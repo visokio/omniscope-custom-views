@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        html, body, main {
+          /* Ensure the body fills the view, so clicks are handled everywhere: */
+          width: 100%;
+          height: 100%;
+          margin: 0px;
+        }
+        main {
+          font-family: monospace;
+          font-size: 17px;
+          display: table;
+          position: absolute;
+          height: 100%;
+          width: 100%;
+        }
+        span {
+          font-size: 15px;
+          color: #000;
+        }
+        #container {
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          color: #41475e;
+          font-family: 'Montserrat', Roboto,'Helvetica Neue',Helvetica,Arial,sans-serif;
+          display: table-cell;
+          vertical-align: middle;
+        }
+        #content-container {
+          margin-left: auto;
+          margin-right: auto;
+          padding: 10px;
+        }
+        #measure {
+          font-size: 2em;
+          font-weight: bold;
+          color: #f39300;
+        }
+        #text {
+          font-size: 0.9em;
+          font-weight: bold;
+        }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+
+</head>
+
+<body>
+
+  <main id="main">
+    <div id="container">
+      <div id="content-container">
+        <div>
+          <span id="text"></span>
+          <br/>
+          <span id="measure"></span>
+        </div>
+      </div>
+    </div>
+  </main><!-- This element is where the view will render -->
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+    // Naively redraw on any of these events 
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+      
+        // Retrieve the auto-query results, a 2d array ([row][column]):
+        var data = omniscope.view.context().result.data.records;
+      
+        document.getElementById("text").textContent = omniscope.view.context().options.items.text;
+        document.getElementById("measure").textContent = Math.round(data[0][0]).toLocaleString();
+    });
+
+</script>
+
+</body>
+</html>
