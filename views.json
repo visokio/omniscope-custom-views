@@ -1,3 +1,11 @@
 {
-	"views": ["KPI"]
+	"views": [
+		{
+			"name": "KPI",
+			"displayName": "KPI",
+			"tags": ["key"],
+			"files": [],
+			"version": 0
+		}
+	]
 }
