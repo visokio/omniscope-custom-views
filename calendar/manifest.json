@@ -1,0 +1,51 @@
+{
+  "name": "Calendar",
+  "frameworkVersion": "v1",
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "date": {
+        "displayName": "Date",
+        "type": "GROUPING",
+        "mandatory": true
+      },
+      "value": {
+        "displayName": "Value",
+        "type": "MEASURE",
+        "mandatory": true
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "date",
+        "value"
+      ],
+      "x": [],
+      "y": []
+    }
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50,
+    "maxCells": 20
+  }
+}
