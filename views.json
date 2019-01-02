@@ -8,7 +8,7 @@
 			"version": 0
 		},
 		{
-			"name": "Calendar",
+			"name": "calendar",
 			"displayName": "Calendar",
 			"tags": ["calendar"],
 			"files": [],
