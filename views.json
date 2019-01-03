@@ -1,7 +1,7 @@
 {
 	"views": [
 		{
-			"name": "KPI",
+			"name": "kpi",
 			"displayName": "KPI",
 			"tags": ["key"],
 			"files": [],
@@ -11,6 +11,13 @@
 			"name": "calendar",
 			"displayName": "Calendar",
 			"tags": ["calendar"],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "bubblechart",
+			"displayName": "Bubble Chart",
+			"tags": ["bubble"],
 			"files": [],
 			"version": 0
 		}

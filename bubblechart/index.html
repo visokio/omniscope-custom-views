@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        #main {
+          	width: 100%;
+        	height: 100%;
+            margin: 0;
+            top: 0;
+            left: 0;
+            position: absolute;
+        }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+  	<script src="https://d3js.org/d3.v4.min.js"></script>
+
+</head>
+
+<body>
+  
+  <div id="main">
+    <svg width="100%" height="100%"></svg>
+  </div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+  
+    var svg = d3.select("svg");
+
+    var format = d3.format(",d");
+
+    var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+    // Naively redraw on any of these events 
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+      
+        var width = +parseInt(svg.style("width"), 10);
+  		var height = +parseInt(svg.style("height"), 10);
+      
+        var pack = d3.pack()
+          .size([width, height])
+          .padding(1.5);
+
+        // Retrieve the auto-query results, a 2d array ([row][column]):
+        var data = omniscope.view.context().result.data.records;
+
+      	var classes = data
+        	.filter(function(record) {
+              return record[0] !== null && record[0].length > 0;
+            })
+        	.map(function(record) {
+          		return {id: record[0], value: record[1]};
+        	});
+          
+        var root = d3.hierarchy({children: classes})
+            .sum(function(d) { return d.value; })
+            .each(function(d) {
+              if (id = d.data.id) {
+                d.id = id;
+                d.class = id;
+              }
+            });
+
+        var node = svg.selectAll(".node")
+          .data(pack(root).leaves())
+          .enter().append("g")
+            .attr("class", "node");
+      
+        svg.selectAll(".node")
+          	.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+        node.append("circle")
+            .attr("id", function(d) { return d.id; })
+        	.style("fill", function(d) { return color(d.id); });
+      
+      	svg.selectAll(".node").select("circle")
+            .attr("r", function(d) { return d.r; })
+            
+
+        node.append("clipPath")
+            .attr("id", function(d) { return "clip-" + d.id; })
+          .append("use")
+            .attr("xlink:href", function(d) { return "#" + d.id; });
+
+        node.append("text")
+            .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
+          .selectAll("tspan")
+          .data(function(d) { return (d.r > 20) ? d.class.split(/(?=[A-Z][^A-Z])/g) : ""; })
+          .enter().append("tspan")
+            .attr("x", 0)
+            .attr("y", function(d, i, nodes) { return 13 + (i - nodes.length / 2 - 0.5) * 10; })
+            .text(function(d) { return d; });
+
+        node.append("title")
+            .text(function(d) { return d.id + "\n" + format(d.value); });
+    });
+
+</script>
+
+</body>
+</html>
