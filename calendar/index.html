@@ -2,10 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <link rel="stylesheet" type="text/css" href="http://visapi-gadgets.googlecode.com/svn/trunk/pilesofmoney/pom.css"/>
-    <script type="text/javascript" src="http://visapi-gadgets.googlecode.com/svn/trunk/pilesofmoney/pom.js"></script>
     <style>
         #main {
           margin: 0;
@@ -62,10 +59,13 @@
       // Map records to field options
       var data = [];
       records.forEach(function(record) {
-        data.push({
-          date: (mappings.date !== undefined) ? record[mappings.date] : null,
-          value: (mappings.value !== undefined) ? record[mappings.value] : null
-        });
+        if (record[mappings.date] !== undefined && record[mappings.date] !== null
+            && record[mappings.value] !== undefined && record[mappings.value] !== null) {
+          data.push({
+            date: (mappings.date !== undefined) ? record[mappings.date] : null,
+            value: (mappings.value !== undefined) ? record[mappings.value] : null
+          });
+        }
       });
       
       var rowData = result.data.records;
@@ -88,6 +88,7 @@
           [ date, row.value ]
         ]);
       }
+      totalYears = addMissingNumbers(totalYears);
        
       var charts = document.getElementById('main');
       var chart = new google.visualization.Calendar(document.getElementById('main'));
@@ -95,7 +96,7 @@
       var options = {
         height:  1+ totalYears.length *150
       };
-
+      
       chart.draw(dataTable, options);
 
       google.visualization.events.addListener(chart, 'select', function() {
@@ -118,6 +119,18 @@
       });
      
     };
+  
+    var addMissingNumbers = function(nums) {
+        var filledArray = [];
+        var sortedNums = nums.sort();
+        for (var i = 1; i < sortedNums.length; i++) {
+          for (var num = sortedNums[i-1]; num < sortedNums[i]; num++) {
+            filledArray.push(num);
+          }
+        }
+        if (sortedNums.length > 0) filledArray.push(sortedNums[sortedNums.length-1]);
+        return filledArray;
+    }
 
 </script>
 </body>
