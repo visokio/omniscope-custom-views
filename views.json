@@ -10,7 +10,7 @@
 		{
 			"name": "calendar",
 			"displayName": "Calendar",
-			"tags": ["calendar"],
+			"tags": ["table", "time", "custom"],
 			"files": [],
 			"version": 0
 		},
