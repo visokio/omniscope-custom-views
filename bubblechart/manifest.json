@@ -1,6 +1,7 @@
 {
   "name": "Custom Bubble Chart",
   "frameworkVersion": "v1",
+  "icon": "icon.svg",
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,

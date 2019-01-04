@@ -1,6 +1,7 @@
 {
   "name": "KPI",
   "frameworkVersion": "v1",
+  "icon": "icon.svg",
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
