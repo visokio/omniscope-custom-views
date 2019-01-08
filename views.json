@@ -22,9 +22,9 @@
 			"version": 0
 		},
 		{
-			"name": "choropleth",
-			"displayName": "Choropleth",
-			"tags": ["map", "custom"],
+			"name": "francechoropleth",
+			"displayName": "France Choropleth",
+			"tags": ["map", "custom", "france"],
 			"files": ["regions_fr.json", "d3.v4.min.js"],
 			"version": 0
 		}

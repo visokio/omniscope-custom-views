@@ -1,8 +1,8 @@
 {
-  "name": "Choropleth",
+  "name": "France Choropleth",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["map", "custom"],
+  "tags": ["map", "custom", "france"],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
