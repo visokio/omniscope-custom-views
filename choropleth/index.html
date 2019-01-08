@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        html, body, main {
+            /* Ensure the body fills the view, so clicks are handled everywhere: */
+            width: 100%;
+            height: 100%;
+        }
+        main {
+            font-family: monospace;
+            font-size: 20px;
+            white-space: pre;
+        }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="d3.v4.min.js"></script>
+
+</head>
+
+<body>
+
+<main id="main"><svg width="100%" height="100%"></svg></main><!-- This element is where the view will render -->
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+    var ORIGINAL_MAP_WIDTH = 702;
+    var ORIGINAL_MAP_HEIGHT = 610;
+
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+    // Naively redraw on any of these events
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+
+        var svg = d3.select("svg");
+        var width = +parseInt(svg.style("width"), 10);
+        var height = +parseInt(svg.style("height"), 10);
+        var maxSize = Math.min(width, height);
+        // Using ORIGINAL_MAP_WIDTH as it's greater than ORIGINAL_MAP_HEIGHT
+        var scale = maxSize/ORIGINAL_MAP_WIDTH;
+
+        // Position map in the centre of the view
+        var widthMargin = width - (ORIGINAL_MAP_WIDTH * scale);
+        var heightMargin = height - (ORIGINAL_MAP_HEIGHT * scale);
+        svg.attr("transform", "translate("+widthMargin/2+", "+heightMargin/2+")");
+
+        // Retrieve the auto-query results, a 2d array ([row][column]):
+        var records = omniscope.view.context().result.data.records;
+        var mappings = omniscope.view.context().result.mappings;
+
+        // Map records to field options
+        var data = [];
+        records.forEach(function(record) {
+            data.push({
+                name: (mappings.split !== undefined) ? record[mappings.split] : null,
+                opacity: (mappings.measures !== undefined) ? record[mappings.measures] : null
+            });
+        });
+
+        var opacityMinMax = getMinMax(data, "opacity");
+
+        d3.json("regions_fr.json", function(error, regions) {
+            if (error) throw error;
+
+            // Add value to regions
+            regions.forEach(function(region) {
+                var opacity = 0;
+                for (var i = 0; i < data.length; i++) {
+                    var record = data[i];
+                    if (record.name != null && record.name.toUpperCase() === region.name.toUpperCase()) {
+                        if (record.opacity !== null && record.opacity !== undefined) opacity = record.opacity;
+                        break;
+                    }
+                }
+                region.opacity = opacity/opacityMinMax.max;
+            });
+
+            d3.select("svg")
+                .selectAll(".region")
+                .data(regions)
+                .enter()
+                .append("path")
+                .attr("class", "region");
+
+            d3.selectAll(".region")
+                .attr("transform", "scale("+scale+")")
+                .attr("d", function(d) {return d.path;})
+                .attr("stroke", "#CBCDCC")
+                .attr("fill", "#00BFB6")
+                .attr("fill-opacity", function(d) {return d.opacity;});
+
+            d3.selectAll(".region")
+                .append("title")
+                .text(function(d) {return d.name});
+        });
+
+    });
+
+    function getMinMax(data, field) {
+        var min = null, max = null;
+        data.forEach(function(record) {
+            if (min == null || min > record[field]) min = record[field];
+            if (max == null || max < record[field]) max = record[field];
+        });
+        return {min: min, max: max};
+    }
+
+</script>
+
+</body>
+</html>

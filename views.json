@@ -20,6 +20,13 @@
 			"tags": ["bubble"],
 			"files": [],
 			"version": 0
+		},
+		{
+			"name": "choropleth",
+			"displayName": "Choropleth",
+			"tags": ["map", "custom"],
+			"files": ["regions_fr.json", "d3.v4.min.js"],
+			"version": 0
 		}
 	]
 }
