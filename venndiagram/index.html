@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        #main {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            top: 0;
+            left: 0;
+            position: absolute;
+            font-family: Arial;
+            color: #666;
+        }
+        .selected {
+            fill: #7DA9DA;
+            fill-opacity: 1 !important;
+            stroke: black;
+            stroke-width: 0.01px;
+        }
+        text {
+            -webkit-touch-callout: none;
+            -webkit-user-select:none;
+            -khtml-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            -o-user-select:none;
+            user-select:none;
+            pointer-events: none;
+        }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+</head>
+
+<body>
+
+<div id="main" width="100%" height="100%">
+    <svg width="100%" height="100%">
+
+        <circle
+                class="circle-a"
+                cx="0.62086117"
+                cy="0.69178772"
+                style="fill:#a52a2a;fill-opacity:0.5"
+                id="circle8136"
+                r="0.59291744" />
+        <circle
+                class="circle-b"
+                cx="1.3874403"
+                cy="0.69178772"
+                r="0.59291744"
+                style="fill:#4682b4;fill-opacity:0.5"
+                id="circle8139" />
+        <circle
+                class="circle-c"
+                cx="1.0041505"
+                cy="1.371521"
+                r="0.59291744"
+                style="fill:#008000;fill-opacity:0.5"
+                id="circle8142" />
+
+        <path
+                style="fill-opacity:0"
+                d="m 1.0039068,0.77738375 a 0.59291744,0.59291744 0 0 0 -0.19531197,0.0351 0.59291744,0.59291744 0 0 0 0.19531197,0.33202995 0.59291744,0.59291744 0 0 0 0.1992181,-0.33202995 0.59291744,0.59291744 0 0 0 -0.1992181,-0.0351 z"
+                id="subset-abc"/>
+        <path
+                style="fill-opacity:0"
+                d="m 0.62109423,0.09769375 a 0.59291744,0.59291744 0 0 0 -0.59374989,0.59375 0.59291744,0.59291744 0 0 0 0.39453119,0.55858995 0.59291744,0.59291744 0 0 1 0.3828127,-0.43749995 0.59291744,0.59291744 0 0 1 -0.01172,-0.12109 0.59291744,0.59291744 0 0 1 0.21093737,-0.45313 0.59291744,0.59291744 0 0 0 -0.38281237,-0.14062 z"
+                id="subset-a"/>
+        <path
+                style="fill-opacity:0"
+                d="m 1.3867193,0.09769375 a 0.59291744,0.59291744 0 0 0 -0.3828127,0.14062 0.59291744,0.59291744 0 0 1 0.2109377,0.45313 0.59291744,0.59291744 0 0 1 -0.01172,0.12109 0.59291744,0.59291744 0 0 1 0.3828124,0.43749995 0.59291744,0.59291744 0 0 0 0.3945314,-0.55858995 0.59291744,0.59291744 0 0 0 -0.59375,-0.59375 z"
+                id="subset-b"/>
+        <path
+                style="fill-opacity:0"
+                d="m 1.0039068,1.1445638 a 0.59291744,0.59291744 0 0 1 -0.38281257,0.14063 0.59291744,0.59291744 0 0 1 -0.199218,-0.0352 0.59291744,0.59291744 0 0 0 -0.01172,0.1211 0.59291744,0.59291744 0 0 0 0.59375007,0.5937499 0.59291744,0.59291744 0 0 0 0.5937502,-0.59375 0.59291744,0.59291744 0 0 0 -0.01172,-0.1211 0.59291744,0.59291744 0 0 1 -0.1992182,0.0352 0.59291744,0.59291744 0 0 1 -0.3828127,-0.1406299 z"
+                id="subset-c"/>
+        <path
+                style="fill-opacity:0"
+                d="m 1.0039068,0.23831375 a 0.59291744,0.59291744 0 0 0 -0.21093737,0.45313 0.59291744,0.59291744 0 0 0 0.01172,0.12109 0.59291744,0.59291744 0 0 1 0.19921797,-0.0351 0.59291744,0.59291744 0 0 1 0.1992181,0.0351 0.59291744,0.59291744 0 0 0 0.01172,-0.12109 0.59291744,0.59291744 0 0 0 -0.2109375,-0.45313 z"
+                id="subset-ab"/>
+        <path
+                style="fill-opacity:0"
+                d="M 1.203125 0.8125 A 0.59291744 0.59291744 0 0 1 1.0058594 1.1445312 A 0.59291744 0.59291744 0 0 0 1.3867188 1.2851562 A 0.59291744 0.59291744 0 0 0 1.5859375 1.25 A 0.59291744 0.59291744 0 0 0 1.203125 0.8125 z "
+                id="subset-bc" />
+        <path
+                style="fill-opacity:0"
+                d="m 0.80859423,0.81253375 a 0.59291744,0.59291744 0 0 0 -0.3867187,0.43749995 0.59291744,0.59291744 0 0 0 0.199218,0.0352 0.59291744,0.59291744 0 0 0 0.38671897,-0.14062 0.59291744,0.59291744 0 0 1 -0.19921797,-0.33203995 z"
+                id="subset-ac"/>
+
+        <text
+                x="0.62086117"
+                y="0.69178772"
+                id="text4957"
+                style="font-size:0.03453888px;text-anchor:middle">Set A</text>
+        <text
+                x="1.3874403"
+                y="0.69178772"
+                id="text4961"
+                style="font-size:0.03453888px;text-anchor:middle">Set B</text>
+        <text
+                x="1.0041505"
+                y="1.371521"
+                id="text4965"
+                style="font-size:0.03453888px;text-anchor:middle">Set C</text>
+
+    </svg>
+</div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+
+    var svg = d3.select("svg");
+    var ORIGINAL_WIDTH = 2;
+    var ORIGINAL_HEIGHT = 2;
+
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+    // Naively redraw on any of these events
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+
+        var width = +parseInt(svg.style("width"), 10);
+        var height = +parseInt(svg.style("height"), 10);
+        var maxSize = Math.min(width, height);
+
+        var scale = maxSize/ORIGINAL_WIDTH;
+
+        var widthMargin = width - (ORIGINAL_WIDTH * scale);
+        var heightMargin = height - (ORIGINAL_HEIGHT * scale);
+
+        svg.attr("transform", "translate("+widthMargin/2+", "+heightMargin/2+")");
+        svg.selectAll("*").classed("selected", false);
+        svg.selectAll("*").attr("transform", "scale("+scale+")");
+
+        // ------------- Selection ------------ //
+        var options = omniscope.view.context().options.items;
+        var filterA = createFilter(options.filterAField, options.filterAMin, options.filterAMax);
+        var filterB = createFilter(options.filterBField, options.filterBMin, options.filterBMax);
+        var filterC = createFilter(options.filterCField, options.filterCMin, options.filterCMax);
+
+        svg.select("#subset-a").on("click", function() {selectSubset(this, [filterA]);});
+        svg.select("#subset-b").on("click", function() {selectSubset(this, [filterB]);});
+        svg.select("#subset-c").on("click", function() {selectSubset(this, [filterC]);});
+        svg.select("#subset-ab").on("click", function() {selectSubset(this, [filterA, filterB]);});
+        svg.select("#subset-bc").on("click", function() {selectSubset(this, [filterB, filterC]);});
+        svg.select("#subset-ac").on("click", function() {selectSubset(this, [filterA, filterC]);});
+        svg.select("#subset-abc").on("click", function() {selectSubset(this, [filterA, filterB, filterC]);});
+    });
+
+    var selectSubset = function(element, filters) {
+        var wasSelected = d3.select(element).classed("selected");
+        svg.selectAll("*").classed("selected", false);
+        if (!wasSelected) {
+            d3.select(element).classed("selected", true);
+            addFilter(filters);
+        } else {
+            omniscope.view.whitespaceClick();
+        }
+        event.stopPropagation();
+    };
+
+    var createFilter = function(filterField, filterMin, filterMax) {
+        var filter = {
+            type: "AND",
+            filters: []
+        };
+        if (filterMin !== undefined && filterMax !== undefined) {
+            filter.filters = [
+                {"type": "FIELD_VALUE", "inputField": filterField, "value": parseInt(filterMax), "operator": "<="},
+                {"type": "FIELD_VALUE", "inputField": filterField, "value": parseInt(filterMin), "operator": ">"}
+            ];
+        }
+        return filter;
+    };
+
+    var addFilter = function(filters) {
+        var filter = {};
+        filter.type = "AND";
+        filter.filters = filters;
+        omniscope.view.context().viewSelection = filter;
+        omniscope.view.updated();
+    };
+
+</script>
+
+</body>
+</html>

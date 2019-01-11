@@ -1,0 +1,93 @@
+{
+  "name": "Venn Diagram",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "tags": ["subset", "custom"],
+  "thumbnail": "thumbnail.png",
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "filterAField": {
+        "displayName": "Filter A field",
+        "type": "FIELD"
+      },
+      "filterAMax": {
+        "displayName": "Filter A max",
+        "type": "TEXT"
+      },
+      "filterAMin": {
+        "displayName": "Filter A min",
+        "type": "TEXT"
+      },
+      "filterBField": {
+        "displayName": "Filter B field",
+        "type": "FIELD"
+      },
+      "filterBMax": {
+        "displayName": "Filter B max",
+        "type": "TEXT"
+      },
+      "filterBMin": {
+        "displayName": "Filter B min",
+        "type": "TEXT"
+      },
+      "filterCField": {
+        "displayName": "Filter C field",
+        "type": "FIELD"
+      },
+      "filterCMax": {
+        "displayName": "Filter C max",
+        "type": "TEXT"
+      },
+      "filterCMin": {
+        "displayName": "Filter C min",
+        "type": "TEXT"
+      },
+      "setAName": {
+        "displayName": "Set A name",
+        "type": "TEXT"
+      },
+      "setBName": {
+        "displayName": "Set B name",
+        "type": "TEXT"
+      },
+      "setCName": {
+        "displayName": "Set C name",
+        "type": "TEXT"
+      }
+    },
+    "structure": {
+      "toolbar": [],
+      "x": [],
+      "y": []
+    }
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 50,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}

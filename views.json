@@ -27,6 +27,13 @@
 			"tags": ["map", "custom", "france"],
 			"files": ["regions_fr.json", "d3.v4.min.js"],
 			"version": 0
+		},
+		{
+			"name": "venndiagram",
+			"displayName": "Venn Diagram",
+			"tags": ["subset", "custom"],
+			"files": [],
+			"version": 0
 		}
 	]
 }
