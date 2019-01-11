@@ -96,18 +96,18 @@
         <text
                 x="0.62086117"
                 y="0.69178772"
-                id="text4957"
-                style="font-size:0.03453888px;text-anchor:middle">Set A</text>
+                id="text-a"
+                style="font-size:0.03453888px;text-anchor:middle"></text>
         <text
                 x="1.3874403"
                 y="0.69178772"
-                id="text4961"
-                style="font-size:0.03453888px;text-anchor:middle">Set B</text>
+                id="text-b"
+                style="font-size:0.03453888px;text-anchor:middle"></text>
         <text
                 x="1.0041505"
                 y="1.371521"
-                id="text4965"
-                style="font-size:0.03453888px;text-anchor:middle">Set C</text>
+                id="text-c"
+                style="font-size:0.03453888px;text-anchor:middle"></text>
 
     </svg>
 </div>
@@ -149,8 +149,13 @@
         svg.selectAll("*").classed("selected", false);
         svg.selectAll("*").attr("transform", "scale("+scale+")");
 
-        // ------------- Selection ------------ //
         var options = omniscope.view.context().options.items;
+        svg.select("#text-a").text(options.setAName);
+        svg.select("#text-b").text(options.setBName);
+        svg.select("#text-c").text(options.setCName);
+
+        // ------------- Selection ------------ //
+
         var filterA = createFilter(options.filterAField, options.filterAMin, options.filterAMax);
         var filterB = createFilter(options.filterBField, options.filterBMin, options.filterBMax);
         var filterC = createFilter(options.filterCField, options.filterCMin, options.filterCMax);

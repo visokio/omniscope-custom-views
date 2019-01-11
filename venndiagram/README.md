@@ -4,5 +4,5 @@ Custom view that shows 3 sets and its combinations. Each set can be configured w
 
 ![screenshot](thumbnail.png)
 
-###Libraries:
+### Libraries:
  - [d3.js](https://d3js.org/)
