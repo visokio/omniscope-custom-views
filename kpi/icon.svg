@@ -1,1 +1,84 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" style="zoom: 1;" id="svg_document" preserveAspectRatio="xMidYMid meet" viewBox="0 0 500 500" height="500px" width="500px" version="1.1"><metadata id="metadata4256"><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"></dc:type><dc:title>Untitled.svg</dc:title></cc:Work></rdf:RDF></metadata><title id="svg_document_title">Untitled.svg</title><defs id="svg_document_defs"></defs><g id="main_group"></g><polygon transform="" fill="#ffffff" stroke-width="3px" id="polygon1" stroke="#000000" points="9,19"></polygon><line stroke="#000000" y1="0px" stroke-width="3px" x1="99px" d="" id="line1" y2="0px" x2="99px" transform=""></line><text stroke="none" id="text1" style="outline-style:none;" stroke-width="1px" x="252px" font-weight="bold" text-rendering="geometricPrecision" font-family="Helvetica" fill="#7CA4EB" font-size="240px" transform="" y="226px" text-anchor="middle">70%</text><text stroke="none" style="outline-style:none;" id="text2" stroke-width="1px" x="236px" font-weight="bold" text-rendering="geometricPrecision" font-family="Helvetica" fill="#F6BB68" font-size="200px" y="440px" transform="" text-anchor="middle">KPI</text></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg_document"
+   preserveAspectRatio="xMidYMid meet"
+   viewBox="0 0 32 32"
+   height="32"
+   width="32"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="icon.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1998"
+     inkscape:window-height="1184"
+     id="namedview5538"
+     showgrid="false"
+     inkscape:zoom="10.680141"
+     inkscape:cx="25.243315"
+     inkscape:cy="17.021207"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg_document" />
+  <metadata
+     id="metadata4256">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Untitled.svg</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <title
+     id="svg_document_title">Untitled.svg</title>
+  <defs
+     id="svg_document_defs" />
+  <g
+     id="main_group"
+     transform="translate(0,-468)" />
+  <polygon
+     transform="matrix(0.06718168,0,0,0.06718168,-0.96780753,0.11720219)"
+     id="polygon1"
+     points="9,19 "
+     style="fill:#ffffff;stroke:#000000;stroke-width:3px" />
+  <line
+     y1="0.11720562"
+     x1="5.6831789"
+     d=""
+     id="line1"
+     y2="0.11720562"
+     x2="5.6831789"
+     style="stroke:#000000;stroke-width:0.20154504px" />
+  <text
+     id="text1"
+     style="font-weight:bold;font-size:16.12360382px;font-family:Helvetica;text-anchor:middle;fill:#7ca4eb;stroke:none;stroke-width:1px;text-rendering:geometricPrecision"
+     x="15.961977"
+     font-weight="bold"
+     font-size="240px"
+     y="15.30025">70%</text>
+  <text
+     style="font-weight:bold;font-size:13.43633652px;font-family:Helvetica;text-anchor:middle;fill:#f6bb68;stroke:none;stroke-width:1px;text-rendering:geometricPrecision"
+     id="text2"
+     x="14.88707"
+     font-weight="bold"
+     font-size="200px"
+     y="29.677143">KPI</text>
+</svg>
