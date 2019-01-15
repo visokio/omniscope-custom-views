@@ -2,6 +2,8 @@
   "name": "KPI",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
+  "tags": ["key"],
+  "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,

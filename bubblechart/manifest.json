@@ -2,6 +2,8 @@
   "name": "Custom Bubble Chart",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
+  "tags": ["bubble"],
+  "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,

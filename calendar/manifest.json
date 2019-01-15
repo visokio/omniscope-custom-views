@@ -3,6 +3,7 @@
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "tags": ["table", "time", "custom"],
+  "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
