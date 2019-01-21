@@ -3,35 +3,35 @@
 		{
 			"name": "kpi",
 			"displayName": "KPI",
-			"tags": ["key"],
+			"tags": ["custom", "key"],
 			"files": [],
 			"version": 0
 		},
 		{
 			"name": "calendar",
 			"displayName": "Calendar",
-			"tags": ["table", "time", "custom"],
+			"tags": ["custom", "table", "time"],
 			"files": [],
 			"version": 0
 		},
 		{
 			"name": "bubblechart",
 			"displayName": "Bubble Chart",
-			"tags": ["bubble"],
+			"tags": ["custom", "bubble"],
 			"files": [],
 			"version": 0
 		},
 		{
 			"name": "francechoropleth",
 			"displayName": "France Choropleth",
-			"tags": ["map", "custom", "france"],
+			"tags": ["custom", "map", "france"],
 			"files": ["regions_fr.json", "d3.v4.min.js"],
 			"version": 0
 		},
 		{
 			"name": "venndiagram",
 			"displayName": "Venn Diagram",
-			"tags": ["subset", "custom"],
+			"tags": ["custom", "subset"],
 			"files": [],
 			"version": 0
 		}

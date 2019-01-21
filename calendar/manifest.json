@@ -2,7 +2,7 @@
   "name": "Calendar",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["table", "time", "custom"],
+  "tags": ["custom", "table", "time"],
   "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,

@@ -2,7 +2,7 @@
   "name": "France Choropleth",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["map", "custom", "france"],
+  "tags": ["custom", "map", "france"],
   "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,

@@ -2,7 +2,7 @@
   "name": "Venn Diagram",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["subset", "custom"],
+  "tags": ["custom", "subset"],
   "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,
