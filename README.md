@@ -4,13 +4,12 @@ Public repository for custom views for Omniscope 2018+.
 The views added here are available to install in the view picker of Omniscope.
 
 ### List of views
+[<img src="https://github.com/visokio/custom-views/raw/master/bubblechart/thumbnail.png">](bubblechart/README.md "Bubble Chart")
+[<img src="https://github.com/visokio/custom-views/raw/master/calendar/thumbnail.png">](calendar/README.md "Calendar")
+[<img src="https://github.com/visokio/custom-views/raw/master/francechoropleth/thumbnail.png">](francechoropleth/README.md "France Choropleth")
+[<img src="https://github.com/visokio/custom-views/raw/master/kpi/thumbnail.png">](kpi/README.md "KPI")
+[<img src="https://github.com/visokio/custom-views/raw/master/venndiagram/thumbnail.png">](venndiagram/README.md "Venn Diagram")
 
- - [Bubble Chart](bubblechart/README.md)
- - [Calendar](calendar/README.md)
- - [France Choropleth](francechoropleth/README.md)
- - [KPI](kpi/README.md)
- - [Venn Diagram](venndiagram/README.md)
- 
 ### How to create a new view
 
  - Add a folder with a name matching the unique view id (the view name which must not conflict with other view names).
