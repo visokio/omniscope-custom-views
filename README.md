@@ -31,3 +31,4 @@ The views added here are available to install in the view picker of Omniscope.
     }
     ```
  - Make sure manifest.json has the entries for "icon", "tags" and "thumbnail". See other view manifests.
+ - Update the gallery of views in the README.md to include a thumbnail of the new view that links to the view readme file.
