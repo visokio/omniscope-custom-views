@@ -4,11 +4,18 @@ Public repository for custom views for Omniscope 2018+.
 The views added here are available to install in the view picker of Omniscope.
 
 ### List of views
-[<img src="https://github.com/visokio/custom-views/raw/master/bubblechart/thumbnail.png">](bubblechart/README.md "Bubble Chart")
-[<img src="https://github.com/visokio/custom-views/raw/master/calendar/thumbnail.png">](calendar/README.md "Calendar")
-[<img src="https://github.com/visokio/custom-views/raw/master/francechoropleth/thumbnail.png">](francechoropleth/README.md "France Choropleth")
-[<img src="https://github.com/visokio/custom-views/raw/master/kpi/thumbnail.png">](kpi/README.md "KPI")
-[<img src="https://github.com/visokio/custom-views/raw/master/venndiagram/thumbnail.png">](venndiagram/README.md "Venn Diagram")
+
+<table>
+    <tr valign="top">
+        <td width="33%">Bubble Chart<br><a href="bubblechart/README.md" title="Bubble Chart"><img width="290" src="https://github.com/visokio/custom-views/raw/master/bubblechart/thumbnail.png"></a></td>
+        <td width="33%">Calendar<br><a href="calendar/README.md" title="Calendar"><img width="290" src="https://github.com/visokio/custom-views/raw/master/calendar/thumbnail.png"></a></td>
+        <td width="33%">France Choropleth<br><a href="francechoropleth/README.md" title="France Choropleth"><img width="290" src="https://github.com/visokio/custom-views/raw/master/francechoropleth/thumbnail.png"></a></td>
+    </tr>
+    <tr valign="top">
+        <td width="33%">KPI<br><a href="kpi/README.md" title="KPI"><img width="290" src="https://github.com/visokio/custom-views/raw/master/kpi/thumbnail.png"></a></td>
+        <td width="33%">Venn Diagram<br><a href="venndiagram/README.md" title="Venn Diagram"><img width="290" src="https://github.com/visokio/custom-views/raw/master/venndiagram/thumbnail.png"></a></td>
+    </tr>
+</table>
 
 ### How to create a new view
 
