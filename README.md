@@ -25,7 +25,7 @@ The views added here are available to install in the view picker of Omniscope.
     * index.html - main page loaded by the application to show the view.
     * manifest.json - configuration file for the view that defines the options and limitations.
     * README.md - markdown file that describes the view following the same format as the existing readme files.
-    * thumbnail.png - 256x256 px screenshot.
+    * thumbnail.png - 290x290 px screenshot.
     * test.ioz - Omniscope file to test the view and create a thumbnail.
  - Add an entry to the file view.json:
     ```
