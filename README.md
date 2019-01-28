@@ -1,4 +1,4 @@
-# custom-views
+# omniscope-custom-views
 
 Public repository for custom views for Omniscope 2018+.
 The views added here are available to install in the view picker of Omniscope.
