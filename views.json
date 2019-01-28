@@ -34,6 +34,13 @@
 			"tags": ["custom", "subset"],
 			"files": [],
 			"version": 0
+		},
+		{
+			"name": "beeswarm",
+			"displayName": "Beeswarm",
+			"tags": ["custom", "bee", "swarm", "circle", "dot", "jitter"],
+			"files": [],
+			"version": 0
 		}
 	]
 }

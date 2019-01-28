@@ -5,17 +5,17 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <style>
         #main {
-          margin: 0;
-          height: 100%;
-          width: 100%;
-          left: 0;
-          top: 0;
-          position: absolute;
-          overflow-x: auto;
-          overflow-y: auto;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            top: 0;
+            position: absolute;
+            overflow-x: auto;
+            overflow-y: auto;
         }
         svg {
-          width: 920px;
+            width: 920px;
         }
     </style>
 </head>
@@ -26,9 +26,9 @@
 <div id="main"></div>
 
 <script>
-  
+
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
-    
+
     google.load("visualization", "1.1", {packages:["calendar"]});
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
@@ -49,84 +49,84 @@
         // Retrieve the auto-query results, a 2d array ([row][column]):
         renderView(omniscope.view.context().result);
     });
-  
+
     var renderView = function (result) {
-      
-      // Retrieve the auto-query results, a 2d array ([row][column]):
-      var records = result.data.records;
-      var mappings = result.mappings;
-           
-      // Map records to field options
-      var data = [];
-      records.forEach(function(record) {
-        if (record[mappings.date] !== undefined && record[mappings.date] !== null
-            && record[mappings.value] !== undefined && record[mappings.value] !== null) {
-          data.push({
-            date: (mappings.date !== undefined) ? record[mappings.date] : null,
-            value: (mappings.value !== undefined) ? record[mappings.value] : null
-          });
-        }
-      });
-      
-      var rowData = result.data.records;
 
-      var totalYears = [];
-      
-      var dataTable = new google.visualization.DataTable();
-      dataTable.addColumn({ type: 'date', id: 'Date' });
-      dataTable.addColumn({ type: 'number', id: 'DataItem'});
-      
-      for (var i=0; i < data.length; i++) {
-        var row = data[i];
-        var date = new Date(row.date);
-        var year = date.getYear();
-            
-        if (totalYears.indexOf(year)<0) {
-          totalYears.push(year);
-        }
-        dataTable.addRows([        
-          [ date, row.value ]
-        ]);
-      }
-      totalYears = addMissingNumbers(totalYears);
-       
-      var charts = document.getElementById('main');
-      var chart = new google.visualization.Calendar(document.getElementById('main'));
+        // Retrieve the auto-query results, a 2d array ([row][column]):
+        var records = result.data.records;
+        var mappings = result.mappings;
 
-      var options = {
-        height:  1+ totalYears.length *150
-      };
-      
-      chart.draw(dataTable, options);
+        // Map records to field options
+        var data = [];
+        records.forEach(function(record) {
+            if (record[mappings.date] !== undefined && record[mappings.date] !== null
+                && record[mappings.value] !== undefined && record[mappings.value] !== null) {
+                data.push({
+                    date: (mappings.date !== undefined) ? record[mappings.date] : null,
+                    value: (mappings.value !== undefined) ? record[mappings.value] : null
+                });
+            }
+        });
 
-      google.visualization.events.addListener(chart, 'select', function() {
-        var selectionArr = chart.getSelection();
-        if (!selectionArr) return;
-        
-        var filter = {};
-        filter.type = "AND";
-        filter.filters = [];
-        
-        if (selectionArr[0]) {
-            var dateValue = new Date(selectionArr[0].date).toISOString();
-            var dateField = omniscope.view.context().options.items.date.inputField;
-            filter.filters = [
-              {"type": "FIELD_VALUE", "inputField": dateField, "value": dateValue, "operator": "="}
-            ];
+        var rowData = result.data.records;
+
+        var totalYears = [];
+
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'date', id: 'Date' });
+        dataTable.addColumn({ type: 'number', id: 'DataItem'});
+
+        for (var i=0; i < data.length; i++) {
+            var row = data[i];
+            var date = new Date(row.date);
+            var year = date.getYear();
+
+            if (totalYears.indexOf(year)<0) {
+                totalYears.push(year);
+            }
+            dataTable.addRows([
+                [ date, row.value ]
+            ]);
         }
-        omniscope.view.context().viewSelection = filter;
-        omniscope.view.updated();
-      });
-     
+        totalYears = addMissingNumbers(totalYears);
+
+        var charts = document.getElementById('main');
+        var chart = new google.visualization.Calendar(document.getElementById('main'));
+
+        var options = {
+            height:  1+ totalYears.length * 170
+        };
+
+        chart.draw(dataTable, options);
+
+        google.visualization.events.addListener(chart, 'select', function() {
+            var selectionArr = chart.getSelection();
+            if (!selectionArr) return;
+
+            var filter = {};
+            filter.type = "AND";
+            filter.filters = [];
+
+            if (selectionArr[0]) {
+                var dateValue = new Date(selectionArr[0].date).toISOString();
+                var dateField = omniscope.view.context().options.items.date.inputField;
+                filter.filters = [
+                    {"type": "FIELD_VALUE", "inputField": dateField, "value": dateValue, "operator": "="}
+                ];
+            }
+            omniscope.view.context().viewSelection = filter;
+            omniscope.view.updated();
+        });
+
     };
-  
+
     var addMissingNumbers = function(nums) {
         var filledArray = [];
         var sortedNums = nums.sort();
         for (var i = 1; i < sortedNums.length; i++) {
-          for (var num = sortedNums[i-1]; num < sortedNums[i]; num++) {
-            filledArray.push(num);
-          }
+            for (var num = sortedNums[i-1]; num < sortedNums[i]; num++) {
+                filledArray.push(num);
+            }
         }
         if (sortedNums.length > 0) filledArray.push(sortedNums[sortedNums.length-1]);
         return filledArray;

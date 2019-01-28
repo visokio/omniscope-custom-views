@@ -1,8 +1,8 @@
 {
-  "name": "Bubble Chart",
+  "name": "Beeswarm",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["custom", "bubble"],
+  "tags": ["custom", "bee", "swarm", "circle", "dot", "jitter"],
   "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,
@@ -11,6 +11,10 @@
   "supportsSelection": true,
   "options": {
     "items": {
+      "colour": {
+        "displayName": "Colour",
+        "type": "MEASURE"
+      },
       "measures": {
         "displayName": "Measure",
         "type": "MEASURE",
@@ -28,8 +32,11 @@
       },
       "split": {
         "displayName": "Split",
-        "type": "GROUPING",
-        "mandatory": true
+        "type": "GROUPING"
+      },
+      "title": {
+        "displayName": "Title",
+        "type": "MEASURE"
       }
     },
     "structure": {
@@ -48,7 +55,7 @@
   "defaultOptions": {
     "items": {},
     "pane": {
-      "yAxisHeaderWidth": 50,
+      "yAxisHeaderWidth": 75,
       "paneWidth": 200,
       "paneHeight": 200,
       "gridLineThickness": 1,

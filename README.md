@@ -14,6 +14,7 @@ The views added here are available to install in the view picker of Omniscope.
     <tr valign="top">
         <td width="33%">KPI<br><a href="kpi/README.md" title="KPI"><img width="290" src="https://github.com/visokio/custom-views/raw/master/kpi/thumbnail.png"></a></td>
         <td width="33%">Venn Diagram<br><a href="venndiagram/README.md" title="Venn Diagram"><img width="290" src="https://github.com/visokio/custom-views/raw/master/venndiagram/thumbnail.png"></a></td>
+        <td width="33%">Beeswarm<br><a href="beeswarm/README.md" title="Beeswarm"><img width="290" src="https://github.com/visokio/custom-views/raw/master/beeswarm/thumbnail.png"></a></td>
     </tr>
 </table>
 
