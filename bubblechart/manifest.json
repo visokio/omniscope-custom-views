@@ -2,8 +2,11 @@
   "name": "Bubble Chart",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["custom", "bubble"],
   "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "bubble"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
@@ -14,7 +17,10 @@
       "measures": {
         "displayName": "Measure",
         "type": "MEASURE",
-        "mandatory": true
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ]
       },
       "paneX": {
         "displayName": "Pane X",
