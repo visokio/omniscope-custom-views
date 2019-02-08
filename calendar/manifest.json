@@ -2,8 +2,12 @@
   "name": "Calendar",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["custom", "table", "time"],
   "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "table",
+    "time"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
@@ -14,7 +18,13 @@
       "date": {
         "displayName": "Date",
         "type": "GROUPING",
-        "mandatory": true
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ]
       },
       "value": {
         "displayName": "Value",
