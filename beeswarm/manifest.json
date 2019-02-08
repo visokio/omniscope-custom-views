@@ -2,8 +2,15 @@
   "name": "Beeswarm",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["custom", "bee", "swarm", "circle", "dot", "jitter"],
   "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "bee",
+    "swarm",
+    "circle",
+    "dot",
+    "jitter"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
@@ -32,7 +39,8 @@
       },
       "split": {
         "displayName": "Split",
-        "type": "GROUPING"
+        "type": "GROUPING",
+        "mandatory": true
       },
       "title": {
         "displayName": "Title",
