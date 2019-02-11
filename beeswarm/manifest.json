@@ -20,10 +20,11 @@
     "items": {
       "colour": {
         "displayName": "Colour",
+        "iconName": "visokio-option-icon:colour-measure",
         "type": "MEASURE"
       },
       "measures": {
-        "displayName": "Measure",
+        "displayName": "X",
         "type": "MEASURE",
         "mandatory": true
       },
@@ -43,22 +44,101 @@
         "mandatory": true
       },
       "title": {
-        "displayName": "Title",
+        "displayName": "Tooltip",
         "type": "MEASURE"
       }
     },
     "structure": {
       "toolbar": [
-        "measures",
-        "split"
+        "colour"
       ],
       "x": [
+        "split",
+        "measures",
         "paneX"
       ],
       "y": [
         "paneY"
       ]
-    }
+    },
+    "optionGroups": [
+      {
+        "@visokiotype": "CustomViewApi.OptionGroup",
+        "displayName": "Chart",
+        "rows": [
+          {
+            "@visokiotype": "CustomViewApi.OptionGroupRow",
+            "cells": [
+              {
+                "@visokiotype": "CustomViewApi.OptionGroupCell",
+                "option": "split",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "@visokiotype": "CustomViewApi.OptionGroupRow",
+            "cells": [
+              {
+                "@visokiotype": "CustomViewApi.OptionGroupCell",
+                "option": "measures",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },{
+        "@visokiotype": "CustomViewApi.OptionGroup",
+        "displayName": "Marker",
+        "rows": [
+          {
+            "@visokiotype": "CustomViewApi.OptionGroupRow",
+            "cells": [
+              {
+                "@visokiotype": "CustomViewApi.OptionGroupCell",
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "@visokiotype": "CustomViewApi.OptionGroupRow",
+            "cells": [
+              {
+                "@visokiotype": "CustomViewApi.OptionGroupCell",
+                "option": "title",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },{
+        "@visokiotype": "CustomViewApi.OptionGroup",
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "@visokiotype": "CustomViewApi.OptionGroupRow",
+            "cells": [
+              {
+                "@visokiotype": "CustomViewApi.OptionGroupCell",
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "@visokiotype": "CustomViewApi.OptionGroupRow",
+            "cells": [
+              {
+                "@visokiotype": "CustomViewApi.OptionGroupCell",
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {},
