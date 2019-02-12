@@ -1,6 +1,8 @@
 # ![](icon.svg) France Choropleth
 
-Custom view that shows a choropleth map of France divided by 100 departments. Each region can be coloured by a measure. 
+Custom view that shows a choropleth map of France divided by 100 departments. Each region can be coloured by a measure.
+
+A detailed tutorial on how to create a choropleth map can be found [here](https://help.visokio.com/support/solutions/articles/42000012405-how-to-create-a-custom-view-choropleth-map-example-using-d3). 
 
 ![screenshot](thumbnail.png)
 
