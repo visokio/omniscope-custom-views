@@ -150,9 +150,9 @@
         svg.selectAll("*").attr("transform", "scale("+scale+")");
 
         var options = omniscope.view.context().options.items;
-        svg.select("#text-a").text(options.setAName);
-        svg.select("#text-b").text(options.setBName);
-        svg.select("#text-c").text(options.setCName);
+        svg.select("#text-a").text((options.setAName !== undefined) ? options.setAName : options.filterAField);
+        svg.select("#text-b").text((options.setBName !== undefined) ? options.setBName : options.filterBField);
+        svg.select("#text-c").text((options.setCName !== undefined) ? options.setCName : options.filterCField);
 
         // ------------- Selection ------------ //
 
