@@ -2,8 +2,11 @@
   "name": "Venn Diagram",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["custom", "subset"],
   "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "subset"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
@@ -13,7 +16,12 @@
     "items": {
       "filterAField": {
         "displayName": "Filter A field",
-        "type": "FIELD"
+        "type": "FIELD",
+        "detail": "Field used to create a range filter for the set A",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ]
       },
       "filterAMax": {
         "displayName": "Filter A max",
@@ -25,7 +33,12 @@
       },
       "filterBField": {
         "displayName": "Filter B field",
-        "type": "FIELD"
+        "type": "FIELD",
+        "detail": "Field used to create a range filter for the set B",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ]
       },
       "filterBMax": {
         "displayName": "Filter B max",
@@ -37,7 +50,12 @@
       },
       "filterCField": {
         "displayName": "Filter C field",
-        "type": "FIELD"
+        "type": "FIELD",
+        "detail": "Field used to create a range filter for the set C",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ]
       },
       "filterCMax": {
         "displayName": "Filter C max",
@@ -64,7 +82,102 @@
       "toolbar": [],
       "x": [],
       "y": []
-    }
+    },
+    "optionGroups": [{
+      "displayName": "Filters",
+      "rows": [
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "title": "Filter A",
+          "cells": []
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "cells": [
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterAField",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterAMin",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterAMax",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "setAName",
+              "usePrefixTitle": false
+            }
+          ]
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "title": "Filter B",
+          "cells": []
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "cells": [
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterBField",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterBMin",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterBMax",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "setBName",
+              "usePrefixTitle": false
+            }
+          ]
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "title": "Filter C",
+          "cells": []
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "cells": [
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterCField",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterCMin",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterCMax",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "setCName",
+              "usePrefixTitle": false
+            }
+          ]
+        }
+      ]
+    }]
   },
   "defaultOptions": {
     "items": {},
