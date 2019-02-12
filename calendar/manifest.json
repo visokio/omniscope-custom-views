@@ -29,7 +29,10 @@
       "value": {
         "displayName": "Value",
         "type": "MEASURE",
-        "mandatory": true
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ]
       }
     },
     "structure": {
