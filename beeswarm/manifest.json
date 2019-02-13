@@ -23,10 +23,13 @@
         "iconName": "visokio-option-icon:colour-measure",
         "type": "MEASURE"
       },
-      "measures": {
+      "x": {
         "displayName": "X",
-        "type": "MEASURE",
-        "mandatory": true
+        "type": "MEASURE"
+      },
+      "y": {
+        "displayName": "Y",
+        "type": "MEASURE"
       },
       "paneX": {
         "displayName": "Pane X",
@@ -53,92 +56,59 @@
         "colour"
       ],
       "x": [
-        "split",
-        "measures",
+        "x",
         "paneX"
       ],
       "y": [
+        "y",
         "paneY"
       ]
     },
-    "optionGroups": [
-      {
-        "@visokiotype": "CustomViewApi.OptionGroup",
-        "displayName": "Chart",
-        "rows": [
-          {
-            "@visokiotype": "CustomViewApi.OptionGroupRow",
-            "cells": [
-              {
-                "@visokiotype": "CustomViewApi.OptionGroupCell",
-                "option": "split",
-                "usePrefixTitle": false
-              }
-            ]
-          },
-          {
-            "@visokiotype": "CustomViewApi.OptionGroupRow",
-            "cells": [
-              {
-                "@visokiotype": "CustomViewApi.OptionGroupCell",
-                "option": "measures",
-                "usePrefixTitle": false
-              }
-            ]
-          }
-        ]
-      },{
-        "@visokiotype": "CustomViewApi.OptionGroup",
-        "displayName": "Marker",
-        "rows": [
-          {
-            "@visokiotype": "CustomViewApi.OptionGroupRow",
-            "cells": [
-              {
-                "@visokiotype": "CustomViewApi.OptionGroupCell",
-                "option": "colour",
-                "usePrefixTitle": false
-              }
-            ]
-          },
-          {
-            "@visokiotype": "CustomViewApi.OptionGroupRow",
-            "cells": [
-              {
-                "@visokiotype": "CustomViewApi.OptionGroupCell",
-                "option": "title",
-                "usePrefixTitle": false
-              }
-            ]
-          }
-        ]
-      },{
-        "@visokiotype": "CustomViewApi.OptionGroup",
-        "displayName": "Pane/tile",
-        "rows": [
-          {
-            "@visokiotype": "CustomViewApi.OptionGroupRow",
-            "cells": [
-              {
-                "@visokiotype": "CustomViewApi.OptionGroupCell",
-                "option": "paneX",
-                "usePrefixTitle": false
-              }
-            ]
-          },
-          {
-            "@visokiotype": "CustomViewApi.OptionGroupRow",
-            "cells": [
-              {
-                "@visokiotype": "CustomViewApi.OptionGroupCell",
-                "option": "paneY",
-                "usePrefixTitle": false
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    "optionGroups": [{
+      "displayName": "Chart",
+      "rows": [{
+        "cells": [{
+          "option": "split",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "x",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "y",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Marker",
+      "rows": [{
+        "cells": [{
+          "option": "colour",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "title",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Pane/tile",
+      "rows": [{
+        "cells": [{
+          "option": "paneX",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "paneY",
+          "usePrefixTitle": false
+        }]
+      }]
+    }]
   },
   "defaultOptions": {
     "items": {},

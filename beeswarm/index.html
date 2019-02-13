@@ -80,11 +80,12 @@
     // (load = first init, update = external settings/state change, resize = browser window resized)
     omniscope.view.on(["load", "update", "resize"], function() {
 
-        var margin = {top: 40, right: 40, bottom: 40, left: -20};
+        var margin = {top: -20, right: 40, bottom: 40, left: -20};
         var width = +parseInt(svg.style("width"), 10) - 80;
         var height = +parseInt(svg.style("height"), 10) - 80;
 
         var x = d3.scaleLinear().rangeRound([60, width]);
+        var y = d3.scaleLinear().rangeRound([height, 60]);
 
         svg.select("g").remove();
 
@@ -99,26 +100,40 @@
         records.forEach(function(record) {
             bees.push({
                 id: (mappings.split !== undefined) ? record[mappings.split] : null,
-                value: (mappings.measures !== undefined) ? record[mappings.measures] : null,
+                xValue: (mappings.x !== undefined) ? record[mappings.x] : null,
+                yValue: (mappings.y !== undefined) ? record[mappings.y] : null,
                 colour: (mappings.colour !== undefined) ? record[mappings.colour] : null,
                 title: (mappings.title !== undefined) ? record[mappings.title] : null
             });
         });
 
-        x.domain(d3.extent(bees, function(d) { return d.value; }));
+        var xMin = d3.min(bees, function(d) { return d.xValue; });
+        var yMin = d3.min(bees, function(d) { return d.yValue; });
+
+        if (mappings.x) x.domain([(xMin < 0) ? xMin : 0, d3.max(bees, function(d) {return d.xValue;})]);
+        if (mappings.y) y.domain([(yMin < 0) ? yMin : 0, d3.max(bees, function(d) {return d.yValue;})]);
 
         var simulation = d3.forceSimulation(bees)
-            .force("x", d3.forceX(function(d) { return x(d.value); }).strength(1))
-            .force("y", d3.forceY(height / 2))
+            .force("x", d3.forceX(function(d) { return (d.xValue !== null) ? x(d.xValue) : width / 2; }).strength(1))
+            .force("y", d3.forceY(function(d) { return (d.yValue !== null) ? y(d.yValue) : height / 2; }).strength(1))
             .force("collide", d3.forceCollide(10))
             .stop();
 
         for (var i = 0; i < 500; ++i) simulation.tick();
 
-        g.append("g")
-            .attr("class", "axis axis--x")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+        if (mappings.x) {
+            g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+        }
+
+        if (mappings.y) {
+            g.append("g")
+                .attr("class", "axis axis--y")
+                .attr("transform", "translate(60,0)")
+                .call(d3.axisLeft(y));
+        }
 
         var cell = g.append("g")
             .attr("class", "cells")
