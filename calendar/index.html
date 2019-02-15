@@ -108,12 +108,17 @@
             filter.filters = [];
 
             if (selectionArr[0]) {
-                var dateValue = new Date(selectionArr[0].date).toISOString();
+                var cellDate = new Date(selectionArr[0].date);
+                var date = new Date(cellDate.getYear(), cellDate.getMonth(), cellDate.getDate());
+                var nextDate = new Date(date.getTime());
+                nextDate.setDate(nextDate.getDate() + 1);
                 var dateField = omniscope.view.context().options.items.date.inputField;
                 filter.filters = [
-                    {"type": "FIELD_VALUE", "inputField": dateField, "value": dateValue, "operator": "="}
+                    {"type": "FIELD_VALUE", "inputField": dateField, "value": date.toISOString(), "operator": ">="},
+                    {"type": "FIELD_VALUE", "inputField": dateField, "value": nextDate.toISOString(), "operator": "<"}
                 ];
             }
+
             omniscope.view.context().viewSelection = filter;
             omniscope.view.updated();
         });
