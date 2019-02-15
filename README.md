@@ -67,3 +67,4 @@ The views added here are available to install in the view picker of Omniscope.
  - Sizing, colouring, etc.
  - Suitability to any data. It's ok for a view to have specific data structure requirements (as long as you it's described in the readme file, and where possible manifest option tooltips)
  - Pixel-perfect (minor visual glitches that don't appear in every scenario are ok)
+ - Proper brushing (note poor man's brushing is perfectly acceptable)
