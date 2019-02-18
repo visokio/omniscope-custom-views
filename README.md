@@ -16,6 +16,9 @@ The views added here are available to install in the view picker of Omniscope.
         <td width="33%">Venn Diagram<br><a href="venndiagram/README.md" title="Venn Diagram"><img width="290" src="https://github.com/visokio/custom-views/raw/master/venndiagram/thumbnail.png"></a></td>
         <td width="33%">Beeswarm<br><a href="beeswarm/README.md" title="Beeswarm"><img width="290" src="https://github.com/visokio/custom-views/raw/master/beeswarm/thumbnail.png"></a></td>
     </tr>
+    <tr valign="top">
+            <td width="33%">Force Dot Density Map<br><a href="forcedotdensitymap/README.md" title="Force Dot Density Map"><img width="290" src="https://github.com/visokio/custom-views/raw/master/forcedotdensitymap/thumbnail.png"></a></td>
+        </tr>
 </table>
 
 ### How to create a new view
