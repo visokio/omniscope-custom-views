@@ -103,10 +103,10 @@
             function tick() {
                 svg.selectAll("circle")
                     .attr("cx", function(d) {
-                        return d.x = (d.p && !d.p.in && d.p.x !== undefined) ? d.p.x : d.x;
+                        return d.x;
                     })
                     .attr("cy", function(d) {
-                        return d.y = (d.p && !d.p.in && d.p.y !== undefined) ? d.p.y : d.y;
+                        return d.y;
                     });
             }
 

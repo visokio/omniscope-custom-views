@@ -46,7 +46,8 @@
       },
       "split": {
         "displayName": "Split",
-        "type": "GROUPING"
+        "type": "GROUPING",
+        "mandatory": true
       },
       "tooltiptitle": {
         "displayName": "Tooltip title",
@@ -55,8 +56,7 @@
       },
       "tooltipvalue": {
         "displayName": "Tooltip value",
-        "type": "MEASURE",
-        "mandatory": true
+        "type": "MEASURE"
       }
     },
     "structure": {
