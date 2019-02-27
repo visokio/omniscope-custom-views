@@ -14,21 +14,13 @@
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
-  "dataLimit": 10000,
+  "dataLimit": 1000,
   "supportsSelection": true,
   "options": {
     "items": {
       "colour": {
         "displayName": "Colour",
         "iconName": "visokio-option-icon:colour-measure",
-        "type": "MEASURE"
-      },
-      "x": {
-        "displayName": "X",
-        "type": "MEASURE"
-      },
-      "y": {
-        "displayName": "Y",
         "type": "MEASURE"
       },
       "paneX": {
@@ -48,6 +40,14 @@
       },
       "title": {
         "displayName": "Tooltip",
+        "type": "MEASURE"
+      },
+      "x": {
+        "displayName": "X",
+        "type": "MEASURE"
+      },
+      "y": {
+        "displayName": "Y",
         "type": "MEASURE"
       }
     },
