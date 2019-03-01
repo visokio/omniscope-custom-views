@@ -11,7 +11,7 @@
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
-  "dataLimit": 10000,
+  "dataLimit": 100000,
   "supportsSelection": true,
   "options": {
     "items": {
