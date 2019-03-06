@@ -43,9 +43,9 @@
 			"version": 0
 		},
 		{
-			"name": "forcedotdensitymap",
-			"displayName": "Force Dot Density Map",
-			"tags": ["custom", "map", "dot", "density", "force", "jitter"],
+			"name": "spainforcedotdensitymap",
+			"displayName": "Spain Force Dot Density Map",
+			"tags": ["custom", "map", "dot", "density", "force", "jitter", "spain"],
 			"files": ["spain_peninsula.json"],
 			"version": 0
 		}

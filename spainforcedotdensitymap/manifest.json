@@ -1,5 +1,5 @@
 {
-  "name": "Force Dot Density Map",
+  "name": "Spain Force Dot Density Map",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
@@ -9,7 +9,8 @@
     "dot",
     "density",
     "force",
-    "jitter"
+    "jitter",
+    "spain"
   ],
   "sandbox": false,
   "autoPane": true,

@@ -1,4 +1,4 @@
-# ![](icon.svg) Force Dot Density Map
+# ![](icon.svg) Spain Force Dot Density Map
 
 Custom view that shows geographical dots on a flat base map. Dots are not accurately positioned but instead are spread to occupy the space nearby and avoid overlap.
 
