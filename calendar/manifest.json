@@ -11,19 +11,16 @@
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
-  "dataLimit": 100000,
+  "dataLimit": 1000,
   "supportsSelection": true,
   "options": {
     "items": {
       "date": {
         "displayName": "Date",
-        "type": "GROUPING",
+        "type": "FIELD",
         "mandatory": true,
         "validFieldTypes": [
           "DATE"
-        ],
-        "validGroupingTypes": [
-          "UNIQUE_VALUES"
         ]
       },
       "value": {

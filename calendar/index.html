@@ -43,32 +43,69 @@
         omniscope.view.whitespaceClick();
     });
 
-    // Naively redraw on any of these events 
+    var update = function () {
+        omniscope.view.busy(true);
+
+        var options = omniscope.view.context().options;
+
+        var query_ = {
+            "@visokiotype": "QueryApi.AggregateOperation",
+            "groupings": [
+                {
+                    "inputField": options.items.date,
+                    "type": "HISTOGRAM",
+                    "dateUnit": "DAY",
+                    "histogramInterval": 1,
+                    "fitToScreen": true,
+                    "name": "date"
+                }
+            ],
+            "measures": [
+                {
+                    "name": "value",
+                    "inputField": options.items.value.inputField,
+                    "function": options.items.value.function,
+                }
+            ],
+            "input": {
+                "@visokiotype": "QueryApi.RecordFilterOperation",
+                "filter": omniscope.view.context().dataConfig.filter,
+                "input": {
+                    "@visokiotype": "QueryApi.DefaultSource"
+                }
+            }
+        };
+
+        omniscope.view.queryBuilder()
+            .table(query_)
+            .on("load", function(event) {
+                // On success, pass the TableQueryOutput object to render():
+
+                renderView(event.data);
+            }).on("error", function(err) {
+            // On error, report to the enclosing application:
+            omniscope.view.error(err.error);
+        }).execute(); // Submit the query for execution
+        omniscope.view.busy(false);
+    };
+
+    // Naively redraw on any of these events
     // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        renderView(omniscope.view.context().result);
-    });
+    omniscope.view.on(["load", "update", "resize"], update);
 
     var renderView = function (result) {
-
         // Retrieve the auto-query results, a 2d array ([row][column]):
-        var records = result.data.records;
-        var mappings = result.mappings;
+        var records = result.records;
 
         // Map records to field options
         var data = [];
         records.forEach(function(record) {
-            if (record[mappings.date] !== undefined && record[mappings.date] !== null
-                && record[mappings.value] !== undefined && record[mappings.value] !== null) {
-                data.push({
-                    date: (mappings.date !== undefined) ? record[mappings.date] : null,
-                    value: (mappings.value !== undefined) ? record[mappings.value] : null
-                });
-            }
+            data.push({
+                date: new Date(record[0].lower),
+                value: record[1]
+            });
         });
 
-        var rowData = result.data.records;
 
         var totalYears = [];
 
@@ -108,11 +145,13 @@
             filter.filters = [];
 
             if (selectionArr[0]) {
+                var options = omniscope.view.context().options;
+
                 var cellDate = new Date(selectionArr[0].date);
                 var date = new Date(cellDate.getYear(), cellDate.getMonth(), cellDate.getDate());
                 var nextDate = new Date(date.getTime());
                 nextDate.setDate(nextDate.getDate() + 1);
-                var dateField = omniscope.view.context().options.items.date.inputField;
+                var dateField = options.items.date;
                 filter.filters = [
                     {"type": "FIELD_VALUE", "inputField": dateField, "value": date.toISOString(), "operator": ">="},
                     {"type": "FIELD_VALUE", "inputField": dateField, "value": nextDate.toISOString(), "operator": "<"}
