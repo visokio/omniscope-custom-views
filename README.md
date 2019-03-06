@@ -55,7 +55,7 @@ The views added here are available to install in the view picker of Omniscope.
         "name": "<<unique view id in lower case>>",
         "displayName": "<<view name to display in the view picker>>",
         "tags": [<<list of tags to identify the view with>>],
-        "files": [<<list of additional file names that the view requires],
+        "files": [<<list of additional file names that the view requires>>],
         "version": 0
     }
     ```
