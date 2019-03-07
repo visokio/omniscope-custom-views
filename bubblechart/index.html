@@ -18,7 +18,7 @@
     </style>
 
     <!-- Put SCRIPT tags to load 3rd party libraries here -->
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 
 </head>
 
@@ -36,7 +36,7 @@
 
     var format = d3.format(",d");
 
-    var color = d3.scaleOrdinal(d3.schemeCategory20c);
+    var color = d3.scaleOrdinal(d3.schemeCategory10);
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
@@ -96,22 +96,25 @@
 
         nodeEnter.append("circle");
         svg.selectAll(".node").select("circle")
-            .attr("id", function(d) { return d.id; })
+            .attr("id", function(d) { return "circle-" + d.id.replace(/\s/g, "+"); })
             .style("fill", function(d) { return color(d.id); })
             .attr("r", function(d) { return d.r; });
 
-        nodeEnter.append("clipPath");
+        nodeEnter.append("clipPath")
         svg.selectAll(".node").select("clipPath")
-            .attr("id", function(d) { return "clip-" + d.id; })
+            .attr("id", function(d) { return "clipPath-" + d.id.replace(/\s/g, "+"); })
             .append("use")
-            .attr("xlink:href", function(d) { return "#" + d.id; });
+            .attr("xlink:href", function(d) { return "#circle-" + d.id.replace(/\s/g, "+"); });
 
-        nodeEnter.append("text");
+        nodeEnter.append("text")
         svg.selectAll(".node").select("text")
-            .attr("clip-path", function(d) { return "url(#clip-" + d.id + ")"; })
+            .attr("clip-path", function(d) { return "url(#clipPath-"+d.id.replace(/\s/g, "+")+")"; })
+            .selectAll("tspan")
+            .data(function(d) { return d.id.split(/(?=[A-Z][^A-Z])/g); })
+            .join("tspan")
             .attr("x", 0)
-            .attr("y", 0)
-            .text(function(d) { return d.id; });
+            .attr("y", (d, i, nodes) => `${i - nodes.length / 2 + 0.8}em`)
+            .text(d => d);
 
         nodeEnter.append("title");
         svg.selectAll(".node").select("title")
