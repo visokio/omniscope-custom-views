@@ -1,0 +1,190 @@
+{
+  "name": "Force Coordinate Graph",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "circle",
+    "dot",
+    "jitter",
+    "coordinate",
+    "graph",
+    "diagram",
+    "edge",
+    "bundle",
+    "force",
+    "network",
+    "structure"
+  ],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 100000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "colour": {
+        "displayName": "Colour",
+        "iconName": "visokio-option-icon:colour-measure",
+        "type": "MEASURE"
+      },
+      "edgeWeight": {
+        "displayName": "Weight",
+        "type": "MEASURE",
+        "detail": "Value used to sort the edges and show the most important ones"
+      },
+      "imageURL": {
+        "displayName": "Image URL",
+        "type": "MEASURE"
+      },
+      "linkedNodeId": {
+        "displayName": "Linked node Id",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "Id of the target node of the edge"
+      },
+      "markerSize": {
+        "displayName": "Size",
+        "iconName": "visokio-option-icon:size-measure",
+        "type": "MEASURE"
+      },
+      "nodeId": {
+        "displayName": "Node Id",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "Id of the origin node of the edge"
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      },
+      "title": {
+        "displayName": "Tooltip",
+        "type": "MEASURE"
+      },
+      "x": {
+        "displayName": "X",
+        "type": "MEASURE",
+        "mandatory": true
+      },
+      "y": {
+        "displayName": "Y",
+        "type": "MEASURE",
+        "mandatory": true
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "colour",
+        "markerSize"
+      ],
+      "x": [
+        "x",
+        "paneX"
+      ],
+      "y": [
+        "y",
+        "paneY"
+      ]
+    },
+    "optionGroups": [{
+      "displayName": "Chart",
+      "rows": [{
+        "cells": [{
+          "option": "nodeId",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "linkedNodeId",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "x",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "y",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Marker",
+      "rows": [{
+        "cells": [{
+          "option": "colour",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "markerSize",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "title",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "imageURL",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Edge",
+      "rows": [{
+        "cells": [{
+          "option": "edgeWeight",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Pane/tile",
+      "rows": [{
+        "cells": [{
+          "option": "paneX",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "paneY",
+          "usePrefixTitle": false
+        }]
+      }]
+    }]
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}

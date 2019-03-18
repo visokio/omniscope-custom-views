@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        html, body, main {
+            /* Ensure the body fills the view, so clicks are handled everywhere: */
+            width: 100%;
+            height: 100%;
+        }
+        #main {
+            width: 100%;
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            white-space: pre;
+            position: absolute;
+        }
+        svg {
+            top: 0px;
+            left: 0px;
+            position: absolute;
+        }
+        .axis path, .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            font: 10px sans-serif;
+        }
+
+        .cells path {
+            fill: none;
+            pointer-events: all;
+        }
+
+        .cells :hover circle {
+            stroke: #7DA9DA;
+            stroke-width: 4px;
+        }
+
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
+    <script src="paper-core.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div id="main">
+    <svg width="100%" height="100%"></svg>
+</div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+
+    var NODE_RADIUS = 10;
+    var NODE_MARGIN = 4;
+    var NODE_SEPARATION = 5;
+    var MAX_EDGES = 2000;
+
+    var svg = d3.select("svg");
+
+    var d3line = d3.line()
+        .x(function(d){ return d.x; })
+        .y(function(d){ return d.y; })
+        .curve(d3.curveCardinal);
+
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+    // Naively redraw on any of these events
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+
+        svg.select("g").remove();
+        svg.selectAll("path").remove();
+
+        var margin = {top: -20, right: 40, bottom: 40, left: -20};
+        var width = +parseInt(svg.style("width"), 10) - 80;
+        var height = +parseInt(svg.style("height"), 10) - 80;
+
+        var x = d3.scaleLinear().range([100, width - 100]);
+        var y = d3.scaleLinear().range([height - 100, 100]);
+        var size = d3.scaleSqrt().range([2, 25]);
+        var colour = d3.scaleOrdinal(d3.schemeSet3);
+
+        // Retrieve the auto-query results, a 2d array ([row][column]):
+        var records = omniscope.view.context().result.data.records;
+        var mappings = omniscope.view.context().result.mappings;
+
+        var beeLinksMap = new Map();
+
+        // Map records to field options
+        var bees = new Map();
+        records.forEach(function(record, i) {
+            var bee = {
+                id: (mappings.nodeId !== undefined) ? record[mappings.nodeId] : null,
+                xValue: (mappings.x !== undefined) ? record[mappings.x] : null,
+                yValue: (mappings.y !== undefined) ? record[mappings.y] : null,
+                colour: (mappings.colour !== undefined) ? record[mappings.colour] : null,
+                imageURL: (mappings.imageURL !== undefined) ? record[mappings.imageURL] : null,
+                size: (mappings.markerSize !== undefined) ? record[mappings.markerSize] : null,
+                title: (mappings.title !== undefined) ? record[mappings.title] : null
+            };
+            bees.set(bee.id, bee);
+
+            // Links
+            var linkedId = (mappings.linkedNodeId !== undefined) ? record[mappings.linkedNodeId] : null;
+            var linkWeight = (mappings.linkWeight !== undefined) ? record[mappings.linkWeight] : null;
+
+            var hasLinkedId = linkedId !== undefined && linkedId !== null;
+            var link = {targetId: linkedId, colour: bee.colour, weight: linkWeight};
+            if (!beeLinksMap.has(bee.id)) {
+                beeLinksMap.set(bee.id, (hasLinkedId) ? [link] : []);
+            } else if (hasLinkedId) {
+                beeLinksMap.get(bee.id).push(link);
+            }
+        });
+
+        var beesArray = Array.from(bees.values());
+
+        // --- SCALES --- //
+        if (mappings.x) x.domain([d3.min(beesArray, function(d) { return d.xValue; }),
+            d3.max(beesArray, function(d) {return d.xValue;})]);
+        if (mappings.y) y.domain([d3.min(beesArray, function(d) { return d.yValue; }),
+            d3.max(beesArray, function(d) {return d.yValue;})]);
+        if (mappings.markerSize) size.domain(d3.extent(beesArray, function(d) { return d.size;}));
+
+        // --- FORCE SIMULATION --- //
+        var simulation = d3.forceSimulation(beesArray)
+            .force("x", d3.forceX(function(d) { return (d.xValue !== null) ? x(d.xValue) : width / 2; }).strength(1))
+            .force("y", d3.forceY(function(d) { return (d.yValue !== null) ? y(d.yValue) : height / 2; }).strength(1))
+            .force("collide", d3.forceCollide(function(d) {
+                return (mappings.markerSize) ? NODE_MARGIN + size(d.size)*2 + NODE_SEPARATION : NODE_MARGIN + NODE_RADIUS + NODE_SEPARATION;
+            }))
+            .stop();
+        for (var i = 0; i < 500; ++i) simulation.tick();
+
+        // --- LINKS --- //
+        var beeKeys = Array.from(bees.keys());
+        var linkIds = [];
+        beeLinksMap.forEach(function(beeLinks, sourceId) {
+            var source = bees.get(sourceId);
+            beeLinks.forEach(function(link) {
+                var target = bees.get(link.targetId);
+                linkIds.push({
+                    source: beeKeys.indexOf(source.id),
+                    target: beeKeys.indexOf(target.id),
+                    data: {
+                        colour: (mappings.colour) ? colour(source.colour) : "rgb(123, 168, 220)",
+                        opacity: 0.15,
+                        path: [[source.x, source.y], [target.x, target.y]],
+                        weight: link.weight
+                    }
+                });
+            });
+        });
+
+        linkIds.sort(function(a, b) {
+            return a.data.weight > b.data.weight;
+        });
+
+        linkIds = linkIds.slice(0, MAX_EDGES);
+
+        drawNodes(beesArray);
+
+        if (window.Worker) {
+            var worker = new Worker("bundler.js");
+            worker.onmessage = function(e) {
+                drawEdges(e.data);
+                drawNodes(beesArray);
+            };
+            worker.postMessage({beesArray: beesArray, linkIds: linkIds});
+        } else {
+            var fbundling = d3.ForceEdgeBundling()
+                .nodes(beesArray)
+                .edges(linkIds);
+            var results = fbundling();
+            drawEdges(results);
+        }
+
+        function drawEdges(paths) {
+            svg.selectAll("path").remove();
+            svg.selectAll("path")
+                .data(paths)
+                .enter()
+                .append("path")
+                .attr("d", d3line)
+                .style("stroke-width", 1)
+                .style("stroke", function(d, i) { return linkIds[i].data.colour;})
+                .style("fill", "none")
+                .attr("stroke-opacity", function(d, i) { return linkIds[i].data.opacity; });
+        }
+
+        function drawNodes(beesArray) {
+            svg.selectAll("defs").remove();
+            svg.selectAll(".cells").remove();
+            // --- IMAGES --- //
+            var defs = svg.append("defs").attr("id", "imgdefs");
+
+            bees.forEach(function(bee) {
+                var pattern = defs.append("pattern")
+                    .attr("id", "img-"+bee.id)
+                    .attr("class", "img-pattern")
+                    .attr("height", 1)
+                    .attr("width", 1)
+                    .attr("x", 0)
+                    .attr("y", 0);
+
+                pattern.append("image")
+                    .attr("x", -size(bee.size)/2)
+                    .attr("y", -size(bee.size)/2)
+                    .attr("height", (mappings.markerSize) ? size(bee.size)*5 : NODE_RADIUS*4)
+                    .attr("width", (mappings.markerSize) ? size(bee.size)*5 : NODE_RADIUS*4)
+                    .attr("xlink:href", bee.imageURL);
+            });
+
+            // --- NODES --- //
+            var g = svg.append("g");
+
+            var cell = g.append("g")
+                .attr("class", "cells")
+                .selectAll("g").data(d3.voronoi()
+                    .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
+                    .x(function(d) { return d.x; })
+                    .y(function(d) { return d.y; })
+                    .polygons(beesArray)).enter().filter(function(d) {return !!d;}).append("g");
+
+            cell.append("circle")
+                .attr("r", function(d) { return (mappings.markerSize && d) ? size(d.data.size)*2 : NODE_RADIUS*2; })
+                .attr("cx", function(d) { return (d) ? d.data.x : null; })
+                .attr("cy", function(d) { return (d) ? d.data.y : null; })
+                .attr("fill", function(d) { return (d) ? "url(#img-"+d.data.id+")" : null;});
+
+            cell.append("circle")
+                .attr("class", "cluster-circle")
+                .attr("r", function(d) {
+                    return (mappings.colour && mappings.markerSize && d) ? NODE_MARGIN+size(d.data.size)*2 : NODE_MARGIN+NODE_RADIUS*2;
+                })
+                .attr("cx", function(d) { return (d) ? d.data.x : null; })
+                .attr("cy", function(d) { return (d) ? d.data.y : null; })
+                .attr("fill-opacity", function(d) { return (d.data.imageURL) ? 0.4 : 1; })
+                .attr("fill", function(d) { return (mappings.colour && d) ? colour(d.data.colour) : "none";});
+
+            cell.append("path")
+                .attr("d", function(d) { return (d) ? "M" + d.join("L") + "Z" : null; });
+
+            cell.append("title")
+                .text(function(d) { return (d) ? d.data.title : null; });
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

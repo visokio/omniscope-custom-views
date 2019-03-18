@@ -48,6 +48,26 @@
 			"tags": ["custom", "map", "dot", "density", "force", "jitter", "spain"],
 			"files": ["spain_peninsula.json"],
 			"version": 0
+		},
+		{
+			"name": "forcecoordinategraph",
+			"displayName": "Force Coordinate Graph",
+			"tags": [
+				"custom",
+				"circle",
+				"dot",
+				"jitter",
+				"coordinate",
+				"graph",
+				"diagram",
+				"edge",
+				"bundle",
+				"force",
+				"network",
+				"structure"
+			],
+			"files": ["d3-ForceEdgeBundling.js", "bundler.js"],
+			"version": 0
 		}
 	]
 }
