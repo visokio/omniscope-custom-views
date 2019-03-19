@@ -24,6 +24,11 @@
   "supportsSelection": true,
   "options": {
     "items": {
+      "preventNodeOverlap": {
+        "displayName": "Prevent node overlapping",
+        "type": "TOGGLE",
+        "detail": "Add jittering between nodes so they don't appear on top of each other when they share the same coordinates"
+      },
       "colour": {
         "displayName": "Colour",
         "iconName": "visokio-option-icon:colour-measure",
@@ -116,6 +121,11 @@
           "option": "y",
           "usePrefixTitle": false
         }]
+      }, {
+        "cells": [{
+          "option": "preventNodeOverlap",
+          "usePrefixTitle": false
+        }]
       }]
     }, {
       "displayName": "Marker",
@@ -164,7 +174,9 @@
     }]
   },
   "defaultOptions": {
-    "items": {},
+    "items": {
+      "preventNodeOverlap": true
+    },
     "pane": {
       "yAxisHeaderWidth": 75,
       "paneWidth": 200,

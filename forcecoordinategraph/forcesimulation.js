@@ -4,10 +4,13 @@ onmessage = function(e) {
     var simulation = d3.forceSimulation(nodes)
         .force("x", d3.forceX(function(d) { return (d.xValue !== null) ? d.x : e.data.width / 2; }).strength(1))
         .force("y", d3.forceY(function(d) { return (d.yValue !== null) ? d.y : e.data.height / 2; }).strength(1))
-        .force("collide", d3.forceCollide(function(d) {
-            return (e.data.mappings.markerSize) ? e.data.nodeMargin + d.size : e.data.nodeMargin + e.data.nodeRadius;
-        }))
         .stop();
+
+    if (e.data.preventNodeOverlap) {
+        simulation.force("collide", d3.forceCollide(function(d) {
+            return (e.data.mappings.markerSize) ? e.data.nodeMargin + d.size : e.data.nodeMargin + e.data.nodeRadius;
+        }));
+    }
 
     for (var i = 0; i < 500; ++i) {
         simulation.tick();

@@ -104,6 +104,7 @@
         // Retrieve the auto-query results, a 2d array ([row][column]):
         var records = omniscope.view.context().result.data.records;
         var mappings = omniscope.view.context().result.mappings;
+        var options = omniscope.view.context().options;
 
         var beeLinksMap = new Map();
 
@@ -196,17 +197,21 @@
                 nodeMargin: NODE_MARGIN,
                 nodeRadius: NODE_RADIUS,
                 width: width,
-                height: height
+                height: height,
+                preventNodeOverlap: options.items.preventNodeOverlap
             });
         } else {
             // --- FORCE SIMULATION --- //
             var simulation = d3.forceSimulation(beesArray)
                 .force("x", d3.forceX(function(d) { return (d.xValue !== null) ? d.x : width / 2; }).strength(1))
                 .force("y", d3.forceY(function(d) { return (d.yValue !== null) ? d.y : height / 2; }).strength(1))
-                .force("collide", d3.forceCollide(function(d) {
-                    return (mappings.markerSize) ? NODE_MARGIN + d.size : NODE_MARGIN + NODE_RADIUS;
-                }))
                 .stop();
+
+            if (options.items.preventNodeOverlap) {
+                simulation.force("collide", d3.forceCollide(function(d) {
+                    return (mappings.markerSize) ? NODE_MARGIN + d.size : NODE_MARGIN + NODE_RADIUS;
+                }));
+            }
 
             for (var i = 0; i < 500; ++i) {
                 simulation.tick();
