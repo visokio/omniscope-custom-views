@@ -8,6 +8,7 @@
             /* Ensure the body fills the view, so clicks are handled everywhere: */
             width: 100%;
             height: 100%;
+            margin: 0px;
         }
         #main {
             width: 100%;
@@ -47,7 +48,6 @@
     <!-- Put SCRIPT tags to load 3rd party libraries here -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
-    <script src="paper-core.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
 </head>
@@ -62,9 +62,8 @@
 
 <script>
 
-    var NODE_RADIUS = 10;
-    var NODE_MARGIN = 4;
-    var NODE_SEPARATION = 5;
+    var NODE_RADIUS = 8;
+    var NODE_MARGIN = 2;
     var MAX_EDGES = 2000;
 
     var svg = d3.select("svg");
@@ -93,13 +92,13 @@
         svg.select("g").remove();
         svg.selectAll("path").remove();
 
-        var margin = {top: -20, right: 40, bottom: 40, left: -20};
-        var width = +parseInt(svg.style("width"), 10) - 80;
-        var height = +parseInt(svg.style("height"), 10) - 80;
+        var margin = {top: 80, right: 80, bottom: 80, left: 80};
+        var width = +parseInt(svg.style("width"), 10);
+        var height = +parseInt(svg.style("height"), 10);
 
-        var x = d3.scaleLinear().range([100, width - 100]);
-        var y = d3.scaleLinear().range([height - 100, 100]);
-        var size = d3.scaleSqrt().range([2, 25]);
+        var x = d3.scaleLinear().range([0 + margin.left, width - margin.right]);
+        var y = d3.scaleLinear().range([height - margin.bottom, 0 + margin.top]);
+        var size = d3.scaleSqrt().range([4, 50]);
         var colour = d3.scaleOrdinal(d3.schemeSet3);
 
         // Retrieve the auto-query results, a 2d array ([row][column]):
@@ -117,7 +116,7 @@
                 yValue: (mappings.y !== undefined) ? record[mappings.y] : null,
                 colour: (mappings.colour !== undefined) ? record[mappings.colour] : null,
                 imageURL: (mappings.imageURL !== undefined) ? record[mappings.imageURL] : null,
-                size: (mappings.markerSize !== undefined) ? record[mappings.markerSize] : null,
+                sizeValue: (mappings.markerSize !== undefined) ? record[mappings.markerSize] : null,
                 title: (mappings.title !== undefined) ? record[mappings.title] : null
             };
             bees.set(bee.id, bee);
@@ -142,17 +141,7 @@
             d3.max(beesArray, function(d) {return d.xValue;})]);
         if (mappings.y) y.domain([d3.min(beesArray, function(d) { return d.yValue; }),
             d3.max(beesArray, function(d) {return d.yValue;})]);
-        if (mappings.markerSize) size.domain(d3.extent(beesArray, function(d) { return d.size;}));
-
-        // --- FORCE SIMULATION --- //
-        var simulation = d3.forceSimulation(beesArray)
-            .force("x", d3.forceX(function(d) { return (d.xValue !== null) ? x(d.xValue) : width / 2; }).strength(1))
-            .force("y", d3.forceY(function(d) { return (d.yValue !== null) ? y(d.yValue) : height / 2; }).strength(1))
-            .force("collide", d3.forceCollide(function(d) {
-                return (mappings.markerSize) ? NODE_MARGIN + size(d.size)*2 + NODE_SEPARATION : NODE_MARGIN + NODE_RADIUS + NODE_SEPARATION;
-            }))
-            .stop();
-        for (var i = 0; i < 500; ++i) simulation.tick();
+        if (mappings.markerSize) size.domain(d3.extent(beesArray, function(d) { return d.sizeValue;}));
 
         // --- LINKS --- //
         var beeKeys = Array.from(bees.keys());
@@ -161,35 +150,71 @@
             var source = bees.get(sourceId);
             beeLinks.forEach(function(link) {
                 var target = bees.get(link.targetId);
-                linkIds.push({
-                    source: beeKeys.indexOf(source.id),
-                    target: beeKeys.indexOf(target.id),
-                    data: {
-                        colour: (mappings.colour) ? colour(source.colour) : "rgb(123, 168, 220)",
-                        opacity: 0.15,
-                        path: [[source.x, source.y], [target.x, target.y]],
-                        weight: link.weight
-                    }
-                });
+                if (target) {
+                    linkIds.push({
+                        source: beeKeys.indexOf(source.id),
+                        target: beeKeys.indexOf(target.id),
+                        data: {
+                            colour: (mappings.colour) ? colour(source.colour) : "rgb(123, 168, 220)",
+                            opacity: 0.15,
+                            weight: link.weight
+                        }
+                    });
+                }
             });
         });
 
+        beesArray.forEach(function(d) {
+            d.x = x(d.xValue);
+            d.y = y(d.yValue);
+            d.size = size(d.sizeValue);
+        });
+
+        // Keep only the most important edges
         linkIds.sort(function(a, b) {
             return a.data.weight > b.data.weight;
         });
-
         linkIds = linkIds.slice(0, MAX_EDGES);
 
-        drawNodes(beesArray);
-
+        omniscope.view.busy(true);
         if (window.Worker) {
-            var worker = new Worker("bundler.js");
-            worker.onmessage = function(e) {
-                drawEdges(e.data);
-                drawNodes(beesArray);
+            var forceSimulation = new Worker("forcesimulation.js");
+            forceSimulation.onmessage = function(e) {
+                var nodes = e.data.nodes;
+                omniscope.view.busy(false);
+                drawNodes(nodes);
+                var bundler = new Worker("bundler.js");
+                bundler.onmessage = function(e) {
+                    drawEdges(e.data.edges);
+                    drawNodes(nodes);
+                };
+                bundler.postMessage({nodes: nodes, edges: linkIds});
             };
-            worker.postMessage({beesArray: beesArray, linkIds: linkIds});
+            forceSimulation.postMessage({
+                nodes: beesArray,
+                mappings: mappings,
+                nodeMargin: NODE_MARGIN,
+                nodeRadius: NODE_RADIUS,
+                width: width,
+                height: height
+            });
         } else {
+            // --- FORCE SIMULATION --- //
+            var simulation = d3.forceSimulation(beesArray)
+                .force("x", d3.forceX(function(d) { return (d.xValue !== null) ? d.x : width / 2; }).strength(1))
+                .force("y", d3.forceY(function(d) { return (d.yValue !== null) ? d.y : height / 2; }).strength(1))
+                .force("collide", d3.forceCollide(function(d) {
+                    return (mappings.markerSize) ? NODE_MARGIN + d.size : NODE_MARGIN + NODE_RADIUS;
+                }))
+                .stop();
+
+            for (var i = 0; i < 500; ++i) {
+                simulation.tick();
+                tick();
+            }
+            omniscope.view.busy(false);
+            drawNodes(beesArray);
+
             var fbundling = d3.ForceEdgeBundling()
                 .nodes(beesArray)
                 .edges(linkIds);
@@ -210,13 +235,13 @@
                 .attr("stroke-opacity", function(d, i) { return linkIds[i].data.opacity; });
         }
 
-        function drawNodes(beesArray) {
+        function drawNodes(_beesArray) {
             svg.selectAll("defs").remove();
             svg.selectAll(".cells").remove();
             // --- IMAGES --- //
             var defs = svg.append("defs").attr("id", "imgdefs");
 
-            bees.forEach(function(bee) {
+            _beesArray.forEach(function(bee) {
                 var pattern = defs.append("pattern")
                     .attr("id", "img-"+bee.id)
                     .attr("class", "img-pattern")
@@ -226,10 +251,10 @@
                     .attr("y", 0);
 
                 pattern.append("image")
-                    .attr("x", -size(bee.size)/2)
-                    .attr("y", -size(bee.size)/2)
-                    .attr("height", (mappings.markerSize) ? size(bee.size)*5 : NODE_RADIUS*4)
-                    .attr("width", (mappings.markerSize) ? size(bee.size)*5 : NODE_RADIUS*4)
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("height", (mappings.markerSize) ? bee.size*2 : NODE_RADIUS*2)
+                    .attr("width", (mappings.markerSize) ? bee.size*2 : NODE_RADIUS*2)
                     .attr("xlink:href", bee.imageURL);
             });
 
@@ -238,33 +263,31 @@
 
             var cell = g.append("g")
                 .attr("class", "cells")
-                .selectAll("g").data(d3.voronoi()
-                    .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
-                    .x(function(d) { return d.x; })
-                    .y(function(d) { return d.y; })
-                    .polygons(beesArray)).enter().filter(function(d) {return !!d;}).append("g");
+                .selectAll("g")
+                .data(_beesArray)
+                .enter().append("g");
 
             cell.append("circle")
-                .attr("r", function(d) { return (mappings.markerSize && d) ? size(d.data.size)*2 : NODE_RADIUS*2; })
-                .attr("cx", function(d) { return (d) ? d.data.x : null; })
-                .attr("cy", function(d) { return (d) ? d.data.y : null; })
-                .attr("fill", function(d) { return (d) ? "url(#img-"+d.data.id+")" : null;});
+                .attr("r", function(d) { return (mappings.markerSize && d) ? d.size : NODE_RADIUS; })
+                .attr("cx", function(d) { return (d) ? d.x : null; })
+                .attr("cy", function(d) { return (d) ? d.y : null; })
+                .attr("fill", function(d) { return (d) ? "url(#img-"+d.id+")" : null;});
 
             cell.append("circle")
                 .attr("class", "cluster-circle")
                 .attr("r", function(d) {
-                    return (mappings.colour && mappings.markerSize && d) ? NODE_MARGIN+size(d.data.size)*2 : NODE_MARGIN+NODE_RADIUS*2;
+                    return (mappings.markerSize && d) ? d.size : NODE_RADIUS;
                 })
-                .attr("cx", function(d) { return (d) ? d.data.x : null; })
-                .attr("cy", function(d) { return (d) ? d.data.y : null; })
-                .attr("fill-opacity", function(d) { return (d.data.imageURL) ? 0.4 : 1; })
-                .attr("fill", function(d) { return (mappings.colour && d) ? colour(d.data.colour) : "none";});
-
-            cell.append("path")
-                .attr("d", function(d) { return (d) ? "M" + d.join("L") + "Z" : null; });
+                .attr("cx", function(d) { return (d) ? d.x : null; })
+                .attr("cy", function(d) { return (d) ? d.y : null; })
+                .attr("fill-opacity", function(d) { return (d.imageURL) ? 0.4 : 1; })
+                .attr("fill", function(d) {
+                    if (mappings.colour && d) return colour(d.colour);
+                    return (mappings.imageURL) ? "none" : "#7DA9DA";
+                });
 
             cell.append("title")
-                .text(function(d) { return (d) ? d.data.title : null; });
+                .text(function(d) { return (d) ? d.title : null; });
         }
 
     });

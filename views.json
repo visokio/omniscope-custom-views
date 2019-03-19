@@ -66,7 +66,7 @@
 				"network",
 				"structure"
 			],
-			"files": ["d3-ForceEdgeBundling.js", "bundler.js"],
+			"files": ["d3-ForceEdgeBundling.js", "bundler.js", "forcesimulation.js"],
 			"version": 0
 		}
 	]

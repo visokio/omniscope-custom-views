@@ -18,7 +18,7 @@ The views added here are available to install in the view picker of Omniscope.
     </tr>
     <tr valign="top">
         <td width="33%">Spain Force Dot Density Map<br><a href="spainforcedotdensitymap/README.md" title="Spain Force Dot Density Map"><img width="290" src="https://github.com/visokio/custom-views/raw/master/spainforcedotdensitymap/thumbnail.png"></a></td>
-        <td width="33%">Force Coordinate Graph<br><a href="forcecoordinategraph/README.md" title="Force Coordinate Graph"><img width="290" src="https://github.com/visokio/custom-views/raw/master/forcecoordinategraph/thumbnail.png"></a></td>
+        <td width="33%">Force Coordinate Graph<br><a href="forcecoordinategraph/README.md" title="Force Coordinate Graph"><img width="290" src="https://github.com/visokio/custom-views/raw/master/forcecoordinategraph/thumbnail2.png"></a></td>
     </tr>
 </table>
 

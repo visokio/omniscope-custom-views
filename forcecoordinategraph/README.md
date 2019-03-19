@@ -24,6 +24,7 @@ A typical use case would be the representation of clusters in a network. Pre-cal
     - Weight (Optional): Measure value used to sort the edges and show the most important ones.
 
 ![screenshot](thumbnail.png)
+![screenshot](thumbnail2.png)
 
 ### Libraries:
  - [d3.js](https://d3js.org/)

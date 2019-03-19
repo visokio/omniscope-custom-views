@@ -31,8 +31,8 @@
       },
       "edgeWeight": {
         "displayName": "Weight",
-        "type": "MEASURE",
-        "detail": "Value used to sort the edges and show the most important ones"
+        "detail": "Value used to sort the edges and show the most important ones",
+        "type": "MEASURE"
       },
       "imageURL": {
         "displayName": "Image URL",
@@ -40,9 +40,9 @@
       },
       "linkedNodeId": {
         "displayName": "Linked node Id",
+        "detail": "Id of the target node of the edge",
         "type": "GROUPING",
-        "mandatory": true,
-        "detail": "Id of the target node of the edge"
+        "mandatory": true
       },
       "markerSize": {
         "displayName": "Size",
@@ -51,9 +51,9 @@
       },
       "nodeId": {
         "displayName": "Node Id",
+        "detail": "Id of the origin node of the edge",
         "type": "GROUPING",
-        "mandatory": true,
-        "detail": "Id of the origin node of the edge"
+        "mandatory": true
       },
       "paneX": {
         "displayName": "Pane X",
