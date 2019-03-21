@@ -12,24 +12,11 @@ This visualisation can be used as a filter to control what is shown in other vie
 
 ## Settings
     
- - Filters:
-   - Filter A:
-     - Filter A field: Field used to create a range filter for the set A.
-     - Filter A min: Minimum value for the field filter, if not set, the set won't have a filter.
-     - Filter A max: Maximum value for the field filter, if not set, the set won't have a filter.
-     - Set A name: Custom name for set A, if not set, the field name will be used.
-     
-   - Filter B:
-     - Filter B field: Field used to create a range filter for the set B.
-     - Filter B min: Minimum value for the field filter, if not set, the set won't have a filter.
-     - Filter B max: Maximum value for the field filter, if not set, the set won't have a filter.
-     - Set B name: Custom name for set B, if not set, the field name will be used.
-        
-   - Filter C:
-     - Filter C field: Field used to create a range filter for the set C.
-     - Filter C min: Minimum value for the field filter, if not set, the set won't have a filter.
-     - Filter C max: Maximum value for the field filter, if not set, the set won't have a filter.
-     - Set C name: Custom name for set C, if not set, the field name will be used.
+ - Filter options for each set:
+     - Filter field: Field used to create a range filter for the set.
+     - Filter min: Minimum value for the field filter, if not set, the set won't have a filter.
+     - Filter max: Maximum value for the field filter, if not set, the set won't have a filter.
+     - Set name: Custom name for the set, if not set, the field name will be used.
 
 ![screenshot](thumbnail.png)
 
