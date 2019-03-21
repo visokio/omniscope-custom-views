@@ -53,7 +53,8 @@
     },
     "structure": {
       "toolbar": [
-        "colour"
+        "colour",
+        "split"
       ],
       "x": [
         "x",

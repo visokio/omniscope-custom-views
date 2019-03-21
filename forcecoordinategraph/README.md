@@ -11,8 +11,8 @@ A typical use case would be the representation of clusters in a network. Pre-cal
  - Chart
     - Node Id: Id of the origin node of the edge.
     - Linked node Id: Id of the target node of the edge.
-    - X: X coordinate of the node
-    - Y: Y coordinate of the node
+    - X: X coordinate of the node.
+    - Y: Y coordinate of the node.
     - Prevent node overlapping: Add jittering between nodes so they don't appear on top of each other when they share the same coordinates.
 
  - Marker

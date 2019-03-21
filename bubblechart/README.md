@@ -2,9 +2,17 @@
 
 Custom view that shows aggregated data with coloured circles sized by a measure.
 
-This visualization is particularly effective to show the proportion between elements through their areas.
+## Use case
 
-The dataset consists of rows with an id value and a numerical value to size by.
+This visualisation is particularly effective to show the proportion between elements through their areas.
+
+## Settings
+
+ - Chart
+    - Split: Categorical field to split and colour the markers by.
+
+ - Marker
+    - Size (Optional): Numerical measure value to size the markers by.
 
 ![screenshot](thumbnail.png)
 

@@ -15,8 +15,9 @@
   "options": {
     "items": {
       "measures": {
-        "displayName": "Measure",
+        "displayName": "Size",
         "type": "MEASURE",
+        "iconName": "visokio-option-icon:size-measure",
         "mandatory": true,
         "validMeasureResultTypes": [
           "NUMBER"
@@ -35,6 +36,7 @@
       "split": {
         "displayName": "Split",
         "type": "GROUPING",
+        "detail": "Categorical field to split and colour the markers by",
         "mandatory": true
       }
     },
@@ -49,7 +51,37 @@
       "y": [
         "paneY"
       ]
-    }
+    },
+    "optionGroups": [{
+      "displayName": "Chart",
+      "rows": [{
+        "cells": [{
+          "option": "split",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Marker",
+      "rows": [{
+        "cells": [{
+          "option": "measures",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Pane/tile",
+      "rows": [{
+        "cells": [{
+          "option": "paneX",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "paneY",
+          "usePrefixTitle": false
+        }]
+      }]
+    }]
   },
   "defaultOptions": {
     "items": {},

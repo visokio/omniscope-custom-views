@@ -24,7 +24,8 @@
         ]
       },
       "value": {
-        "displayName": "Value",
+        "displayName": "Colour",
+        "iconName": "visokio-option-icon:colour-measure",
         "type": "MEASURE",
         "mandatory": true,
         "validMeasureResultTypes": [
@@ -34,8 +35,8 @@
     },
     "structure": {
       "toolbar": [
-        "date",
-        "value"
+        "value",
+        "date"
       ],
       "x": [],
       "y": []

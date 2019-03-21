@@ -25,10 +25,12 @@
       },
       "filterAMax": {
         "displayName": "Filter A max",
+        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
         "type": "TEXT"
       },
       "filterAMin": {
         "displayName": "Filter A min",
+        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
         "type": "TEXT"
       },
       "filterBField": {
@@ -42,10 +44,12 @@
       },
       "filterBMax": {
         "displayName": "Filter B max",
+        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
         "type": "TEXT"
       },
       "filterBMin": {
         "displayName": "Filter B min",
+        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
         "type": "TEXT"
       },
       "filterCField": {
@@ -59,22 +63,28 @@
       },
       "filterCMax": {
         "displayName": "Filter C max",
+        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
         "type": "TEXT"
       },
       "filterCMin": {
         "displayName": "Filter C min",
+        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
         "type": "TEXT"
       },
       "setAName": {
         "displayName": "Set A name",
+        "detail": "Custom name for set A, if not set, the field name will be used",
         "type": "TEXT"
       },
       "setBName": {
         "displayName": "Set B name",
-        "type": "TEXT"
+        "type": "TEXT",
+        "detail": "Custom name for set B, if not set, the field name will be used"
       },
       "setCName": {
         "displayName": "Set C name",
+        "detail": "Custom name for set C, if not set, the field name will be used",
+
         "type": "TEXT"
       }
     },

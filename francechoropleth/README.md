@@ -4,7 +4,11 @@ Custom view that shows a choropleth map of France divided by 100 departments. Ea
 
 A detailed tutorial on how to create a choropleth map can be found [here](https://help.visokio.com/support/solutions/articles/42000012405-how-to-create-a-custom-view-choropleth-map-example-using-d3). 
 
-The dataset consists of rows with an id value that matches the department name and a numerical value to colour by.
+## Settings
+
+ - Region
+    - Split: Id value that matches the department name.
+    - Colour: Numerical measure value to colour the regions by.
 
 ![screenshot](thumbnail.png)
 

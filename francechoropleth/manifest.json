@@ -12,8 +12,9 @@
   "options": {
     "items": {
       "measures": {
-        "displayName": "Measure",
+        "displayName": "Colour",
         "type": "MEASURE",
+        "iconName": "visokio-option-icon:colour-measure",
         "mandatory": true
       },
       "paneX": {
@@ -42,7 +43,34 @@
       "y": [
         "paneY"
       ]
-    }
+    },
+    "optionGroups": [{
+      "displayName": "Region",
+      "rows": [{
+        "cells": [{
+          "option": "split",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "measures",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Pane/tile",
+      "rows": [{
+        "cells": [{
+          "option": "paneX",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "paneY",
+          "usePrefixTitle": false
+        }]
+      }]
+    }]
   },
   "defaultOptions": {
     "items": {},

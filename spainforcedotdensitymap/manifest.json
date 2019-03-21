@@ -20,7 +20,7 @@
   "options": {
     "items": {
       "lat": {
-        "displayName": "Lat",
+        "displayName": "Latitude",
         "type": "MEASURE",
         "mandatory": true,
         "validFieldTypes": [
@@ -28,7 +28,7 @@
         ]
       },
       "lon": {
-        "displayName": "Lon",
+        "displayName": "Longitude",
         "type": "MEASURE",
         "mandatory": true,
         "validFieldTypes": [
@@ -85,17 +85,37 @@
           "usePrefixTitle": false
         }]
       }]
-    }, {
-      "displayName": "Marker",
+    },
+      {
+        "displayName": "Marker",
+        "rows": [
+          {
+            "title": "Tooltip",
+            "cells": []
+          },
+          {
+            "cells": [
+              {
+                "option": "tooltiptitle",
+                "usePrefixTitle": false
+              },
+              {
+                "option": "tooltipvalue",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }, {
+      "displayName": "Pane/tile",
       "rows": [{
-        "title": "Tooltip",
-        "cells": []
+        "cells": [{
+          "option": "paneX",
+          "usePrefixTitle": false
+        }]
       }, {
         "cells": [{
-          "option": "tooltiptitle",
-          "usePrefixTitle": false
-        }, {
-          "option": "tooltipvalue",
+          "option": "paneY",
           "usePrefixTitle": false
         }]
       }]
