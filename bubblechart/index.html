@@ -66,10 +66,10 @@
 
         var classes = data
             .filter(function(record) {
-                return record[0] !== null && record[0].length > 0;
+                return record[0] !== null;
             })
             .map(function(record) {
-                return {id: record[0], value: record[1]};
+                return {id: ""+record[0], value: record[1]};
             });
 
         var root = d3.hierarchy({children: classes})

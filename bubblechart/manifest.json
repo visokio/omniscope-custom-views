@@ -37,7 +37,10 @@
         "displayName": "Split",
         "type": "GROUPING",
         "detail": "Categorical field to split and colour the markers by",
-        "mandatory": true
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ]
       }
     },
     "structure": {
