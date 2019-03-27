@@ -1,5 +1,5 @@
 {
-  "name": "orbitaltransactionflow",
+  "name": "Orbital Transaction Flow",
   "frameworkVersion": "v1",
   "tags": [
     "custom",
@@ -9,6 +9,8 @@
     "gooey",
     "orbit"
   ],
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
