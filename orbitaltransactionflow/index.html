@@ -1,0 +1,501 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body, main {
+            /* Ensure the body fills the view, so clicks are handled everywhere: */
+            width: 100%;
+            height: 100%;
+        }
+      	#main {
+            width: 100%;
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            color: #ceff00;
+            white-space: pre;
+            position: absolute;
+            background-color: black;
+        }
+        svg {
+            top: 0px;
+            left: 0px;
+            position: absolute;
+          	background-color: #4A4A4A;
+        }
+        .annotation-note-title {
+          	fill:#fff;
+        }
+        .tooltip-sent {
+          	padding: 10px;
+        }
+        .tooltip-received {
+          	padding: 10px;
+        }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+  	<script src="http://d3js.org/d3.v5.min.js"></script>
+  	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  	<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+</head>
+
+<body>
+
+<main id="main">
+  <svg width="100%" height="100%"></svg>
+</main>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+
+    var nodeIds = new Map();
+    var nodes = [];
+    var lastDate = null;
+  	var simulation = d3.forceSimulation();
+    var orbit_radius = 450;
+    var SUN_COLOUR_OUT = "#FAA901";
+  	var colourScale = d3.scaleOrdinal(d3.schemeSet3);
+
+  	var svg = d3.select("svg");
+
+    // --- ORBITS --- //
+  	var orbit1 = svg.append("circle")
+      .attr("class", "orbit")
+      .attr("id", "orbit-1");
+
+    // --- GOOEY FILTER --- //
+    var g = svg.append("g")
+     .style("filter", "url(#gooey)"); //Set the filter on the container svg
+
+    //SVG filter for the gooey effect
+    //Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+    var defs = svg.append('defs');
+    var filter = defs.append('filter').attr('id','gooey');
+    filter.append('feGaussianBlur')
+      .attr('in','SourceGraphic')
+      .attr('stdDeviation','10')
+      .attr('result','blur');
+    filter.append('feColorMatrix')
+      .attr('in','blur')
+      .attr('mode','matrix')
+      .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
+      .attr('result','gooey');
+    filter.append('feComposite')
+      .attr('in','SourceGraphic')
+      .attr('in2','gooey')
+      .attr('operator','atop');
+
+    // Filter for the outside glow
+    var glowFilter = defs.append("filter")
+        .attr("id","glow");
+    glowFilter.append("feGaussianBlur")
+        .attr("stdDeviation","3.5")
+        .attr("result","coloredBlur");
+    var feMerge = glowFilter.append("feMerge");
+    feMerge.append("feMergeNode")
+        .attr("in","coloredBlur");
+    feMerge.append("feMergeNode")
+        .attr("in","SourceGraphic");
+
+  	var planetsGroup = g.append("g")
+    	.attr("class", "planets");
+    var linksGroup = g.append("g")
+    	.attr("class", "links");
+    var flyNodesGroup = g.append("g")
+    	.attr("class", "flyNodes");
+
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+  	var update = function () {
+        omniscope.view.busy(true);
+
+        var options = omniscope.view.context().options;
+
+        var query_ = {
+            "@visokiotype": "QueryApi.AggregateOperation",
+            "groupings": [
+                {
+                    "inputField": options.items.date,
+                    "type": "HISTOGRAM",
+                    "dateUnit": "SECOND",
+                    "histogramInterval": 1,
+                    "fitToScreen": true,
+                    "name": "date"
+                },
+              	{
+                    "inputField": options.items.link,
+                    "type": "UNIQUE_VALUES",
+                    "fitToScreen": true,
+                    "name": "link"
+                }
+            ],
+            "measures": [
+                {
+                    "name": "source",
+                    "inputField": options.items.source.inputField,
+                    "function": "SINGLETON"
+                },
+              	{
+                    "name": "target",
+                    "inputField": options.items.target.inputField,
+                    "function": "SINGLETON"
+                },
+              	{
+                    "name": "size",
+                    "inputField": options.items.size.inputField,
+                    "function": "SUM"
+                }
+            ],
+            "input": {
+                "@visokiotype": "QueryApi.RecordFilterOperation",
+                "filter": omniscope.view.context().dataConfig.filter,
+                "input": {
+                    "@visokiotype": "QueryApi.DefaultSource"
+                }
+            }
+        };
+
+        omniscope.view.queryBuilder()
+            .table(query_)
+            .on("load", function(event) {
+                // On success, pass the TableQueryOutput object to render():
+                renderView(event.data);
+            }).on("error", function(err) {
+            // On error, report to the enclosing application:
+            omniscope.view.error(err.error);
+        }).execute(); // Submit the query for execution
+        omniscope.view.busy(false);
+    };
+
+    // Naively redraw on any of these events
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], update);
+
+    function renderView(result) {
+
+      	// Map records to field options
+        var records = result.records;
+
+        var options = omniscope.view.context().options;
+        var sun_id = options.items.centreNodeId;
+
+        var mappings = result.mappings;
+        var bees = new Map();
+        var maxDate = lastDate;
+
+        if (!getNode(nodes, sun_id)) {
+          nodes.push({id: sun_id, sizeIn: 0, sizeOut: 0, colourIn: SUN_COLOUR_OUT, colourOut: d3.color(SUN_COLOUR_OUT).darker(1).hex()});
+        }
+
+        records.forEach(function(record, i) {
+            var bee = {
+                id: record[1],
+                source: record[2],
+                target: record[3],
+              	size: record[4],
+              	date: new Date(record[0].lower)
+            };
+            var beeDate = new Date(bee.date);
+           	if (bee.size > 0 && (lastDate == null || lastDate.getTime() < beeDate)) {
+                var sourceColourOut = (bee.source === sun_id) ? SUN_COLOUR_OUT : colourScale(bee.source);
+              	if (bee.source != null && bee.target != null) {
+                  bee.colour = sourceColourOut;
+                  bees.set(bee.id, bee);
+                }
+                if (bee.source != null && !getNode(nodes, bee.source)) {
+                  var sourceColourIn = d3.color(sourceColourOut).darker(1).hex();
+                  nodes.push({id: bee.source, sizeIn: 0, sizeOut: 0, colourIn: sourceColourIn, colourOut: sourceColourOut});
+                }
+                if (bee.target != null && !getNode(nodes, bee.target)) {
+                  var targetColourOut = (bee.target === sun_id) ? SUN_COLOUR_OUT : colourScale(bee.target);
+                  var targetColourIn = d3.color(targetColourOut).darker(1).hex();
+                  nodes.push({id: bee.target, sizeIn: 0, sizeOut: 0, colourIn: targetColourIn, colourOut: targetColourOut});
+                }
+            }
+          	if (maxDate == null || maxDate.getTime() < beeDate) maxDate = beeDate;
+        });
+      	if (maxDate != null && (lastDate == null || lastDate.getTime() < maxDate.getTime())) {
+          lastDate = maxDate;
+        }
+
+        var beesArray = Array.from(bees.values());
+
+      	var margin = {top: 30, right: 30, bottom: 30, left: 30};
+        var width = +parseInt(svg.style("width"), 10) - 80;
+        var height = +parseInt(svg.style("height"), 10) - 80;
+      	var maxSize = Math.min(width, height);
+
+        var marginNodes = maxSize/50;
+        var _sizeScale = d3.scaleSqrt().range([Math.max(5, maxSize/60), maxSize/40]).domain([0, 250]);
+
+        orbit_radius = maxSize/3.5;
+
+      	// --- ORBITS --- //
+        orbit1.attr("cx", width/2)
+        	.attr("cy", height/2)
+        	.attr("r", orbit_radius)
+        	.attr("stroke", "rgb(99, 99, 99)")
+        	.attr("stroke-width", "2px")
+        	.attr("stroke-dasharray", "7")
+        	.style("filter", "url(#glow)")
+      		.attr("fill", "none");
+
+      	var links = [];
+        nodes.forEach(function(node, i) {
+          	if (node.id !== sun_id) links.push({source: getNode(nodes, node.id), target: getNode(nodes, sun_id)});
+        });
+
+      	// --- FORCE SIMULATION --- //
+        simulation
+        	.nodes(nodes)
+            .force("link", d3.forceLink(links)
+                .id(function(d, i) { return d.id; })
+        		.distance(orbit_radius)
+        		.strength(1))
+        	.force("charge", d3.forceManyBody())
+        	.force("collide", d3.forceCollide().radius(function(d) { return _sizeScale(d.sizeIn) + _sizeScale(d.sizeOut) + marginNodes;} ))
+        	.force("center", d3.forceCenter(width / 2, height / 2))
+        	.alphaDecay(0.07)
+        	.on("tick", tick);
+
+        // --- PLANETS --- //
+        var planets = planetsGroup.selectAll(".node")
+          .data(nodes);
+        planets.exit().remove();
+
+        var planetsEnter = planets
+          .enter()
+          .append("g")
+          .attr("class", "node");
+
+        planetsEnter.append("circle")
+            .attr("class", function(d) { return "circle node-out node-out-"+d.id; })
+        	.style("fill", function(d) { return d.colourOut; })
+            .attr("r", function(d){  return _sizeScale(d.sizeOut) + _sizeScale(d.sizeIn); });
+
+        planetsEnter.append("circle")
+          .attr("class", function(d) { return "circle node-in node-in-"+d.id; })
+          .style("fill", function(d) { return d.colourIn; })
+            .attr("r", function(d){  return _sizeScale(d.sizeIn); });
+
+        // --- TICK --- //
+        function tick() {
+          g.selectAll("circle")
+            .attr("cx", function(d) {
+              if (d.id === sun_id) return d.x = width/2;
+              return d.x;
+            })
+            .attr("cy", function(d) {
+              if (d.id === sun_id) return d.y = height/2;
+              return d.y;
+            })
+          ;
+        }
+
+      	simulation.alpha(1);
+      	simulation.restart();
+
+        // --- ANIMATE FLYING NODES --- //
+
+        beesArray.map(function(flyNode) {
+          flyNode.sourceNode = getNode(nodes, flyNode.source);
+          flyNode.targetNode = getNode(nodes, flyNode.target);
+        });
+
+      	simulation.on("end", function() {
+          // --- ANNOTATIONS --- //
+          updateAnnotations();
+
+          // --- FLYING NODES --- //
+          flyNodesGroup.selectAll(".flyNode").remove();
+          flyNodesGroup
+              .selectAll(".flyNode")
+              .data(beesArray)
+              .enter()
+              .append("circle")
+              .attr("class", "flyNode")
+              .attr("cy", function(d) { return d.sourceNode.cx; })
+              .attr("cx", function(d) { return d.sourceNode.cy; })
+              .attr("r", 0)
+              .style("fill", "none")
+              .call(update);
+        });
+
+        function update(that, d) {
+          var dur = 10000,
+              del = 4000/beesArray.length+1;
+
+          var flyNode = flyNodesGroup.selectAll(".flyNode");
+
+          // --- CREATE ARC PATHS --- //
+          var sun = planetsGroup.select(".node-out-"+sun_id);
+          var x_c = width/2;
+          var y_c = height/2;
+          flyNode.each(function(d, i) {
+             var points;
+             var radius = orbit_radius/2;
+             if (d.source === sun_id && d.target === sun_id) {
+               points = [[[d.sourceNode.x, d.sourceNode.y], [width/2 + radius/2, height/2+radius], [width/2 + radius, height/2 + radius/2], [d.targetNode.x, d.targetNode.y]]];
+             } else if (d.source === sun_id || d.target === sun_id) {
+               points = [[[d.sourceNode.x, d.sourceNode.y], [d.targetNode.x, d.targetNode.y]]];
+             } else {
+               var x_int_source = x_c + ( (radius*(d.sourceNode.x-x_c)) / Math.sqrt( Math.pow(Math.abs(d.sourceNode.x - x_c), 2) + Math.pow(Math.abs(d.sourceNode.y - y_c), 2) ) );
+               var y_int_source = y_c + ( (radius*(d.sourceNode.y-y_c)) / Math.sqrt( Math.pow(Math.abs(d.sourceNode.x - x_c), 2) + Math.pow(Math.abs(d.sourceNode.y - y_c), 2) ) );
+
+               var x_int_target = x_c + ( (radius*(d.targetNode.x-x_c)) / Math.sqrt( Math.pow(Math.abs(d.targetNode.x - x_c), 2) + Math.pow(Math.abs(d.targetNode.y - y_c), 2) ) );
+               var y_int_target = y_c + ( (radius*(d.targetNode.y-y_c)) / Math.sqrt( Math.pow(Math.abs(d.targetNode.x - x_c), 2) + Math.pow(Math.abs(d.targetNode.y - y_c), 2) ) );
+
+               var x_mid = (x_int_source + x_int_target)/2;
+               var y_mid = (y_int_source + y_int_target)/2;
+
+               var x_int = x_c + ( (radius*(x_mid-x_c)) / Math.sqrt( Math.pow(Math.abs(x_mid - x_c), 2) + Math.pow(Math.abs(y_mid - y_c), 2) ) );
+               var y_int = y_c + ( (radius*(y_mid-y_c)) / Math.sqrt( Math.pow(Math.abs(x_mid - x_c), 2) + Math.pow(Math.abs(y_mid - y_c), 2) ) );
+               points = [[[d.sourceNode.x, d.sourceNode.y], [x_int, y_int], [d.targetNode.x, d.targetNode.y]]];
+             }
+              d.path = svg.append("path")
+                .data(points)
+                .attr("d", d3.line().curve(d3.curveCardinal.tension(0)))
+                .attr("fill", "none");
+          });
+
+          (function animate() {
+            flyNode.each(function(d, i) {
+                d3.select(this)
+                  .transition("start").duration(0)
+                    .attr("cx", function(d) { return d.sourceNode.cx; })
+                    .attr("cy", function(d) { return d.sourceNode.cy; })
+                  .transition("resize").duration(2000).delay(i*del)
+                    .attr("r", function(d) { return 5 + _sizeScale(d.size); })
+                  .transition("initial").duration(0)
+                	.attr("cx", "0px")
+                    .attr("cy", "0px")
+                  .transition("outward").duration(dur).delay(i*del)
+                	.style("fill", function(d) { return d.colour; })
+                	.attrTween("transform", (function() {return translateAlong(d.path.node());})())
+                    .on("start", function(d) {
+                      // Resize output of source
+                      var node = d.sourceNode;
+                      node.sizeOut += d.size;
+                  	  updateSizeScale(node.sizeOut);
+                      d3.select(".node-out-"+node.id)
+                        .transition("resize").duration(5000)
+                        .attr("r", _sizeScale(node.sizeIn) + _sizeScale(node.sizeOut));
+                  	  updateAnnotation(node);
+                    })
+                  .transition("outward").duration(500)//.delay(i*del)
+                	.attr("r", 0)
+                    .on("end", function(d) {
+                      	// Resize input and output of target
+                        var node = d.targetNode;
+                        node.sizeIn += d.size;
+                        updateSizeScale(node.sizeIn);
+                        d3.select(".node-in-"+node.id)
+                          .transition("resize").duration(2000)
+                          .attr("r", _sizeScale(node.sizeIn));
+                        d3.select(".node-out-"+node.id)
+                          .transition("resize").duration(2000)
+                          .attr("r", _sizeScale(node.sizeIn) + _sizeScale(node.sizeOut));
+                        updateAnnotation(node);
+                        // Delete flying node
+                        this.remove();
+                    })
+                ;
+            });
+          })();
+        }
+
+        function getNode(nodes, id) {
+          return nodes.find(function(node) { return node.id === id; });
+        }
+
+        function updateAnnotations() {
+          svg.selectAll(".annotation-tooltip").remove();
+          var labels = nodes.map(function(d) {
+            let radius = _sizeScale(d.sizeOut);
+            let margin = 20;
+            let _x = (d.x > width/2) ? d.x + radius + margin : d.x - radius - margin;
+            let _y = (d.y > height/2) ? d.y + radius + margin : d.y - radius - margin;
+            return {
+              className: "annotation-tooltip-"+d.id,
+              x: _x,
+              y: _y,
+              dx: (_x > width/2) ? 50 : -50,
+              dy: (_y > height/2) ? 50 : -50,
+              note: {title: d.id, label: "_", wrap: 100},
+              subject: { radius: 4 },
+              data: {
+                sizeIn: d.sizeIn,
+              	sizeOut: d.sizeOut,
+                inColour: d.colourIn,
+                outColour: d.colourOut
+              }
+            }
+          });
+          window.makeAnnotations = d3.annotation().annotations(labels).type(d3.annotationCalloutElbow );
+          var tooltips = svg.append("g")
+            .attr("class", "annotation-tooltip");
+          tooltips.call(makeAnnotations);
+          tooltips.selectAll(".annotation-note-label")
+            .html(function(d) {
+            	return "</tspan><tspan class=\"tooltip-sent\" dy=\"0.8em\" fill=\""+d.data.inColour+"\">Received: "
+                  +d3.format(",.2r")(d.data.sizeIn)+"</tspan>"
+                  +"<tspan class=\"tooltip-sent\" dx=\"0.8em\" fill=\""+d.data.outColour+"\">Sent: "
+                  +d3.format(",.2r")(d.data.sizeOut);
+          	});
+        }
+
+        function updateAnnotation(node) {
+          svg.select(".annotation-tooltip-"+node.id)
+              .selectAll(".annotation-note-label")
+              .html(function() {
+                  return "</tspan><tspan class=\"tooltip-sent\" dy=\"0.8em\" fill=\""+node.colourIn+"\">Received: "
+                    +d3.format(",.2r")(node.sizeIn)+"</tspan>"
+                    +"<tspan class=\"tooltip-sent\" dx=\"0.8em\" fill=\""+node.colourOut+"\">Sent: "
+                    +d3.format(",.2r")(node.sizeOut);
+              });
+        }
+
+        function updateSizeScale(size) {
+          _sizeScale.domain([0, Math.max(size, _sizeScale.domain()[1])]);
+          updatePlanetSizes();
+        }
+
+        function updatePlanetSizes() {
+          planetsGroup.selectAll(".node-out").transition("resize").duration(500)
+            .attr("r", function(d){  return _sizeScale(d.sizeOut) + _sizeScale(d.sizeIn); });
+
+          planetsGroup.selectAll(".node-in").transition("resize").duration(500)
+            .attr("r", function(d){  return _sizeScale(d.sizeIn); });
+        }
+
+        function translateAlong(path) {
+          var l = path.getTotalLength();
+          return function(d, i, a) {
+            return function(t) {
+              var p = path.getPointAtLength(t * l);
+              return "translate(" + p.x + "," + p.y + ")";
+            };
+          };
+        }
+    };
+
+</script>
+
+</body>
+</html>
