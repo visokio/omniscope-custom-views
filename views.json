@@ -68,6 +68,20 @@
 			],
 			"files": ["d3-ForceEdgeBundling.js", "bundler.js", "forcesimulation.js"],
 			"version": 0
+		},
+    {
+			"name": "orbitaltransactionflow",
+			"displayName": "Orbital Transaction Flow",
+			"tags": [
+        "custom",
+        "transaction",
+        "flow",
+        "circle"
+        "gooey",
+        "orbit"
+			],
+			"files": [],
+			"version": 0
 		}
 	]
 }

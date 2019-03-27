@@ -19,6 +19,7 @@ The views added here are available to install in the view picker of Omniscope.
     <tr valign="top">
         <td width="33%">Spain Force Dot Density Map<br><a href="spainforcedotdensitymap/README.md" title="Spain Force Dot Density Map"><img width="290" src="https://github.com/visokio/custom-views/raw/master/spainforcedotdensitymap/thumbnail.png"></a></td>
         <td width="33%">Force Coordinate Graph<br><a href="forcecoordinategraph/README.md" title="Force Coordinate Graph"><img width="290" src="https://github.com/visokio/custom-views/raw/master/forcecoordinategraph/thumbnail2.png"></a></td>
+        <td width="33%">Orbital Transaction Flow<br><a href="orbitaltransactionflow/README.md" title="Orbital Transaction Flow"><img width="290" src="https://github.com/visokio/custom-views/raw/master/orbitaltransactionflow/thumbnail.png"></a></td>
     </tr>
 </table>
 
@@ -27,29 +28,29 @@ The views added here are available to install in the view picker of Omniscope.
  - Add a folder with a name matching the unique view id (the view name which must not conflict with other view names).
  - The folder should have the following files (all file names have to be case-sensitive):
     * icon.svg
-    
+
         32x32 px SVG icon following the same style as the existing icons.
-        
+
     * index.html
-    
+
         Main page loaded by the application to show the view.
-        
+
     * manifest.json
-    
+
         Configuration file for the view that defines the options and limitations. Manifest options should be declared with necessary restrictions (e.g. you should not be able to pick a text field in calendar view) and with descriptions inside them (for tooltips).
-        
+
     * README.md
-    
+
         Markdown file that describes the view following the same format as the existing readme files. Each view's readme.md file should explain what it's for (typical use case), what data structure you need for it to work, how to configure it / how the options work.
-    
+
     * thumbnail.png
-    
+
         290x290 px screenshot.
-        
+
     * test.ioz
-    
+
         Omniscope file to test the view.
-        
+
  - Add an entry to the file view.json:
     ```
     {
@@ -63,7 +64,7 @@ The views added here are available to install in the view picker of Omniscope.
  - Make sure manifest.json has the entries for "icon", "tags" and "thumbnail". See other view manifests.
  - Update the gallery of views in the README.md to include a thumbnail of the new view that links to the view readme file.
  - Filtering must work. If you filter, the view needs to update cleanly, and if you then reload the page, the view should look the same. Make sure each render is clean, and there isn't some UI effects hanging over from the previous state. This also implies poor man's brushing works properly.
- 
+
 ### Nice things to have
 
  - Selection
