@@ -1,6 +1,6 @@
 # ![](icon.svg) Orbital transaction flow
 
-Custom view that shows live transactions between entities. The view will show fixed circles for all entities referenced in the transactions as sources or targets. These circles will have an inner and outer area that matches the accumulated transaction values received and sent respectively. All new transactions will be shown as circles moving from one entity to another and sized by its value. During the animation, the entities will update their annotation and size.
+Custom view that shows live transactions between entities. The view will show fixed circles for all entities referenced in the transactions as sources or targets. These circles will have inner and outer areas that match the accumulated transaction values received and sent respectively. All new transactions will be shown as circles moving from one entity to another and sized by its value. During the animation, the entities will update their annotation and size.
 
 The input data consists of individual transactions with a timestamp.
 The view will aggregate all transactions that have the same origin and target and happen during the same one minute period.
