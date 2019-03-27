@@ -2,7 +2,12 @@
   "name": "orbitaltransactionflow",
   "frameworkVersion": "v1",
   "tags": [
-    "custom"
+    "custom",
+    "transaction",
+    "flow",
+    "circle"
+    "gooey",
+    "orbit"
   ],
   "sandbox": false,
   "autoPane": true,
@@ -13,11 +18,13 @@
     "items": {
       "centreNodeId": {
         "displayName": "Centre Node Id",
+        "detail": "Id of the node shown at the centre of the view",
         "type": "TEXT",
         "mandatory": true
       },
       "date": {
         "displayName": "Date",
+        "detail": "Date of the transaction. Transactions with the same source and target that happen in the same minute will be shown as one",
         "type": "FIELD",
         "mandatory": true,
         "validFieldTypes": [
@@ -26,6 +33,7 @@
       },
       "link": {
         "displayName": "Id",
+        "detail": "Unique identifier of the transaction",
         "type": "FIELD",
         "mandatory": true,
         "validFieldTypes": [
@@ -43,17 +51,20 @@
         "list": true
       },
       "size": {
-        "displayName": "Size",
+        "displayName": "Value",
         "iconName": "visokio-option-icon:size-measure",
-        "type": "MEASURE"
+        "type": "MEASURE",
+        "mandatory": true
       },
       "source": {
         "displayName": "Source",
+        "detail": "Identifier of the source sending the transaction",
         "type": "MEASURE",
         "mandatory": true
       },
       "target": {
         "displayName": "Target",
+        "detail": "Identifier of the target where the transaction is sent to",
         "type": "MEASURE",
         "mandatory": true
       }
