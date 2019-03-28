@@ -21,7 +21,8 @@
         "mandatory": true,
         "validMeasureResultTypes": [
           "NUMBER"
-        ]
+        ],
+        "detail": "Numerical measure value to size the markers by"
       },
       "paneX": {
         "displayName": "Pane X",
@@ -36,7 +37,7 @@
       "split": {
         "displayName": "Split",
         "type": "GROUPING",
-        "detail": "Categorical field to split and colour the markers by",
+        "detail": "Categorical field to split/group and colour the markers by",
         "mandatory": true,
         "validGroupingTypes": [
           "UNIQUE_VALUES"

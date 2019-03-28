@@ -21,7 +21,8 @@
       "colour": {
         "displayName": "Colour",
         "iconName": "visokio-option-icon:colour-measure",
-        "type": "MEASURE"
+        "type": "MEASURE",
+        "detail": "Categorical value to colour the markers by"
       },
       "paneX": {
         "displayName": "Pane X",
@@ -36,19 +37,23 @@
       "split": {
         "displayName": "Split",
         "type": "GROUPING",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "Field to split/group markers by"
       },
       "title": {
         "displayName": "Tooltip",
-        "type": "MEASURE"
+        "type": "MEASURE",
+        "detail": "Tooltip text to show on the nodes when hovering"
       },
       "x": {
         "displayName": "X",
-        "type": "MEASURE"
+        "type": "MEASURE",
+        "detail": "X coordinate of the marker"
       },
       "y": {
         "displayName": "Y",
-        "type": "MEASURE"
+        "type": "MEASURE",
+        "detail": "Y coordinate of the marker"
       }
     },
     "structure": {

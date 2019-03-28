@@ -18,6 +18,7 @@
       "date": {
         "displayName": "Date",
         "type": "FIELD",
+        "detail": "Date field to split/group the rows by",
         "mandatory": true,
         "validFieldTypes": [
           "DATE"
@@ -28,6 +29,7 @@
         "iconName": "visokio-option-icon:colour-measure",
         "type": "MEASURE",
         "mandatory": true,
+        "detail": "Numerical measure value to colour the dates by",
         "validMeasureResultTypes": [
           "NUMBER"
         ]

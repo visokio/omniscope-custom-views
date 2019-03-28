@@ -6,7 +6,7 @@ The visualisation aggregates all rows with the same date and marks the dates wit
 
 ## Settings
 
- - Date: Date field to split group the rows by.
+ - Date: Date field to split/group the rows by.
  - Value (Optional): Numerical measure value to colour the dates by.
 
 ![screenshot](thumbnail.png)

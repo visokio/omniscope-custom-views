@@ -12,10 +12,10 @@ It also supports on hover tooltips which will display a title and a measure valu
 ## Settings
 
  - Chart:
-   - Split: Field to split markers by.
+   - Split: Field to split/group markers by.
    - Latitude: Latitude value of the marker.
    - Longitude: Longitude value of the marker.
-   
+
  - Marker:
    - Tooltip title (Optional): Static text to show as title of the tooltip when hovering.
    - Tooltip value (Optional): Measure value to show in the tooltip when hovering.

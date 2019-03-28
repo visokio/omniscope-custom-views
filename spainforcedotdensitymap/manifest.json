@@ -25,7 +25,8 @@
         "mandatory": true,
         "validFieldTypes": [
           "NUMBER"
-        ]
+        ],
+        "detail": "Latitude value of the marker"
       },
       "lon": {
         "displayName": "Longitude",
@@ -33,7 +34,8 @@
         "mandatory": true,
         "validFieldTypes": [
           "NUMBER"
-        ]
+        ],
+        "detail": "Longitude value of the marker"
       },
       "paneX": {
         "displayName": "Pane X",
@@ -48,16 +50,18 @@
       "split": {
         "displayName": "Split",
         "type": "GROUPING",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "Field to split/group markers by"
       },
       "tooltiptitle": {
         "displayName": "Tooltip title",
-        "detail": "If not specified, the field name of the tooltip value will be used",
+        "detail": "Static text to show as title of the tooltip when hovering. If not specified, the field name of the tooltip value will be used",
         "type": "TEXT"
       },
       "tooltipvalue": {
         "displayName": "Tooltip value",
-        "type": "MEASURE"
+        "type": "MEASURE",
+        "detail": "Measure value to show in the tooltip when hovering"
       }
     },
     "structure": {

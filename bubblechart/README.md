@@ -9,7 +9,7 @@ This visualisation is particularly effective to show the proportion between elem
 ## Settings
 
  - Chart
-    - Split: Categorical field to split and colour the markers by.
+    - Split: Categorical field to split/group and colour the markers by.
 
  - Marker
     - Size (Optional): Numerical measure value to size the markers by.

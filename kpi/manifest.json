@@ -14,11 +14,13 @@
       "measure": {
         "displayName": "Measure",
         "type": "MEASURE",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "Measure value to show under the text"
       },
       "text": {
         "displayName": "Text",
-        "type": "TEXT"
+        "type": "TEXT",
+        "detail": "Static text to show as title"
       }
     },
     "structure": {

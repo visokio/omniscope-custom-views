@@ -10,7 +10,7 @@ This focuses on singularity and accumulation over accuracy.
 ## Settings
 
  - Chart
-    - Split: Field to split markers by.
+    - Split: Field to split/group markers by.
     - X: X coordinate of the marker.
     - Y: Y coordinate of the marker.
 
