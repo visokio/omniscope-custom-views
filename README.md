@@ -7,19 +7,19 @@ The views added here are available to install in the view picker of Omniscope.
 
 <table>
     <tr valign="top">
-        <td width="33%">Bubble Chart<br><a href="bubblechart/README.md" title="Bubble Chart"><img width="290" src="https://github.com/visokio/custom-views/raw/master/bubblechart/thumbnail.png"></a></td>
-        <td width="33%">Calendar<br><a href="calendar/README.md" title="Calendar"><img width="290" src="https://github.com/visokio/custom-views/raw/master/calendar/thumbnail.png"></a></td>
-        <td width="33%">France Choropleth<br><a href="francechoropleth/README.md" title="France Choropleth"><img width="290" src="https://github.com/visokio/custom-views/raw/master/francechoropleth/thumbnail.png"></a></td>
+        <td width="33%">Bubble Chart<br><a href="bubblechart" title="Bubble Chart"><img width="290" src="https://github.com/visokio/custom-views/raw/master/bubblechart/thumbnail.png"></a></td>
+        <td width="33%">Calendar<br><a href="calendar" title="Calendar"><img width="290" src="https://github.com/visokio/custom-views/raw/master/calendar/thumbnail.png"></a></td>
+        <td width="33%">France Choropleth<br><a href="francechoropleth" title="France Choropleth"><img width="290" src="https://github.com/visokio/custom-views/raw/master/francechoropleth/thumbnail.png"></a></td>
     </tr>
     <tr valign="top">
-        <td width="33%">KPI<br><a href="kpi/README.md" title="KPI"><img width="290" src="https://github.com/visokio/custom-views/raw/master/kpi/thumbnail.png"></a></td>
-        <td width="33%">Venn Diagram<br><a href="venndiagram/README.md" title="Venn Diagram"><img width="290" src="https://github.com/visokio/custom-views/raw/master/venndiagram/thumbnail.png"></a></td>
-        <td width="33%">Beeswarm<br><a href="beeswarm/README.md" title="Beeswarm"><img width="290" src="https://github.com/visokio/custom-views/raw/master/beeswarm/thumbnail.png"></a></td>
+        <td width="33%">KPI<br><a href="kpi" title="KPI"><img width="290" src="https://github.com/visokio/custom-views/raw/master/kpi/thumbnail.png"></a></td>
+        <td width="33%">Venn Diagram<br><a href="venndiagram" title="Venn Diagram"><img width="290" src="https://github.com/visokio/custom-views/raw/master/venndiagram/thumbnail.png"></a></td>
+        <td width="33%">Beeswarm<br><a href="beeswarm" title="Beeswarm"><img width="290" src="https://github.com/visokio/custom-views/raw/master/beeswarm/thumbnail.png"></a></td>
     </tr>
     <tr valign="top">
-        <td width="33%">Spain Force Dot Density Map<br><a href="spainforcedotdensitymap/README.md" title="Spain Force Dot Density Map"><img width="290" src="https://github.com/visokio/custom-views/raw/master/spainforcedotdensitymap/thumbnail.png"></a></td>
-        <td width="33%">Force Coordinate Graph<br><a href="forcecoordinategraph/README.md" title="Force Coordinate Graph"><img width="290" src="https://github.com/visokio/custom-views/raw/master/forcecoordinategraph/thumbnail2.png"></a></td>
-        <td width="33%">Orbital Transaction Flow<br><a href="orbitaltransactionflow/README.md" title="Orbital Transaction Flow"><img width="290" src="https://github.com/visokio/custom-views/raw/master/orbitaltransactionflow/thumbnail.png"></a></td>
+        <td width="33%">Spain Force Dot Density Map<br><a href="spainforcedotdensitymap" title="Spain Force Dot Density Map"><img width="290" src="https://github.com/visokio/custom-views/raw/master/spainforcedotdensitymap/thumbnail.png"></a></td>
+        <td width="33%">Force Coordinate Graph<br><a href="forcecoordinategraph" title="Force Coordinate Graph"><img width="290" src="https://github.com/visokio/custom-views/raw/master/forcecoordinategraph/thumbnail2.png"></a></td>
+        <td width="33%">Orbital Transaction Flow<br><a href="orbitaltransactionflow" title="Orbital Transaction Flow"><img width="290" src="https://github.com/visokio/custom-views/raw/master/orbitaltransactionflow/thumbnail.png"></a></td>
     </tr>
 </table>
 
