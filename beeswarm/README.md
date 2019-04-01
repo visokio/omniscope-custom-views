@@ -7,6 +7,9 @@ Custom view that shows non-overlapping coloured points positioned along the x-ax
 The visualisation can be used to show the distribution of values in a dataset preserving the resolution of every data point rather than displaying aggregated (clustering, histogram) or overlapped (scatter) data.
 This focuses on singularity and accumulation over accuracy.
 
+## Demo
+[Public demo file](https://omniscope.me/Demos/Custom+Views/Github/beeswarm.iox/er/Report)
+
 ## Settings
 
  - Chart
@@ -21,5 +24,5 @@ This focuses on singularity and accumulation over accuracy.
 ![screenshot](thumbnail.png)
 ![screenshot](thumbnail2.png)
 
-### Libraries:
+## Libraries
  - [d3.js](https://d3js.org/)

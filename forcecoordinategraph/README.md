@@ -6,6 +6,9 @@ Custom view that shows a force graph with bundled edges. The position of the nod
 
 A typical use case would be the representation of clusters in a network. Pre-calculated coordinates based on the clusters and bundled edges allow a simplified view of a network.
 
+## Demo
+[Public demo file](https://omniscope.me/Demos/Custom+Views/Github/force+coordinate+graph.iox/er/Report)
+
 ## Settings
 
  - Chart
@@ -20,13 +23,13 @@ A typical use case would be the representation of clusters in a network. Pre-cal
     - Size (Optional): Measure value to size the nodes by.
     - Tooltip (Optional): Tooltip text to show on the nodes when hovering.
     - Image URL (Optional): URL of the image shown in the nodes.
-    
+
  - Edge
     - Weight (Optional): Measure value used to sort the edges and show the most important ones.
 
 ![screenshot](thumbnail.png)
 ![screenshot](thumbnail2.png)
 
-### Libraries:
+## Libraries
  - [d3.js](https://d3js.org/)
  - [d3-ForceEdgeBundling.js](https://github.com/upphiminn/d3.ForceBundle)

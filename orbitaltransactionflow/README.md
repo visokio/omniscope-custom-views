@@ -24,6 +24,6 @@ An example IOZ file using the Token Analyst API can be [downloaded](TokenAnalyst
 
 ![screenshot](thumbnail.png)
 
-### Libraries:
+## Libraries
  - [d3.js](https://d3js.org/)
  - [d3-annotation](https://d3-annotation.susielu.com/)

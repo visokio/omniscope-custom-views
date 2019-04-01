@@ -4,6 +4,9 @@ Custom view that shows a title and a measure value.
 
 The dataset consists of rows with a value from which we can calculate a number to show.
 
+## Demo
+[Public demo file](https://omniscope.me/Demos/Custom+Views/Github/kpi.iox/er/Report)
+
 ## Use case
 
 The visualisation is usually used to summarises a simple value calculated from all the dataset with a custom title.

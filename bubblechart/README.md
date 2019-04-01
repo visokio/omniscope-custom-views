@@ -6,6 +6,9 @@ Custom view that shows aggregated data with coloured circles sized by a measure.
 
 This visualisation is particularly effective to show the proportion between elements through their areas.
 
+## Demo
+[Public demo file](https://omniscope.me/Demos/Custom+Views/Github/bubble+chart.iox/er/Report)
+
 ## Settings
 
  - Chart
@@ -16,5 +19,5 @@ This visualisation is particularly effective to show the proportion between elem
 
 ![screenshot](thumbnail.png)
 
-### Libraries:
+## Libraries
  - [d3.js](https://d3js.org/)
