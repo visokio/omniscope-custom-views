@@ -2,7 +2,7 @@
 	"views": [
 		{
 			"name": "kpi",
-			"displayName": "KPI",
+			"displayName": "KPI (custom view demo)",
 			"tags": ["custom", "key"],
 			"files": [],
 			"version": 0
