@@ -201,6 +201,8 @@
         var mappings = result.mappings;
         var bees = new Map();
         var maxDate = lastDate;
+      
+        var maxBeeSize = 1;
 
         if (!getNode(nodes, sun_id)) {
           nodes.push({id: sun_id, sizeIn: 0, sizeOut: 0, colourIn: SUN_COLOUR_OUT, colourOut: d3.color(SUN_COLOUR_OUT).darker(1).hex()});
@@ -232,6 +234,7 @@
                 }
             }
           	if (maxDate == null || maxDate.getTime() < beeDate) maxDate = beeDate;
+            if (maxBeeSize == null || maxBeeSize < bee.size) maxBeeSize = bee.size;
         });
       	if (maxDate != null && (lastDate == null || lastDate.getTime() < maxDate.getTime())) {
           lastDate = maxDate;
@@ -249,13 +252,13 @@
         //////////////////////////////////////////////////////////////
 
       	var margin = {top: 30, right: 30, bottom: 30, left: 30};
-        var width = +parseInt(svg.style("width"), 10) - 80;
-        var height = +parseInt(svg.style("height"), 10) - 80;
+        var width = +parseInt(svg.style("width"), 10) - 40;
+        var height = +parseInt(svg.style("height"), 10) - 40;
       	var maxSize = Math.min(width, height);
-        var orbit_radius = maxSize/3.5;
+        var orbit_radius = maxSize/3;
 
         var marginNodes = maxSize/50;
-        var _sizeScale = d3.scaleSqrt().range([Math.max(5, maxSize/60), maxSize/40]).domain([0, 250]);
+        var _sizeScale = d3.scaleSqrt().range([Math.max(5, maxSize/100), Math.max(25, maxSize/40)]).domain([0, maxBeeSize]);
 
         //////////////////////////////////////////////////////////////
         /////////////////////////// Orbit ////////////////////////////
