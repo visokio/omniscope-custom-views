@@ -6,6 +6,8 @@ The views added here are available to install in the view picker of Omniscope.
 
 Visit our forums for more info and discussion https://help.visokio.com/support/discussions/topics/42000001524 
 
+Documentation: https://omniscope.me/_global_/customview/v1/docs/Reference/ 
+
 ### List of views
 
 <table>
