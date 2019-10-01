@@ -24,6 +24,32 @@
             position: absolute;
           	background-color: #4A4A4A;
         }
+      	.restart-animation {
+          	position: absolute;
+            font-size: 22px;
+            padding: 2px 6px;
+    		bottom: 0px;
+    		left: 0;
+            background-color: rgba(	211, 211, 211, 0.4 );
+        }
+        #queryInfoDiv {
+          	position: absolute;
+            font-size: 9px;
+            padding: 5px;
+    		top: 0;
+    		left: 0;
+            background-color: rgba(	211, 211, 211, 0.2 );
+            display: none;
+        }
+        #txInfoDiv {
+          	position: absolute;
+            font-size: 9px;
+            padding: 5px;
+    		top: 24px;
+    		left: 0;
+            background-color: rgba( 211, 211, 211, 0.2 );
+            display: none;
+        }
         .annotation-note-title {
           	fill:#fff;
         }
@@ -42,6 +68,7 @@
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
   	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   	<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -49,65 +76,91 @@
 <main id="main">
   <svg width="100%" height="100%"></svg>
 </main>
+  <div class="restart-animation" onclick="window.location.reload()">
+       <i class="fa fa-play-circle" title="Reload animation / frame"></i>
+  </div>
+  <div id="queryInfoDiv">
+      <span id="queryInfo"></span>
+  </div>
+  <div id="txInfoDiv">
+      <span id="transactionInfo"></span>
+  </div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
 <script>
-
-    var nodeIds = new Map();
-    var nodes = [];
+ 
     var lastDate = null;
-  	var simulation = d3.forceSimulation();
     var SUN_COLOUR_OUT = "#FAA901";
   	var colourScale = d3.scaleOrdinal(d3.schemeSet3);
+  
+    var groupByDate = false;
+    var showTxLabels = false;
 
-  	var svg = d3.select("svg");
+  	var nodeIds, nodes, simulation, svg, orbit, g, planetsGroup, linksGroup, flyNodesGroup;
+  
+    function initSvg() {
+      
+      if (typeof svg !== 'undefined') {
+          svg.selectAll("*").remove();
+      }
+      
+      nodeIds = new Map();
+      nodes = [];
+      
+      simulation = d3.forceSimulation();
+  
+      svg = d3.select("svg");
 
-  	var orbit = svg.append("circle").attr("id", "orbit");
+      orbit = svg.append("circle").attr("id", "orbit");
 
-    //////////////////////////////////////////////////////////////
-    /////////////////////// Visual Effects ///////////////////////
-    //////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////
+      /////////////////////// Visual Effects ///////////////////////
+      //////////////////////////////////////////////////////////////
 
-    // --- GOOEY FILTER --- //
-    var g = svg.append("g")
-     .style("filter", "url(#gooey)"); //Set the filter on the container svg
+      // --- GOOEY FILTER --- //
+      g = svg.append("g")
+       .style("filter", "url(#gooey)"); //Set the filter on the container svg
 
-    //Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
-    var defs = svg.append('defs');
-    var filter = defs.append('filter').attr('id','gooey');
-    filter.append('feGaussianBlur')
-      .attr('in','SourceGraphic')
-      .attr('stdDeviation','10')
-      .attr('result','blur');
-    filter.append('feColorMatrix')
-      .attr('in','blur')
-      .attr('mode','matrix')
-      .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
-      .attr('result','gooey');
-    filter.append('feComposite')
-      .attr('in','SourceGraphic')
-      .attr('in2','gooey')
-      .attr('operator','atop');
+      //Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+      var defs = svg.append('defs');
+      var filter = defs.append('filter').attr('id','gooey');
+      filter.append('feGaussianBlur')
+        .attr('in','SourceGraphic')
+        .attr('stdDeviation','10')
+        .attr('result','blur');
+      filter.append('feColorMatrix')
+        .attr('in','blur')
+        .attr('mode','matrix')
+        .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
+        .attr('result','gooey');
+      filter.append('feComposite')
+        .attr('in','SourceGraphic')
+        .attr('in2','gooey')
+        .attr('operator','atop');
 
-    // --- ORBIT GLOW FILTER --- //
-    var glowFilter = defs.append("filter")
-        .attr("id","glow");
-    glowFilter.append("feGaussianBlur")
-        .attr("stdDeviation","3.5")
-        .attr("result","coloredBlur");
-    var feMerge = glowFilter.append("feMerge");
-    feMerge.append("feMergeNode")
-        .attr("in","coloredBlur");
-    feMerge.append("feMergeNode")
-        .attr("in","SourceGraphic");
+      // --- ORBIT GLOW FILTER --- //
+      var glowFilter = defs.append("filter")
+          .attr("id","glow");
+      glowFilter.append("feGaussianBlur")
+          .attr("stdDeviation","3.5")
+          .attr("result","coloredBlur");
+      var feMerge = glowFilter.append("feMerge");
+      feMerge.append("feMergeNode")
+          .attr("in","coloredBlur");
+      feMerge.append("feMergeNode")
+          .attr("in","SourceGraphic");
 
-  	var planetsGroup = g.append("g")
-    	.attr("class", "planets");
-    var linksGroup = g.append("g")
-    	.attr("class", "links");
-    var flyNodesGroup = g.append("g")
-    	.attr("class", "flyNodes");
+      planetsGroup = g.append("g")
+          .attr("class", "planets");
+      linksGroup = g.append("g")
+          .attr("class", "links");
+      flyNodesGroup = g.append("g")
+          .attr("class", "flyNodes");
+      
+    }
+  
+    initSvg();
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
@@ -126,18 +179,11 @@
 
         var options = omniscope.view.context().options;
 
+        groupByDate = false;    
         var query_ = {
             "@visokiotype": "QueryApi.AggregateOperation",
             "groupings": [
                 {
-                    "inputField": options.items.date,
-                    "type": "HISTOGRAM",
-                    "dateUnit": "SECOND",
-                    "histogramInterval": 1,
-                    "fitToScreen": true,
-                    "name": "date"
-                },
-              	{
                     "inputField": options.items.link,
                     "type": "UNIQUE_VALUES",
                     "fitToScreen": true,
@@ -145,6 +191,11 @@
                 }
             ],
             "measures": [
+                {
+                    "name": "date",
+                    "inputField": options.items.date.inputField,
+                    "function": "SINGLETON"
+                },
                 {
                     "name": "source",
                     "inputField": options.items.source.inputField,
@@ -169,6 +220,55 @@
                 }
             }
         };
+        
+        if (options.items.date.type === "HISTOGRAM") {
+      		//if date is specified we get all transactions grouped by the date histogram specified
+            groupByDate = true;
+          
+            var query_ = {
+                "@visokiotype": "QueryApi.AggregateOperation",
+                "groupings": [
+                    options.items.date,
+                    {
+                        "inputField": options.items.source.inputField,
+                        "type": "UNIQUE_VALUES",
+                        "fitToScreen": true,
+                        "name": "source"
+                    }
+                  ,
+                    {
+                        "inputField": options.items.target.inputField,
+                        "type": "UNIQUE_VALUES",
+                        "fitToScreen": true,
+                        "name": "target"
+                    }
+                ],
+                "measures": [
+                    {
+                        "name": "size",
+                        "inputField": options.items.size.inputField,
+                        "function": "SUM"
+                    }
+                ],
+                "input": {
+                    "@visokiotype": "QueryApi.RecordFilterOperation",
+                    "filter": omniscope.view.context().dataConfig.filter,
+                    "input": {
+                        "@visokiotype": "QueryApi.DefaultSource"
+                    }
+                }
+            };
+          
+        }
+        
+        showTxLabels = false;
+        if (options.items.txLabels) {
+            showTxLabels = true;
+            let infoText = "Transactions " + (groupByDate ? "grouped by date histogram ("+ options.items.date.histogramInterval + " " + options.items.date.dateUnit.toLowerCase()+")" : "by unique values (ID)"); 
+            document.getElementById("queryInfo").innerHTML = infoText;
+        	document.getElementById("queryInfoDiv").style.display = "block";
+        	document.getElementById("txInfoDiv").style.display = "block";
+        }
 
         omniscope.view.queryBuilder()
             .table(query_)
@@ -176,15 +276,28 @@
                 // On success, pass the TableQueryOutput object to render():
                 renderView(event.data);
             }).on("error", function(err) {
-            // On error, report to the enclosing application:
-            omniscope.view.error(err.error);
+              // On error, report to the enclosing application:
+              omniscope.view.error(err.error);
         }).execute(); // Submit the query for execution
         omniscope.view.busy(false);
     };
+  
+    var reloadOrUpdate = function() {
+      var opts = omniscope.view.context().options;
+      var restartAnimation = opts.items.animationRestartOnData;
+        if (restartAnimation == true) {
+            window.location.reload();
+        } else {
+            update();
+        }
+    }
 
     // Naively redraw on any of these events
     // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], update);
+    omniscope.view.on(["load", "resize"], update);
+  
+    omniscope.view.on(["update"], reloadOrUpdate);
+    
 
     function renderView(result) {
 
@@ -192,10 +305,13 @@
         //////////////////////////// Data ////////////////////////////
         //////////////////////////////////////////////////////////////
 
+		// On update, depending on option we rebuild the view or ignore it          		
+      
       	// Map records to field options
         var records = result.records;
 
         var options = omniscope.view.context().options;
+      
         var sun_id = options.items.centreNodeId;
 
         var mappings = result.mappings;
@@ -209,13 +325,25 @@
         }
 
         records.forEach(function(record, i) {
-            var bee = {
-                id: record[1],
-                source: record[2],
-                target: record[3],
-              	size: record[4],
-              	date: new Date(record[0].lower)
-            };
+            var bee;
+            if (groupByDate) {
+                 bee = {
+                    id: i,
+                    source: record[1],
+                    target: record[2],
+                    size: record[3],
+                    date: new Date(record[0].lower)
+           		 };
+            } else {
+                 bee = {
+                    id: record[0],
+                    source: record[2],
+                    target: record[3],
+                    size: record[4],
+                    date: new Date(record[1])
+                 };
+            }
+          
             var beeDate = new Date(bee.date);
            	if (bee.size > 0 && (lastDate == null || lastDate.getTime() < beeDate)) {
                 var sourceColourOut = (bee.source === sun_id) ? SUN_COLOUR_OUT : colourScale(bee.source);
@@ -252,12 +380,12 @@
         //////////////////////////////////////////////////////////////
 
       	var margin = {top: 30, right: 30, bottom: 30, left: 30};
-        var width = +parseInt(svg.style("width"), 10) - 40;
-        var height = +parseInt(svg.style("height"), 10) - 40;
+        var width = +parseInt(svg.style("width"), 10);
+        var height = +parseInt(svg.style("height"), 10);
       	var maxSize = Math.min(width, height);
         var orbit_radius = maxSize/3;
 
-        var marginNodes = maxSize/50;
+        var marginNodes = maxSize/25;
         var _sizeScale = d3.scaleSqrt().range([Math.max(5, maxSize/100), Math.max(25, maxSize/40)]).domain([0, maxBeeSize]);
 
         //////////////////////////////////////////////////////////////
@@ -322,12 +450,16 @@
         planetsEnter.append("circle")
             .attr("class", function(d) { return "circle node-out node-out-"+d.id; })
         	.style("fill", function(d) { return d.colourOut; })
-            .attr("r", function(d){  return _sizeScale(d.sizeOut) + _sizeScale(d.sizeIn); });
+            .attr("r", function(d){  return _sizeScale(d.sizeOut) + _sizeScale(d.sizeIn); })
+            .append("title")
+            .text(function(d) { return d.id +"\n" + "Received: "+ d.sizeIn + " Sent: "+ d.sizeOut})
 
         planetsEnter.append("circle")
           .attr("class", function(d) { return "circle node-in node-in-"+d.id; })
           .style("fill", function(d) { return d.colourIn; })
-            .attr("r", function(d){  return _sizeScale(d.sizeIn); });
+          .attr("r", function(d){  return _sizeScale(d.sizeIn); })
+          .append("title")
+          .text(function(d) { return d.id +"\n" + "Received: "+ d.sizeIn + " Sent: "+ d.sizeOut})
 
         //////////////////////////////////////////////////////////////
         //////////////////// Flying transactions /////////////////////
@@ -362,8 +494,15 @@
         //////////////////////////////////////////////////////////////
 
         function update(that, d) {
-          var dur = 8000,
-              del = 4000/beesArray.length+1;
+          
+          var options = omniscope.view.context().options;
+          var duration = options.items.animationDuration;
+          //Default duration 10 seconds
+          var dur = (duration === undefined || duration == null || duration <= 0) ? 10000 : duration * 1000;
+          
+          var del = dur/beesArray.length+1;
+          //Minimum delay 25ms, too hard for the browser otherwise
+          del = (del < 25) ? 25 : del;
 
           var flyNode = flyNodesGroup.selectAll(".flyNode");
 
@@ -399,12 +538,13 @@
           });
 
           (function animate() {
+            var lastNode = flyNode._groups[0].length - 1;
             flyNode.each(function(d, i) {
                 d3.select(this)
                   .transition("start").duration(0)
                     .attr("cx", function(d) { return d.sourceNode.cx; })
                     .attr("cy", function(d) { return d.sourceNode.cy; })
-                  .transition("resize").duration(2000).delay(i*del)
+                  .transition("resize").duration(1500).delay(i*del)
                     .attr("r", function(d) { return 5 + _sizeScale(d.size); })
                   .transition("initial").duration(0)
                 	.attr("cx", "0px")
@@ -414,11 +554,12 @@
                 	.attrTween("transform", (function() {return translateAlong(d.path.node());})())
                     .on("start", function(d) {
                       // Resize output of source
+                      updateTransactionInfo(d);
                       var node = d.sourceNode;
                       node.sizeOut += d.size;
                   	  updateSizeScale(node.sizeOut);
                       d3.select(".node-out-"+node.id)
-                        .transition("resize").duration(5000)
+                        .transition("resize").duration(3500)
                         .attr("r", _sizeScale(node.sizeIn) + _sizeScale(node.sizeOut));
                   	  updateAnnotation(node);
                     })
@@ -430,14 +571,17 @@
                         node.sizeIn += d.size;
                         updateSizeScale(node.sizeIn);
                         d3.select(".node-in-"+node.id)
-                          .transition("resize").duration(2000)
+                          .transition("resize").duration(1500)
                           .attr("r", _sizeScale(node.sizeIn));
                         d3.select(".node-out-"+node.id)
-                          .transition("resize").duration(2000)
+                          .transition("resize").duration(1500)
                           .attr("r", _sizeScale(node.sizeIn) + _sizeScale(node.sizeOut));
                         updateAnnotation(node);
                         // Delete flying node
                         this.remove();
+                        if (lastNode == i) {
+                            resetTransactionInfo();
+                        }
                     })
                 ;
             });
@@ -447,6 +591,18 @@
         //////////////////////////////////////////////////////////////
         ////////////////////// Extra functions ///////////////////////
         //////////////////////////////////////////////////////////////
+        function updateTransactionInfo(node) {
+          if (showTxLabels) {
+            let infoText = "<b>TX </b>" + (groupByDate ? "" : "ID: " + node.id) + "<br>Date: " + node.date.toUTCString() + "<br>From: " +node.source + "<br>To: "+node.target+ "<br>Size: "+d3.format(",.2f")(node.size); 
+            document.getElementById("transactionInfo").innerHTML = infoText;
+          }
+        }
+      
+        function resetTransactionInfo() {
+          document.getElementById("transactionInfo").innerHTML = "";
+          document.getElementById("txInfoDiv").style.display = "none";
+          document.getElementById("queryInfoDiv").style.display = "none";
+        }
 
         function getNode(nodes, id) {
           return nodes.find(function(node) { return node.id === id; });
@@ -456,16 +612,18 @@
           svg.selectAll(".annotation-tooltip").remove();
           var labels = nodes.map(function(d) {
             let radius = _sizeScale(d.sizeOut);
-            let margin = 20;
-            let _x = (d.x > width/2) ? d.x + radius + margin : d.x - radius - margin;
-            let _y = (d.y > height/2) ? d.y + radius + margin : d.y - radius - margin;
+            let margin = 15;
+            let _x = (d.x >= width/2) ? d.x + radius + margin : d.x - radius - margin;
+            let _y = (d.y >= height/2) ? d.y + radius + margin : d.y - radius - margin;
+            let distFromCenter = Math.min(5, Math.max(1, Math.pow (Math.abs(d.y - height/2) / height * 3.7, 7)));
+            let aligment = sun_id == d.id ? "right" : "";
             return {
               className: "annotation-tooltip-"+d.id,
-              x: _x,
+              x: sun_id == d.id ? _x - 20 : _x,
               y: _y,
-              dx: (_x > width/2) ? 50 : -50,
-              dy: (_y > height/2) ? 50 : -50,
-              note: {title: d.id, label: "_", wrap: 100},
+              dx:  sun_id == d.id ? 0 : (_x < width/2) ? - 50 : 50,
+              dy:  sun_id == d.id ? 40 : (_y < height/2 ) ? -10 * distFromCenter : 10 * distFromCenter,
+              note: {title: d.id, label: "_", wrap: 100, align: aligment},
               subject: { radius: 4 },
               data: {
                 sizeIn: d.sizeIn,
@@ -478,24 +636,35 @@
           window.makeAnnotations = d3.annotation().annotations(labels).type(d3.annotationCalloutElbow );
           var tooltips = svg.append("g")
             .attr("class", "annotation-tooltip");
+            
           tooltips.call(makeAnnotations);
+          tooltips.selectAll(".annotation-note-title")
+          	.attr("text-anchor", (d) => d.x >= width/2 ? "Start" : "middle");
+          
           tooltips.selectAll(".annotation-note-label")
             .html(function(d) {
-            	return "</tspan><tspan class=\"tooltip-sent\" dy=\"0.8em\" fill=\""+d.data.inColour+"\">Received: "
-                  +d3.format(",.2r")(d.data.sizeIn)+"</tspan>"
+                let alignment = d.x >= width/2  ? "Start" : "middle";
+            	return "</tspan><tspan class=\"tooltip-sent\" dy=\"0.8em\" text-anchor=\""+alignment+"\" fill=\""+d.data.inColour+"\">Received: "
+                  +d3.format(",.3r")(d.data.sizeIn)+"</tspan>"
                   +"<tspan class=\"tooltip-sent\" dx=\"0.8em\" fill=\""+d.data.outColour+"\">Sent: "
-                  +d3.format(",.2r")(d.data.sizeOut);
+                  +d3.format(",.3r")(d.data.sizeOut);
           	});
+          
+          tooltips.selectAll(".connector")
+          	.style("stroke-dasharray", ("3, 3"));
+          tooltips.selectAll(".note-line")
+          	.style("stroke-dasharray", ("3, 3"));
         }
 
         function updateAnnotation(node) {
           svg.select(".annotation-tooltip-"+node.id)
               .selectAll(".annotation-note-label")
               .html(function() {
-                  return "</tspan><tspan class=\"tooltip-sent\" dy=\"0.8em\" fill=\""+node.colourIn+"\">Received: "
-                    +d3.format(",.2r")(node.sizeIn)+"</tspan>"
+            	  let alignment = node.x >= width/2  ? "Start" : "middle";
+                  return "</tspan><tspan class=\"tooltip-sent\" dy=\"0.8em\" text-anchor=\""+alignment+"\" fill=\""+node.colourIn+"\">Received: "
+                    +d3.format(",.3r")(node.sizeIn)+"</tspan>"
                     +"<tspan class=\"tooltip-sent\" dx=\"0.8em\" fill=\""+node.colourOut+"\">Sent: "
-                    +d3.format(",.2r")(node.sizeOut);
+                    +d3.format(",.3r")(node.sizeOut);
               });
         }
 
@@ -507,9 +676,12 @@
         function updatePlanetSizes() {
           planetsGroup.selectAll(".node-out").transition("resize").duration(500)
             .attr("r", function(d){  return _sizeScale(d.sizeOut) + _sizeScale(d.sizeIn); });
-
+          
           planetsGroup.selectAll(".node-in").transition("resize").duration(500)
             .attr("r", function(d){  return _sizeScale(d.sizeIn); });
+          
+          planetsGroup.selectAll("title")
+            .text(function(d) { return d.id +"\n" + "Received: "+ d3.format(",.3s")(d.sizeIn) + "  Sent: "+ d3.format(",.3s")(d.sizeOut)})
         }
 
         function translateAlong(path) {
