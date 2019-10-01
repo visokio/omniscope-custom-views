@@ -1,6 +1,8 @@
 {
   "name": "Orbital Transaction Flow",
   "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
   "tags": [
     "custom",
     "transaction",
@@ -9,8 +11,6 @@
     "gooey",
     "orbit"
   ],
-  "icon": "icon.svg",
-  "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
@@ -18,24 +18,43 @@
   "supportsSelection": true,
   "options": {
     "items": {
+      "animationDuration": {
+        "displayName": "Duration",
+        "detail": "In seconds, tells for how long the whole animation should run. N.B. for high number of transactions the total animation duration may increase to avoid browser performance issues.",
+        "type": "NUMBER",
+        "mandatory": true,
+        "isDecimal": false,
+        "minValue": 1,
+        "maxValue": 100
+      },
+      "animationRestartOnData": {
+        "displayName": "Restart on data change",
+        "detail": "If true restarts the whole animation when data changes, e.g. when filters are applied or new records are added to the dataset. Default false.",
+        "type": "TOGGLE"
+      },
+      "txLabels": {
+        "displayName": "Show transactions labels",
+        "detail": "If true show transations information information as the animation goes.",
+        "type": "TOGGLE"
+      },
       "centreNodeId": {
-        "displayName": "Centre Node Id",
-        "detail": "Id of the node shown at the centre of the view",
+        "displayName": "Centre Node ID",
+        "detail": "ID of the node shown at the centre of the view",
         "type": "TEXT",
         "mandatory": true
       },
       "date": {
         "displayName": "Date",
-        "detail": "Date of the transaction. Transactions with the same source and target that happen in the same minute will be shown as one",
-        "type": "FIELD",
+        "detail": "Date of the transaction. Can be used to group transactions per date interval, so transactions with the same source and target that happen in the same interval will be shown as one with a cumulative size.",
+        "type": "GROUPING",
         "mandatory": true,
         "validFieldTypes": [
           "DATE"
         ]
       },
       "link": {
-        "displayName": "Id",
-        "detail": "Unique identifier of the transaction",
+        "displayName": "ID",
+        "detail": "Unique Identifier of the transaction",
         "type": "FIELD",
         "mandatory": true,
         "validFieldTypes": [
@@ -84,60 +103,67 @@
         "paneY"
       ]
     },
-    "optionGroups": [
-      {
-        "displayName": "Chart",
-        "rows": [{
-          "cells": [{
-            "option": "centreNodeId",
-            "usePrefixTitle": false
-          }]
-        }]
-      },{
-        "displayName": "Transaction",
-        "rows": [
-          {
-            "cells": [
-              {
-                "option": "link",
-                "usePrefixTitle": false
-              },
-              {
-                "option": "source",
-                "usePrefixTitle": false
-              },
-              {
-                "option": "target",
-                "usePrefixTitle": false
-              },
-              {
-                "option": "date",
-                "usePrefixTitle": false
-              },
-              {
-                "option": "size",
-                "usePrefixTitle": false
-              }
-            ]
-          }
-        ]
-      },{
-        "displayName": "Pane/tile",
-        "rows": [{
-          "cells": [{
-            "option": "paneX",
-            "usePrefixTitle": false
-          }]
-        }, {
-          "cells": [{
-            "option": "paneY",
-            "usePrefixTitle": false
-          }]
+    "optionGroups": [{
+      "displayName": "Chart",
+      "rows": [{
+        "cells": [{
+          "option": "centreNodeId",
+          "usePrefixTitle": false
         }]
       }]
+    }, {
+      "displayName": "Transaction",
+      "rows": [{
+        "cells": [{
+          "option": "link",
+          "usePrefixTitle": false
+        }, {
+          "option": "date",
+          "usePrefixTitle": false
+        }, {
+          "option": "source",
+          "usePrefixTitle": false
+        }, {
+          "option": "target",
+          "usePrefixTitle": false
+        }, {
+          "option": "size",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Animation",
+      "rows": [{
+        "cells": [{
+          "option": "animationDuration",
+          "usePrefixTitle": false
+        }, {
+          "option": "animationRestartOnData",
+          "usePrefixTitle": false
+        }, {
+          "option": "txLabels",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Pane/tile",
+      "rows": [{
+        "cells": [{
+          "option": "paneX",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "paneY",
+          "usePrefixTitle": false
+        }]
+      }]
+    }]
   },
   "defaultOptions": {
-    "items": {},
+    "items": {
+      "animationDuration": 10
+    },
     "pane": {
       "yAxisHeaderWidth": 75,
       "paneWidth": 200,
