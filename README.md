@@ -26,6 +26,9 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/Reference/
         <td width="33%">Force Coordinate Graph<br><a href="forcecoordinategraph" title="Force Coordinate Graph"><img width="290" src="https://github.com/visokio/custom-views/raw/master/forcecoordinategraph/thumbnail2.png"></a></td>
         <td width="33%">Orbital Transaction Flow<br><a href="orbitaltransactionflow" title="Orbital Transaction Flow"><img width="290" src="https://github.com/visokio/custom-views/raw/master/orbitaltransactionflow/thumbnail.png"></a></td>
     </tr>
+    <tr valign="top">
+        <td width="33%">Web View<br><a href="web" title="Web View"><img width="290" src="https://github.com/visokio/custom-views/raw/master/web/thumbnail.png"></a></td>
+    </tr>
 </table>
 
 ### How to create a new view
