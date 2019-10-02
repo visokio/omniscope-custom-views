@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        html, body, main {
+	        margin: 0px;
+            /* Ensure the body fills the view, so clicks are handled everywhere: */
+            width: 100%;
+            height: 100%;
+        }
+        main {
+            font-family: monospace;
+            display: flex;
+            font-size: 20px;
+            white-space: pre;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<main id="main">
+  <iframe id="webview" src="about:blank" frameborder="0" allowfullscreen
+    style="width:100%;height:100%;margin:0px;"></iframe>
+ </main>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+    // Redraw on any of these events 
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+
+        // Retrieve the auto-query results, a 2d array ([row][column]):
+        var data = omniscope.view.context().result.data.records;
+
+        var url = data[0];
+        if (url == null || url[0] == null) {
+      		url = "data:text/html;charset=utf-8," + "No single value is selected. Filter or select a single record in another view to navigate.";
+        }
+          
+        document.getElementById("webview").src = url;
+    });
+
+</script>
+
+</body>
+</html>
