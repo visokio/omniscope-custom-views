@@ -20,6 +20,9 @@
         "displayName": "URL",
         "detail": "The field which contain the web pages URL to navigate to. N.B. some pages might not load when loading content in a iframe is not permitted by their server.",
         "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "TEXT"
+        ],
         "mandatory": true
       },
       "paneX": {
@@ -31,10 +34,6 @@
         "displayName": "Pane Y",
         "type": "GROUPING",
         "list": true
-      },
-      "split": {
-        "displayName": "Split",
-        "type": "GROUPING"
       }
     },
     "structure": {
