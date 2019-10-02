@@ -1,7 +1,14 @@
 {
   "name": "Web",
   "frameworkVersion": "v1",
-  "tags": [],
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "web",
+    "webpage",
+    "www"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
