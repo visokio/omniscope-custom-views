@@ -1,0 +1,70 @@
+{
+  "name": "Web",
+  "frameworkVersion": "v1",
+  "tags": [],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "measures": {
+        "displayName": "URL",
+        "detail": "The field which contain the web pages URL to navigate to. N.B. some pages might not load when loading content in a iframe is not permitted by their server.",
+        "type": "MEASURE",
+        "mandatory": true
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      },
+      "split": {
+        "displayName": "Split",
+        "type": "GROUPING"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "measures",
+        "split"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    }
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}
