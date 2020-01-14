@@ -1,4 +1,4 @@
-# omniscope-custom-views
+# Omniscope Custom Views
 
 Public repository for custom views for Omniscope 2018+.
 
