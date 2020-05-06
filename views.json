@@ -96,6 +96,20 @@
 		    ],
 		    "files": [],
 		    "version": 0
+		},
+		{
+		    "name": "workflowexecution",
+		    "displayName": "Workflow Execution",
+		    "tags": [
+			    "custom",
+			    "workflow",
+			    "job",
+			    "execution",
+			    "block",
+			    "api"
+		    ],
+		    "files": [],
+		    "version": 0
 		}
 	]
 }
