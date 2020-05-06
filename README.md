@@ -28,6 +28,7 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/Reference/
     </tr>
     <tr valign="top">
         <td width="33%">Web View<br><a href="web" title="Web View"><img width="290" src="https://github.com/visokio/custom-views/raw/master/web/thumbnail.png"></a></td>
+        <td width="33%">Workflow Execution<br><a href="workflowexecution" title="Workflow Execution"><img width="290" src="https://github.com/visokio/custom-views/raw/master/workflowexecution/thumbnail.png"></a></td>
     </tr>
 </table>
 
