@@ -63,6 +63,8 @@ function startWorkflow() {
             if (this.status == 200) {
                  _jobId = JSON.parse(xhr.responseText).jobId;
             	document.getElementById("jobState").innerHTML = "Job state = STARTED";
+            } else if (this.status == 403) {
+                document.getElementById("jobState").innerHTML = xhr.responseText;
             } else {
             	document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
             }
@@ -85,6 +87,9 @@ function checkWorkflowState() {
                 if (_jobState === "COMPLETED") {
                   clearInterval(_check);
                 }
+            } else if (this.status == 403) {
+                document.getElementById("jobState").innerHTML = xhr.responseText;
+                clearInterval(_check);
             } else {
             	document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
                 clearInterval(_check);
@@ -129,6 +134,3 @@ function checkWorkflowState() {
 
 </body>
 </html>
-
-
-
