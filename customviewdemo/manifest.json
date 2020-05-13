@@ -1,7 +1,13 @@
 {
   "name": "Custom View Demo",
   "frameworkVersion": "v1",
-  "tags": [],
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "demo",
+    "highcharts"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": false,
