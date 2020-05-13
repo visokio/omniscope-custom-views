@@ -110,6 +110,17 @@
 		    ],
 		    "files": [],
 		    "version": 0
+		},
+		{
+			"name": "customviewdemo",
+			"displayName": "Custom View Demo",
+			"tags": [
+				"custom",
+				"demo",
+				"highcharts"
+			],
+			"files": [],
+			"version": 0
 		}
 	]
 }

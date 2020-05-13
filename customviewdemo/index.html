@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body, main {
+            width: 100%;
+            height: 100%;
+        }
+        main {
+            font-family: monospace;
+            font-size: 20px;
+            white-space: pre;
+        }
+    </style>
+    <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+</head>
+<!--
+  A demonstration of a custom view using Highcharts, manual/advanced querying, and selection.
+-->
+<body>
+<main id="main"></main><!-- This element is where the view will render -->
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+<script>
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+    // Naively redraw on any of these events
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+        try {
+            var query = {
+                // Use grouping and measure from options, as specified in manifest
+                "groupings": [
+                    omniscope.view.context().options.items.split
+                ],
+                "measures": [
+                    omniscope.view.context().options.items.measures
+                ],
+                // Use default filters for the view:
+                "filter": omniscope.view.context().dataConfig.filter
+            }
+
+            // Notify the container that the view is busy loading
+            omniscope.view.busy(true);
+
+            // Get the view endpoint using the Custom View API, this is needed to create the query builder.
+            var endpoint = omniscope.view.endpoint();
+
+            // Execute the query and render the view.
+            omniscope.query.builder(endpoint).table(query).on("load", function(event) {
+                renderView(event.data);
+                omniscope.view.busy(false); // Also notify the container view is now ready.
+            }).execute();
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    });
+
+    // Using the query results, show it in the custom visualisation.
+    function renderView(queryResultData) {
+
+        // CREATE SPLIT LABELS.
+        var labels = [];
+
+        // Note the result is a 2d array - for more information see Query API docs.
+        for (var i = 0; i < queryResultData.records.length; i++) {
+            labels.push(queryResultData.records[i][0]);
+        }
+
+        // Get stored measure option
+        var measure = omniscope.view.context().options.items.measures;
+
+        var yAxisLabel = "";
+
+        // RECORD COUNT option doesn't have an input field associated with it
+        // hence we are checking to see if the input field is present.
+        if (!measure.inputField) {
+            yAxisLabel = measure.function;
+        } else {
+            yAxisLabel = measure.inputField + " (" + measure.function+")";
+        }
+        var bodyOffsets = document.body.getBoundingClientRect();
+
+        // High chart specific
+        new Highcharts.Chart({
+            chart: {
+                renderTo: 'main',
+                width: bodyOffsets.width,
+                height: bodyOffsets.height,
+                events: {
+                    click: function() {
+                        // On clicking anywhere on the chart other than point, trigger whitespace click.
+                        omniscope.view.whitespaceClick();
+                    }
+                },
+                type: "column"
+            },
+            title: {
+                text: null
+            },
+            xAxis: {
+                gridLineWidth: 1,
+                categories: labels,
+                type: "categories",
+            },
+            yAxis: {
+                gridLineDashStyle: 'longdash',
+                title: {
+                    text: yAxisLabel
+                }
+            },
+            plotOptions: {
+                series: {
+                    animation: 1000,
+                    allowPointSelect: true,
+                    dataLabels: {
+                        enabled: true
+                    },
+                    states: {
+                        select: {
+                            color: 'blue'
+                        }
+                    },
+                    point: {
+                        events: {
+                            click: function() {
+                                // On clicking a bar trigger omniscope selection.
+                                var fieldName = omniscope.view.context().options.items["split"].inputField;
+                                var selectedValue = this.category;
+                                var filter = {
+                                    "type": "AND",
+                                    "filters": [{
+                                        "type": "FIELD_VALUE",
+                                        "inputField": fieldName,
+                                        "operator": "=",
+                                        "value": selectedValue
+                                    }]
+                                };
+                                omniscope.view.context().viewSelection = { filter: filter };
+                                omniscope.view.updated();
+                            }
+                        }
+                    }
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                data: queryResultData.records
+            }]
+        });
+    }
+</script>
+</body>
+</html>

@@ -29,6 +29,7 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/Reference/
     <tr valign="top">
         <td width="33%">Web View<br><a href="web" title="Web View"><img width="290" src="https://github.com/visokio/custom-views/raw/master/web/thumbnail.png"></a></td>
         <td width="33%">Workflow Execution<br><a href="workflowexecution" title="Workflow Execution"><img width="290" src="https://github.com/visokio/custom-views/raw/master/workflowexecution/thumbnail.png"></a></td>
+        <td width="33%">Custom View Demo<br><a href="customviewdemo" title="Custom View Demo"><img width="290" src="https://github.com/visokio/custom-views/raw/master/customviewdemo/thumbnail.png"></a></td>
     </tr>
 </table>
 
@@ -60,7 +61,7 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/Reference/
 
         Omniscope file to test the view.
 
- - Add an entry to the file view.json:
+ - Add an entry to the file views.json:
     ```
     {
         "name": "<<unique view id in lower case>>",
