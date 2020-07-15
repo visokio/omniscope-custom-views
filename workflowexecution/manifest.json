@@ -18,6 +18,10 @@
         "displayName": "Button text",
         "type": "TEXT"
       },
+      "refreshFromSource": {
+        "displayName": "Refresh from source",
+        "type": "TOGGLE"
+      },
       "showJobState": {
         "displayName": "Show job state",
         "type": "TOGGLE"
@@ -25,14 +29,18 @@
     },
     "structure": {
       "toolbar": [
-        "block", "buttonText", "showJobState"
+        "block",
+        "buttonText",
+        "showJobState"
       ],
       "x": [],
       "y": []
     }
   },
   "defaultOptions": {
-    "items": {},
+    "items": {
+      "refreshFromSource": true
+    },
     "pane": {
       "yAxisHeaderWidth": 75,
       "paneWidth": 200,
