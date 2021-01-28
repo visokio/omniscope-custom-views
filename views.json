@@ -112,6 +112,20 @@
 		    "version": 0
 		},
 		{
+		    "name": "switchparam",
+		    "displayName": "Switch Param",
+		    "tags": [
+			    "custom",
+			    "workflow",
+			    "param",
+			    "parameter",
+			    "project",
+			    "api"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 			"name": "customviewdemo",
 			"displayName": "Custom View Demo",
 			"tags": [
