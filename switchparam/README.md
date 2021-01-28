@@ -8,5 +8,6 @@ It uses the [Workflow Execution REST API](https://help.visokio.com/support/solut
 
  - Param name : the name of the parameter to set
  - Field with param values: the field in the dataset from which obtain the unique values 
+ 
 
 ![](thumbnail.png) 
