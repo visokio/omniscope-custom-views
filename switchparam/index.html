@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            html,
+            body,
+            main {
+                /* Ensure the body fills the view, so clicks are handled everywhere: */
+                width: 100%;
+                height: 100%;
+                font-family: Lato, Verdana;
+                font-size: 13px;
+                color: rgba(0, 0, 0, 0.62);
+                margin: 0px 4px 15px;
+            }
+            #paramName {
+                font-family: Lato, Verdana;
+                font-weight: bold;
+                padding-bottom: 8px;
+                padding-left: 3px;
+            }
+            #errorState {
+              color: red;
+              font-weight: bold;
+              padding-bottom: 8px;
+            }
+            .container {
+              display: block;
+              position: relative;
+              padding-left: 25px;
+              padding-top: 3px;
+              margin-bottom: 6px;
+              cursor: pointer;
+              -webkit-user-select: none;
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+            }
+
+            /* Hide the browser's default radio button */
+            .container input {
+              position: absolute;
+              opacity: 0;
+              cursor: pointer;
+            }
+
+            /* Create a custom radio button */
+            .checkmark {
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 19px;
+              width: 19px;
+              background-color: #e6e6e6;
+              border-radius: 50%;
+              border-width: 1px;
+              border-color: grey;
+              border-style: solid;
+            }
+          
+            /* On mouse-over, underline */
+            .container:hover {
+              text-decoration: underline;
+            }
+
+
+            /* On mouse-over, add a grey background color */
+            .container:hover input ~ .checkmark {
+              background-color: #999;
+            }
+
+            /* Create the indicator (the dot/circle - hidden when not checked) */
+            .checkmark::after {
+              content: "";
+              position: absolute;
+              display: none;
+            }
+
+            /* Show the indicator (dot/circle) when checked */
+            .container input:checked ~ .checkmark::after {
+              display: block;
+            }
+
+            /* Style the indicator (dot/circle) */
+            .container .checkmark::after {
+                top: 5px;
+                left: 5px;
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                background: black;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+          <div>
+            <div id="paramName">Param name</div>
+            <div id="errorState"></div>
+            <div id="paramValues"></div>
+          </div>
+        </div>
+        <script src="/_global_/customview/v1/omniscope.js"></script>
+        <!-- Add the Omniscope custom view API -->
+        <script>
+            var paramName;
+            var paramValue;
+            var _projEndpoint;
+
+            if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+          
+            function updateUI(simulateClick) {
+              var container = document.getElementById("paramValues");
+              var labels = container.getElementsByTagName("label");
+              for (i = 0; i < labels.length; i++) {
+                 var l = labels[i];
+                 var input = l.getElementsByTagName("input");
+                 if (input[0].value === paramValue) {
+                     if (input.checked) {
+                       //already checked, no update needed
+                     } else {
+                        input.checked = true;
+                        if (simulateClick) l.click();//simulate click to fix UI
+                     }
+                     return;
+                 }
+              }
+            }
+          
+            function setParam(e) {
+              
+                var value = event.target.value;
+                if (value === paramValue) {
+                  //skip
+                  return;
+                }
+ 
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", _projEndpoint + "w/updateparams", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        if (this.status == 200) {
+                            document.getElementById("errorState").innerHTML = ""; // "Param set to "+value;
+                            paramValue = value;
+                            updateUI();
+                        } else if (this.status == 403) {
+                            document.getElementById("errorState").innerHTML = xhr.responseText;
+                            //error, revert to current param value
+                            getParamValue();
+                            return;
+                        } else {
+                            document.getElementById("errorState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
+                            //error, revert to current param value
+                            getParamValue();
+                            return;
+                        }
+                    }
+                };
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send('{"updates": [{"name":"'+paramName+'", "value":"'+value+'"}]}');
+            }
+          
+          
+            function getParamValue() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", _projEndpoint + "w/param/"+paramName, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        if (this.status == 200) {
+						                paramValue = JSON.parse(xhr.responseText).value;    
+                            document.getElementById("errorState").innerHTML = ""; // "Param set to "+value;
+                            updateUI(true);
+                        } else if (this.status == 403) {
+                            document.getElementById("errorState").innerHTML = xhr.responseText;
+                            updateUI(true);
+                            return;
+                        } else {
+                            document.getElementById("errorState").innerHTML = xhr.responseText;
+                            updateUI(true);
+                            return;
+                        }
+                    }
+                };
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send();
+            }
+          
+            
+
+            omniscope.view.on("load", function () {
+                window.onerror = function (msg) {
+                    omniscope.view.error(msg);
+                };
+            });
+
+            // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+            document.body.addEventListener("click", function () {
+                omniscope.view.whitespaceClick();
+            });
+
+            // Naively redraw on any of these events
+            // (load = first init, update = external settings/state change, resize = browser window resized)
+            omniscope.view.on(["load", "update", "resize"], function () {
+              
+                _projEndpoint = omniscope.view.context().baseUrl + "../../../../";
+                var options = omniscope.view.context().options;
+              	paramName = options.items.paramName;
+                document.getElementById('paramName').innerHTML = paramName;
+              
+                var data = omniscope.view.context().result.data.records;
+
+                var number = data.length;
+                var container = document.getElementById("paramValues");
+                while (container.hasChildNodes()) {
+                    container.removeChild(container.lastChild);
+                }
+                if (number > 100) {
+                    var x = document.createElement("I");
+                    var t = document.createTextNode("Too many values. Truncated to first 100.");
+                    x.appendChild(t);
+                    container.appendChild(x);
+                    container.appendChild(document.createElement("br"));
+                    number = 100;
+                }
+                  
+                for (i=0;i<number;i++){
+                  	var label = document.createElement("label");
+                    label.className = "container";
+                    label.innerHTML = data[i];
+                    var input = document.createElement("input");
+                    input.type = "radio";
+                    input.name = "thisParam";
+                    input.addEventListener("click", setParam)
+                    input.value = data[i];
+                    label.appendChild(input);
+                    var span = document.createElement("span");
+                    span.className = "checkmark";
+                    label.appendChild(span);
+                    container.appendChild(label);
+                } 	
+              
+                getParamValue(); //To Update UI
+            });
+        </script>
+    </body>
+</html>
