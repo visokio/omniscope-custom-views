@@ -31,6 +31,9 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/Reference/
         <td width="33%">Workflow Execution<br><a href="workflowexecution" title="Workflow Execution"><img width="290" src="https://github.com/visokio/custom-views/raw/master/workflowexecution/thumbnail.png"></a></td>
         <td width="33%">Custom View Demo<br><a href="customviewdemo" title="Custom View Demo"><img width="290" src="https://github.com/visokio/custom-views/raw/master/customviewdemo/thumbnail.png"></a></td>
     </tr>
+    <tr valign="top">
+        <td width="33%">Switch Param<br><a href="web" title="Switch Param"><img width="290" src="https://github.com/visokio/custom-views/raw/master/switchparam/thumbnail.png"></a></td>
+    </tr>
 </table>
 
 ### How to create a new view
