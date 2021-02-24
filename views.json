@@ -98,6 +98,20 @@
 		    "version": 0
 		},
 		{
+		    "name": "switchparam",
+		    "displayName": "Switch Param",
+		    "tags": [
+			    "custom",
+			    "workflow",
+			    "param",
+			    "parameter",
+			    "project",
+			    "api"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 		    "name": "workflowexecution",
 		    "displayName": "Workflow Execution",
 		    "tags": [
@@ -112,14 +126,18 @@
 		    "version": 0
 		},
 		{
-		    "name": "switchparam",
-		    "displayName": "Switch Param",
+		    "name": "lambdaworkflowexecution",
+		    "displayName": "Lambda Workflow Execution",
 		    "tags": [
 			    "custom",
-			    "workflow",
-			    "param",
+			    "lambda",
 			    "parameter",
-			    "project",
+			    "param",
+			    "workflow",
+			    "job",
+			    "execute",
+			    "execution",
+			    "block",
 			    "api"
 		    ],
 		    "files": [],
