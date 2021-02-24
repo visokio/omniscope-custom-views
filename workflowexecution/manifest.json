@@ -1,7 +1,17 @@
 {
   "name": "Workflow Execution View",
   "frameworkVersion": "v1",
-  "tags": [],
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+			    "custom",
+			    "workflow",
+			    "job",
+			    "execute",
+			    "execution",
+			    "block",
+			    "api"
+		    ],
   "sandbox": false,
   "autoPane": false,
   "autoQuery": false,
