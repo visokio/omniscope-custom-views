@@ -1,7 +1,14 @@
 {
   "name": "Switch Param View",
   "frameworkVersion": "v1",
-  "tags": [],
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+			    "custom",
+			    "parameter",
+			    "param",
+			    "api"
+		    ],
   "sandbox": false,
   "autoPane": false,
   "autoQuery": true,
