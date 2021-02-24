@@ -1,0 +1,74 @@
+{
+  "name": "Lambda Workflow Execution",
+  "frameworkVersion": "v1",
+  "tags": [],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "block": {
+        "displayName": "Blocks to execute (comma separated names)",
+        "type": "TEXT",
+        "mandatory": true
+      },
+      "buttonText": {
+        "displayName": "Button text",
+        "type": "TEXT"
+      },
+      "deleteExecutionOnFinish": {
+        "displayName": "Delete spawned project and data on execution finish",
+        "type": "TOGGLE"
+      },
+      "paramNames": {
+        "displayName": "Param names (comma separated names)",
+        "type": "TEXT"
+      },
+      "showJobState": {
+        "displayName": "Show job state",
+        "type": "TOGGLE"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "block",
+        "buttonText",
+        "paramNames",
+        "deleteExecutionOnFinish",
+        "showJobState"
+      ],
+      "x": [],
+      "y": []
+    }
+  },
+  "defaultOptions": {
+    "items": {
+      "refreshFromSource": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "xHeaderStyle": {},
+      "yHeaderStyle": {},
+      "tileHeaderStyle": {},
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}
