@@ -58,7 +58,7 @@
   },
   "defaultOptions": {
     "items": {
-      "refreshFromSource": true
+      "deleteExecutionOnFinish": false
     },
     "pane": {
       "yAxisHeaderWidth": 75,
