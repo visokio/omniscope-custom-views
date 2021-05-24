@@ -8,13 +8,6 @@
 			"version": 0
 		},
 		{
-			"name": "calendar",
-			"displayName": "Calendar",
-			"tags": ["custom", "table", "time"],
-			"files": [],
-			"version": 0
-		},
-		{
 			"name": "bubblechart",
 			"displayName": "Bubble Chart",
 			"tags": ["custom", "bubble"],
