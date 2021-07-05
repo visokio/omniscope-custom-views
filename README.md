@@ -33,7 +33,7 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/Reference/
     </tr>
     <tr valign="top">
         <td width="33%">Switch Param<br><a href="web" title="Switch Param"><img width="290" src="https://github.com/visokio/custom-views/raw/master/switchparam/thumbnail.png"></a></td>
-        <td width="33%">Lambda Workflow Execution<br><a href="web" title="Lambda Workflow Execution"><img width="290" src="https://github.com/visokio/custom-views/raw/master/lambdaworkflowexecution/thumbnail.png"></a></td>
+        <td width="33%">Lambda Workflow Execution<br><a href="lambdaworkflowexecution" title="Lambda Workflow Execution"><img width="290" src="https://github.com/visokio/custom-views/raw/master/lambdaworkflowexecution/thumbnail.png"></a></td>
     </tr>
 </table>
 
