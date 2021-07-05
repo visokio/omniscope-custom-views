@@ -119,6 +119,22 @@
 		    "version": 0
 		},
 		{
+		    "name": "setparamandexecute",
+		    "displayName": "Set Parameters and Execute",
+		    "tags": [
+			    "custom",
+			    "workflow",
+			    "job",
+			    "execution",
+			    "parameter",
+			    "param",
+			    "block",
+			    "api"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 		    "name": "lambdaworkflowexecution",
 		    "displayName": "Lambda Workflow Execution",
 		    "tags": [
