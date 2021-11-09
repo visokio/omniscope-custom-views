@@ -105,6 +105,24 @@
 		    "version": 0
 		},
 		{
+		    "name": "switchparamandexecute",
+		    "displayName": "Switch Param and Execute Workflow",
+		    "tags": [
+			    "custom",
+			    "workflow",
+			    "param",
+			    "parameter",
+			    "project",
+			    "api",
+					"execution",
+					"block",
+					"job"
+
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 		    "name": "workflowexecution",
 		    "displayName": "Workflow Execution",
 		    "tags": [
