@@ -1,11 +1,32 @@
 {
 	"views": [
 		{
-			"name": "kpi",
-			"displayName": "KPI (custom view demo)",
-			"tags": ["custom", "key"],
-			"files": [],
-			"version": 0
+		    "name": "web",
+		    "displayName": "Web View",
+		    "tags": [
+			    "custom",
+			    "web",
+			    "www",
+			    "browser",
+			    "internet",
+			    "url"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
+		    "name": "tradingview",
+		    "displayName": "TradingView",
+		    "tags": [
+			    "trading",
+			    "tradingview",
+			    "quotes",
+			    "stocks",
+			    "exchange",
+			    "crypto"
+		    ],
+		    "files": [],
+		    "version": 0
 		},
 		{
 			"name": "bubblechart",
@@ -75,20 +96,6 @@
 			],
 			"files": [],
 			"version": 0
-		},
-		{
-		    "name": "web",
-		    "displayName": "Web View",
-		    "tags": [
-			    "custom",
-			    "web",
-			    "www",
-			    "browser",
-			    "internet",
-			    "url"
-		    ],
-		    "files": [],
-		    "version": 0
 		},
 		{
 		    "name": "switchparam",
@@ -169,6 +176,13 @@
 		    ],
 		    "files": [],
 		    "version": 0
+		},
+		{
+			"name": "kpi",
+			"displayName": "KPI (custom view demo)",
+			"tags": ["custom", "key"],
+			"files": [],
+			"version": 0
 		},
 		{
 			"name": "customviewdemo",
