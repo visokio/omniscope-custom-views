@@ -1,6 +1,8 @@
 {
   "name": "TradingView",
   "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
   "tags": [],
   "sandbox": false,
   "autoPane": true,
