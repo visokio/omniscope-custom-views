@@ -11,14 +11,25 @@
   "supportsSelection": true,
   "options": {
     "items": {
-      "measures": {
+      "aticker": {
         "displayName": "Ticker",
-        "detail": "The field with a function - typically Singleton - which contains the stock ticker (e.g. AAPL).",
+        "documentation": "The field with a function - typically Singleton - which contains the stock ticker (e.g. AAPL).",
         "type": "MEASURE",
         "mandatory": true,
         "validMeasureResultTypes": [
           "TEXT"
         ]
+      },
+      "details": {
+        "displayName": "Show details",
+        "documentation": "Show an extra panel with security key stats, like earnings, financial statements, etc.\n N.B. the panel is hidden when the view is too small.",
+        "type": "TOGGLE",
+        "choicesLayout": "Compact"
+      },
+      "o_darkMode": {
+        "displayName": "Dark mode",
+        "type": "TOGGLE",
+        "choicesLayout": "Compact"
       },
       "paneX": {
         "displayName": "Pane X",
@@ -32,7 +43,7 @@
       }
     },
     "structure": {
-      "toolbar": [],
+      "toolbar": ["aticker"],
       "x": [
         "paneX"
       ],
