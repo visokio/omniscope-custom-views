@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            html,
+            body,
+            main {
+                /* Ensure the body fills the view, so clicks are handled everywhere: */
+                width: 100%;
+                height: 100%;
+                font-family: Monospace;
+            }
+            a.button {
+                background: #ececec;
+                border-radius: 10px;
+                padding: 5px 20px;
+                font-family: Lato;
+                font-weight: bold;
+                color: #3f3f3f;
+                text-decoration: none;
+                text-shadow: 0px 1px 0px #fff;
+                border: 1px solid #a7a7a7;
+                margin: 0px auto;
+                box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+                -webkit-transition: box-shadow 0.5s;
+            }
+            a.button i {
+                float: right;
+                margin: 2px;
+            }
+            a.button:hover {
+                box-shadow: 0px 2px 1px lightgrey inset, 0px -2px 20px lightgrey, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+            }
+            a.button:active {
+                box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5) inset, 0px -2px 20px white, 0px 1px 5px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.1);
+                background: -webkit-linear-gradient(top, #d1d1d1 0%, #ececec 100%);
+            }
+        </style>
+        <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    </head>
+    <body>
+
+
+      
+      
+      
+        <div>
+          <div id="params">
+          </div>
+            <br>
+            <a href="#" class="button" id="btnid" onclick="startLambdaWorkflow()">Upload and Execute</a><br />
+            <br />
+            <div id="jobState"></div>
+        </div>
+      
+      
+      
+      
+      
+        <script src="/_global_/customview/v1/omniscope.js"></script>
+      
+      
+      
+       	<script>
+            var _jobId = "NA";
+            var _lambdaProjectPath;
+            var _blocksToExecute;
+            var _paramNames;
+            var _paramValues;
+            var _showJobState;
+            var _projEndpoint;
+            var _reportBlock;
+            var _check;
+
+            if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+          
+            function updateUI() {
+        
+              
+              
+              var container = document.getElementById("params");
+              
+              //container.innerHTML = ""; //reset
+              while (container.hasChildNodes()) {
+                    container.removeChild(container.lastChild);
+              }
+              
+              
+              // ===============================
+              // ADD FILE UPLOAD WIDGET
+              // ===============================
+              // Note: Its hard coded to "myprojectparam1" parameter which is then referenced in workflow.
+              // on clicking execute it will execute the workflow automatically after it has uploaded the file
+              // and make the "myprojectparam1" to use this particular file.
+              {
+               
+                 var label = document.createElement("label");
+                 label.className = "container";
+                 label.innerHTML = "Select a file to upload";
+                
+                 var fileUpload = document.createElement("input");
+                 fileUpload.type = "file";
+                 fileUpload.id   = "uploadedFile_formdata_key"; // the form data key
+                 fileUpload.name = "uploadedFile"; // Must be the project param name
+                 fileUpload.style = "margin-left:20px";
+                 fileUpload.className="fileUpload";
+                 container.appendChild(label);
+                 container.appendChild(fileUpload);
+                 container.appendChild(document.createElement("br"));
+                 container.appendChild(document.createElement("br"));
+                
+              }
+              
+              // Second file upload if you want to upload multiple
+              /*
+              {
+               
+                 var label = document.createElement("label");
+                 label.className = "container";
+                 label.innerHTML = "Proj param 2 = (myprojectparam2)";
+                
+                 var fileUpload = document.createElement("input");
+                 fileUpload.type = "file";
+                 fileUpload.id   = "myprojectparam2_formdata_key";
+                 fileUpload.name = "myprojectparam2";
+                 fileUpload.style = "margin-left:20px";
+                 fileUpload.className="fileUpload";
+
+                 container.appendChild(label);
+                 container.appendChild(fileUpload);
+                 container.appendChild(document.createElement("br"));
+                 container.appendChild(document.createElement("br"));
+                
+              }
+              
+              
+               // Third param if you want to send further params to server which are not file upload
+               // but normal params.
+              
+               {
+               
+                  var label = document.createElement("label");
+                 label.className = "container";
+                 label.innerHTML = "Proj param 3 = (myprojectparam1)";
+                
+                 var normalParam = document.createElement("input");
+                 normalParam.type = "text";
+                 normalParam.id   = "myprojectparam3";
+                 normalParam.name = "myprojectparam3";
+                 normalParam.style = "margin-left:20px";
+                 container.appendChild(label);
+                 container.appendChild(normalParam);
+                 container.appendChild(document.createElement("br"));
+                 container.appendChild(document.createElement("br"));
+                
+               }
+               */
+              
+          
+            }
+          
+            function refreshThisReport() {   
+                var options = omniscope.view.context().options;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", _projEndpoint + "w/execute", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                console.log("refreshing "+_reportBlock);
+                xhr.send('{"blocks": ["' + _reportBlock + '"], "refreshFromSource": true, "cancelExisting": false}');
+            } 
+          
+            function startLambdaWorkflow() {   
+              
+                // Find all the inputs and correct map them Lambda execution JSON object
+                var myParams = document.getElementById('params');
+                var inputs = myParams.getElementsByTagName("input");
+                var paramsToSet = []
+                for (i=0;i<inputs.length;i++) {
+                    param = {}
+                    param.name = inputs[i].name;
+                  
+                    if (inputs[i].type === "file") {
+                      
+                      // This is a file upload param update the formDataKey to point to the 
+                      // upload id. This is important as it tells the server that this particular file upload
+                      // points to this particular project param (the id here is the one defined above in the update ui method).
+                      param.formDataKey = inputs[i].id;
+                    } else {
+                      param.value = inputs[i].value;
+                    }
+                    paramsToSet.push(param);
+                }
+                var paramsUpdate = {}
+                paramsUpdate.updates = paramsToSet;
+              
+                
+
+              
+              	var formData = new FormData();
+              
+                // Get all the file uploads and adds them to the form data which will be sent to the server.
+               	var myUploadedFileElements = document.getElementsByClassName("fileUpload");
+
+              	for (let i = 0; i < myUploadedFileElements.length; i++) {
+                 
+                  var myUploadFile = myUploadedFileElements[i];
+
+                  if (myUploadFile && myUploadFile.files) {
+                    for (var j=0; j < myUploadFile.files.length; j++) {
+                      const fileToUpload = myUploadFile.files[j];
+
+                      formData.append(myUploadFile.id, fileToUpload);
+                      }
+                  }
+              }
+              
+  
+              // Create the JSON object
+              var options = omniscope.view.context().options;
+
+              var lambdaReq = '{"blocks": ["' + _blocksToExecute.join('","') + '"], "params": '+JSON.stringify(paramsUpdate)+', "deleteExecutionOnFinish": '+options.items.deleteExecutionOnFinish+'}'
+              
+              
+              // Add the execution json (lambda execution json) to the form data.
+              formData.append("execution", lambdaReq);
+               
+              
+              xhr = new XMLHttpRequest();
+                xhr.open("POST", _projEndpoint + "w/uploadandexecute", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        if (this.status == 200) {
+                            _jobId = JSON.parse(xhr.responseText).jobId;
+                            _lambdaProjectPath = window.location.origin + "/"+ JSON.parse(xhr.responseText).lambdaProjectPath;
+                            console.log(_jobId);
+                            console.log(_lambdaProjectPath);
+                            _check = setInterval(checkWorkflowState, 1000);
+                            document.getElementById("jobState").innerHTML = "Job state = STARTED; Job ID = "+_jobId+
+                              "; <br>Lambda Project URL = <a target=\"_blank\" href=\""+ _lambdaProjectPath+"\">"+
+          					  _lambdaProjectPath+"</a>";
+                        } else if (this.status == 403) {
+                            document.getElementById("jobState").innerHTML = xhr.responseText;
+                        } else {
+                            document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
+                        }
+                    }
+                };
+              
+              	// Finally send it to the server.
+                xhr.send(formData);
+
+            }
+          
+            function checkWorkflowState() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", _lambdaProjectPath + "/w/job/" + _jobId + "/state", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == XMLHttpRequest.DONE) {
+                        if (this.status == 200) {
+                            var _jobState = JSON.parse(xhr.responseText).jobState;
+                            document.getElementById("jobState").innerHTML = "Job state = " + _jobState +"; Job ID = "+_jobId+
+                              "; <br>Lambda Project URL = <a target=\"_blank\" href=\""+ _lambdaProjectPath+"\">"+
+          					  _lambdaProjectPath+"</a>";
+                        
+                            if (_jobState === "COMPLETED") {
+                                clearInterval(_check);
+                                var options = omniscope.view.context().options;
+                                if (options.items.refreshThisReportOnFinish) {
+                                    refreshThisReport();
+                                }
+                            }
+                        } else if (this.status == 403) {
+                            clearInterval(_check);
+							document.getElementById("jobState").innerHTML = xhr.responseText;
+                        } else if (this.status == 404) {
+                           
+                           // if you have terminate
+                          var options = omniscope.view.context().options;
+
+                          if (options.items.deleteExecutionOnFinish) {
+                           	 // User is deleting the lambda execution on finish... it is possible that interval
+                             // may check after project has not been found.
+                             clearInterval(_check);
+                             document.getElementById("jobState").innerHTML = "Lambda execution ended and cleaned.";
+                          }
+                          if (options.items.refreshThisReportOnFinish) {
+                             refreshThisReport();
+                          }
+                        }
+                      
+                        else {
+							clearInterval(_check);
+							document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
+                            
+                        }
+                    }
+                };
+              
+              	
+                xhr.send();
+            }
+
+            omniscope.view.on("load", function () {
+                window.onerror = function (msg) {
+                    omniscope.view.error(msg);
+                };
+            });
+
+            // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+            document.body.addEventListener("click", function () {
+                omniscope.view.whitespaceClick();
+            });
+
+            // Naively redraw on any of these events
+            // (load = first init, update = external settings/state change, resize = browser window resized)
+            omniscope.view.on(["load", "update", "resize"], function () {
+                
+                _projEndpoint = omniscope.view.context().baseUrl + "../../../../";
+              
+                _reportBlock = decodeURIComponent(omniscope.view.context().baseUrl.split(".iox/")[1].split("/")[1]).replaceAll("+"," ");
+                              
+                var options = omniscope.view.context().options;
+
+                _blocksToExecute = options.items.block.split(",");
+              
+                if (options.items.paramNames) {
+                	_paramNames = options.items.paramNames.split(",");
+                } else {
+                  //use all params
+                }
+              
+                updateUI(); //To Update UI
+              
+                document.getElementById("btnid").textContent = options.items.buttonText ? options.items.buttonText : "Lambda Execution";
+              
+                if (options.items.showJobState) {
+                    document.getElementById("jobState").style.display = "block";
+                } else {
+                    document.getElementById("jobState").style.display = "none";
+                }
+
+                
+            });
+        </script>
+    </body>
+</html>
