@@ -14,11 +14,21 @@
   "supportsSelection": true,
   "options": {
     "items": {
-      "measures": {
+      "atweetID": {
         "displayName": "Tweet ID",
         "documentation": "Select the field and function to retrieve the Tweet ID",
         "type": "MEASURE",
         "mandatory": true
+      },
+      "darkMode": {
+        "displayName": "Dark mode",
+        "type": "TOGGLE",
+        "documentation": "If ticked, displays Tweet with light text over a dark background."
+      },
+      "hideConversation": {
+        "displayName": "Hide conversation",
+        "type": "TOGGLE",
+        "documentation": "If ticked, only the cited Tweet will be displayed even if it is in reply to another Tweet."
       },
       "paneX": {
         "displayName": "Pane X",
@@ -29,16 +39,11 @@
         "displayName": "Pane Y",
         "type": "GROUPING",
         "list": true
-      },
-      "split": {
-        "displayName": "Split",
-        "type": "GROUPING"
       }
     },
     "structure": {
       "toolbar": [
-        "measures",
-        "split"
+        "atweetID"
       ],
       "x": [
         "paneX"
