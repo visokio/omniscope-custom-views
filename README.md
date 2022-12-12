@@ -39,6 +39,7 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/
         <tr valign="top">
         <td width="33%">Upload and Execute<br><a href="uploadandexecute" title="Upload and Execute"><img width="290" src="https://github.com/visokio/custom-views/raw/master/uploadandexecute/thumbnail.png"></a></td>
         <td width="33%">TradingView<br><a href="tradingview" title="TradingView"><img width="290" src="https://github.com/visokio/omniscope-custom-views/raw/master/tradingview/thumbnail.png"></a></td>
+        <td width="33%">Twitter View<br><a href="twitterview" title="Twitter View"><img width="290" src="https://github.com/visokio/omniscope-custom-views/raw/master/twitterview/thumbnail.png"></a></td>
     </tr>
 </table>
 
