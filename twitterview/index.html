@@ -48,6 +48,9 @@
 
         // Retrieve the auto-query results, a 2d array ([row][column]):
         var data = omniscope.view.context().result.data.records;
+      
+        var theme = omniscope.view.context().options.items.darkMode === true ? 'dark' : '';
+        var conversation = omniscope.view.context().options.items.hideConversation === true ? 'none' : '';
 
         var id = data[0][0];
          
@@ -67,7 +70,8 @@
               id,
               document.getElementById('thetweet'),
               {
-                theme: 'dark'
+                theme: theme,
+                conversation: conversation
               }
             );
         }
