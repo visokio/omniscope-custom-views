@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        html, body, main {
+
+            /* Ensure the body fills the view, so clicks are handled everywhere: */
+            width: 99%;
+            height: 99%;
+        }
+        main {
+            font-family: monospace;
+            font-size: 13px;
+        }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+
+</head>
+
+<body>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+ <main  style="overflow-y:scroll;">
+  <div id="warn">Select a single record to show the Tweet</div>
+  <div id="thetweet"></div>
+ </main>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+    // Naively redraw on any of these events 
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+
+        // Retrieve the auto-query results, a 2d array ([row][column]):
+        var data = omniscope.view.context().result.data.records;
+
+        var id = data[0][0];
+         
+        if (id === null || id === "null") {
+          //nothing to show, warn user 
+		  document.getElementById("warn").style.display = "block";
+          var el = document.getElementById("thetweet");
+          if (el) el.style.display = "none";
+          return;
+        }
+        document.getElementById("warn").style.display = "none";
+        var el = document.getElementById("thetweet");
+        if (el) {
+            el.style.display = "block";
+            el.innerHTML = "";
+            twttr.widgets.createTweet(
+              id,
+              document.getElementById('thetweet'),
+              {
+                theme: 'dark'
+              }
+            );
+        }
+    });
+  
+ 
+</script>
+
+</body>
+</html>
