@@ -29,6 +29,16 @@
 		    "version": 0
 		},
 		{
+		    "name": "twitterview",
+		    "displayName": "Twitter View",
+		    "tags": [
+			    "twitter",
+			    "tweet"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 			"name": "bubblechart",
 			"displayName": "Bubble Chart",
 			"tags": ["custom", "bubble"],
