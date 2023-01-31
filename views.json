@@ -15,6 +15,18 @@
 		    "version": 0
 		},
 		{
+		    "name": "customhtml",
+		    "displayName": "Custom HTML",
+		    "tags": [
+			    "HTML",
+			    "web",
+			    "widget",
+			    "content"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 		    "name": "tradingview",
 		    "displayName": "TradingView",
 		    "tags": [
