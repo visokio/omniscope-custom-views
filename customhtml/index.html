@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        html, body, main {
+            /* Ensure the body fills the view, so clicks are handled everywhere: */
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+
+</head>
+
+<body>
+
+<div id="main"></div><!-- This element is where the view will render -->
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function() {
+        omniscope.view.whitespaceClick();
+    });
+
+    // Naively redraw on any of these events 
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], function() {
+
+        // Retrieve the auto-query results, a 2d array ([row][column]):
+        var data = omniscope.view.context().result.data.records;
+        var content = "";
+        if (omniscope.view.context().options.items.dynamicHTML === true) {
+        	content = data[0][0];
+        } else if (omniscope.view.context().options.items.aStaticHTML) {
+            content = omniscope.view.context().options.items.aStaticHTML;
+        }
+        document.getElementById("main").innerHTML = content;
+    });
+
+</script>
+
+</body>
+</html>
