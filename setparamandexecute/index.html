@@ -69,7 +69,8 @@
                     container.removeChild(container.lastChild);
               }
                   
-              for (i=0;i<_paramValues.length;i++){
+              if (_paramValues) { //undefined if no permissions
+               for (i=0;i<_paramValues.length;i++){
                 var param = _paramValues[i];
                 var label = document.createElement("label");
                 label.className = "container";
@@ -84,7 +85,8 @@
                 container.appendChild(input);
                 container.appendChild(document.createElement("br"));
                 container.appendChild(document.createElement("br"));
-              } 	
+               } 
+	      }
             }
           
             function getParamValues() {
