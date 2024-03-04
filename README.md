@@ -34,6 +34,7 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/
     <tr valign="top">
         <td width="33%">Switch Param<br><a href="web" title="Switch Param"><img width="290" src="https://github.com/visokio/custom-views/raw/master/switchparam/thumbnail.png"></a></td>
         <td width="33%">Lambda Workflow Execution<br><a href="lambdaworkflowexecution" title="Lambda Workflow Execution"><img width="290" src="https://github.com/visokio/custom-views/raw/master/lambdaworkflowexecution/thumbnail.png"></a></td>
+        <td width="33%">Lambda Workflow Execution using Variables<br><a href="variableslambdaworkflowexecution" title="Lambda Workflow Execution using Variables"><img width="290" src="https://github.com/visokio/custom-views/raw/master/variableslambdaworkflowexecution/thumbnail.png"></a></td>
         <td width="33%">Set Parameters and Execute<br><a href="setparamandexecute" title="Set Parameters and Execute"><img width="290" src="https://github.com/visokio/custom-views/raw/master/setparamandexecute/thumbnail.png"></a></td>
     </tr>
         <tr valign="top">

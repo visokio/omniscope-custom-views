@@ -200,6 +200,24 @@
 		    "version": 0
 		},
 		{
+		    "name": "variableslambdaworkflowexecution",
+		    "displayName": "Lambda Workflow Execution using Variables",
+		    "tags": [
+			    "custom",
+			    "lambda",
+			    "parameter",
+			    "param",
+			    "workflow",
+			    "job",
+			    "execute",
+			    "execution",
+			    "block",
+			    "api"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 		    "name": "uploadandexecute",
 		    "displayName": "Upload and Execute",
 		    "tags": [

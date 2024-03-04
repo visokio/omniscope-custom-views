@@ -1,5 +1,5 @@
 {
-  "name": "Lambda Workflow Execution for variables",
+  "name": "Lambda Workflow Execution using variables",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
