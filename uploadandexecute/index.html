@@ -253,7 +253,7 @@
           
             function checkWorkflowState() {
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", _lambdaProjectPath + "/w/job/" + _jobId + "/state", true);
+                xhr.open("GET", _projEndpoint + "/w/job/" + _jobId + "/state", true);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == XMLHttpRequest.DONE) {
                         if (this.status == 200) {
