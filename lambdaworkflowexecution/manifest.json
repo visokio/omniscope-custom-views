@@ -4,17 +4,17 @@
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
   "tags": [
-			    "custom",
-			    "lambda",
-			    "parameter",
-			    "param",
-			    "workflow",
-			    "job",
-			    "execute",
-			    "execution",
-			    "block",
-			    "api"
-		    ],
+    "custom",
+    "lambda",
+    "parameter",
+    "param",
+    "workflow",
+    "job",
+    "execute",
+    "execution",
+    "block",
+    "api"
+  ],
   "sandbox": false,
   "autoPane": false,
   "autoQuery": false,
@@ -39,6 +39,14 @@
         "displayName": "Param names (comma separated names)",
         "type": "TEXT"
       },
+      "refreshThisReportOnFinish": {
+        "displayName": "Refresh this report on execution finish",
+        "type": "TOGGLE"
+      },
+      "setParametersUsingVariables": {
+        "displayName": "Set project parameters using report variables",
+        "type": "TOGGLE"
+      },
       "showJobState": {
         "displayName": "Show job state",
         "type": "TOGGLE"
@@ -58,12 +66,14 @@
   },
   "defaultOptions": {
     "items": {
-      "deleteExecutionOnFinish": false
+      "deleteExecutionOnFinish": false,
+      "setParametersUsingVariables": false
     },
     "pane": {
       "yAxisHeaderWidth": 75,
       "paneWidth": 200,
       "paneHeight": 200,
+      "showGridLines": true,
       "gridLineThickness": 1,
       "gridLineColour": "rgba(229,229,229,1)",
       "headerStyle": {

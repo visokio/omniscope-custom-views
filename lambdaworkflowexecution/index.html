@@ -25,6 +25,7 @@
                 box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
                 -webkit-transition: box-shadow 0.5s;
             }
+            
             a.button i {
                 float: right;
                 margin: 2px;
@@ -35,6 +36,10 @@
             a.button:active {
                 box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5) inset, 0px -2px 20px white, 0px 1px 5px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.1);
                 background: -webkit-linear-gradient(top, #d1d1d1 0%, #ececec 100%);
+            }
+            input.error {
+              
+             	color:red; 
             }
         </style>
         <!-- Put SCRIPT tags to load 3rd party libraries here -->
@@ -58,6 +63,7 @@
             var _paramValues;
             var _showJobState;
             var _projEndpoint;
+            var _reportBlock;
             var _check;
 
             if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
@@ -65,27 +71,59 @@
             function updateUI() {
               var container = document.getElementById("params");
               
-              //container.innerHTML = ""; //reset
               while (container.hasChildNodes()) {
                     container.removeChild(container.lastChild);
               }
+              
+              
+              var options = omniscope.view.context().options;
+              if (options.items.setParametersUsingVariables) {  
+                
+                 const appVariables = omniscope.view.context().variables;
+              
+              
+                 for (i=0;i<_paramValues.length;i++){
+                    var param = _paramValues[i];
+                    var label = document.createElement("label");
+                    label.className = "container";
+                    label.innerHTML = param.name;
+                    var input = document.createElement("input");
+                    input.type = "text";
+                    input.disabled = true;
+                    input.name = param.name;
+                    input.style = "width:95%";
+                
+                
+                    const variableWithParamName = appVariables[param.name];
+                
+                    if (appVariables.hasOwnProperty(param.name)) {
+                     	input.value = appVariables[param.name];
                   
-              for (i=0;i<_paramValues.length;i++){
-                var param = _paramValues[i];
-                var label = document.createElement("label");
-                label.className = "container";
-                label.innerHTML = param.name;
-                var input = document.createElement("input");
-                input.type = "text";
-                input.name = param.name;
-                input.style = "width:95%";
-                input.value = param.value;
-                container.appendChild(label);
-                container.appendChild(document.createElement("br"));
-                container.appendChild(input);
-                container.appendChild(document.createElement("br"));
-                container.appendChild(document.createElement("br"));
-              } 	
+                    } else {
+                 
+                      input.className = "error";
+                      input.value = "Error: no matching variable found. This parameter will not be set.";
+                    }
+                }
+
+              } else {
+                for (i=0;i<_paramValues.length;i++){
+                    var param = _paramValues[i];
+                    var label = document.createElement("label");
+                    label.className = "container";
+                    label.innerHTML = param.name;
+                    var input = document.createElement("input");
+                    input.type = "text";
+                    input.name = param.name;
+                    input.style = "width:95%";
+                    input.value = param.value;
+                    container.appendChild(label);
+                    container.appendChild(document.createElement("br"));
+                    container.appendChild(input);
+                    container.appendChild(document.createElement("br"));
+                    container.appendChild(document.createElement("br"));
+                } 
+              }
             }
           
             function getParamValues() {
@@ -100,7 +138,7 @@
                           		_paramValues = _paramValues.filter(item => _paramNames.indexOf(item.name) > -1);
                             }
                           
-                            document.getElementById("jobState").innerHTML = ""; // "Param set to "+value;
+                            document.getElementById("jobState").innerHTML = ""; 
                             updateUI();
                         } else if (this.status == 403) {
                             document.getElementById("jobState").innerHTML = xhr.responseText;
@@ -117,21 +155,52 @@
                 xhr.send();
             }
           
+            function refreshThisReport() {   
+                var options = omniscope.view.context().options;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", _projEndpoint + "w/execute", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                console.log("refreshing "+_reportBlock);
+                xhr.send('{"blocks": ["' + _reportBlock + '"], "refreshFromSource": true, "cancelExisting": false}');
+            } 
           
             function startLambdaWorkflow() {   
               
-                var myParams = document.getElementById('params');
-                var inputs = myParams.getElementsByTagName("input");
                 var paramsToSet = []
-                for (i=0;i<inputs.length;i++) {
-                    param = {}
-                    param.name = inputs[i].name;
-                    param.value = inputs[i].value;
-                    paramsToSet.push(param);
-                }
+                var options = omniscope.view.context().options;
+                if (options.items.setParametersUsingVariables) {
+              	    const appVariables = omniscope.view.context().variables;
+              
+                    for (i=0;i<_paramValues.length;i++){
+                      var param = _paramValues[i];
+                  
+                      if (appVariables.hasOwnProperty(param.name)) {
+                    
+                        var paramObj = {}
+                        paramObj.name = param.name;
+                        paramObj.value = appVariables[param.name];
+                    
+                        paramsToSet.push(paramObj);
+                    
+                      }
+                  
+                    }
+                } else {
+		   var myParams = document.getElementById('params');
+                   var inputs = myParams.getElementsByTagName("input");
+                   var paramsToSet = []
+		   for (i=0;i<inputs.length;i++) {
+	           	param = {}
+	                param.name = inputs[i].name;
+	                param.value = inputs[i].value;
+	                paramsToSet.push(param);
+	            }
+		
+		}
                 var paramsUpdate = {}
                 paramsUpdate.updates = paramsToSet;
               
+
               
                 var options = omniscope.view.context().options;
                 xhr = new XMLHttpRequest();
@@ -162,7 +231,7 @@
           
             function checkWorkflowState() {
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", _lambdaProjectPath + "/w/job/" + _jobId + "/state", true);
+                xhr.open("GET", _projEndpoint + "w/job/" + _jobId + "/state", true);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == XMLHttpRequest.DONE) {
                         if (this.status == 200) {
@@ -173,6 +242,10 @@
                         
                             if (_jobState === "COMPLETED") {
                                 clearInterval(_check);
+                                var options = omniscope.view.context().options;
+                                if (options.items.refreshThisReportOnFinish) {
+                                    refreshThisReport();
+                                }
                             }
                         } else if (this.status == 403) {
                             document.getElementById("jobState").innerHTML = xhr.responseText;
@@ -180,6 +253,10 @@
                         } else {
                             document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
                             clearInterval(_check);
+                          
+                            if (options.items.refreshThisReportOnFinish) {
+                               refreshThisReport();
+                            }
                         }
                     }
                 };
@@ -203,17 +280,18 @@
                 
                 _projEndpoint = omniscope.view.context().baseUrl + "../../../../";
               
+                _reportBlock = decodeURIComponent(omniscope.view.context().baseUrl.split(".iox/")[1].split("/")[1]).replaceAll("+"," ");
+              
                 var options = omniscope.view.context().options;
 
                 _blocksToExecute = options.items.block.split(",");
               
-                if (options.items.paramNames) {
-                	_paramNames = options.items.paramNames.split(",");
+		        if (options.items.paramNames && options.items.paramNames.trim().length > 0) {
+                    _paramNames = options.items.paramNames.split(",");
                 } else {
                   //use all params
                 }
-              
-                getParamValues(); //To Update UI
+             	getParamValues();
               
                 document.getElementById("btnid").textContent = options.items.buttonText ? options.items.buttonText : "Lambda Execution";
               
@@ -222,8 +300,6 @@
                 } else {
                     document.getElementById("jobState").style.display = "none";
                 }
-
-                
             });
         </script>
     </body>
