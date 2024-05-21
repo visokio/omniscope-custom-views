@@ -124,14 +124,18 @@
               for (i = 0; i < labels.length; i++) {
                  var l = labels[i];
                  var input = l.getElementsByTagName("input");
-                 if (input[0].value === paramValue) {
-                     if (input.checked) {
-                       //already checked, no update needed
-                     } else {
-                        input.checked = true;
-                        if (simulateClick) l.click();//simulate click to fix UI
-                     }
-                     return;
+                 if (input.length > 0) {
+                    var inputValue = input[0].value;
+                    // Convert paramValue to string for comparison
+                    if (inputValue === String(paramValue)) {
+                        if (input[0].checked) {
+                            // Already checked, no update needed
+                        } else {
+                            input[0].checked = true;
+                            if (simulateClick) l.click(); // Simulate click to fix UI
+                        }
+                        return;
+                    }
                  }
               }
             }
