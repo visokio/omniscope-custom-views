@@ -6,10 +6,18 @@
             html,
             body,
             main {
-                /* Ensure the body fills the view, so clicks are handled everywhere: */
                 width: 100%;
                 height: 100%;
-                font-family: Monospace;
+                font-family: visokio-branded-font, sans-serif;
+            }
+            label {
+                font-size: 16px;
+                padding: 2px;
+                display: inline-block;
+            }
+            input[type="text"] {
+                border: 1px solid #e5e5e5;
+                padding: 4px;
             }
             a.button {
                 background: #ececec;
@@ -24,32 +32,42 @@
                 margin: 0px auto;
                 box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
                 -webkit-transition: box-shadow 0.5s;
+                position: relative;
+                display: inline-flex;
+                align-items: center;
             }
-            a.button i {
-                float: right;
-                margin: 2px;
+            a.button.disabled {
+                pointer-events: none;
+                opacity: 0.6;
             }
-            a.button:hover {
-                box-shadow: 0px 2px 1px lightgrey inset, 0px -2px 20px lightgrey, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+            .spinner {
+                width: 20px;
+                height: 20px;
+                border: 2px solid transparent;
+                border-top: 2px solid #3f3f3f;
+                border-radius: 50%;
+                margin-left: 10px;
+                animation: spin 1s linear infinite;
             }
-            a.button:active {
-                box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5) inset, 0px -2px 20px white, 0px 1px 5px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.1);
-                background: -webkit-linear-gradient(top, #d1d1d1 0%, #ececec 100%);
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
             }
         </style>
-        <!-- Put SCRIPT tags to load 3rd party libraries here -->
     </head>
     <body>
         <div>
-          <div id="params">
-          </div>
-            <br>
-            <a href="#" class="button" id="btnid" onclick="startWorkflow()">Execute</a><br />
+            <div id="params"></div>
             <br />
+            <a href="#" class="button" id="btnid" onclick="startWorkflow()">Execute</a>
+            <br /><br />
             <div id="jobState"></div>
         </div>
         <script src="/_global_/customview/v1/omniscope.js"></script>
-        <!-- Add the Omniscope custom view API -->
         <script>
             var _jobId = "NA";
             var _blocksToExecute;
@@ -58,50 +76,45 @@
             var _showJobState;
             var _projEndpoint;
             var _check;
+            var originalButtonText = "Execute"; // Default text
 
             if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
-          
+
             function updateUI() {
-              var container = document.getElementById("params");
-              
-              //container.innerHTML = ""; //reset
-              while (container.hasChildNodes()) {
+                var container = document.getElementById("params");
+                while (container.hasChildNodes()) {
                     container.removeChild(container.lastChild);
-              }
-                  
-              if (_paramValues) { //undefined if no permissions
-               for (i=0;i<_paramValues.length;i++){
-                var param = _paramValues[i];
-                var label = document.createElement("label");
-                label.className = "container";
-                label.innerHTML = param.name;
-                var input = document.createElement("input");
-                input.type = "text";
-                input.name = param.name;
-                input.style = "width:93%";
-                input.value = param.value;
-                container.appendChild(label);
-                container.appendChild(document.createElement("br"));
-                container.appendChild(input);
-                container.appendChild(document.createElement("br"));
-                container.appendChild(document.createElement("br"));
-               } 
-	      }
+                }
+                if (_paramValues) {
+                    for (i = 0; i < _paramValues.length; i++) {
+                        var param = _paramValues[i];
+                        var label = document.createElement("label");
+                        label.className = "container";
+                        label.innerHTML = param.name;
+                        var input = document.createElement("input");
+                        input.type = "text";
+                        input.name = param.name;
+                        input.value = param.value;
+                        container.appendChild(label);
+                        container.appendChild(document.createElement("br"));
+                        container.appendChild(input);
+                        container.appendChild(document.createElement("br"));
+                        container.appendChild(document.createElement("br"));
+                    }
+                }
             }
-          
+
             function getParamValues() {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", _projEndpoint + "w/param/", true);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == XMLHttpRequest.DONE) {
                         if (this.status == 200) {
-						    _paramValues = JSON.parse(xhr.responseText).paramValues;    
+                            _paramValues = JSON.parse(xhr.responseText).paramValues;
                             if (_paramNames) {
-                          		//just the ones mentioned
-                          		_paramValues = _paramValues.filter(item => _paramNames.indexOf(item.name) > -1);
+                                _paramValues = _paramValues.filter(item => _paramNames.indexOf(item.name) > -1);
                             }
-                          
-                            document.getElementById("jobState").innerHTML = ""; // "Param set to "+value;
+                            document.getElementById("jobState").innerHTML = "";
                             updateUI();
                         } else if (this.status == 403) {
                             document.getElementById("jobState").innerHTML = xhr.responseText;
@@ -117,23 +130,20 @@
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.send();
             }
-          
-          
-            function startWorkflow() {   
-              
-                var myParams = document.getElementById('params');
+
+            function startWorkflow() {
+                var myParams = document.getElementById("params");
                 var inputs = myParams.getElementsByTagName("input");
-                var paramsToSet = []
-                for (i=0;i<inputs.length;i++) {
-                    param = {}
+                var paramsToSet = [];
+                for (i = 0; i < inputs.length; i++) {
+                    param = {};
                     param.name = inputs[i].name;
                     param.value = inputs[i].value;
                     paramsToSet.push(param);
                 }
-                var paramsUpdate = {}
+                var paramsUpdate = {};
                 paramsUpdate.updates = paramsToSet;
-              
-              
+
                 var options = omniscope.view.context().options;
                 xhr = new XMLHttpRequest();
                 xhr.open("POST", _projEndpoint + "w/execute", true);
@@ -141,22 +151,32 @@
                     if (xhr.readyState == XMLHttpRequest.DONE) {
                         if (this.status == 200) {
                             _jobId = JSON.parse(xhr.responseText).jobId;
-                            console.log(_jobId);
                             _check = setInterval(checkWorkflowState, 1000);
-                            document.getElementById("jobState").innerHTML = "Job state = STARTED; Job ID = "+_jobId;
+                            document.getElementById("jobState").innerHTML =
+                                "Job state = STARTED; Job ID = " + _jobId;
                         } else if (this.status == 403) {
                             document.getElementById("jobState").innerHTML = xhr.responseText;
+                            resetButton();
                         } else {
                             document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
+                            resetButton();
                         }
                     }
                 };
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.send('{"blocks": ["' + _blocksToExecute.join('","') + '"], "refreshFromSource": ' + options.items.refreshFromSource + ', "cancelExisting": false, "params": '+JSON.stringify(paramsUpdate)+'}');
 
-                
+                disableButton(); // Disable button and show spinner
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send(
+                    '{"blocks": ["' +
+                        _blocksToExecute.join('","') +
+                        '"], "refreshFromSource": ' +
+                        options.items.refreshFromSource +
+                        ', "cancelExisting": false, "params": ' +
+                        JSON.stringify(paramsUpdate) +
+                        "}"
+                );
             }
-          
+
             function checkWorkflowState() {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", _projEndpoint + "w/job/" + _jobId + "/state", true);
@@ -164,21 +184,33 @@
                     if (xhr.readyState == XMLHttpRequest.DONE) {
                         if (this.status == 200) {
                             var _jobState = JSON.parse(xhr.responseText).jobState;
-                            document.getElementById("jobState").innerHTML = "Job state = " + _jobState +"; Job ID = "+_jobId;
-                        
-                            if (_jobState === "COMPLETED") {
+                            document.getElementById("jobState").innerHTML =
+                                "Job state = " + _jobState + "; Job ID = " + _jobId;
+
+                            if (_jobState === "COMPLETED" || _jobState === "FAILED") {
                                 clearInterval(_check);
+                                resetButton(); // Reset button after job completes
                             }
-                        } else if (this.status == 403) {
+                        } else {
                             document.getElementById("jobState").innerHTML = xhr.responseText;
                             clearInterval(_check);
-                        } else {
-                            document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
-                            clearInterval(_check);
+                            resetButton();
                         }
                     }
                 };
                 xhr.send();
+            }
+
+            function disableButton() {
+                var button = document.getElementById("btnid");
+                button.classList.add("disabled");
+                button.innerHTML = "Executing...<span class='spinner'></span>";
+            }
+
+            function resetButton() {
+                var button = document.getElementById("btnid");
+                button.classList.remove("disabled");
+                button.innerHTML = originalButtonText;
             }
 
             omniscope.view.on("load", function () {
@@ -187,38 +219,26 @@
                 };
             });
 
-            // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
             document.body.addEventListener("click", function () {
                 omniscope.view.whitespaceClick();
             });
 
-            // Naively redraw on any of these events
-            // (load = first init, update = external settings/state change, resize = browser window resized)
             omniscope.view.on(["load", "update", "resize"], function () {
-                
                 _projEndpoint = omniscope.view.context().baseUrl + "../../../../";
-              
                 var options = omniscope.view.context().options;
-
                 _blocksToExecute = options.items.block.split(",");
-              
-                if (options.items.paramNames) {
-                	_paramNames = options.items.paramNames.split(",");
-                } else {
-                  //use all params
-                }
-              
-                getParamValues(); //To Update UI
-              
-                document.getElementById("btnid").textContent = options.items.buttonText ? options.items.buttonText : "Execute";
-              
-                if (options.items.showJobState) {
-                    document.getElementById("jobState").style.display = "block";
-                } else {
-                    document.getElementById("jobState").style.display = "none";
-                }
 
-                
+                // Set the original button text from options
+                originalButtonText = options.items.buttonText ? options.items.buttonText : "Execute";
+                document.getElementById("btnid").textContent = originalButtonText;
+
+                if (options.items.paramNames) {
+                    _paramNames = options.items.paramNames.split(",");
+                }
+                getParamValues();
+                document.getElementById("jobState").style.display = options.items.showJobState
+                    ? "block"
+                    : "none";
             });
         </script>
     </body>
