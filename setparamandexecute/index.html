@@ -10,44 +10,66 @@
                 height: 100%;
                 font-family: visokio-branded-font, sans-serif;
             }
+
+            /* Flex container for wrapping items */
+            #params {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px; /* Space between cells */
+            }
+
+            /* Each input container with max width from gridWidth */
+            .input-container {
+                display: flex;
+                flex-direction: column;
+                padding: 5px; /* Padding inside each cell */
+                box-sizing: border-box; /* Ensures padding doesn’t expand the width */
+                flex: 1 1 auto;
+            }
+
             label {
                 font-size: 16px;
                 padding: 2px;
-                display: inline-block;
+                display: block;
+                box-sizing: border-box;
             }
+
             input[type="text"] {
                 border: 1px solid #e5e5e5;
                 padding: 4px;
+                box-sizing: border-box; /* Ensures padding doesn’t expand the input */
             }
+
             a.button {
                 background: #ececec;
                 border-radius: 10px;
                 padding: 5px 20px;
-                font-family: Lato;
                 font-weight: bold;
+                font-size: 16px;
                 color: #3f3f3f;
                 text-decoration: none;
                 text-shadow: 0px 1px 0px #fff;
                 border: 1px solid #a7a7a7;
                 margin: 0px auto;
-                box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+                box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1),
+                    0px 8px 10px rgba(0, 0, 0, 0.1);
                 -webkit-transition: box-shadow 0.5s;
-                position: relative;
                 display: inline-flex;
                 align-items: center;
             }
+
             a.button.disabled {
                 pointer-events: none;
                 opacity: 0.6;
             }
             .spinner {
-                width: 20px;
-                height: 20px;
-                border: 2px solid transparent;
-                border-top: 2px solid #3f3f3f;
-                border-radius: 50%;
-                margin-left: 10px;
-                animation: spin 1s linear infinite;
+                  width: 20px;
+                  height: 20px;
+                  border: 2px solid transparent;
+                  border-top: 2px solid #3f3f3f;
+                  border-radius: 50%;
+                  margin-left: 10px;
+                  animation: spin 1s linear infinite;
             }
             @keyframes spin {
                 from {
@@ -76,30 +98,37 @@
             var _showJobState;
             var _projEndpoint;
             var _check;
-            var originalButtonText = "Execute"; // Default text
+            var originalButtonText = "Execute";
+            var gridWidth = 200; // Default grid cell width
 
             if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
 
             function updateUI() {
                 var container = document.getElementById("params");
+
                 while (container.hasChildNodes()) {
                     container.removeChild(container.lastChild);
                 }
                 if (_paramValues) {
-                    for (i = 0; i < _paramValues.length; i++) {
+                    for (let i = 0; i < _paramValues.length; i++) {
                         var param = _paramValues[i];
                         var label = document.createElement("label");
-                        label.className = "container";
                         label.innerHTML = param.name;
+                        label.style.width = gridWidth + "px"; // Set label width to gridWidth
+                        
                         var input = document.createElement("input");
                         input.type = "text";
                         input.name = param.name;
                         input.value = param.value;
-                        container.appendChild(label);
-                        container.appendChild(document.createElement("br"));
-                        container.appendChild(input);
-                        container.appendChild(document.createElement("br"));
-                        container.appendChild(document.createElement("br"));
+                        input.style.width = gridWidth/2 + "px"; // Set input width to gridWidth / 2
+
+                        var inputContainer = document.createElement("div");
+                        inputContainer.className = "input-container";
+                        inputContainer.style.width = gridWidth + "px"; // Set width from gridWidth option
+                        inputContainer.appendChild(label);
+                        inputContainer.appendChild(input);
+
+                        container.appendChild(inputContainer);
                     }
                 }
             }
@@ -135,8 +164,8 @@
                 var myParams = document.getElementById("params");
                 var inputs = myParams.getElementsByTagName("input");
                 var paramsToSet = [];
-                for (i = 0; i < inputs.length; i++) {
-                    param = {};
+                for (let i = 0; i < inputs.length; i++) {
+                    let param = {};
                     param.name = inputs[i].name;
                     param.value = inputs[i].value;
                     paramsToSet.push(param);
@@ -145,7 +174,7 @@
                 paramsUpdate.updates = paramsToSet;
 
                 var options = omniscope.view.context().options;
-                xhr = new XMLHttpRequest();
+                var xhr = new XMLHttpRequest();
                 xhr.open("POST", _projEndpoint + "w/execute", true);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == XMLHttpRequest.DONE) {
@@ -228,13 +257,16 @@
                 var options = omniscope.view.context().options;
                 _blocksToExecute = options.items.block.split(",");
 
-                // Set the original button text from options
-                originalButtonText = options.items.buttonText ? options.items.buttonText : "Execute";
+                originalButtonText = options.items.buttonText || "Execute";
                 document.getElementById("btnid").textContent = originalButtonText;
 
                 if (options.items.paramNames) {
                     _paramNames = options.items.paramNames.split(",");
                 }
+
+                // Set grid width from options if provided
+                gridWidth = options.items.wGrid || 200;
+                
                 getParamValues();
                 document.getElementById("jobState").style.display = options.items.showJobState
                     ? "block"
