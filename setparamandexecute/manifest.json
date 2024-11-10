@@ -39,6 +39,10 @@
         "displayName": "Refresh from source",
         "type": "TOGGLE"
       },
+      "wGrid": { 
+        "displayName": "Grid Width",
+        "type": "NUMBER"
+      },
       "showJobState": {
         "displayName": "Show job state",
         "type": "TOGGLE"
@@ -59,7 +63,8 @@
   "defaultOptions": {
     "items": {
       "buttonText": "Execute",
-      "refreshFromSource": true
+      "refreshFromSource": true,
+      "wGrid": 200
     },
     "pane": {
       "yAxisHeaderWidth": 75,
@@ -73,9 +78,14 @@
         "colour": "#333333",
         "backgroundColour": "#FFFFFF"
       },
+      "showPaneXHeader": true,
+      "showPaneYHeader": true,
+      "showTileHeader": true,
       "xHeaderStyle": {},
       "yHeaderStyle": {},
       "tileHeaderStyle": {},
+      "xHeaderLines": 1,
+      "tileHeaderLines": 1,
       "xHeaderPlacement": "TOP",
       "yHeaderPlacement": "LEFT",
       "showColourKeyInEveryPane": false,
