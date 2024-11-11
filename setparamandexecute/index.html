@@ -139,9 +139,13 @@
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == XMLHttpRequest.DONE) {
                         if (this.status == 200) {
-                            _paramValues = JSON.parse(xhr.responseText).paramValues;
+                            let responseParams = JSON.parse(xhr.responseText).paramValues;
                             if (_paramNames) {
-                                _paramValues = _paramValues.filter(item => _paramNames.indexOf(item.name) > -1);
+                                // Ensure parameters are in the order specified in _paramNames
+                                _paramValues = _paramNames.map(name => responseParams.find(item => item.name === name)).filter(Boolean);
+                            } else {
+                                // Use the order in responseParams if no specific order is defined
+                                _paramValues = responseParams;
                             }
                             document.getElementById("jobState").innerHTML = "";
                             updateUI();
