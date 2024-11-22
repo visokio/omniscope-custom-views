@@ -199,11 +199,14 @@
 
                 disableButton(); // Disable button and show spinner
                 xhr.setRequestHeader("Content-Type", "application/json");
+
+                let blocksParam = "";
+                if (_blocksToExecute !== null) {
+					blocksParam = '"blocks": ["' + _blocksToExecute.join('","') + '"], ';
+                }
                 xhr.send(
-                    '{"blocks": ["' +
-                        _blocksToExecute.join('","') +
-                        '"], "refreshFromSource": ' +
-                        options.items.refreshFromSource +
+                    '{'+ blocksParam +
+                      '"refreshFromSource": ' + options.items.refreshFromSource +
                         ', "cancelExisting": false, "params": ' +
                         JSON.stringify(paramsUpdate) +
                         "}"
@@ -259,7 +262,12 @@
             omniscope.view.on(["load", "update", "resize"], function () {
                 _projEndpoint = omniscope.view.context().baseUrl + "../../../../";
                 var options = omniscope.view.context().options;
-                _blocksToExecute = options.items.block.split(",");
+              
+                if (options.items.block) {
+                	_blocksToExecute = options.items.block.split(",");
+                } else {
+                    _blocksToExecute = null;
+                }
 
                 originalButtonText = options.items.buttonText || "Execute";
                 document.getElementById("btnid").textContent = originalButtonText;

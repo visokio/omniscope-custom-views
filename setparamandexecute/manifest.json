@@ -24,8 +24,8 @@
     "items": {
       "block": {
         "displayName": "Blocks to execute (comma separated names)",
-        "type": "TEXT",
-        "mandatory": true
+        "documentation": "Leave blank to execute all blocks; Use the current report name as a way to refresh the report data",
+        "type": "TEXT"
       },
       "buttonText": {
         "displayName": "Button text",
@@ -37,15 +37,16 @@
       },
       "refreshFromSource": {
         "displayName": "Refresh from source",
+        "documentation": "If ticked, Omniscope discards any previous execution data and reloads fresh data from the sources;\n\n \n\n If unticked, Omniscope executes only the necessary blocks in the workflow based on their current configuration and previous execution data; it will reuse cached data from upstream blocks if available, executing only those blocks that require fresh data.",
         "type": "TOGGLE"
-      },
-      "wGrid": { 
-        "displayName": "Grid Width",
-        "type": "NUMBER"
       },
       "showJobState": {
         "displayName": "Show job state",
         "type": "TOGGLE"
+      },
+      "wGrid": {
+        "displayName": "Grid Width",
+        "type": "NUMBER"
       }
     },
     "structure": {
