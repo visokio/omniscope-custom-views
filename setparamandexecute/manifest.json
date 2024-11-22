@@ -45,7 +45,15 @@
         "type": "TOGGLE"
       },
       "wGrid": {
-        "displayName": "Grid Width",
+        "displayName": "Grid Width (px)",
+        "type": "NUMBER"
+      },
+      "wInputWidth": {
+        "displayName": "Input Width (px)",
+        "type": "NUMBER"
+      },
+      "zlabelFontSize": {
+        "displayName": "Label Font Size (px)",
         "type": "NUMBER"
       }
     },
@@ -65,7 +73,9 @@
     "items": {
       "buttonText": "Execute",
       "refreshFromSource": true,
-      "wGrid": 200
+      "wGrid": 200,
+      "wInputWidth": 100,
+      "zlabelFontSize": 13
     },
     "pane": {
       "yAxisHeaderWidth": 75,
