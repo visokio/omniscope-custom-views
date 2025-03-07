@@ -166,6 +166,22 @@
 		    "version": 0
 		},
 		{
+		    "name": "sequentialworkflowexecution",
+		    "displayName": "Sequential Workflow Execution",
+		    "tags": [
+			    "custom",
+			    "sequential",
+			    "order",
+			    "workflow",
+			    "job",
+			    "execution",
+			    "block",
+			    "api"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 		    "name": "setparamandexecute",
 		    "displayName": "Set Parameters and Execute",
 		    "tags": [
