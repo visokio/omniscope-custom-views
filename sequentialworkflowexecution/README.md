@@ -1,4 +1,4 @@
-# ![](icon.svg) Workflow Execution
+# ![](icon.svg) Sequential Workflow Execution
 
 Custom view that shows a button to trigger a data Workflow execution of specified blocks in order.
 
