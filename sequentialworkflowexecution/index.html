@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            html,
+            body,
+            main {
+                /* Ensure the body fills the view, so clicks are handled everywhere: */
+                width: 100%;
+                height: 100%;
+                font-family: Monospace;
+            }
+            a.button {
+                background: #ececec;
+                border-radius: 10px;
+                padding: 5px 20px;
+                font-family: Lato;
+                font-weight: bold;
+                color: #3f3f3f;
+                text-decoration: none;
+                text-shadow: 0px 1px 0px #fff;
+                border: 1px solid #a7a7a7;
+                margin: 0px auto;
+                box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+                -webkit-transition: box-shadow 0.5s;
+            }
+            a.button i {
+                float: right;
+                margin: 2px;
+            }
+            a.button:hover {
+                box-shadow: 0px 2px 1px lightgrey inset, 0px -2px 20px lightgrey, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+            }
+            a.button:active {
+                box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5) inset, 0px -2px 20px white, 0px 1px 5px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.1);
+                background: -webkit-linear-gradient(top, #d1d1d1 0%, #ececec 100%);
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <a href="#" class="button" id="btnid" onclick="startWorkflow()">Refresh Workflow</a><br /><br />
+            <div id="jobState"></div>
+        </div>
+        <script src="/_global_/customview/v1/omniscope.js"></script>
+        <script>
+            var _jobId = "NA";
+            var _blocksToExecute = [];
+            var _projEndpoint;
+            var _check;
+            var currentBlockIndex = 0;
+
+            if (!omniscope || !omniscope.view)
+                throw new Error("Omniscope chart API is not loaded");
+
+            // Starts the multi-step workflow execution
+            function startWorkflow() {
+                var options = omniscope.view.context().options;
+                // Assume options.items.block is a comma-separated list of blocks
+                _blocksToExecute = options.items.block.split(",");
+                currentBlockIndex = 0;
+                document.getElementById("jobState").innerHTML = "Starting workflow execution...";
+                executeNextBlock();
+            }
+
+            // Executes the current block
+            function executeNextBlock() {
+                if (currentBlockIndex >= _blocksToExecute.length) {
+                    document.getElementById("jobState").innerHTML =
+                        "All blocks executed successfully.";
+                    return;
+                }
+                var block = _blocksToExecute[currentBlockIndex].trim();
+                document.getElementById("jobState").innerHTML =
+                    "Executing block: " + block;
+                var options = omniscope.view.context().options;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", _projEndpoint + "w/execute", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (this.status === 200) {
+                            _jobId = JSON.parse(xhr.responseText).jobId;
+                            // Begin polling the state of the current block job
+                            _check = setInterval(pollWorkflowState, 1000);
+                        } else {
+                            document.getElementById("jobState").innerHTML =
+                                "Error initiating block " + block + ": " + xhr.responseText;
+                        }
+                    }
+                };
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send(
+                    '{"blocks": ["' +
+                        block +
+                        '"], "refreshFromSource": ' +
+                        options.items.refreshFromSource +
+                        ', "cancelExisting": false}'
+                );
+            }
+
+            // Polls the workflow state for the current job until it completes or fails
+            function pollWorkflowState() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", _projEndpoint + "w/job/" + _jobId + "/state", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (this.status === 200) {
+                            var _jobState = JSON.parse(xhr.responseText).jobState;
+                            document.getElementById("jobState").innerHTML =
+                                "Block " +
+                                _blocksToExecute[currentBlockIndex] +
+                                " state: " +
+                                _jobState;
+                            if (_jobState === "COMPLETED") {
+                                clearInterval(_check);
+                                currentBlockIndex++;
+                                executeNextBlock();
+                            } else if (
+                                _jobState === "FAILED" ||
+                                _jobState === "ERROR"
+                            ) {
+                                clearInterval(_check);
+                                document.getElementById("jobState").innerHTML =
+                                    "Block " +
+                                    _blocksToExecute[currentBlockIndex] +
+                                    " failed with state: " +
+                                    _jobState;
+                            }
+                        } else if (this.status === 403) {
+                            document.getElementById("jobState").innerHTML =
+                                xhr.responseText;
+                            clearInterval(_check);
+                        } else {
+                            var errorResponse = JSON.parse(xhr.responseText);
+                            document.getElementById("jobState").innerHTML =
+                                errorResponse.errorMessage;
+                            clearInterval(_check);
+                        }
+                    }
+                };
+                xhr.send();
+            }
+
+            // Basic error handling for the Omniscope view
+            omniscope.view.on("load", function () {
+                window.onerror = function (msg) {
+                    omniscope.view.error(msg);
+                };
+            });
+
+            // Clicking on any empty space clears selections
+            document.body.addEventListener("click", function () {
+                omniscope.view.whitespaceClick();
+            });
+
+            // On view load/update/resize, update settings from the context options
+            omniscope.view.on(["load", "update", "resize"], function () {
+                var options = omniscope.view.context().options;
+                _projEndpoint = omniscope.view.context().baseUrl + "../../../../";
+                document.getElementById("btnid").textContent =
+                    options.items.buttonText
+                        ? options.items.buttonText
+                        : "Refresh Workflow";
+                if (options.items.showJobState) {
+                    document.getElementById("jobState").style.display = "block";
+                } else {
+                    document.getElementById("jobState").style.display = "none";
+                }
+            });
+        </script>
+    </body>
+</html>
