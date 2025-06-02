@@ -43,6 +43,7 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/
     </tr>
     <tr valign="top">
         <td width="33%">Sequential Workflow Execution<br><a href="sequentialworkflowexecution" title="Sequential Workflow Execution"><img width="290" src="https://github.com/visokio/custom-views/raw/master/sequentialworkflowexecution/thumbnail.png"></a></td>
+        <td width="33%">Running Pivot View<br><a href="runningpivot" title="Running Pivot View"><img width="290" src="https://github.com/visokio/custom-views/raw/master/runningpivot/thumbnail.png"></a></td>
         <td width="33%">Custom View Demo<br><a href="customviewdemo" title="Custom View Demo"><img width="290" src="https://github.com/visokio/custom-views/raw/master/customviewdemo/thumbnail.png"></a></td>
     </tr>
 </table>

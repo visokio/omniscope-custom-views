@@ -41,6 +41,18 @@
 		    "version": 0
 		},
 		{
+		    "name": "runningpivot",
+		    "displayName": "Running Pivot View",
+		    "tags": [
+			    "cumulative",
+			    "running",
+			    "total",
+			    "running total"
+		    ],
+		    "files": [],
+		    "version": 0
+		},
+		{
 		    "name": "twitterview",
 		    "displayName": "Twitter View",
 		    "tags": [
