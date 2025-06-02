@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Pivot with Running Totals</title>
+
+  <!-- Omniscope Custom View API -->
+  <script src="/_global_/customview/v1/omniscope.js"></script>
+
+  <style>
+    
+    @font-face {
+      font-family: "VisokioBranded";
+      /* Use a relative path from index.html to the .woff2 file */
+      src: url("/branding.internal/visokio-branded-font.woff2") format("woff2");
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    /* ─────────────────────────────────────────────────────────────────────────
+       Make the pivotContainer fill the available area and scroll if the table
+       is larger than its bounds (in both directions).
+       ───────────────────────────────────────────────────────────────────────── */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #pivotContainer {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      box-sizing: border-box;
+      font-family: "VisokioBranded", sans-serif;
+      font-size: 13px;
+    }
+
+    /* Optional: keep the table’s natural size (so it can overflow) */
+    table {
+      border-collapse: collapse;
+      width: auto; /* do NOT force width:100% */
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+      text-align: right;
+      white-space: nowrap; /* prevents cells from wrapping, forcing horizontal scroll when needed */
+    }
+    th {
+      background: #f0f0f0;
+      text-align: center;
+    }
+    td.dim {
+      text-align: left;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <!-- This container will now scroll if the table inside is too large -->
+  <div id="pivotContainer">Loading…</div>
+  <script>
+// view.js
+
+(function() {
+  if (!omniscope || !omniscope.view) {
+    throw new Error("Omniscope chart API is not loaded");
+  }
+
+  // Redraw on load, update, or resize
+  omniscope.view.on(["load", "update", "resize"], function() {
+    try {
+      drawRunningPivot();
+    } catch (err) {
+      omniscope.view.error(err.message || err.toString());
+    }
+  });
+
+  function drawRunningPivot() {
+    // 1) Read options
+    const opts = omniscope.view.context().options.items;
+
+    if (!opts.measures) {
+      document.getElementById("pivotContainer").textContent =
+        "⚠️ Please select a Measure in the view’s options.";
+      return;
+    }
+    if (!Array.isArray(opts.paneX) || opts.paneX.length === 0) {
+      document.getElementById("pivotContainer").textContent =
+        "⚠️ Please select at least one Pane X (grouping field) in the view’s options.";
+      return;
+    }
+    if (!Array.isArray(opts.paneY) || opts.paneY.length === 0) {
+      document.getElementById("pivotContainer").textContent =
+        "⚠️ Please select at least one Pane Y (grouping field) in the view’s options.";
+      return;
+    }
+
+    // 2) Build the query object using ALL grouping/measure OPTION OBJECTS
+    //    We still query by paneX then paneY (that affects how Omniscope groups),
+    //    but for rendering, we will swap: paneY dims become rows (first columns),
+    //    paneX dims become columns (header hierarchy).
+    const groupingXOpts = opts.paneX;    // array of grouping-option objects for "Pane X"
+    const groupingYOpts = opts.paneY;    // array of grouping-option objects for "Pane Y"
+    const measureOpt    = opts.measures; // single measure-option object
+
+    const query = {
+      groupings: [...groupingXOpts, ...groupingYOpts],
+      measures:  [measureOpt],
+      filter:    omniscope.view.context().dataConfig.filter
+    };
+
+    // 3) Run the query
+    omniscope.view.busy(true);
+    const endpoint = omniscope.view.endpoint();
+
+    omniscope.query.builder(endpoint)
+      .table(query)
+      .on("load", function(event) {
+        try {
+          renderPivotFromQuery(
+            event.data,
+            groupingXOpts,
+            groupingYOpts
+          );
+        } catch (err) {
+          document.getElementById("pivotContainer").innerText =
+            "Error rendering table: " + err.message;
+        } finally {
+          omniscope.view.busy(false);
+        }
+      })
+      .on("error", function(err) {
+        document.getElementById("pivotContainer").innerText =
+          "Query error: " + err.message;
+        omniscope.view.busy(false);
+      })
+      .execute();
+  }
+
+  /**
+   * data.records is a 2D array: each row = [ x1, x2, ..., xN, y1, y2, ..., yM, aggregatedMeasure ]
+   * groupingXOpts / groupingYOpts are arrays of option objects so we can grab inputField & displayName.
+   *
+   * We will treat paneY (groupingYOpts) as the ROW axis (first M columns)
+   * and paneX (groupingXOpts) as the COLUMN axis (top header hierarchy).
+   */
+  function renderPivotFromQuery(data, groupingXOpts, groupingYOpts) {
+    const records = data.records;
+    if (!Array.isArray(records) || records.length === 0) {
+      document.getElementById("pivotContainer").innerText =
+        "⚠️ No records returned by the pivot. Perhaps your filters are too restrictive.";
+      return;
+    }
+
+    const N = groupingXOpts.length; // number of paneX levels
+    const M = groupingYOpts.length; // number of paneY levels
+
+    // 1) Build unique composite keys for ROW (paneY) and COLUMN (paneX),
+    //    plus maps to their display strings and raw arrays for sorting.
+
+    const uniqueRowKeys    = []; // paneY combinations
+    const uniqueColKeys    = []; // paneX combinations
+    const labelMapRow      = {}; // keyRow → "labelY1 | labelY2 | …"
+    const labelMapCol      = {}; // keyCol → "labelX1 | labelX2 | …"
+    const rawMapRow        = {}; // keyRow → [ y1, y2, …, yM ]
+    const rawMapCol        = {}; // keyCol → [ x1, x2, …, xN ]
+
+    records.forEach(function(row) {
+      // rawX dims = [ x1, x2, ..., xN ]
+      const rawX = row.slice(0, N);
+      // rawY dims = [ y1, y2, ..., yM ]
+      const rawY = row.slice(N, N + M);
+
+      const keyRow = compositeKey(rawY);
+      const keyCol = compositeKey(rawX);
+
+      if (!uniqueRowKeys.includes(keyRow)) {
+        uniqueRowKeys.push(keyRow);
+        labelMapRow[keyRow] = rawY.map(formatValue).join(" | ");
+        rawMapRow[keyRow]   = rawY.slice();
+      }
+      if (!uniqueColKeys.includes(keyCol)) {
+        uniqueColKeys.push(keyCol);
+        labelMapCol[keyCol] = rawX.map(formatValue).join(" | ");
+        rawMapCol[keyCol]   = rawX.slice();
+      }
+    });
+
+    // Sort row and column keys by their raw values (numeric if possible, otherwise string)
+    uniqueRowKeys.sort((a, b) => compareArrays(rawMapRow[a], rawMapRow[b]));
+    uniqueColKeys.sort((a, b) => compareArrays(rawMapCol[a], rawMapCol[b]));
+
+    // 2) Build a cellMap[rowKey][colKey] = SUM(measure), defaulting to 0
+    const cellMap = {};
+    uniqueRowKeys.forEach(function(rk) {
+      cellMap[rk] = {};
+      uniqueColKeys.forEach(function(ck) {
+        cellMap[rk][ck] = 0;
+      });
+    });
+    records.forEach(function(row) {
+      const rawX = row.slice(0, N);
+      const rawY = row.slice(N, N + M);
+      const val  = Number(row[N + M]) || 0;
+
+      const keyRow = compositeKey(rawY);
+      const keyCol = compositeKey(rawX);
+      cellMap[keyRow][keyCol] = val;
+    });
+
+    // 3) Compute running totals down each column (paneX leaf) across sorted row keys
+    //    cumulMap[rowKey][colKey] = running total up to that row for that column
+    const cumulMap = {};
+    uniqueColKeys.forEach(function(ck) {
+      let running = 0;
+      uniqueRowKeys.forEach(function(rk) {
+        running += cellMap[rk][ck];
+        if (!cumulMap[rk]) cumulMap[rk] = {};
+        cumulMap[rk][ck] = running;
+      });
+    });
+
+    // 4) Build HTML <table> so that:
+    //    • First M columns are paneY levels (as separate columns).
+    //    • Top header rows include:
+    //      - One row showing the combined paneX field names
+    //      - N rows for paneX value hierarchy
+    //      - One row labeling paneY columns
+    //    • Body rows: each begins with M cells (paneY values), then leaf cumulative values.
+
+    let html = "<table>\n";
+    html += "  <thead>\n";
+
+    // ─── (A) Row for combined paneX field names ───────────────────────────────────────────
+    html += "    <tr>\n";
+    // Left M blanks (for paneY columns)
+    for (let i = 0; i < M; i++) {
+      html += "      <th></th>\n";
+    }
+    // One <th> spanning all leaf-column columns, showing paneX field names
+    const paneXHeaderLabel = groupingXOpts
+      .map(opt => opt.displayName || opt.inputField)
+      .join(" | ");
+    html += 
+      "      <th colspan=\"" + uniqueColKeys.length + "\">" +
+      escapeHtml(paneXHeaderLabel) +
+      "</th>\n";
+    html += "    </tr>\n";
+
+    // ─── (B) Build N header rows for paneX value hierarchy ────────────────────────────────
+    for (let level = 0; level < N; level++) {
+      html += "    <tr>\n";
+      // Left M blanks (for paneY columns)
+      for (let i = 0; i < M; i++) {
+        html += "      <th></th>\n";
+      }
+
+      // Now group uniqueColKeys by rawMapCol[*][level]
+      let lastValue = null;
+      let spanCount = 0;
+      for (let i = 0; i < uniqueColKeys.length; i++) {
+        const colKey = uniqueColKeys[i];
+        const rawX   = rawMapCol[colKey];
+        const curVal = rawX[level];
+
+        if (curVal !== lastValue) {
+          // Close the previous span
+          if (spanCount > 0) {
+            html += 
+              "      <th colspan=\"" + spanCount + "\">" +
+              escapeHtml(formatValue(lastValue)) +
+              "</th>\n";
+          }
+          lastValue = curVal;
+          spanCount = 1;
+        } else {
+          spanCount++;
+        }
+      }
+      // Close the final span
+      if (spanCount > 0) {
+        html += 
+          "      <th colspan=\"" + spanCount + "\">" +
+          escapeHtml(formatValue(lastValue)) +
+          "</th>\n";
+      }
+
+      html += "    </tr>\n";
+    }
+
+    // ─── (C) Build a header row that labels the paneY columns by field name ──────────────
+    html += "    <tr>\n";
+    for (let level = 0; level < M; level++) {
+      const fieldLabel = groupingYOpts[level].displayName || groupingYOpts[level].inputField;
+      html += "      <th>" + escapeHtml(fieldLabel) + "</th>\n";
+    }
+    // For each leaf column under the paneX hierarchy, leave its cell blank
+    for (let i = 0; i < uniqueColKeys.length; i++) {
+      html += "      <th></th>\n";
+    }
+    html += "    </tr>\n";
+
+    html += "  </thead>\n";
+
+    // ─── (D) Build <tbody> with M paneY columns + leaf cumulative values ─────────────────
+    html += "  <tbody>\n";
+    uniqueRowKeys.forEach(function(rk) {
+      html += "    <tr>\n";
+      // Output one <td> per paneY level
+      const rawY = rawMapRow[rk]; // [ y1, y2, … , yM ]
+      for (let level = 0; level < M; level++) {
+        html += "      <td class=\"dim\">" + escapeHtml(formatValue(rawY[level])) + "</td>\n";
+      }
+      // Output cumulative values for each leaf colKey
+      uniqueColKeys.forEach(function(ck) {
+        const cellVal = cumulMap[rk][ck];
+        html += "      <td>" + cellVal + "</td>\n";
+      });
+      html += "    </tr>\n";
+    });
+    html += "  </tbody>\n";
+
+    html += "</table>";
+    document.getElementById("pivotContainer").innerHTML = html;
+  }
+
+  // Helper: create a unique string key from an array of values (primitives or objects)
+  function compositeKey(arrayOfValues) {
+    return JSON.stringify(arrayOfValues);
+  }
+
+  // Helper: format a raw grouping value into a user-friendly label
+  function formatValue(value) {
+    if (value === null || value === undefined) {
+      return "";
+    }
+    // If it’s an object with "lower" and "upper", render "lower to upper"
+    if (
+      typeof value === "object" &&
+      value.hasOwnProperty("lower") &&
+      value.hasOwnProperty("upper")
+    ) {
+      return value.lower + " to " + value.upper;
+    }
+    return String(value);
+  }
+
+  // Helper: compare two arrays element-wise, numeric if possible, otherwise string
+  function compareArrays(arrA, arrB) {
+    for (let i = 0; i < Math.min(arrA.length, arrB.length); i++) {
+      const cmp = compareValues(arrA[i], arrB[i]);
+      if (cmp !== 0) return cmp;
+    }
+    // If all compared elements are equal, shorter array comes first
+    return arrA.length - arrB.length;
+  }
+
+  // Helper: compare two values, using numeric comparison if both have "lower"/"upper" or are numbers
+  function compareValues(a, b) {
+    // Handle objects with lower/upper
+    if (isRangeObject(a) && isRangeObject(b)) {
+      return Number(a.lower) - Number(b.lower);
+    }
+    // If a is range-object but b is not, put range-objects first
+    if (isRangeObject(a)) return -1;
+    if (isRangeObject(b)) return 1;
+
+    // Both are plain numbers?
+    if (typeof a === "number" && typeof b === "number") {
+      return a - b;
+    }
+    // One is number, the other is not: numbers first
+    if (typeof a === "number") return -1;
+    if (typeof b === "number") return 1;
+
+    // Fallback to string comparison
+    const sa = String(a), sb = String(b);
+    return sa < sb ? -1 : sa > sb ? 1 : 0;
+  }
+
+  function isRangeObject(obj) {
+    return (
+      obj !== null &&
+      typeof obj === "object" &&
+      obj.hasOwnProperty("lower") &&
+      obj.hasOwnProperty("upper") &&
+      !Array.isArray(obj)
+    );
+  }
+
+  // Helper to escape HTML-sensitive characters
+  function escapeHtml(str) {
+    if (str == null) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+})();
+
+
+  
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+{
+  "name": "Running Pivot",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "pivot",
+    "running",
+    "totals",
+    "running total"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "measures": {
+        "displayName": "Measure",
+        "type": "MEASURE",
+        "mandatory": true
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true,
+          "mandatory": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true,
+          "mandatory": true
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "measures"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    }
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "showGridLines": true,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "showPaneXHeader": true,
+      "showPaneYHeader": true,
+      "showTileHeader": true,
+      "xHeaderStyle": {},
+      "yHeaderStyle": {},
+      "tileHeaderStyle": {},
+      "xHeaderLines": 1,
+      "tileHeaderLines": 1,
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}
