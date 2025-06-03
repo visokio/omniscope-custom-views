@@ -8,6 +8,8 @@ Visualise network relationships in 3D using Three.js force layout.
 
 Hover over a node to see its value in a tooltip.
 
+=======
+
 ## Settings
 
  - **Source**: Field representing the link source node.
