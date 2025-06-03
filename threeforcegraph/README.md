@@ -6,6 +6,8 @@ Custom view that renders a 3D force-directed graph using the [3d-force-graph](ht
 
 Visualise network relationships in 3D using Three.js force layout.
 
+Hover over a node to see its value in a tooltip.
+
 ## Settings
 
  - **Source**: Field representing the link source node.

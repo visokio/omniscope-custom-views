@@ -56,7 +56,8 @@
 
         const Graph = ForceGraph3D()(document.getElementById('main'))
             .graphData({ nodes: nodes, links: links })
-            .nodeAutoColorBy('group');
+            .nodeAutoColorBy('group')
+            .nodeLabel(node => node.id);
     });
 </script>
 </body>
