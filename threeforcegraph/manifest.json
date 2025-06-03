@@ -1,0 +1,69 @@
+{
+  "name": "3D Force Graph",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "tags": ["custom", "3d", "graph", "network", "three.js"],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": false,
+  "options": {
+    "items": {
+      "source": {
+        "displayName": "Source",
+        "type": "GROUPING",
+        "mandatory": true
+      },
+      "target": {
+        "displayName": "Target",
+        "type": "GROUPING",
+        "mandatory": true
+      },
+      "group": {
+        "displayName": "Group",
+        "type": "GROUPING",
+        "list": false
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      }
+    },
+    "structure": {
+      "toolbar": ["source", "target"],
+      "x": ["paneX"],
+      "y": ["paneY"]
+    }
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}

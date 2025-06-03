@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body, main {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+        #main {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            overflow: hidden;
+        }
+    </style>
+    <script src="https://unpkg.com/3d-force-graph"></script>
+</head>
+<body>
+<main id="main"></main>
+<script src="/_global_/customview/v1/omniscope.js"></script>
+<script>
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+
+    omniscope.view.on("load", function() {
+        window.onerror = function(msg) {
+            omniscope.view.error(msg);
+        }
+    });
+
+    omniscope.view.on(["load", "update", "resize"], function() {
+        const context = omniscope.view.context();
+        const records = context.result.data.records;
+        const mappings = context.result.mappings;
+
+        const sourceIdx = mappings.source;
+        const targetIdx = mappings.target;
+        const groupIdx = mappings.group;
+
+        const nodesMap = new Map();
+        const links = [];
+
+        records.forEach(record => {
+            const src = record[sourceIdx];
+            const tgt = record[targetIdx];
+            if (src == null || tgt == null) return;
+            if (!nodesMap.has(src)) nodesMap.set(src, { id: src, group: groupIdx !== undefined ? record[groupIdx] : null });
+            if (!nodesMap.has(tgt)) nodesMap.set(tgt, { id: tgt, group: groupIdx !== undefined ? record[groupIdx] : null });
+            links.push({ source: src, target: tgt });
+        });
+
+        const nodes = Array.from(nodesMap.values());
+
+        document.getElementById('main').innerHTML = '';
+
+        const Graph = ForceGraph3D()(document.getElementById('main'))
+            .graphData({ nodes: nodes, links: links })
+            .nodeAutoColorBy('group');
+    });
+</script>
+</body>
+</html>

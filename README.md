@@ -46,6 +46,11 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/
         <td width="33%">Running Pivot View<br><a href="runningpivot" title="Running Pivot View"><img width="290" src="https://github.com/visokio/custom-views/raw/master/runningpivot/thumbnail.png"></a></td>
         <td width="33%">Custom View Demo<br><a href="customviewdemo" title="Custom View Demo"><img width="290" src="https://github.com/visokio/custom-views/raw/master/customviewdemo/thumbnail.png"></a></td>
     </tr>
+    <tr valign="top">
+        <td width="33%"><a href="threeforcegraph" title="3D Force Graph">3D Force Graph</a></td>
+        <td width="33%"></td>
+        <td width="33%"></td>
+    </tr>
 </table>
 
 ### How to create a new view
