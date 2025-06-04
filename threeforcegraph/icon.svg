@@ -1,5 +1,101 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <circle cx="16" cy="16" r="14" stroke="black" stroke-width="2" fill="none"/>
-  <line x1="16" y1="2" x2="16" y2="30" stroke="black" stroke-width="2"/>
-  <line x1="2" y1="16" x2="30" y2="16" stroke="black" stroke-width="2"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   preserveAspectRatio="xMidYMid meet"
+   id="svg_document"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="icon force.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata
+     id="metadata4214">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Untitled.svg</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2069"
+     inkscape:window-height="1302"
+     id="namedview4212"
+     showgrid="false"
+     inkscape:zoom="13.135216"
+     inkscape:cx="13.932013"
+     inkscape:cy="33.04095"
+     inkscape:window-x="291"
+     inkscape:window-y="150"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg_document"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <title
+     id="svg_document_title">Untitled.svg</title>
+  <defs
+     id="svg_document_defs" />
+  <circle
+     style="fill:#467de7;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     id="path3"
+     cy="20.123838"
+     cx="25.814661"
+     r="4.4985385" />
+  <circle
+     style="fill:#467de7;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     id="path3-1"
+     cy="4.7398968"
+     cx="22.900932"
+     r="3.5062137" />
+  <circle
+     style="fill:#467de7;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     id="path3-1-2"
+     cy="5.5718608"
+     cx="8.152606"
+     r="3.5062137" />
+  <circle
+     style="fill:#467de7;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     id="path3-4"
+     cy="24.576332"
+     cx="8.3770046"
+     r="6.0862575" />
+  <path
+     style="fill:none;stroke:#467de7;stroke-width:1.22889px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 8.1843609,9.0759579 V 18.403808"
+     id="path8" />
+  <path
+     style="fill:none;stroke:#467de7;stroke-width:1.22889px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 14.402927,23.034657 6.946272,-1.85234"
+     id="path9" />
+  <path
+     style="fill:none;stroke:#467de7;stroke-width:1.22889px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 25.120034,15.559145 -1.3231,-7.4093572"
+     id="path10" />
+  <path
+     style="fill:none;stroke:#467de7;stroke-width:1.22889px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 11.558264,4.9743497 7.740131,-0.066155"
+     id="path11" />
+  <path
+     style="fill:none;stroke:#467de7;stroke-width:1.21831px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 10.893501,7.8811625 22.278583,17.084715"
+     id="path12" />
 </svg>
