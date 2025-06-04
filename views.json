@@ -262,5 +262,12 @@
 			"files": [],
 			"version": 0
 		}
+                ,{
+                        "name": "threeforcegraph",
+                        "displayName": "3D Force Graph",
+                        "tags": ["custom", "3d", "graph", "network", "three.js"],
+                        "files": [],
+                        "version": 0
+                }
 	]
 }
