@@ -7,7 +7,10 @@ Custom view that renders a 3D force-directed graph using the [3d-force-graph](ht
 Visualise network relationships in 3D using Three.js force layout.
 
 Hover over a node to see its value in a tooltip.
+Hover over a link to see the connection displayed as `source -> target`.
 
+ - **Link width (optional)**: Numeric measure controlling the thickness of each link.
+ - **Background (optional)**: Background colour of the graph. Defaults to `#ffffff`.
 =======
 
 ## Settings

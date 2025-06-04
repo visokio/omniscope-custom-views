@@ -25,6 +25,16 @@
         "type": "GROUPING",
         "list": false
       },
+      "linkWidth": {
+        "displayName": "Link width",
+        "type": "MEASURE",
+        "detail": "Numeric measure controlling link thickness"
+      },
+      "background": {
+        "displayName": "Background",
+        "type": "TEXT",
+        "detail": "Background colour for the graph"
+      },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
@@ -43,7 +53,9 @@
     }
   },
   "defaultOptions": {
-    "items": {},
+    "items": {
+      "background": "#ffffff"
+    },
     "pane": {
       "yAxisHeaderWidth": 75,
       "paneWidth": 200,
