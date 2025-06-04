@@ -62,7 +62,7 @@
             .nodeLabel(node => node.id)
             .linkLabel(link => link.source.id + ' -> ' + link.target.id)
             .linkWidth(link => link.width || 1)
-            .backgroundColor(options.background || '#ffffff');
+            .backgroundColor(options.background || '#ffffff')
             .nodeAutoColorBy('group');
     });
 </script>
