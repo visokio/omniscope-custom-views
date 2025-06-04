@@ -42,6 +42,8 @@
 
         const nodesMap = new Map();
         const links = [];
+        let minWidth = Infinity;
+        let maxWidth = -Infinity;
 
         records.forEach(record => {
             const src = record[sourceIdx];
@@ -49,21 +51,37 @@
             if (src == null || tgt == null) return;
             if (!nodesMap.has(src)) nodesMap.set(src, { id: src, group: groupIdx !== undefined ? record[groupIdx] : null });
             if (!nodesMap.has(tgt)) nodesMap.set(tgt, { id: tgt, group: groupIdx !== undefined ? record[groupIdx] : null });
-            const width = widthIdx !== undefined ? Number(record[widthIdx]) : 1;
-            links.push({ source: src, target: tgt, width: width });
+            const widthVal = widthIdx !== undefined ? Number(record[widthIdx]) : 1;
+            if (widthIdx !== undefined) {
+                if (widthVal < minWidth) minWidth = widthVal;
+                if (widthVal > maxWidth) maxWidth = widthVal;
+            }
+            links.push({ source: src, target: tgt, widthValue: widthVal });
         });
 
         const nodes = Array.from(nodesMap.values());
+
+        if (widthIdx !== undefined && links.length) {
+            if (maxWidth === minWidth) {
+                links.forEach(l => { l.width = 1; });
+            } else {
+                links.forEach(l => {
+                    l.width = 1 + 9 * (l.widthValue - minWidth) / (maxWidth - minWidth);
+                });
+            }
+        } else {
+            links.forEach(l => { l.width = 1; });
+        }
 
         document.getElementById('main').innerHTML = '';
 
         const Graph = ForceGraph3D()(document.getElementById('main'))
             .graphData({ nodes: nodes, links: links })
+            .nodeAutoColorBy('group')
             .nodeLabel(node => node.id)
             .linkLabel(link => link.source.id + ' -> ' + link.target.id)
             .linkWidth(link => link.width || 1)
-            .backgroundColor(options.background || '#ffffff')
-            .nodeAutoColorBy('group');
+            .backgroundColor(options.background || '#ffffff');
     });
 </script>
 </body>
