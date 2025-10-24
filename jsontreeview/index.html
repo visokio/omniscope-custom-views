@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON Tree Viewer</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <div class="view-root">
+    <header class="top-bar" role="toolbar" aria-label="Tree controls">
+      <div class="row-selector" id="rowSelectorContainer">
+        <label for="rowSelector">Row:</label>
+        <select id="rowSelector" aria-label="Row selector"></select>
+      </div>
+      <div class="search-group">
+        <input id="searchInput" type="search" placeholder="Search..." aria-label="Search in tree" />
+      </div>
+      <div class="controls">
+        <button id="expandAllBtn" type="button" title="Expand all">Expand all</button>
+        <button id="collapseAllBtn" type="button" title="Collapse all">Collapse all</button>
+        <label class="root-only-toggle"><input type="checkbox" id="rootOnlyToggle" /> Root only</label>
+      </div>
+    </header>
+    <div class="content">
+      <aside class="tree-panel" aria-label="JSON tree">
+        <div id="configNotice" class="config-notice" hidden></div>
+        <div id="errorCard" class="error-card" hidden></div>
+        <div id="treeContainer" class="tree-container" role="tree" aria-label="JSON structure"></div>
+      </aside>
+      <section class="details-panel" aria-label="Node details">
+        <div class="details-header">
+          <h2>Node details</h2>
+        </div>
+        <div id="detailsContent" class="details-content">
+          <p class="empty-details">Select a node to view details.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+  <div id="toastContainer" class="toast-container" role="status" aria-live="polite"></div>
+  <script type="module" src="index.js"></script>
+</body>
+</html>
