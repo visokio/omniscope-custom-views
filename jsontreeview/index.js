@@ -27,6 +27,7 @@ const state = {
   rootOnly: false,
   renderOrder: [],
   pendingParseId: 0,
+  pendingQueryId: 0,
   parseWorker: null,
   lastRawText: '',
 };
@@ -722,11 +723,11 @@ function showToast(message, action) {
   }, 4000);
 }
 
-function setSettings(settings) {
+function setSettings(settings, options = {}) {
   state.settings = settings || {};
   state.jsonColumn = state.settings.jsonColumn || null;
   validateConfiguration();
-  if (state.rows.length > 0 && state.jsonColumn) {
+  if (!options.deferParse && state.rows.length > 0 && state.jsonColumn) {
     parseRow(state.currentRowIndex);
   }
 }
@@ -740,8 +741,10 @@ function setData(rows) {
     return labelValue ? `${idx + 1} · ${labelValue}` : `Row ${idx + 1}`;
   });
   updateRowSelector();
-  if (state.jsonColumn) {
+  if (state.jsonColumn && state.rows.length > 0) {
     parseRow(state.currentRowIndex);
+  } else {
+    resetTree();
   }
 }
 
@@ -772,7 +775,7 @@ function updateRowSelector() {
 
 function validateConfiguration() {
   if (!state.jsonColumn) {
-    configNotice.textContent = 'Select the JSON column in the view settings to render data.';
+    configNotice.textContent = 'Select the JSON column in the view options to render data.';
     configNotice.hidden = false;
   } else {
     configNotice.hidden = true;
@@ -916,6 +919,241 @@ function buildTreeModel(value) {
   state.rootNode = rootNode;
 }
 
+function setupOmniscopeIntegration() {
+  if (!window.omniscope || !omniscope.view || typeof omniscope.view.on !== 'function') {
+    return;
+  }
+
+  omniscope.view.on('load', () => {
+    window.onerror = function handleOmniscopeError(message, source, line, column, error) {
+      const text = error?.message || (typeof message === 'string' ? message : 'Unexpected error');
+      try {
+        omniscope.view.error(text);
+      } catch (err) {
+        console.error('Failed to report error to Omniscope:', err);
+      }
+    };
+  });
+
+  const handleUpdate = () => {
+    try {
+      const context = omniscope.view.context();
+      const optionItems = context?.options?.items || {};
+      const settings = context?.settings || {};
+      const jsonOption = optionItems.jsonField ?? optionItems.jsonColumn ?? settings.jsonColumn;
+      const labelOption = optionItems.labelField ?? null;
+      const jsonFieldName = extractFieldName(jsonOption);
+
+      setSettings({ jsonColumn: jsonFieldName }, { deferParse: true });
+
+      if (!jsonFieldName) {
+        setData([]);
+        return;
+      }
+
+      fetchRowsFromOmniscope(jsonOption, labelOption, context?.dataConfig?.filter).catch((err) => {
+        console.error('Failed to load Omniscope data', err);
+        showToast('Failed to load data', {
+          label: 'Retry',
+          onClick: handleUpdate,
+        });
+        try {
+          omniscope.view.error(err?.message || String(err));
+        } catch (reportErr) {
+          console.error('Unable to report error to Omniscope', reportErr);
+        }
+      });
+    } catch (err) {
+      console.error('Error while updating from Omniscope context', err);
+      try {
+        omniscope.view.error(err?.message || String(err));
+      } catch (reportErr) {
+        console.error('Unable to report error to Omniscope', reportErr);
+      }
+    }
+  };
+
+  omniscope.view.on(['load', 'update', 'selection', 'filter'], handleUpdate);
+  handleUpdate();
+}
+
+function extractFieldName(option) {
+  if (!option) return null;
+  if (typeof option === 'string') return option;
+  if (typeof option === 'object') {
+    if (typeof option.inputField === 'string') {
+      return option.inputField;
+    }
+    if (typeof option.field === 'string') {
+      return option.field;
+    }
+    if (typeof option.value === 'string') {
+      return option.value;
+    }
+  }
+  return null;
+}
+
+function buildGrouping(option, name) {
+  if (!option) return null;
+  const grouping = {
+    type: 'UNIQUE_VALUES',
+    name,
+    fitToScreen: false,
+  };
+  if (typeof option === 'object') {
+    grouping.inputField = option;
+    if (option.type) {
+      grouping.type = option.type;
+    }
+  } else {
+    grouping.inputField = option;
+  }
+  return grouping.inputField ? grouping : null;
+}
+
+function buildJsonQuery(jsonOption, labelOption, filter) {
+  const jsonFieldName = extractFieldName(jsonOption);
+  if (!jsonFieldName) return null;
+  const groupings = [];
+  const labelGrouping = buildGrouping(labelOption, 'rowLabel');
+  if (labelGrouping) {
+    groupings.push(labelGrouping);
+  }
+  const jsonGrouping = buildGrouping(jsonOption, 'jsonGroup');
+  if (jsonGrouping) {
+    groupings.push(jsonGrouping);
+  }
+  const measures = [
+    {
+      name: 'jsonValue',
+      inputField: jsonFieldName,
+      function: 'SINGLETON',
+    },
+    {
+      name: 'rowCount',
+      inputField: jsonFieldName,
+      function: 'COUNT',
+    },
+  ];
+  return {
+    '@visokiotype': 'QueryApi.AggregateOperation',
+    groupings,
+    measures,
+    input: {
+      '@visokiotype': 'QueryApi.RecordFilterOperation',
+      filter: filter || null,
+      input: {
+        '@visokiotype': 'QueryApi.DefaultSource',
+      },
+    },
+  };
+}
+
+function fetchRowsFromOmniscope(jsonOption, labelOption, filter) {
+  const jsonFieldName = extractFieldName(jsonOption);
+  if (!jsonFieldName || !window.omniscope || !omniscope.view) {
+    return Promise.resolve();
+  }
+  const query = buildJsonQuery(jsonOption, labelOption, filter);
+  if (!query) {
+    return Promise.resolve();
+  }
+  return new Promise((resolve, reject) => {
+    const queryId = ++state.pendingQueryId;
+    let resolved = false;
+    try {
+      omniscope.view.busy(true);
+      omniscope.view
+        .queryBuilder()
+        .table(query)
+        .on('load', (event) => {
+          if (queryId !== state.pendingQueryId) {
+            omniscope.view.busy(false);
+            resolved = true;
+            resolve();
+            return;
+          }
+          try {
+            processQueryResult(event?.data, jsonFieldName, Boolean(labelOption));
+            omniscope.view.busy(false);
+            resolved = true;
+            resolve();
+          } catch (err) {
+            omniscope.view.busy(false);
+            reject(err);
+          }
+        })
+        .on('error', (err) => {
+          if (queryId !== state.pendingQueryId) {
+            return;
+          }
+          if (!resolved) {
+            omniscope.view.busy(false);
+            reject(err?.error ? new Error(err.error) : err);
+          }
+        })
+        .execute();
+    } catch (err) {
+      omniscope.view.busy(false);
+      reject(err);
+    }
+  });
+}
+
+function getMappingIndex(mappings, key) {
+  if (!mappings) return undefined;
+  if (Object.prototype.hasOwnProperty.call(mappings, key)) {
+    return mappings[key];
+  }
+  return undefined;
+}
+
+function processQueryResult(result, jsonFieldName, hasExplicitLabel) {
+  if (!result) {
+    clearError();
+    setData([]);
+    return;
+  }
+  const records = Array.isArray(result.records) ? result.records : [];
+  const mappings = result.mappings || {};
+  const jsonIdx = getMappingIndex(mappings, 'jsonValue');
+  const labelIdx = getMappingIndex(mappings, 'rowLabel');
+  const jsonGroupIdx = getMappingIndex(mappings, 'jsonGroup');
+  const countIdx = getMappingIndex(mappings, 'rowCount');
+  const rows = [];
+
+  records.forEach((record, recordIdx) => {
+    if (!Array.isArray(record)) return;
+    const jsonText = jsonIdx != null ? record[jsonIdx] : record[record.length - 1];
+    let baseLabel = null;
+    if (labelIdx != null) {
+      baseLabel = record[labelIdx];
+    } else if (hasExplicitLabel && jsonGroupIdx != null) {
+      baseLabel = record[jsonGroupIdx];
+    } else if (!hasExplicitLabel) {
+      baseLabel = jsonGroupIdx != null ? record[jsonGroupIdx] : `Row ${recordIdx + 1}`;
+    }
+    let copies = countIdx != null ? Number(record[countIdx]) || 1 : 1;
+    if (!Number.isFinite(copies) || copies < 1) copies = 1;
+    for (let i = 0; i < copies; i++) {
+      const row = { [jsonFieldName]: jsonText };
+      if (baseLabel != null && baseLabel !== '') {
+        row.__label = baseLabel;
+      }
+      rows.push(row);
+    }
+  });
+
+  if (rows.length === 0) {
+    clearError();
+    setData([]);
+  } else {
+    clearError();
+    setData(rows);
+  }
+}
+
 function onExternalSelectRow(index) {
   if (typeof index === 'number') {
     selectRow(index);
@@ -932,6 +1170,7 @@ window.viewApi = {
 };
 
 init();
+setupOmniscopeIntegration();
 
 // Sample data for local testing if running standalone
 if (!window.omniscope) {
