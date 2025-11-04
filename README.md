@@ -48,7 +48,7 @@ Documentation: https://omniscope.me/_global_/customview/v1/docs/
     </tr>
     <tr valign="top">
         <td width="33%"><a href="threeforcegraph" title="3D Force Graph">3D Force Graph</a></td>
-        <td width="33%"></td>
+        <td width="33%"><a href="jsontree" title="JSON Tree">JSON Tree</a></td>
         <td width="33%"></td>
     </tr>
 </table>
