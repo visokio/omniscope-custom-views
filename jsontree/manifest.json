@@ -1,7 +1,8 @@
 {
   "name": "JSON Tree",
   "frameworkVersion": "v1",
-  "tags": [],
+  "icon": "icon.svg",
+  "tags": ["custom", "tree", "json"],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": false,
