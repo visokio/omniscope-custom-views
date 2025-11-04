@@ -1,0 +1,29 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">JSON Tree Icon (32×32)</title>
+  <desc id="desc">JSON pill with single-level branching tree and spaced child nodes</desc>
+
+  <!-- JSON badge -->
+  <rect x="6" y="2" width="20" height="8" rx="4" fill="#7AA2EE"></rect>
+  <text x="16" y="7.25" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="5" font-weight="700" fill="#ffffff" letter-spacing=".2" text-rendering="geometricPrecision">JSON</text>
+
+  <!-- Tree connectors -->
+  <g fill="none" stroke="#7AA2EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- trunk -->
+    <path d="M16 10 V16"></path>
+    <!-- T to bar -->
+    <path d="M16 16 V18"></path>
+    <!-- horizontal branch bar aligned to node centers (8–24) -->
+    <path d="M8 18 H24"></path>
+    <!-- vertical drops to node tops -->
+    <path d="M8 18 V22"></path>
+    <path d="M16 18 V22"></path>
+    <path d="M24 18 V22"></path>
+  </g>
+
+  <!-- Child nodes (secondary colour, 6×6, clearly spaced) -->
+  <g fill="none" stroke="#F6BB68" stroke-width="2" stroke-linejoin="round">
+    <rect x="5" y="22" width="6" height="6" rx="1.5"></rect>
+    <rect x="13" y="22" width="6" height="6" rx="1.5"></rect>
+    <rect x="21" y="22" width="6" height="6" rx="1.5"></rect>
+  </g>
+</svg>
