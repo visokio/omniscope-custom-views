@@ -1,0 +1,61 @@
+{
+  "name": "JSON Tree",
+  "frameworkVersion": "v1",
+  "tags": [],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": false,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "json": {
+        "displayName": "JSON Field",
+        "detail": "Field containing the JSON data",
+        "type": "FIELD",
+        "validFieldTypes": [
+          "TEXT"
+        ]
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "json"
+      ],
+      "x": [],
+      "y": []
+    }
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "showGridLines": true,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "showPaneXHeader": true,
+      "showPaneYHeader": true,
+      "showTileHeader": true,
+      "xHeaderStyle": {},
+      "yHeaderStyle": {},
+      "tileHeaderStyle": {},
+      "xHeaderLines": 1,
+      "tileHeaderLines": 1,
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}
