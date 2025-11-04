@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.16/dist/themes/default/style.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jstree@3.3.16/dist/jstree.min.js"></script>
+
+  <style>
+    html, body, main {
+      height: 100%;
+      margin: 0;
+    }
+    main {
+      font-family: 'Montserrat', Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      height: 100%;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <main id="main"></main><!-- This element is where the view will render -->
+
+  <!-- Omniscope custom view API -->
+  <script src="/_global_/customview/v1/omniscope.js"></script>
+
+  <script>
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+
+    omniscope.view.on("load", function () {
+      window.onerror = function (msg) {
+        omniscope.view.error(msg);
+      };
+    });
+
+    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    document.body.addEventListener("click", function () {
+      omniscope.view.whitespaceClick();
+    });
+
+    // Redraw on load/update
+    omniscope.view.on(["load", "update"], function () {
+      
+      const field = omniscope.view.context().options.items.json;
+      if (!field) {
+        try { $("#main").jstree("destroy"); } catch (e) {}
+        return;
+      }
+      
+      var query = {
+        fields: [field],
+        filter: omniscope.view.context().dataConfig.filter // default filters
+      };
+
+      omniscope.view.busy(true);
+
+      // Execute the query and render the view.
+      var endpoint = omniscope.view.endpoint();
+      omniscope.query.builder(endpoint).table(query).on("load", function (event) {
+        renderTree(event.data);
+        omniscope.view.busy(false);
+      }).execute();
+    });
+
+    function renderTree(data) {
+      if (!data || !data.records || !data.records.length) return;
+
+      const jsonString = data.records[0][0];
+      let jsonObj;
+
+      try {
+        jsonObj = JSON.parse(jsonString);
+      } catch (err) {
+        console.log(err);
+        document.getElementById("main").textContent = "Invalid JSON: " + err.message;
+        return;
+      }
+
+      // Re-init jsTree on #main each time
+      try { $("#main").jstree("destroy"); } catch (e) {}
+
+      const root = toJsTree(jsonObj, "root");
+
+      $("#main").jstree({
+        core: {
+          data: [root],
+          themes: {
+            name: "default",
+            stripes: false,
+            dots: false, // hides the vertical connector line(s)
+            icons: true  // keep file/folder icons
+          }
+        }
+      }).on('ready.jstree', function() {
+        const tree = $(this).jstree(true);
+        const firstRootId = tree.get_node('#').children[0]; // id of first top-level node
+        if (firstRootId) tree.open_node(firstRootId);
+      });
+    }
+
+    function toJsTree(value, key) {
+      const isObj = typeof value === "object" && value !== null;
+
+      if (isObj) {
+        const children = [];
+        if (Array.isArray(value)) {
+          for (let i = 0; i < value.length; i++) {
+            children.push(toJsTree(value[i], String(i)));
+          }
+        } else {
+          for (const k of Object.keys(value)) {
+            children.push(toJsTree(value[k], k));
+          }
+        }
+        return { text: key || "root", children };
+      } else {
+        const label =
+          (key || "value") + ": " +
+          (value === null ? "null" : (typeof value === "string" ? '"' + value + '"' : String(value)));
+        return { text: label, icon: "jstree-file" };
+      }
+    }
+  </script>
+</body>
+</html>
