@@ -10,7 +10,7 @@ Useful when your dataset contains one or more records with JSON strings and you 
 
 ## Settings
 
-- **JSON Field**: The field containing the raw JSON data to be parsed and displayed as a tree.
+- **JSON Field**: The field containing the raw JSON data to be parsed and displayed as a tree
 
 ## Libraries
 
