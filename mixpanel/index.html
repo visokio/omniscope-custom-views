@@ -1,0 +1,369 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* invisible tracker */
+        }
+    </style>
+
+<!-- ====================================================== -->
+<!--                OFFICIAL MIXPANEL SNIPPET               -->
+<!-- ====================================================== -->
+<script type="text/javascript">
+(function(e,c){
+  if(!c.__SV){
+    var l,h;window.mixpanel=c;c._i=[];
+    c.init=function(q,r,f){
+      function t(d,a){
+        var g=a.split(".");
+        if(g.length==2){ d=d[g[0]]; a=g[1]; }
+        d[a]=function(){
+          d.push([a].concat(Array.prototype.slice.call(arguments,0)));
+        };
+      }
+      var b=c;
+      if(typeof f!=="undefined") b=c[f]=[];
+      else f="mixpanel";
+      b.people=b.people||[];
+      b.toString=function(d){
+        var a="mixpanel";
+        if(f!=="mixpanel") a+="."+f;
+        if(!d) a+=" (stub)";
+        return a;
+      };
+      b.people.toString=function(){ return b.toString(1)+".people (stub)" };
+
+      l="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders start_session_recording stop_session_recording people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove"
+      .split(" ");
+
+      for(h=0;h<l.length;h++) t(b, l[h]);
+
+      var n="set set_once union unset remove delete".split(" ");
+      b.get_group=function(){
+        var a={}, g=["get_group"].concat(Array.prototype.slice.call(arguments,0));
+        function d(p){
+          a[p]=function(){
+            b.push([g, [p].concat(Array.prototype.slice.call(arguments,0))]);
+          };
+        }
+        for(var m=0;m<n.length;m++) d(n[m]);
+        return a;
+      };
+
+      c._i.push([q,r,f]);
+    };
+
+    c.__SV=1.2;
+
+    var k=e.createElement("script");
+    k.type="text/javascript";
+    k.async=true;
+    k.src="//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
+    var s=e.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(k, s);
+  }
+})(document, window.mixpanel || []);
+</script>
+
+</head>
+
+<body>
+
+<script src="/_global_/customview/v1/omniscope.js"></script>
+
+<script>
+/* ============================================================
+   Utility functions
+   ============================================================ */
+
+function extractReportName(url) {
+    try {
+        const u = new URL(url);
+        const segments = u.pathname.split("/").filter(Boolean); // remove empty
+
+        if (!segments.length) return null;
+
+        // Case 1: standalone .ior report
+        // /folderpath/reportname.ior[/...]
+        const last = segments[segments.length - 1];
+        if (/\.ior$/i.test(last)) {
+            return decodeURIComponent(last.replace(/\.ior$/i, ""));
+        }
+
+        // Case 2: project .iox with /er/ or /r/
+        // .../Something.iox/er/ReportName/...
+        // .../Something.iox/r/ReportName/...
+        const ioxIndex = segments.findIndex(seg => /\.iox$/i.test(seg));
+        if (ioxIndex !== -1) {
+            const modeSeg   = segments[ioxIndex + 1]; // "er" or "r"
+            const reportSeg = segments[ioxIndex + 2]; // "Dashboard", "My+Report", etc.
+
+            if (modeSeg && /^(er|r)$/i.test(modeSeg) && reportSeg) {
+                return decodeURIComponent(reportSeg);
+            }
+        }
+
+        // Fallback: use last segment (e.g. if Omniscope adds new patterns later)
+        return decodeURIComponent(last.replace(/\/$/, ""));
+    } catch (e) {
+        console.warn("[OmniMP] extractReportName failed for URL:", url, e);
+        return null;
+    }
+}
+  
+function getClassString(el) {
+    if (!el || !el.className) return "";
+    if (typeof el.className === "string") return el.className;
+    if (typeof el.className.baseVal === "string") return el.className.baseVal;
+    return String(el.className || "");
+}
+
+function getAutNamePath(target) {
+    const names = [];
+    let el = target;
+
+    while (el) {
+        if (el.nodeType === 1) {
+            // 1) normal data-aut-name attribute
+            if (el.hasAttribute("data-aut-name")) {
+                names.push(el.getAttribute("data-aut-name"));
+            }
+
+            // 2) any class token like data-aut-name-Whatever
+            const cls = getClassString(el);
+            if (cls) {
+                const tokens = cls.split(/\s+/);
+                tokens.forEach(tok => {
+                    if (tok.startsWith("data-aut-name-")) {
+                        const val = tok.slice("data-aut-name-".length);
+                        if (val) names.push(val);
+                    }
+                });
+            }
+        }
+        el = el.parentElement;
+    }
+
+    names.reverse(); // outer → inner
+    return names.length ? names.join(" > ") : null;
+}
+  
+function getInnermostDataAttrs(target) {
+    let el = target;
+
+    while (el) {
+        if (el.nodeType === 1) {
+            const dataAttrs = {};
+            let found = false;
+
+            // real data-* attributes
+            if (el.attributes) {
+                for (let i = 0; i < el.attributes.length; i++) {
+                    const a = el.attributes[i];
+                    if (a.name.startsWith("data-")) {
+                        dataAttrs[a.name] = a.value;
+                        found = true;
+                    }
+                }
+            }
+
+            // ALSO support class "data-aut-name-Whatever"
+            const cls = getClassString(el);
+            if (cls) {
+                const tokens = cls.split(/\s+/);
+                tokens.forEach(tok => {
+                    if (tok.startsWith("data-aut-name-")) {
+                        const val = tok.slice("data-aut-name-".length);
+                        if (val) {
+                            // only set if not already a real attribute
+                            if (!dataAttrs["data-aut-name"]) {
+                                dataAttrs["data-aut-name"] = val;
+                            }
+                            found = true;
+                        }
+                    }
+                });
+            }
+
+            if (found) {
+                return { dataEl: el, dataAttrs };
+            }
+        }
+
+        el = el.parentElement;
+    }
+
+    // nothing found – fallback
+    return { dataEl: target, dataAttrs: {} };
+}
+
+function extractTabName(url) {
+    const hash = url.split("#")[1];
+    if (!hash) return null;
+    return decodeURIComponent(hash.replace(/\+/g, " "));
+}
+
+function extractComponentMetadata(target) {
+    const el = target.closest?.("[data-aut-name], [title], [aria-label]") || target;
+
+    const dataAttrs = {};
+    if (el.attributes) {
+        for (let i = 0; i < el.attributes.length; i++) {
+            const a = el.attributes[i];
+            if (a.name.startsWith("data-")) dataAttrs[a.name] = a.value;
+        }
+    }
+
+    // DOM path
+    const parts = [];
+    let cur = el, depth = 6;
+    while (cur && depth-- > 0) {
+        let p = cur.tagName.toLowerCase();
+        if (cur.id) p += "#" + cur.id;
+        if (cur.className)
+            p += "." + cur.className.trim().replace(/\s+/g, ".");
+        parts.push(p);
+        cur = cur.parentElement;
+    }
+
+    return {
+        el,
+        autName: el.getAttribute?.("data-aut-name") || null,
+        title: el.getAttribute?.("title") || null,
+        aria: el.getAttribute?.("aria-label") || null,
+        dataAttrs,
+        domPath: parts.reverse().join(" > ")
+    };
+}
+
+/* ============================================================
+   Tracker state
+   ============================================================ */
+
+let mixpanelInitialized = false;
+let clickTrackingAttached = false;
+
+/* ============================================================
+   Click tracking on PARENT report
+   ============================================================ */
+function attachParentClickTracking(userIdentity) {
+    if (clickTrackingAttached) return;
+    if (!window.parent || window.parent === window) return;
+
+    let parentDoc;
+    try {
+        parentDoc = window.parent.document;
+    } catch {
+        console.warn("[OmniMP] Cannot access parent document.");
+        return;
+    }
+
+parentDoc.addEventListener("click", function (e) {
+    const target = e.target || e.srcElement;
+
+    const autNamePath = getAutNamePath(target);
+    const { dataEl, dataAttrs } = getInnermostDataAttrs(target);
+
+    const parentUrl  = window.parent.location?.href || null;
+    const reportName = parentUrl ? extractReportName(parentUrl) : null;
+    const tabName    = parentUrl ? extractTabName(parentUrl) : null;
+
+    const parts = [];
+    let cur = dataEl, depth = 6;
+    while (cur && depth-- > 0) {
+        let p = (cur.tagName || "node").toLowerCase();
+        if (cur.id) p += "#" + cur.id;
+
+        const cls = getClassString(cur);
+        if (cls) {
+            p += "." + cls.trim().replace(/\s+/g, ".");
+        }
+
+        parts.push(p);
+        cur = cur.parentElement;
+    }
+    const domPath = parts.reverse().join(" > ");
+
+    mixpanel.track("omniscope_component_click", {
+        user_identity: userIdentity,
+
+        aut_name_path: autNamePath,  
+        data_attrs: dataAttrs,       
+
+        dom_path: domPath,
+        tag: dataEl.tagName,
+        id: dataEl.id || null,
+        classes: getClassString(dataEl) || null,
+        click_x: e.clientX,
+        click_y: e.clientY,
+
+        parent_url: parentUrl,
+        report_name: reportName,
+        tab_name: tabName
+    });
+}, true);
+
+    clickTrackingAttached = true;
+}
+
+/* ============================================================
+   Omniscope lifecycle
+   ============================================================ */
+omniscope.view.on(["load", "update"], function () {
+
+    const ctx = omniscope.view.context();
+    const opts = ctx.options.items || {};
+    const vars = ctx.variables || {};
+
+    const MIXPANEL_TOKEN = opts.token;
+    const MIXPANEL_API_HOST = opts.api_host || "https://api.mixpanel.com";
+    const USER_IDENTITY = vars["!userIdentity"] || null;
+
+    if (!MIXPANEL_TOKEN) {
+        console.warn("[OmniMP] No token configured in view settings.");
+        return;
+    }
+
+    // Init mixpanel once
+    if (!mixpanelInitialized) {
+        mixpanel.init(MIXPANEL_TOKEN, {
+            api_host: MIXPANEL_API_HOST,
+            autocapture: true,
+            record_sessions_percent: 100
+        });
+
+        mixpanelInitialized = true;
+
+        const parentUrl = window.parent.location?.href || null;
+        const reportName = parentUrl ? extractReportName(parentUrl) : null;
+        const tabName = parentUrl ? extractTabName(parentUrl) : null;
+
+        mixpanel.track("omniscope_custom_view_loaded", {
+            user_identity: USER_IDENTITY,
+            api_host: MIXPANEL_API_HOST,
+            parent_url: parentUrl,
+            report_name: reportName,
+            tab_name: tabName
+        });
+    }
+
+    attachParentClickTracking(USER_IDENTITY);
+});
+
+
+// Keep Omniscope behaviour
+document.body.addEventListener("click", function () {
+    omniscope.view.whitespaceClick();
+});
+
+</script>
+
+</body>
+</html>
