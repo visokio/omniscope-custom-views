@@ -275,6 +275,13 @@
             "tags": ["custom", "tree", "json"],
             "files": [],
             "version": 0
+        },
+		{
+        	"name": "mixpanel",
+            "displayName": "Mixpanel tracker",
+            "tags": ["mixpanel", "tracker"],
+            "files": [],
+            "version": 0
         }
 	]
 }
