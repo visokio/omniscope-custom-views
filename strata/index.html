@@ -90,12 +90,16 @@ svg text { font-family: inherit; }
   // report shows), so read in the reader's time zone they moved: an hour late
   // in London, four hours early in New York, sometimes onto another day. Moved
   // back, each is the same clock time wherever it is read. Epoch milliseconds
-  // are taken the same way; text with no zone is the clock time already.
+  // are taken the same way; text with no zone is the clock time already -
+  // including a midnight, which it sends as the date alone.
   function seconds(value) {
     if (value === null || value === undefined || value === "") return NaN;
     var text = String(value);
     if (typeof value === "string" && !/(Z|[+-]\d\d:?\d\d)$/.test(text)) {
-      return Date.parse(text.replace(" ", "T")) / 1000;      // no zone: already the clock time
+      // No zone: already the clock time. A midnight comes as the date alone
+      // ("2026-10-01"), which a browser would read as UTC: given its time.
+      if (/^\d{4}-\d\d-\d\d$/.test(text)) text += "T00:00:00";
+      return Date.parse(text.replace(" ", "T")) / 1000;
     }
     var ms = typeof value === "number" ? value : Date.parse(text);
     return (ms + new Date(ms).getTimezoneOffset() * 60000) / 1000;
