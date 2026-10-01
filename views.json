@@ -282,6 +282,13 @@
             "tags": ["mixpanel", "tracker"],
             "files": [],
             "version": 0
+        },
+		{
+        	"name": "strata",
+            "displayName": "Strata",
+            "tags": ["custom", "time", "timeline", "gantt", "stacked", "strata", "layers", "sessions"],
+            "files": ["strata-cloth.js", "strata-view.js", "strata-ui.js"],
+            "version": 0
         }
 	]
 }

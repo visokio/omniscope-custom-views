@@ -1,0 +1,310 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Strata</title>
+<script src="/_global_/customview/v1/omniscope.js"></script>
+<script src="strata-cloth.js"></script>
+<script src="strata-view.js"></script>
+<script src="strata-ui.js"></script>
+<style>
+html, body { margin: 0; height: 100%; background: transparent; color: #1a1a19;
+             font: 13px -apple-system, system-ui, "Segoe UI", sans-serif; overflow: hidden; }
+#strata { padding: 2px 0 0; }   /* just enough for the overview box's outline */
+#message { padding: 16px; color: #5f5e57; display: none; }
+svg text { font-family: inherit; }
+.chart { display: block; }   /* not inline: no gap under it for a text baseline */
+.line { fill: none; stroke-width: 5.5; stroke-linecap: butt; stroke-linejoin: round; }
+.base { stroke-width: 11; pointer-events: stroke; }
+.lab { fill: #5f5e57; font-size: 10px; paint-order: stroke; stroke: #ffffff;
+       stroke-opacity: .85; stroke-width: 4px; stroke-linejoin: round; }
+.lab { transition: opacity .6s ease; }
+.replaying .lab { opacity: 0; transition: none; }
+.grab { fill: none; stroke: transparent; stroke-width: 16; pointer-events: stroke; cursor: pointer; }
+.line { transition: opacity .12s; }
+.hovering .line:not(.lit), .hovering .lab:not(.lit) { opacity: .28; }
+.line.lit { stroke-width: 7.5; }
+.pinch { cursor: default; transition: opacity .12s; }
+.pinch circle { fill: transparent; }
+.pinch-mark { fill: #000; fill-opacity: .3; }
+.pinch .lit-only, .pinch.lit .pinch-mark { display: none; }
+.pinch.lit .lit-only { display: inline; }
+.badge { opacity: .85; cursor: default; transition: opacity .12s; }
+.badge circle { stroke: #ffffff; stroke-width: .8; }
+.badge-tick { fill: none; stroke: #ffffff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.hovering .badge:not(.lit) { opacity: .28; }
+.hovering .pinch:not(.lit) { opacity: .28; }
+.foot-1 { stroke: #8e8e8a; }
+.foot-2 { stroke: #cbcbc6; }
+.day, .workday { stroke: #d6d5cc; stroke-width: 1; }
+.tick { fill: #5f5e57; }
+.standup { fill: #ffffff; stroke: #5f5e57; stroke-width: 1.2; }
+.daylab { fill: #5f5e57; font-size: 12px; text-anchor: middle; }
+.tip { position: fixed; pointer-events: none; background: #fff; border: 1px solid #d6d5cc; border-radius: 6px;
+       padding: 6px 9px; font-size: 12px; display: none; white-space: nowrap; z-index: 2; }
+.nav { display: flex; align-items: center; gap: 14px; margin: 0 0 6px; padding: 0 4px; }
+.overview { display: block; flex: 1; min-width: 0; cursor: pointer; touch-action: none; }
+.zoom { display: flex; align-items: center; gap: 6px; color: #5f5e57; font-size: 11px; white-space: nowrap; }
+.zoom input { width: 140px; accent-color: #5f5e57; }
+.left-out { color: #5f5e57; font-size: 11px; white-space: nowrap; }
+.left-out:empty { display: none; }
+.ov-area { fill: #d6d5cc; }
+.ov-day { stroke: #ffffff; stroke-width: 1; }
+.ov-box { fill: #5f5e57; fill-opacity: .12; stroke: #5f5e57; stroke-width: 1.2; }
+.wrap { position: relative; }
+.wrap::before { content: ""; position: absolute; left: 0; top: 0; bottom: 14px; width: 56px; z-index: 1;
+                pointer-events: none; opacity: 0; transition: opacity .2s;
+                background: linear-gradient(to right, #ffffff, transparent); }
+.wrap.more::before { opacity: 1; }
+.scroller { overflow-x: scroll; overflow-y: hidden; scrollbar-width: auto; scrollbar-color: #5f5e57 #d6d5cc; }
+.scroller::-webkit-scrollbar { height: 12px; }
+.scroller::-webkit-scrollbar-track { background: #d6d5cc; border-radius: 6px; }
+.scroller::-webkit-scrollbar-thumb { background: #5f5e57; border-radius: 6px; border: 2px solid #d6d5cc; }
+</style>
+</head>
+<body>
+<div id="message"></div>
+<div id="strata"></div>
+<script>
+/*
+ * Strata - an Omniscope custom view. Each Layer value is a line; its rows are
+ * stretches of time. Lines stack like layers of cloth: each rests on the ones
+ * beneath and drapes where one ends. See README.md. The layout, drawing and
+ * interaction are strata-cloth.js, strata-view.js and strata-ui.js, which
+ * standalone pages use too; this file maps Omniscope's data onto them.
+ */
+(function () {
+  "use strict";
+  var PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948"];
+  var ui = null, loaded = false;   // loaded: the glide is for the first load, not every filter change
+
+  function message(text) {
+    var box = document.getElementById("message");
+    box.textContent = text || "";
+    box.style.display = text ? "block" : "none";
+    document.getElementById("strata").style.display = text ? "none" : "block";
+  }
+
+  // A date from the Query API, as the clock time Omniscope shows. It sends a
+  // table's dates as UTC ("18:32:41Z" for a CSV's 18:32:41, which is what the
+  // report shows), so read in the reader's time zone they moved: an hour late
+  // in London, four hours early in New York, sometimes onto another day. Moved
+  // back, each is the same clock time wherever it is read. Epoch milliseconds
+  // are taken the same way; text with no zone is the clock time already.
+  function seconds(value) {
+    if (value === null || value === undefined || value === "") return NaN;
+    var text = String(value);
+    if (typeof value === "string" && !/(Z|[+-]\d\d:?\d\d)$/.test(text)) {
+      return Date.parse(text.replace(" ", "T")) / 1000;      // no zone: already the clock time
+    }
+    var ms = typeof value === "number" ? value : Date.parse(text);
+    return (ms + new Date(ms).getTimezoneOffset() * 60000) / 1000;
+  }
+
+  // Omniscope rows -> strata-view's data.
+  // `at` gives each setting's column in the records, or -1 if not chosen.
+  function build(records, at, items, width) {
+    // The range is the lines': foot-line rows have no Layer, so a filter on
+    // what the lines are (a workspace, say) never reaches them, and they would
+    // hold the chart open over the whole of the time. Only with no lines at all
+    // is the foot line the range.
+    var rows = [], lo = Infinity, hi = -Infinity, footLo = Infinity, footHi = -Infinity;
+    records.forEach(function (r) {
+      var row = {layer: r[at.layer], start: seconds(r[at.start]), end: seconds(r[at.end])};
+      row.label = at.label >= 0 ? r[at.label] : null;
+      row.colour = at.colour >= 0 ? r[at.colour] : null;
+      row.emphasis = at.emphasis >= 0 ? Number(r[at.emphasis]) || 0 : 0;
+      row.foot = at.foot >= 0 ? r[at.foot] : null;
+      row.moment = at.moment >= 0 ? r[at.moment] : null;
+      // A moment at a time of its own (Moment time): no Start or End needed.
+      var when = at.momentAt >= 0 ? seconds(r[at.momentAt]) : NaN;
+      if (when === when) row.start = row.end = when;
+      // A row with no length is a moment (a commit, say): a mark on its line.
+      if (!(row.end >= row.start)) return;
+      rows.push(row);
+      if (row.layer === null || row.layer === undefined || row.layer === "") {
+        footLo = Math.min(footLo, row.start); footHi = Math.max(footHi, row.end);
+        return;
+      }
+      if (row.end === row.start) return;     // a moment: the range is the lines'
+      if (row.start < lo) lo = row.start;
+      if (row.end > hi) hi = row.end;
+    });
+    if (!rows.length) return null;
+    if (lo === Infinity) { lo = footLo; hi = footHi; }
+    var first = new Date(lo * 1000); first.setHours(0, 0, 0, 0);
+    lo = first.getTime() / 1000;
+
+    // Layers: a line from each Layer value's first start to its last end.
+    var layers = {}, feet = {}, kinds = {};
+    rows.forEach(function (row) {
+      var key = row.layer;
+      if (key === null || key === undefined || key === "") {
+        if (row.foot !== null && row.foot !== undefined && row.foot !== "") {
+          var from = Math.max(row.start, lo), to = Math.min(row.end, hi);
+          if (to > from) (feet[row.foot] = feet[row.foot] || []).push([from - lo, to - lo]);
+        }
+        return;
+      }
+      var layer = layers[key] = layers[key] || {key: key, s: Infinity, e: -Infinity, f: [], w: []};
+      // Its name and colour group from whichever of its rows has them: rows
+      // appended from another table (commits, say) may carry neither.
+      if (!layer.name && row.label) layer.name = row.label;
+      if (!layer.group && row.colour) layer.group = row.colour;
+      if (row.end === row.start) {
+        (layer.mm = layer.mm || []).push([row.start - lo, row.moment === null || row.moment === undefined
+                                                          ? "" : String(row.moment)]);
+        kinds[row.moment] = (kinds[row.moment] || 0) + 1;
+        return;
+      }
+      // Only stretches make the line: a moment marks it, but moments a filter
+      // has left without their stretches (a State filter, say) are no line.
+      layer.s = Math.min(layer.s, row.start - lo);
+      layer.e = Math.max(layer.e, row.end - lo);
+      if (row.emphasis >= 2) layer.f.push([row.start - lo, row.end - lo]);
+      else if (row.emphasis >= 1) layer.w.push([row.start - lo, row.end - lo]);
+    });
+    var list = Object.keys(layers).map(function (k) { return layers[k]; })
+      .filter(function (l) { return l.e >= l.s; });
+    list.forEach(function (l) { l.name = l.name || String(l.key); l.group = l.group || String(l.key); });
+
+    var named = Object.keys(kinds).filter(function (k) { return k !== "" && k !== "null" && k !== "undefined"; })
+      .sort(function (a, b) { return kinds[b] - kinds[a]; });
+    var pinchKind = named[0], badgeKind = named[1];
+    // Colours by group, the most time first, in the palette's fixed order.
+    var weight = {};
+    list.forEach(function (l) { weight[l.group] = (weight[l.group] || 0) + (l.e - l.s); });
+    var groups = Object.keys(weight).sort(function (a, b) { return weight[b] - weight[a]; });
+    list.forEach(function (l) {
+      l.c = StrataView.tones(PALETTE[groups.indexOf(l.group) % PALETTE.length], "#ffffff");
+      l.f = merge(l.f); l.w = merge(l.w);
+      // Moments: the commonest kind as pinches on the line, the next (a merge,
+      // say) as ticked badges, any more as pinches too.
+      if (l.mm) {
+        l.m = []; l.b = [];
+        l.mm.forEach(function (m) {
+          if (m[0] >= l.s && m[0] <= l.e) (m[1] !== "" && m[1] === badgeKind ? l.b : l.m).push(m[0]);
+        });
+        l.m.sort(function (a, b) { return a - b; }); l.b.sort(function (a, b) { return a - b; });
+        delete l.mm;
+      }
+    });
+    // Laid bottom first.
+    list.sort(items.order === "Oldest at the bottom"
+      ? function (a, b) { return a.s - b.s; }
+      : items.order === "Longest-lived at the bottom"
+      ? function (a, b) { return (b.e - b.s) - (a.e - a.s) || a.s - b.s; }
+      : function (a, b) { return (a.e - a.s) - (b.e - b.s) || a.s - b.s; });
+
+    // The foot line: up to two values, the more frequent darker.
+    var footKeys = Object.keys(feet).sort(function (a, b) { return total(feet[b]) - total(feet[a]); });
+    var labels = {"At the end": "end", "At the start": "start", "None": null}[items.labels || "At the end"];
+    var days = [];
+    for (var d = new Date(lo * 1000); d.getTime() / 1000 < hi; d.setDate(d.getDate() + 1)) {
+      // "Mon 14 Sep" in the reader's language, in a fixed order, so it can
+      // shorten to "Mon 14" and "14" as days narrow.
+      days.push([d.getTime() / 1000 - lo,
+                 d.toLocaleDateString(undefined, {weekday: "short"}).replace(/[.,]/g, "") + " " + d.getDate()
+                   + " " + d.toLocaleDateString(undefined, {month: "short"}).replace(/[.,]/g, ""),
+                 (d.getDay() + 6) % 7]);
+    }
+    var standup = /^(\d{1,2})[:.](\d{2})$/.exec(String(items.standup || "").trim());
+    return {
+      span: hi - lo, lo: lo, view: width, left: 8, right: 8, room: labels === "end" ? 170 : 0, labels: labels,
+      gap: 30, radius: 12, soften: 6, minDrawnPx: 2,
+      days: days,
+      axis: items.workday === false ? null
+        : {work: [8, 16], dots: [8, 12, 16], standup: standup ? [+standup[1], +standup[2]] : null},
+      segs: list,
+      moments: {m: pinchKind || "moment", b: badgeKind || "moment"},
+      // Without a Foot line field, the foot line is drawn from the lines
+      // themselves: wherever any is strong. So it filters as they do.
+      foot: at.foot < 0 ? merge([].concat.apply([], list.map(function (l) { return l.f; })))
+        : footKeys[0] ? merge(feet[footKeys[0]]) : [],
+      foot2: footKeys[1] ? merge(feet[footKeys[1]]) : [],
+      // The tooltip's words for the foot line: the Foot field's own values.
+      names: {foot: at.foot < 0 ? "strong, on any line" : String(footKeys[0]), foot2: String(footKeys[1])}
+    };
+  }
+  // The Opening setting (an older view saved it as a toggle).
+  function introOf(value) {
+    if (value === false || value === "None") return false;
+    return value === "Replay the timeline" ? "replay" : "glide";
+  }
+  function total(pairs) {
+    return pairs.reduce(function (sum, p) { return sum + p[1] - p[0]; }, 0);
+  }
+  function merge(pairs) {
+    pairs.sort(function (a, b) { return a[0] - b[0]; });
+    var out = [];
+    pairs.forEach(function (p) {
+      if (out.length && p[0] <= out[out.length - 1][1]) out[out.length - 1][1] = Math.max(out[out.length - 1][1], p[1]);
+      else out.push([p[0], p[1]]);
+    });
+    return out;
+  }
+
+  function refresh() {
+    var context = omniscope.view.context(), items = context.options.items || {};
+    if (!items.layer || !items.start || !items.end) {
+      message("Choose a Layer, a Start and an End field.");
+      return;
+    }
+    if (items.start === items.end) {
+      message("Start and End are the same field - choose a different End.");
+      return;
+    }
+    // Each field asked for once - the server refuses a repeat - though two
+    // settings may share one (a Label that is also the Colour).
+    var fields = [], at = {};
+    ["layer", "start", "end", "label", "colour", "emphasis", "foot", "moment", "momentAt"].forEach(function (k) {
+      if (!items[k]) { at[k] = -1; return; }
+      if (fields.indexOf(items[k]) < 0) fields.push(items[k]);
+      at[k] = fields.indexOf(items[k]);
+    });
+    omniscope.view.busy(true);
+    // The chosen fields, row by row, through the report's filters - as the
+    // gallery's views ask (jsontree).
+    omniscope.view.queryBuilder().table({
+      "fields": fields,
+      "filter": context.dataConfig.filter
+    }).on("load", function (event) {
+      try {
+        var records = event.data.records || [];
+        var data = build(records, at, items, document.body.clientWidth);
+        if (!data) { message("No rows with an End after their Start."); return; }
+        message("");
+        // A filter changed, say: carry on at the same zoom and place.
+        var was = ui ? ui.state() : null;
+        ui = StrataUI.mount(document.getElementById("strata"), data, {
+          maxDayPx: 1760, openDayPx: 250, fitHeight: true, intro: !loaded && introOf(items.intro),
+          resume: was,
+          onPick: function (seg) {
+            if (!seg) { omniscope.view.whitespaceClick(); return; }
+            // Select the line's rows, so other views brush to them.
+            omniscope.view.context().viewSelection = {
+              type: "AND",
+              filters: [{type: "FIELD_VALUE", inputField: items.layer, operator: "=", value: seg.key}]
+            };
+            omniscope.view.updated();
+          }
+        });
+        loaded = true;
+      } catch (err) {
+        omniscope.view.error(err.message, err);
+      } finally {
+        omniscope.view.busy(false);
+      }
+    }).on("error", function (event) {
+      omniscope.view.busy(false);
+      omniscope.view.error(event.data.message, event.data.internal);
+    }).execute();
+  }
+
+  if (typeof omniscope === "undefined" || !omniscope.view) throw new Error("Omniscope custom view API is not loaded");
+  omniscope.view.on(["load", "update"], refresh);
+  omniscope.view.on("resize", function () { if (ui) ui.resize(); });
+})();
+</script>
+</body>
+</html>
