@@ -13,7 +13,7 @@ strip above shows the whole range with the part on screen boxed; drag it, or cli
 lights it and gives its name, the stretch under the pointer and when it was open; clicking it selects its rows,
 for other views to brush.
 
-**See it live:** [a report of two weeks of Claude Code sessions](https://public.omniscope.me/Public/Strata/Report.ior/),
+**See it live:** [the story behind it](https://visokio.com/2026/10/02/drinking-from-the-ai-firehose/), [a report of two weeks of Claude Code sessions](https://public.omniscope.me/Public/Strata/Report.ior/),
 and [its project and data](https://public.omniscope.me/Public/Strata/), free to open and download.
 
 This folder is built from **[visokio/strata](https://github.com/visokio/strata)**, where the chart lives as a
