@@ -22,22 +22,67 @@ its build makes this folder.
 
 ![screenshot](thumbnail.png)
 
-## Try it in Omniscope
+## Using Strata in Omniscope
 
-1. **No Omniscope yet?** [Try it free](https://omniscope.visokio.com/): sign up and you're in Omniscope, in your
-   browser.
-2. **Start from the demo.** Download
-   [`test.ioz`](https://github.com/visokio/omniscope-custom-views/blob/master/strata/test.ioz) - a project with
-   the demo data, its report and Strata already set up - and open it in your Omniscope. Then change the data,
-   filters and settings from there.
-3. **Or add Strata to your own report:** **Add View → Strata**. It needs one table with, at the least:
-   - **Layer** - what each line is: a session, a ticket, a project id;
-   - **Start** and **End** - each stretch's times, as dates (not text).
+### Get Omniscope
 
-   A line runs from its first Start to its last End. Then, optionally: **Label** (the line's name), **Colour by**
-   (lines sharing a value share a colour), **Emphasis** (2 strong, 1 medium, 0 faint) and **Moment time** (events
-   on a line, such as commits). [Data](#data) has every field; [From business data](#from-business-data) shows how
-   the demo composes its one table from four, step by step, so filters on any of them reach the view.
+No Omniscope yet? [Try it free](https://omniscope.visokio.com/): sign up, and you land in Omniscope's folder
+view, in your browser.
+
+### Start from the demo project
+
+The [live report](https://public.omniscope.me/Public/Strata/Report.ior/) comes from a project you can copy into
+your own Omniscope, with its workflow, its report and Strata already set up:
+
+1. Open the project, [Tangent Strata](https://public.omniscope.me/Public/Strata/Tangent+Strata.iox/).
+2. In the **⋮** menu at the top right, choose **Download IOZ file**.
+3. Drag the downloaded file into your Omniscope's folder view - the home view you land on after signing in.
+   Omniscope imports it as a project of your own, with the results of its last run, so the report works
+   straight away.
+4. The project doesn't carry its data files, so to run it again (after changing a step, say) it needs them:
+   download the four CSVs from
+   [examples/claude-code-sessions-2026-09](https://github.com/visokio/strata/tree/main/examples/claude-code-sessions-2026-09)
+   (sessions, stretches, attention, commits) and point each of the project's File blocks at its file.
+
+From there, open the report and change the view's settings ([Settings](#settings) explains each), add filters,
+or swap your own data in with the same columns.
+
+### Your own data
+
+Strata reads one table, a row for each stretch of time. The least it needs:
+
+| Field | What | Example |
+|---|---|---|
+| Layer | what each line is | `T-1042` - a ticket, a session, a project id |
+| Start | when the stretch starts, as a date | `2026-09-29 09:12:53` |
+| End | when it ends, as a date | `2026-09-29 11:40:00` |
+
+A line runs from its first Start to its last End, gaps included. With just those three you get the stack of
+lines; the rest is optional:
+
+- **Label** - the line's name, on the line and when you point at it (else the Layer value);
+- **Colour by** - lines sharing a value share a colour (a team, a workspace);
+- **Emphasis** - per row, `2` strong, `1` medium, `0` faint: which stretches of a line to bring out (in the
+  demo, me at the keyboard, Claude working, waiting);
+- **Moment time** - rows with a time here and no Start or End are moments on their line (a commit, say).
+
+Then:
+
+1. Bring the table into a project (a File block, a database, whatever holds it) and add a **Report** block.
+2. In the report, **Add View → Strata**.
+3. Set **Layer**, **Start** and **End**, then any of the optional fields. Start and End must be date fields: if
+   Omniscope reads them as text, set their type to date in the data source.
+4. Make the view's pane tall enough for the busiest moment: where more lines are open at once than fit, the
+   shortest-lived there are left out, and the view says how many.
+
+If your data is in several tables, as business data usually is, [From business data](#from-business-data) shows
+how the demo composes its one table from four, so that filters on any of them reach the view.
+
+If the view shows a message instead of a chart:
+
+- *Choose a Layer, a Start and an End field* - one of the three isn't set.
+- *Start and End are the same field* - choose a different End.
+- *No rows with an End after their Start* - the dates are text, or the filters leave nothing.
 
 ## Data
 
