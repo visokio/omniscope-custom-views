@@ -22,6 +22,23 @@ its build makes this folder.
 
 ![screenshot](thumbnail.png)
 
+## Try it in Omniscope
+
+1. **No Omniscope yet?** [Try it free](https://omniscope.visokio.com/): sign up and you're in Omniscope, in your
+   browser.
+2. **Start from the demo.** Download
+   [`test.ioz`](https://github.com/visokio/omniscope-custom-views/blob/master/strata/test.ioz) - a project with
+   the demo data, its report and Strata already set up - and open it in your Omniscope. Then change the data,
+   filters and settings from there.
+3. **Or add Strata to your own report:** **Add View → Strata**. It needs one table with, at the least:
+   - **Layer** - what each line is: a session, a ticket, a project id;
+   - **Start** and **End** - each stretch's times, as dates (not text).
+
+   A line runs from its first Start to its last End. Then, optionally: **Label** (the line's name), **Colour by**
+   (lines sharing a value share a colour), **Emphasis** (2 strong, 1 medium, 0 faint) and **Moment time** (events
+   on a line, such as commits). [Data](#data) has every field; [From business data](#from-business-data) shows how
+   the demo composes its one table from four, step by step, so filters on any of them reach the view.
+
 ## Data
 
 One row per stretch of time: which line it belongs to, when it starts and ends, and optionally how strongly to
