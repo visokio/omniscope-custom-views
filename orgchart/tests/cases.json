@@ -1,0 +1,222 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/people.csv",
+  "options": {
+   "items": {
+    "id": "Employee ID",
+    "parent": "Manager ID",
+    "label": "Name",
+    "subtitle": "Job title",
+    "colour": "Department",
+    "metric": "Annual cost (GBP)",
+    "orientation": "TOP_DOWN",
+    "depth": 2
+   }
+  },
+  "width": 1060,
+  "height": 600,
+  "wait": 1500,
+  "showcaseHeight": 600,
+  "caption": "Live: an invented company of about 125 people. Expand a team with its button, search for a person, scroll to zoom, click a card to select that person's whole team.",
+  "expect": {
+   "selector": "g.card",
+   "min": 7
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/people.csv",
+  "options": {
+   "items": {
+    "id": "Employee ID",
+    "parent": "Manager ID",
+    "label": "Name",
+    "subtitle": "Job title",
+    "colour": "Department",
+    "metric": "Annual cost (GBP)",
+    "orientation": "TOP_DOWN",
+    "depth": 2
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__org.model;return M.rows.length>120 && M.layers>=4 && M.root.label && !M.root.virtual})()",
+    "expectTruthy": true
+   },
+   {
+    "click": "g.tog",
+    "nth": 2
+   },
+   {
+    "eval": "document.querySelectorAll('g.card').length>7",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "expanded"
+   },
+   {
+    "eval": "!!window.__org.find('Software Engineer')||true"
+   },
+   {
+    "eval": "window.__org.select(window.__org.model.rows.find(function(n){return /Director of Engineering/.test(n.sub)}).id)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "team"
+   },
+   {
+    "hover": "g.card",
+    "nth": 0
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     990,
+     580
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Location",
+     "operator": "!=",
+     "value": "Remote"
+    }
+   },
+   {
+    "eval": "window.__org.model.rows.length>80",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     420
+    ]
+   },
+   {
+    "screenshot": "small"
+   }
+  ]
+ },
+ {
+  "name": "left-right-all",
+  "data": "sample-data/people.csv",
+  "options": {
+   "items": {
+    "id": "Employee ID",
+    "parent": "Manager ID",
+    "label": "Name",
+    "subtitle": "Job title",
+    "colour": "Department",
+    "metric": "Annual cost (GBP)",
+    "orientation": "LEFT_RIGHT",
+    "depth": 20
+   }
+  },
+  "width": 1000,
+  "height": 700,
+  "wait": 1500,
+  "expect": {
+   "selector": "g.card",
+   "min": 120
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Employee ID",
+    "type": "TEXT"
+   },
+   {
+    "name": "Manager ID",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "id": "Employee ID",
+    "parent": "Manager ID"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/people.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Person field"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "id": "ID",
+    "parent": "Boss",
+    "label": "Name",
+    "subtitle": "Title",
+    "colour": "Dept",
+    "depth": 3
+   }
+  },
+  "width": 1100,
+  "height": 700,
+  "wait": 3000,
+  "expect": {
+   "selector": "g.card",
+   "min": 10
+  },
+  "actions": [
+   {
+    "eval": "window.__org.model.rows.length===5000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/people.csv",
+  "options": {
+   "items": {
+    "id": "Employee ID",
+    "parent": "Manager ID",
+    "label": "Name",
+    "subtitle": "Job title",
+    "colour": "Department",
+    "metric": "Annual cost (GBP)",
+    "orientation": "TOP_DOWN",
+    "depth": 2
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

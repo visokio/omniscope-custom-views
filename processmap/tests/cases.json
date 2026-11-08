@@ -1,0 +1,215 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/claims.csv",
+  "options": {
+   "items": {
+    "case": "Claim ID",
+    "activity": "Activity",
+    "time": "Timestamp",
+    "metric": "FREQUENCY",
+    "detail": 2,
+    "maxEvents": 200000
+   }
+  },
+  "width": 1060,
+  "height": 640,
+  "wait": 2000,
+  "showcaseHeight": 640,
+  "caption": "Live: an illustrative claims process mined from about 2,500 claims. Orange links are rework. Drag the detail slider, switch the labels to time, click an activity, link or variant to select those claims.",
+  "expect": {
+   "selector": "g.node",
+   "min": 10
+  }
+ },
+ {
+  "name": "durations",
+  "showcase": true,
+  "data": "sample-data/claims.csv",
+  "options": {
+   "items": {
+    "case": "Claim ID",
+    "activity": "Activity",
+    "time": "Timestamp",
+    "metric": "DURATION",
+    "detail": 5,
+    "maxEvents": 200000
+   }
+  },
+  "width": 1060,
+  "height": 600,
+  "wait": 2000,
+  "showcaseHeight": 600,
+  "caption": "Live: the same process labelled with the average time between steps, with rarer links hidden."
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/claims.csv",
+  "options": {
+   "items": {
+    "case": "Claim ID",
+    "activity": "Activity",
+    "time": "Timestamp",
+    "metric": "FREQUENCY",
+    "detail": 2,
+    "maxEvents": 200000
+   }
+  },
+  "width": 1000,
+  "height": 620,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__proc.model;return M.ncase===2500 && M.nodes.has('Assessed') && M.variants.length>10 && M.edges.some(function(e){return e.a==='Information received'&&e.b==='Assessed'})})()",
+    "expectTruthy": true
+   },
+   {
+    "click": "g.node",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "activity"
+   },
+   {
+    "eval": "window.__proc.selectVariant(0)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "window.__proc.setDetail(20)"
+   },
+   {
+    "screenshot": "simplified"
+   },
+   {
+    "hover": "g.edge",
+    "nth": 1
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     20,
+     600
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Channel",
+     "operator": "=",
+     "value": "Broker"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__proc.model.ncase<800",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     460
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Claim ID",
+    "type": "TEXT"
+   },
+   {
+    "name": "Activity",
+    "type": "TEXT"
+   },
+   {
+    "name": "Timestamp",
+    "type": "DATE"
+   }
+  ],
+  "options": {
+   "items": {
+    "case": "Claim ID",
+    "activity": "Activity",
+    "time": "Timestamp",
+    "metric": "FREQUENCY",
+    "detail": 2,
+    "maxEvents": 200000
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/claims.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Cases"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "case": "Case",
+    "activity": "Act",
+    "time": "When",
+    "detail": 1
+   }
+  },
+  "width": 1100,
+  "height": 700,
+  "wait": 8000,
+  "expect": {
+   "selector": "g.node",
+   "min": 12
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/claims.csv",
+  "options": {
+   "items": {
+    "case": "Claim ID",
+    "activity": "Activity",
+    "time": "Timestamp",
+    "metric": "FREQUENCY",
+    "detail": 5,
+    "maxEvents": 200000
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 2000
+ }
+]

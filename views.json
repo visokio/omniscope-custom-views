@@ -742,6 +742,364 @@
 			],
 			"files": [],
 			"version": 0
+		},
+		{
+			"name": "networkanalyser",
+			"displayName": "Network Analyser",
+			"tags": [
+				"custom",
+				"network",
+				"graph",
+				"relationship",
+				"community",
+				"centrality",
+				"fraud",
+				"link analysis",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "orgchart",
+			"displayName": "Org Chart",
+			"tags": [
+				"custom",
+				"org chart",
+				"organisation",
+				"hierarchy",
+				"tree",
+				"hr",
+				"people",
+				"span of control",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "paygap",
+			"displayName": "Pay Gap",
+			"tags": [
+				"custom",
+				"gender pay gap",
+				"pay gap",
+				"hr",
+				"equality",
+				"pay quartiles",
+				"bonus",
+				"reporting",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "processmap",
+			"displayName": "Process Map",
+			"tags": [
+				"custom",
+				"process mining",
+				"process map",
+				"event log",
+				"workflow",
+				"journey",
+				"variants",
+				"bottleneck",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "pvmbridge",
+			"displayName": "Price Volume Mix",
+			"tags": [
+				"custom",
+				"price volume mix",
+				"pvm",
+				"bridge",
+				"waterfall",
+				"variance",
+				"revenue",
+				"finance",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "quadrant",
+			"displayName": "Quadrant Matrix",
+			"tags": [
+				"custom",
+				"quadrant",
+				"matrix",
+				"bcg",
+				"priority",
+				"importance performance",
+				"portfolio",
+				"scatter",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "rfmsegments",
+			"displayName": "RFM Segments",
+			"tags": [
+				"custom",
+				"rfm",
+				"segmentation",
+				"customers",
+				"crm",
+				"retention",
+				"recency",
+				"marketing",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "ridgeline",
+			"displayName": "Ridgeline",
+			"tags": [
+				"custom",
+				"ridgeline",
+				"joyplot",
+				"distribution",
+				"density",
+				"histogram",
+				"compare",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "scatter3d",
+			"displayName": "3D Scatter",
+			"tags": [
+				"custom",
+				"3d",
+				"scatter",
+				"three.js",
+				"webgl",
+				"point cloud",
+				"cluster",
+				"segmentation",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "slopechart",
+			"displayName": "Slope Chart",
+			"tags": [
+				"custom",
+				"slope chart",
+				"before and after",
+				"change",
+				"comparison",
+				"ranking",
+				"market share",
+				"movers",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "sparklinescorecard",
+			"displayName": "Sparkline Scorecard",
+			"tags": [
+				"custom",
+				"scorecard",
+				"sparkline",
+				"kpi",
+				"target",
+				"status",
+				"table",
+				"dashboard",
+				"rag",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "spcchart",
+			"displayName": "SPC Control Chart",
+			"tags": [
+				"custom",
+				"spc",
+				"control chart",
+				"xmr",
+				"statistical process control",
+				"quality",
+				"variation",
+				"nhs",
+				"six sigma",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "surface3d",
+			"displayName": "3D Surface",
+			"tags": [
+				"custom",
+				"3d",
+				"surface",
+				"three.js",
+				"response surface",
+				"yield curve",
+				"terrain",
+				"heatmap",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "survivalcurve",
+			"displayName": "Survival Curve",
+			"tags": [
+				"custom",
+				"survival",
+				"kaplan-meier",
+				"churn",
+				"retention",
+				"tenure",
+				"time to event",
+				"log-rank",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "targettracker",
+			"displayName": "Target Tracker",
+			"tags": [
+				"custom",
+				"target",
+				"pacing",
+				"run rate",
+				"projection",
+				"burn-up",
+				"sales target",
+				"goal",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "tilemap",
+			"displayName": "Tile Map",
+			"tags": [
+				"custom",
+				"tile map",
+				"map",
+				"us states",
+				"uk regions",
+				"grid map",
+				"choropleth",
+				"regions",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "transitions",
+			"displayName": "Transition Matrix",
+			"tags": [
+				"custom",
+				"transition matrix",
+				"migration",
+				"movement",
+				"customer tiers",
+				"credit rating",
+				"segments",
+				"churn",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "variancechart",
+			"displayName": "Variance Chart",
+			"tags": [
+				"custom",
+				"variance",
+				"budget",
+				"plan",
+				"actual",
+				"forecast",
+				"finance",
+				"management reporting",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "waffle",
+			"displayName": "Waffle Chart",
+			"tags": [
+				"custom",
+				"waffle",
+				"part to whole",
+				"share",
+				"percentage",
+				"infographic",
+				"proportion",
+				"small multiples",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "weeklypattern",
+			"displayName": "Weekly Pattern",
+			"tags": [
+				"custom",
+				"heatmap",
+				"day of week",
+				"hour of day",
+				"weekly pattern",
+				"staffing",
+				"capacity",
+				"punch card",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "yearonyear",
+			"displayName": "Year on Year",
+			"tags": [
+				"custom",
+				"year on year",
+				"yoy",
+				"year to date",
+				"ytd",
+				"seasonal comparison",
+				"financial year",
+				"trend",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
 		}
 	]
 }

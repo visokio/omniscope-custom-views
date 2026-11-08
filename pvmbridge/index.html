@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #left { flex: 1.3; position: relative; min-width: 0; }
+        #right { flex: 1; overflow: auto; border-left: 1px solid #e1e0d9; padding: 8px 10px; }
+        body.narrow #main { flex-direction: column; } body.narrow #right { border-left: 0; border-top: 1px solid #e1e0d9; }
+        #head { position: absolute; left: 12px; top: 8px; right: 12px; }
+        #head b { font-size: 13px; } #head .sub { color: #52514e; font-size: 11px; margin-top: 2px; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .bar { cursor: pointer; } .bar:hover { filter: brightness(1.1); }
+        .axis text { fill: #898781; font-size: 10px; } .axis path, .axis line { stroke: #c3c2b7; } .grid line { stroke: #eeede8; } .grid path { display: none; }
+        table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+        th { text-align: right; font-weight: normal; color: #52514e; font-size: 11px; padding: 4px 6px; border-bottom: 1px solid #c3c2b7; position: sticky; top: -8px; background: #fcfcfb; }
+        th.l, td.l { text-align: left; }
+        td { padding: 4px 6px; border-bottom: 1px solid #eeede8; text-align: right; white-space: nowrap; }
+        td.l { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+        tr.r { cursor: pointer; } tr.r:hover td { background: #f3f6fb; } tr.r.sel td { background: #eaf1fc; }
+        .pos { color: #256abf; } .neg { color: #d03b3b; }
+        .tag { font-size: 10px; color: #fff; border-radius: 3px; padding: 0 4px; margin-left: 4px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; max-width: 300px; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="left"><svg id="svg"></svg><div id="head"></div></div>
+    <div id="right"><div id="table"></div></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    // Increases blue, decreases red (diverging pair), totals in neutral ink.
+    var UP = "#3987e5", DOWN = "#e34948", TOTAL = "#52514e", SELECT = "#2161D9";
+    var S = { gen: 0, sel: null };
+    window.__pvm = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { var a = Math.abs(v), s = v < 0 ? "\u2212" : ""; return s + (a >= 1e9 ? (a / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (a / 1e6).toFixed(2) + "M" : a >= 1e4 ? (a / 1e3).toFixed(1) + "k" : Math.round(a).toLocaleString()); };
+    var sgn = function (v) { return (v > 0 ? "+" : "") + fmt(v); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    var EFFECT_HELP = {
+        Volume: "Change in total units, valued at the base period's average price.",
+        Mix: "Change in the product mix: selling relatively more of higher-priced (or lower-priced) products, at base prices.",
+        Price: "Change in each continuing product's price, applied to current volumes.",
+        "New products": "Revenue from products sold only in the current period.",
+        Discontinued: "Base-period revenue from products not sold in the current period."
+    };
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { item: fld(o.item), period: fld(o.period), volume: fld(o.volume), revenue: fld(o.revenue) };
+        if (!F.item || !F.period || !F.volume || !F.revenue) { message("Choose Products, Period, Volume and Revenue."); return; }
+        var q = { groupings: [{ inputField: F.period, type: "UNIQUE_VALUES" }, { inputField: F.item, type: "UNIQUE_VALUES" }], measures: [{ inputField: F.volume, function: "SUM", name: "v" }, { inputField: F.revenue, function: "SUM", name: "r" }], range: { start: 0, length: 200000 } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); compute(F, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+    function plabel(v) { if (v === null || v === undefined) return "(blank)"; var s = String(v); var m = s.match(/^(\d{4}-\d{2}-\d{2})(T00:00:00(\.000)?Z)?$/); return m ? m[1] : s; }
+    function compute(F, recs) {
+        var periods = Array.from(new Set(recs.map(function (r) { return plabel(r[0]); }))).sort(function (a, b) { return a.localeCompare(b, undefined, { numeric: true }); });
+        if (periods.length < 2) { S.model = null; message(recs.length ? "Need at least two periods to compare (found " + periods.length + ")." : "No data to show. Check the filters."); return; }
+        var o = it(), cur = o.current && periods.indexOf(String(o.current).trim()) >= 0 ? String(o.current).trim() : periods[periods.length - 1];
+        var base = o.base && periods.indexOf(String(o.base).trim()) >= 0 ? String(o.base).trim() : periods[Math.max(0, periods.indexOf(cur) - 1)];
+        if (base === cur) base = periods[periods.indexOf(cur) - 1] || periods[0];
+        var items = new Map();
+        recs.forEach(function (r) {
+            var p = plabel(r[0]); if (p !== base && p !== cur) return;
+            var k = String(r[1]); if (!items.has(k)) items.set(k, { key: k, raw: r[1], v0: 0, r0: 0, v1: 0, r1: 0 });
+            var x = items.get(k), v = typeof r[2] === "number" ? r[2] : 0, rv = typeof r[3] === "number" ? r[3] : 0;
+            if (p === base) { x.v0 += v; x.r0 += rv; } else { x.v1 += v; x.r1 += rv; }
+        });
+        var list = Array.from(items.values()), R0 = d3.sum(list, function (x) { return x.r0; }), R1 = d3.sum(list, function (x) { return x.r1; });
+        var cont = list.filter(function (x) { return x.v0 > 0 && x.v1 > 0; }), news = list.filter(function (x) { return x.v0 <= 0 && x.v1 > 0; }), lost = list.filter(function (x) { return x.v0 > 0 && x.v1 <= 0; });
+        var V0c = d3.sum(cont, function (x) { return x.v0; }), V1c = d3.sum(cont, function (x) { return x.v1; }), R0c = d3.sum(cont, function (x) { return x.r0; }), R1c = d3.sum(cont, function (x) { return x.r1; });
+        var P0 = V0c ? R0c / V0c : 0, atBase = d3.sum(cont, function (x) { return x.v1 * x.r0 / x.v0; });
+        var eff = { Volume: (V1c - V0c) * P0, Mix: atBase - V1c * P0, Price: R1c - atBase, "New products": d3.sum(news, function (x) { return x.r1; }), Discontinued: -d3.sum(lost, function (x) { return x.r0; }) };
+        // per-product contributions (they add up to each effect)
+        list.forEach(function (x) {
+            x.d = x.r1 - x.r0;
+            if (x.v0 > 0 && x.v1 > 0) { var p0 = x.r0 / x.v0, s0 = x.v0 / V0c, s1 = x.v1 / V1c; x.vol = s0 * (V1c - V0c) * P0; x.mix = V1c * (s1 - s0) * p0 + (s0 * (V1c - V0c)) * (p0 - P0); x.price = x.v1 * (x.r1 / x.v1 - p0); x.status = "continuing"; }
+            else { x.vol = x.mix = x.price = 0; x.status = x.v1 > 0 ? "new" : x.v0 > 0 ? "discontinued" : "none"; }
+        });
+        S.model = { F: F, base: base, cur: cur, R0: R0, R1: R1, eff: eff, list: list, news: news, lost: lost, P0: P0, P1: V1c ? R1c / V1c : 0, V0: V0c, V1: V1c };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+    function draw() {
+        var M = S.model; if (!M) return; message(null); var intro = introDone();
+        document.body.classList.toggle("narrow", window.innerWidth < 720);
+        var ch = M.R1 - M.R0;
+        document.getElementById("head").innerHTML = '<b>Revenue bridge: ' + esc(M.base) + ' to ' + esc(M.cur) + '</b><div class="sub">' + fmt(M.R0) + ' to ' + fmt(M.R1) + ' (' + sgn(ch) + ', ' + (M.R0 ? (ch / M.R0 * 100).toFixed(1) : "0") + '%). Average price ' + M.P0.toFixed(2) + ' to ' + M.P1.toFixed(2) + ' (' + (M.P0 ? ((M.P1 / M.P0 - 1) * 100).toFixed(1) : '0') + '%) on continuing products.</div>';
+        var box = document.getElementById("left"), W = box.clientWidth, H = box.clientHeight, m = { l: 56, r: 14, t: 58, b: 44 };
+        var svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var steps = [{ k: "base", label: M.base, v: M.R0, total: true }], acc = M.R0;
+        ["Volume", "Mix", "Price", "New products", "Discontinued"].forEach(function (k) { if (k === "New products" && !M.news.length) return; if (k === "Discontinued" && !M.lost.length) return; steps.push({ k: k, label: k, v: M.eff[k], from: acc, to: acc + M.eff[k] }); acc += M.eff[k]; });
+        steps.push({ k: "current", label: M.cur, v: M.R1, total: true });
+        var lo = d3.min(steps, function (s) { return s.total ? s.v : Math.min(s.from, s.to); }), hi = d3.max(steps, function (s) { return s.total ? s.v : Math.max(s.from, s.to); });
+        var floor = Math.max(0, lo - (hi - lo) * 0.6);
+        var x = d3.scaleBand().domain(steps.map(function (s) { return s.k; })).range([m.l, W - m.r]).padding(0.28), y = d3.scaleLinear().domain([floor, hi + (hi - floor) * 0.08]).nice().range([H - m.b, m.t]);
+        svg.append("g").attr("class", "grid").attr("transform", "translate(" + m.l + ",0)").call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat(""));
+        svg.append("g").attr("class", "axis").attr("transform", "translate(" + m.l + ",0)").call(d3.axisLeft(y).ticks(5).tickFormat(function (v) { return fmt(v); }));
+        if (floor > 0) svg.append("text").attr("x", m.l + 4).attr("y", H - m.b - 4).attr("font-size", 10).attr("fill", "#898781").text("axis starts at " + fmt(floor));
+        steps.forEach(function (s, i) {
+            var y0 = s.total ? y(floor) : y(Math.max(s.from, s.to)), y1 = s.total ? y(s.v) : y(Math.min(s.from, s.to)), top = Math.min(y0, y1), h = Math.max(1, Math.abs(y0 - y1));
+            var col = s.total ? TOTAL : s.v >= 0 ? UP : DOWN, on = !S.sel || S.sel.effect === s.k;
+            var r = svg.append("rect").attr("class", "bar").attr("x", x(s.k)).attr("width", x.bandwidth()).attr("y", top).attr("height", h).attr("rx", 3).attr("fill", col).attr("opacity", on ? 1 : 0.35)
+                .on("mousemove", function (ev) { tip(s, ev); }).on("mouseleave", function () { tip(null); })
+                .on("click", function (ev) { ev.stopPropagation(); selectEffect(s.k); });
+            if (S.sel && S.sel.effect === s.k) svg.append("rect").attr("x", x(s.k) - 3).attr("y", top - 3).attr("width", x.bandwidth() + 6).attr("height", h + 6).attr("rx", 4).attr("fill", "none").attr("stroke", SELECT).attr("stroke-dasharray", "4,2");
+            if (i < steps.length - 1) { var ny = s.total ? y(s.v) : y(s.to); svg.append("line").attr("x1", x(s.k) + x.bandwidth()).attr("x2", x(steps[i + 1].k)).attr("y1", ny).attr("y2", ny).attr("stroke", "#898781").attr("stroke-dasharray", "2,2"); }
+            svg.append("text").attr("x", x(s.k) + x.bandwidth() / 2).attr("y", top - 5).attr("text-anchor", "middle").attr("font-size", 11).attr("font-weight", "bold").attr("fill", s.total ? "#0b0b0b" : s.v >= 0 ? "#256abf" : "#b02c2c").text(s.total ? fmt(s.v) : sgn(s.v));
+            var lab = svg.append("text").attr("x", x(s.k) + x.bandwidth() / 2).attr("y", H - m.b + 16).attr("text-anchor", "middle").attr("font-size", 11).attr("fill", "#52514e").text(s.label);
+            if (x.bandwidth() < 64) lab.attr("font-size", 9.5);
+        });
+        if (intro) { fadeIn(svg.selectAll("rect.bar"), 420, 160); fadeIn(svg.selectAll("line"), 300, 160); }
+        table();
+    }
+    function table() {
+        var M = S.model, n = Math.max(3, Math.min(100, +it().topN || 12));
+        var rows = M.list.filter(function (x) { return x.status !== "none"; }).sort(function (a, b) { return Math.abs(b.d) - Math.abs(a.d); }).slice(0, n);
+        var c = function (v) { return '<td class="' + (v > 0 ? "pos" : v < 0 ? "neg" : "") + '">' + (v ? sgn(v) : "\u2013") + '</td>'; };
+        var h = '<table><thead><tr><th class="l">' + esc(M.F.item) + ' (largest changes)</th><th>Change</th><th>Volume</th><th>Mix</th><th>Price</th></tr></thead><tbody>';
+        rows.forEach(function (x) {
+            var tag = x.status === "new" ? '<span class="tag" style="background:' + UP + '">new</span>' : x.status === "discontinued" ? '<span class="tag" style="background:' + DOWN + '">gone</span>' : "";
+            h += '<tr class="r' + (S.sel && S.sel.item === x.key ? " sel" : "") + '" data-k="' + esc(x.key) + '"><td class="l" title="' + esc(x.key) + '">' + esc(x.key) + tag + '</td>' + c(x.d) + c(x.vol) + c(x.mix) + c(x.price) + '</tr>';
+        });
+        h += '</tbody></table><div style="color:#898781;font-size:11px;margin-top:6px">Volume, mix and price for each continuing product add up to the bars. New and discontinued products appear in their own bars.</div>';
+        var el = document.getElementById("table"); el.innerHTML = h;
+        Array.prototype.forEach.call(el.querySelectorAll("tr.r"), function (tr) { tr.addEventListener("click", function (e) { e.stopPropagation(); selectItem(tr.getAttribute("data-k")); }); });
+    }
+    function tip(s, ev) {
+        var el = document.getElementById("tooltip");
+        if (!s) { el.style.display = "none"; return; }
+        var M = S.model;
+        el.innerHTML = s.total ? '<b>' + esc(s.label) + '</b><br><span class="k">Revenue:</span> ' + fmt(s.v) : '<b>' + esc(s.label) + ' effect: ' + sgn(s.v) + '</b><br><span class="k">' + esc(EFFECT_HELP[s.k] || "") + '</span>' +
+            (s.k === "New products" ? '<br>' + M.news.length + ' products' : s.k === "Discontinued" ? '<br>' + M.lost.length + ' products' : '');
+        el.style.display = "block";
+        var X = ev.clientX + 14, Y = ev.clientY + 14;
+        if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14;
+        if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+    function periodFilter(which) { var M = S.model; return { type: "FIELD_VALUE", inputField: M.F.period, operator: "=", value: which }; }
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function itemsFilter(xs) { var M = S.model, eq = function (x) { return { type: "FIELD_VALUE", inputField: M.F.item, operator: "=", value: x.raw }; }; return xs.length === 1 ? eq(xs[0]) : { type: "OR", filters: xs.map(eq) }; }
+    function selectEffect(k) {
+        var M = S.model;
+        if (S.sel && S.sel.effect === k) return publish(null, null);
+        if (k === "base" || k === "current") return publish(periodFilter(k === "base" ? M.base : M.cur), { effect: k });
+        var xs = k === "New products" ? M.news : k === "Discontinued" ? M.lost : M.list.filter(function (x) { return x.status === "continuing"; });
+        publish({ type: "AND", filters: [{ type: "OR", filters: [periodFilter(M.base), periodFilter(M.cur)] }, itemsFilter(xs.slice(0, 3000))] }, { effect: k });
+    }
+    function selectItem(key) { var M = S.model, x = M.list.find(function (z) { return z.key === key; }); if (S.sel && S.sel.item === key) return publish(null, null); publish({ type: "AND", filters: [{ type: "OR", filters: [periodFilter(M.base), periodFilter(M.cur)] }, itemsFilter([x])] }, { item: key }); }
+    window.__pvm.selectEffect = selectEffect; window.__pvm.selectItem = selectItem;
+    document.body.addEventListener("click", function () { if (S.sel) { S.sel = null; draw(); } omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

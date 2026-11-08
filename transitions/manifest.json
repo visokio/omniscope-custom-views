@@ -1,0 +1,147 @@
+{
+  "name": "Transition Matrix",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "transition matrix",
+    "migration",
+    "movement",
+    "customer tiers",
+    "credit rating",
+    "segments",
+    "churn",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "item": {
+        "displayName": "Items",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "What moves between states, e.g. Customer, Account, Loan"
+      },
+      "period": {
+        "displayName": "Periods",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "When the state was recorded, e.g. Year or Month"
+      },
+      "state": {
+        "displayName": "State",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "The state in each period, e.g. Tier, Rating, Segment"
+      },
+      "from": {
+        "displayName": "From",
+        "type": "TEXT",
+        "detail": "Optional: the earlier period as it appears in the data (default the second last)"
+      },
+      "to": {
+        "displayName": "To",
+        "type": "TEXT",
+        "detail": "Optional: the later period (default the last)"
+      },
+      "order": {
+        "displayName": "Order",
+        "type": "TEXT",
+        "detail": "The states best first, separated by commas (e.g. Platinum, Gold, Silver, Bronze), to count moves up and down"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "item",
+        "period",
+        "state"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Data",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "item",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "period",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "state",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Comparison",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "from",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "to",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "order",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

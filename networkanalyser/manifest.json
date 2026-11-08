@@ -1,0 +1,250 @@
+{
+  "name": "Network Analyser",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "network",
+    "graph",
+    "relationship",
+    "community",
+    "centrality",
+    "fraud",
+    "link analysis",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 20000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "source": {
+        "displayName": "From",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Field holding one end of each link, e.g. Payer account, Sender, Supplier"
+      },
+      "target": {
+        "displayName": "To",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Field holding the other end of each link, e.g. Payee account, Recipient, Customer"
+      },
+      "weight": {
+        "displayName": "Link weight",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional strength of each link, e.g. sum of Amount or count of messages. Without it every pair counts once."
+      },
+      "sizeBy": {
+        "displayName": "Size nodes by",
+        "type": "CHOICE",
+        "values": [
+          "BETWEENNESS",
+          "PAGERANK",
+          "DEGREE",
+          "WEIGHTED_DEGREE"
+        ],
+        "displayValues": [
+          "Betweenness (brokers)",
+          "PageRank (influence)",
+          "Degree (connections)",
+          "Weighted degree (volume)"
+        ],
+        "detail": "Centrality measure used for node size, the ranking list and labels"
+      },
+      "colourBy": {
+        "displayName": "Colour nodes by",
+        "type": "CHOICE",
+        "values": [
+          "COMMUNITY",
+          "NONE"
+        ],
+        "displayValues": [
+          "Community (detected)",
+          "Single colour"
+        ],
+        "detail": "Communities are detected in the browser with the Louvain method"
+      },
+      "directed": {
+        "displayName": "Directed links",
+        "type": "TOGGLE",
+        "detail": "Treat From to To as a direction: draws arrows and uses direction for PageRank and paths"
+      },
+      "labels": {
+        "displayName": "Labels",
+        "type": "CHOICE",
+        "values": [
+          "TOP",
+          "ALL",
+          "NONE"
+        ],
+        "displayValues": [
+          "Most central nodes",
+          "All nodes",
+          "None"
+        ],
+        "detail": "Which node labels to draw"
+      },
+      "labelCount": {
+        "displayName": "Number of labels",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 200,
+        "detail": "How many of the most central nodes to label when Labels is Most central nodes"
+      },
+      "minWeight": {
+        "displayName": "Minimum link weight",
+        "type": "NUMBER",
+        "minValue": 0,
+        "detail": "Hide links weaker than this before analysing (0 keeps every link)"
+      },
+      "showPanel": {
+        "displayName": "Show analysis panel",
+        "type": "TOGGLE",
+        "detail": "Side panel with network statistics, rankings, communities, search and path finder"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "source",
+        "target",
+        "weight",
+        "sizeBy"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Links",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "source",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "target",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "weight",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "minWeight",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "directed",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Analysis",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "sizeBy",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "colourBy",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "labels",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "labelCount",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showPanel",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "sizeBy": "BETWEENNESS",
+      "colourBy": "COMMUNITY",
+      "directed": false,
+      "labels": "TOP",
+      "labelCount": 12,
+      "minWeight": 0,
+      "showPanel": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 200,
+    "minHeight": 200
+  }
+}

@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #chart { flex: 1; position: relative; min-width: 0; }
+        #side { width: 250px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .axis text { fill: #52514e; font-size: 11px; } .axis path, .axis line { stroke: #c9c8c1; } .grid line { stroke: #ebeae5; } .grid path { display: none; } svg line, .grid, .axis, path.ln { pointer-events: none; }
+        .lg { cursor: pointer; } .lg:hover text { fill: #2a78d6; } .pt { cursor: pointer; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        .stat { color: #52514e; margin-bottom: 4px; line-height: 1.45; } .big { font-size: 16px; font-weight: bold; color: #0b0b0b; }
+        table { border-collapse: collapse; width: 100%; font-size: 11.5px; } td, th { padding: 2px 3px; text-align: right; white-space: nowrap; } th { color: #52514e; font-weight: normal; font-size: 10.5px; border-bottom: 1px solid #e1e0d9; } td:first-child, th:first-child { text-align: left; }
+        .up { color: #0b6b0b; } .down { color: #a32a2a; }
+        .note { color: #898781; font-size: 11px; margin-top: 6px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; } #tooltip .sw { display: inline-block; width: 10px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    // The current year in blue, the previous year in orange, older years in fading greys.
+    var CUR = "#2a78d6", PREV = "#eb6834", OLD = ["#8f8d86", "#b3b1aa", "#cfcdc6", "#e1e0d9"], SELECT = "#2161D9";
+    var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], NPER = { MONTH: 12, QUARTER: 4, WEEK: 53, DAY: 366 };
+    var S = { gen: 0, sel: null };
+    window.__yoy = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var chg = function (a, b) { return b ? a / b - 1 : null; };
+    var spct = function (v) { return v === null || !isFinite(v) ? "n/a" : (v > 0 ? "+" : v < 0 ? "\u2212" : "") + (Math.abs(v) * 100).toFixed(1) + "%"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function tval(v) { if (v === null || v === undefined || v === "") return null; if (typeof v === "number") return v; var s = typeof v === "object" ? v.lower : v; var t = Date.parse(typeof s === "string" && s.length === 10 ? s + "T00:00:00Z" : s); return isNaN(t) ? null : t; }
+    function measureOf(m) { if (!m) return { function: "RECORD_COUNT", name: "v" }; var fn = m.function || "RECORD_COUNT"; return fn === "RECORD_COUNT" || !m.inputField ? { function: "RECORD_COUNT", name: "v" } : { inputField: m.inputField, function: fn, name: "v" }; }
+    function mname(m) { return !m || m.function === "RECORD_COUNT" || !m.inputField ? "Records" : m.inputField; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { d: fld(o.date), m: o.value };
+        if (!F.d) { message("Choose the date field (Dated by) and the measure to compare year on year."); return; }
+        var unit = NPER[o.period] ? o.period : "MONTH", filt = omniscope.view.context().dataConfig.filter, withF = function (q) { if (filt && (!filt.filters || filt.filters.length)) q.filter = filt; return q; };
+        var qb = function (q) { return new Promise(function (res, rej) { omniscope.view.queryBuilder().table(withF(q)).on("load", function (e) { res(e.data.records); }).on("error", function (e) { rej(e); }).execute(); }); };
+        var gen = ++S.gen; omniscope.view.busy(true);
+        Promise.all([qb({ groupings: [{ inputField: F.d, type: "HISTOGRAM", dateUnit: unit, histogramInterval: 1 }], measures: [measureOf(F.m)], range: { start: 0, length: 20000 } }), qb({ measures: [{ inputField: F.d, function: "MAX", name: "last" }] })])
+            .then(function (r) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, unit, r[0], r[1]); draw(); })
+            .catch(function (e) { omniscope.view.busy(false); omniscope.view.error((e && e.data && e.data.message) || "Query failed", e && e.data); });
+    }
+
+    function fyStart(y, s) { return Date.UTC(y, s - 1, 1); }
+    function locate(t, unit, s) {
+        var d = new Date(t), m = d.getUTCMonth() + 1, y = d.getUTCFullYear(), fy = m >= s ? y : y - 1, off = (m - s + 12) % 12, start = fyStart(fy, s);
+        var idx = unit === "MONTH" ? off : unit === "QUARTER" ? Math.floor(off / 3) : unit === "WEEK" ? Math.min(52, Math.floor((t - start) / (7 * 864e5))) : Math.min(365, Math.floor((t - start) / 864e5));
+        return { fy: fy, idx: idx };
+    }
+    function build(F, unit, recs, last) {
+        var o = it(), s = Math.max(1, Math.min(12, Math.round(+o.fiscalStart || 1))), cum = o.mode === "CUMULATIVE", maxYears = Math.max(2, Math.min(8, Math.round(+o.years || 3)));
+        var pts = recs.map(function (r) { return { t: tval(r[0]), raw: r[0], v: typeof r[1] === "number" ? r[1] : null }; }).filter(function (p) { return p.t !== null && p.v !== null; });
+        if (!pts.length) { S.model = null; message("No data to show. Check the filters."); return; }
+        var lastT = last && last[0] ? tval(last[0][0]) : null, years = new Map();
+        pts.forEach(function (p) { var L = locate(p.t, unit, s); p.fy = L.fy; p.idx = L.idx; var up = p.raw && typeof p.raw === "object" && p.raw.upper ? tval(p.raw.upper) : null; p.partial = lastT !== null && up !== null && up - 864e5 > lastT + 1; if (!years.has(L.fy)) years.set(L.fy, []); years.get(L.fy).push(p); });
+        var fys = Array.from(years.keys()).sort(function (a, b) { return a - b; });
+        if (fys.length < 2) { S.model = null; message("Only one year of data (" + label(fys[0], s) + "). Year on year needs at least two."); return; }
+        message(null);
+        fys = fys.slice(-maxYears);
+        var n = NPER[unit], cur = fys[fys.length - 1], prev = fys[fys.length - 2];
+        var series = fys.map(function (y, k) {
+            var arr = new Array(n).fill(null), raw = new Array(n).fill(null), part = new Array(n).fill(false);
+            years.get(y).forEach(function (p) { if (p.idx < n) { arr[p.idx] = (arr[p.idx] || 0) + p.v; raw[p.idx] = p.raw; part[p.idx] = p.partial; } });
+            var lastIdx = -1; arr.forEach(function (v, i) { if (v !== null) lastIdx = i; });
+            var shown = arr.slice(); if (cum) { var acc = 0; for (var i = 0; i <= lastIdx; i++) { acc += arr[i] || 0; shown[i] = acc; } }
+            var age = fys.length - 1 - k;
+            return { fy: y, label: label(y, s), vals: arr, shown: shown, raw: raw, partial: part, lastIdx: lastIdx, colour: age === 0 ? CUR : age === 1 ? PREV : OLD[Math.min(OLD.length - 1, age - 2)], width: age === 0 ? 2.6 : age === 1 ? 2 : 1.4, age: age };
+        });
+        var C = series[series.length - 1], P = series[series.length - 2];
+        // like for like: complete periods of the current year, against the same periods a year earlier
+        var lfl = []; for (var i = 0; i <= C.lastIdx; i++) if (C.vals[i] !== null && !C.partial[i]) lfl.push(i);
+        var ytdC = d3.sum(lfl, function (i) { return C.vals[i]; }), ytdP = d3.sum(lfl, function (i) { return P.vals[i] || 0; });
+        S.model = { F: F, unit: unit, s: s, cum: cum, series: series, n: n, C: C, P: P, lfl: lfl, ytdC: ytdC, ytdP: ytdP, partialLast: C.partial[C.lastIdx], lastT: lastT, name: mname(F.m) };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+    function label(y, s) { return s === 1 ? String(y) : y + "/" + String((y + 1) % 100).padStart(2, "0"); }
+    function plabel(i) { var M = S.model; return M.unit === "MONTH" ? MONTHS[(i + M.s - 1) % 12] : M.unit === "QUARTER" ? "Q" + (i + 1) : M.unit === "WEEK" ? "Week " + (i + 1) : "Day " + (i + 1); }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var m = { l: 54, r: 16, t: 66, b: 30 }, w = Math.max(60, W - m.l - m.r), h = Math.max(60, H - m.t - m.b);
+        var maxIdx = d3.max(M.series, function (S2) { return S2.lastIdx; }), n = M.unit === "MONTH" || M.unit === "QUARTER" ? M.n : maxIdx + 1;
+        var x = d3.scalePoint().domain(d3.range(n)).range([0, w]).padding(0.3), ymax = d3.max(M.series, function (S2) { return d3.max(S2.shown); }) || 1, ymin = Math.min(0, d3.min(M.series, function (S2) { return d3.min(S2.shown.filter(function (v) { return v !== null; })); }));
+        var y = d3.scaleLinear().domain([ymin, ymax]).nice().range([h, 0]);
+        var g = svg.append("g").attr("transform", "translate(" + m.l + "," + m.t + ")");
+        g.append("g").attr("class", "grid").call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(""));
+        g.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(5).tickFormat(fmt));
+        var every = n > 60 ? 30 : n > 20 ? 4 : 1;
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + h + ")").call(d3.axisBottom(x).tickValues(d3.range(0, n, every)).tickFormat(function (i) { return M.unit === "DAY" ? MONTHS[new Date(fyStart(2001, M.s) + i * 864e5).getUTCMonth()] : M.unit === "WEEK" ? "W" + (i + 1) : plabel(i); }));
+        var selY = S.sel ? S.sel.fy : null;
+        M.series.forEach(function (S2) {
+            var line = d3.line().defined(function (v) { return v !== null; }).x(function (v, i) { return x(i); }).y(function (v) { return y(v); });
+            var dim = selY !== null && selY !== S2.fy ? 0.3 : 1, data = S2.shown.slice(0, n);
+            var solid = data.map(function (v, i) { return S2.partial[i] ? null : v; });
+            g.append("path").attr("class", "ln").attr("d", line(solid)).attr("fill", "none").attr("stroke", S2.colour).attr("stroke-width", S2.width).attr("opacity", dim);
+            var pi = S2.partial.indexOf(true); if (pi > 0 && data[pi] !== null && data[pi - 1] !== null) g.append("path").attr("class", "ln").attr("d", line(data.map(function (v, i) { return i === pi || i === pi - 1 ? v : null; }))).attr("fill", "none").attr("stroke", S2.colour).attr("stroke-width", S2.width).attr("stroke-dasharray", "4 3").attr("opacity", dim);
+            if (n <= 60) g.selectAll(null).data(data.map(function (v, i) { return { v: v, i: i }; }).filter(function (d) { return d.v !== null; })).enter().append("circle").attr("class", "pt").attr("cx", function (d) { return x(d.i); }).attr("cy", function (d) { return y(d.v); })
+                .attr("r", function (d) { return S.sel && S.sel.fy === S2.fy && S.sel.idx === d.i ? 5.5 : S2.age === 0 ? 3.4 : 2.4; }).attr("fill", function (d) { return S2.partial[d.i] ? "#fcfcfb" : S2.colour; }).attr("stroke", function (d) { return S.sel && S.sel.fy === S2.fy && S.sel.idx === d.i ? SELECT : S2.colour; }).attr("stroke-width", 1.5).attr("opacity", dim)
+                .on("click", function (ev, d) { ev.stopPropagation(); selectPeriod(S2, d.i); });
+        });
+        // legend and headline
+        var lg = svg.append("g").attr("transform", "translate(" + m.l + ",52)").style("font-size", "11px").attr("fill", "#52514e"), lx = 0;
+        M.series.slice().reverse().forEach(function (S2) { var e = lg.append("g").attr("class", "lg").attr("transform", "translate(" + lx + ",0)").on("click", function (ev) { ev.stopPropagation(); selectYear(S2); }); e.append("rect").attr("y", -5).attr("width", 16).attr("height", 3).attr("rx", 1.5).attr("fill", S2.colour); var t = e.append("text").attr("x", 21).attr("dy", "0.1em").style("font-weight", S2.age === 0 ? "bold" : null).attr("fill", "#2b2a28").text(S2.label); lx += 21 + t.node().getComputedTextLength() + 16; });
+        var c = chg(M.ytdC, M.ytdP), head = svg.append("text").attr("x", m.l).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.name + " " + (M.s === 1 ? "year to date" : "financial year to date") + ": " + fmt(M.ytdC) + " ");
+        head.append("tspan").style("font-weight", "bold").attr("fill", c === null ? "#52514e" : c >= 0 ? "#0b6b0b" : "#a32a2a").text((c >= 0 ? "\u25b2 " : "\u25bc ") + spct(c));
+        head.append("tspan").attr("fill", "#52514e").text(" on " + M.P.label + " (" + fmt(M.ytdP) + ")");
+        svg.append("text").attr("x", m.l).attr("y", 34).style("font-size", "11px").attr("fill", "#52514e").text("Like for like: " + M.lfl.length + " complete " + (M.unit === "MONTH" ? "months" : M.unit === "QUARTER" ? "quarters" : M.unit === "WEEK" ? "weeks" : "days") + (M.partialLast ? "; the latest, still incomplete, is dashed and left out" : "") + (M.cum ? ". Lines are running totals." : "."));
+        // hover crosshair
+        var cross = g.append("line").attr("y1", 0).attr("y2", h).attr("stroke", "#52514e").attr("opacity", 0);
+        g.insert("rect", ":first-child").attr("width", w).attr("height", h).attr("fill", "transparent")
+            .on("mousemove", function (ev) { var px = d3.pointer(ev, g.node())[0], i = Math.max(0, Math.min(n - 1, Math.round((px - x(0)) / (x.step() || 1)))); cross.attr("x1", x(i)).attr("x2", x(i)).attr("opacity", 0.35); tipAt(i, ev); })
+            .on("mouseleave", function () { cross.attr("opacity", 0); tip(); });
+        if (intro) { linesIn(svg, 1100); }
+        side();
+    }
+    function tipAt(i, ev) {
+        var M = S.model, h = '<b>' + esc(plabel(i)) + '</b>' + (M.cum ? ' <span class="k">(running total)</span>' : '');
+        M.series.slice().reverse().forEach(function (S2, k, arr) { var v = S2.shown[i]; if (v === null || v === undefined) return; var older = arr[k + 1], ch = older && older.shown[i] !== null ? chg(v, older.shown[i]) : null; h += '<br><span class="sw" style="background:' + S2.colour + '"></span>' + esc(S2.label) + ': <b>' + fmt(v) + '</b>' + (ch !== null ? ' <span class="' + (ch >= 0 ? "up" : "down") + '">' + spct(ch) + '</span>' : '') + (S2.partial[i] ? ' <span class="k">(incomplete)</span>' : ''); });
+        show(h, ev);
+    }
+    function side() {
+        var M = S.model, el = document.getElementById("side"), C = M.C, P = M.P, c = chg(M.ytdC, M.ytdP);
+        var h = '<h3>' + esc(C.label) + ' so far</h3><div class="stat"><span class="big">' + fmt(M.ytdC) + '</span> <b class="' + (c >= 0 ? "up" : "down") + '">' + (c >= 0 ? "\u25b2 " : "\u25bc ") + spct(c) + '</b><br>against ' + fmt(M.ytdP) + ' in the same ' + M.lfl.length + ' periods of ' + esc(P.label) + '</div>';
+        if (M.unit === "MONTH" || M.unit === "QUARTER") {
+            h += '<h3>By ' + (M.unit === "MONTH" ? "month" : "quarter") + '</h3><table><tr><th></th><th>' + esc(C.label) + '</th><th>' + esc(P.label) + '</th><th>Change</th></tr>';
+            for (var i = 0; i < M.n; i++) { var a = C.vals[i], b = P.vals[i], ch = a !== null && b ? a / b - 1 : null; if (a === null && b === null) continue; h += '<tr><td>' + plabel(i) + '</td><td>' + (a === null ? '' : fmt(a) + (C.partial[i] ? '*' : '')) + '</td><td>' + (b === null ? '' : fmt(b)) + '</td><td class="' + (ch === null ? '' : ch >= 0 ? 'up' : 'down') + '">' + (ch === null || C.partial[i] ? '' : spct(ch)) + '</td></tr>'; }
+            h += '</table>' + (M.partialLast ? '<div class="note">* incomplete: data runs to ' + new Date(M.lastT).toISOString().slice(0, 10) + '.</div>' : '');
+        }
+        h += '<div class="note">' + (M.s === 1 ? 'Calendar years.' : 'Financial years starting in ' + MONTHS[M.s - 1] + '.') + ' Click a point to select that period, or a year in the legend to select the whole year.</div>';
+        el.innerHTML = h;
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function range(lo, hi) { var F = S.model.F.d, iso = function (t) { return new Date(t).toISOString().slice(0, 10); }; return { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F, operator: ">=", value: iso(lo) }, { type: "FIELD_VALUE", inputField: F, operator: "<", value: iso(hi) }] }; }
+    function selectPeriod(S2, i) {
+        if (S.sel && S.sel.fy === S2.fy && S.sel.idx === i) return publish(null, null);
+        var raw = S2.raw[i]; if (!raw || typeof raw !== "object") return;
+        publish(range(tval(raw.lower), tval(raw.upper)), { fy: S2.fy, idx: i });
+    }
+    function selectYear(S2) { if (S.sel && S.sel.fy === S2.fy && S.sel.idx === undefined) return publish(null, null); var M = S.model; publish(range(fyStart(S2.fy, M.s), fyStart(S2.fy + 1, M.s)), { fy: S2.fy }); }
+    window.__yoy.selectPeriod = function (age, i) { var M = S.model; selectPeriod(M.series[M.series.length - 1 - age], i); };
+    window.__yoy.selectYear = function (age) { var M = S.model; selectYear(M.series[M.series.length - 1 - age]); };
+
+    document.getElementById("chart").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

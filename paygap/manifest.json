@@ -1,0 +1,153 @@
+{
+  "name": "Pay Gap",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "gender pay gap",
+    "pay gap",
+    "hr",
+    "equality",
+    "pay quartiles",
+    "bonus",
+    "reporting",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "group": {
+        "displayName": "Groups",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "The two groups to compare, e.g. Gender (other values are left out and counted)"
+      },
+      "pay": {
+        "displayName": "Hourly pay",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Hourly pay of each employee"
+      },
+      "bonus": {
+        "displayName": "Bonus",
+        "type": "FIELD",
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional: bonus paid in the period (0 or blank for none)"
+      },
+      "breakdown": {
+        "displayName": "Break down by",
+        "type": "FIELD",
+        "detail": "Optional: show the gap within each department, grade or location"
+      },
+      "reference": {
+        "displayName": "Reference group",
+        "type": "TEXT",
+        "detail": "The group the gap is measured against (default: Male or Men if present)"
+      },
+      "comparison": {
+        "displayName": "Compared group",
+        "type": "TEXT",
+        "detail": "The other group (default: Female or Women if present)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "group",
+        "pay",
+        "bonus",
+        "breakdown"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Employees",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "group",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "pay",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "bonus",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "breakdown",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Groups",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "reference",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "comparison",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

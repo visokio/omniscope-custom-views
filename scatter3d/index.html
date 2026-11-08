@@ -1,0 +1,436 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        }
+        body { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781; --panel: rgba(252,252,251,0.92); --ring: rgba(11,11,11,0.10); background: var(--surface); color: var(--ink); }
+        body.dark { --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --muted: #898781; --panel: rgba(26,26,25,0.88); --ring: rgba(255,255,255,0.12); }
+        #main { position: absolute; inset: 0; }
+        #main canvas { display: block; outline: none; }
+        #tooltip {
+            position: absolute; pointer-events: none; display: none; z-index: 5;
+            background: var(--panel); color: var(--ink); border: 1px solid var(--ring);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15); border-radius: 6px; padding: 8px 10px;
+            font-size: 12px; line-height: 1.45; max-width: 260px; white-space: nowrap;
+        }
+        #tooltip b { font-size: 13px; }
+        #tooltip .k { color: var(--ink2); }
+        #tooltip .sw { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: 0; }
+        #legend {
+            position: absolute; top: 8px; right: 8px; z-index: 4; max-height: calc(100% - 52px); overflow: auto;
+            background: var(--panel); border: 1px solid var(--ring); border-radius: 6px; padding: 6px 8px;
+            font-size: 12px; display: none; min-width: 110px;
+        }
+        #legend .title { color: var(--ink2); font-weight: bold; margin-bottom: 3px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #legend .item { display: flex; align-items: center; gap: 6px; padding: 2px 3px; cursor: pointer; border-radius: 4px; white-space: nowrap; }
+        #legend .item:hover { background: rgba(127,127,127,0.12); }
+        #legend .item.sel { outline: 1px dashed #2161D9; }
+        #legend .sw { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+        #legend .n { color: var(--muted); margin-left: auto; padding-left: 8px; }
+        #legend .grad { width: 130px; height: 10px; border-radius: 3px; margin: 4px 0 2px; }
+        #legend .ends { display: flex; justify-content: space-between; color: var(--ink2); }
+        #toolbar { position: absolute; left: 8px; bottom: 8px; z-index: 4; display: flex; gap: 6px; }
+        #toolbar button {
+            font: inherit; font-size: 12px; color: var(--ink2); background: var(--panel); border: 1px solid var(--ring);
+            border-radius: 4px; padding: 3px 8px; cursor: pointer;
+        }
+        #toolbar button:hover { color: var(--ink); }
+        #hint { position: absolute; right: 10px; bottom: 8px; font-size: 11px; color: var(--muted); z-index: 3; pointer-events: none; }
+        #message {
+            position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center;
+            color: var(--ink2); font-size: 14px; padding: 20px; z-index: 6; background: var(--surface);
+        }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+
+<body>
+<div id="main"></div><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="legend"></div>
+<div id="toolbar"><button id="resetBtn" title="Reset the camera">Reset view</button><button id="spinBtn" title="Start or stop rotating">Rotate</button></div>
+<div id="hint">Drag to rotate, scroll to zoom, right-drag to pan, click to select</div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+
+    omniscope.view.on("load", function () {
+        window.onerror = function (msg) { omniscope.view.error(msg); };
+    });
+
+    // Validated categorical palette (fixed order, never cycled); 9th+ categories fold into "Other".
+    var PALETTE = { LIGHT: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"],
+                    DARK:  ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9085e9", "#e66767"] };
+    var OTHER = "#898781";
+    var SEQ = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"];
+    var SELECT_BLUE = "#2161D9";
+
+    var state = { catOrder: {}, catPending: {}, scene: null, camera: null, renderer: null, controls: null, mesh: null, frame: null, points: [], selected: new Set(), hover: -1, lastKey: null };
+    var fmt = function (v) {
+        if (v === null || v === undefined || isNaN(v)) return "n/a";
+        var a = Math.abs(v);
+        return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? Math.round(v).toLocaleString() : a >= 100 ? v.toFixed(1) : a >= 1 ? v.toFixed(2) : v.toPrecision(3);
+    };
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+    }
+
+    function webglOk() {
+        try { var c = document.createElement("canvas"); return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl"))); } catch (e) { return false; }
+    }
+
+    // ------------------------------------------------------------ scene set-up (once)
+    function initScene() {
+        var main = document.getElementById("main");
+        var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        main.appendChild(renderer.domElement);
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(40, window.innerWidth / Math.max(1, window.innerHeight), 0.01, 100);
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; controls.dampingFactor = 0.08; controls.autoRotateSpeed = 1.2;
+        controls.minDistance = 0.6; controls.maxDistance = 20;
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8f99, 0.95));
+        var dir = new THREE.DirectionalLight(0xffffff, 0.55); dir.position.set(2, 4, 3); scene.add(dir);
+        state.scene = scene; state.camera = camera; state.renderer = renderer; state.controls = controls;
+        resetCamera();
+        bindPointer(renderer.domElement);
+        (function loop(now) { requestAnimationFrame(loop); intro(now || performance.now()); controls.update(); renderer.render(scene, camera); })();
+        document.getElementById("resetBtn").addEventListener("click", function (e) { e.stopPropagation(); resetCamera(); });
+        document.getElementById("spinBtn").addEventListener("click", function (e) { e.stopPropagation(); controls.autoRotate = !controls.autoRotate; });
+    }
+    function resetCamera() {
+        state.camera.position.set(2.6, 1.9, 3.1);
+        state.controls.target.set(0, 0, 0);
+        state.camera.lookAt(0, 0, 0);
+        state.controls.update();
+    }
+
+    // ------------------------------------------------------------ text sprites for axis labels
+    function textSprite(text, colour, px, bold) {
+        var c = document.createElement("canvas"), g = c.getContext("2d"), f = (bold ? "bold " : "") + (px || 28) + "px Lato, 'Segoe UI', Arial, sans-serif";
+        g.font = f; var w = Math.ceil(g.measureText(text).width) + 8, h = (px || 28) + 10;
+        c.width = w; c.height = h; g.font = f; g.fillStyle = colour; g.textBaseline = "middle"; g.fillText(text, 4, h / 2);
+        var tex = new THREE.CanvasTexture(c); tex.minFilter = THREE.LinearFilter;
+        var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
+        var k = 0.0021; s.scale.set(w * k, h * k, 1);
+        return s;
+    }
+
+    // ------------------------------------------------------------ axes frame
+    function buildFrame(names, ranges, dark) {
+        var g = new THREE.Group();
+        var gridCol = dark ? 0x2c2c2a : 0xe1e0d9, edgeCol = dark ? 0x383835 : 0xc3c2b7;
+        var ink2 = dark ? "#c3c2b7" : "#52514e", muted = "#898781";
+        var pts = [], N = 4;
+        // Grid on the three back planes: floor (y=-1), back wall (z=-1), left wall (x=-1)
+        for (var i = 0; i <= N; i++) {
+            var t = -1 + 2 * i / N;
+            pts.push(t, -1, -1, t, -1, 1, -1, -1, t, 1, -1, t);      // floor
+            pts.push(t, -1, -1, t, 1, -1, -1, t, -1, 1, t, -1);      // back wall
+            pts.push(-1, t, -1, -1, t, 1, -1, -1, t, -1, 1, t);      // left wall
+        }
+        var geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
+        g.add(new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: gridCol })));
+        var box = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(2, 2, 2)), new THREE.LineBasicMaterial({ color: edgeCol }));
+        g.add(box);
+        // Axis titles and min / max ticks
+        var axes = [
+            { n: names[0], r: ranges[0], title: [0, -1.18, 1.18], lo: [-1, -1.08, 1.12], hi: [1, -1.08, 1.12] },
+            { n: names[1], r: ranges[1], title: [-1.22, 0, 1.12], lo: [-1.12, -1, 1.1], hi: [-1.12, 1, 1.1] },
+            { n: names[2], r: ranges[2], title: [1.2, -1.18, 0], lo: [1.14, -1.08, 1], hi: [1.14, -1.08, -1] }
+        ];
+        axes.forEach(function (a) {
+            var s = textSprite(a.n, ink2, 30, true); s.position.set.apply(s.position, a.title); g.add(s);
+            var lo = textSprite(fmt(a.r[0]), muted, 24); lo.position.set.apply(lo.position, a.lo); g.add(lo);
+            var hi = textSprite(fmt(a.r[1]), muted, 24); hi.position.set.apply(hi.position, a.hi); g.add(hi);
+        });
+        return g;
+    }
+
+    function disposeObj(o) {
+        if (!o) return;
+        o.traverse(function (c) {
+            if (c.geometry) c.geometry.dispose();
+            if (c.material) { if (c.material.map) c.material.map.dispose(); c.material.dispose(); }
+        });
+        state.scene.remove(o);
+    }
+
+    // ------------------------------------------------------------ data -> points
+    function fieldName(m) { return m ? (m.displayName || (m.function === "RECORD_COUNT" ? "Record count" : m.inputField) || m.name || "") : ""; }
+    function groupField(g) { return g ? (typeof g === "string" ? g : g.inputField) : null; }
+
+    function render() {
+        var ctx = omniscope.view.context();
+        var items = ctx.options.items || {};
+        var dark = items.theme === "DARK";
+        document.body.classList.toggle("dark", dark);
+        if (!webglOk()) { message("3D Scatter needs WebGL, which this browser does not provide."); return; }
+        if (!items.point || !items.x || !items.y || !items.z) { message("Choose a Points field and numeric X, Y and Z measures to draw the 3D scatter."); hideExtras(); return; }
+        var res = ctx.result;
+        if (!res || !res.data) { message(ctx.invalidReason || "Waiting for data"); hideExtras(); return; }
+        if (!state.scene) initScene();
+        state.renderer.setClearColor(dark ? 0x1a1a19 : 0xfcfcfb, 1);
+        state.controls.autoRotate = !!items.autoRotate;
+
+        var mp = res.mappings || {}, recs = res.data.records || [];
+        var get = function (r, k) { return mp[k] === undefined ? null : r[mp[k]]; };
+        var pts = [];
+        recs.forEach(function (r) {
+            var x = get(r, "x"), y = get(r, "y"), z = get(r, "z");
+            if (typeof x !== "number" || typeof y !== "number" || typeof z !== "number" || !isFinite(x + y + z)) return;
+            pts.push({ id: get(r, "point"), x: x, y: y, z: z, cat: items.colour ? get(r, "colour") : null, cv: get(r, "colourValue"), size: get(r, "size") });
+        });
+        disposeObj(state.mesh); disposeObj(state.frame); state.mesh = state.frame = null;
+        if (!pts.length) { message(recs.length ? "No rows have numeric X, Y and Z values." : "No data to show. Check the filters."); hideExtras(); return; }
+        message(null);
+
+        var ext = function (k) { var lo = Infinity, hi = -Infinity; pts.forEach(function (p) { if (p[k] < lo) lo = p[k]; if (p[k] > hi) hi = p[k]; }); if (lo === hi) { lo -= 1; hi += 1; } return [lo, hi]; };
+        var rx = ext("x"), ry = ext("y"), rz = ext("z");
+        var norm = function (v, r) { return -1 + 2 * (v - r[0]) / (r[1] - r[0]); };
+
+        // Colours
+        var pal = PALETTE[dark ? "DARK" : "LIGHT"], legend = { type: null };
+        if (items.colour) {
+            var counts = {}; pts.forEach(function (p) { var k = p.cat === null ? "(blank)" : String(p.cat); counts[k] = (counts[k] || 0) + 1; });
+            var byName = function (a, b) { return a.localeCompare(b, undefined, { numeric: true }); };
+            var cats = Object.keys(counts).sort(byName);
+            // Colour follows the category, not its rank: slots come from the full (unfiltered) category list.
+            var cf = groupField(items.colour), order = state.catOrder[cf];
+            if (!order) { fetchCategories(cf); order = cats; }
+            var cmap = {}; cats.forEach(function (c) { var i = order.indexOf(c); cmap[c] = i >= 0 && i < 8 ? pal[i] : OTHER; });
+            cats.sort(function (a, b) { return (order.indexOf(a) + 1 || 1e9) - (order.indexOf(b) + 1 || 1e9) || byName(a, b); });
+            pts.forEach(function (p) { p.colour = cmap[p.cat === null ? "(blank)" : String(p.cat)]; });
+            legend = { type: "cat", title: groupField(items.colour), cats: cats, cmap: cmap, counts: counts };
+        } else if (items.colourValue && mp.colourValue !== undefined) {
+            var rc = [Infinity, -Infinity]; pts.forEach(function (p) { if (typeof p.cv === "number") { rc[0] = Math.min(rc[0], p.cv); rc[1] = Math.max(rc[1], p.cv); } });
+            var ramp = dark ? SEQ.slice(0, 6) : SEQ.slice(1);
+            var cs = ramp.map(function (h) { return new THREE.Color(h); });
+            pts.forEach(function (p) {
+                if (typeof p.cv !== "number") { p.colour = OTHER; return; }
+                var t = rc[1] > rc[0] ? (p.cv - rc[0]) / (rc[1] - rc[0]) : 0.5; if (dark) t = 1 - t;
+                var f = t * (cs.length - 1), i = Math.min(cs.length - 2, Math.floor(f));
+                p.colour = "#" + cs[i].clone().lerp(cs[i + 1], f - i).getHexString();
+            });
+            legend = { type: "seq", title: fieldName(items.colourValue), range: rc, ramp: dark ? ramp.slice().reverse() : ramp };
+        } else pts.forEach(function (p) { p.colour = pal[0]; });
+
+        // Sizes: area proportional to value
+        var base = 0.03 * Math.max(0.35, Math.min(1, Math.sqrt(600 / pts.length))) * (+items.pointScale > 0 ? +items.pointScale : 1);
+        var smax = 0; pts.forEach(function (p) { if (typeof p.size === "number" && p.size > smax) smax = p.size; });
+        pts.forEach(function (p) { p.r = (items.size && smax > 0 && typeof p.size === "number") ? base * (0.35 + 1.65 * Math.sqrt(Math.max(0, p.size) / smax)) : base; });
+
+        var geo = new THREE.SphereGeometry(1, pts.length > 5000 ? 8 : 14, pts.length > 5000 ? 6 : 10);
+        var mat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+        var mesh = new THREE.InstancedMesh(geo, mat, pts.length);
+        var m4 = new THREE.Matrix4(), col = new THREE.Color();
+        pts.forEach(function (p, i) {
+            p.pos = new THREE.Vector3(norm(p.x, rx), norm(p.y, ry), norm(p.z, rz));
+            m4.makeScale(p.r, p.r, p.r); m4.setPosition(p.pos); mesh.setMatrixAt(i, m4);
+            mesh.setColorAt(i, col.set(p.colour));
+        });
+        mesh.instanceMatrix.needsUpdate = true;
+        state.scene.add(mesh);
+        state.mesh = mesh; state.points = pts;
+        var isig = pts.length + "|" + JSON.stringify(items) + "|" + JSON.stringify(ctx.dataConfig.filter || null);
+        if (isig !== state.introSig && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) state.intro = { t0: null };
+        if (state.intro) { var dm = 0; pts.forEach(function (p) { dm = Math.max(dm, p.pos.length()); }); pts.forEach(function (p) { p.k = 0; p.d = 900 * p.pos.length() / (dm || 1); }); }
+        state.introSig = isig;
+        state.names = [fieldName(items.x), fieldName(items.y), fieldName(items.z)];
+        state.fields = { point: groupField(items.point), colour: groupField(items.colour), colourValue: fieldName(items.colourValue), size: fieldName(items.size) };
+        if (items.showAxes !== false) { state.frame = buildFrame(state.names, [rx, ry, rz], dark); state.scene.add(state.frame); }
+        state.legend = legend;
+        restoreSelection(ctx);
+        applyHighlight();
+        drawLegend();
+        document.getElementById("toolbar").style.display = "flex";
+        document.getElementById("hint").style.display = window.innerWidth > 520 ? "block" : "none";
+    }
+    // Full category list for the colour field, ignoring filters, so colours stay stable when filtering.
+    function fetchCategories(field) {
+        if (state.catPending[field]) return; state.catPending[field] = true;
+        omniscope.view.queryBuilder().table({ groupings: [{ inputField: field, type: "UNIQUE_VALUES" }], measures: [{ function: "RECORD_COUNT" }] })
+            .on("load", function (e) {
+                var list = (e.data.records || []).map(function (r) { return r[0] === null ? "(blank)" : String(r[0]); });
+                list.sort(function (a, b) { return a.localeCompare(b, undefined, { numeric: true }); });
+                var before = JSON.stringify(state.catOrder[field] || null);
+                state.catOrder[field] = list;
+                if (before !== JSON.stringify(list)) render();
+            })
+            .on("error", function () { state.catOrder[field] = state.catOrder[field] || []; })
+            .execute();
+    }
+    function hideExtras() {
+        ["legend", "tooltip"].forEach(function (id) { document.getElementById(id).style.display = "none"; });
+        document.getElementById("toolbar").style.display = "none";
+        document.getElementById("hint").style.display = "none";
+    }
+
+    // ------------------------------------------------------------ selection
+    function restoreSelection(ctx) {
+        state.selected = new Set();
+        var sel = ctx.viewSelection, f = sel && (sel.filter || (sel.type ? sel : null));
+        if (!f) return;
+        var walk = function (x) {
+            if (!x) return;
+            if (x.filters) x.filters.forEach(walk);
+            if (x.inputField === state.fields.point && (x.operator === "=" || !x.operator)) state.selected.add(String(x.value));
+            if (x.inputField === state.fields.colour && (x.operator === "=" || !x.operator))
+                state.points.forEach(function (p) { if (String(p.cat) === String(x.value)) state.selected.add(String(p.id)); });
+        };
+        walk(f);
+    }
+    // entrance: points grow out from the centre, nearest first (plays when the data, options or filters change)
+    function intro(now) {
+        var I = state.intro; if (!I || !state.points) return; var done = true; if (I.t0 === null) I.t0 = now; // starts on the first frame drawn
+        state.points.forEach(function (p) { var t = Math.max(0, Math.min(1, (now - I.t0 - p.d) / 650)); p.k = 1 - Math.pow(1 - t, 3); if (t < 1) done = false; });
+        applyHighlight(); if (done) state.intro = null;
+    }
+    function applyHighlight() {
+        if (!state.mesh) return;
+        var any = state.selected.size > 0, col = new THREE.Color(), grey = new THREE.Color(document.body.classList.contains("dark") ? "#3a3a38" : "#dcdbd5"), m4 = new THREE.Matrix4();
+        state.points.forEach(function (p, i) {
+            var on = state.selected.has(String(p.id)), hov = i === state.hover;
+            col.set(p.colour); if (any && !on) col.lerp(grey, 0.8);
+            if (hov) col.offsetHSL(0, 0, 0.12);
+            state.mesh.setColorAt(i, col);
+            var k = p.k === undefined ? 1 : p.k, r = p.r * (hov ? 1.6 : on ? 1.25 : 1) * Math.max(0.001, k);
+            m4.makeScale(r, r, r); m4.setPosition(k < 1 ? p.pos.clone().multiplyScalar(0.35 + 0.65 * k) : p.pos); state.mesh.setMatrixAt(i, m4);
+        });
+        state.mesh.instanceColor.needsUpdate = true; state.mesh.instanceMatrix.needsUpdate = true;
+    }
+    function publishSelection(filter) {
+        omniscope.view.context().viewSelection = filter ? { filter: filter } : null;
+        omniscope.view.updated();
+    }
+    function selectPoints(ids, additive) {
+        if (!additive) state.selected = new Set();
+        ids.forEach(function (id) { var k = String(id); if (additive && state.selected.has(k) && ids.length === 1) state.selected.delete(k); else state.selected.add(k); });
+        applyHighlight(); drawLegend();
+        if (!state.selected.size) return publishSelection(null);
+        var byId = {}; state.points.forEach(function (p) { byId[String(p.id)] = p.id; });
+        var vals = Array.from(state.selected).map(function (k) { return byId[k] === undefined ? k : byId[k]; });
+        publishSelection(vals.length === 1 ? { type: "FIELD_VALUE", inputField: state.fields.point, operator: "=", value: vals[0] }
+            : { type: "OR", filters: vals.map(function (v) { return { type: "FIELD_VALUE", inputField: state.fields.point, operator: "=", value: v }; }) });
+    }
+    function selectCategory(cat, additive) {
+        var ids = state.points.filter(function (p) { return String(p.cat === null ? "(blank)" : p.cat) === cat; }).map(function (p) { return p.id; });
+        if (!additive) state.selected = new Set();
+        ids.forEach(function (id) { state.selected.add(String(id)); });
+        applyHighlight(); drawLegend();
+        var cats = state.legend.cats.filter(function (c) {
+            var members = state.points.filter(function (p) { return String(p.cat === null ? "(blank)" : p.cat) === c; });
+            return members.length && members.every(function (p) { return state.selected.has(String(p.id)); });
+        });
+        var f = cats.map(function (c) { return { type: "FIELD_VALUE", inputField: state.fields.colour, operator: "=", value: c === "(blank)" ? null : c }; });
+        publishSelection(f.length === 1 ? f[0] : { type: "OR", filters: f });
+    }
+
+    // ------------------------------------------------------------ legend
+    function drawLegend() {
+        var el = document.getElementById("legend"), L = state.legend;
+        if (!L || !L.type) { el.style.display = "none"; return; }
+        el.style.display = "block";
+        if (L.type === "cat") {
+            var shown = L.cats.slice(0, 8), other = L.cats.slice(8);
+            var html = '<div class="title" title="' + esc(L.title) + '">' + esc(L.title) + '</div>';
+            shown.forEach(function (c) {
+                var members = state.points.filter(function (p) { return String(p.cat === null ? "(blank)" : p.cat) === c; });
+                var sel = state.selected.size && members.every(function (p) { return state.selected.has(String(p.id)); });
+                html += '<div class="item' + (sel ? " sel" : "") + '" data-cat="' + esc(c) + '"><span class="sw" style="background:' + L.cmap[c] + '"></span>' + esc(c) + '<span class="n">' + L.counts[c] + '</span></div>';
+            });
+            if (other.length) html += '<div class="item" style="cursor:default"><span class="sw" style="background:' + OTHER + '"></span>Other (' + other.length + ')<span class="n">' + other.reduce(function (a, c) { return a + L.counts[c]; }, 0) + '</span></div>';
+            el.innerHTML = html;
+            Array.prototype.forEach.call(el.querySelectorAll(".item[data-cat]"), function (it) {
+                it.addEventListener("click", function (e) { e.stopPropagation(); selectCategory(it.getAttribute("data-cat"), e.shiftKey || e.ctrlKey || e.metaKey); });
+            });
+        } else {
+            el.innerHTML = '<div class="title">' + esc(L.title) + '</div><div class="grad" style="background:linear-gradient(90deg,' + L.ramp.join(",") + ')"></div><div class="ends"><span>' + fmt(L.range[0]) + '</span><span>' + fmt(L.range[1]) + '</span></div>';
+        }
+    }
+
+    // ------------------------------------------------------------ pointer: hover tooltip, click select
+    function bindPointer(canvas) {
+        var ray = new THREE.Raycaster(), mouse = new THREE.Vector2(), down = null, pending = null;
+        function pick(ev) {
+            if (!state.mesh) return -1;
+            var r = canvas.getBoundingClientRect();
+            mouse.x = ((ev.clientX - r.left) / r.width) * 2 - 1; mouse.y = -((ev.clientY - r.top) / r.height) * 2 + 1;
+            ray.setFromCamera(mouse, state.camera);
+            var hit = ray.intersectObject(state.mesh, false);
+            return hit.length ? hit[0].instanceId : -1;
+        }
+        canvas.addEventListener("pointermove", function (ev) {
+            pending = ev;
+            requestAnimationFrame(function () {
+                if (!pending) return; var e = pending; pending = null;
+                var i = pick(e);
+                if (i !== state.hover) { state.hover = i; applyHighlight(); }
+                showTip(i, e);
+            });
+        });
+        canvas.addEventListener("pointerleave", function () { state.hover = -1; applyHighlight(); showTip(-1); });
+        canvas.addEventListener("pointerdown", function (ev) { down = { x: ev.clientX, y: ev.clientY }; });
+        canvas.addEventListener("pointerup", function (ev) {
+            if (!down || ev.button !== 0) return;
+            var moved = Math.abs(ev.clientX - down.x) + Math.abs(ev.clientY - down.y) > 5; down = null;
+            if (moved) return;
+            var i = pick(ev), add = ev.shiftKey || ev.ctrlKey || ev.metaKey;
+            if (i >= 0) selectPoints([state.points[i].id], add);
+            else { state.selected = new Set(); applyHighlight(); drawLegend(); omniscope.view.whitespaceClick(); }
+        });
+    }
+    function showTip(i, ev) {
+        var tip = document.getElementById("tooltip");
+        if (i < 0 || !state.points[i]) { tip.style.display = "none"; return; }
+        var p = state.points[i], f = state.fields;
+        var h = '<b>' + esc(p.id) + '</b><br>';
+        h += '<span class="k">' + esc(state.names[0]) + ':</span> ' + fmt(p.x) + '<br><span class="k">' + esc(state.names[1]) + ':</span> ' + fmt(p.y) + '<br><span class="k">' + esc(state.names[2]) + ':</span> ' + fmt(p.z);
+        if (f.colour) h += '<br><span class="k">' + esc(f.colour) + ':</span> <span class="sw" style="background:' + p.colour + '"></span>' + esc(p.cat === null ? "(blank)" : p.cat);
+        else if (f.colourValue && typeof p.cv === "number") h += '<br><span class="k">' + esc(f.colourValue) + ':</span> ' + fmt(p.cv);
+        if (f.size && typeof p.size === "number") h += '<br><span class="k">' + esc(f.size) + ':</span> ' + fmt(p.size);
+        tip.innerHTML = h; tip.style.display = "block";
+        var w = tip.offsetWidth, hh = tip.offsetHeight, x = ev.clientX + 14, y = ev.clientY + 14;
+        if (x + w > window.innerWidth - 4) x = ev.clientX - w - 14;
+        if (y + hh > window.innerHeight - 4) y = ev.clientY - hh - 14;
+        tip.style.left = Math.max(4, x) + "px"; tip.style.top = Math.max(4, y) + "px";
+    }
+
+    // Clicks on the HTML overlays (not the canvas) count as whitespace.
+    document.body.addEventListener("click", function (e) {
+        if (e.target === document.body || e.target.id === "message") omniscope.view.whitespaceClick();
+    });
+
+    omniscope.view.on("resize", function () {
+        if (!state.renderer) return render();
+        state.renderer.setSize(window.innerWidth, window.innerHeight);
+        state.camera.aspect = window.innerWidth / Math.max(1, window.innerHeight);
+        state.camera.updateProjectionMatrix();
+        document.getElementById("hint").style.display = window.innerWidth > 520 ? "block" : "none";
+    });
+    omniscope.view.on(["load", "update"], render);
+    window.__scatter3d = state; // exposed for tests
+})();
+</script>
+</body>
+</html>

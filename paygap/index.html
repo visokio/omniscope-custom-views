@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; overflow-y: auto; overflow-x: hidden; }
+        #main { padding: 10px 14px 14px; box-sizing: border-box; }
+        .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 12px; }
+        .tile { background: #f6f6f3; border: 1px solid #e9e8e3; border-radius: 6px; padding: 8px 10px; }
+        .tile .t { color: #52514e; font-size: 11px; } .tile .v { font-size: 22px; font-weight: bold; margin-top: 2px; } .tile .s { color: #52514e; font-size: 11px; margin-top: 2px; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 14px 0 6px; font-weight: normal; }
+        .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; } body.narrow .row2 { grid-template-columns: 1fr; }
+        .q { display: flex; align-items: center; margin-bottom: 6px; } .q .l { width: 104px; flex: none; color: #2b2a28; } .q .bar { flex: 1; display: flex; height: 22px; border-radius: 3px; overflow: hidden; }
+        .q .seg { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; cursor: pointer; } .q .seg:hover { filter: brightness(1.1); } .q .seg.sel { outline: 2px solid #2161D9; outline-offset: -2px; }
+        .q .r { width: 96px; flex: none; text-align: right; color: #52514e; font-size: 11px; }
+        table { border-collapse: collapse; width: 100%; font-size: 11.5px; } td, th { padding: 3px 5px; text-align: right; white-space: nowrap; } th { color: #52514e; font-weight: normal; font-size: 10.5px; border-bottom: 1px solid #e1e0d9; } td:first-child, th:first-child { text-align: left; }
+        tr.g { cursor: pointer; } tr.g:hover { background: rgba(127,127,127,.07); } tr.sel td:first-child { font-weight: bold; color: #2161D9; }
+        .key { display: inline-flex; align-items: center; margin-right: 12px; color: #52514e; } .key i { width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; display: inline-block; }
+        .note { color: #898781; font-size: 11px; margin-top: 8px; line-height: 1.45; }
+        svg { display: block; }
+        #tooltip { position: fixed; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"></div><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var REF = "#2a78d6", CMP = "#eb6834", SELECT = "#2161D9";
+    var S = { gen: 0, sel: null };
+    window.__gap = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var money = function (v) { return v === null || !isFinite(v) ? "n/a" : v >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(2); };
+    var gp = function (v) { return v === null || !isFinite(v) ? "n/a" : (v * 100).toFixed(1) + "%"; };
+    var pct = function (v) { return (v * 100).toFixed(1) + "%"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { g: fld(o.group), p: fld(o.pay), b: fld(o.bonus), d: fld(o.breakdown) };
+        if (!F.g || !F.p) { message("Choose the Groups field (for example Gender) and Hourly pay. Add Bonus and Break down by for the full set of measures."); return; }
+        if (F.d === F.g) F.d = null;
+        var fields = [F.g, F.p]; if (F.b) fields.push(F.b); if (F.d) fields.push(F.d);
+        var q = { fields: fields, range: { start: 0, length: 300000 } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    // Reference group: the one the gap is measured against (men, in UK gender pay gap reporting).
+    function pickGroups(counts) {
+        var o = it(), names = Array.from(counts.keys()).sort(function (a, b) { return counts.get(b) - counts.get(a); }), find = function (re) { return names.find(function (n) { return re.test(n); }); };
+        var ref = o.reference && counts.has(o.reference) ? o.reference : find(/^(m|male|males|man|men)$/i) || names[0];
+        var cmp = o.comparison && counts.has(o.comparison) && o.comparison !== ref ? o.comparison : (/^(m|male|males|man|men)$/i.test(ref) ? find(/^(f|female|females|woman|women)$/i) : null) || names.find(function (n) { return n !== ref; });
+        return [ref, cmp];
+    }
+    function stats(rows) {
+        var pays = rows.map(function (r) { return r.p; }), bon = rows.filter(function (r) { return r.b !== null && r.b > 0; }).map(function (r) { return r.b; });
+        return { n: rows.length, mean: d3.mean(pays), median: d3.median(pays), bn: bon.length, bmean: bon.length ? d3.mean(bon) : null, bmedian: bon.length ? d3.median(bon) : null, bshare: rows.length ? bon.length / rows.length : null };
+    }
+    function gaps(R, C) { var g = function (a, b) { return a && b !== null && b !== undefined ? (a - b) / a : null; }; return { mean: g(R.mean, C.mean), median: g(R.median, C.median), bmean: g(R.bmean, C.bmean), bmedian: g(R.bmedian, C.bmedian) }; }
+
+    function build(F, recs) {
+        var counts = new Map(), all = [], other = 0;
+        recs.forEach(function (r) { var g = r[0] === null || r[0] === undefined ? null : String(r[0]), p = typeof r[1] === "number" ? r[1] : parseFloat(r[1]); if (g === null || !isFinite(p) || p <= 0) { other++; return; } var b = F.b ? (typeof r[2] === "number" ? r[2] : parseFloat(r[2])) : null; all.push({ g: g, p: p, b: isFinite(b) ? b : null, d: F.d ? (r[F.b ? 3 : 2] === null ? "(blank)" : String(r[F.b ? 3 : 2])) : null }); counts.set(g, (counts.get(g) || 0) + 1); });
+        if (!all.length) { S.model = null; message("No data to show. Check the filters and that Hourly pay holds numbers."); return; }
+        if (counts.size < 2) { S.model = null; message("Only one group (" + Array.from(counts.keys())[0] + ") in the data. A pay gap compares two groups."); return; }
+        if (counts.size > 20) { S.model = null; message("Groups has " + counts.size + " different values. Choose a field such as Gender, with a few values."); return; }
+        message(null);
+        var pg = pickGroups(counts), ref = pg[0], cmp = pg[1], rows = all.filter(function (r) { return r.g === ref || r.g === cmp; }), excluded = all.length - rows.length + other;
+        var R = stats(rows.filter(function (r) { return r.g === ref; })), C = stats(rows.filter(function (r) { return r.g === cmp; })), G = gaps(R, C);
+        // pay quartiles: everyone ranked by hourly pay and split into four groups of (nearly) equal size
+        var sorted = rows.slice().sort(function (a, b) { return a.p - b.p; }), n = sorted.length, qs = [];
+        for (var k = 0; k < 4; k++) { var part = sorted.slice(Math.round(k * n / 4), Math.round((k + 1) * n / 4)); qs.push({ k: k, n: part.length, ref: part.filter(function (r) { return r.g === ref; }).length, cmp: part.filter(function (r) { return r.g === cmp; }).length, lo: part.length ? part[0].p : null, hi: part.length ? part[part.length - 1].p : null }); }
+        var groups = null;
+        if (F.d) { var m = d3.group(rows, function (r) { return r.d; }); groups = Array.from(m.entries()).map(function (e) { var rr = e[1], a = stats(rr.filter(function (r) { return r.g === ref; })), b = stats(rr.filter(function (r) { return r.g === cmp; })); return { name: e[0], n: rr.length, share: b.n / rr.length, gap: gaps(a, b), nr: a.n, nc: b.n }; }).sort(function (x, y) { return x.name.localeCompare(y.name, undefined, { numeric: true }); }).slice(0, 30); }
+        S.model = { F: F, ref: ref, cmp: cmp, R: R, C: C, G: G, qs: qs, groups: groups, rows: rows, excluded: excluded, others: Array.from(counts.keys()).filter(function (k) { return k !== ref && k !== cmp; }) };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    function draw() {
+        var M = S.model, el = document.getElementById("main"); tip();
+        if (!M) { el.innerHTML = ""; return; } var intro = introDone();
+        document.body.classList.toggle("narrow", window.innerWidth < 720);
+        var g = M.G, sub = function (v, who) { return v === null ? "" : v > 0 ? esc(who) + " paid less" : v < 0 ? esc(who) + " paid more" : "no gap"; };
+        var tile = function (t, v, s) { return '<div class="tile"><div class="t">' + t + '</div><div class="v">' + gp(v) + '</div><div class="s">' + s + '</div></div>'; };
+        var h = '<div class="tiles">' + tile("Mean hourly pay gap", g.mean, sub(g.mean, M.cmp) + "; " + money(M.R.mean) + " against " + money(M.C.mean)) + tile("Median hourly pay gap", g.median, sub(g.median, M.cmp) + "; " + money(M.R.median) + " against " + money(M.C.median));
+        if (M.F.b) h += tile("Mean bonus gap", g.bmean, "among those paid a bonus") + tile("Median bonus gap", g.bmedian, "among those paid a bonus") + '<div class="tile"><div class="t">Received a bonus</div><div class="v" style="font-size:16px;margin-top:6px"><span style="color:' + REF + '">' + pct(M.R.bshare || 0) + '</span> <span style="color:#9a988f;font-weight:normal">/</span> <span style="color:' + CMP + '">' + pct(M.C.bshare || 0) + '</span></div><div class="s">' + esc(M.ref) + ' / ' + esc(M.cmp) + '</div></div>';
+        h += '</div><div><span class="key"><i style="background:' + REF + '"></i>' + esc(M.ref) + ' (' + M.R.n.toLocaleString() + ')</span><span class="key"><i style="background:' + CMP + '"></i>' + esc(M.cmp) + ' (' + M.C.n.toLocaleString() + ')</span></div>';
+        h += '<div class="row2"><div><h3>Pay quartiles</h3>';
+        var QN = ["Upper", "Upper middle", "Lower middle", "Lower"];
+        M.qs.slice().reverse().forEach(function (q) {
+            var a = q.n ? q.ref / q.n : 0, b = q.n ? q.cmp / q.n : 0, sa = S.sel && S.sel.q === q.k && S.sel.who === "ref", sb = S.sel && S.sel.q === q.k && S.sel.who === "cmp";
+            h += '<div class="q"><div class="l">' + QN[3 - q.k] + '</div><div class="bar"><div class="seg' + (sa ? ' sel' : '') + '" data-q="' + q.k + '" data-w="ref" style="width:' + (a * 100) + '%;background:' + REF + '">' + (a > 0.12 ? pct(a) : '') + '</div><div class="seg' + (sb ? ' sel' : '') + '" data-q="' + q.k + '" data-w="cmp" style="width:' + (b * 100) + '%;background:' + CMP + '">' + (b > 0.12 ? pct(b) : '') + '</div></div><div class="r">' + money(q.lo) + ' to ' + money(q.hi) + '</div></div>';
+        });
+        h += '</div><div><h3>Hourly pay distribution</h3><div id="dist"></div></div></div>';
+        if (M.groups) {
+            h += '<h3>By ' + esc(M.F.d) + '</h3><table><tr><th></th><th>People</th><th>' + esc(M.cmp) + ' share</th><th>Mean gap</th><th>Median gap</th><th style="width:30%"></th></tr>';
+            var mx = d3.max(M.groups, function (x) { return Math.abs(x.gap.median || 0); }) || 0.01;
+            M.groups.forEach(function (x) {
+                var v = x.gap.median, small = x.nr < 10 || x.nc < 10, w = v === null ? 0 : Math.abs(v) / mx * 46;
+                h += '<tr class="g' + (S.sel && S.sel.d === x.name ? ' sel' : '') + '" data-d="' + esc(x.name) + '"><td>' + esc(x.name) + '</td><td>' + x.n.toLocaleString() + '</td><td>' + pct(x.share) + '</td><td>' + gp(x.gap.mean) + '</td><td><b>' + gp(v) + '</b>' + (small ? ' <span title="Fewer than 10 people in a group" style="color:#898781">*</span>' : '') + '</td><td><svg width="100%" height="12" viewBox="0 0 100 12" preserveAspectRatio="none"><line x1="50" x2="50" y1="0" y2="12" stroke="#9a988f"/>' + (v === null ? '' : '<rect x="' + (v >= 0 ? 50 : 50 - w) + '" width="' + w + '" y="2" height="8" fill="' + (v >= 0 ? CMP : REF) + '"/>') + '</svg></td></tr>';
+            });
+            h += '</table>';
+        }
+        h += '<div class="note">Gaps are the difference between ' + esc(M.ref) + ' and ' + esc(M.cmp) + ' as a share of ' + esc(M.ref) + '\u2019s pay; a positive gap means ' + esc(M.cmp) + ' are paid less on average. These are the six measures of UK gender pay gap reporting (mean and median hourly pay gap, mean and median bonus gap, the share receiving a bonus, and pay quartiles), calculated simply from the data given: check the official guidance for which staff, pay elements and periods to include before publishing. A pay gap is not the same as unequal pay for equal work. ' + (M.excluded ? M.excluded.toLocaleString() + ' records left out (' + (M.others.length ? esc(M.others.slice(0, 3).join(", ")) + ', or ' : '') + 'no hourly pay).' : '') + (M.groups ? ' * fewer than 10 people in one of the groups.' : '') + ' Click a quartile segment, a group or a row to select those people.</div>';
+        el.innerHTML = h;
+        dist(M);
+        if (intro) { fadeCss(d3.selectAll("#main .tile"), 450, 90); d3.selectAll("#main .q .seg").each(function (d, i) { var e = d3.select(this), w = this.style.width; e.style("width", "0%").transition().delay(i * 60).duration(700).ease(d3.easeCubicOut).style("width", w); }); fadeIn(d3.selectAll("#dist path"), 700, 0); fadeCss(d3.selectAll("#main tr.g"), 400, 40); }
+        Array.prototype.forEach.call(el.querySelectorAll(".seg"), function (s) {
+            var q = M.qs[+s.getAttribute("data-q")], who = s.getAttribute("data-w");
+            s.addEventListener("click", function (e) { e.stopPropagation(); selectQuartile(q, who); });
+            s.addEventListener("mousemove", function (e) { show('<b>' + QN[3 - q.k] + ' quartile</b><br><span class="k">' + esc(who === "ref" ? M.ref : M.cmp) + ':</span> ' + (who === "ref" ? q.ref : q.cmp).toLocaleString() + ' of ' + q.n.toLocaleString() + ' (' + pct((who === "ref" ? q.ref : q.cmp) / q.n) + ')<br><span class="k">Hourly pay:</span> ' + money(q.lo) + ' to ' + money(q.hi), e); }); s.addEventListener("mouseleave", tip);
+        });
+        Array.prototype.forEach.call(el.querySelectorAll("tr.g"), function (r) { r.addEventListener("click", function (e) { e.stopPropagation(); selectGroup(r.getAttribute("data-d")); }); });
+    }
+    function dist(M) {
+        var box = document.getElementById("dist"), W = box.clientWidth || 300, H = 150, m = { l: 34, r: 8, t: 6, b: 22 }, w = W - m.l - m.r, h = H - m.t - m.b;
+        var ext = d3.extent(M.rows, function (r) { return r.p; }), x = d3.scaleLinear().domain(ext).nice(20), bins = d3.bin().domain(x.domain()).thresholds(x.ticks(24));
+        var br = bins(M.rows.filter(function (r) { return r.g === M.ref; }).map(function (r) { return r.p; })), bc = bins(M.rows.filter(function (r) { return r.g === M.cmp; }).map(function (r) { return r.p; }));
+        var ymax = d3.max(br.concat(bc), function (b) { return b.length; }) || 1, y = d3.scaleLinear().domain([0, ymax]).range([h, 0]); x.range([0, w]);
+        var svg = d3.select(box).append("svg").attr("width", W).attr("height", H), g = svg.append("g").attr("transform", "translate(" + m.l + "," + m.t + ")");
+        [[br, REF], [bc, CMP]].forEach(function (s) { g.append("path").attr("d", d3.area().curve(d3.curveStepAfter).x(function (b) { return x(b.x0); }).y0(h).y1(function (b) { return y(b.length); })(s[0].concat([{ x0: s[0][s[0].length - 1].x1, length: 0 }]))).attr("fill", s[1]).attr("opacity", 0.3); g.append("path").attr("d", d3.line().curve(d3.curveStepAfter).x(function (b) { return x(b.x0); }).y(function (b) { return y(b.length); })(s[0].concat([{ x0: s[0][s[0].length - 1].x1, length: 0 }]))).attr("fill", "none").attr("stroke", s[1]).attr("stroke-width", 1.5); });
+        [[M.R.median, REF], [M.C.median, CMP]].forEach(function (s) { g.append("line").attr("x1", x(s[0])).attr("x2", x(s[0])).attr("y1", 0).attr("y2", h).attr("stroke", s[1]).attr("stroke-dasharray", "3 2").attr("stroke-width", 1.5); });
+        g.append("g").attr("transform", "translate(0," + h + ")").call(d3.axisBottom(x).ticks(6)).selectAll("text").attr("fill", "#52514e");
+        g.append("g").call(d3.axisLeft(y).ticks(3)).selectAll("text").attr("fill", "#52514e"); g.selectAll(".domain, .tick line").attr("stroke", "#c9c8c1");
+        svg.append("text").attr("x", W - 8).attr("y", 14).attr("text-anchor", "end").style("font-size", "10.5px").attr("fill", "#52514e").text("dashed: medians");
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectQuartile(q, who) {
+        if (S.sel && S.sel.q === q.k && S.sel.who === who) return publish(null, null);
+        var M = S.model; publish({ type: "AND", filters: [{ type: "FIELD_VALUE", inputField: M.F.g, operator: "=", value: who === "ref" ? M.ref : M.cmp }, { type: "FIELD_VALUE", inputField: M.F.p, operator: ">=", value: q.lo }, { type: "FIELD_VALUE", inputField: M.F.p, operator: "<=", value: q.hi }] }, { q: q.k, who: who });
+    }
+    function selectGroup(name) { if (S.sel && S.sel.d === name) return publish(null, null); publish({ type: "FIELD_VALUE", inputField: S.model.F.d, operator: "=", value: name === "(blank)" ? null : name }, { d: name }); }
+    window.__gap.selectQuartile = function (k, who) { selectQuartile(S.model.qs[k], who); };
+
+    document.body.addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+{
+  "name": "3D Scatter",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "3d",
+    "scatter",
+    "three.js",
+    "webgl",
+    "point cloud",
+    "cluster",
+    "segmentation",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 20000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "point": {
+        "displayName": "Points",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "One point is drawn per unique value of this field, e.g. Customer ID. Selection filters on this field."
+      },
+      "x": {
+        "displayName": "X axis",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Numeric value for the X axis (left to right)"
+      },
+      "y": {
+        "displayName": "Y axis",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Numeric value for the Y axis (bottom to top)"
+      },
+      "z": {
+        "displayName": "Z axis",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Numeric value for the Z axis (back to front)"
+      },
+      "colour": {
+        "displayName": "Colour by category",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Optional category to colour points by, e.g. Segment or Cluster. Up to 8 categories get their own colour; the rest are grouped as Other."
+      },
+      "colourValue": {
+        "displayName": "Colour by value",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional numeric value to shade points light to dark. Ignored when Colour by category is set."
+      },
+      "size": {
+        "displayName": "Size",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional numeric value to size points by (area proportional to value)"
+      },
+      "pointScale": {
+        "displayName": "Point size",
+        "type": "NUMBER",
+        "minValue": 0.2,
+        "maxValue": 5,
+        "detail": "Multiplier for the size of every point. 1 is the default."
+      },
+      "theme": {
+        "displayName": "Background",
+        "type": "CHOICE",
+        "values": [
+          "LIGHT",
+          "DARK"
+        ],
+        "displayValues": [
+          "Light",
+          "Dark"
+        ],
+        "detail": "Light or dark scene background"
+      },
+      "autoRotate": {
+        "displayName": "Auto rotate",
+        "type": "TOGGLE",
+        "detail": "Slowly rotate the scene. Drag to rotate by hand, scroll to zoom, right-drag to pan."
+      },
+      "showAxes": {
+        "displayName": "Show axes and grid",
+        "type": "TOGGLE",
+        "detail": "Draw the bounding box, grid lines and axis labels"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "point",
+        "x",
+        "y",
+        "z",
+        "colour",
+        "size"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Points",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "point",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "x",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "y",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "z",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Colour and size",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "colourValue",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "size",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "pointScale",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Scene",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "theme",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "autoRotate",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showAxes",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "pointScale": 1,
+      "theme": "LIGHT",
+      "autoRotate": false,
+      "showAxes": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 200,
+    "minHeight": 200
+  }
+}

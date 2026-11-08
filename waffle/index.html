@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .cell, .key { cursor: pointer; } .key:hover text { fill: #2a78d6; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<svg id="svg"></svg><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+
+    var CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], OTHER = "#c9c8c1", SELECT = "#2161D9";
+    var S = { sel: null };
+    window.__waffle = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(1) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(1) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function name(o) { return !o ? "" : o.function === "RECORD_COUNT" ? "Record count" : (o.name && o.function ? o.name : o.inputField || ""); }
+    // Largest-remainder rounding, so the squares always add up to exactly n.
+    function squares(vals, n) { var t = d3.sum(vals); if (!t) return vals.map(function () { return 0; }); var raw = vals.map(function (v) { return v / t * n; }), fl = raw.map(Math.floor), left = n - d3.sum(fl); raw.map(function (r, i) { return { i: i, f: r - fl[i] }; }).sort(function (a, b) { return b.f - a.f; }).slice(0, left).forEach(function (o) { fl[o.i]++; }); return fl; }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.category || !it.value) { message("Choose the Parts grouping (for example Source or Category) and the measure that sizes them."); clear(); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = (res.data.records || []).filter(function (r) { return typeof r[mp.value] === "number" && r[mp.value] > 0; });
+        if (!recs.length) { message("No positive values to show. Check the filters; a waffle shows parts of a positive total."); clear(); return; }
+        message(null);
+        var label = function (v) { return v === null || v === undefined ? "(blank)" : String(v); };
+        var tot = d3.rollup(recs, function (v) { return d3.sum(v, function (r) { return r[mp.value]; }); }, function (r) { return label(r[mp.category]); });
+        var maxParts = Math.max(2, Math.min(8, +it.maxParts || 6)), names = Array.from(tot.keys()).sort(function (a, b) { return tot.get(b) - tot.get(a); });
+        var keep = names.length > maxParts ? names.slice(0, maxParts - 1) : names, other = names.length > keep.length;
+        var alpha = names.slice().sort(), /* colours follow the part name across settings, not the parts currently shown */ parts = keep.map(function (n) { return { name: n, colour: CAT[alpha.indexOf(n) % CAT.length] }; }); if (other) parts.push({ name: "Other (" + (names.length - keep.length) + ")", colour: OTHER, other: true, members: names.slice(keep.length) });
+        var raws = new Map(); recs.forEach(function (r) { raws.set(label(r[mp.category]), r[mp.category]); });
+        var part = function (r) { var n = label(r[mp.category]); var i = keep.indexOf(n); return i >= 0 ? i : parts.length - 1; };
+        var paneKey = mp.pane !== undefined ? function (r) { return label(r[mp.pane]); } : function () { return "All"; };
+        var panes = new Map(); recs.forEach(function (r) { var k = paneKey(r); if (!panes.has(k)) panes.set(k, { name: k, raw: mp.pane !== undefined ? r[mp.pane] : null, v: parts.map(function () { return 0; }) }); panes.get(k).v[part(r)] += r[mp.value]; });
+        var pl = Array.from(panes.values()).sort(function (a, b) { return d3.sum(b.v) - d3.sum(a.v); }).slice(0, 12), grid = it.grid === 20 || it.grid === "20" ? 20 : 10;
+        pl.forEach(function (P) { P.total = d3.sum(P.v); P.sq = squares(P.v, grid * grid); });
+        S.model = { it: it, parts: parts, panes: pl, grid: grid, raws: raws, names: [name(it.category), name(it.value), it.pane ? name(it.pane) : null], F: { c: it.category.inputField, p: it.pane ? it.pane.inputField : null }, total: d3.sum(pl, function (P) { return P.total; }), morePanes: panes.size - pl.length };
+        introIf(recs.length + "|" + JSON.stringify(it) + "|" + d3.sum(pl, function (P) { return P.total; }));
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        draw();
+    }
+    function clear() { d3.select("#svg").selectAll("*").remove(); }
+
+    function draw() {
+        var M = S.model; if (!M) return; tip(); var intro = introDone();
+        var W = window.innerWidth, H = window.innerHeight, svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var n = M.panes.length, keyW = W > 600 ? 210 : 0, top = 34, avail = { w: W - keyW - 20, h: H - top - 10 }, cols = 1, best = 0;
+        for (var c = 1; c <= n; c++) { var r = Math.ceil(n / c), s = Math.min((avail.w - (c - 1) * 16) / c, (avail.h) / r - (n > 1 ? 34 : 6)); if (s > best) { best = s; cols = c; } }
+        var size = Math.max(40, Math.min(best, 420)), rows = Math.ceil(n / cols), cell = size / M.grid, gap = Math.max(0.6, cell * 0.12), shape = M.it.shape === "CIRCLE";
+        var sel = S.sel, x0 = 10 + Math.max(0, (avail.w - cols * size - (cols - 1) * 16) / 2);
+        var head = svg.append("text").attr("x", 10).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.names[1] + " by " + M.names[0] + (M.names[2] ? ", for each " + M.names[2] : ""));
+        head.append("tspan").attr("fill", "#52514e").text("  each square is " + (M.grid === 10 ? "1%" : "0.25%") + " of " + (n > 1 ? "its total" : "the total (" + fmt(M.total) + ")") + (M.morePanes ? "; " + M.morePanes + " smaller not shown" : ""));
+        M.panes.forEach(function (P, pi) {
+            var gx = x0 + (pi % cols) * (size + 16), gy = top + Math.floor(pi / cols) * (size + (n > 1 ? 38 : 8)) + (n > 1 ? 22 : 4), g = svg.append("g").attr("transform", "translate(" + gx + "," + gy + ")");
+            if (n > 1) { var isP = sel && sel.pane === P.name; g.append("text").attr("class", "key").attr("x", 0).attr("y", -7).style("font-size", "12px").style("font-weight", "bold").attr("fill", isP ? SELECT : "#2b2a28").text(P.name).on("click", function (ev) { ev.stopPropagation(); select({ pane: P.name }); }); g.append("text").attr("x", size).attr("y", -7).attr("text-anchor", "end").style("font-size", "11px").attr("fill", "#52514e").text(fmt(P.total)); }
+            var k = 0, cells = []; P.sq.forEach(function (cnt, i) { for (var j = 0; j < cnt; j++) cells.push(i); });
+            // fill column by column from the bottom left, so each part forms a block
+            cells.forEach(function (pi2, idx) {
+                var col = Math.floor(idx / M.grid), row = M.grid - 1 - (idx % M.grid), pt = M.parts[pi2], on = !sel || (sel.part === pt.name && (sel.pane === undefined || sel.pane === P.name)) || (sel.part === undefined && sel.pane === P.name);
+                var e = shape ? g.append("circle").attr("cx", col * cell + cell / 2).attr("cy", row * cell + cell / 2).attr("r", Math.max(0.5, cell / 2 - gap / 2)) : g.append("rect").attr("x", col * cell + gap / 2).attr("y", row * cell + gap / 2).attr("width", Math.max(0.5, cell - gap)).attr("height", Math.max(0.5, cell - gap)).attr("rx", Math.min(2, cell * 0.15));
+                e.attr("class", "cell").attr("fill", pt.colour).attr("opacity", on ? 1 : 0.22)
+                    .on("mousemove", function (ev) { tipPart(P, pi2, ev); }).on("mouseleave", tip).on("click", function (ev) { ev.stopPropagation(); select(n > 1 ? { part: pt.name, pane: P.name } : { part: pt.name }); });
+            });
+        });
+        if (intro) { var cs = svg.selectAll(".cell"); fadeIn(cs, 260, Math.min(6, 800 / Math.max(1, cs.size()))); }
+        if (keyW) {
+            var tots = M.parts.map(function (p, i) { return d3.sum(M.panes, function (P) { return P.v[i]; }); }), kg = svg.append("g").attr("transform", "translate(" + (W - keyW) + "," + (top + 8) + ")");
+            M.parts.forEach(function (p, i) {
+                var e = kg.append("g").attr("class", "key").attr("transform", "translate(0," + i * 38 + ")").attr("opacity", sel && sel.part !== undefined && sel.part !== p.name ? 0.4 : 1).on("click", function (ev) { ev.stopPropagation(); select({ part: p.name }); });
+                e.append("rect").attr("width", 14).attr("height", 14).attr("rx", 2).attr("fill", p.colour);
+                e.append("text").attr("x", 22).attr("y", 11).style("font-size", "12px").style("font-weight", "bold").attr("fill", "#2b2a28").text(p.name.length > 22 ? p.name.slice(0, 21) + "\u2026" : p.name);
+                e.append("text").attr("x", 22).attr("y", 27).style("font-size", "11px").attr("fill", "#52514e").text((100 * tots[i] / (M.total || 1)).toFixed(1) + "%, " + fmt(tots[i]));
+            });
+        }
+    }
+
+    function tipPart(P, i, ev) {
+        var M = S.model, p = M.parts[i], v = P.v[i];
+        show('<b>' + esc(p.name) + '</b>' + (P.name !== "All" ? ' <span class="k">(' + esc(P.name) + ')</span>' : '') + '<br><span class="k">' + esc(M.names[1]) + ':</span> ' + fmt(v) + '<br><span class="k">Share:</span> <b>' + (100 * v / (P.total || 1)).toFixed(1) + '%</b> (' + P.sq[i] + ' of ' + (M.grid * M.grid) + ' squares)' + (p.other ? '<br><span class="k">Includes:</span> ' + esc(p.members.slice(0, 5).join(", ")) + (p.members.length > 5 ? "\u2026" : "") : ''), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function select(meta) {
+        if (S.sel && JSON.stringify(S.sel) === JSON.stringify(meta)) return publish(null, null);
+        var M = S.model, fs = [], eq = function (f, v) { return { type: "FIELD_VALUE", inputField: f, operator: "=", value: v }; };
+        if (meta.part !== undefined) { var p = M.parts.find(function (q) { return q.name === meta.part; }), list = p.other ? p.members : [p.name], cl = list.map(function (n) { return eq(M.F.c, M.raws.get(n)); }); fs.push(cl.length === 1 ? cl[0] : { type: "OR", filters: cl }); }
+        if (meta.pane !== undefined && M.F.p) { var P = M.panes.find(function (q) { return q.name === meta.pane; }); fs.push(eq(M.F.p, P.raw)); }
+        if (!fs.length) return;
+        publish(fs.length === 1 ? fs[0] : { type: "AND", filters: fs }, meta);
+    }
+    window.__waffle.select = select;
+
+    document.body.addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

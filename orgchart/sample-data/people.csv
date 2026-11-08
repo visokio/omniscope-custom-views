@@ -1,0 +1,127 @@
+Employee ID,Manager ID,Name,Job title,Department,Location,Annual cost (GBP)
+E0001,,Siobhan White,Chief Executive,Executive,London,260000
+E0002,E0001,Rhys Wood,Director of Sales,Sales,London,165000
+E0003,E0002,Zara Patel,UK Manager,Sales,Manchester,88000
+E0004,E0003,Lucia Wright,Account Executive,Sales,Bristol,58700.0
+E0005,E0003,Kofi Harris,Account Executive,Sales,Remote,42400.0
+E0006,E0003,Lily Brown,Senior Account Executive,Sales,Manchester,39800.0
+E0007,E0003,Leo Smith,Account Executive,Sales,Edinburgh,58400.0
+E0008,E0003,Chen Clark,Account Executive,Sales,Remote,44700.0
+E0009,E0003,Ffion Green,Senior Account Executive,Sales,Bristol,67100.0
+E0010,E0002,Noah Moore,Europe Manager,Sales,Manchester,88000
+E0011,E0010,Mei Baker,Account Executive,Sales,London,50000.0
+E0012,E0010,Oliver Taylor,Account Executive,Sales,Remote,49500.0
+E0013,E0010,Omar Lewis,Account Executive,Sales,Edinburgh,48700.0
+E0014,E0010,Arjun Harris,Account Executive,Sales,London,45600.0
+E0015,E0010,Niamh Khan,Account Executive,Sales,Remote,62300.0
+E0016,E0002,Zara Clarke,North America Manager,Sales,London,88000
+E0017,E0016,Isla Lewis,Account Executive,Sales,Manchester,58300.0
+E0018,E0016,Dylan Wright,Senior Account Executive,Sales,Remote,41100.0
+E0019,E0016,Theo Scott,Senior Account Executive,Sales,Edinburgh,39100.0
+E0020,E0016,Omar Walker,Account Executive,Sales,London,53400.0
+E0021,E0001,Arjun Hughes,Director of Marketing,Marketing,London,165000
+E0022,E0021,Siobhan Hill,Brand Manager,Marketing,Bristol,88000
+E0023,E0022,Dylan Harris,Marketing Specialist,Marketing,Manchester,51900.0
+E0024,E0022,Amelia White,Senior Marketing Specialist,Marketing,Manchester,65400.0
+E0025,E0022,Amelia Cooper,Marketing Specialist,Marketing,Edinburgh,43400.0
+E0026,E0022,Omar Ward,Senior Marketing Specialist,Marketing,Remote,41500.0
+E0027,E0021,Oliver Green,Digital Manager,Marketing,Manchester,88000
+E0028,E0027,Arthur Wright,Senior Marketing Specialist,Marketing,Edinburgh,72000
+E0029,E0027,Aisha Thompson,Marketing Specialist,Marketing,Remote,52300.0
+E0030,E0028,Grace Clark,Marketing Specialist,Marketing,Bristol,64800.0
+E0031,E0027,Niamh Clark,Marketing Specialist,Marketing,London,46300.0
+E0032,E0028,Rhys Thompson,Marketing Specialist,Marketing,Manchester,60000.0
+E0033,E0027,Freya Moore,Senior Marketing Specialist,Marketing,London,58800.0
+E0034,E0028,Lily Clarke,Marketing Specialist,Marketing,Bristol,42200.0
+E0035,E0027,Tomasz Thompson,Marketing Specialist,Marketing,London,54800.0
+E0036,E0028,Leo Martin,Marketing Specialist,Marketing,Bristol,50900.0
+E0037,E0021,Mateo Moore,Events Manager,Marketing,Manchester,88000
+E0038,E0037,Oliver Thomas,Marketing Specialist,Marketing,Bristol,54900.0
+E0039,E0037,Mei Ward,Marketing Specialist,Marketing,London,64900.0
+E0040,E0037,Aisha Ali,Senior Marketing Specialist,Marketing,Bristol,61800.0
+E0041,E0037,Tomasz Evans,Marketing Specialist,Marketing,Remote,52800.0
+E0042,E0037,Ravi Watson,Senior Marketing Specialist,Marketing,Remote,59000.0
+E0043,E0001,George Brown,Director of Engineering,Engineering,London,165000
+E0044,E0043,Aisha Green,Platform Manager,Engineering,Bristol,88000
+E0045,E0044,Finley Edwards,Software Engineer,Engineering,Manchester,58600.0
+E0046,E0044,Oliver Walker,Software Engineer,Engineering,Bristol,49000.0
+E0047,E0044,Noah Baker,Software Engineer,Engineering,Bristol,52600.0
+E0048,E0044,Mia Wright,Software Engineer,Engineering,Manchester,64500.0
+E0049,E0044,Ivy Wright,Senior Software Engineer,Engineering,Edinburgh,49000.0
+E0050,E0043,Niamh Hall,Data Manager,Engineering,Manchester,88000
+E0051,E0050,George Turner,Software Engineer,Engineering,Bristol,56200.0
+E0052,E0050,Evie Jackson,Software Engineer,Engineering,London,63000.0
+E0053,E0050,Kofi Williams,Software Engineer,Engineering,Bristol,53600.0
+E0054,E0050,Finley Wood,Software Engineer,Engineering,Remote,55100.0
+E0055,E0050,Callum Harris,Software Engineer,Engineering,London,47700.0
+E0056,E0050,Evie Ward,Software Engineer,Engineering,Manchester,42100.0
+E0057,E0043,Sofia Scott,Mobile Manager,Engineering,Manchester,88000
+E0058,E0057,Lucia Hughes,Software Engineer,Engineering,Edinburgh,46600.0
+E0059,E0057,Freya Thompson,Software Engineer,Engineering,Remote,47600.0
+E0060,E0057,Zara Jackson,Software Engineer,Engineering,Remote,61900.0
+E0061,E0057,Zara Scott,Software Engineer,Engineering,Edinburgh,48200.0
+E0062,E0057,Harry Roberts,Software Engineer,Engineering,Bristol,62400.0
+E0063,E0043,Sofia Evans,Security Manager,Engineering,Manchester,88000
+E0064,E0063,Noah Wood,Senior Software Engineer,Engineering,Remote,72000
+E0065,E0063,Finley Walker,Software Engineer,Engineering,Edinburgh,61100.0
+E0066,E0064,Isla Patel,Software Engineer,Engineering,London,54700.0
+E0067,E0063,Ivy Ali,Software Engineer,Engineering,Manchester,42900.0
+E0068,E0064,Oliver Baker,Software Engineer,Engineering,Edinburgh,54400.0
+E0069,E0063,Ffion Ali,Software Engineer,Engineering,Edinburgh,58500.0
+E0070,E0064,Freya Martin,Software Engineer,Engineering,Remote,38200.0
+E0071,E0063,Rhys Smith,Software Engineer,Engineering,Edinburgh,52000.0
+E0072,E0001,Theo Smith,Director of Finance,Finance,London,165000
+E0073,E0072,Mia Clarke,Accounting Manager,Finance,Manchester,88000
+E0074,E0073,Lucia Harris,Senior Analyst,Finance,Bristol,72000
+E0075,E0073,Evie Davies,Analyst,Finance,Manchester,48500.0
+E0076,E0074,George Smith,Analyst,Finance,London,63100.0
+E0077,E0073,Oliver Watson,Senior Analyst,Finance,Remote,56500.0
+E0078,E0074,Ama Hall,Senior Analyst,Finance,Bristol,56900.0
+E0079,E0073,George Martin,Analyst,Finance,Remote,62900.0
+E0080,E0074,Noah Harris,Senior Analyst,Finance,Remote,48100.0
+E0081,E0073,Lucia Wilson,Senior Analyst,Finance,London,65700.0
+E0082,E0072,Amelia Ali,FP&A Manager,Finance,Edinburgh,88000
+E0083,E0082,Ravi Green,Senior Analyst,Finance,Bristol,59900.0
+E0084,E0082,Callum Hall,Analyst,Finance,Bristol,61000.0
+E0085,E0082,Tomasz Harris,Senior Analyst,Finance,Remote,57100.0
+E0086,E0082,Tomasz King,Senior Analyst,Finance,Edinburgh,49600.0
+E0087,E0001,Freya Ward,Director of Operations,Operations,London,165000
+E0088,E0087,Theo Thompson,Support Manager,Operations,Bristol,88000
+E0089,E0088,Mateo Scott,Coordinator,Operations,London,41600.0
+E0090,E0088,Theo Lewis,Senior Coordinator,Operations,Remote,42700.0
+E0091,E0088,Arjun Cooper,Coordinator,Operations,Edinburgh,48600.0
+E0092,E0088,Ravi Walker,Coordinator,Operations,London,43200.0
+E0093,E0088,Aisha Thomas,Coordinator,Operations,Remote,49000.0
+E0094,E0088,Ravi Jones,Coordinator,Operations,Edinburgh,67800.0
+E0095,E0087,Ffion Brown,Logistics Manager,Operations,Edinburgh,88000
+E0096,E0095,Mia Thompson,Senior Coordinator,Operations,Remote,72000
+E0097,E0095,Finley Roberts,Senior Coordinator,Operations,Bristol,67700.0
+E0098,E0096,Evie Ali,Coordinator,Operations,Manchester,46500.0
+E0099,E0095,Mateo Khan,Senior Coordinator,Operations,London,57100.0
+E0100,E0096,Siobhan Martin,Coordinator,Operations,Edinburgh,51800.0
+E0101,E0095,Lily Robinson,Coordinator,Operations,Bristol,48800.0
+E0102,E0096,Tomasz Hall,Coordinator,Operations,Bristol,53000.0
+E0103,E0095,Ava Hughes,Coordinator,Operations,Edinburgh,42100.0
+E0104,E0096,Oscar Morris,Coordinator,Operations,Edinburgh,65100.0
+E0105,E0095,Chen Jackson,Coordinator,Operations,Edinburgh,43400.0
+E0106,E0087,Oscar Williams,Facilities Manager,Operations,London,88000
+E0107,E0106,Rhys Edwards,Senior Coordinator,Operations,London,72000
+E0108,E0106,Dylan Lewis,Senior Coordinator,Operations,Manchester,41700.0
+E0109,E0107,Lily Thomas,Coordinator,Operations,Edinburgh,56000.0
+E0110,E0106,Sofia Morris,Coordinator,Operations,Bristol,63800.0
+E0111,E0107,Jack Moore,Coordinator,Operations,Manchester,41800.0
+E0112,E0106,Ffion Ward,Senior Coordinator,Operations,Manchester,45800.0
+E0113,E0107,Rhys Khan,Coordinator,Operations,London,52700.0
+E0114,E0106,Noah Clarke,Coordinator,Operations,Remote,63200.0
+E0115,E0001,Finley Smith,Director of People,People,London,165000
+E0116,E0115,Zara Wood,Recruitment Manager,People,Bristol,88000
+E0117,E0116,Rhys Turner,Senior People Advisor,People,Remote,65600.0
+E0118,E0116,Omar Jackson,People Advisor,People,Remote,50000.0
+E0119,E0116,Ava Morris,People Advisor,People,London,48100.0
+E0120,E0116,Evie Edwards,People Advisor,People,Edinburgh,67700.0
+E0121,E0116,Rhys Taylor,People Advisor,People,Remote,60400.0
+E0122,E0116,Omar Hughes,People Advisor,People,London,64100.0
+E0123,E0115,Leo Evans,People Partners Manager,People,Edinburgh,88000
+E0124,E0123,Oscar Wilson,Senior People Advisor,People,Manchester,39900.0
+E0125,E0123,Harry Moore,People Advisor,People,Remote,54000.0
+E0126,E0123,Evie Martin,People Advisor,People,Edinburgh,67300.0

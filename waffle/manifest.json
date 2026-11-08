@@ -1,0 +1,177 @@
+{
+  "name": "Waffle Chart",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "waffle",
+    "part to whole",
+    "share",
+    "percentage",
+    "infographic",
+    "proportion",
+    "small multiples",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 5000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "category": {
+        "displayName": "Parts",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "The parts of the whole, e.g. Source, Category, Segment"
+      },
+      "value": {
+        "displayName": "Size",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "The measure that sizes each part, e.g. sum of Generation"
+      },
+      "pane": {
+        "displayName": "One waffle per",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Optional: small multiples, e.g. one waffle per Nation (up to 12)"
+      },
+      "maxParts": {
+        "displayName": "Parts shown",
+        "type": "NUMBER",
+        "minValue": 2,
+        "maxValue": 8,
+        "detail": "Further parts are combined as Other (default 6)"
+      },
+      "grid": {
+        "displayName": "Squares",
+        "type": "CHOICE",
+        "values": [
+          "10",
+          "20"
+        ],
+        "displayValues": [
+          "100 (each 1%)",
+          "400 (each 0.25%)"
+        ],
+        "detail": "Grid size"
+      },
+      "shape": {
+        "displayName": "Shape",
+        "type": "CHOICE",
+        "values": [
+          "SQUARE",
+          "CIRCLE"
+        ],
+        "displayValues": [
+          "Squares",
+          "Dots"
+        ]
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "category",
+        "value",
+        "pane"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Parts",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "category",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "pane",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "maxParts",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "grid",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "shape",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "maxParts": 6,
+      "grid": "10",
+      "shape": "SQUARE"
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 200
+  }
+}

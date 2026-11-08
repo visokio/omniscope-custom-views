@@ -1,0 +1,337 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; flex-direction: column; }
+        #summary { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; padding: 8px 12px 2px; }
+        .badge { display: flex; align-items: center; gap: 7px; }
+        .badge .ico { width: 30px; height: 30px; flex: none; }
+        .badge b { display: block; font-size: 12px; }
+        .badge span { color: #52514e; font-size: 11px; }
+        .kpi { color: #52514e; }
+        .kpi b { color: #0b0b0b; font-size: 15px; margin-right: 3px; font-variant-numeric: tabular-nums; }
+        #legend { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 2px 12px 0; color: #52514e; font-size: 11px; }
+        #legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+        #legend .ln { display: inline-block; width: 16px; height: 0; border-top: 2px dashed #898781; margin-right: 4px; vertical-align: 3px; }
+        #chart { flex: 1; position: relative; min-height: 80px; }
+        svg { display: block; }
+        .axis text { fill: #898781; font-size: 10px; }
+        .axis path, .axis line { stroke: #c3c2b7; }
+        .grid line { stroke: #e1e0d9; }
+        .grid path { display: none; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,0.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 7px 10px; line-height: 1.45; white-space: nowrap; z-index: 4; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+        body.compact #summary .badge span, body.compact #legend { display: none; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="summary"></div>
+    <div id="legend"></div>
+    <div id="chart"><svg id="svg"></svg><div id="tooltip"></div></div>
+</div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    // Colours: common cause grey; special cause improvement blue, concern orange, neutral violet (categorical slots 1, 2, 7).
+    var C = { common: "#898781", improve: "#2a78d6", concern: "#eb6834", neutral: "#6250d6", line: "#52514e", mean: "#0b0b0b", limit: "#898781", target: "#008300", select: "#2161D9" };
+    var S = { points: [], selected: new Set() };
+    window.__spc = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function fmt(v) { if (v === null || v === undefined || isNaN(v)) return "n/a"; var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1000 ? Math.round(v).toLocaleString() : a >= 100 ? v.toFixed(1) : a >= 10 ? v.toFixed(2) : v.toFixed(3); }
+
+    // ------------------------------------------------------------ time keys
+    var DATE_RE = /^\d{4}-\d{2}-\d{2}/;
+    function timeInfo(v) {
+        if (v && typeof v === "object" && "lower" in v) { var lo = v.lower; return { sort: DATE_RE.test(lo) ? Date.parse(lo) : +lo, date: DATE_RE.test(lo) ? new Date(Date.parse(lo.length === 10 ? lo + "T00:00:00Z" : lo)) : null, label: String(lo), raw: v, range: true }; }
+        if (typeof v === "string" && DATE_RE.test(v)) return { sort: Date.parse(v), date: new Date(Date.parse(v.length === 10 ? v + "T00:00:00Z" : v)), label: v.slice(0, 10), raw: v };
+        if (typeof v === "number") return { sort: v, date: null, label: String(v), raw: v };
+        return { sort: null, date: null, label: v === null || v === undefined ? "(blank)" : String(v), raw: v };
+    }
+    var fmtDate = d3.utcFormat("%-d %b %Y");
+    function niceLabel(p) { return p.t.date ? fmtDate(p.t.date) : p.t.label; }
+
+    // ------------------------------------------------------------ SPC calculations
+    function analyse(points, it) {
+        var n = points.length, runLen = Math.max(5, +it.runLength || 7), trendLen = Math.max(5, +it.trendLength || 6), dir = it.direction || "NEUTRAL";
+        // Phases: split where the time label matches a rebase entry.
+        var rebase = String(it.rebase || "").split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+        var starts = [0];
+        points.forEach(function (p, i) { if (i > 0 && rebase.some(function (r) { return p.t.label === r || p.t.label.indexOf(r) === 0 || niceLabel(p) === r; })) starts.push(i); });
+        var phases = starts.map(function (s, k) { return { from: s, to: (starts[k + 1] || n) - 1 }; });
+        phases.forEach(function (ph, k) {
+            var seg = points.slice(ph.from, ph.to + 1), base = seg;
+            var b = +it.baseline || 0; if (k === 0 && b >= 2 && b < seg.length) base = seg.slice(0, b);
+            ph.mean = d3.mean(base, function (p) { return p.v; });
+            var mrs = []; for (var i = 1; i < base.length; i++) mrs.push(Math.abs(base[i].v - base[i - 1].v));
+            ph.mrBar = mrs.length ? d3.mean(mrs) : 0;
+            ph.sigma = ph.mrBar / 1.128; ph.ucl = ph.mean + 2.66 * ph.mrBar; ph.lcl = ph.mean - 2.66 * ph.mrBar; ph.mrUcl = 3.267 * ph.mrBar;
+            seg.forEach(function (p, j) { p.phase = k; p.mr = j > 0 ? Math.abs(p.v - seg[j - 1].v) : null; });
+        });
+        points.forEach(function (p) { p.flags = []; p.side = 0; });
+        phases.forEach(function (ph) {
+            var seg = points.slice(ph.from, ph.to + 1), i, j;
+            seg.forEach(function (p) {
+                if (p.v > ph.ucl) { p.flags.push("Above the upper limit"); p.side = 1; }
+                else if (p.v < ph.lcl) { p.flags.push("Below the lower limit"); p.side = -1; }
+            });
+            // Shift: run of runLen or more on one side of the mean (points on the mean break the run).
+            for (i = 0; i < seg.length;) {
+                var s = Math.sign(seg[i].v - ph.mean); j = i;
+                while (j < seg.length && s !== 0 && Math.sign(seg[j].v - ph.mean) === s) j++;
+                if (s !== 0 && j - i >= runLen) for (var k2 = i; k2 < j; k2++) { seg[k2].flags.push("Shift: " + (j - i) + " points " + (s > 0 ? "above" : "below") + " the mean"); seg[k2].side = seg[k2].side || s; }
+                i = Math.max(j, i + 1);
+            }
+            // Trend: trendLen or more consecutive increases or decreases.
+            for (i = 0; i < seg.length - 1;) {
+                var d = Math.sign(seg[i + 1].v - seg[i].v); j = i + 1;
+                while (j < seg.length && d !== 0 && Math.sign(seg[j].v - seg[j - 1].v) === d) j++;
+                if (d !== 0 && j - i >= trendLen) for (var k3 = i; k3 < j; k3++) { seg[k3].flags.push("Trend: " + (j - i) + " points " + (d > 0 ? "rising" : "falling")); seg[k3].side = seg[k3].side || d; }
+                i = Math.max(j - 1, i + 1);
+            }
+            // Two out of three beyond two sigma on the same side.
+            for (i = 0; i + 2 < seg.length; i++) {
+                [1, -1].forEach(function (sd) {
+                    var hits = [0, 1, 2].filter(function (o) { return sd * (seg[i + o].v - ph.mean) > 2 * ph.sigma; });
+                    if (hits.length >= 2) hits.forEach(function (o) { var p = seg[i + o]; if (p.flags.indexOf("Two of three beyond two sigma") < 0) p.flags.push("Two of three beyond two sigma"); p.side = p.side || sd; });
+                });
+            }
+        });
+        points.forEach(function (p) {
+            if (!p.flags.length) p.cause = "common";
+            else if (dir === "NEUTRAL") p.cause = "neutral";
+            else p.cause = (p.side > 0) === (dir === "HIGHER") ? "improve" : "concern";
+        });
+        return phases;
+    }
+    function verdicts(points, phases, it) {
+        var last = points[points.length - 1], ph = phases[phases.length - 1], dir = it.direction || "NEUTRAL";
+        var variation = last.cause === "common" ? { key: "common", title: "Common cause variation", text: "No signal in the latest point" }
+            : last.cause === "improve" ? { key: "improve", title: "Special cause: improvement", text: last.flags[0] }
+            : last.cause === "concern" ? { key: "concern", title: "Special cause: concern", text: last.flags[0] }
+            : { key: "neutral", title: "Special cause variation", text: last.flags[0] };
+        var assurance = null, t = it.target;
+        if (t !== null && t !== undefined && t !== "" && !isNaN(+t) && dir !== "NEUTRAL") {
+            t = +t;
+            var passAll = dir === "HIGHER" ? ph.lcl > t : ph.ucl < t, failAll = dir === "HIGHER" ? ph.ucl < t : ph.lcl > t;
+            assurance = passAll ? { key: "pass", title: "Will consistently meet target", text: "Target is outside the limits, on the good side" }
+                : failAll ? { key: "fail", title: "Will consistently miss target", text: "Target is outside the limits, on the wrong side" }
+                : { key: "hit", title: "Hit and miss against target", text: "Target lies within the limits" };
+        }
+        return { variation: variation, assurance: assurance };
+    }
+    function badgeIcon(kind) {
+        var col = { common: C.common, improve: C.improve, concern: C.concern, neutral: C.neutral, pass: C.improve, fail: C.concern, hit: C.common }[kind];
+        var inner = kind === "improve" || kind === "pass" ? '<path d="M9 19 L15 11 L21 19" fill="none" stroke="' + col + '" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'
+            : kind === "concern" || kind === "fail" ? '<path d="M9 12 L15 20 L21 12" fill="none" stroke="' + col + '" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'
+            : kind === "hit" ? '<path d="M8 15 C11 9 13 21 16 15 S21 9 23 15" fill="none" stroke="' + col + '" stroke-width="2.2" stroke-linecap="round"/>'
+            : kind === "neutral" ? '<circle cx="15" cy="15" r="3.5" fill="' + col + '"/>'
+            : '<path d="M8 15 L22 15" stroke="' + col + '" stroke-width="2.4" stroke-linecap="round"/>';
+        return '<svg class="ico" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#fff" stroke="' + col + '" stroke-width="2.4"/>' + inner + '</svg>';
+    }
+
+    // ------------------------------------------------------------ render
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.time || !it.value) { message("Choose a Time field (for example a date grouped by week) and a Value to monitor."); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = res.data.records || [];
+        var pts = recs.map(function (r) { return { t: timeInfo(r[mp.time]), v: r[mp.value], raw: r[mp.time] }; }).filter(function (p) { return typeof p.v === "number" && isFinite(p.v); });
+        if (pts.every(function (p) { return p.t.sort !== null && !isNaN(p.t.sort); })) pts.sort(function (a, b) { return a.t.sort - b.t.sort; });
+        if (pts.length < 3) { message(pts.length ? "At least three time points are needed for control limits." : "No data to show. Check the filters."); clear(); return; }
+        message(null);
+        pts.forEach(function (p, i) { p.i = i; p.key = JSON.stringify(p.raw); });
+        var phases = analyse(pts, it);
+        S.points = pts; S.phases = phases; S.items = it;
+        S.timeField = typeof it.time === "string" ? it.time : it.time.inputField;
+        S.valueName = it.value.displayName || (it.value.function === "RECORD_COUNT" ? "Record count" : ({ MEAN: "Average ", SUM: "Total ", MEDIAN: "Median " }[it.value.function] || "") + it.value.inputField);
+        restoreSelection(ctx);
+        var v = verdicts(pts, phases, it), ph = phases[phases.length - 1], last = pts[pts.length - 1];
+        document.body.classList.toggle("compact", window.innerHeight < 260 || window.innerWidth < 420);
+        var h = '<div class="badge">' + badgeIcon(v.variation.key) + '<div><b>' + esc(v.variation.title) + '</b><span>' + esc(v.variation.text) + '</span></div></div>';
+        if (v.assurance) h += '<div class="badge">' + badgeIcon(v.assurance.key) + '<div><b>' + esc(v.assurance.title) + '</b><span>' + esc(v.assurance.text) + '</span></div></div>';
+        h += '<div class="kpi"><b>' + fmt(last.v) + '</b>latest (' + esc(niceLabel(last)) + ')</div><div class="kpi"><b>' + fmt(ph.mean) + '</b>mean</div><div class="kpi"><b>' + fmt(ph.lcl) + ' to ' + fmt(ph.ucl) + '</b>limits</div>';
+        document.getElementById("summary").innerHTML = h;
+        var lg = '<span><i style="background:' + C.common + '"></i>Common cause</span>';
+        var causes = {}; pts.forEach(function (p) { causes[p.cause] = 1; });
+        if (causes.improve) lg += '<span><i style="background:' + C.improve + '"></i>Improvement</span>';
+        if (causes.concern) lg += '<span><i style="background:' + C.concern + '"></i>Concern</span>';
+        if (causes.neutral) lg += '<span><i style="background:' + C.neutral + '"></i>Special cause</span>';
+        lg += '<span><span class="ln"></span>Control limits</span>';
+        if (it.target !== null && it.target !== undefined && it.target !== "" && !isNaN(+it.target)) lg += '<span><span class="ln" style="border-top:2px dotted ' + C.target + '"></span>Target</span>';
+        document.getElementById("legend").innerHTML = lg;
+        introIf(recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null));
+        draw();
+    }
+    function clear() { document.getElementById("summary").innerHTML = ""; document.getElementById("legend").innerHTML = ""; d3.select("#svg").selectAll("*").remove(); }
+
+    function draw() {
+        var it = S.items, pts = S.points, phases = S.phases;
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight;
+        var svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove(); var intro = introDone();
+        var showMR = it.showMR !== false && H > 220, m = { l: 52, r: 16, t: 10, b: 24 }, gap = 26;
+        var hX = showMR ? Math.round((H - m.t - m.b - gap) * 0.7) : H - m.t - m.b, hR = showMR ? H - m.t - m.b - gap - hX : 0;
+        var x = d3.scaleLinear().domain([-0.5, pts.length - 0.5]).range([m.l, W - m.r]);
+        var target = it.target !== null && it.target !== undefined && it.target !== "" && !isNaN(+it.target) ? +it.target : null;
+        var ext = d3.extent(pts.map(function (p) { return p.v; }).concat(phases.map(function (p) { return p.ucl; }), phases.map(function (p) { return p.lcl; }), target === null ? [] : [target]));
+        var pad = (ext[1] - ext[0]) * 0.06 || 1;
+        var y = d3.scaleLinear().domain([ext[0] - pad, ext[1] + pad]).nice().range([m.t + hX, m.t]);
+        // SI prefixes turn 0.8 into "800m"; use plain decimals for small ranges.
+        var tf = function (dom) { var span = Math.abs(dom[1] - dom[0]), mx = Math.max(Math.abs(dom[0]), Math.abs(dom[1])); return mx < 1000 ? d3.format(span < 5 ? ",.2~f" : ",.0f") : d3.format("~s"); };
+        // X axis ticks: dates or labels, thinned to fit
+        var every = Math.max(1, Math.ceil(pts.length / Math.max(2, Math.floor((W - m.l - m.r) / 78))));
+        var tickIdx = pts.map(function (p) { return p.i; }).filter(function (i) { return i % every === 0; });
+        var g = svg.append("g");
+        g.append("g").attr("class", "grid").attr("transform", "translate(" + m.l + ",0)").call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat(""));
+        g.append("g").attr("class", "axis").attr("transform", "translate(" + m.l + ",0)").call(d3.axisLeft(y).ticks(5).tickFormat(tf(y.domain())));
+        var xAxis = function (yy) { return d3.axisBottom(x).tickValues(tickIdx).tickFormat(function (i) { var p = pts[i]; return p ? (p.t.date ? d3.utcFormat(pts.length > 60 ? "%b %y" : "%-d %b")(p.t.date) : p.t.label) : ""; }); };
+        if (!showMR) g.append("g").attr("class", "axis").attr("transform", "translate(0," + (m.t + hX) + ")").call(xAxis());
+        // sigma bands
+        if (it.showSigma) phases.forEach(function (ph) {
+            var x0 = x(ph.from - 0.5), x1 = x(ph.to + 0.5);
+            [[1, 2, 0.05], [2, 3, 0.09]].forEach(function (z) {
+                [1, -1].forEach(function (sd) { var a = ph.mean + sd * z[0] * ph.sigma, b = ph.mean + sd * z[1] * ph.sigma; g.append("rect").attr("x", x0).attr("width", x1 - x0).attr("y", y(Math.max(a, b))).attr("height", Math.abs(y(a) - y(b))).attr("fill", "#898781").attr("opacity", z[2]); });
+            });
+        });
+        // phase separators, mean and limits per phase
+        phases.forEach(function (ph, k) {
+            var x0 = x(ph.from - 0.5), x1 = x(ph.to + 0.5);
+            if (k > 0) g.append("line").attr("x1", x0).attr("x2", x0).attr("y1", m.t).attr("y2", m.t + hX).attr("stroke", "#c3c2b7").attr("stroke-dasharray", "2,3");
+            g.append("line").attr("x1", x0).attr("x2", x1).attr("y1", y(ph.mean)).attr("y2", y(ph.mean)).attr("stroke", C.mean).attr("stroke-width", 1.2);
+            [ph.ucl, ph.lcl].forEach(function (v) { g.append("line").attr("x1", x0).attr("x2", x1).attr("y1", y(v)).attr("y2", y(v)).attr("stroke", C.limit).attr("stroke-width", 1.4).attr("stroke-dasharray", "6,4"); });
+            if (k === phases.length - 1) {
+                [["UCL", ph.ucl], ["Mean", ph.mean], ["LCL", ph.lcl]].forEach(function (L) { g.append("text").attr("x", W - m.r).attr("y", y(L[1]) - 3).attr("text-anchor", "end").attr("fill", "#52514e").attr("font-size", 10).text(L[0] + " " + fmt(L[1])); });
+            }
+        });
+        if (target !== null) {
+            g.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(target)).attr("y2", y(target)).attr("stroke", C.target).attr("stroke-width", 1.6).attr("stroke-dasharray", "2,3");
+            g.append("text").attr("x", m.l + 4).attr("y", y(target) - 3).attr("fill", C.target).attr("font-size", 10).text("Target " + fmt(target));
+        }
+        // data line and points (points >= 8px across, 2px surface ring)
+        g.append("path").datum(pts).attr("fill", "none").attr("stroke", C.line).attr("stroke-width", 1.6).attr("d", d3.line().x(function (p) { return x(p.i); }).y(function (p) { return y(p.v); }));
+        var r = pts.length > 200 ? 2.5 : pts.length > 80 ? 3.5 : 4.5;
+        g.selectAll("circle.pt").data(pts).enter().append("circle").attr("class", "pt").attr("cx", function (p) { return x(p.i); }).attr("cy", function (p) { return y(p.v); })
+            .attr("r", function (p) { return p.cause === "common" ? r * 0.8 : r; }).attr("fill", function (p) { return C[p.cause]; }).attr("stroke", "#fcfcfb").attr("stroke-width", 1.5);
+        g.selectAll("circle.sel").data(pts.filter(function (p) { return S.selected.has(p.key); })).enter().append("circle").attr("class", "sel").attr("cx", function (p) { return x(p.i); }).attr("cy", function (p) { return y(p.v); })
+            .attr("r", r + 3.5).attr("fill", "none").attr("stroke", C.select).attr("stroke-width", 1.5).attr("stroke-dasharray", "3,2");
+        // moving range chart
+        if (showMR) {
+            var top = m.t + hX + gap, yr = d3.scaleLinear().domain([0, d3.max(pts.map(function (p) { return p.mr || 0; }).concat(phases.map(function (p) { return p.mrUcl; }))) * 1.1 || 1]).nice().range([top + hR, top]);
+            g.append("text").attr("x", m.l).attr("y", top - 6).attr("fill", "#52514e").attr("font-size", 10).text("Moving range");
+            g.append("g").attr("class", "axis").attr("transform", "translate(" + m.l + ",0)").call(d3.axisLeft(yr).ticks(3).tickFormat(tf(yr.domain())));
+            g.append("g").attr("class", "axis").attr("transform", "translate(0," + (top + hR) + ")").call(xAxis());
+            phases.forEach(function (ph) {
+                var x0 = x(ph.from - 0.5), x1 = x(ph.to + 0.5);
+                g.append("line").attr("x1", x0).attr("x2", x1).attr("y1", yr(ph.mrBar)).attr("y2", yr(ph.mrBar)).attr("stroke", C.mean).attr("stroke-width", 1);
+                g.append("line").attr("x1", x0).attr("x2", x1).attr("y1", yr(ph.mrUcl)).attr("y2", yr(ph.mrUcl)).attr("stroke", C.limit).attr("stroke-dasharray", "6,4");
+            });
+            var mrPts = pts.filter(function (p) { return p.mr !== null; });
+            g.append("path").datum(mrPts).attr("fill", "none").attr("stroke", "#9a988f").attr("stroke-width", 1.2).attr("d", d3.line().x(function (p) { return x(p.i); }).y(function (p) { return yr(p.mr); }));
+            g.selectAll("circle.mr").data(mrPts.filter(function (p) { return p.mr > phases[p.phase].mrUcl; })).enter().append("circle").attr("cx", function (p) { return x(p.i); }).attr("cy", function (p) { return yr(p.mr); }).attr("r", 3).attr("fill", C.neutral);
+        }
+        // interaction layer: hover crosshair, click to select, drag to select a range
+        var cross = g.append("line").attr("y1", m.t).attr("y2", H - m.b).attr("stroke", "#c3c2b7").style("display", "none");
+        var brush = g.append("rect").attr("y", m.t).attr("height", hX).attr("fill", C.select).attr("opacity", 0.12).style("display", "none");
+        var overlay = g.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.l - m.r).attr("height", H - m.t - m.b).attr("fill", "transparent").style("cursor", "crosshair");
+        if (intro) linesIn(svg, 1400);
+        var nearest = function (mx) { return Math.max(0, Math.min(pts.length - 1, Math.round(x.invert(mx)))); }, dragFrom = null;
+        overlay.on("mousemove", function (ev) {
+            var mx = d3.pointer(ev)[0], i = nearest(mx), p = pts[i];
+            cross.attr("x1", x(i)).attr("x2", x(i)).style("display", null);
+            if (dragFrom !== null) { var a = Math.min(dragFrom, i), b = Math.max(dragFrom, i); brush.attr("x", x(a - 0.5)).attr("width", x(b + 0.5) - x(a - 0.5)).style("display", null); }
+            tip(p, ev);
+        }).on("mouseleave", function () { cross.style("display", "none"); tip(null); })
+          .on("mousedown", function (ev) { dragFrom = nearest(d3.pointer(ev)[0]); ev.preventDefault(); })
+          .on("mouseup", function (ev) {
+              if (dragFrom === null) return;
+              var i = nearest(d3.pointer(ev)[0]), a = Math.min(dragFrom, i), b = Math.max(dragFrom, i); dragFrom = null; brush.style("display", "none");
+              var px = Math.abs(x(i) - x(a === i ? b : a));
+              ev.stopPropagation();
+              selectRange(a, b, ev.shiftKey || ev.ctrlKey || ev.metaKey);
+          });
+    }
+    function tip(p, ev) {
+        var el = document.getElementById("tooltip");
+        if (!p) { el.style.display = "none"; return; }
+        var ph = S.phases[p.phase];
+        el.innerHTML = '<b>' + esc(niceLabel(p)) + '</b><br><span class="k">' + esc(S.valueName) + ':</span> <b>' + fmt(p.v) + '</b>' +
+            '<br><span class="k">Mean:</span> ' + fmt(ph.mean) + ' <span class="k">Limits:</span> ' + fmt(ph.lcl) + ' to ' + fmt(ph.ucl) +
+            (p.mr !== null ? '<br><span class="k">Moving range:</span> ' + fmt(p.mr) : '') +
+            (p.flags.length ? '<br><span style="color:' + C[p.cause] + ';font-weight:bold">' + esc(p.flags.join("; ")) + '</span>' : '<br><span class="k">Common cause</span>');
+        el.style.display = "block";
+        var box = document.getElementById("chart").getBoundingClientRect(), xx = ev.clientX - box.left + 14, yy = ev.clientY - box.top + 14;
+        if (xx + el.offsetWidth > box.width - 4) xx = ev.clientX - box.left - el.offsetWidth - 14;
+        if (yy + el.offsetHeight > box.height - 4) yy = Math.max(4, ev.clientY - box.top - el.offsetHeight - 14);
+        el.style.left = Math.max(4, xx) + "px"; el.style.top = yy + "px";
+    }
+
+    // ------------------------------------------------------------ selection
+    function timeFilter(a, b) {
+        var f = S.timeField, pa = S.points[a], pb = S.points[b];
+        if (pa.t.range) return { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: f, operator: ">=", value: pa.raw.lower }, { type: "FIELD_VALUE", inputField: f, operator: "<", value: pb.raw.upper }] };
+        if (a === b) return { type: "FIELD_VALUE", inputField: f, operator: "=", value: pa.raw };
+        if (pa.t.sort !== null) return { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: f, operator: ">=", value: pa.raw }, { type: "FIELD_VALUE", inputField: f, operator: "<=", value: pb.raw }] };
+        return { type: "OR", filters: S.points.slice(a, b + 1).map(function (p) { return { type: "FIELD_VALUE", inputField: f, operator: "=", value: p.raw }; }) };
+    }
+    function selectRange(a, b, additive) {
+        var keys = S.points.slice(a, b + 1).map(function (p) { return p.key; });
+        if (!additive) S.selected = new Set();
+        keys.forEach(function (k) { S.selected.add(k); });
+        var f = timeFilter(a, b);
+        if (additive && S.prevFilter) f = { type: "OR", filters: [S.prevFilter, f] };
+        S.prevFilter = f;
+        omniscope.view.context().viewSelection = { filter: f, meta: { keys: Array.from(S.selected) } };
+        omniscope.view.updated();
+        draw();
+    }
+    function restoreSelection(ctx) {
+        var sel = ctx.viewSelection;
+        S.selected = new Set(sel && sel.meta && sel.meta.keys ? sel.meta.keys : []);
+        if (!sel) S.prevFilter = null;
+    }
+    document.body.addEventListener("click", function (e) {
+        if (e.target.closest && e.target.closest("svg") && e.target.tagName === "rect") return;
+        if (S.selected.size) { S.selected = new Set(); S.prevFilter = null; draw(); }
+        omniscope.view.whitespaceClick();
+    });
+    window.__spc.selectRange = selectRange;
+
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.points.length) { document.body.classList.toggle("compact", window.innerHeight < 260 || window.innerWidth < 420); draw(); } else render(); });
+})();
+</script>
+</body>
+</html>

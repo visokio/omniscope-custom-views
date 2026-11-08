@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <path d="M16 8 L16 12 L6 12 L6 14.5" fill="none" stroke="#aec6f5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 12 L26 12 L26 14.5" fill="none" stroke="#aec6f5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 12 L16 14.5" fill="none" stroke="#aec6f5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M26 20.5 L26 23 L21.5 23 L21.5 24.5" fill="none" stroke="#aec6f5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M26 23 L29.5 23 L29.5 24.5" fill="none" stroke="#aec6f5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="10" y="1.5" width="12" height="6.5" rx="1.2" fill="#f68c11"/>
+  <rect x="1.5" y="14.5" width="9" height="6" rx="1.2" fill="#467de7"/>
+  <rect x="11.5" y="14.5" width="9" height="6" rx="1.2" fill="#467de7"/>
+  <rect x="21.5" y="14.5" width="9" height="6" rx="1.2" fill="#467de7"/>
+  <rect x="18.5" y="24.5" width="6" height="5" rx="1" fill="#7aa2ee"/>
+  <rect x="26.5" y="24.5" width="4.5" height="5" rx="1" fill="#7aa2ee"/>
+</svg>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .tile { cursor: pointer; } .tile:hover rect { stroke: #0b0b0b; stroke-width: 1.5; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<svg id="svg"></svg><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var SEQ = ["#e8f1fc", "#c9def8", "#9ec5f4", "#6fa8ec", "#3987e5", "#2a6fc4", "#184f95"], DIV = ["#a32a2a", "#e34948", "#f4a6a5", "#f0efec", "#9ec5f4", "#3987e5", "#184f95"], EMPTY = "#f0efec", SELECT = "#2161D9";
+    // Equal-area tile layouts: [code, name, column, row, other accepted spellings]
+    var LAYOUTS = {
+        US: [["AK", "Alaska", 0, 0], ["ME", "Maine", 10, 0], ["VT", "Vermont", 9, 1], ["NH", "New Hampshire", 10, 1],
+            ["WA", "Washington", 0, 2], ["ID", "Idaho", 1, 2], ["MT", "Montana", 2, 2], ["ND", "North Dakota", 3, 2], ["MN", "Minnesota", 4, 2], ["IL", "Illinois", 5, 2], ["WI", "Wisconsin", 6, 2], ["MI", "Michigan", 7, 2], ["NY", "New York", 8, 2], ["RI", "Rhode Island", 9, 2], ["MA", "Massachusetts", 10, 2],
+            ["OR", "Oregon", 0, 3], ["NV", "Nevada", 1, 3], ["WY", "Wyoming", 2, 3], ["SD", "South Dakota", 3, 3], ["IA", "Iowa", 4, 3], ["IN", "Indiana", 5, 3], ["OH", "Ohio", 6, 3], ["PA", "Pennsylvania", 7, 3], ["NJ", "New Jersey", 8, 3], ["CT", "Connecticut", 9, 3],
+            ["CA", "California", 0, 4], ["UT", "Utah", 1, 4], ["CO", "Colorado", 2, 4], ["NE", "Nebraska", 3, 4], ["MO", "Missouri", 4, 4], ["KY", "Kentucky", 5, 4], ["WV", "West Virginia", 6, 4], ["VA", "Virginia", 7, 4], ["MD", "Maryland", 8, 4], ["DE", "Delaware", 9, 4],
+            ["AZ", "Arizona", 1, 5], ["NM", "New Mexico", 2, 5], ["KS", "Kansas", 3, 5], ["AR", "Arkansas", 4, 5], ["TN", "Tennessee", 5, 5], ["NC", "North Carolina", 6, 5], ["SC", "South Carolina", 7, 5], ["DC", "District of Columbia", 8, 5, ["Washington DC", "Washington D.C.", "D.C."]],
+            ["OK", "Oklahoma", 3, 6], ["LA", "Louisiana", 4, 6], ["MS", "Mississippi", 5, 6], ["AL", "Alabama", 6, 6], ["GA", "Georgia", 7, 6],
+            ["HI", "Hawaii", 0, 7], ["TX", "Texas", 3, 7], ["FL", "Florida", 8, 7]],
+        UK: [["SCO", "Scotland", 1, 0, ["TLM", "UKM"]], ["NI", "Northern Ireland", 0, 1, ["TLN", "UKN"]], ["NE", "North East", 2, 1, ["TLC", "UKC"]],
+            ["NW", "North West", 1, 2, ["TLD", "UKD"]], ["YH", "Yorkshire and The Humber", 2, 2, ["TLE", "UKE", "Yorkshire & Humber", "Yorkshire and Humber", "Yorkshire"]],
+            ["WAL", "Wales", 0, 3, ["TLL", "UKL"]], ["WM", "West Midlands", 1, 3, ["TLG", "UKG"]], ["EM", "East Midlands", 2, 3, ["TLF", "UKF"]], ["EE", "East of England", 3, 3, ["TLH", "UKH", "East", "Eastern", "East England"]],
+            ["SW", "South West", 1, 4, ["TLK", "UKK"]], ["LDN", "London", 2, 4, ["TLI", "UKI", "Greater London"]], ["SE", "South East", 3, 4, ["TLJ", "UKJ"]]]
+    };
+    var S = { sel: null };
+    window.__tile = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(1) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(1) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var norm = function (s) { return String(s).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]/g, ""); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function name(o) { return !o ? "" : o.function === "RECORD_COUNT" ? "Record count" : (o.name && o.function ? o.name : o.inputField || ""); }
+
+    function parseCustom(txt) { // "CODE:col,row" or "CODE:col,row:Full name", separated by semicolons or new lines
+        var out = []; String(txt || "").split(/[;\n]/).forEach(function (p) { var m = p.trim().match(/^([^:]+):\s*(-?\d+)\s*,\s*(-?\d+)\s*(?::(.+))?$/); if (m) out.push([m[1].trim(), (m[4] || m[1]).trim(), +m[2], +m[3]]); }); return out;
+    }
+    function index(layout) { var ix = new Map(); layout.forEach(function (t) { [t[0], t[1]].concat(t[4] || []).forEach(function (k) { ix.set(norm(k), t); }); }); return ix; }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.region || !it.value) { message("Choose the Regions grouping (US states, UK regions or your own codes) and a measure to colour them by."); clear(); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = res.data.records || [];
+        var vals = recs.map(function (r) { return { raw: r[mp.region], v: typeof r[mp.value] === "number" ? r[mp.value] : null }; }).filter(function (x) { return x.raw !== null && x.raw !== undefined; });
+        if (!vals.length) { message("No data to show. Check the filters."); clear(); return; }
+        var choice = it.layout || "AUTO", custom = parseCustom(it.custom), cands = choice === "CUSTOM" ? [["CUSTOM", custom]] : choice === "US" || choice === "UK" ? [[choice, LAYOUTS[choice]]] : [["US", LAYOUTS.US], ["UK", LAYOUTS.UK]].concat(custom.length ? [["CUSTOM", custom]] : []);
+        var best = null; cands.forEach(function (c) { var ix = index(c[1]), hit = vals.filter(function (x) { return ix.has(norm(x.raw)); }).length; if (!best || hit > best.hit) best = { key: c[0], layout: c[1], ix: ix, hit: hit }; });
+        if (!best || !best.hit) { message(choice === "CUSTOM" && !custom.length ? "Type a layout into Custom layout, for example North:1,0; South:1,1; West:0,1." : "None of the " + vals.length + " regions match a US state, a UK region or the custom layout. Check the Regions field, or type a Custom layout."); clear(); return; }
+        message(null);
+        var byCode = new Map(), unmatched = [];
+        vals.forEach(function (x) { var t = best.ix.get(norm(x.raw)); if (!t) { unmatched.push(String(x.raw)); return; } var c = byCode.get(t[0]) || { t: t, v: null, raws: [] }; c.v = x.v === null ? c.v : (c.v || 0) + x.v; c.raws.push(x.raw); byCode.set(t[0], c); });
+        var list = Array.from(byCode.values()).filter(function (c) { return c.v !== null; }).sort(function (a, b) { return b.v - a.v; }); list.forEach(function (c, i) { c.rank = i + 1; });
+        S.model = { it: it, layout: best.layout, key: best.key, byCode: byCode, unmatched: unmatched, n: list.length, names: [name(it.region), name(it.value)], F: it.region.inputField, total: d3.sum(list, function (c) { return c.v; }) };
+        introIf(recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null));
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        draw();
+    }
+    function clear() { d3.select("#svg").selectAll("*").remove(); }
+
+    function draw() {
+        var M = S.model; if (!M) return; tip(); var intro = introDone();
+        var W = window.innerWidth, H = window.innerHeight, svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var it = M.it, cols = d3.max(M.layout, function (t) { return t[2]; }) + 1, rows = d3.max(M.layout, function (t) { return t[3]; }) + 1, top = 46, bottom = M.unmatched.length ? 40 : 22;
+        var size = Math.floor(Math.max(16, Math.min((W - 20) / cols, (H - top - bottom) / rows))), gap = Math.max(2, Math.round(size * 0.07)), x0 = (W - size * cols) / 2, y0 = top + Math.max(0, (H - top - bottom - size * rows) / 2);
+        var vs = Array.from(M.byCode.values()).map(function (c) { return c.v; }).filter(function (v) { return v !== null; }), lo = d3.min(vs), hi = d3.max(vs);
+        var diverging = it.colour === "DIVERGING", mid = diverging ? (it.midpoint !== undefined && it.midpoint !== null && it.midpoint !== "" && isFinite(+it.midpoint) ? +it.midpoint : d3.median(vs)) : null;
+        var col = diverging ? (function () { var e = Math.max(Math.abs(hi - mid), Math.abs(mid - lo)) || 1; return d3.scaleQuantize().domain([mid - e, mid + e]).range(DIV); })() : it.colour === "QUANTILE" ? d3.scaleQuantile().domain(vs).range(SEQ) : d3.scaleQuantize().domain([lo, hi === lo ? lo + 1 : hi]).range(SEQ);
+        var g = svg.append("g"), sel = S.sel;
+        M.layout.forEach(function (t) {
+            var c = M.byCode.get(t[0]), v = c ? c.v : null, fill = v === null ? EMPTY : col(v), ink = d3.lab(fill).l > 60 ? "#0b0b0b" : "#ffffff", isSel = sel && sel.code === t[0];
+            var e = g.append("g").attr("class", "tile").attr("transform", "translate(" + (x0 + t[2] * size) + "," + (y0 + t[3] * size) + ")").attr("opacity", sel && !isSel ? 0.4 : 1)
+                .on("mousemove", function (ev) { tipTile(t, c, ev); }).on("mouseleave", tip).on("click", function (ev) { ev.stopPropagation(); select(t, c); });
+            e.append("rect").attr("x", gap / 2).attr("y", gap / 2).attr("width", size - gap).attr("height", size - gap).attr("rx", Math.min(6, size * 0.08)).attr("fill", fill).attr("stroke", isSel ? SELECT : v === null ? "#e1e0d9" : "none").attr("stroke-width", isSel ? 3 : 1);
+            var fs = Math.max(8, Math.min(16, size * 0.24));
+            e.append("text").attr("x", size / 2).attr("y", size / 2 - (it.showValues !== false && size > 34 ? fs * 0.35 : 0)).attr("dy", "0.35em").attr("text-anchor", "middle").style("font-size", fs + "px").style("font-weight", "bold").attr("fill", v === null ? "#9a988f" : ink).attr("pointer-events", "none").text(t[0]);
+            if (it.showValues !== false && size > 34 && v !== null) e.append("text").attr("x", size / 2).attr("y", size / 2 + fs * 0.75).attr("dy", "0.35em").attr("text-anchor", "middle").style("font-size", Math.max(8, fs * 0.72) + "px").attr("fill", ink).attr("pointer-events", "none").text(fmt(v));
+        });
+        // heading, legend and unmatched values
+        var head = svg.append("text").attr("x", 10).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.names[1] + " by " + M.names[0]);
+        head.append("tspan").attr("fill", "#52514e").text("  " + M.n + " of " + M.layout.length + " " + (M.key === "US" ? "states" : M.key === "UK" ? "UK regions" : "tiles") + " with data");
+        var stops = diverging ? DIV : SEQ, lg = svg.append("g").attr("transform", "translate(" + (W - 10 - stops.length * 18) + ",10)");
+        stops.forEach(function (c, i) { lg.append("rect").attr("x", i * 18).attr("width", 17).attr("height", 9).attr("fill", c); });
+        lg.append("text").attr("x", 0).attr("y", 21).style("font-size", "10px").attr("fill", "#52514e").text(fmt(diverging ? col.domain()[0] : lo));
+        if (diverging) lg.append("text").attr("x", stops.length * 9).attr("y", 21).attr("text-anchor", "middle").style("font-size", "10px").attr("fill", "#52514e").text(fmt(mid));
+        lg.append("text").attr("x", stops.length * 18).attr("y", 21).attr("text-anchor", "end").style("font-size", "10px").attr("fill", "#52514e").text(fmt(diverging ? col.domain()[1] : hi));
+        if (M.unmatched.length) svg.append("text").attr("x", 10).attr("y", H - 10).style("font-size", "11px").attr("fill", "#898781").text("Not on the map: " + M.unmatched.slice(0, 6).join(", ") + (M.unmatched.length > 6 ? " and " + (M.unmatched.length - 6) + " more" : ""));
+        if (intro) { var ts = svg.selectAll("g.tile"); fadeIn(ts, 380, stag(ts.size(), 700)); }
+    }
+
+    function tipTile(t, c, ev) {
+        var M = S.model;
+        show('<b>' + esc(t[1]) + '</b>' + (t[1] !== t[0] ? ' <span class="k">(' + esc(t[0]) + ')</span>' : '') + '<br>' + (c && c.v !== null ? '<span class="k">' + esc(M.names[1]) + ':</span> <b>' + fmt(c.v) + '</b><br><span class="k">Rank:</span> ' + c.rank + ' of ' + M.n + (M.total > 0 && c.v >= 0 ? '<br><span class="k">Share of total:</span> ' + (100 * c.v / M.total).toFixed(1) + '%' : '') : '<span class="k">No data</span>'), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function select(t, c) {
+        if (S.sel && S.sel.code === t[0]) return publish(null, null);
+        if (!c) return;
+        var F = S.model.F, eq = function (v) { return { type: "FIELD_VALUE", inputField: F, operator: "=", value: v }; };
+        publish(c.raws.length === 1 ? eq(c.raws[0]) : { type: "OR", filters: c.raws.map(eq) }, { code: t[0] });
+    }
+    window.__tile.select = function (code) { var M = S.model, t = M.layout.find(function (x) { return x[0] === code; }); select(t, M.byCode.get(code)); };
+
+    document.body.addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

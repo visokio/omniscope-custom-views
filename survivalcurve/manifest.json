@@ -1,0 +1,206 @@
+{
+  "name": "Survival Curve",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "survival",
+    "kaplan-meier",
+    "churn",
+    "retention",
+    "tenure",
+    "time to event",
+    "log-rank",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "start": {
+        "displayName": "Start",
+        "type": "FIELD",
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "When each record started, e.g. subscription start, hire date, install date"
+      },
+      "end": {
+        "displayName": "End",
+        "type": "FIELD",
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "When it ended (churn, leaving, failure); leave blank while still active"
+      },
+      "duration": {
+        "displayName": "Duration",
+        "type": "FIELD",
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Alternative to Start and End: time to the event or to the last observation"
+      },
+      "event": {
+        "displayName": "Event flag",
+        "type": "FIELD",
+        "detail": "With Duration: whether the event happened (1, true, yes); 0, false, no or blank mean still active"
+      },
+      "group": {
+        "displayName": "Compare",
+        "type": "FIELD",
+        "detail": "Optional: one curve per value, e.g. Plan, Channel, Cohort"
+      },
+      "unit": {
+        "displayName": "Time unit",
+        "type": "CHOICE",
+        "values": [
+          "AUTO",
+          "DAYS",
+          "WEEKS",
+          "MONTHS",
+          "YEARS"
+        ],
+        "displayValues": [
+          "Automatic",
+          "Days",
+          "Weeks",
+          "Months",
+          "Years"
+        ],
+        "detail": "Unit of the time axis when using Start and End"
+      },
+      "show": {
+        "displayName": "Show",
+        "type": "CHOICE",
+        "values": [
+          "SURVIVAL",
+          "CUMULATIVE"
+        ],
+        "displayValues": [
+          "Share still active",
+          "Share ended"
+        ],
+        "detail": "Survival curve, or its complement (cumulative churn or failure)"
+      },
+      "bands": {
+        "displayName": "Confidence bands",
+        "type": "TOGGLE",
+        "detail": "Shade the 95% confidence interval of each curve"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "start",
+        "end",
+        "group",
+        "show"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Time",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "start",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "end",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "duration",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "event",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "group",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "unit",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "show",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "bands",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "unit": "AUTO",
+      "show": "SURVIVAL",
+      "bands": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

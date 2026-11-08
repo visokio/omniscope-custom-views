@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #chart { position: absolute; inset: 0; }
+        svg { display: block; }
+        .axis text { fill: #898781; font-size: 10px; } .axis path, .axis line { stroke: #c3c2b7; }
+        .rowlab { cursor: pointer; }
+        .rowlab:hover { fill: #2a78d6; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 7px 10px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="chart"><svg id="svg"></svg></div><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var FILL = "#2a78d6", FILL_DIM = "#cde2fb", SELECT = "#2161D9";
+    var S = { gen: 0, sel: null };
+    window.__ridge = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toLocaleString() : a >= 1 ? (+v.toFixed(1)).toLocaleString() : (+v.toPrecision(2)).toString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function niceStep(raw) { var p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
+    function q(query) { return new Promise(function (res, rej) { omniscope.view.queryBuilder().table(query).on("load", function (e) { res(e.data); }).on("error", function (e) { rej(e.data); }).execute(); }); }
+    function withFilter(query, extra) { var f = omniscope.view.context().dataConfig.filter, fs = []; if (f && (!f.filters || f.filters.length)) fs.push(f); (extra || []).forEach(function (x) { fs.push(x); }); if (fs.length) query.filter = fs.length === 1 ? fs[0] : { type: "AND", filters: fs }; return query; }
+
+    // Readable labels for dates and times of day (a time such as 08:00 arrives as 1970-01-01T08:00:00Z).
+    function label(v) {
+        if (v === null || v === undefined) return "(blank)";
+        var s = String(v), m = s.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(:\d{2})?/);
+        if (!m) return s;
+        if (m[1] === "1970-01-01") return m[2];
+        return m[2] === "00:00" ? m[1] : m[1] + " " + m[2];
+    }
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), cat = fld(o.category), val = fld(o.value);
+        if (!cat || !val) { message("Choose the Rows field and a numeric field for Distribution of."); return; }
+        var gen = ++S.gen; omniscope.view.busy(true);
+        var notNull = { type: "FIELD_VALUE", inputField: val, operator: "!=", value: null };
+        Promise.all([
+            q(withFilter({ measures: [{ inputField: val, function: "MIN", name: "lo" }, { inputField: val, function: "MAX", name: "hi" }, { inputField: val, function: "LOWER_QUARTILE", name: "q1" }, { inputField: val, function: "UPPER_QUARTILE", name: "q3" }, { function: "RECORD_COUNT", name: "n" }] }, [notNull])),
+            q(withFilter({ groupings: [{ inputField: cat, type: "UNIQUE_VALUES" }], measures: [{ function: "RECORD_COUNT", name: "n" }, { inputField: val, function: "MEDIAN", name: "med" }, { inputField: val, function: "MEAN", name: "mean" }], range: { start: 0, length: 5000 } }, [notNull]))
+        ]).then(function (r) {
+            if (gen !== S.gen) return;
+            var g = r[0].records[0] || [], lo = g[0], hi = g[1], q1 = g[2], q3 = g[3], n = g[4];
+            if (!n || typeof lo !== "number") { omniscope.view.busy(false); S.model = null; message("No data to show. Check the filters."); d3.select("#svg").selectAll("*").remove(); return; }
+            if (o.trim !== false && typeof q1 === "number" && q3 > q1) { var iqr = q3 - q1; lo = Math.max(lo, q1 - 3 * iqr); hi = Math.min(hi, q3 + 3 * iqr); }
+            if (hi <= lo) hi = lo + 1;
+            var bins = Math.max(10, Math.min(200, +o.bins || 60)), step = niceStep((hi - lo) / bins);
+            var lo0 = Math.floor(lo / step) * step, hi0 = Math.ceil(hi / step) * step;
+            var rows = r[1].records.map(function (x) { return { raw: x[0], key: label(x[0]), n: x[1], med: x[2], mean: x[3] }; });
+            var maxRows = Math.max(2, Math.min(60, +o.maxRows || 25)), dropped = 0;
+            if (rows.length > maxRows) { var keep = rows.slice().sort(function (a, b) { return b.n - a.n; }).slice(0, maxRows); dropped = rows.length - maxRows; rows = rows.filter(function (x) { return keep.indexOf(x) >= 0; }); }
+            var srt = o.sort || "NATURAL";
+            if (srt === "MEDIAN_DESC") rows.sort(function (a, b) { return b.med - a.med; });
+            else if (srt === "MEDIAN_ASC") rows.sort(function (a, b) { return a.med - b.med; });
+            else if (srt === "COUNT_DESC") rows.sort(function (a, b) { return b.n - a.n; });
+            else if (rows.every(function (x) { return typeof x.raw === "number"; })) rows.sort(function (a, b) { return a.raw - b.raw; });
+            else if (rows.every(function (x) { return typeof x.raw === "string" && /^\d{4}-\d{2}-\d{2}/.test(x.raw); })) rows.sort(function (a, b) { return a.raw < b.raw ? -1 : 1; });
+            return q(withFilter({ groupings: [{ inputField: cat, type: "UNIQUE_VALUES" }, { inputField: val, type: "HISTOGRAM", histogramInterval: step }], measures: [{ function: "RECORD_COUNT", name: "n" }], range: { start: 0, length: 200000 } },
+                [{ type: "FIELD_VALUE", inputField: val, operator: ">=", value: lo0 }, { type: "FIELD_VALUE", inputField: val, operator: "<", value: hi0 + step }])).then(function (h) {
+                if (gen !== S.gen) return;
+                omniscope.view.busy(false);
+                build(rows, h.records, lo0, hi0, step, dropped, n); draw();
+            });
+        }).catch(function (e) { omniscope.view.busy(false); omniscope.view.error((e && e.message) || "Query failed", e); });
+    }
+    function build(rows, recs, lo, hi, step, dropped, total) {
+        var nb = Math.round((hi - lo) / step) + 1, byKey = {};
+        rows.forEach(function (r) { r.counts = new Float64Array(nb); byKey[r.key] = r; });
+        recs.forEach(function (x) {
+            var r = byKey[label(x[0])]; if (!r) return;
+            var b = x[1], l = b && typeof b === "object" ? b.lower : b, i = Math.round((l - lo) / step);
+            if (i >= 0 && i < nb) r.counts[i] += x[2];
+        });
+        var sm = it().smooth === undefined || it().smooth === null ? 1.5 : Math.max(0, +it().smooth);
+        rows.forEach(function (r) { r.dens = smooth(r.counts, sm); r.peak = d3.max(r.dens) || 1; });
+        S.model = { rows: rows, lo: lo, hi: hi + step, step: step, nb: nb, dropped: dropped, total: total, fields: { category: fld(it().category), value: fld(it().value) } };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+    function smooth(c, s) {
+        if (!s) return Array.from(c);
+        var k = [], w = Math.ceil(s * 3); for (var i = -w; i <= w; i++) k.push(Math.exp(-i * i / (2 * s * s)));
+        var out = new Array(c.length);
+        for (var j = 0; j < c.length; j++) { var a = 0, ws = 0; for (var t = -w; t <= w; t++) { var idx = j + t; if (idx < 0 || idx >= c.length) continue; a += c[idx] * k[t + w]; ws += k[t + w]; } out[j] = ws ? a / ws : 0; }
+        return out;
+    }
+
+    function draw() {
+        var M = S.model; if (!M) return; var intro = introDone();
+        message(null);
+        var o = it(), box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight;
+        var svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var maxLab = d3.max(M.rows, function (r) { return r.key.length; }) || 4;
+        var m = { l: Math.min(170, 14 + maxLab * 6.4), r: o.showMedian !== false ? 64 : 16, t: 14, b: 28 };
+        var n = M.rows.length, overlap = Math.max(0.5, Math.min(4, +o.overlap || 1.8));
+        var stepY = (H - m.t - m.b) / (n + overlap - 0.6);
+        var x = d3.scaleLinear().domain([M.lo, M.hi]).range([m.l, W - m.r]);
+        var gmax = d3.max(M.rows, function (r) { return r.peak; }) || 1, norm = !!o.normalise;
+        svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (H - m.b) + ")").call(d3.axisBottom(x).ticks(Math.max(3, Math.floor((W - m.l - m.r) / 80))).tickFormat(function (v) { return fmt(v); }));
+        svg.append("text").attr("x", W - m.r).attr("y", H - 2).attr("text-anchor", "end").attr("fill", "#52514e").attr("font-size", 10).text(M.fields.value + (M.dropped ? "  (" + M.dropped + " smaller rows not shown)" : ""));
+        // value-range selection band
+        if (S.sel && S.sel.type === "range") svg.append("rect").attr("x", x(S.sel.a)).attr("width", Math.max(1, x(S.sel.b) - x(S.sel.a))).attr("y", m.t).attr("height", H - m.t - m.b).attr("fill", SELECT).attr("opacity", 0.1);
+        M.rows.forEach(function (r, i) {
+            var base = m.t + stepY * (i + overlap - 0.6) + stepY * 0.6, hmax = stepY * overlap;
+            var yv = function (d) { return base - hmax * d / (norm ? r.peak : gmax); };
+            var pts = r.dens.map(function (d, j) { return [x(M.lo + j * M.step + M.step / 2), yv(d)]; });
+            pts.unshift([x(M.lo), base]); pts.push([x(M.hi), base]);
+            var on = !S.sel || S.sel.type === "range" || (S.sel.type === "row" && S.sel.key === r.key);
+            var g = svg.append("g");
+            g.append("path").attr("d", d3.line().curve(d3.curveBasis)(pts)).attr("fill", on ? FILL : FILL_DIM).attr("fill-opacity", on ? 0.78 : 0.6).attr("stroke", "#fcfcfb").attr("stroke-width", 1.5);
+            g.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", base).attr("y2", base).attr("stroke", "#e1e0d9");
+            var lab = g.append("text").attr("class", "rowlab").attr("x", m.l - 8).attr("y", base - 3).attr("text-anchor", "end").attr("font-size", 11).attr("font-weight", S.sel && S.sel.key === r.key ? "bold" : "normal").text(r.key)
+                .on("click", function (ev) { ev.stopPropagation(); selectRow(r); });
+            if (o.showMedian !== false && typeof r.med === "number") {
+                var xm = x(Math.max(M.lo, Math.min(M.hi, r.med)));
+                g.append("line").attr("x1", xm).attr("x2", xm).attr("y1", base).attr("y2", base - Math.min(hmax * 0.5, stepY * 0.9)).attr("stroke", "#0b0b0b").attr("stroke-width", 1.5);
+                g.append("text").attr("x", W - m.r + 6).attr("y", base - 3).attr("font-size", 10).attr("fill", "#52514e").text(fmt(r.med));
+            }
+            r.base = base;
+        });
+        if (o.showMedian !== false) svg.append("text").attr("x", W - m.r + 6).attr("y", 10).attr("font-size", 10).attr("fill", "#898781").text("median");
+        // interaction overlay: hover tooltip, click row, drag to select a value range
+        var cross = svg.append("line").attr("y1", m.t).attr("y2", H - m.b).attr("stroke", "#898781").attr("stroke-dasharray", "3,3").style("display", "none");
+        var band = svg.append("rect").attr("y", m.t).attr("height", H - m.t - m.b).attr("fill", SELECT).attr("opacity", 0.12).style("display", "none");
+        var ov = svg.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.l - m.r).attr("height", H - m.t - m.b).attr("fill", "transparent").style("cursor", "crosshair");
+        var rowAt = function (py) { var best = null, bd = Infinity; M.rows.forEach(function (r) { var d = r.base - py; if (d >= -4 && d < bd) { bd = d; best = r; } }); return best; };
+        var drag = null;
+        ov.on("mousemove", function (ev) {
+            var p = d3.pointer(ev), v = x.invert(p[0]), r = rowAt(p[1]);
+            cross.attr("x1", p[0]).attr("x2", p[0]).style("display", null);
+            if (drag !== null) { var a = Math.min(drag, p[0]), b = Math.max(drag, p[0]); band.attr("x", a).attr("width", b - a).style("display", null); }
+            tip(r, v, ev);
+        }).on("mouseleave", function () { cross.style("display", "none"); tip(null); })
+          .on("mousedown", function (ev) { drag = d3.pointer(ev)[0]; ev.preventDefault(); })
+          .on("mouseup", function (ev) {
+              if (drag === null) return; var p = d3.pointer(ev), a = Math.min(drag, p[0]), b = Math.max(drag, p[0]); drag = null; band.style("display", "none"); ev.stopPropagation();
+              if (b - a > 6) selectRange(x.invert(a), x.invert(b)); else { var r = rowAt(p[1]); if (r) selectRow(r); }
+          });
+        if (intro) { var rs = svg.selectAll("g:not(.axis)"); fadeIn(rs, 500, stag(rs.size(), 900)); }
+    }
+    function tip(r, v, ev) {
+        var el = document.getElementById("tooltip");
+        if (!r) { el.style.display = "none"; return; }
+        var M = S.model, j = Math.max(0, Math.min(M.nb - 1, Math.floor((v - M.lo) / M.step))), a = M.lo + j * M.step;
+        el.innerHTML = '<b>' + esc(r.key) + '</b><br><span class="k">' + esc(M.fields.value) + ' ' + fmt(a) + ' to ' + fmt(a + M.step) + ':</span> ' + Math.round(r.counts[j]).toLocaleString() + ' records' +
+            '<br><span class="k">Median:</span> ' + fmt(r.med) + ' <span class="k">Mean:</span> ' + fmt(r.mean) + '<br><span class="k">Records:</span> ' + r.n.toLocaleString();
+        el.style.display = "block";
+        var X = ev.clientX + 14, Y = ev.clientY + 14;
+        if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14;
+        if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = { filter: f, meta: meta }; omniscope.view.updated(); draw(); }
+    function selectRow(r) { publish({ type: "FIELD_VALUE", inputField: S.model.fields.category, operator: "=", value: r.raw }, { type: "row", key: r.key }); }
+    function selectRange(a, b) { var F = S.model.fields; publish({ type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F.value, operator: ">=", value: +a.toPrecision(6) }, { type: "FIELD_VALUE", inputField: F.value, operator: "<", value: +b.toPrecision(6) }] }, { type: "range", a: a, b: b }); }
+    window.__ridge.selectRow = function (k) { selectRow(S.model.rows.find(function (r) { return r.key === k; })); };
+    window.__ridge.selectRange = selectRange;
+    document.body.addEventListener("click", function () { if (S.sel) { S.sel = null; draw(); } omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

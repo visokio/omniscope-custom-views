@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; } #main canvas { display: block; outline: none; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #legend { position: absolute; right: 10px; top: 10px; z-index: 4; background: rgba(252,252,251,.92); border: 1px solid rgba(11,11,11,.1); border-radius: 6px; padding: 6px 9px; }
+        #legend .t { color: #52514e; font-weight: bold; margin-bottom: 3px; max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #legend .grad { width: 150px; height: 10px; border-radius: 3px; margin: 4px 0 2px; } #legend .ends { display: flex; justify-content: space-between; color: #52514e; font-size: 11px; }
+        #title { position: absolute; left: 10px; top: 8px; z-index: 4; font-size: 12.5px; pointer-events: none; } #title .s { color: #52514e; font-size: 11.5px; margin-top: 2px; }
+        #toolbar { position: absolute; left: 8px; bottom: 8px; z-index: 4; display: flex; gap: 6px; }
+        #toolbar button { font: inherit; font-size: 11px; border: 1px solid rgba(11,11,11,.15); background: rgba(252,252,251,.94); border-radius: 4px; padding: 3px 9px; cursor: pointer; color: #52514e; } #toolbar button:hover { color: #0b0b0b; } #toolbar button.on { background: #2a78d6; color: #fff; border-color: #2a78d6; }
+        #hint { position: absolute; right: 10px; bottom: 8px; font-size: 11px; color: #898781; z-index: 3; pointer-events: none; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"></div><!-- This element is where the view will render -->
+<div id="title"></div>
+<div id="legend"></div>
+<div id="toolbar"><button id="resetBtn">Reset view</button><button id="topBtn">From above</button><button id="spinBtn">Spin</button></div>
+<div id="hint">Drag to rotate, scroll to zoom, right-drag to pan</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    var SEQ = ["#e8f1fc", "#c9def8", "#9ec5f4", "#6fa8ec", "#3987e5", "#2a6fc4", "#184f95", "#0e3466"], DIV = ["#184f95", "#3987e5", "#9ec5f4", "#f0efec", "#f4a6a5", "#e34948", "#a32a2a"], SELECT = 0x2161D9;
+    var S = { sel: null, hover: null };
+    window.__surf = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var DATE_RE = /^\d{4}-\d{2}-\d{2}/;
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function name(o) { return !o ? "" : typeof o === "string" ? o : o.function === "RECORD_COUNT" ? "Record count" : (o.name && o.function ? o.name : o.inputField || ""); }
+    function webglOk() { try { var c = document.createElement("canvas"); return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl"))); } catch (e) { return false; } }
+
+    function keyInfo(v) {
+        var s = v && typeof v === "object" && "lower" in v ? v.lower : v;
+        if (typeof s === "string" && DATE_RE.test(s)) { var d = Date.parse(s.length === 10 ? s + "T00:00:00Z" : s); return { kind: "date", sort: d, raw: v, key: JSON.stringify(v) }; }
+        if (typeof s === "number") return { kind: "num", sort: v && typeof v === "object" ? (v.lower + v.upper) / 2 : s, raw: v, key: JSON.stringify(v), label: v && typeof v === "object" ? fmt(v.lower) + " to " + fmt(v.upper) : fmt(s) };
+        return { kind: "text", sort: null, raw: v, key: JSON.stringify(v), label: s === null || s === undefined ? "(blank)" : String(s) };
+    }
+    function axisOf(keys) {
+        var m = new Map(); keys.forEach(function (k) { if (!m.has(k.key)) m.set(k.key, k); });
+        var list = Array.from(m.values()), kind = list.every(function (k) { return k.kind === "date"; }) ? "date" : list.every(function (k) { return k.kind === "num"; }) ? "num" : "text";
+        if (kind !== "text") list.sort(function (a, b) { return a.sort - b.sort; });
+        if (kind === "date") { var span = list.length > 1 ? list[list.length - 1].sort - list[0].sort : 0, f = span > 3 * 365 * 864e5 ? d3.utcFormat("%Y") : span > 120 * 864e5 ? d3.utcFormat("%b %Y") : d3.utcFormat("%d %b"); list.forEach(function (k) { k.label = f(new Date(k.sort)); k.full = d3.utcFormat(span > 120 * 864e5 ? "%b %Y" : "%d %b %Y")(new Date(k.sort)); }); }
+        var lo = kind === "text" ? 0 : list[0].sort, hi = kind === "text" ? list.length - 1 : list[list.length - 1].sort;
+        list.forEach(function (k, i) { k.i = i; k.pos = kind === "text" || hi === lo ? (list.length > 1 ? i / (list.length - 1) : 0.5) : (k.sort - lo) / (hi - lo); k.pos = k.pos * 2 - 1; });
+        var idx = new Map(); list.forEach(function (k) { idx.set(k.key, k); });
+        return { list: list, kind: kind, idx: idx };
+    }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.x || !it.y || !it.z) { message("Choose two groupings for the floor of the surface (Across and Along, for example Maturity and Month) and a measure for its Height."); clearScene(); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = (res.data.records || []).filter(function (r) { return typeof r[mp.z] === "number" && isFinite(r[mp.z]); });
+        if (!recs.length) { message("No data to show. Check the filters."); clearScene(); return; }
+        if (!webglOk()) { message("This view needs WebGL, which this browser has turned off."); return; }
+        var X = axisOf(recs.map(function (r) { return keyInfo(r[mp.x]); })), Y = axisOf(recs.map(function (r) { return keyInfo(r[mp.y]); }));
+        if (X.list.length < 2 || Y.list.length < 2) { message("A surface needs at least two values in each direction (found " + X.list.length + " by " + Y.list.length + ")."); clearScene(); return; }
+        message(null);
+        var nx = X.list.length, ny = Y.list.length, grid = new Array(nx * ny).fill(null);
+        recs.forEach(function (r) { var a = X.idx.get(JSON.stringify(r[mp.x])), b = Y.idx.get(JSON.stringify(r[mp.y])); if (a && b) grid[a.i * ny + b.i] = (grid[a.i * ny + b.i] || 0) + r[mp.z]; });
+        var vals = grid.filter(function (v) { return v !== null; }), lo = d3.min(vals), hi = d3.max(vals);
+        var diverging = it.colour === "DIVERGING" || (it.colour !== "SEQUENTIAL" && lo < 0 && hi > 0);
+        S.model = { X: X, Y: Y, grid: grid, nx: nx, ny: ny, lo: lo, hi: hi, diverging: diverging, names: [name(it.x), name(it.y), name(it.z)], F: { x: it.x.inputField, y: it.y.inputField }, filled: vals.length };
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        if (!S.scene) initScene();
+        S.scene3.controls.autoRotate = !!it.autoRotate; document.getElementById("spinBtn").classList.toggle("on", !!it.autoRotate);
+        build(it);
+        // entrance: the surface rises from its floor (plays when the data, options or filters change)
+        var isig = recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null);
+        if (isig !== S.introSig && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) && S.group) S.rise = { t0: null, objs: S.group.children.filter(function (o) { return (o.isMesh && o.visible) || (o.isLineSegments && o.material.color.getHex() === 0x0b0b0b); }) };
+        else if (S.rise && S.group) S.rise.objs = S.group.children.filter(function (o) { return (o.isMesh && o.visible) || (o.isLineSegments && o.material.color.getHex() === 0x0b0b0b); });
+        S.introSig = isig;
+    }
+
+    function rise(now) { // clock starts on the first frame drawn
+        var R = S.rise; if (!R) return; if (R.t0 === null) R.t0 = now;
+        var t = Math.min(1, (now - R.t0) / 1100), k = Math.max(0.001, 1 - Math.pow(1 - t, 3));
+        R.objs.forEach(function (o) { o.scale.y = k; }); if (t >= 1) S.rise = null;
+    }
+    function initScene() {
+        var main = document.getElementById("main"), renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(window.innerWidth, window.innerHeight); renderer.setClearColor(0xfcfcfb); main.appendChild(renderer.domElement);
+        var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(38, window.innerWidth / Math.max(1, window.innerHeight), 0.01, 100), controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; controls.dampingFactor = 0.08; controls.autoRotateSpeed = 1.0; controls.minDistance = 1; controls.maxDistance = 14;
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x9aa1ad, 0.62)); var dl = new THREE.DirectionalLight(0xffffff, 0.42); dl.position.set(3, 5, 2); scene.add(dl);
+        S.scene = scene; S.scene3 = { renderer: renderer, camera: camera, controls: controls };
+        resetCamera(); bindPointer(renderer.domElement);
+        (function loop(now) { requestAnimationFrame(loop); rise(now || performance.now()); controls.update(); renderer.render(scene, camera); })();
+        document.getElementById("resetBtn").addEventListener("click", function (e) { e.stopPropagation(); resetCamera(); });
+        document.getElementById("topBtn").addEventListener("click", function (e) { e.stopPropagation(); camera.position.set(0, 4.2, 0.001); controls.target.set(0, 0, 0); controls.update(); });
+        document.getElementById("spinBtn").addEventListener("click", function (e) { e.stopPropagation(); controls.autoRotate = !controls.autoRotate; this.classList.toggle("on", controls.autoRotate); });
+    }
+    function resetCamera() { var c = S.scene3; c.camera.position.set(2.7, 2.1, 2.9); c.controls.target.set(0, 0.2, 0); c.controls.update(); }
+    function clearScene() { if (S.group && S.scene) { S.scene.remove(S.group); S.group = null; } document.getElementById("legend").innerHTML = ""; document.getElementById("title").innerHTML = ""; }
+    function textSprite(text, colour, px, bold) {
+        var c = document.createElement("canvas"), g = c.getContext("2d"), f = (bold ? "bold " : "") + (px || 28) + "px Lato, 'Segoe UI', Arial, sans-serif";
+        g.font = f; var w = Math.ceil(g.measureText(text).width) + 8, h = (px || 28) + 10; c.width = w; c.height = h; g.font = f; g.fillStyle = colour; g.textBaseline = "middle"; g.fillText(text, 4, h / 2);
+        var tex = new THREE.CanvasTexture(c); tex.minFilter = THREE.LinearFilter;
+        var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false })); var k = 0.0021; s.scale.set(w * k, h * k, 1); return s;
+    }
+    function colourScale(M) {
+        if (M.diverging) { var m = Math.max(Math.abs(M.lo), Math.abs(M.hi)); return d3.scaleLinear().domain(d3.range(DIV.length).map(function (i) { return -m + 2 * m * i / (DIV.length - 1); })).range(DIV).interpolate(d3.interpolateLab); }
+        return d3.scaleLinear().domain(d3.range(SEQ.length).map(function (i) { return M.lo + (M.hi - M.lo) * i / (SEQ.length - 1); })).range(SEQ).interpolate(d3.interpolateLab);
+    }
+
+    function build(it) {
+        var M = S.model; if (S.group) S.scene.remove(S.group);
+        var G = new THREE.Group(), nx = M.nx, ny = M.ny, hs = Math.max(0.2, Math.min(3, +it.heightScale || 1)), base = M.diverging ? 0 : M.lo, span = M.diverging ? Math.max(Math.abs(M.lo), Math.abs(M.hi)) : (M.hi - M.lo || 1);
+        var hY = function (v) { return M.diverging ? 0.55 * hs * v / span : 1.1 * hs * (v - base) / span; }, col = colourScale(M);
+        M.hY = hY; M.col = col;
+        // surface: one vertex per grid point, two triangles per cell where all four corners have data
+        var pos = new Float32Array(nx * ny * 3), cols = new Float32Array(nx * ny * 3), index = [];
+        for (var i = 0; i < nx; i++) for (var j = 0; j < ny; j++) {
+            var k = i * ny + j, v = M.grid[k], c = new THREE.Color(v === null ? "#f0efec" : col(v));
+            pos[3 * k] = M.X.list[i].pos; pos[3 * k + 1] = v === null ? hY(M.diverging ? 0 : M.lo) : hY(v); pos[3 * k + 2] = M.Y.list[j].pos;
+            cols[3 * k] = c.r; cols[3 * k + 1] = c.g; cols[3 * k + 2] = c.b;
+        }
+        for (i = 0; i < nx - 1; i++) for (j = 0; j < ny - 1; j++) { var a = i * ny + j, b = a + ny, cc = a + 1, d = b + 1; if ([a, b, cc, d].every(function (q) { return M.grid[q] !== null; })) { index.push(a, b, cc, b, d, cc); } }
+        var geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(pos, 3)); geo.setAttribute("color", new THREE.BufferAttribute(cols, 3)); geo.setIndex(index); geo.computeVertexNormals();
+        var mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 })); G.add(mesh); M.mesh = mesh;
+        if (it.wireframe !== false) {
+            var lp = [], step = Math.max(1, Math.round(Math.max(nx, ny) / 40));
+            var xs = d3.range(0, nx, step), ys = d3.range(0, ny, step); if (xs[xs.length - 1] !== nx - 1) xs.push(nx - 1); if (ys[ys.length - 1] !== ny - 1) ys.push(ny - 1);
+            var seg = function (p, q) { if (M.grid[p] !== null && M.grid[q] !== null) lp.push(pos[3 * p], pos[3 * p + 1], pos[3 * p + 2], pos[3 * q], pos[3 * q + 1], pos[3 * q + 2]); };
+            xs.forEach(function (i) { for (var j = 0; j < ny - 1; j++) seg(i * ny + j, i * ny + j + 1); });
+            ys.forEach(function (j) { for (var i = 0; i < nx - 1; i++) seg(i * ny + j, (i + 1) * ny + j); });
+            var lg = new THREE.BufferGeometry(); lg.setAttribute("position", new THREE.Float32BufferAttribute(lp, 3)); G.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0x0b0b0b, transparent: true, opacity: 0.16 })));
+        }
+        // floor and axes
+        var fy = M.diverging ? -0.62 * hs : -0.02, floor = [], N = 4;
+        for (i = 0; i <= N; i++) { var t = -1 + 2 * i / N; floor.push(t, fy, -1, t, fy, 1, -1, fy, t, 1, fy, t); }
+        var fg = new THREE.BufferGeometry(); fg.setAttribute("position", new THREE.Float32BufferAttribute(floor, 3)); G.add(new THREE.LineSegments(fg, new THREE.LineBasicMaterial({ color: 0xe1e0d9 })));
+        // about n evenly spread ticks, dropping any that would sit too close to the previous one
+        var ticks = function (A, n) { var L = A.list, out = []; for (var q = 0; q < n; q++) { var k = L[Math.round(q * (L.length - 1) / (n - 1))]; if (out.length && (out[out.length - 1] === k || Math.abs(k.pos - out[out.length - 1].pos) < 0.3)) { if (q === n - 1) out[out.length - 1] = k; continue; } out.push(k); } return out; };
+        ticks(M.X, 5).forEach(function (k) { var lab = k.full || k.label; var s = textSprite(lab.length > 16 ? lab.slice(0, 15) + "\u2026" : lab, "#52514e", 24); s.position.set(k.pos, fy, 1.16); G.add(s); });
+        ticks(M.Y, 5).forEach(function (k) { var lab = k.full || k.label; var s = textSprite(lab.length > 16 ? lab.slice(0, 15) + "\u2026" : lab, "#52514e", 24); s.position.set(1.22, fy, k.pos); G.add(s); });
+        var sx = textSprite(M.names[0], "#2b2a28", 28, true); sx.position.set(0, fy - 0.02, 1.36); G.add(sx);
+        var sy = textSprite(M.names[1], "#2b2a28", 28, true); sy.position.set(1.5, fy - 0.02, 0); G.add(sy);
+        [M.lo, (M.lo + M.hi) / 2, M.hi].forEach(function (v) { var s = textSprite(fmt(v), "#52514e", 24); s.position.set(-1.12, hY(v), -1.12); G.add(s); });
+        var sz = textSprite(M.names[2], "#2b2a28", 28, true); sz.position.set(-1.12, hY(M.hi) + 0.18, -1.12); G.add(sz);
+        var vl = new THREE.BufferGeometry(); vl.setAttribute("position", new THREE.Float32BufferAttribute([-1, hY(M.lo), -1, -1, hY(M.hi), -1], 3)); G.add(new THREE.LineSegments(vl, new THREE.LineBasicMaterial({ color: 0xc3c2b7 })));
+        // hover and selection markers
+        var mk = new THREE.Mesh(new THREE.SphereGeometry(0.028, 16, 12), new THREE.MeshBasicMaterial({ color: 0x0b0b0b })); mk.visible = false; G.add(mk); M.marker = mk;
+        var sm = new THREE.Mesh(new THREE.SphereGeometry(0.04, 16, 12), new THREE.MeshBasicMaterial({ color: SELECT })); sm.visible = false; G.add(sm); M.selMarker = sm;
+        S.scene.add(G); S.group = G; placeSel();
+        // legend and title
+        var stops = (M.diverging ? DIV : SEQ).join(",");
+        document.getElementById("legend").innerHTML = '<div class="t">' + esc(M.names[2]) + '</div><div class="grad" style="background:linear-gradient(90deg,' + stops + ')"></div><div class="ends"><span>' + fmt(M.diverging ? -Math.max(Math.abs(M.lo), Math.abs(M.hi)) : M.lo) + '</span><span>' + (M.diverging ? '0' : '') + '</span><span>' + fmt(M.diverging ? Math.max(Math.abs(M.lo), Math.abs(M.hi)) : M.hi) + '</span></div>';
+        document.getElementById("title").innerHTML = '<b>' + esc(M.names[2]) + '</b> by ' + esc(M.names[0]) + ' and ' + esc(M.names[1]) + '<div class="s">' + M.nx + ' by ' + M.ny + ' grid, ' + M.filled.toLocaleString() + ' points' + (M.filled < M.nx * M.ny ? ' (' + (M.nx * M.ny - M.filled).toLocaleString() + ' empty)' : '') + '; from ' + fmt(M.lo) + ' to ' + fmt(M.hi) + '</div>';
+    }
+    function placeSel() { var M = S.model; if (!M || !M.selMarker) return; if (S.sel && S.sel.i !== undefined && S.sel.i < M.nx && S.sel.j < M.ny) { var v = M.grid[S.sel.i * M.ny + S.sel.j]; M.selMarker.position.set(M.X.list[S.sel.i].pos, M.hY(v === null ? M.lo : v), M.Y.list[S.sel.j].pos); M.selMarker.visible = true; } else M.selMarker.visible = false; }
+
+    function bindPointer(canvas) {
+        var ray = new THREE.Raycaster(), mouse = new THREE.Vector2(), down = null, pending = null;
+        function pick(ev) {
+            var M = S.model; if (!M || !M.mesh) return null;
+            var r = canvas.getBoundingClientRect(); mouse.x = ((ev.clientX - r.left) / r.width) * 2 - 1; mouse.y = -((ev.clientY - r.top) / r.height) * 2 + 1;
+            ray.setFromCamera(mouse, S.scene3.camera); var hit = ray.intersectObject(M.mesh, false); if (!hit.length) return null;
+            var p = hit[0].point, bi = 0, bj = 0, bd = Infinity;
+            M.X.list.forEach(function (k) { var d = Math.abs(k.pos - p.x); if (d < bd) { bd = d; bi = k.i; } }); bd = Infinity;
+            M.Y.list.forEach(function (k) { var d = Math.abs(k.pos - p.z); if (d < bd) { bd = d; bj = k.i; } });
+            return { i: bi, j: bj };
+        }
+        canvas.addEventListener("pointermove", function (ev) { pending = ev; requestAnimationFrame(function () { if (!pending) return; var e = pending; pending = null; var h = pick(e); S.hover = h; showTip(h, e); }); });
+        canvas.addEventListener("pointerleave", function () { S.hover = null; showTip(null); });
+        canvas.addEventListener("pointerdown", function (ev) { down = { x: ev.clientX, y: ev.clientY }; });
+        canvas.addEventListener("pointerup", function (ev) {
+            if (!down || ev.button !== 0) return; var moved = Math.abs(ev.clientX - down.x) + Math.abs(ev.clientY - down.y) > 5; down = null; if (moved) return;
+            var h = pick(ev); if (h) selectCell(h.i, h.j); else { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); }
+        });
+    }
+    function showTip(h, ev) {
+        var M = S.model, el = document.getElementById("tooltip");
+        if (!h || !M) { el.style.display = "none"; if (M && M.marker) M.marker.visible = false; return; }
+        var v = M.grid[h.i * M.ny + h.j], kx = M.X.list[h.i], ky = M.Y.list[h.j];
+        M.marker.position.set(kx.pos, M.hY(v === null ? M.lo : v), ky.pos); M.marker.visible = v !== null;
+        el.innerHTML = '<span class="k">' + esc(M.names[0]) + ':</span> ' + esc(kx.full || kx.label) + '<br><span class="k">' + esc(M.names[1]) + ':</span> ' + esc(ky.full || ky.label) + '<br><span class="k">' + esc(M.names[2]) + ':</span> <b>' + (v === null ? "no data" : fmt(v)) + '</b>';
+        el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+
+    function keyFilter(field, raw) { return raw && typeof raw === "object" && "lower" in raw ? { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: field, operator: ">=", value: raw.lower }, { type: "FIELD_VALUE", inputField: field, operator: "<", value: raw.upper }] } : { type: "FIELD_VALUE", inputField: field, operator: "=", value: raw }; }
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); placeSel(); }
+    function selectCell(i, j) {
+        var M = S.model; if (S.sel && S.sel.i === i && S.sel.j === j) return publish(null, null);
+        if (M.grid[i * M.ny + j] === null) return;
+        publish({ type: "AND", filters: [keyFilter(M.F.x, M.X.list[i].raw), keyFilter(M.F.y, M.Y.list[j].raw)] }, { i: i, j: j });
+    }
+    // test hook: screen position of a grid point, for real-mouse clicks
+    window.__surf.screenOf = function (i, j) { var M = S.model, v = M.grid[i * M.ny + j], p = new THREE.Vector3(M.X.list[i].pos, M.hY(v), M.Y.list[j].pos).project(S.scene3.camera); return [(p.x + 1) / 2 * window.innerWidth, (1 - p.y) / 2 * window.innerHeight]; };
+    window.__surf.selectCell = selectCell;
+
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (!S.scene3) return; var c = S.scene3; c.renderer.setSize(window.innerWidth, window.innerHeight); c.camera.aspect = window.innerWidth / Math.max(1, window.innerHeight); c.camera.updateProjectionMatrix(); });
+})();
+</script>
+</body>
+</html>

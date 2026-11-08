@@ -1,0 +1,178 @@
+{
+  "name": "Target Tracker",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "target",
+    "pacing",
+    "run rate",
+    "projection",
+    "burn-up",
+    "sales target",
+    "goal",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "date": {
+        "displayName": "Dated by",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "The date of each record, e.g. Booking date"
+      },
+      "value": {
+        "displayName": "Measure",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "What counts towards the target, e.g. sum of Bookings (default: number of records)"
+      },
+      "target": {
+        "displayName": "Target",
+        "type": "NUMBER",
+        "minValue": 0,
+        "detail": "The target for the whole period"
+      },
+      "start": {
+        "displayName": "Start",
+        "type": "TEXT",
+        "detail": "First day of the period as yyyy-mm-dd (default 1 January of the latest year in the data)"
+      },
+      "end": {
+        "displayName": "End",
+        "type": "TEXT",
+        "detail": "Last day of the period as yyyy-mm-dd (default 31 December)"
+      },
+      "shape": {
+        "displayName": "Target path",
+        "type": "CHOICE",
+        "values": [
+          "DAYS",
+          "WORKDAYS"
+        ],
+        "displayValues": [
+          "Evenly over all days",
+          "Evenly over working days (Monday to Friday)"
+        ],
+        "detail": "How the target builds up through the period"
+      },
+      "recent": {
+        "displayName": "Recent days",
+        "type": "NUMBER",
+        "minValue": 7,
+        "maxValue": 120,
+        "detail": "Days used for the recent run rate (default 28)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "date",
+        "value",
+        "target"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Target",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "date",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "target",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Period",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "start",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "end",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "shape",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "recent",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "shape": "DAYS",
+      "recent": 28
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

@@ -1,0 +1,33 @@
+Nation,Source,Generation (GWh)
+England,Wind,65053
+England,Gas,70237
+England,Nuclear,31835
+England,Solar,10216
+England,Biomass,13220
+England,Hydro,4611
+England,Imports,20819
+England,Other,4009
+Scotland,Wind,16226
+Scotland,Gas,2456
+Scotland,Nuclear,3502
+Scotland,Solar,1366
+Scotland,Biomass,1508
+Scotland,Hydro,1978
+Scotland,Imports,2449
+Scotland,Other,514
+Wales,Wind,6137
+Wales,Gas,10200
+Wales,Nuclear,33
+Wales,Solar,1078
+Wales,Biomass,1451
+Wales,Hydro,496
+Wales,Imports,2099
+Wales,Other,506
+Northern Ireland,Wind,3432
+Northern Ireland,Gas,3166
+Northern Ireland,Nuclear,11
+Northern Ireland,Solar,348
+Northern Ireland,Biomass,412
+Northern Ireland,Hydro,165
+Northern Ireland,Imports,324
+Northern Ireland,Other,142

@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #f6f6f3; }
+        #chart { position: absolute; inset: 0; }
+        svg { display: block; }
+        .card { cursor: pointer; }
+        .card rect.bg { fill: #fff; stroke: rgba(11,11,11,.12); }
+        .card:hover rect.bg { stroke: #2a78d6; }
+        .card.sel rect.bg { stroke: #2161D9; stroke-width: 2; stroke-dasharray: 5,3; }
+        .card.hit rect.bg { stroke: #eda100; stroke-width: 3; }
+        .tog { cursor: pointer; }
+        .tog:hover circle { fill: #eef4fd; }
+        #bar { position: absolute; left: 8px; top: 8px; z-index: 4; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; right: 8px; pointer-events: none; }
+        #bar > * { pointer-events: auto; }
+        #bar input { font: inherit; padding: 4px 7px; border: 1px solid rgba(11,11,11,.15); border-radius: 4px; width: 170px; background: #fff; }
+        #bar button { font: inherit; font-size: 11px; padding: 4px 9px; border: 1px solid rgba(11,11,11,.15); border-radius: 4px; background: #fff; cursor: pointer; color: #52514e; }
+        #stats { margin-left: auto; background: rgba(255,255,255,.92); border: 1px solid rgba(11,11,11,.1); border-radius: 6px; padding: 4px 9px; color: #52514e; font-size: 11px; }
+        #stats b { color: #0b0b0b; font-size: 13px; margin-right: 2px; }
+        #legend { position: absolute; left: 8px; bottom: 8px; z-index: 4; display: flex; flex-wrap: wrap; gap: 3px 10px; font-size: 11px; color: #52514e; background: rgba(255,255,255,.9); border-radius: 6px; padding: 4px 8px; max-width: calc(100% - 30px); }
+        #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="chart"><svg id="svg"><g id="zoom"></g></svg></div><!-- This element is where the view will render -->
+<div id="bar"><input id="search" list="people" placeholder="Find a person"><datalist id="people"></datalist><button id="expandAll">Expand all</button><button id="collapse">Collapse</button><button id="fit">Fit</button><span id="stats"></span></div>
+<div id="legend"></div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    var PAL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], OTHER = "#c3c2b7";
+    var CW = 176, CH = 58;
+    var S = { gen: 0, collapsed: new Set(), sel: null, hit: null, order: {} };
+    window.__org = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : Math.round(v).toLocaleString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+
+    function load() {
+        var o = it(), F = { id: fld(o.id), parent: fld(o.parent), label: fld(o.label), subtitle: fld(o.subtitle), colour: fld(o.colour), metric: fld(o.metric) };
+        if (!F.id || !F.parent) { message("Choose the Person field and the Reports to field (the manager ID)."); return; }
+        var names = []; Object.keys(F).forEach(function (k) { if (F[k] && names.indexOf(F[k]) < 0) names.push(F[k]); });
+        var q = { fields: names, range: { start: 0, length: 50000 } }, f = omniscope.view.context().dataConfig.filter;
+        if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) {
+            if (gen !== S.gen) return; omniscope.view.busy(false);
+            build(F, names, e.data.records); draw(true);
+        }).on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+    function build(F, names, recs) {
+        var col = function (k) { return F[k] ? names.indexOf(F[k]) : -1; };
+        var byId = new Map(), rows = [];
+        recs.forEach(function (r) {
+            var id = r[col("id")]; if (id === null || id === undefined || byId.has(String(id))) return;
+            var n = { id: String(id), raw: id, parent: r[col("parent")] === null || r[col("parent")] === undefined || r[col("parent")] === "" ? null : String(r[col("parent")]),
+                label: F.label ? r[col("label")] : id, sub: F.subtitle ? r[col("subtitle")] : "", cat: F.colour ? r[col("colour")] : null, val: F.metric ? r[col("metric")] : null, children: [] };
+            byId.set(n.id, n); rows.push(n);
+        });
+        if (!rows.length) { S.model = null; message("No data to show. Check the filters."); return; }
+        message(null);
+        var roots = [];
+        rows.forEach(function (n) { var p = n.parent && byId.get(n.parent); if (p && p !== n) p.children.push(n); else roots.push(n); });
+        // guard against cycles: walk from roots; anything unreached joins the roots
+        var seen = new Set(), stack = roots.slice(); while (stack.length) { var x = stack.pop(); if (seen.has(x.id)) continue; seen.add(x.id); x.children.forEach(function (c) { stack.push(c); }); }
+        rows.forEach(function (n) { if (!seen.has(n.id)) { roots.push(n); n.children = n.children.filter(function (c) { return !seen.has(c.id); }); } });
+        var root = roots.length === 1 ? roots[0] : { id: "__root", label: "Organisation", sub: roots.length + " top-level entries", children: roots, virtual: true };
+        // team sizes, team totals, depth
+        (function walk(n, d) { n.depth = d; n.team = 0; n.teamVal = typeof n.val === "number" ? n.val : 0; n.children.sort(function (a, b) { return String(a.label).localeCompare(String(b.label)); });
+            n.children.forEach(function (c) { walk(c, d + 1); n.team += 1 + c.team; n.teamVal += c.teamVal; }); })(root, 0);
+        var managers = rows.filter(function (n) { return n.children.length; }), spans = managers.map(function (n) { return n.children.length; });
+        var key = JSON.stringify(F);
+        if (!S.order[key]) S.order[key] = Array.from(new Set(rows.map(function (n) { return String(n.cat); }))).sort(function (a, b) { return rows.filter(function (n) { return String(n.cat) === b; }).length - rows.filter(function (n) { return String(n.cat) === a; }).length; });
+        S.model = { root: root, byId: byId, rows: rows, F: F, managers: managers.length, avgSpan: spans.length ? d3.mean(spans) : 0, layers: d3.max(rows, function (n) { return n.depth; }) + (root.virtual ? 0 : 1), catOrder: S.order[key] };
+        if (S.lastKey !== key) { S.collapsed = new Set(); var lv = Math.max(1, +it().depth || 3); rows.forEach(function (n) { if (n.children.length && n.depth >= lv - (root.virtual ? 0 : 1)) S.collapsed.add(n.id); }); S.lastKey = key; }
+        document.getElementById("people").innerHTML = rows.slice(0, 5000).map(function (n) { return '<option value="' + esc(n.label) + '">' + esc(n.sub || "") + '</option>'; }).join("");
+        document.getElementById("stats").innerHTML = '<b>' + rows.length.toLocaleString() + '</b> people &middot; <b>' + S.model.layers + '</b> layers &middot; <b>' + S.model.avgSpan.toFixed(1) + '</b> average span of control';
+        var lg = S.model.catOrder.filter(function (c) { return c !== "null"; }).slice(0, 8);
+        document.getElementById("legend").innerHTML = F.colour ? lg.map(function (c, i) { return '<span><i style="background:' + PAL[i] + '"></i>' + esc(c) + '</span>'; }).join("") : "";
+        document.getElementById("legend").style.display = F.colour ? "flex" : "none";
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta.id : null;
+    }
+    function colourOf(n) { if (!S.model.F.colour || n.virtual) return "#52514e"; var i = S.model.catOrder.indexOf(String(n.cat)); return i >= 0 && i < 8 ? PAL[i] : OTHER; }
+
+    var svg = d3.select("#svg"), gz = d3.select("#zoom");
+    S.zoom = d3.zoom().scaleExtent([0.1, 2.5]).on("zoom", function (ev) { gz.attr("transform", ev.transform); S.t = ev.transform; });
+    svg.call(S.zoom).on("dblclick.zoom", null);
+    function draw(refit) {
+        var M = S.model; if (!M) return;
+        var W = window.innerWidth, H = window.innerHeight; svg.attr("width", W).attr("height", H);
+        var lr = it().orientation === "LEFT_RIGHT";
+        var h = d3.hierarchy(M.root, function (n) { return S.collapsed.has(n.id) ? null : n.children; });
+        d3.tree().nodeSize(lr ? [CH + 14, CW + 56] : [CW + 18, CH + 54]).separation(function (a, b) { return a.parent === b.parent ? 1 : 1.12; })(h);
+        var P = function (d) { return lr ? [d.y, d.x] : [d.x, d.y]; };
+        gz.selectAll("*").remove();
+        var links = gz.append("g");
+        h.links().forEach(function (l) {
+            var a = P(l.source), b = P(l.target), path;
+            if (lr) { var mx = (a[0] + CW / 2 + b[0] - CW / 2) / 2; path = "M" + (a[0] + CW / 2) + "," + a[1] + " H" + mx + " V" + b[1] + " H" + (b[0] - CW / 2); }
+            else { var my = (a[1] + CH / 2 + b[1] - CH / 2) / 2; path = "M" + a[0] + "," + (a[1] + CH / 2) + " V" + my + " H" + b[0] + " V" + (b[1] - CH / 2); }
+            links.append("path").attr("d", path).attr("fill", "none").attr("stroke", "#c3c2b7").attr("stroke-width", 1.2);
+        });
+        var selSet = S.sel ? subtree(S.sel) : null;
+        h.descendants().forEach(function (d) {
+            var n = d.data, p = P(d), g = gz.append("g").attr("class", "card" + (selSet && selSet.has(n.id) ? " sel" : "") + (S.hit === n.id ? " hit" : "")).attr("transform", "translate(" + (p[0] - CW / 2) + "," + (p[1] - CH / 2) + ")");
+            g.append("rect").attr("class", "bg").attr("width", CW).attr("height", CH).attr("rx", 7);
+            g.append("rect").attr("width", 5).attr("height", CH).attr("rx", 2).attr("fill", colourOf(n));
+            var t1 = g.append("text").attr("x", 14).attr("y", 20).attr("font-weight", "bold").attr("font-size", 12).text(String(n.label)); clip(t1, CW - 20);
+            var t2 = g.append("text").attr("x", 14).attr("y", 36).attr("font-size", 11).attr("fill", "#52514e").text(n.sub || ""); clip(t2, CW - 20);
+            var line3 = n.children.length ? n.children.length + " direct, " + n.team + " in team" : "";
+            if (M.F.metric && !n.virtual) line3 += (line3 ? " · " : "") + fmt(n.children.length ? n.teamVal : (n.val || 0));
+            var t3 = g.append("text").attr("x", 14).attr("y", 51).attr("font-size", 10).attr("fill", "#898781").text(line3); clip(t3, CW - 34);
+            g.on("click", function (ev) { ev.stopPropagation(); if (!n.virtual) select(n); })
+             .on("mousemove", function (ev) { tip(n, ev); }).on("mouseleave", function () { tip(null); });
+            if (n.children.length) {
+                var open = !S.collapsed.has(n.id), tx = lr ? CW + 2 : CW / 2, ty = lr ? CH / 2 : CH + 2;
+                var tg = g.append("g").attr("class", "tog").attr("transform", "translate(" + tx + "," + ty + ")").on("click", function (ev) { ev.stopPropagation(); toggle(n); });
+                tg.append("circle").attr("r", 9).attr("fill", "#fff").attr("stroke", "#c3c2b7");
+                tg.append("text").attr("text-anchor", "middle").attr("dy", "0.35em").attr("font-size", open ? 12 : 9).attr("fill", "#52514e").text(open ? "−" : String(n.children.length));
+            }
+        });
+        if (refit) fit();
+    }
+    function clip(t, w) { var s = t.text(); while (s.length > 2 && t.node().getComputedTextLength() > w) { s = s.slice(0, -1); t.text(s + "…"); } }
+    function fit() {
+        var b = gz.node().getBBox(), W = window.innerWidth, H = window.innerHeight; if (!b.width) return;
+        var k = Math.min(1.2, Math.max(0.12, Math.min((W - 40) / b.width, (H - 90) / b.height)));
+        svg.call(S.zoom.transform, d3.zoomIdentity.translate(W / 2 - k * (b.x + b.width / 2), 50 + (H - 90) / 2 - k * (b.y + b.height / 2)).scale(k));
+    }
+    function toggle(n) { if (S.collapsed.has(n.id)) S.collapsed.delete(n.id); else S.collapsed.add(n.id); draw(false); }
+    function subtree(id) { var out = new Set(), n = S.model.byId.get(id); (function w(x) { out.add(x.id); x.children.forEach(w); })(n); return out; }
+    function select(n) {
+        var M = S.model, ids = Array.from(subtree(n.id));
+        if (S.sel === n.id) { S.sel = null; omniscope.view.context().viewSelection = null; omniscope.view.updated(); draw(false); return; }
+        if (ids.length > 3000) { omniscope.view.error("This team has " + ids.length + " people; selection is limited to 3,000."); return; }
+        S.sel = n.id;
+        var eq = function (v) { return { type: "FIELD_VALUE", inputField: M.F.id, operator: "=", value: M.byId.get(v).raw }; };
+        omniscope.view.context().viewSelection = { filter: ids.length === 1 ? eq(ids[0]) : { type: "OR", filters: ids.map(eq) }, meta: { id: n.id } };
+        omniscope.view.updated(); draw(false);
+    }
+    function reveal(n) { var p = n.parent && S.model.byId.get(n.parent); while (p) { S.collapsed.delete(p.id); p = p.parent && S.model.byId.get(p.parent); } }
+    function find(text) {
+        var M = S.model, q = String(text).toLowerCase(), n = M.rows.find(function (x) { return String(x.label).toLowerCase() === q; }) || M.rows.find(function (x) { return String(x.label).toLowerCase().indexOf(q) >= 0; });
+        if (!n) return null; reveal(n); S.hit = n.id; draw(false);
+        var node = null; gz.selectAll("g.card").each(function () { if (this.classList.contains("hit")) node = this; });
+        if (node) { var bb = node.getBBox(), tr = node.transform.baseVal.consolidate().matrix, k = Math.max(0.8, S.t ? S.t.k : 1), W = window.innerWidth, H = window.innerHeight;
+            svg.transition().duration(500).call(S.zoom.transform, d3.zoomIdentity.translate(W / 2 - k * (tr.e + CW / 2), H / 2 - k * (tr.f + CH / 2)).scale(k)); }
+        return n;
+    }
+    function tip(n, ev) {
+        var el = document.getElementById("tooltip");
+        if (!n) { el.style.display = "none"; return; }
+        var M = S.model, mgr = n.parent && M.byId.get(n.parent);
+        el.innerHTML = '<b>' + esc(n.label) + '</b>' + (n.sub ? '<br>' + esc(n.sub) : '') + (M.F.colour && !n.virtual ? '<br><span class="k">' + esc(M.F.colour) + ':</span> ' + esc(n.cat) : '') +
+            (mgr ? '<br><span class="k">Reports to:</span> ' + esc(mgr.label) : '') + (n.children.length ? '<br><span class="k">Direct reports:</span> ' + n.children.length + ' <span class="k">Team:</span> ' + n.team : '') +
+            (M.F.metric && !n.virtual ? '<br><span class="k">' + esc(M.F.metric) + ':</span> ' + fmt(n.val || 0) + (n.children.length ? ' <span class="k">team total</span> ' + fmt(n.teamVal) : '') : '');
+        el.style.display = "block";
+        var X = ev.clientX + 14, Y = ev.clientY + 14;
+        if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14;
+        if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+    document.getElementById("search").addEventListener("change", function () { find(this.value); });
+    document.getElementById("expandAll").addEventListener("click", function (e) { e.stopPropagation(); S.collapsed = new Set(); draw(true); });
+    document.getElementById("collapse").addEventListener("click", function (e) { e.stopPropagation(); S.collapsed = new Set(); S.model.rows.forEach(function (n) { if (n.children.length && n.depth >= 1) S.collapsed.add(n.id); }); draw(true); });
+    document.getElementById("fit").addEventListener("click", function (e) { e.stopPropagation(); fit(); });
+    document.getElementById("bar").addEventListener("click", function (e) { e.stopPropagation(); });
+    window.__org.find = find; window.__org.toggle = function (id) { toggle(S.model.byId.get(id)); }; window.__org.select = function (id) { select(S.model.byId.get(id)); };
+    document.getElementById("chart").addEventListener("click", function () { S.hit = null; if (S.sel) { S.sel = null; draw(false); } omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(true); });
+})();
+</script>
+</body>
+</html>

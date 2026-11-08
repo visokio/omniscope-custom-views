@@ -1,0 +1,344 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/orders_daily.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "mode": "PERIOD",
+    "years": 3,
+    "fiscalStart": 1
+   }
+  },
+  "width": 1060,
+  "height": 520,
+  "wait": 1500,
+  "showcaseHeight": 520,
+  "caption": "Live: illustrative monthly revenue for 2026 against the two years before. Hover a month for every year and the change; click a point to select that month.",
+  "expect": {
+   "selector": "circle.pt",
+   "min": 30
+  }
+ },
+ {
+  "name": "cumulative",
+  "showcase": true,
+  "data": "sample-data/orders_daily.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Orders",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "mode": "CUMULATIVE",
+    "years": 4,
+    "fiscalStart": 4
+   }
+  },
+  "width": 1060,
+  "height": 480,
+  "wait": 1500,
+  "showcaseHeight": 480,
+  "caption": "Live: orders as running totals through UK financial years starting in April.",
+  "expect": {
+   "selector": "circle.pt",
+   "min": 30
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/orders_daily.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Orders",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "mode": "PERIOD",
+    "years": 3,
+    "fiscalStart": 1
+   }
+  },
+  "width": 1000,
+  "height": 500,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__yoy.model.ytdC===149561 && window.__yoy.model.ytdP===136494 && window.__yoy.model.lfl.length===10 && !window.__yoy.model.partialLast",
+    "expectTruthy": true
+   },
+   {
+    "hoverEval": "(function(){var r=document.querySelector('svg g rect').getBoundingClientRect();return [r.left+r.width*0.45, r.top+r.height*0.5]})()"
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "circle.pt",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "window.__yoy.selectYear(1)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.filters[0].value==='2025-01-01' && f.filters[1].value==='2026-01-01'})()",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     8,
+     495
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Channel",
+     "operator": "=",
+     "value": "Online"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__yoy.model.ytdC<100000",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     420
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "fiscal",
+  "data": "sample-data/orders_daily.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Orders",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "mode": "PERIOD",
+    "years": 3,
+    "fiscalStart": 4
+   }
+  },
+  "width": 900,
+  "height": 460,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__yoy.model.ytdC===108257 && window.__yoy.model.ytdP===99026 && window.__yoy.model.C.label==='2026/27'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "partial",
+  "data": "sample-data/orders_daily.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Date",
+   "operator": "<=",
+   "value": "2026-10-15"
+  },
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Orders",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "mode": "PERIOD",
+    "years": 3,
+    "fiscalStart": 1
+   }
+  },
+  "width": 900,
+  "height": 460,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__yoy.model.partialLast===true && window.__yoy.model.lfl.length===9",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "weekly",
+  "data": "sample-data/orders_daily.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Orders",
+     "function": "SUM"
+    },
+    "period": "WEEK",
+    "mode": "PERIOD",
+    "years": 3,
+    "fiscalStart": 1
+   }
+  },
+  "width": 1000,
+  "height": 460,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__yoy.model.n===53 && window.__yoy.model.C.lastIdx>=42",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "oneyear",
+  "data": "sample-data/orders_daily.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Date",
+   "operator": ">=",
+   "value": "2026-01-01"
+  },
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Orders",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "mode": "PERIOD",
+    "years": 3,
+    "fiscalStart": 1
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "at least two"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Date",
+    "type": "DATE"
+   },
+   {
+    "name": "Orders",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Orders",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "mode": "PERIOD",
+    "years": 3,
+    "fiscalStart": 1
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders_daily.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the date"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "date": "Day",
+    "value": {
+     "inputField": "Amount",
+     "function": "SUM"
+    },
+    "years": 5
+   }
+  },
+  "width": 1100,
+  "height": 560,
+  "wait": 8000,
+  "actions": [
+   {
+    "eval": "window.__yoy.model.series.length===5",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/orders_daily.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Orders",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "mode": "PERIOD",
+    "years": 3,
+    "fiscalStart": 1
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

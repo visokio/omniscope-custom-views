@@ -1,0 +1,347 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/sales_budget.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Month",
+     "type": "UNIQUE_VALUES"
+    },
+    "actual": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "plan": {
+     "inputField": "Budget",
+     "function": "SUM"
+    },
+    "good": "HIGHER",
+    "sort": "VARIANCE",
+    "topN": 15,
+    "layout": "AUTO",
+    "showTotal": true
+   }
+  },
+  "width": 1060,
+  "height": 560,
+  "wait": 1200,
+  "showcaseHeight": 560,
+  "caption": "Live: illustrative monthly sales against budget. Hover a month for the figures, click one to select it.",
+  "expect": {
+   "selector": "g.band",
+   "min": 13
+  }
+ },
+ {
+  "name": "regions",
+  "showcase": true,
+  "data": "sample-data/sales_budget.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "actual": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "plan": {
+     "inputField": "Budget",
+     "function": "SUM"
+    },
+    "good": "HIGHER",
+    "sort": "VARIANCE",
+    "topN": 15,
+    "layout": "AUTO",
+    "showTotal": true
+   }
+  },
+  "width": 1000,
+  "height": 360,
+  "wait": 1200,
+  "showcaseHeight": 360,
+  "caption": "Live: the same comparison by product line, sorted by variance.",
+  "expect": {
+   "selector": "g.band",
+   "min": 6
+  }
+ },
+ {
+  "name": "costs",
+  "showcase": true,
+  "data": "sample-data/sales_budget.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "actual": {
+     "inputField": "Costs",
+     "function": "SUM"
+    },
+    "plan": {
+     "inputField": "Cost budget",
+     "function": "SUM"
+    },
+    "good": "LOWER",
+    "sort": "PERCENT",
+    "topN": 15,
+    "layout": "AUTO",
+    "showTotal": true
+   }
+  },
+  "width": 1000,
+  "height": 380,
+  "wait": 1200,
+  "showcaseHeight": 380,
+  "caption": "Live: costs against cost budget by region, where spending above plan is shown in red.",
+  "expect": {
+   "selector": "g.band",
+   "min": 7
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/sales_budget.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "actual": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "plan": {
+     "inputField": "Budget",
+     "function": "SUM"
+    },
+    "good": "HIGHER",
+    "sort": "VARIANCE",
+    "topN": 15,
+    "layout": "AUTO",
+    "showTotal": true
+   }
+  },
+  "width": 1000,
+  "height": 420,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__var.model;return M.total && Math.abs(M.total.a-8753273)<2 && Math.abs(M.total.p-8528385)<2 && M.rows[0].k.label==='North' && M.layout==='rows'})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "g.band",
+    "nth": 2
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "click": "g.band",
+    "nth": 1
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "click": "g.band",
+    "nth": 6
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Channel",
+     "operator": "=",
+     "value": "Online"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__var.model.total.a<4e6",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     480,
+     360
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "topn",
+  "data": "sample-data/sales_budget.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "actual": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "plan": {
+     "inputField": "Budget",
+     "function": "SUM"
+    },
+    "good": "HIGHER",
+    "sort": "VARIANCE",
+    "topN": 3,
+    "layout": "COLUMNS",
+    "showTotal": true
+   }
+  },
+  "width": 700,
+  "height": 420,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "window.__var.model.rows.length===3 && window.__var.model.rows[2].other===true",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "text": "Other (3)"
+  }
+ },
+ {
+  "name": "mean",
+  "data": "sample-data/sales_budget.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "actual": {
+     "inputField": "Sales",
+     "function": "MEAN"
+    },
+    "plan": {
+     "inputField": "Budget",
+     "function": "MEAN"
+    },
+    "good": "HIGHER",
+    "sort": "VARIANCE",
+    "topN": 15,
+    "layout": "AUTO",
+    "showTotal": true
+   }
+  },
+  "width": 800,
+  "height": 360,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "window.__var.model.total===null",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Region",
+    "type": "TEXT"
+   },
+   {
+    "name": "Sales",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Budget",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "actual": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "plan": {
+     "inputField": "Budget",
+     "function": "SUM"
+    },
+    "good": "HIGHER",
+    "sort": "VARIANCE",
+    "topN": 15,
+    "layout": "AUTO",
+    "showTotal": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/sales_budget.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose a Breakdown"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/sales_budget.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "actual": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "plan": {
+     "inputField": "Budget",
+     "function": "SUM"
+    },
+    "good": "HIGHER",
+    "sort": "VARIANCE",
+    "topN": 15,
+    "layout": "AUTO",
+    "showTotal": true
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1200
+ }
+]

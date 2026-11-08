@@ -1,0 +1,1801 @@
+Employee ID,Gender,Department,Grade,Working pattern,Hourly pay,Bonus paid
+E00001,Male,Operations,G3,Full-time,18.54,0.0
+E00002,Male,Sales,G2,Part-time,15.46,1103.17
+E00003,Male,Operations,G2,Full-time,17.75,0.0
+E00004,Female,Customer service,G1,Full-time,12.34,592.68
+E00005,Female,Customer service,G1,Full-time,12.99,1066.18
+E00006,Male,Operations,G1,Part-time,12.6,0.0
+E00007,Male,Operations,G1,Full-time,12.71,0.0
+E00008,Male,Technology,G1,Full-time,11.39,0.0
+E00009,Male,Operations,G5,Full-time,35.79,12506.04
+E00010,Female,Sales,G1,Full-time,12.26,0.0
+E00011,Male,Sales,G3,Full-time,18.34,2942.74
+E00012,Female,Operations,G2,Full-time,15.51,1869.43
+E00013,Female,Operations,G1,Full-time,11.65,0.0
+E00014,Male,Technology,G6,Full-time,59.85,0.0
+E00015,Female,Customer service,G4,Full-time,23.93,0.0
+E00016,Female,Operations,G4,Full-time,26.06,6546.24
+E00017,Female,Operations,G1,Full-time,11.67,1273.25
+E00018,Male,Customer service,G3,Full-time,18.48,0.0
+E00019,Male,Sales,G1,Full-time,12.36,0.0
+E00020,Male,Technology,G3,Full-time,17.09,2446.56
+E00021,Male,Operations,G1,Full-time,11.69,0.0
+E00022,Male,Technology,G3,Full-time,19.34,4370.59
+E00023,Female,Customer service,G1,Part-time,12.11,775.18
+E00024,Female,Technology,G2,Full-time,15.33,1057.31
+E00025,Female,Operations,G2,Full-time,13.67,0.0
+E00026,Male,Customer service,G4,Part-time,24.07,795.53
+E00027,Female,Finance,G3,Part-time,17.06,1175.53
+E00028,Male,Operations,G2,Full-time,13.08,2203.47
+E00029,Male,Operations,G3,Full-time,19.21,0.0
+E00030,Male,Sales,G1,Full-time,11.34,0.0
+E00031,Female,Sales,G6,Part-time,59.81,0.0
+E00032,Female,Finance,G3,Part-time,17.71,0.0
+E00033,Male,Sales,G2,Full-time,14.05,1022.08
+E00034,Male,Finance,G4,Full-time,25.63,3502.99
+E00035,Male,Sales,G6,Full-time,54.46,20091.58
+E00036,Male,Finance,G4,Full-time,25.3,0.0
+E00037,Male,Technology,G2,Full-time,13.86,0.0
+E00038,Male,Customer service,G1,Full-time,12.33,857.44
+E00039,Male,Operations,G1,Full-time,12.92,612.97
+E00040,Male,Customer service,G1,Full-time,10.97,0.0
+E00041,Female,Technology,G5,Full-time,40.87,10280.01
+E00042,Male,Operations,G2,Full-time,16.16,0.0
+E00043,Female,Sales,G3,Part-time,18.09,822.18
+E00044,Female,Customer service,G4,Full-time,26.75,1172.11
+E00045,Female,Sales,G3,Full-time,18.01,1034.39
+E00046,Male,Operations,G5,Full-time,38.37,10975.78
+E00047,Female,Customer service,G1,Part-time,10.23,623.41
+E00048,Male,Customer service,G5,Part-time,39.0,1499.86
+E00049,Male,Customer service,G4,Full-time,28.42,5577.23
+E00050,Male,Sales,G2,Full-time,14.75,1175.48
+E00051,Male,Technology,G1,Part-time,10.6,381.93
+E00052,Female,Operations,G2,Full-time,13.88,0.0
+E00053,Female,Operations,G5,Full-time,34.09,6909.39
+E00054,Male,Operations,G1,Part-time,11.9,575.01
+E00055,Female,Technology,G3,Full-time,21.03,0.0
+E00056,Female,Customer service,G1,Full-time,13.03,0.0
+E00057,Male,Sales,G6,Full-time,70.53,3044.73
+E00058,Male,Sales,G3,Full-time,16.79,1183.53
+E00059,Female,Customer service,G4,Part-time,26.72,0.0
+E00060,Male,Finance,G2,Full-time,13.98,885.57
+E00061,Male,Sales,G2,Full-time,15.16,645.55
+E00062,Female,Technology,G1,Full-time,12.6,1370.63
+E00063,Female,Sales,G1,Full-time,10.5,0.0
+E00064,Female,Technology,G2,Full-time,13.51,1016.69
+E00065,Male,Sales,G1,Full-time,10.08,0.0
+E00066,Male,Finance,G2,Full-time,12.96,1680.31
+E00067,Male,Technology,G6,Full-time,66.0,14380.98
+E00068,Male,Operations,G4,Full-time,28.22,3886.96
+E00069,Male,Technology,G4,Full-time,27.02,6408.69
+E00070,Male,Finance,G1,Full-time,10.61,0.0
+E00071,Female,Operations,G3,Part-time,17.99,0.0
+E00072,Female,Operations,G1,Full-time,10.87,0.0
+E00073,Male,Operations,G2,Full-time,13.5,633.09
+E00074,Male,Technology,G1,Full-time,12.9,0.0
+E00075,Male,Operations,G3,Full-time,14.31,2334.09
+E00076,Male,Technology,G2,Full-time,15.11,0.0
+E00077,Male,Sales,G2,Full-time,15.6,1079.5
+E00078,Male,Technology,G1,Full-time,12.6,1276.52
+E00079,Female,Operations,G1,Part-time,11.35,0.0
+E00080,Female,Customer service,G1,Full-time,11.99,846.34
+E00081,Female,Finance,G3,Full-time,18.92,1093.23
+E00082,Male,Operations,G4,Full-time,25.76,1063.82
+E00083,Female,Operations,G5,Full-time,38.17,12106.3
+E00084,Male,Finance,G1,Full-time,11.26,1286.72
+E00085,Male,Finance,G3,Full-time,16.85,1936.43
+E00086,Female,Customer service,G1,Part-time,12.26,742.08
+E00087,Female,Finance,G2,Part-time,12.96,700.56
+E00088,Female,Customer service,G3,Full-time,16.68,2459.64
+E00089,Female,Sales,G2,Part-time,13.24,0.0
+E00090,Female,Sales,G1,Part-time,11.66,0.0
+E00091,Male,Operations,G2,Full-time,12.26,1106.31
+E00092,Male,Operations,G5,Full-time,39.53,5592.86
+E00093,Male,Customer service,G1,Full-time,11.69,0.0
+E00094,Female,Customer service,G6,Full-time,52.86,21185.81
+E00095,Male,Operations,G3,Full-time,17.73,3262.62
+E00096,Male,Finance,G5,Full-time,43.37,0.0
+E00097,Male,Sales,G3,Full-time,17.14,1654.17
+E00098,Male,Operations,G1,Part-time,10.37,463.23
+E00099,Female,Finance,G3,Part-time,16.29,1738.36
+E00100,Female,Sales,G3,Part-time,17.38,1834.24
+E00101,Male,Customer service,G2,Full-time,13.33,0.0
+E00102,Female,Operations,G5,Full-time,42.37,12472.03
+E00103,Male,Operations,G1,Full-time,11.92,488.55
+E00104,Female,Customer service,G3,Full-time,19.15,0.0
+E00105,Female,Customer service,G1,Full-time,13.23,776.77
+E00106,Male,Operations,G4,Full-time,27.64,0.0
+E00107,Female,Finance,G2,Part-time,11.56,0.0
+E00108,Not stated,Operations,G5,Full-time,40.52,11497.75
+E00109,Male,Operations,G6,Full-time,61.72,13531.66
+E00110,Female,Customer service,G2,Part-time,13.34,0.0
+E00111,Female,Finance,G2,Part-time,12.57,1273.08
+E00112,Female,Customer service,G3,Full-time,16.47,1922.24
+E00113,Male,Sales,G1,Full-time,11.56,1272.36
+E00114,Male,Operations,G2,Full-time,13.2,1483.36
+E00115,Male,Operations,G1,Part-time,11.35,420.33
+E00116,Female,Customer service,G2,Full-time,14.79,0.0
+E00117,Male,Operations,G4,Full-time,25.04,0.0
+E00118,Male,Operations,G6,Full-time,53.21,0.0
+E00119,Male,Operations,G2,Full-time,12.77,946.16
+E00120,Female,Customer service,G3,Part-time,18.26,2495.52
+E00121,Male,Operations,G4,Full-time,20.0,0.0
+E00122,Male,Operations,G2,Full-time,13.01,0.0
+E00123,Male,Operations,G2,Part-time,13.31,1042.22
+E00124,Male,Customer service,G3,Full-time,19.35,2968.47
+E00125,Female,Customer service,G2,Full-time,13.36,1759.31
+E00126,Female,Customer service,G1,Full-time,12.32,0.0
+E00127,Male,Operations,G1,Full-time,11.25,1278.42
+E00128,Female,Customer service,G4,Full-time,22.06,3079.29
+E00129,Female,Customer service,G1,Part-time,11.62,0.0
+E00130,Female,Sales,G5,Full-time,41.72,4289.6
+E00131,Female,Sales,G1,Full-time,12.18,0.0
+E00132,Male,Sales,G3,Full-time,18.93,0.0
+E00133,Male,Sales,G6,Full-time,59.99,9432.85
+E00134,Male,Operations,G4,Full-time,26.88,0.0
+E00135,Male,Customer service,G2,Full-time,15.88,0.0
+E00136,Male,Operations,G2,Full-time,14.66,2135.07
+E00137,Male,Customer service,G2,Full-time,16.29,1440.58
+E00138,Male,Finance,G2,Full-time,13.19,0.0
+E00139,Female,Operations,G3,Full-time,19.53,0.0
+E00140,Female,Customer service,G1,Part-time,10.83,0.0
+E00141,Male,Operations,G5,Full-time,35.42,0.0
+E00142,Male,Sales,G5,Full-time,35.3,10228.65
+E00143,Male,Sales,G6,Full-time,57.02,6578.34
+E00144,Male,Operations,G1,Full-time,11.83,0.0
+E00145,Male,Finance,G5,Full-time,41.35,14360.55
+E00146,Female,Customer service,G4,Part-time,25.67,2095.1
+E00147,Male,Operations,G3,Full-time,19.77,4505.72
+E00148,Male,Technology,G2,Full-time,15.36,0.0
+E00149,Female,Customer service,G1,Full-time,12.94,1231.08
+E00150,Male,Operations,G1,Part-time,11.61,732.86
+E00151,Male,Sales,G4,Full-time,24.82,0.0
+E00152,Female,Finance,G2,Full-time,15.72,1655.44
+E00153,Male,Technology,G2,Full-time,15.26,1945.13
+E00154,Male,Technology,G1,Full-time,12.99,768.78
+E00155,Female,Customer service,G1,Part-time,10.35,688.39
+E00156,Female,Technology,G5,Full-time,37.27,11510.12
+E00157,Female,Operations,G2,Full-time,13.67,2061.61
+E00158,Male,Operations,G2,Full-time,15.05,0.0
+E00159,Male,Operations,G3,Full-time,16.27,1126.2
+E00160,Male,Operations,G3,Full-time,19.14,3257.87
+E00161,Male,Sales,G5,Full-time,33.97,10576.38
+E00162,Female,Sales,G2,Full-time,14.63,0.0
+E00163,Female,Sales,G5,Part-time,39.07,5840.08
+E00164,Female,Operations,G3,Full-time,18.12,3219.79
+E00165,Male,Sales,G3,Full-time,14.1,0.0
+E00166,Female,Finance,G3,Full-time,17.7,3744.43
+E00167,Male,Customer service,G5,Full-time,41.44,0.0
+E00168,Male,Operations,G3,Full-time,17.94,3464.86
+E00169,Male,Sales,G4,Full-time,27.9,3230.23
+E00170,Male,Operations,G1,Full-time,11.68,643.83
+E00171,Male,Technology,G1,Full-time,11.31,455.99
+E00172,Male,Operations,G3,Full-time,19.21,3317.71
+E00173,Female,Customer service,G4,Full-time,27.58,3486.81
+E00174,Female,Finance,G3,Full-time,17.91,0.0
+E00175,Female,Finance,G1,Full-time,10.34,853.91
+E00176,Female,Sales,G3,Full-time,19.39,0.0
+E00177,Male,Operations,G3,Full-time,19.83,0.0
+E00178,Male,Operations,G3,Full-time,18.98,0.0
+E00179,Male,Operations,G4,Full-time,26.16,0.0
+E00180,Male,Operations,G2,Full-time,13.15,0.0
+E00181,Male,Technology,G2,Full-time,16.02,2223.7
+E00182,Male,Operations,G3,Full-time,18.81,2371.09
+E00183,Female,Technology,G6,Full-time,60.91,8614.26
+E00184,Female,Customer service,G2,Full-time,14.37,1196.44
+E00185,Female,Sales,G2,Full-time,14.12,1811.87
+E00186,Male,Operations,G1,Full-time,10.53,947.81
+E00187,Male,Customer service,G6,Full-time,64.99,13490.47
+E00188,Male,Customer service,G4,Full-time,24.38,2209.75
+E00189,Male,Technology,G1,Part-time,12.92,583.85
+E00190,Male,Operations,G3,Full-time,17.96,0.0
+E00191,Female,Operations,G4,Full-time,23.26,6477.92
+E00192,Male,Customer service,G6,Full-time,61.7,21361.21
+E00193,Male,Operations,G3,Full-time,17.28,3718.05
+E00194,Female,Customer service,G5,Full-time,38.58,8300.53
+E00195,Female,Customer service,G1,Full-time,12.06,0.0
+E00196,Female,Sales,G2,Part-time,12.68,0.0
+E00197,Female,Customer service,G4,Part-time,22.51,556.49
+E00198,Female,Customer service,G3,Full-time,19.39,1775.66
+E00199,Male,Operations,G6,Full-time,60.32,17260.95
+E00200,Female,Finance,G1,Full-time,13.46,0.0
+E00201,Male,Technology,G1,Full-time,13.1,1037.01
+E00202,Female,Sales,G1,Part-time,11.66,342.01
+E00203,Female,Customer service,G3,Full-time,16.95,0.0
+E00204,Female,Customer service,G2,Full-time,13.5,2137.2
+E00205,Male,Technology,G3,Full-time,20.43,1678.7
+E00206,Male,Operations,G2,Full-time,14.46,2422.2
+E00207,Male,Operations,G2,Full-time,14.96,1858.24
+E00208,Male,Operations,G6,Full-time,64.42,0.0
+E00209,Female,Customer service,G1,Full-time,11.54,0.0
+E00210,Female,Finance,G3,Part-time,17.45,1472.3
+E00211,Male,Operations,G3,Full-time,18.14,0.0
+E00212,Male,Operations,G3,Full-time,17.92,3692.48
+E00213,Male,Customer service,G3,Full-time,19.68,3084.7
+E00214,Male,Operations,G3,Full-time,16.69,0.0
+E00215,Female,Finance,G2,Part-time,13.26,1172.15
+E00216,Male,Operations,G5,Full-time,39.53,5125.04
+E00217,Male,Sales,G5,Part-time,41.56,7924.82
+E00218,Male,Operations,G3,Full-time,19.38,0.0
+E00219,Female,Customer service,G2,Full-time,13.96,0.0
+E00220,Male,Customer service,G2,Full-time,14.95,2282.65
+E00221,Female,Operations,G1,Full-time,11.85,710.2
+E00222,Female,Finance,G1,Full-time,11.49,0.0
+E00223,Female,Operations,G2,Full-time,14.57,0.0
+E00224,Female,Finance,G1,Full-time,11.68,522.94
+E00225,Male,Operations,G1,Full-time,11.77,1187.31
+E00226,Female,Technology,G2,Full-time,14.39,0.0
+E00227,Female,Customer service,G1,Full-time,13.85,1133.75
+E00228,Female,Customer service,G4,Part-time,24.65,3299.8
+E00229,Female,Sales,G4,Full-time,26.48,0.0
+E00230,Male,Operations,G6,Full-time,57.82,23265.46
+E00231,Male,Customer service,G2,Full-time,13.54,1554.89
+E00232,Female,Customer service,G4,Full-time,24.3,0.0
+E00233,Female,Operations,G5,Full-time,38.91,2694.29
+E00234,Female,Operations,G3,Full-time,18.8,0.0
+E00235,Male,Operations,G4,Full-time,22.62,6227.53
+E00236,Male,Sales,G5,Part-time,34.15,996.43
+E00237,Female,Finance,G3,Full-time,18.91,3643.4
+E00238,Female,Sales,G3,Full-time,17.98,2039.32
+E00239,Male,Operations,G5,Full-time,40.74,11490.31
+E00240,Male,Customer service,G2,Full-time,13.7,1540.76
+E00241,Female,Customer service,G2,Part-time,12.39,0.0
+E00242,Male,Technology,G1,Full-time,12.75,0.0
+E00243,Male,Operations,G3,Part-time,18.17,1780.79
+E00244,Female,Sales,G4,Full-time,28.35,0.0
+E00245,Female,Customer service,G1,Full-time,12.19,0.0
+E00246,Male,Operations,G4,Full-time,24.56,1645.24
+E00247,Male,Finance,G6,Full-time,57.66,17171.95
+E00248,Male,Technology,G3,Full-time,20.94,0.0
+E00249,Female,Finance,G2,Full-time,13.49,0.0
+E00250,Female,Finance,G3,Full-time,17.66,3953.89
+E00251,Female,Sales,G3,Full-time,20.09,0.0
+E00252,Female,Customer service,G1,Part-time,10.4,694.04
+E00253,Male,Customer service,G4,Full-time,24.58,3452.62
+E00254,Female,Operations,G2,Part-time,13.48,410.04
+E00255,Male,Sales,G3,Full-time,17.45,0.0
+E00256,Female,Sales,G1,Part-time,9.58,492.7
+E00257,Female,Sales,G1,Full-time,12.93,1205.36
+E00258,Female,Finance,G3,Full-time,17.94,3171.5
+E00259,Male,Operations,G3,Full-time,16.09,1607.54
+E00260,Male,Finance,G6,Full-time,53.68,9588.53
+E00261,Male,Operations,G2,Full-time,14.68,0.0
+E00262,Female,Operations,G1,Full-time,10.47,587.14
+E00263,Male,Technology,G4,Full-time,29.41,6848.09
+E00264,Female,Operations,G2,Full-time,13.43,0.0
+E00265,Female,Sales,G1,Full-time,10.35,0.0
+E00266,Male,Technology,G5,Full-time,41.19,8084.4
+E00267,Female,Operations,G3,Full-time,19.42,987.43
+E00268,Male,Operations,G4,Full-time,25.28,2432.1
+E00269,Female,Technology,G1,Full-time,12.74,0.0
+E00270,Male,Operations,G4,Full-time,25.73,5440.45
+E00271,Male,Operations,G3,Full-time,18.14,2565.02
+E00272,Female,Technology,G2,Full-time,15.21,1249.42
+E00273,Female,Operations,G5,Part-time,39.07,4888.99
+E00274,Male,Operations,G3,Full-time,18.52,1594.35
+E00275,Male,Sales,G2,Full-time,14.47,0.0
+E00276,Female,Technology,G2,Part-time,15.91,0.0
+E00277,Male,Sales,G4,Full-time,23.4,3497.94
+E00278,Male,Operations,G1,Part-time,11.02,750.15
+E00279,Male,Technology,G3,Full-time,18.33,0.0
+E00280,Female,Finance,G2,Full-time,13.66,0.0
+E00281,Male,Customer service,G1,Full-time,11.59,1036.59
+E00282,Male,Operations,G6,Full-time,62.28,6085.54
+E00283,Female,Operations,G2,Full-time,14.88,1815.23
+E00284,Female,Customer service,G1,Part-time,11.14,508.8
+E00285,Male,Operations,G1,Part-time,10.97,0.0
+E00286,Male,Technology,G1,Full-time,11.33,0.0
+E00287,Female,Operations,G3,Full-time,17.86,0.0
+E00288,Female,Operations,G2,Part-time,11.13,1003.79
+E00289,Male,Operations,G2,Full-time,14.5,1713.07
+E00290,Male,Operations,G2,Full-time,14.26,2179.45
+E00291,Female,Finance,G4,Full-time,23.24,3985.94
+E00292,Female,Sales,G6,Part-time,55.49,0.0
+E00293,Female,Technology,G3,Part-time,17.13,0.0
+E00294,Female,Customer service,G4,Full-time,25.06,1493.52
+E00295,Female,Sales,G1,Full-time,11.82,1074.86
+E00296,Female,Technology,G3,Full-time,21.48,0.0
+E00297,Male,Operations,G2,Full-time,13.66,0.0
+E00298,Male,Operations,G1,Full-time,11.57,0.0
+E00299,Female,Operations,G2,Full-time,14.29,2144.95
+E00300,Male,Operations,G1,Full-time,11.85,0.0
+E00301,Female,Customer service,G6,Full-time,53.87,3008.2
+E00302,Female,Technology,G1,Full-time,11.05,664.23
+E00303,Female,Operations,G4,Full-time,24.76,0.0
+E00304,Male,Sales,G1,Full-time,10.52,949.78
+E00305,Female,Customer service,G2,Full-time,15.78,2692.69
+E00306,Male,Finance,G3,Full-time,19.25,3569.84
+E00307,Male,Sales,G4,Full-time,24.73,0.0
+E00308,Male,Operations,G3,Full-time,19.09,1768.35
+E00309,Male,Sales,G4,Full-time,26.44,0.0
+E00310,Male,Technology,G3,Full-time,18.94,4204.04
+E00311,Male,Operations,G1,Full-time,10.72,822.95
+E00312,Male,Operations,G3,Part-time,17.77,1506.77
+E00313,Male,Technology,G4,Full-time,30.14,5535.0
+E00314,Female,Customer service,G1,Full-time,10.68,459.52
+E00315,Male,Sales,G5,Full-time,37.1,10969.35
+E00316,Male,Sales,G3,Full-time,16.68,2505.8
+E00317,Male,Finance,G5,Part-time,37.1,3316.58
+E00318,Male,Customer service,G3,Full-time,17.62,777.67
+E00319,Male,Sales,G1,Full-time,11.41,774.93
+E00320,Male,Technology,G2,Full-time,15.74,0.0
+E00321,Female,Operations,G4,Part-time,22.45,0.0
+E00322,Male,Finance,G1,Full-time,10.63,0.0
+E00323,Male,Technology,G1,Full-time,13.25,821.31
+E00324,Female,Sales,G2,Part-time,13.39,0.0
+E00325,Female,Customer service,G1,Full-time,11.09,0.0
+E00326,Female,Customer service,G1,Full-time,9.92,0.0
+E00327,Male,Sales,G4,Full-time,23.42,2659.68
+E00328,Female,Finance,G2,Full-time,13.24,0.0
+E00329,Female,Operations,G4,Part-time,22.15,0.0
+E00330,Male,Technology,G3,Full-time,18.66,0.0
+E00331,Male,Sales,G2,Full-time,15.45,0.0
+E00332,Female,Customer service,G2,Full-time,14.03,0.0
+E00333,Male,Sales,G2,Part-time,14.18,485.12
+E00334,Male,Finance,G2,Full-time,14.33,2265.05
+E00335,Female,Customer service,G2,Full-time,12.98,0.0
+E00336,Female,Technology,G1,Full-time,12.37,0.0
+E00337,Male,Sales,G1,Full-time,10.77,916.67
+E00338,Female,Customer service,G3,Full-time,18.74,0.0
+E00339,Female,Technology,G5,Full-time,46.05,7062.08
+E00340,Female,Technology,G3,Full-time,20.2,0.0
+E00341,Male,Sales,G2,Part-time,14.39,608.75
+E00342,Male,Operations,G5,Full-time,39.43,7679.09
+E00343,Male,Sales,G4,Full-time,26.73,5666.11
+E00344,Female,Customer service,G3,Full-time,18.15,0.0
+E00345,Male,Operations,G2,Full-time,14.4,1088.51
+E00346,Female,Customer service,G1,Full-time,13.07,0.0
+E00347,Female,Operations,G3,Full-time,21.44,0.0
+E00348,Male,Operations,G2,Full-time,13.96,570.4
+E00349,Male,Sales,G2,Full-time,16.08,0.0
+E00350,Male,Operations,G3,Full-time,19.22,2800.79
+E00351,Male,Customer service,G3,Full-time,18.81,0.0
+E00352,Male,Technology,G3,Full-time,21.19,0.0
+E00353,Male,Sales,G4,Full-time,23.87,0.0
+E00354,Male,Operations,G4,Full-time,23.81,4451.4
+E00355,Female,Operations,G2,Part-time,12.85,1330.75
+E00356,Male,Sales,G1,Full-time,11.62,0.0
+E00357,Male,Sales,G1,Full-time,10.97,0.0
+E00358,Female,Operations,G1,Part-time,10.79,648.36
+E00359,Female,Operations,G2,Part-time,14.99,1160.17
+E00360,Female,Customer service,G2,Part-time,12.08,404.33
+E00361,Female,Sales,G3,Full-time,19.58,3589.49
+E00362,Female,Finance,G2,Full-time,14.71,0.0
+E00363,Male,Technology,G2,Full-time,14.54,1206.15
+E00364,Female,Operations,G4,Full-time,27.14,0.0
+E00365,Male,Operations,G5,Full-time,35.69,3637.97
+E00366,Male,Operations,G3,Full-time,15.76,0.0
+E00367,Female,Customer service,G1,Full-time,11.08,730.62
+E00368,Male,Sales,G6,Full-time,60.22,21381.22
+E00369,Female,Sales,G3,Part-time,17.23,0.0
+E00370,Female,Finance,G3,Full-time,17.54,3360.42
+E00371,Female,Operations,G2,Full-time,14.33,2083.68
+E00372,Female,Sales,G1,Full-time,10.93,1091.16
+E00373,Female,Customer service,G2,Full-time,13.16,0.0
+E00374,Female,Customer service,G4,Part-time,24.57,1983.56
+E00375,Female,Customer service,G2,Part-time,12.22,0.0
+E00376,Female,Customer service,G3,Full-time,18.37,3260.55
+E00377,Male,Customer service,G2,Full-time,14.36,2452.92
+E00378,Female,Sales,G2,Full-time,13.45,0.0
+E00379,Male,Operations,G2,Full-time,14.57,2539.91
+E00380,Male,Operations,G1,Full-time,10.89,0.0
+E00381,Male,Technology,G2,Full-time,15.71,1810.53
+E00382,Male,Customer service,G4,Full-time,23.72,0.0
+E00383,Female,Customer service,G3,Full-time,16.45,0.0
+E00384,Male,Customer service,G5,Full-time,40.88,10417.47
+E00385,Female,Customer service,G1,Full-time,11.42,1196.47
+E00386,Female,Technology,G4,Full-time,26.59,5389.89
+E00387,Female,Operations,G3,Full-time,16.86,1081.72
+E00388,Female,Customer service,G2,Full-time,13.19,1093.68
+E00389,Female,Operations,G5,Part-time,36.22,0.0
+E00390,Female,Customer service,G3,Full-time,19.1,3220.26
+E00391,Male,Customer service,G5,Full-time,35.85,4634.07
+E00392,Female,Customer service,G1,Full-time,8.71,761.8
+E00393,Female,Operations,G3,Full-time,17.1,1351.68
+E00394,Female,Operations,G3,Full-time,16.4,737.73
+E00395,Female,Customer service,G1,Full-time,11.74,1076.21
+E00396,Female,Finance,G2,Full-time,13.77,2107.32
+E00397,Male,Technology,G5,Full-time,40.62,13881.6
+E00398,Female,Sales,G3,Full-time,17.67,0.0
+E00399,Female,Technology,G2,Part-time,13.45,371.16
+E00400,Male,Technology,G4,Full-time,28.27,4835.26
+E00401,Male,Operations,G1,Full-time,11.02,0.0
+E00402,Female,Operations,G3,Part-time,16.54,0.0
+E00403,Male,Customer service,G4,Full-time,24.24,1339.65
+E00404,Female,Operations,G1,Full-time,12.29,941.53
+E00405,Female,Customer service,G2,Full-time,12.3,0.0
+E00406,Female,Customer service,G4,Full-time,26.02,1976.78
+E00407,Male,Finance,G1,Full-time,8.98,854.9
+E00408,Male,Operations,G3,Full-time,18.88,3164.14
+E00409,Male,Customer service,G5,Full-time,36.69,0.0
+E00410,Male,Sales,G4,Full-time,25.88,2322.16
+E00411,Male,Sales,G1,Full-time,11.69,658.59
+E00412,Female,Sales,G2,Part-time,12.86,1267.61
+E00413,Male,Customer service,G3,Full-time,18.31,1202.99
+E00414,Female,Sales,G3,Full-time,17.07,2583.57
+E00415,Male,Technology,G2,Full-time,14.47,2337.38
+E00416,Female,Sales,G3,Full-time,16.99,2665.33
+E00417,Male,Sales,G2,Full-time,14.48,871.41
+E00418,Male,Sales,G3,Full-time,17.08,3296.19
+E00419,Female,Customer service,G1,Full-time,10.87,1165.3
+E00420,Male,Operations,G3,Part-time,17.46,0.0
+E00421,Female,Customer service,G3,Part-time,18.07,0.0
+E00422,Male,Finance,G5,Full-time,36.97,0.0
+E00423,Female,Technology,G1,Part-time,12.74,473.88
+E00424,Male,Customer service,G2,Full-time,14.75,1201.97
+E00425,Female,Operations,G6,Full-time,60.79,3521.24
+E00426,Male,Sales,G5,Full-time,37.1,0.0
+E00427,Male,Sales,G2,Full-time,13.3,1130.01
+E00428,Male,Operations,G5,Full-time,35.67,6649.6
+E00429,Female,Sales,G2,Part-time,14.18,1165.46
+E00430,Male,Operations,G3,Full-time,18.65,3565.91
+E00431,Female,Operations,G3,Full-time,19.11,0.0
+E00432,Female,Customer service,G3,Part-time,17.42,1213.75
+E00433,Female,Operations,G2,Full-time,12.65,1787.97
+E00434,Female,Finance,G1,Part-time,11.12,478.45
+E00435,Female,Technology,G1,Full-time,12.88,0.0
+E00436,Female,Technology,G2,Part-time,13.93,0.0
+E00437,Male,Operations,G5,Full-time,39.25,0.0
+E00438,Female,Operations,G1,Full-time,12.16,0.0
+E00439,Male,Sales,G4,Part-time,23.16,1367.19
+E00440,Male,Operations,G3,Full-time,19.01,3069.44
+E00441,Female,Operations,G1,Full-time,10.96,956.07
+E00442,Male,Operations,G5,Full-time,33.68,8592.31
+E00443,Female,Finance,G1,Full-time,10.17,854.05
+E00444,Female,Customer service,G3,Full-time,15.29,0.0
+E00445,Male,Sales,G4,Full-time,28.14,1940.83
+E00446,Male,Operations,G5,Full-time,38.37,4962.44
+E00447,Male,Operations,G2,Part-time,13.57,0.0
+E00448,Female,Operations,G2,Full-time,13.91,0.0
+E00449,Female,Operations,G2,Full-time,12.12,0.0
+E00450,Female,Finance,G1,Full-time,12.15,941.08
+E00451,Male,Sales,G6,Full-time,67.43,16634.81
+E00452,Male,Operations,G3,Full-time,19.09,1492.37
+E00453,Female,Technology,G1,Full-time,12.68,574.54
+E00454,Male,Operations,G4,Full-time,24.27,0.0
+E00455,Female,Sales,G3,Full-time,18.76,4142.43
+E00456,Male,Operations,G3,Full-time,18.75,0.0
+E00457,Male,Operations,G5,Full-time,37.06,10512.67
+E00458,Female,Customer service,G6,Full-time,63.45,12918.08
+E00459,Male,Technology,G4,Full-time,26.18,2818.85
+E00460,Male,Technology,G6,Full-time,68.49,17117.08
+E00461,Female,Operations,G1,Full-time,11.22,0.0
+E00462,Male,Operations,G4,Part-time,24.43,912.04
+E00463,Male,Operations,G5,Full-time,34.11,4195.03
+E00464,Female,Customer service,G5,Part-time,37.63,0.0
+E00465,Female,Sales,G4,Full-time,30.95,0.0
+E00466,Female,Technology,G4,Part-time,31.25,0.0
+E00467,Male,Finance,G5,Full-time,35.66,7103.66
+E00468,Male,Technology,G3,Full-time,20.58,4436.86
+E00469,Female,Operations,G3,Full-time,17.61,0.0
+E00470,Female,Sales,G2,Full-time,14.39,0.0
+E00471,Male,Technology,G1,Full-time,12.69,0.0
+E00472,Female,Sales,G1,Full-time,12.05,0.0
+E00473,Female,Technology,G2,Part-time,14.52,0.0
+E00474,Male,Technology,G4,Full-time,28.1,0.0
+E00475,Male,Sales,G3,Full-time,18.35,3549.21
+E00476,Male,Sales,G3,Full-time,15.28,3420.38
+E00477,Male,Operations,G4,Full-time,24.54,2389.43
+E00478,Male,Operations,G4,Full-time,26.52,1370.56
+E00479,Male,Operations,G4,Full-time,25.26,0.0
+E00480,Female,Operations,G1,Full-time,11.41,798.13
+E00481,Male,Sales,G4,Full-time,25.48,3858.23
+E00482,Female,Sales,G1,Full-time,11.75,0.0
+E00483,Male,Operations,G5,Full-time,35.82,2870.07
+E00484,Female,Customer service,G5,Full-time,42.24,13725.5
+E00485,Male,Sales,G1,Part-time,10.72,494.78
+E00486,Male,Operations,G4,Full-time,25.48,7363.48
+E00487,Male,Sales,G4,Part-time,24.1,643.28
+E00488,Male,Finance,G3,Full-time,18.95,2140.8
+E00489,Male,Operations,G2,Full-time,14.25,1587.88
+E00490,Female,Sales,G5,Full-time,36.72,7871.32
+E00491,Female,Customer service,G6,Full-time,62.0,0.0
+E00492,Female,Customer service,G1,Full-time,9.83,0.0
+E00493,Male,Operations,G4,Full-time,24.01,6462.59
+E00494,Female,Finance,G2,Full-time,15.64,0.0
+E00495,Male,Operations,G1,Part-time,11.23,658.01
+E00496,Female,Sales,G4,Part-time,24.16,3010.49
+E00497,Female,Customer service,G2,Part-time,13.67,0.0
+E00498,Male,Operations,G4,Full-time,27.55,7654.47
+E00499,Female,Customer service,G5,Full-time,40.03,2207.47
+E00500,Female,Customer service,G2,Part-time,13.24,0.0
+E00501,Male,Customer service,G2,Full-time,13.58,1667.88
+E00502,Male,Sales,G4,Full-time,22.65,1101.33
+E00503,Female,Customer service,G3,Full-time,19.96,0.0
+E00504,Female,Customer service,G2,Part-time,13.01,377.86
+E00505,Male,Technology,G5,Full-time,39.29,11229.86
+E00506,Female,Customer service,G1,Full-time,11.38,484.01
+E00507,Male,Operations,G1,Full-time,11.0,743.03
+E00508,Female,Sales,G3,Part-time,15.91,1322.51
+E00509,Female,Sales,G4,Part-time,23.58,0.0
+E00510,Male,Technology,G1,Full-time,14.17,0.0
+E00511,Female,Finance,G5,Full-time,39.84,0.0
+E00512,Male,Operations,G6,Full-time,56.27,7792.78
+E00513,Male,Operations,G3,Full-time,18.31,1397.94
+E00514,Female,Operations,G3,Full-time,17.24,0.0
+E00515,Female,Sales,G2,Part-time,13.22,600.56
+E00516,Male,Operations,G1,Full-time,10.62,0.0
+E00517,Male,Technology,G4,Full-time,32.3,7551.93
+E00518,Female,Customer service,G1,Full-time,12.43,0.0
+E00519,Female,Sales,G4,Part-time,25.28,1844.3
+E00520,Female,Customer service,G1,Full-time,9.36,829.87
+E00521,Male,Technology,G1,Full-time,10.71,985.16
+E00522,Male,Finance,G1,Full-time,13.09,0.0
+E00523,Female,Customer service,G3,Full-time,19.22,894.16
+E00524,Female,Technology,G1,Full-time,11.61,1268.34
+E00525,Female,Customer service,G3,Part-time,19.27,1963.57
+E00526,Female,Customer service,G5,Full-time,40.35,4925.93
+E00527,Female,Operations,G2,Part-time,12.45,379.76
+E00528,Male,Technology,G2,Full-time,13.58,0.0
+E00529,Male,Operations,G5,Full-time,37.19,6675.49
+E00530,Male,Technology,G1,Full-time,13.12,0.0
+E00531,Male,Technology,G5,Full-time,45.06,2823.44
+E00532,Female,Customer service,G1,Full-time,11.58,712.37
+E00533,Male,Technology,G5,Full-time,37.48,8253.69
+E00534,Male,Technology,G2,Full-time,15.75,1549.82
+E00535,Male,Operations,G4,Full-time,20.58,3329.93
+E00536,Male,Sales,G2,Full-time,13.8,0.0
+E00537,Male,Operations,G4,Full-time,24.89,4404.66
+E00538,Male,Technology,G3,Full-time,18.24,1724.11
+E00539,Male,Operations,G4,Full-time,24.03,5922.2
+E00540,Female,Customer service,G4,Part-time,22.76,0.0
+E00541,Male,Technology,G4,Part-time,26.64,0.0
+E00542,Male,Operations,G6,Full-time,59.59,11391.84
+E00543,Male,Operations,G3,Full-time,14.74,1265.16
+E00544,Male,Finance,G3,Part-time,17.75,863.98
+E00545,Male,Customer service,G1,Full-time,11.43,0.0
+E00546,Male,Operations,G3,Full-time,18.75,0.0
+E00547,Female,Sales,G2,Full-time,14.32,780.52
+E00548,Female,Finance,G2,Part-time,14.23,627.92
+E00549,Female,Customer service,G5,Full-time,39.09,4297.09
+E00550,Male,Operations,G3,Full-time,15.82,3237.18
+E00551,Male,Operations,G4,Full-time,23.77,0.0
+E00552,Female,Customer service,G1,Part-time,11.7,0.0
+E00553,Male,Operations,G1,Full-time,10.72,429.01
+E00554,Male,Sales,G2,Full-time,13.24,0.0
+E00555,Male,Operations,G2,Full-time,14.99,1706.61
+E00556,Female,Customer service,G1,Full-time,11.36,0.0
+E00557,Male,Technology,G5,Full-time,44.01,2398.5
+E00558,Male,Operations,G2,Full-time,14.23,1979.22
+E00559,Male,Operations,G2,Full-time,15.02,2290.42
+E00560,Male,Sales,G4,Full-time,26.76,6248.27
+E00561,Female,Operations,G1,Full-time,11.21,0.0
+E00562,Female,Operations,G2,Part-time,12.82,541.88
+E00563,Female,Customer service,G2,Full-time,15.32,0.0
+E00564,Male,Operations,G4,Full-time,25.92,0.0
+E00565,Male,Technology,G5,Full-time,41.58,2752.73
+E00566,Female,Finance,G3,Part-time,17.79,619.04
+E00567,Male,Operations,G3,Full-time,20.55,3316.01
+E00568,Male,Sales,G1,Full-time,10.9,915.09
+E00569,Female,Sales,G4,Full-time,25.71,3111.83
+E00570,Male,Operations,G4,Full-time,25.5,0.0
+E00571,Male,Operations,G3,Full-time,17.59,1432.42
+E00572,Male,Technology,G4,Full-time,24.27,2094.67
+E00573,Male,Sales,G2,Full-time,14.42,1730.8
+E00574,Male,Customer service,G3,Full-time,16.84,1663.46
+E00575,Female,Finance,G2,Full-time,13.43,1388.94
+E00576,Male,Operations,G5,Full-time,39.99,4493.77
+E00577,Female,Customer service,G1,Part-time,11.17,0.0
+E00578,Male,Operations,G3,Full-time,19.02,4147.51
+E00579,Female,Sales,G4,Full-time,23.12,3990.17
+E00580,Male,Sales,G4,Full-time,27.64,0.0
+E00581,Female,Customer service,G3,Full-time,15.81,0.0
+E00582,Female,Sales,G2,Part-time,12.62,662.1
+E00583,Male,Sales,G4,Full-time,21.69,4346.93
+E00584,Female,Finance,G3,Full-time,19.85,0.0
+E00585,Female,Sales,G3,Full-time,17.59,1080.36
+E00586,Male,Operations,G2,Full-time,13.93,2143.19
+E00587,Female,Operations,G3,Full-time,17.83,0.0
+E00588,Male,Technology,G3,Full-time,20.08,1897.87
+E00589,Male,Operations,G1,Full-time,12.82,609.04
+E00590,Male,Operations,G1,Full-time,12.3,0.0
+E00591,Male,Technology,G3,Full-time,23.68,4380.7
+E00592,Male,Operations,G4,Full-time,27.04,0.0
+E00593,Female,Customer service,G1,Full-time,12.2,579.72
+E00594,Female,Operations,G1,Full-time,12.35,0.0
+E00595,Male,Operations,G4,Full-time,24.12,2917.39
+E00596,Male,Technology,G1,Full-time,12.57,0.0
+E00597,Female,Finance,G3,Full-time,19.01,0.0
+E00598,Female,Finance,G1,Part-time,9.66,590.69
+E00599,Male,Operations,G4,Full-time,26.05,4189.18
+E00600,Male,Technology,G3,Part-time,16.84,1893.14
+E00601,Male,Technology,G2,Full-time,13.73,0.0
+E00602,Female,Technology,G3,Full-time,22.41,1152.76
+E00603,Female,Operations,G1,Part-time,10.66,0.0
+E00604,Female,Customer service,G5,Full-time,42.35,9746.71
+E00605,Male,Sales,G2,Part-time,14.81,0.0
+E00606,Male,Sales,G4,Full-time,26.76,5493.99
+E00607,Female,Finance,G1,Full-time,11.1,650.16
+E00608,Male,Technology,G1,Full-time,11.81,895.26
+E00609,Male,Operations,G4,Full-time,25.87,1398.95
+E00610,Male,Operations,G5,Part-time,37.27,3895.81
+E00611,Female,Finance,G2,Part-time,14.78,0.0
+E00612,Female,Operations,G2,Part-time,13.47,347.8
+E00613,Male,Operations,G2,Full-time,13.68,1960.62
+E00614,Male,Sales,G1,Full-time,11.77,0.0
+E00615,Female,Operations,G4,Part-time,21.44,2097.95
+E00616,Female,Customer service,G5,Full-time,36.23,2636.03
+E00617,Male,Finance,G4,Full-time,24.69,1926.07
+E00618,Male,Technology,G5,Full-time,37.73,5772.35
+E00619,Male,Operations,G2,Full-time,12.95,2111.86
+E00620,Male,Finance,G1,Full-time,10.81,0.0
+E00621,Male,Operations,G1,Full-time,12.4,1338.63
+E00622,Female,Sales,G2,Part-time,15.58,762.96
+E00623,Female,Operations,G4,Full-time,29.92,6251.52
+E00624,Female,Finance,G1,Part-time,10.72,0.0
+E00625,Male,Operations,G3,Part-time,16.53,1186.65
+E00626,Male,Technology,G3,Full-time,17.25,0.0
+E00627,Male,Sales,G1,Full-time,11.72,1250.84
+E00628,Female,Customer service,G1,Part-time,11.66,0.0
+E00629,Male,Customer service,G4,Full-time,24.26,4211.25
+E00630,Female,Customer service,G1,Full-time,10.62,0.0
+E00631,Male,Finance,G6,Part-time,48.83,5441.23
+E00632,Female,Customer service,G4,Full-time,26.06,0.0
+E00633,Female,Finance,G1,Full-time,13.26,0.0
+E00634,Male,Operations,G2,Full-time,13.4,0.0
+E00635,Male,Operations,G2,Part-time,13.24,0.0
+E00636,Male,Operations,G3,Full-time,17.74,777.4
+E00637,Male,Operations,G4,Full-time,24.86,6670.42
+E00638,Male,Sales,G1,Full-time,10.3,937.59
+E00639,Male,Operations,G1,Full-time,10.32,535.8
+E00640,Male,Operations,G4,Full-time,22.85,3199.15
+E00641,Male,Finance,G4,Full-time,23.41,3518.77
+E00642,Female,Operations,G2,Full-time,15.01,2143.71
+E00643,Male,Operations,G1,Full-time,10.7,965.64
+E00644,Female,Technology,G1,Full-time,13.5,869.54
+E00645,Female,Finance,G5,Full-time,38.19,2805.35
+E00646,Male,Sales,G3,Full-time,18.02,2105.72
+E00647,Female,Customer service,G1,Full-time,11.26,0.0
+E00648,Male,Customer service,G5,Part-time,38.0,0.0
+E00649,Male,Technology,G1,Part-time,12.38,349.77
+E00650,Male,Finance,G2,Part-time,14.85,0.0
+E00651,Not stated,Technology,G4,Full-time,28.09,2267.14
+E00652,Female,Customer service,G5,Full-time,37.24,9404.44
+E00653,Male,Finance,G3,Part-time,18.07,1925.46
+E00654,Female,Sales,G1,Full-time,10.92,602.95
+E00655,Male,Finance,G1,Full-time,10.53,0.0
+E00656,Female,Operations,G2,Full-time,14.05,0.0
+E00657,Female,Operations,G4,Full-time,20.72,2199.26
+E00658,Female,Sales,G2,Full-time,14.28,1206.79
+E00659,Female,Sales,G1,Full-time,11.56,0.0
+E00660,Male,Finance,G1,Full-time,11.86,0.0
+E00661,Female,Finance,G4,Full-time,27.33,3560.63
+E00662,Female,Finance,G2,Full-time,13.85,718.98
+E00663,Male,Operations,G3,Full-time,20.07,1498.05
+E00664,Male,Technology,G2,Full-time,16.57,2856.67
+E00665,Male,Customer service,G2,Part-time,12.57,0.0
+E00666,Male,Technology,G3,Part-time,19.41,0.0
+E00667,Female,Customer service,G2,Full-time,14.67,1248.53
+E00668,Female,Operations,G2,Part-time,14.59,1514.74
+E00669,Female,Technology,G4,Full-time,30.85,2954.72
+E00670,Female,Sales,G3,Full-time,16.18,0.0
+E00671,Female,Technology,G1,Part-time,13.25,0.0
+E00672,Male,Operations,G3,Full-time,18.85,0.0
+E00673,Male,Operations,G4,Full-time,21.39,3298.01
+E00674,Female,Customer service,G2,Full-time,15.08,0.0
+E00675,Female,Customer service,G2,Part-time,15.68,1102.72
+E00676,Male,Operations,G2,Full-time,14.44,1331.44
+E00677,Male,Customer service,G1,Full-time,12.1,915.33
+E00678,Female,Operations,G1,Part-time,10.04,425.15
+E00679,Male,Operations,G3,Full-time,18.51,2897.56
+E00680,Female,Technology,G1,Full-time,12.87,0.0
+E00681,Male,Sales,G2,Full-time,14.37,1565.21
+E00682,Female,Sales,G2,Full-time,12.67,0.0
+E00683,Female,Customer service,G3,Full-time,18.1,2750.59
+E00684,Female,Operations,G1,Part-time,10.08,0.0
+E00685,Female,Operations,G2,Part-time,12.54,624.63
+E00686,Female,Operations,G5,Full-time,31.19,0.0
+E00687,Female,Finance,G2,Full-time,13.57,0.0
+E00688,Female,Finance,G2,Full-time,16.3,1912.23
+E00689,Male,Operations,G2,Full-time,13.21,1880.35
+E00690,Female,Operations,G1,Part-time,10.12,435.09
+E00691,Male,Operations,G3,Full-time,19.42,0.0
+E00692,Male,Operations,G2,Full-time,13.03,0.0
+E00693,Female,Customer service,G1,Full-time,12.36,915.64
+E00694,Female,Operations,G2,Full-time,13.52,1609.92
+E00695,Male,Sales,G1,Full-time,13.09,0.0
+E00696,Male,Finance,G1,Full-time,12.02,0.0
+E00697,Female,Sales,G2,Full-time,14.73,721.81
+E00698,Female,Operations,G1,Full-time,11.73,940.02
+E00699,Male,Operations,G2,Full-time,14.17,641.99
+E00700,Male,Finance,G2,Part-time,12.35,1188.6
+E00701,Female,Finance,G3,Full-time,19.12,1718.42
+E00702,Female,Finance,G3,Full-time,17.22,2632.57
+E00703,Female,Technology,G1,Part-time,11.29,724.24
+E00704,Female,Operations,G5,Full-time,41.23,0.0
+E00705,Female,Customer service,G3,Full-time,17.73,2798.09
+E00706,Male,Operations,G1,Full-time,11.07,938.44
+E00707,Male,Customer service,G5,Full-time,35.42,3847.92
+E00708,Male,Technology,G4,Full-time,25.21,1612.29
+E00709,Female,Operations,G5,Part-time,32.86,1800.51
+E00710,Male,Sales,G1,Full-time,13.42,580.38
+E00711,Female,Sales,G4,Full-time,26.64,6510.31
+E00712,Female,Sales,G4,Full-time,23.8,6737.48
+E00713,Male,Sales,G1,Part-time,10.33,493.19
+E00714,Female,Operations,G2,Full-time,12.5,0.0
+E00715,Male,Operations,G2,Full-time,12.84,2243.0
+E00716,Male,Sales,G2,Full-time,14.23,1445.91
+E00717,Female,Operations,G3,Part-time,17.17,0.0
+E00718,Male,Sales,G4,Full-time,24.78,4261.28
+E00719,Male,Operations,G6,Full-time,58.5,4874.59
+E00720,Male,Operations,G3,Full-time,18.08,1173.79
+E00721,Female,Customer service,G1,Full-time,11.02,0.0
+E00722,Male,Finance,G5,Full-time,39.77,11674.98
+E00723,Female,Operations,G3,Full-time,17.41,3329.59
+E00724,Male,Operations,G2,Full-time,12.81,0.0
+E00725,Male,Customer service,G4,Full-time,23.77,6739.09
+E00726,Female,Operations,G5,Part-time,36.68,7478.96
+E00727,Female,Customer service,G1,Full-time,11.24,515.13
+E00728,Female,Technology,G5,Full-time,40.49,0.0
+E00729,Male,Sales,G2,Full-time,15.39,0.0
+E00730,Male,Sales,G1,Full-time,10.41,714.51
+E00731,Female,Customer service,G1,Part-time,11.29,0.0
+E00732,Female,Customer service,G4,Part-time,22.19,2777.84
+E00733,Male,Operations,G6,Full-time,68.52,7002.24
+E00734,Male,Operations,G3,Full-time,18.3,855.93
+E00735,Male,Operations,G5,Part-time,33.83,2008.51
+E00736,Female,Technology,G1,Part-time,12.59,436.14
+E00737,Male,Sales,G4,Full-time,22.62,0.0
+E00738,Female,Customer service,G1,Full-time,11.1,0.0
+E00739,Female,Operations,G2,Full-time,12.73,0.0
+E00740,Not stated,Operations,G2,Full-time,15.49,1317.78
+E00741,Female,Operations,G1,Full-time,11.42,798.59
+E00742,Female,Customer service,G4,Full-time,23.98,1873.14
+E00743,Female,Operations,G4,Full-time,26.15,3303.85
+E00744,Male,Operations,G2,Full-time,14.45,0.0
+E00745,Male,Finance,G3,Full-time,18.33,1665.01
+E00746,Female,Operations,G4,Full-time,25.96,4272.86
+E00747,Male,Operations,G3,Part-time,18.49,997.0
+E00748,Female,Customer service,G1,Full-time,10.92,0.0
+E00749,Male,Sales,G1,Full-time,11.78,1264.83
+E00750,Male,Operations,G2,Full-time,13.76,0.0
+E00751,Male,Operations,G4,Full-time,26.12,5393.15
+E00752,Female,Operations,G1,Full-time,10.93,1225.63
+E00753,Male,Operations,G2,Full-time,13.52,1412.63
+E00754,Male,Finance,G3,Full-time,19.63,0.0
+E00755,Male,Operations,G4,Full-time,21.09,0.0
+E00756,Male,Customer service,G2,Full-time,13.52,0.0
+E00757,Male,Finance,G1,Full-time,11.11,843.36
+E00758,Female,Sales,G4,Part-time,26.73,0.0
+E00759,Male,Customer service,G2,Full-time,15.44,779.01
+E00760,Female,Customer service,G5,Full-time,38.42,4428.57
+E00761,Male,Finance,G1,Full-time,10.65,489.36
+E00762,Male,Customer service,G4,Full-time,24.8,5143.46
+E00763,Male,Customer service,G2,Full-time,13.91,1477.84
+E00764,Female,Customer service,G4,Part-time,22.68,0.0
+E00765,Female,Customer service,G3,Full-time,16.81,965.71
+E00766,Male,Operations,G4,Full-time,23.71,6023.37
+E00767,Male,Finance,G5,Full-time,36.22,3495.44
+E00768,Female,Sales,G5,Part-time,43.28,0.0
+E00769,Female,Customer service,G4,Full-time,24.59,1035.63
+E00770,Male,Finance,G1,Full-time,12.0,0.0
+E00771,Female,Sales,G5,Full-time,36.9,9394.66
+E00772,Female,Customer service,G2,Full-time,14.43,782.54
+E00773,Female,Customer service,G3,Full-time,16.53,0.0
+E00774,Male,Finance,G3,Full-time,21.81,0.0
+E00775,Male,Operations,G5,Full-time,35.12,10723.17
+E00776,Male,Operations,G2,Full-time,14.21,786.53
+E00777,Female,Sales,G1,Full-time,11.03,0.0
+E00778,Male,Technology,G5,Full-time,42.2,13292.42
+E00779,Male,Technology,G3,Full-time,19.06,0.0
+E00780,Female,Customer service,G2,Full-time,13.74,0.0
+E00781,Male,Sales,G5,Full-time,41.7,6093.57
+E00782,Male,Customer service,G1,Full-time,9.97,0.0
+E00783,Male,Sales,G3,Full-time,18.71,1483.5
+E00784,Female,Technology,G1,Full-time,12.18,642.27
+E00785,Female,Sales,G1,Full-time,12.5,638.6
+E00786,Female,Sales,G1,Part-time,11.33,690.58
+E00787,Female,Sales,G5,Full-time,37.83,9388.71
+E00788,Female,Finance,G3,Part-time,19.11,1406.16
+E00789,Female,Finance,G1,Full-time,11.76,0.0
+E00790,Male,Customer service,G6,Full-time,57.82,14519.64
+E00791,Male,Operations,G6,Full-time,50.06,19369.47
+E00792,Male,Operations,G3,Part-time,19.64,1079.8
+E00793,Female,Technology,G1,Full-time,11.11,1075.55
+E00794,Male,Customer service,G2,Full-time,13.83,545.69
+E00795,Male,Operations,G2,Full-time,13.41,1794.62
+E00796,Male,Sales,G1,Part-time,11.75,441.94
+E00797,Female,Customer service,G5,Part-time,35.76,0.0
+E00798,Male,Operations,G2,Full-time,13.16,1332.5
+E00799,Male,Operations,G2,Full-time,14.74,2324.42
+E00800,Male,Operations,G2,Full-time,14.48,1266.99
+E00801,Female,Finance,G1,Full-time,12.12,1322.67
+E00802,Female,Customer service,G2,Part-time,14.7,0.0
+E00803,Female,Finance,G2,Full-time,14.33,652.67
+E00804,Female,Customer service,G2,Full-time,15.39,0.0
+E00805,Female,Finance,G2,Full-time,13.82,0.0
+E00806,Male,Technology,G3,Full-time,17.21,3925.07
+E00807,Female,Customer service,G2,Part-time,14.42,0.0
+E00808,Male,Operations,G2,Full-time,12.56,1973.18
+E00809,Male,Operations,G5,Full-time,40.48,0.0
+E00810,Male,Operations,G5,Full-time,36.62,6172.3
+E00811,Male,Operations,G1,Full-time,11.69,0.0
+E00812,Female,Sales,G2,Full-time,15.2,2542.8
+E00813,Male,Operations,G2,Full-time,14.23,0.0
+E00814,Female,Finance,G2,Part-time,13.91,0.0
+E00815,Male,Operations,G6,Full-time,59.43,9937.12
+E00816,Female,Customer service,G3,Part-time,17.5,909.29
+E00817,Female,Operations,G3,Part-time,20.3,0.0
+E00818,Female,Customer service,G1,Full-time,9.11,951.32
+E00819,Female,Technology,G3,Part-time,20.02,0.0
+E00820,Female,Operations,G1,Full-time,11.46,1225.21
+E00821,Male,Finance,G2,Full-time,14.21,0.0
+E00822,Female,Customer service,G3,Part-time,16.9,483.94
+E00823,Male,Technology,G4,Full-time,24.73,6932.14
+E00824,Female,Sales,G5,Part-time,33.87,3291.46
+E00825,Female,Operations,G2,Full-time,13.84,1438.38
+E00826,Male,Operations,G3,Full-time,18.14,0.0
+E00827,Male,Sales,G1,Part-time,10.09,0.0
+E00828,Female,Operations,G2,Full-time,12.72,1414.31
+E00829,Female,Operations,G3,Full-time,18.41,4290.51
+E00830,Female,Sales,G3,Full-time,17.72,1504.96
+E00831,Male,Technology,G2,Full-time,15.73,0.0
+E00832,Male,Sales,G4,Full-time,24.79,0.0
+E00833,Female,Operations,G2,Full-time,13.53,1446.37
+E00834,Male,Sales,G1,Full-time,10.65,1213.07
+E00835,Male,Finance,G3,Part-time,16.88,0.0
+E00836,Female,Customer service,G2,Full-time,14.87,1551.46
+E00837,Female,Finance,G2,Full-time,14.55,0.0
+E00838,Male,Technology,G6,Full-time,69.98,19319.68
+E00839,Female,Customer service,G1,Full-time,11.68,0.0
+E00840,Male,Sales,G3,Full-time,17.46,1035.07
+E00841,Male,Operations,G6,Full-time,56.38,21046.27
+E00842,Male,Operations,G3,Full-time,16.84,3141.1
+E00843,Male,Operations,G1,Full-time,12.07,0.0
+E00844,Male,Operations,G2,Part-time,13.97,0.0
+E00845,Male,Sales,G2,Full-time,14.31,2098.85
+E00846,Female,Technology,G5,Full-time,36.03,0.0
+E00847,Male,Technology,G1,Full-time,11.74,0.0
+E00848,Male,Finance,G1,Full-time,10.87,761.15
+E00849,Male,Finance,G5,Full-time,40.0,12468.78
+E00850,Male,Operations,G3,Full-time,16.76,766.68
+E00851,Female,Technology,G1,Full-time,11.54,1284.52
+E00852,Female,Technology,G3,Full-time,20.41,0.0
+E00853,Female,Sales,G2,Full-time,14.34,0.0
+E00854,Male,Sales,G3,Full-time,15.78,2865.25
+E00855,Male,Operations,G3,Full-time,19.24,0.0
+E00856,Female,Customer service,G2,Full-time,13.47,2010.08
+E00857,Female,Operations,G4,Part-time,24.35,1916.7
+E00858,Female,Finance,G1,Full-time,11.6,0.0
+E00859,Male,Customer service,G2,Full-time,15.14,658.86
+E00860,Male,Operations,G2,Full-time,15.67,0.0
+E00861,Male,Technology,G2,Full-time,15.25,0.0
+E00862,Female,Operations,G3,Full-time,20.5,0.0
+E00863,Male,Operations,G1,Full-time,12.69,0.0
+E00864,Female,Sales,G2,Full-time,14.17,0.0
+E00865,Male,Operations,G6,Full-time,51.87,9102.67
+E00866,Female,Sales,G2,Full-time,14.89,0.0
+E00867,Female,Finance,G4,Full-time,23.77,4621.96
+E00868,Female,Customer service,G1,Full-time,12.1,1152.6
+E00869,Male,Operations,G1,Full-time,11.36,927.25
+E00870,Female,Operations,G1,Part-time,10.67,301.15
+E00871,Female,Operations,G3,Part-time,16.7,1451.84
+E00872,Female,Operations,G6,Full-time,56.69,15335.48
+E00873,Male,Technology,G1,Full-time,13.14,1501.5
+E00874,Female,Technology,G4,Full-time,24.69,1331.78
+E00875,Female,Operations,G2,Full-time,14.73,1709.27
+E00876,Male,Operations,G4,Full-time,24.84,1124.63
+E00877,Male,Operations,G3,Full-time,19.0,1683.1
+E00878,Male,Operations,G1,Full-time,11.04,541.86
+E00879,Male,Operations,G1,Part-time,11.64,344.63
+E00880,Male,Operations,G4,Full-time,26.55,3740.58
+E00881,Male,Operations,G3,Full-time,17.96,2444.29
+E00882,Male,Finance,G1,Full-time,11.63,0.0
+E00883,Male,Operations,G4,Full-time,24.81,5966.76
+E00884,Female,Customer service,G2,Part-time,10.71,0.0
+E00885,Male,Customer service,G1,Full-time,12.17,0.0
+E00886,Female,Technology,G4,Full-time,27.64,1525.2
+E00887,Male,Operations,G4,Full-time,23.47,0.0
+E00888,Male,Sales,G3,Full-time,19.1,4201.47
+E00889,Male,Sales,G3,Full-time,17.98,0.0
+E00890,Male,Operations,G1,Full-time,9.98,0.0
+E00891,Male,Finance,G3,Full-time,18.55,0.0
+E00892,Female,Finance,G4,Part-time,25.8,0.0
+E00893,Female,Customer service,G2,Part-time,14.41,509.1
+E00894,Female,Customer service,G1,Full-time,11.18,0.0
+E00895,Male,Operations,G6,Full-time,54.43,10776.65
+E00896,Female,Sales,G1,Full-time,11.04,0.0
+E00897,Male,Technology,G4,Full-time,26.36,0.0
+E00898,Female,Sales,G2,Full-time,13.25,0.0
+E00899,Female,Operations,G2,Full-time,14.36,1188.7
+E00900,Male,Operations,G2,Full-time,13.26,2127.22
+E00901,Male,Operations,G2,Full-time,14.7,2493.67
+E00902,Female,Customer service,G3,Part-time,16.49,2024.18
+E00903,Male,Technology,G2,Full-time,15.57,985.94
+E00904,Female,Operations,G3,Full-time,19.62,4158.97
+E00905,Male,Operations,G5,Full-time,40.82,0.0
+E00906,Female,Customer service,G5,Full-time,34.63,10336.8
+E00907,Male,Sales,G4,Full-time,23.21,0.0
+E00908,Male,Finance,G3,Full-time,19.02,2162.45
+E00909,Female,Operations,G3,Full-time,17.71,3045.45
+E00910,Female,Operations,G1,Full-time,10.54,0.0
+E00911,Male,Operations,G4,Full-time,24.12,5412.53
+E00912,Male,Operations,G3,Full-time,17.76,0.0
+E00913,Male,Sales,G5,Full-time,33.52,7657.37
+E00914,Male,Customer service,G5,Full-time,41.55,12161.51
+E00915,Female,Operations,G2,Full-time,14.31,627.97
+E00916,Male,Operations,G3,Full-time,17.27,970.9
+E00917,Male,Sales,G3,Full-time,18.03,3451.55
+E00918,Female,Operations,G4,Full-time,24.29,3510.9
+E00919,Male,Operations,G1,Full-time,10.21,0.0
+E00920,Female,Technology,G1,Full-time,10.72,0.0
+E00921,Male,Operations,G1,Full-time,11.3,0.0
+E00922,Male,Operations,G1,Full-time,11.18,1162.47
+E00923,Male,Finance,G5,Full-time,38.11,13182.08
+E00924,Male,Finance,G3,Full-time,18.79,3623.99
+E00925,Female,Operations,G4,Part-time,25.85,0.0
+E00926,Female,Technology,G1,Full-time,10.91,947.48
+E00927,Female,Operations,G3,Full-time,19.64,1085.04
+E00928,Male,Customer service,G3,Full-time,19.26,0.0
+E00929,Female,Customer service,G2,Full-time,15.22,1934.7
+E00930,Male,Sales,G1,Full-time,12.47,0.0
+E00931,Female,Operations,G1,Part-time,11.65,634.27
+E00932,Female,Operations,G2,Full-time,12.63,739.76
+E00933,Female,Operations,G3,Full-time,16.61,1192.08
+E00934,Female,Sales,G4,Part-time,27.68,0.0
+E00935,Male,Operations,G1,Full-time,12.64,0.0
+E00936,Male,Operations,G1,Full-time,11.71,0.0
+E00937,Female,Finance,G1,Full-time,10.99,671.09
+E00938,Male,Operations,G3,Part-time,16.09,0.0
+E00939,Female,Sales,G1,Full-time,11.86,744.29
+E00940,Male,Operations,G1,Full-time,12.03,1071.22
+E00941,Male,Operations,G4,Full-time,25.75,2174.27
+E00942,Male,Operations,G5,Full-time,29.79,8489.49
+E00943,Female,Operations,G3,Full-time,16.05,3469.84
+E00944,Male,Technology,G2,Full-time,14.49,1957.94
+E00945,Female,Sales,G3,Full-time,18.07,1134.56
+E00946,Female,Finance,G5,Full-time,33.64,1442.79
+E00947,Male,Operations,G3,Full-time,18.37,3054.56
+E00948,Male,Operations,G1,Full-time,11.61,799.16
+E00949,Female,Operations,G2,Full-time,12.84,0.0
+E00950,Female,Technology,G2,Full-time,16.78,827.63
+E00951,Female,Customer service,G5,Full-time,38.75,1638.21
+E00952,Male,Sales,G1,Full-time,11.0,0.0
+E00953,Male,Operations,G5,Full-time,39.12,4718.69
+E00954,Male,Operations,G6,Full-time,58.27,8906.12
+E00955,Male,Operations,G6,Full-time,62.71,23149.99
+E00956,Female,Sales,G1,Full-time,12.39,0.0
+E00957,Male,Finance,G1,Full-time,12.39,1278.82
+E00958,Male,Sales,G5,Full-time,36.75,4380.57
+E00959,Female,Operations,G5,Full-time,43.88,11374.6
+E00960,Male,Sales,G5,Full-time,39.35,11321.1
+E00961,Male,Operations,G4,Full-time,25.96,0.0
+E00962,Female,Finance,G2,Part-time,14.95,0.0
+E00963,Male,Technology,G3,Full-time,19.62,0.0
+E00964,Male,Customer service,G1,Full-time,11.37,1317.65
+E00965,Male,Technology,G3,Full-time,20.61,0.0
+E00966,Male,Technology,G4,Full-time,23.97,0.0
+E00967,Male,Sales,G6,Full-time,57.11,15343.15
+E00968,Male,Operations,G1,Full-time,10.87,1215.4
+E00969,Female,Operations,G2,Full-time,13.89,0.0
+E00970,Female,Finance,G2,Full-time,13.27,0.0
+E00971,Male,Operations,G5,Full-time,42.28,0.0
+E00972,Female,Sales,G1,Full-time,9.67,645.71
+E00973,Male,Operations,G5,Full-time,34.41,9942.3
+E00974,Male,Operations,G1,Full-time,12.0,0.0
+E00975,Male,Operations,G1,Full-time,11.26,0.0
+E00976,Male,Technology,G5,Full-time,39.98,10780.11
+E00977,Female,Customer service,G1,Full-time,11.61,0.0
+E00978,Female,Operations,G2,Full-time,14.26,0.0
+E00979,Female,Customer service,G5,Full-time,37.18,10049.36
+E00980,Male,Technology,G3,Full-time,17.9,3080.27
+E00981,Female,Customer service,G3,Full-time,20.89,1672.96
+E00982,Female,Technology,G3,Full-time,23.52,4975.74
+E00983,Male,Operations,G3,Full-time,17.43,2630.78
+E00984,Female,Operations,G1,Full-time,10.81,840.0
+E00985,Female,Customer service,G1,Full-time,10.97,0.0
+E00986,Female,Operations,G1,Part-time,12.07,669.85
+E00987,Female,Customer service,G1,Part-time,10.13,576.16
+E00988,Male,Technology,G2,Full-time,16.05,0.0
+E00989,Male,Sales,G2,Full-time,15.64,0.0
+E00990,Female,Sales,G3,Full-time,18.06,0.0
+E00991,Female,Operations,G6,Part-time,53.42,1317.18
+E00992,Male,Operations,G1,Full-time,11.71,0.0
+E00993,Male,Operations,G5,Part-time,37.17,0.0
+E00994,Male,Operations,G1,Full-time,10.99,480.29
+E00995,Male,Customer service,G5,Full-time,44.06,9749.83
+E00996,Female,Operations,G2,Full-time,14.07,0.0
+E00997,Male,Operations,G2,Full-time,14.74,2341.54
+E00998,Female,Operations,G2,Full-time,15.04,631.75
+E00999,Female,Operations,G2,Full-time,14.4,0.0
+E01000,Male,Finance,G1,Full-time,12.55,0.0
+E01001,Male,Operations,G5,Full-time,37.78,8181.65
+E01002,Female,Operations,G6,Part-time,52.94,10815.13
+E01003,Female,Sales,G2,Part-time,14.37,1237.87
+E01004,Female,Operations,G1,Full-time,11.15,436.87
+E01005,Not stated,Customer service,G2,Full-time,15.24,1479.2
+E01006,Male,Technology,G5,Full-time,40.41,0.0
+E01007,Female,Sales,G4,Full-time,26.46,4681.52
+E01008,Male,Operations,G2,Full-time,13.89,0.0
+E01009,Male,Sales,G2,Full-time,14.1,1170.57
+E01010,Male,Sales,G3,Full-time,16.58,2551.67
+E01011,Male,Sales,G3,Full-time,16.24,0.0
+E01012,Female,Customer service,G1,Full-time,10.62,0.0
+E01013,Male,Operations,G6,Full-time,63.59,2867.26
+E01014,Female,Customer service,G4,Full-time,25.03,6579.63
+E01015,Female,Customer service,G5,Full-time,35.14,11392.83
+E01016,Male,Operations,G4,Full-time,25.86,4093.85
+E01017,Female,Sales,G4,Full-time,21.78,1090.44
+E01018,Female,Customer service,G4,Full-time,21.99,5223.06
+E01019,Female,Sales,G4,Part-time,25.45,3851.32
+E01020,Male,Finance,G2,Full-time,16.15,0.0
+E01021,Male,Operations,G1,Full-time,10.78,1148.51
+E01022,Female,Operations,G2,Full-time,15.33,1077.46
+E01023,Male,Sales,G2,Full-time,15.89,1565.05
+E01024,Male,Technology,G6,Full-time,70.42,18033.86
+E01025,Male,Sales,G2,Full-time,14.23,1972.13
+E01026,Male,Sales,G3,Full-time,17.73,1895.57
+E01027,Male,Technology,G4,Full-time,26.03,2270.92
+E01028,Male,Sales,G2,Full-time,14.02,2063.21
+E01029,Male,Operations,G1,Full-time,12.28,0.0
+E01030,Female,Finance,G2,Full-time,13.95,0.0
+E01031,Female,Finance,G5,Full-time,39.23,10343.72
+E01032,Male,Operations,G4,Full-time,26.7,0.0
+E01033,Male,Operations,G4,Full-time,24.15,6953.2
+E01034,Female,Sales,G1,Part-time,11.01,397.41
+E01035,Male,Technology,G2,Full-time,13.88,1900.38
+E01036,Male,Sales,G1,Full-time,12.54,0.0
+E01037,Male,Operations,G1,Full-time,10.45,0.0
+E01038,Male,Operations,G5,Full-time,44.04,8974.44
+E01039,Female,Customer service,G3,Part-time,17.84,2358.86
+E01040,Male,Technology,G3,Full-time,18.76,0.0
+E01041,Female,Sales,G3,Full-time,16.28,0.0
+E01042,Male,Operations,G4,Full-time,22.93,5213.22
+E01043,Male,Sales,G2,Full-time,13.73,900.25
+E01044,Female,Customer service,G3,Part-time,17.33,1935.3
+E01045,Female,Technology,G2,Full-time,14.34,0.0
+E01046,Female,Sales,G4,Full-time,23.46,947.52
+E01047,Male,Technology,G1,Full-time,11.74,0.0
+E01048,Male,Sales,G4,Full-time,24.39,4333.49
+E01049,Male,Technology,G1,Full-time,12.76,611.99
+E01050,Male,Operations,G6,Part-time,53.82,0.0
+E01051,Female,Customer service,G1,Full-time,12.35,0.0
+E01052,Male,Finance,G5,Full-time,35.24,8022.61
+E01053,Female,Customer service,G4,Part-time,22.72,0.0
+E01054,Male,Operations,G3,Full-time,15.23,0.0
+E01055,Male,Operations,G4,Full-time,26.9,1993.44
+E01056,Male,Operations,G2,Full-time,14.28,1764.95
+E01057,Male,Sales,G3,Full-time,16.61,0.0
+E01058,Male,Operations,G4,Full-time,22.14,0.0
+E01059,Female,Customer service,G3,Part-time,16.59,1469.4
+E01060,Male,Operations,G1,Full-time,11.14,546.02
+E01061,Female,Operations,G1,Part-time,13.23,719.89
+E01062,Male,Sales,G4,Full-time,21.94,5111.25
+E01063,Male,Operations,G6,Full-time,50.63,4791.72
+E01064,Female,Technology,G2,Full-time,15.2,0.0
+E01065,Male,Sales,G1,Full-time,12.17,0.0
+E01066,Male,Operations,G2,Part-time,13.12,0.0
+E01067,Male,Operations,G1,Full-time,10.57,0.0
+E01068,Male,Technology,G5,Full-time,40.47,6896.97
+E01069,Female,Operations,G2,Part-time,11.16,0.0
+E01070,Male,Technology,G1,Full-time,11.51,0.0
+E01071,Male,Sales,G5,Full-time,33.7,0.0
+E01072,Male,Sales,G1,Full-time,11.82,911.25
+E01073,Male,Technology,G1,Part-time,11.71,0.0
+E01074,Female,Finance,G4,Full-time,23.48,0.0
+E01075,Female,Customer service,G3,Full-time,18.67,2616.54
+E01076,Male,Operations,G1,Full-time,11.08,570.47
+E01077,Male,Customer service,G2,Full-time,15.74,1277.07
+E01078,Female,Customer service,G1,Part-time,11.45,615.24
+E01079,Female,Customer service,G4,Full-time,28.95,0.0
+E01080,Female,Customer service,G1,Part-time,11.77,0.0
+E01081,Female,Operations,G3,Full-time,19.06,2079.33
+E01082,Female,Customer service,G3,Full-time,17.41,0.0
+E01083,Male,Finance,G3,Full-time,17.27,0.0
+E01084,Male,Finance,G1,Full-time,10.37,0.0
+E01085,Female,Operations,G3,Part-time,19.38,0.0
+E01086,Male,Customer service,G4,Part-time,25.04,0.0
+E01087,Female,Operations,G4,Full-time,23.6,5795.69
+E01088,Male,Operations,G3,Full-time,19.59,3894.1
+E01089,Female,Finance,G1,Full-time,9.99,762.33
+E01090,Male,Operations,G3,Full-time,18.22,0.0
+E01091,Female,Sales,G4,Part-time,25.81,0.0
+E01092,Female,Technology,G3,Part-time,18.92,0.0
+E01093,Not stated,Sales,G6,Full-time,52.42,0.0
+E01094,Female,Finance,G3,Full-time,17.57,1103.81
+E01095,Female,Finance,G3,Full-time,19.38,0.0
+E01096,Female,Operations,G2,Part-time,13.2,892.99
+E01097,Female,Customer service,G4,Full-time,24.84,5669.19
+E01098,Female,Customer service,G2,Full-time,15.79,1822.89
+E01099,Female,Customer service,G1,Full-time,11.16,0.0
+E01100,Female,Customer service,G2,Full-time,15.3,1834.15
+E01101,Male,Operations,G3,Full-time,19.62,0.0
+E01102,Male,Operations,G1,Full-time,10.48,0.0
+E01103,Male,Technology,G3,Full-time,19.39,2321.3
+E01104,Male,Sales,G3,Full-time,17.77,1840.78
+E01105,Female,Finance,G3,Full-time,17.53,1691.26
+E01106,Female,Operations,G4,Part-time,28.19,0.0
+E01107,Male,Finance,G2,Part-time,15.03,0.0
+E01108,Male,Technology,G3,Full-time,21.28,0.0
+E01109,Female,Finance,G5,Part-time,36.63,0.0
+E01110,Female,Sales,G3,Part-time,16.25,0.0
+E01111,Male,Sales,G4,Full-time,22.63,5457.56
+E01112,Male,Operations,G2,Full-time,14.06,1902.35
+E01113,Female,Finance,G3,Full-time,18.12,834.15
+E01114,Male,Finance,G2,Part-time,14.01,0.0
+E01115,Male,Operations,G5,Full-time,38.87,8703.49
+E01116,Male,Customer service,G6,Full-time,63.45,17926.39
+E01117,Female,Customer service,G1,Part-time,9.73,0.0
+E01118,Female,Finance,G2,Part-time,13.3,0.0
+E01119,Female,Operations,G5,Part-time,35.8,0.0
+E01120,Female,Technology,G1,Full-time,13.0,639.8
+E01121,Female,Sales,G1,Full-time,10.19,0.0
+E01122,Female,Operations,G4,Full-time,23.67,0.0
+E01123,Female,Technology,G4,Part-time,26.16,0.0
+E01124,Female,Sales,G4,Part-time,27.02,1930.07
+E01125,Male,Sales,G4,Full-time,25.85,1030.16
+E01126,Female,Sales,G3,Full-time,18.23,786.32
+E01127,Male,Technology,G4,Full-time,26.97,4764.95
+E01128,Female,Sales,G1,Full-time,10.79,623.42
+E01129,Male,Sales,G2,Full-time,13.44,1363.16
+E01130,Female,Technology,G1,Part-time,13.37,0.0
+E01131,Female,Sales,G2,Full-time,13.36,1764.42
+E01132,Male,Operations,G1,Full-time,11.74,1252.37
+E01133,Female,Sales,G4,Full-time,25.53,4186.35
+E01134,Male,Technology,G3,Full-time,20.08,1956.32
+E01135,Male,Operations,G4,Full-time,23.45,0.0
+E01136,Female,Customer service,G1,Part-time,11.96,751.34
+E01137,Male,Operations,G1,Full-time,12.19,1352.69
+E01138,Female,Customer service,G5,Full-time,37.04,7650.08
+E01139,Male,Operations,G6,Full-time,56.61,0.0
+E01140,Female,Customer service,G5,Full-time,33.16,6014.84
+E01141,Not stated,Finance,G1,Full-time,13.07,1471.7
+E01142,Male,Operations,G4,Full-time,20.29,4803.36
+E01143,Male,Operations,G3,Part-time,15.32,678.96
+E01144,Female,Customer service,G4,Full-time,22.96,5218.88
+E01145,Male,Finance,G2,Full-time,13.89,1124.37
+E01146,Female,Sales,G3,Full-time,17.33,3349.85
+E01147,Male,Operations,G3,Full-time,18.96,3265.39
+E01148,Male,Sales,G4,Full-time,24.41,0.0
+E01149,Male,Sales,G3,Part-time,16.21,1250.86
+E01150,Male,Customer service,G3,Full-time,17.93,0.0
+E01151,Female,Finance,G2,Full-time,16.72,2438.48
+E01152,Male,Finance,G3,Full-time,16.2,0.0
+E01153,Male,Sales,G6,Full-time,57.79,14716.65
+E01154,Female,Operations,G2,Full-time,13.57,0.0
+E01155,Female,Sales,G1,Full-time,10.33,940.61
+E01156,Female,Technology,G1,Full-time,12.11,956.43
+E01157,Male,Operations,G2,Full-time,17.19,1879.74
+E01158,Male,Operations,G5,Full-time,44.84,10181.2
+E01159,Female,Technology,G4,Part-time,28.63,0.0
+E01160,Female,Technology,G4,Full-time,25.63,0.0
+E01161,Male,Operations,G3,Full-time,16.77,0.0
+E01162,Female,Customer service,G1,Part-time,10.94,597.25
+E01163,Female,Operations,G6,Full-time,62.93,10758.04
+E01164,Female,Operations,G6,Part-time,54.68,5783.62
+E01165,Female,Customer service,G6,Full-time,65.88,23877.41
+E01166,Female,Operations,G4,Full-time,27.31,4530.63
+E01167,Male,Operations,G5,Full-time,40.28,0.0
+E01168,Male,Sales,G1,Part-time,11.39,795.43
+E01169,Female,Customer service,G4,Full-time,25.14,7011.81
+E01170,Female,Operations,G1,Full-time,11.14,965.8
+E01171,Male,Sales,G5,Full-time,40.16,10517.68
+E01172,Male,Technology,G6,Full-time,70.3,18627.41
+E01173,Female,Customer service,G5,Full-time,33.03,2556.79
+E01174,Male,Operations,G3,Full-time,17.59,1388.96
+E01175,Female,Operations,G5,Full-time,36.63,8685.28
+E01176,Female,Customer service,G3,Full-time,18.4,3194.06
+E01177,Male,Sales,G4,Full-time,24.09,6598.49
+E01178,Female,Finance,G4,Part-time,27.49,4734.32
+E01179,Female,Operations,G1,Full-time,11.28,534.2
+E01180,Male,Operations,G5,Full-time,41.14,12221.14
+E01181,Female,Sales,G1,Part-time,11.79,384.32
+E01182,Male,Sales,G3,Full-time,18.41,1154.16
+E01183,Female,Operations,G1,Part-time,10.66,648.9
+E01184,Male,Operations,G4,Full-time,24.54,3145.59
+E01185,Male,Sales,G4,Full-time,21.56,1044.93
+E01186,Female,Finance,G3,Full-time,18.16,0.0
+E01187,Female,Customer service,G2,Full-time,15.03,707.5
+E01188,Male,Operations,G4,Full-time,28.03,0.0
+E01189,Male,Operations,G1,Full-time,11.81,0.0
+E01190,Male,Operations,G4,Full-time,25.39,0.0
+E01191,Male,Operations,G4,Part-time,24.67,0.0
+E01192,Male,Customer service,G5,Part-time,35.26,0.0
+E01193,Female,Technology,G4,Full-time,26.34,4592.71
+E01194,Male,Sales,G3,Full-time,16.13,0.0
+E01195,Female,Operations,G2,Part-time,11.6,0.0
+E01196,Male,Sales,G6,Full-time,66.73,17768.65
+E01197,Male,Sales,G5,Full-time,33.63,0.0
+E01198,Female,Customer service,G2,Full-time,12.81,0.0
+E01199,Male,Customer service,G1,Full-time,11.83,817.57
+E01200,Female,Sales,G1,Full-time,12.13,0.0
+E01201,Male,Operations,G3,Full-time,16.67,0.0
+E01202,Male,Technology,G5,Full-time,44.94,3253.8
+E01203,Male,Sales,G4,Full-time,28.33,0.0
+E01204,Female,Technology,G1,Full-time,10.2,0.0
+E01205,Male,Finance,G1,Full-time,12.85,1395.49
+E01206,Female,Operations,G1,Part-time,8.92,0.0
+E01207,Male,Technology,G3,Full-time,20.68,1375.2
+E01208,Male,Technology,G5,Full-time,40.24,0.0
+E01209,Female,Technology,G2,Part-time,13.21,566.43
+E01210,Female,Customer service,G1,Full-time,12.32,673.61
+E01211,Male,Customer service,G2,Full-time,11.78,1822.17
+E01212,Female,Customer service,G3,Full-time,15.98,1006.8
+E01213,Male,Operations,G3,Full-time,20.49,4272.52
+E01214,Female,Customer service,G1,Part-time,11.27,0.0
+E01215,Male,Technology,G1,Full-time,14.08,1494.9
+E01216,Female,Sales,G3,Full-time,18.6,2819.58
+E01217,Female,Finance,G4,Full-time,21.04,3559.19
+E01218,Female,Technology,G2,Part-time,13.96,867.66
+E01219,Male,Finance,G4,Full-time,25.62,5833.83
+E01220,Male,Sales,G2,Full-time,15.22,0.0
+E01221,Male,Operations,G3,Full-time,15.95,0.0
+E01222,Female,Finance,G5,Full-time,39.25,7109.94
+E01223,Female,Customer service,G5,Part-time,33.85,2253.22
+E01224,Female,Sales,G4,Full-time,25.87,2250.35
+E01225,Male,Customer service,G2,Full-time,14.06,2120.61
+E01226,Female,Customer service,G4,Full-time,25.79,7508.9
+E01227,Female,Sales,G4,Full-time,22.37,2973.86
+E01228,Female,Operations,G2,Part-time,12.95,638.34
+E01229,Female,Operations,G1,Part-time,9.63,0.0
+E01230,Male,Sales,G4,Full-time,24.42,4781.2
+E01231,Female,Operations,G1,Full-time,12.65,0.0
+E01232,Male,Technology,G4,Full-time,25.59,0.0
+E01233,Female,Operations,G3,Full-time,17.56,2562.22
+E01234,Male,Sales,G1,Part-time,12.24,438.94
+E01235,Male,Technology,G3,Part-time,17.18,1290.32
+E01236,Female,Sales,G1,Full-time,12.86,1176.38
+E01237,Male,Operations,G4,Part-time,24.28,0.0
+E01238,Male,Operations,G2,Full-time,13.22,0.0
+E01239,Male,Sales,G4,Full-time,25.06,0.0
+E01240,Male,Technology,G3,Part-time,16.48,2104.44
+E01241,Female,Operations,G5,Full-time,36.84,2142.4
+E01242,Female,Customer service,G2,Full-time,13.91,2068.03
+E01243,Male,Operations,G3,Part-time,18.05,0.0
+E01244,Male,Sales,G1,Full-time,11.27,1112.79
+E01245,Male,Operations,G5,Full-time,39.35,11769.28
+E01246,Female,Operations,G1,Full-time,12.59,757.02
+E01247,Male,Customer service,G4,Full-time,23.95,0.0
+E01248,Male,Operations,G2,Full-time,12.84,682.21
+E01249,Male,Sales,G4,Full-time,27.82,7552.39
+E01250,Male,Customer service,G1,Full-time,12.07,0.0
+E01251,Male,Operations,G3,Part-time,14.12,1207.42
+E01252,Male,Operations,G3,Full-time,17.84,1219.25
+E01253,Male,Sales,G1,Full-time,12.35,0.0
+E01254,Female,Customer service,G2,Full-time,16.86,2757.77
+E01255,Female,Sales,G4,Part-time,22.51,0.0
+E01256,Male,Operations,G6,Full-time,66.68,26238.48
+E01257,Male,Customer service,G5,Part-time,36.46,1771.63
+E01258,Male,Sales,G1,Full-time,10.67,0.0
+E01259,Male,Operations,G1,Full-time,12.06,803.19
+E01260,Male,Technology,G5,Full-time,33.56,3847.43
+E01261,Female,Operations,G2,Part-time,15.11,0.0
+E01262,Female,Operations,G2,Full-time,13.54,2056.75
+E01263,Male,Operations,G1,Full-time,13.04,801.59
+E01264,Female,Operations,G5,Part-time,34.38,1707.83
+E01265,Male,Operations,G4,Full-time,25.59,0.0
+E01266,Female,Operations,G1,Part-time,10.75,0.0
+E01267,Female,Operations,G1,Full-time,11.84,631.93
+E01268,Not stated,Operations,G3,Full-time,18.78,0.0
+E01269,Female,Finance,G3,Full-time,17.65,1353.54
+E01270,Female,Operations,G1,Part-time,11.59,0.0
+E01271,Male,Technology,G2,Full-time,15.12,824.51
+E01272,Female,Sales,G2,Part-time,13.54,0.0
+E01273,Female,Customer service,G1,Full-time,11.76,1260.75
+E01274,Male,Operations,G4,Full-time,24.58,3863.47
+E01275,Female,Technology,G1,Full-time,13.37,1545.88
+E01276,Male,Technology,G6,Full-time,81.03,21158.74
+E01277,Male,Technology,G2,Part-time,16.48,0.0
+E01278,Male,Operations,G1,Full-time,10.79,0.0
+E01279,Female,Operations,G2,Full-time,13.8,1150.85
+E01280,Female,Finance,G1,Part-time,12.2,371.36
+E01281,Male,Operations,G2,Full-time,12.58,0.0
+E01282,Not stated,Operations,G2,Full-time,14.43,1984.04
+E01283,Male,Sales,G1,Full-time,12.02,0.0
+E01284,Male,Customer service,G4,Full-time,23.49,0.0
+E01285,Female,Finance,G2,Part-time,12.43,386.68
+E01286,Male,Customer service,G1,Full-time,10.35,575.86
+E01287,Female,Sales,G1,Full-time,11.93,1354.46
+E01288,Female,Customer service,G2,Full-time,13.3,0.0
+E01289,Male,Operations,G5,Full-time,41.73,1727.55
+E01290,Female,Operations,G1,Full-time,12.35,1425.38
+E01291,Male,Finance,G4,Full-time,23.99,1565.47
+E01292,Female,Operations,G6,Full-time,54.72,14023.85
+E01293,Male,Technology,G1,Full-time,13.71,1335.29
+E01294,Female,Customer service,G1,Full-time,10.84,1053.79
+E01295,Male,Operations,G4,Full-time,23.24,4307.04
+E01296,Male,Sales,G3,Part-time,19.8,0.0
+E01297,Female,Customer service,G4,Full-time,26.24,2333.0
+E01298,Male,Operations,G1,Full-time,11.86,1159.3
+E01299,Male,Finance,G5,Full-time,34.42,2946.82
+E01300,Female,Customer service,G1,Full-time,11.96,1085.56
+E01301,Female,Sales,G2,Full-time,14.1,1787.54
+E01302,Male,Operations,G4,Full-time,21.43,0.0
+E01303,Female,Finance,G2,Full-time,14.23,1174.73
+E01304,Female,Sales,G2,Full-time,13.0,1066.23
+E01305,Male,Finance,G5,Full-time,33.2,10080.35
+E01306,Female,Operations,G1,Full-time,10.97,0.0
+E01307,Female,Technology,G2,Full-time,14.52,1142.0
+E01308,Male,Technology,G2,Full-time,13.51,1043.37
+E01309,Male,Operations,G3,Full-time,18.32,2726.82
+E01310,Female,Customer service,G4,Full-time,25.05,1995.49
+E01311,Female,Technology,G2,Full-time,15.63,1487.27
+E01312,Female,Operations,G5,Part-time,39.85,1571.03
+E01313,Male,Sales,G3,Full-time,16.2,1165.55
+E01314,Female,Sales,G2,Full-time,13.83,1749.66
+E01315,Male,Operations,G2,Full-time,14.67,1165.1
+E01316,Male,Operations,G5,Full-time,40.79,0.0
+E01317,Male,Finance,G2,Full-time,13.76,1609.53
+E01318,Male,Sales,G4,Full-time,21.19,5474.64
+E01319,Female,Sales,G2,Full-time,12.88,719.19
+E01320,Female,Sales,G3,Full-time,17.24,3782.36
+E01321,Female,Finance,G3,Part-time,18.4,0.0
+E01322,Male,Operations,G5,Full-time,41.7,0.0
+E01323,Male,Sales,G5,Full-time,37.03,7941.55
+E01324,Female,Finance,G1,Part-time,11.25,276.96
+E01325,Male,Operations,G4,Full-time,24.81,3232.96
+E01326,Male,Operations,G1,Full-time,11.31,0.0
+E01327,Female,Operations,G5,Full-time,28.84,9927.58
+E01328,Male,Operations,G1,Full-time,11.53,995.7
+E01329,Male,Technology,G4,Full-time,28.86,0.0
+E01330,Female,Operations,G1,Full-time,11.45,822.55
+E01331,Male,Operations,G3,Full-time,18.51,1197.01
+E01332,Male,Operations,G2,Full-time,14.96,1518.91
+E01333,Male,Technology,G2,Full-time,15.97,0.0
+E01334,Female,Finance,G3,Part-time,15.73,0.0
+E01335,Female,Customer service,G1,Full-time,10.41,908.51
+E01336,Female,Operations,G2,Full-time,15.36,0.0
+E01337,Female,Operations,G1,Part-time,9.7,0.0
+E01338,Female,Technology,G2,Part-time,15.05,0.0
+E01339,Female,Sales,G2,Full-time,15.07,2460.25
+E01340,Male,Operations,G1,Full-time,10.8,0.0
+E01341,Female,Customer service,G3,Full-time,17.39,3674.94
+E01342,Male,Finance,G3,Full-time,17.36,3846.17
+E01343,Male,Customer service,G5,Full-time,35.74,5120.62
+E01344,Female,Finance,G3,Part-time,15.85,1987.43
+E01345,Female,Finance,G2,Full-time,13.74,850.42
+E01346,Male,Technology,G6,Full-time,71.1,0.0
+E01347,Male,Sales,G4,Full-time,25.48,1377.93
+E01348,Female,Operations,G3,Full-time,16.45,2525.12
+E01349,Male,Operations,G1,Full-time,10.85,0.0
+E01350,Male,Technology,G1,Full-time,13.16,0.0
+E01351,Male,Customer service,G1,Full-time,12.25,910.76
+E01352,Male,Technology,G1,Full-time,11.29,989.54
+E01353,Female,Sales,G2,Part-time,15.3,646.45
+E01354,Female,Operations,G2,Full-time,14.15,1289.32
+E01355,Male,Operations,G5,Full-time,32.66,2717.8
+E01356,Female,Customer service,G2,Full-time,13.63,754.08
+E01357,Male,Operations,G4,Full-time,22.64,0.0
+E01358,Male,Technology,G4,Full-time,23.96,0.0
+E01359,Female,Customer service,G1,Part-time,12.87,687.73
+E01360,Male,Operations,G1,Full-time,10.75,0.0
+E01361,Male,Operations,G2,Full-time,13.96,1253.17
+E01362,Female,Customer service,G4,Full-time,23.37,2895.58
+E01363,Female,Customer service,G1,Part-time,11.14,0.0
+E01364,Female,Customer service,G4,Full-time,25.87,6614.11
+E01365,Male,Operations,G3,Full-time,18.21,3873.49
+E01366,Female,Operations,G1,Full-time,12.01,0.0
+E01367,Female,Customer service,G1,Part-time,9.09,389.65
+E01368,Female,Customer service,G6,Full-time,59.71,7289.75
+E01369,Female,Operations,G3,Full-time,18.5,1237.24
+E01370,Male,Sales,G3,Full-time,18.52,997.87
+E01371,Female,Sales,G2,Full-time,16.12,634.52
+E01372,Female,Technology,G3,Full-time,19.8,2416.59
+E01373,Male,Sales,G4,Full-time,25.86,0.0
+E01374,Female,Finance,G2,Full-time,14.03,845.07
+E01375,Female,Customer service,G1,Full-time,12.56,707.32
+E01376,Female,Operations,G2,Part-time,12.65,928.09
+E01377,Male,Operations,G5,Full-time,34.62,0.0
+E01378,Female,Customer service,G2,Part-time,13.01,0.0
+E01379,Male,Technology,G4,Full-time,27.25,5317.1
+E01380,Male,Technology,G3,Part-time,19.0,1828.15
+E01381,Male,Operations,G1,Full-time,10.18,0.0
+E01382,Female,Technology,G1,Full-time,12.92,0.0
+E01383,Male,Technology,G2,Full-time,15.14,0.0
+E01384,Male,Operations,G1,Full-time,12.03,0.0
+E01385,Male,Sales,G2,Full-time,13.43,1153.76
+E01386,Female,Operations,G1,Part-time,11.35,761.07
+E01387,Male,Technology,G2,Part-time,13.96,0.0
+E01388,Male,Technology,G5,Full-time,41.26,11526.91
+E01389,Female,Operations,G5,Full-time,34.65,0.0
+E01390,Male,Finance,G3,Full-time,15.62,1357.86
+E01391,Male,Technology,G2,Full-time,15.47,0.0
+E01392,Male,Technology,G1,Full-time,13.33,934.04
+E01393,Male,Customer service,G5,Full-time,41.91,0.0
+E01394,Male,Customer service,G6,Full-time,56.83,0.0
+E01395,Male,Operations,G1,Full-time,13.19,0.0
+E01396,Female,Operations,G4,Part-time,25.71,3411.25
+E01397,Female,Technology,G1,Full-time,12.82,0.0
+E01398,Female,Sales,G2,Part-time,13.39,1179.18
+E01399,Male,Finance,G3,Full-time,17.6,2778.53
+E01400,Male,Operations,G5,Full-time,34.77,0.0
+E01401,Female,Operations,G1,Full-time,11.43,0.0
+E01402,Male,Operations,G4,Full-time,23.74,4979.74
+E01403,Female,Technology,G3,Full-time,19.46,4141.35
+E01404,Male,Technology,G3,Full-time,18.01,0.0
+E01405,Male,Technology,G1,Full-time,13.47,0.0
+E01406,Female,Operations,G2,Full-time,13.66,973.35
+E01407,Female,Customer service,G2,Full-time,15.65,0.0
+E01408,Female,Operations,G2,Full-time,12.89,0.0
+E01409,Male,Sales,G3,Full-time,19.89,0.0
+E01410,Male,Operations,G2,Full-time,13.36,2041.04
+E01411,Male,Sales,G6,Full-time,66.96,24760.67
+E01412,Female,Finance,G1,Full-time,10.67,837.56
+E01413,Female,Finance,G2,Full-time,12.85,1329.02
+E01414,Male,Customer service,G2,Full-time,14.37,974.01
+E01415,Male,Sales,G2,Full-time,13.6,0.0
+E01416,Male,Operations,G2,Full-time,16.04,1601.03
+E01417,Female,Sales,G3,Part-time,17.69,0.0
+E01418,Male,Operations,G4,Part-time,26.87,1143.86
+E01419,Female,Finance,G1,Part-time,11.74,519.81
+E01420,Female,Finance,G1,Full-time,12.55,0.0
+E01421,Male,Operations,G2,Full-time,13.69,1250.03
+E01422,Female,Operations,G5,Full-time,30.17,6475.29
+E01423,Male,Technology,G1,Full-time,11.86,1200.37
+E01424,Male,Operations,G1,Full-time,12.23,0.0
+E01425,Male,Technology,G2,Full-time,14.79,1475.52
+E01426,Male,Operations,G3,Full-time,18.46,2728.22
+E01427,Male,Operations,G3,Full-time,17.43,3250.55
+E01428,Female,Operations,G2,Full-time,13.48,1399.4
+E01429,Female,Technology,G4,Full-time,27.62,0.0
+E01430,Male,Operations,G2,Full-time,15.25,0.0
+E01431,Female,Customer service,G3,Full-time,15.74,3625.41
+E01432,Female,Customer service,G3,Full-time,16.86,3222.14
+E01433,Female,Operations,G2,Full-time,13.46,0.0
+E01434,Female,Operations,G4,Full-time,25.53,7239.6
+E01435,Female,Customer service,G2,Full-time,14.76,1301.25
+E01436,Female,Customer service,G2,Part-time,14.97,789.99
+E01437,Male,Operations,G2,Full-time,14.12,878.9
+E01438,Female,Operations,G4,Part-time,25.0,0.0
+E01439,Female,Operations,G2,Full-time,15.39,0.0
+E01440,Female,Sales,G1,Full-time,11.7,0.0
+E01441,Female,Operations,G2,Part-time,15.98,0.0
+E01442,Female,Finance,G1,Full-time,11.97,770.73
+E01443,Female,Operations,G1,Full-time,10.96,0.0
+E01444,Female,Customer service,G2,Part-time,13.93,1345.37
+E01445,Male,Sales,G4,Full-time,25.23,0.0
+E01446,Male,Sales,G1,Full-time,10.72,0.0
+E01447,Male,Operations,G3,Full-time,16.52,3003.67
+E01448,Female,Customer service,G1,Full-time,11.22,0.0
+E01449,Female,Technology,G1,Full-time,10.21,939.09
+E01450,Female,Customer service,G4,Full-time,23.26,2111.24
+E01451,Male,Sales,G2,Full-time,12.35,0.0
+E01452,Female,Operations,G5,Full-time,34.96,10484.72
+E01453,Male,Sales,G6,Full-time,66.11,24833.61
+E01454,Male,Sales,G4,Full-time,26.56,0.0
+E01455,Female,Customer service,G1,Full-time,10.94,1075.52
+E01456,Female,Sales,G3,Full-time,18.94,795.74
+E01457,Male,Sales,G1,Full-time,11.2,0.0
+E01458,Female,Sales,G2,Full-time,13.36,1565.97
+E01459,Female,Technology,G3,Full-time,20.3,0.0
+E01460,Male,Operations,G4,Full-time,22.95,5047.93
+E01461,Male,Sales,G2,Full-time,12.47,1800.02
+E01462,Male,Sales,G6,Full-time,63.53,13674.56
+E01463,Female,Customer service,G3,Full-time,15.99,1831.58
+E01464,Male,Customer service,G1,Full-time,11.58,0.0
+E01465,Female,Customer service,G5,Full-time,37.55,2620.23
+E01466,Female,Finance,G2,Full-time,13.65,2298.06
+E01467,Male,Finance,G4,Full-time,23.7,2300.66
+E01468,Male,Sales,G3,Full-time,17.85,4160.3
+E01469,Male,Operations,G1,Full-time,10.4,1216.57
+E01470,Male,Customer service,G5,Full-time,39.8,9438.98
+E01471,Male,Operations,G2,Full-time,12.11,0.0
+E01472,Male,Operations,G3,Full-time,19.67,3109.97
+E01473,Male,Operations,G2,Full-time,15.81,2078.89
+E01474,Male,Sales,G2,Full-time,13.88,987.52
+E01475,Male,Customer service,G2,Full-time,15.21,0.0
+E01476,Female,Operations,G1,Full-time,11.55,929.45
+E01477,Male,Technology,G2,Full-time,17.08,0.0
+E01478,Male,Operations,G1,Full-time,11.47,797.9
+E01479,Female,Technology,G2,Full-time,14.73,2443.41
+E01480,Male,Technology,G5,Full-time,38.62,12670.91
+E01481,Male,Customer service,G6,Full-time,62.85,19360.48
+E01482,Female,Customer service,G1,Full-time,11.74,0.0
+E01483,Male,Operations,G4,Full-time,26.14,4494.3
+E01484,Female,Finance,G3,Full-time,17.8,3442.03
+E01485,Female,Sales,G2,Full-time,14.18,2301.28
+E01486,Male,Sales,G2,Part-time,14.48,0.0
+E01487,Female,Sales,G2,Full-time,14.41,0.0
+E01488,Male,Sales,G4,Full-time,23.69,4312.53
+E01489,Female,Customer service,G2,Part-time,13.68,0.0
+E01490,Male,Finance,G4,Full-time,23.59,0.0
+E01491,Female,Finance,G3,Part-time,16.73,2215.11
+E01492,Male,Customer service,G3,Full-time,19.07,1203.92
+E01493,Male,Operations,G4,Full-time,25.24,0.0
+E01494,Female,Operations,G2,Part-time,14.27,840.1
+E01495,Female,Technology,G2,Part-time,14.09,0.0
+E01496,Male,Operations,G2,Full-time,13.79,1100.02
+E01497,Male,Operations,G6,Full-time,57.73,0.0
+E01498,Male,Finance,G3,Full-time,17.74,0.0
+E01499,Female,Technology,G3,Part-time,20.52,2552.18
+E01500,Male,Operations,G3,Full-time,17.39,0.0
+E01501,Male,Customer service,G4,Full-time,25.8,2080.95
+E01502,Female,Operations,G3,Full-time,18.22,2596.81
+E01503,Female,Customer service,G1,Part-time,11.42,762.19
+E01504,Female,Operations,G2,Full-time,15.66,1046.12
+E01505,Female,Customer service,G2,Full-time,14.84,0.0
+E01506,Male,Sales,G5,Full-time,31.49,7217.71
+E01507,Female,Sales,G1,Full-time,10.6,750.99
+E01508,Male,Sales,G3,Full-time,18.89,787.48
+E01509,Male,Operations,G4,Full-time,22.7,0.0
+E01510,Male,Operations,G1,Full-time,10.5,1188.71
+E01511,Female,Customer service,G3,Full-time,17.28,2543.79
+E01512,Male,Operations,G3,Full-time,17.02,823.91
+E01513,Female,Finance,G3,Part-time,18.17,0.0
+E01514,Female,Customer service,G2,Part-time,11.47,767.06
+E01515,Male,Sales,G2,Full-time,14.58,1025.3
+E01516,Male,Customer service,G6,Full-time,56.31,8821.42
+E01517,Male,Operations,G3,Full-time,19.06,2338.78
+E01518,Male,Customer service,G2,Full-time,14.03,0.0
+E01519,Male,Technology,G4,Full-time,29.17,0.0
+E01520,Male,Technology,G4,Full-time,26.78,6088.64
+E01521,Female,Customer service,G1,Part-time,12.12,0.0
+E01522,Male,Operations,G2,Full-time,14.4,0.0
+E01523,Male,Customer service,G3,Full-time,20.95,2680.81
+E01524,Female,Finance,G2,Full-time,13.64,0.0
+E01525,Female,Operations,G1,Full-time,12.2,0.0
+E01526,Female,Customer service,G4,Full-time,24.93,0.0
+E01527,Female,Customer service,G2,Part-time,14.24,1035.18
+E01528,Male,Operations,G1,Full-time,11.03,1066.29
+E01529,Male,Operations,G1,Full-time,12.01,0.0
+E01530,Male,Operations,G4,Full-time,24.69,974.16
+E01531,Female,Sales,G6,Full-time,65.46,18391.25
+E01532,Male,Sales,G5,Full-time,35.93,5161.26
+E01533,Male,Operations,G1,Full-time,12.34,1055.73
+E01534,Male,Technology,G1,Full-time,13.07,1078.28
+E01535,Male,Sales,G2,Full-time,12.62,1408.12
+E01536,Female,Customer service,G3,Part-time,15.17,688.2
+E01537,Male,Operations,G3,Full-time,21.1,0.0
+E01538,Female,Customer service,G2,Part-time,13.1,0.0
+E01539,Female,Operations,G4,Full-time,25.29,3970.1
+E01540,Female,Sales,G4,Full-time,24.13,3284.58
+E01541,Male,Sales,G3,Part-time,18.5,0.0
+E01542,Female,Customer service,G4,Full-time,26.85,2215.75
+E01543,Female,Operations,G3,Full-time,19.44,3386.57
+E01544,Male,Operations,G4,Full-time,24.48,1359.58
+E01545,Female,Sales,G2,Full-time,13.73,0.0
+E01546,Male,Customer service,G4,Part-time,26.64,1949.87
+E01547,Male,Operations,G2,Full-time,14.16,0.0
+E01548,Female,Customer service,G4,Full-time,26.49,6287.09
+E01549,Male,Sales,G3,Full-time,18.32,0.0
+E01550,Male,Operations,G1,Full-time,10.95,1245.57
+E01551,Male,Operations,G5,Full-time,38.62,0.0
+E01552,Female,Customer service,G5,Full-time,39.48,9233.74
+E01553,Male,Technology,G4,Full-time,25.81,5509.2
+E01554,Male,Operations,G3,Full-time,18.23,3877.94
+E01555,Male,Technology,G2,Full-time,14.95,0.0
+E01556,Female,Finance,G1,Full-time,11.54,1248.18
+E01557,Female,Operations,G4,Full-time,27.24,0.0
+E01558,Male,Customer service,G4,Full-time,23.01,5376.66
+E01559,Male,Operations,G3,Full-time,19.08,0.0
+E01560,Male,Operations,G1,Full-time,11.02,0.0
+E01561,Female,Customer service,G4,Full-time,26.38,7251.65
+E01562,Male,Operations,G4,Full-time,25.03,0.0
+E01563,Female,Finance,G2,Full-time,14.73,2324.86
+E01564,Male,Operations,G2,Full-time,13.16,0.0
+E01565,Male,Customer service,G3,Full-time,17.61,0.0
+E01566,Male,Technology,G2,Full-time,13.14,977.69
+E01567,Male,Technology,G2,Full-time,15.62,665.28
+E01568,Not stated,Customer service,G1,Full-time,11.0,1156.09
+E01569,Not stated,Sales,G6,Full-time,57.45,23394.24
+E01570,Female,Customer service,G6,Full-time,60.18,20917.77
+E01571,Female,Finance,G2,Full-time,13.5,1693.59
+E01572,Female,Operations,G3,Part-time,17.43,0.0
+E01573,Male,Operations,G5,Full-time,37.93,8602.3
+E01574,Female,Operations,G6,Part-time,59.34,13449.54
+E01575,Female,Customer service,G3,Part-time,17.31,2354.89
+E01576,Female,Customer service,G4,Full-time,25.27,0.0
+E01577,Male,Operations,G2,Full-time,15.6,2333.89
+E01578,Female,Customer service,G5,Full-time,41.38,7043.53
+E01579,Male,Finance,G5,Full-time,40.15,6277.25
+E01580,Female,Customer service,G3,Full-time,20.6,2480.72
+E01581,Female,Operations,G1,Full-time,12.4,1033.81
+E01582,Male,Operations,G1,Full-time,11.27,616.81
+E01583,Male,Sales,G3,Full-time,18.52,0.0
+E01584,Female,Finance,G1,Full-time,11.04,0.0
+E01585,Female,Sales,G1,Full-time,12.86,578.71
+E01586,Male,Operations,G2,Full-time,14.14,1483.36
+E01587,Male,Technology,G3,Full-time,19.39,1033.41
+E01588,Male,Operations,G2,Full-time,13.68,0.0
+E01589,Female,Operations,G2,Full-time,14.32,1632.51
+E01590,Female,Sales,G5,Full-time,29.81,0.0
+E01591,Male,Customer service,G4,Full-time,26.76,0.0
+E01592,Male,Sales,G5,Full-time,37.55,3710.29
+E01593,Female,Operations,G3,Full-time,16.62,2386.22
+E01594,Male,Sales,G2,Full-time,15.13,664.55
+E01595,Female,Customer service,G5,Full-time,41.08,11562.66
+E01596,Not stated,Operations,G1,Full-time,9.88,0.0
+E01597,Female,Technology,G2,Full-time,16.13,2800.75
+E01598,Female,Operations,G3,Full-time,19.72,806.15
+E01599,Female,Finance,G1,Full-time,11.7,1091.85
+E01600,Male,Operations,G3,Full-time,17.06,902.56
+E01601,Female,Sales,G3,Full-time,17.46,0.0
+E01602,Male,Sales,G3,Full-time,17.19,1926.03
+E01603,Male,Customer service,G5,Full-time,38.16,9127.27
+E01604,Male,Technology,G5,Full-time,43.81,13002.72
+E01605,Male,Sales,G3,Full-time,19.7,0.0
+E01606,Male,Technology,G5,Full-time,39.9,9762.08
+E01607,Male,Technology,G3,Full-time,18.99,0.0
+E01608,Female,Operations,G3,Full-time,16.88,1071.4
+E01609,Male,Sales,G4,Full-time,24.24,6190.73
+E01610,Male,Operations,G3,Full-time,19.24,4397.23
+E01611,Male,Sales,G5,Full-time,33.03,3260.07
+E01612,Female,Operations,G4,Part-time,24.52,0.0
+E01613,Male,Operations,G6,Full-time,51.5,4780.36
+E01614,Female,Operations,G1,Full-time,12.19,1001.9
+E01615,Male,Customer service,G3,Full-time,19.5,3336.66
+E01616,Female,Customer service,G3,Part-time,18.3,936.14
+E01617,Male,Sales,G2,Full-time,13.7,0.0
+E01618,Female,Operations,G6,Full-time,57.84,0.0
+E01619,Female,Sales,G1,Part-time,12.63,486.63
+E01620,Male,Operations,G5,Full-time,39.23,0.0
+E01621,Male,Technology,G5,Full-time,45.02,3519.32
+E01622,Male,Operations,G3,Part-time,17.9,0.0
+E01623,Male,Technology,G3,Full-time,17.35,0.0
+E01624,Male,Operations,G5,Full-time,38.46,12419.14
+E01625,Female,Customer service,G2,Full-time,13.08,1265.37
+E01626,Female,Operations,G1,Part-time,10.1,0.0
+E01627,Male,Operations,G1,Full-time,11.8,534.97
+E01628,Male,Operations,G3,Full-time,17.8,0.0
+E01629,Female,Operations,G3,Part-time,18.08,1577.73
+E01630,Male,Operations,G2,Full-time,14.39,0.0
+E01631,Male,Operations,G1,Full-time,13.17,0.0
+E01632,Female,Operations,G4,Full-time,24.64,5277.78
+E01633,Male,Technology,G3,Full-time,19.8,2101.58
+E01634,Female,Sales,G4,Full-time,22.37,0.0
+E01635,Male,Technology,G2,Full-time,15.67,928.55
+E01636,Male,Sales,G1,Full-time,10.71,550.48
+E01637,Male,Sales,G2,Full-time,11.61,0.0
+E01638,Female,Sales,G3,Part-time,14.97,1364.1
+E01639,Male,Operations,G1,Full-time,10.6,0.0
+E01640,Male,Technology,G2,Full-time,14.51,2231.38
+E01641,Male,Operations,G2,Full-time,12.95,0.0
+E01642,Female,Finance,G3,Part-time,17.93,2215.41
+E01643,Female,Sales,G1,Full-time,10.9,0.0
+E01644,Male,Sales,G3,Full-time,15.56,2746.02
+E01645,Male,Sales,G2,Full-time,14.65,2513.1
+E01646,Female,Technology,G3,Full-time,20.19,0.0
+E01647,Not stated,Customer service,G4,Full-time,26.35,2591.71
+E01648,Female,Operations,G5,Part-time,35.38,0.0
+E01649,Male,Technology,G2,Full-time,16.88,2342.11
+E01650,Female,Customer service,G2,Full-time,14.01,1591.83
+E01651,Male,Finance,G4,Full-time,25.78,1311.77
+E01652,Male,Sales,G4,Full-time,21.71,2768.43
+E01653,Male,Operations,G1,Full-time,12.59,731.5
+E01654,Female,Operations,G3,Full-time,17.25,1907.46
+E01655,Female,Customer service,G1,Full-time,11.89,0.0
+E01656,Male,Operations,G3,Full-time,17.36,3787.61
+E01657,Female,Technology,G4,Full-time,26.07,7377.4
+E01658,Male,Operations,G5,Full-time,39.01,10503.67
+E01659,Male,Sales,G2,Full-time,14.01,0.0
+E01660,Male,Operations,G1,Full-time,10.71,1121.6
+E01661,Female,Finance,G2,Full-time,13.26,0.0
+E01662,Male,Operations,G2,Full-time,11.57,456.77
+E01663,Male,Finance,G2,Full-time,14.55,1426.49
+E01664,Female,Technology,G4,Full-time,25.59,2968.61
+E01665,Female,Customer service,G1,Full-time,12.03,0.0
+E01666,Female,Technology,G1,Full-time,12.29,557.59
+E01667,Male,Sales,G4,Part-time,26.38,0.0
+E01668,Female,Sales,G3,Part-time,17.62,2211.45
+E01669,Male,Operations,G1,Full-time,12.17,0.0
+E01670,Male,Technology,G2,Full-time,17.19,0.0
+E01671,Male,Operations,G1,Full-time,12.67,0.0
+E01672,Female,Sales,G4,Part-time,29.12,784.43
+E01673,Female,Operations,G1,Part-time,11.45,794.17
+E01674,Male,Operations,G5,Full-time,37.03,4439.92
+E01675,Male,Customer service,G2,Full-time,11.9,0.0
+E01676,Male,Sales,G1,Full-time,11.66,603.07
+E01677,Male,Technology,G1,Full-time,12.35,0.0
+E01678,Male,Operations,G3,Part-time,15.18,1445.7
+E01679,Male,Technology,G6,Full-time,69.95,28601.4
+E01680,Male,Sales,G2,Part-time,13.07,0.0
+E01681,Male,Sales,G3,Full-time,19.53,1981.57
+E01682,Male,Technology,G4,Full-time,26.01,6886.82
+E01683,Male,Operations,G1,Full-time,10.67,0.0
+E01684,Male,Sales,G2,Full-time,14.81,0.0
+E01685,Female,Operations,G6,Full-time,61.99,6236.63
+E01686,Male,Operations,G2,Full-time,13.84,0.0
+E01687,Female,Customer service,G2,Part-time,14.67,1409.05
+E01688,Male,Customer service,G3,Full-time,17.55,3807.4
+E01689,Male,Sales,G1,Full-time,9.84,958.31
+E01690,Female,Sales,G2,Full-time,15.02,2312.79
+E01691,Male,Technology,G2,Full-time,17.37,0.0
+E01692,Male,Operations,G5,Full-time,37.83,2169.83
+E01693,Female,Operations,G1,Full-time,11.05,1074.26
+E01694,Female,Customer service,G3,Full-time,19.73,3652.7
+E01695,Female,Customer service,G1,Full-time,9.8,613.42
+E01696,Male,Finance,G6,Full-time,55.7,6115.47
+E01697,Female,Operations,G3,Part-time,15.39,1607.56
+E01698,Male,Technology,G2,Full-time,15.67,1031.1
+E01699,Male,Operations,G1,Full-time,11.05,0.0
+E01700,Female,Finance,G1,Full-time,11.07,0.0
+E01701,Male,Operations,G1,Full-time,11.4,0.0
+E01702,Male,Technology,G3,Full-time,19.41,3673.21
+E01703,Male,Technology,G2,Part-time,14.05,726.41
+E01704,Male,Customer service,G2,Full-time,13.47,1549.46
+E01705,Male,Operations,G2,Full-time,14.26,2473.03
+E01706,Male,Sales,G2,Full-time,15.26,1328.28
+E01707,Female,Operations,G2,Part-time,11.94,0.0
+E01708,Male,Operations,G2,Full-time,13.98,1758.82
+E01709,Male,Operations,G5,Full-time,35.9,3420.5
+E01710,Female,Technology,G1,Full-time,14.0,1063.85
+E01711,Male,Operations,G1,Full-time,12.26,1007.36
+E01712,Male,Sales,G1,Full-time,12.33,665.99
+E01713,Male,Operations,G2,Full-time,13.51,2367.63
+E01714,Male,Operations,G2,Full-time,12.02,0.0
+E01715,Female,Operations,G3,Full-time,18.47,0.0
+E01716,Male,Operations,G3,Full-time,16.17,0.0
+E01717,Female,Sales,G4,Part-time,26.55,3306.03
+E01718,Female,Finance,G3,Full-time,17.57,2602.25
+E01719,Female,Sales,G1,Full-time,11.2,813.54
+E01720,Female,Customer service,G3,Full-time,16.9,2934.98
+E01721,Male,Sales,G1,Full-time,11.57,0.0
+E01722,Female,Finance,G3,Part-time,17.49,0.0
+E01723,Male,Customer service,G2,Full-time,12.42,623.52
+E01724,Female,Operations,G3,Full-time,17.02,3059.41
+E01725,Male,Sales,G5,Full-time,41.41,8833.86
+E01726,Male,Operations,G6,Full-time,58.6,0.0
+E01727,Male,Finance,G3,Full-time,20.43,2904.79
+E01728,Female,Customer service,G2,Full-time,14.82,0.0
+E01729,Male,Sales,G3,Full-time,17.07,0.0
+E01730,Female,Technology,G2,Part-time,15.45,0.0
+E01731,Male,Technology,G4,Full-time,28.81,6135.66
+E01732,Female,Operations,G4,Full-time,24.56,0.0
+E01733,Male,Sales,G1,Full-time,13.01,0.0
+E01734,Female,Operations,G3,Part-time,17.01,575.03
+E01735,Male,Technology,G2,Full-time,14.83,0.0
+E01736,Female,Customer service,G2,Part-time,13.88,759.26
+E01737,Female,Operations,G5,Full-time,41.51,8256.64
+E01738,Female,Finance,G5,Part-time,41.16,0.0
+E01739,Male,Technology,G3,Full-time,20.88,2440.03
+E01740,Male,Technology,G2,Part-time,14.24,1169.47
+E01741,Male,Operations,G4,Full-time,24.74,7075.5
+E01742,Female,Customer service,G5,Full-time,38.96,2470.43
+E01743,Male,Operations,G5,Full-time,35.79,8530.21
+E01744,Male,Operations,G4,Full-time,25.92,0.0
+E01745,Female,Operations,G2,Full-time,12.25,1547.63
+E01746,Male,Operations,G3,Full-time,14.9,3212.14
+E01747,Female,Customer service,G1,Part-time,10.78,0.0
+E01748,Male,Sales,G2,Full-time,12.14,0.0
+E01749,Male,Operations,G3,Full-time,19.78,1540.09
+E01750,Male,Operations,G4,Full-time,31.26,6774.0
+E01751,Male,Technology,G4,Full-time,27.29,7647.09
+E01752,Male,Operations,G4,Full-time,25.08,7253.22
+E01753,Female,Operations,G1,Full-time,12.35,1024.75
+E01754,Male,Technology,G2,Full-time,17.51,1009.94
+E01755,Female,Operations,G5,Full-time,42.77,10363.7
+E01756,Male,Customer service,G4,Full-time,25.05,7317.02
+E01757,Male,Operations,G2,Full-time,12.52,1486.73
+E01758,Male,Technology,G6,Full-time,65.83,23955.0
+E01759,Female,Finance,G2,Full-time,13.21,802.79
+E01760,Female,Operations,G1,Part-time,10.93,0.0
+E01761,Male,Sales,G3,Full-time,17.53,0.0
+E01762,Male,Technology,G3,Full-time,18.07,868.91
+E01763,Female,Operations,G2,Full-time,11.68,467.38
+E01764,Female,Operations,G3,Full-time,20.25,1249.06
+E01765,Female,Operations,G5,Part-time,35.54,4829.05
+E01766,Male,Technology,G2,Full-time,15.73,2346.26
+E01767,Male,Finance,G4,Full-time,26.35,6143.45
+E01768,Female,Operations,G2,Full-time,14.35,2464.75
+E01769,Male,Finance,G2,Part-time,13.6,0.0
+E01770,Male,Operations,G6,Full-time,60.97,16252.51
+E01771,Male,Sales,G6,Full-time,61.26,7904.67
+E01772,Male,Sales,G3,Full-time,17.67,0.0
+E01773,Male,Operations,G2,Full-time,13.29,0.0
+E01774,Male,Customer service,G5,Full-time,39.37,11340.07
+E01775,Female,Finance,G1,Full-time,12.57,949.27
+E01776,Male,Customer service,G3,Full-time,18.63,0.0
+E01777,Female,Customer service,G4,Full-time,22.95,0.0
+E01778,Male,Sales,G4,Full-time,24.35,2770.91
+E01779,Male,Operations,G1,Part-time,9.74,0.0
+E01780,Female,Customer service,G4,Part-time,24.97,0.0
+E01781,Female,Operations,G2,Full-time,13.89,2385.47
+E01782,Female,Technology,G2,Full-time,16.13,2420.14
+E01783,Male,Operations,G2,Full-time,13.19,0.0
+E01784,Female,Operations,G2,Full-time,15.16,0.0
+E01785,Female,Technology,G2,Full-time,13.79,0.0
+E01786,Female,Finance,G4,Full-time,25.69,2266.33
+E01787,Female,Operations,G1,Full-time,11.34,0.0
+E01788,Male,Operations,G2,Full-time,13.11,0.0
+E01789,Female,Customer service,G6,Full-time,63.52,6550.78
+E01790,Female,Finance,G2,Full-time,12.61,822.27
+E01791,Female,Finance,G3,Part-time,14.02,0.0
+E01792,Female,Operations,G4,Full-time,25.82,4155.99
+E01793,Male,Sales,G5,Full-time,30.1,4573.74
+E01794,Female,Sales,G6,Full-time,55.21,7805.69
+E01795,Male,Operations,G3,Full-time,18.41,888.86
+E01796,Male,Operations,G2,Full-time,14.91,2520.69
+E01797,Female,Operations,G1,Part-time,11.69,573.47
+E01798,Female,Finance,G5,Full-time,38.68,5594.26
+E01799,Female,Customer service,G2,Full-time,12.43,1316.93
+E01800,Male,Operations,G5,Full-time,34.52,0.0

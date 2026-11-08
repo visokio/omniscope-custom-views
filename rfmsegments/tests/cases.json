@@ -1,0 +1,210 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "customer": "Customer ID",
+    "date": "Order date",
+    "value": "Order value",
+    "orders": "Order ID",
+    "maxCustomers": 200000
+   }
+  },
+  "width": 1060,
+  "height": 640,
+  "wait": 1500,
+  "showcaseHeight": 640,
+  "caption": "Live: about 3,000 illustrative online customers scored on recency, frequency and spend. Hover a cell for the figures; click a cell or a segment to select those customers.",
+  "expect": {
+   "selector": "rect.cell",
+   "min": 25
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "customer": "Customer ID",
+    "date": "Order date",
+    "value": "Order value",
+    "orders": "Order ID",
+    "maxCustomers": 200000
+   }
+  },
+  "width": 1000,
+  "height": 620,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var s=window.__rfm.model.segs,ref={\"0\": 732, \"1\": 264, \"2\": 370, \"3\": 53, \"4\": 70, \"5\": 122, \"6\": 199, \"7\": 466, \"8\": 123, \"9\": 257, \"10\": 344};return Object.keys(ref).every(function(k){return s[+k].n===ref[k]}) && window.__rfm.model.n===3000})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "rect.cell",
+    "nth": 12
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__rfm.selectSeg('At risk')"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "atrisk"
+   },
+   {
+    "click": "rect.cell",
+    "nth": 24
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     10,
+     600
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "Scotland"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__rfm.model.n<500",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     460
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "records",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "customer": "Customer ID",
+    "date": "Order date",
+    "value": "Order value",
+    "maxCustomers": 200000
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__rfm.model.F.o===null && window.__rfm.model.n===3000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Customer ID",
+    "type": "TEXT"
+   },
+   {
+    "name": "Order date",
+    "type": "DATE"
+   },
+   {
+    "name": "Order value",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "customer": "Customer ID",
+    "date": "Order date",
+    "value": "Order value",
+    "maxCustomers": 200000
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Customers"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "customer": "Cust",
+    "date": "Day",
+    "value": "Amount"
+   }
+  },
+  "width": 1100,
+  "height": 700,
+  "wait": 8000,
+  "actions": [
+   {
+    "eval": "window.__rfm.model.n>50000",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "selector": "rect.cell",
+   "min": 25
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "customer": "Customer ID",
+    "date": "Order date",
+    "value": "Order value",
+    "orders": "Order ID",
+    "maxCustomers": 200000
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

@@ -1,0 +1,220 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/sales.csv",
+  "types": {
+   "Year": "TEXT"
+  },
+  "options": {
+   "items": {
+    "item": "Product",
+    "period": "Year",
+    "base": "",
+    "current": "",
+    "volume": "Units",
+    "revenue": "Revenue (GBP)",
+    "topN": 12
+   }
+  },
+  "width": 1060,
+  "height": 560,
+  "wait": 1500,
+  "showcaseHeight": 560,
+  "caption": "Live: an invented manufacturer's revenue, 2024 to 2025, split into volume, mix, price, new and discontinued products. Hover a bar for what it means; click a bar or a product to select those sales.",
+  "expect": {
+   "selector": "rect.bar",
+   "min": 7
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/sales.csv",
+  "types": {
+   "Year": "TEXT"
+  },
+  "options": {
+   "items": {
+    "item": "Product",
+    "period": "Year",
+    "base": "",
+    "current": "",
+    "volume": "Units",
+    "revenue": "Revenue (GBP)",
+    "topN": 12
+   }
+  },
+  "width": 1000,
+  "height": 560,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__pvm.model,e=M.eff,s=M.R0+e.Volume+e.Mix+e.Price+e['New products']+e.Discontinued;return M.base==='2024'&&M.cur==='2025'&&Math.abs(s-M.R1)<1&&e.Price>0&&e.Mix>0&&e.Volume<0&&M.news.length===3&&M.lost.length===2})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var M=window.__pvm.model,c=M.list.filter(function(x){return x.status==='continuing'});var sm=c.reduce(function(a,x){return a+x.mix},0);return Math.abs(sm-M.eff.Mix)<1})()",
+    "expectTruthy": true
+   },
+   {
+    "click": "rect.bar",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "price"
+   },
+   {
+    "click": "tr.r",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     10,
+     540
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "London"
+    }
+   },
+   {
+    "eval": "window.__pvm.model.R1>0",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     520
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "chosen-periods",
+  "data": "sample-data/sales.csv",
+  "types": {
+   "Year": "TEXT"
+  },
+  "options": {
+   "items": {
+    "item": "Product",
+    "period": "Year",
+    "base": "2023",
+    "current": "2025",
+    "volume": "Units",
+    "revenue": "Revenue (GBP)",
+    "topN": 12
+   }
+  },
+  "width": 1000,
+  "height": 540,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__pvm.model.base==='2023'&&window.__pvm.model.cur==='2025'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "one-period",
+  "data": "sample-data/sales.csv",
+  "types": {
+   "Year": "TEXT"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Year",
+   "operator": "=",
+   "value": "2025"
+  },
+  "options": {
+   "items": {
+    "item": "Product",
+    "period": "Year",
+    "base": "",
+    "current": "",
+    "volume": "Units",
+    "revenue": "Revenue (GBP)",
+    "topN": 12
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "two periods"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/sales.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose Products"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "item": "SKU",
+    "period": "Period",
+    "volume": "Units",
+    "revenue": "Revenue",
+    "topN": 20
+   }
+  },
+  "width": 1100,
+  "height": 600,
+  "wait": 3000,
+  "expect": {
+   "selector": "rect.bar",
+   "min": 7
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/sales.csv",
+  "types": {
+   "Year": "TEXT"
+  },
+  "options": {
+   "items": {
+    "item": "Product",
+    "period": "Year",
+    "base": "",
+    "current": "",
+    "volume": "Units",
+    "revenue": "Revenue (GBP)",
+    "topN": 6
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

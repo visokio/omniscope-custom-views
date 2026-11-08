@@ -1,0 +1,331 @@
+[
+ {
+  "name": "all-payments",
+  "data": "sample-data/payments.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "Payer",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "Payee",
+     "type": "UNIQUE_VALUES"
+    },
+    "weight": {
+     "inputField": "Amount (GBP)",
+     "function": "SUM"
+    },
+    "sizeBy": "BETWEENNESS",
+    "colourBy": "COMMUNITY",
+    "directed": false,
+    "labels": "TOP",
+    "labelCount": 12,
+    "minWeight": 0,
+    "showPanel": true
+   }
+  },
+  "width": 1000,
+  "height": 640,
+  "wait": 6000,
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "window.__network.model.communities.length>1 && window.__network.nodes.length>300",
+    "expectTruthy": true
+   }
+  ],
+  "showcase": true,
+  "showcaseHeight": 640,
+  "caption": "Live: about 4,000 illustrative payments between 387 accounts and merchants. Communities are detected in the browser; node size is betweenness."
+ },
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/payments.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "Payer",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "Payee",
+     "type": "UNIQUE_VALUES"
+    },
+    "weight": {
+     "inputField": "Amount (GBP)",
+     "function": "SUM"
+    },
+    "sizeBy": "BETWEENNESS",
+    "colourBy": "COMMUNITY",
+    "directed": true,
+    "labels": "TOP",
+    "labelCount": 12,
+    "minWeight": 1500,
+    "showPanel": true
+   }
+  },
+  "width": 1040,
+  "height": 640,
+  "wait": 5000,
+  "showcaseHeight": 640,
+  "caption": "Live: illustrative payments, keeping only transfers of \u00a31,500 or more. Three rings and their mule accounts stand out. Click a node, a community or a ranked account; try the path finder from ACC-0347 to ACC-CASHOUT.",
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/payments.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "Payer",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "Payee",
+     "type": "UNIQUE_VALUES"
+    },
+    "weight": {
+     "inputField": "Amount (GBP)",
+     "function": "SUM"
+    },
+    "sizeBy": "BETWEENNESS",
+    "colourBy": "COMMUNITY",
+    "directed": true,
+    "labels": "TOP",
+    "labelCount": 12,
+    "minWeight": 1500,
+    "showPanel": true
+   }
+  },
+  "width": 1000,
+  "height": 640,
+  "wait": 5000,
+  "actions": [
+   {
+    "eval": "window.__network.model.communities.length",
+    "expectTruthy": true
+   },
+   {
+    "click": "#panel .row.comm",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "community"
+   },
+   {
+    "clickEval": "(function(){var S=window.__network,t=S.transform,d=S.model.ranked[0];return [t.x+t.k*d.x,t.y+t.k*d.y];})()"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "focus"
+   },
+   {
+    "eval": "window.__network.focus!==null",
+    "expectTruthy": true
+   },
+   {
+    "clickEval": "[5,630]"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "eval": "(function(){var p=window.__network.showPath('ACC-0347','ACC-CASHOUT');return p&&p.length;})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "path"
+   },
+   {
+    "resize": [
+     640,
+     420
+    ]
+   },
+   {
+    "screenshot": "resized"
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Channel",
+     "operator": "=",
+     "value": "Faster Payment"
+    }
+   },
+   {
+    "eval": "window.__network.nodes.length>0",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "pagerank-directed",
+  "data": "sample-data/payments.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "Payer",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "Payee",
+     "type": "UNIQUE_VALUES"
+    },
+    "weight": {
+     "inputField": "Amount (GBP)",
+     "function": "SUM"
+    },
+    "sizeBy": "PAGERANK",
+    "colourBy": "COMMUNITY",
+    "directed": true,
+    "labels": "ALL",
+    "labelCount": 12,
+    "minWeight": 1500,
+    "showPanel": true
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 5000,
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Payer",
+    "type": "TEXT"
+   },
+   {
+    "name": "Payee",
+    "type": "TEXT"
+   },
+   {
+    "name": "Amount (GBP)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "Payer",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "Payee",
+     "type": "UNIQUE_VALUES"
+    },
+    "weight": {
+     "inputField": "Amount (GBP)",
+     "function": "SUM"
+    },
+    "sizeBy": "BETWEENNESS",
+    "colourBy": "COMMUNITY",
+    "directed": false,
+    "labels": "TOP",
+    "labelCount": 12,
+    "minWeight": 0,
+    "showPanel": true
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/payments.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 400,
+  "expect": {
+   "text": "Choose From and To"
+  }
+ },
+ {
+  "name": "large",
+  "data": "sample-data/large.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    },
+    "weight": {
+     "inputField": "Weight",
+     "function": "SUM"
+    },
+    "labels": "TOP",
+    "labelCount": 8
+   }
+  },
+  "width": 1000,
+  "height": 700,
+  "wait": 9000,
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "window.__network.nodes.length===4000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/payments.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "Payer",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "Payee",
+     "type": "UNIQUE_VALUES"
+    },
+    "weight": {
+     "inputField": "Amount (GBP)",
+     "function": "SUM"
+    },
+    "sizeBy": "BETWEENNESS",
+    "colourBy": "COMMUNITY",
+    "directed": true,
+    "labels": "NONE",
+    "labelCount": 12,
+    "minWeight": 1500,
+    "showPanel": false
+   }
+  },
+  "width": 290,
+  "height": 290,
+  "wait": 5000
+ }
+]

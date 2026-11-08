@@ -1,0 +1,249 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/energy_mix.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Source",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Generation (GWh)",
+     "function": "SUM"
+    },
+    "maxParts": 6,
+    "grid": "10",
+    "shape": "SQUARE"
+   }
+  },
+  "width": 900,
+  "height": 480,
+  "wait": 1200,
+  "showcaseHeight": 480,
+  "caption": "Live: an illustrative electricity generation mix (invented figures), 100 squares each worth 1%. Hover a square for the figures; click a square or a key entry to select that source.",
+  "expect": {
+   "selector": ".cell",
+   "min": 100
+  }
+ },
+ {
+  "name": "nations",
+  "showcase": true,
+  "data": "sample-data/energy_mix.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Source",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Generation (GWh)",
+     "function": "SUM"
+    },
+    "maxParts": 8,
+    "grid": "10",
+    "shape": "SQUARE",
+    "pane": {
+     "inputField": "Nation",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 1060,
+  "height": 420,
+  "wait": 1200,
+  "showcaseHeight": 420,
+  "caption": "Live: one waffle per nation, each showing its own mix.",
+  "expect": {
+   "selector": ".cell",
+   "min": 400
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/energy_mix.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Source",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Generation (GWh)",
+     "function": "SUM"
+    },
+    "maxParts": 6,
+    "grid": "10",
+    "shape": "SQUARE"
+   }
+  },
+  "width": 900,
+  "height": 480,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__waffle.model,P=M.panes[0],i=M.parts.findIndex(function(p){return p.name==='Wind'});return d3.sum(P.sq)===100 && P.sq[i]===Math.round(32.445830163679155) && M.parts[M.parts.length-1].other===true})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": ".cell",
+    "nth": 5
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": ".cell",
+    "nth": 5
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "window.__waffle.select({part:window.__waffle.model.parts[5].name})"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.type==='OR'",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     5,
+     470
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Nation",
+     "operator": "=",
+     "value": "Scotland"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__waffle.model.total<40000",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     420,
+     360
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "dots",
+  "data": "sample-data/energy_mix.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Source",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Generation (GWh)",
+     "function": "SUM"
+    },
+    "maxParts": 6,
+    "grid": "20",
+    "shape": "CIRCLE"
+   }
+  },
+  "width": 800,
+  "height": 480,
+  "wait": 1200,
+  "expect": {
+   "selector": "circle.cell",
+   "min": 400
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Source",
+    "type": "TEXT"
+   },
+   {
+    "name": "Generation (GWh)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Source",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Generation (GWh)",
+     "function": "SUM"
+    },
+    "maxParts": 6,
+    "grid": "10",
+    "shape": "SQUARE"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No positive values"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/energy_mix.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Parts"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/energy_mix.csv",
+  "options": {
+   "items": {
+    "category": {
+     "inputField": "Source",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Generation (GWh)",
+     "function": "SUM"
+    },
+    "maxParts": 6,
+    "grid": "10",
+    "shape": "SQUARE"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1200
+ }
+]

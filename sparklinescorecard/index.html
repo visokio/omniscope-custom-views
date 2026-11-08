@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; overflow: hidden; }
+        #main { position: absolute; inset: 0; overflow: auto; }
+        table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+        th { position: sticky; top: 0; background: #fcfcfb; z-index: 2; text-align: right; font-weight: normal; color: #52514e; font-size: 11px; padding: 8px 10px 6px; border-bottom: 1px solid #c3c2b7; white-space: nowrap; }
+        th.l, td.l { text-align: left; }
+        td { padding: 5px 10px; border-bottom: 1px solid #eeede8; text-align: right; white-space: nowrap; }
+        tr.r { cursor: pointer; }
+        tr.r:hover td { background: #f3f6fb; }
+        tr.r.sel td { background: #eaf1fc; }
+        tr.r.sel td:first-child { box-shadow: inset 3px 0 0 #2161D9; }
+        td.name { font-weight: bold; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+        td.big { font-size: 14px; font-weight: bold; }
+        td.spark { padding: 2px 6px; width: 1%; }
+        .up { color: #006300; } .down { color: #d03b3b; } .flat { color: #898781; }
+        .bar { display: inline-block; width: 70px; height: 7px; background: #eeede8; border-radius: 4px; position: relative; vertical-align: middle; margin-right: 6px; overflow: hidden; }
+        .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+        .status { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; }
+        .status svg { width: 14px; height: 14px; }
+        #foot { color: #898781; font-size: 11px; padding: 6px 10px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+</head>
+
+<body>
+<div id="main"><div id="table"></div><div id="foot"></div></div><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    // Status colours are reserved for status and always paired with an icon and a label.
+    var ST = { good: { c: "#0ca30c", t: "On track", ico: '<path d="M4 8.5 L7 11.5 L12 5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' },
+               warn: { c: "#fab219", t: "At risk", ico: '<path d="M8 4.5 V9" stroke="#0b0b0b" stroke-width="2" stroke-linecap="round"/><circle cx="8" cy="11.6" r="1.1" fill="#0b0b0b"/>' },
+               bad: { c: "#d03b3b", t: "Off track", ico: '<path d="M5.3 5.3 L10.7 10.7 M10.7 5.3 L5.3 10.7" stroke="#fff" stroke-width="2" stroke-linecap="round"/>' } };
+    var LINE = "#2a78d6", SELECT = "#2161D9";
+    var S = { sel: null };
+    window.__score = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || v === undefined || isNaN(v)) return "\u2013"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toLocaleString() : (+v.toFixed(2)).toLocaleString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function gf(g) { return g ? (typeof g === "string" ? g : g.inputField) : null; }
+    var DATE_RE = /^\d{4}-\d{2}-\d{2}/;
+    function tkey(v) { var s = v && typeof v === "object" && "lower" in v ? v.lower : v; if (typeof s === "string" && DATE_RE.test(s)) return { sort: Date.parse(s.length === 10 ? s + "T00:00:00Z" : s), label: s.slice(0, 10), raw: v }; if (typeof s === "number") return { sort: s, label: String(s), raw: v }; return { sort: null, label: s === null || s === undefined ? "(blank)" : String(s), raw: v }; }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.rows || !it.time || !it.value) { message("Choose Rows, a Time grouping and a Value."); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = res.data.records || [];
+        if (!recs.length) { message("No data to show. Check the filters."); document.getElementById("table").innerHTML = ""; return; }
+        message(null);
+        // the period axis is shared by all rows: the most recent N periods present in the data
+        var pm = new Map(); recs.forEach(function (r) { var t = tkey(r[mp.time]); if (!pm.has(t.label)) pm.set(t.label, t); });
+        var periods = Array.from(pm.values());
+        if (periods.every(function (p) { return p.sort !== null; })) periods.sort(function (a, b) { return a.sort - b.sort; });
+        var N = Math.max(3, Math.min(104, +it.periods || 13)); periods = periods.slice(-N);
+        var pidx = {}; periods.forEach(function (p, i) { pidx[p.label] = i; });
+        var rows = new Map();
+        recs.forEach(function (r) {
+            var t = tkey(r[mp.time]), i = pidx[t.label]; if (i === undefined) return;
+            var k = r[mp.rows] === null ? "(blank)" : String(r[mp.rows]);
+            if (!rows.has(k)) rows.set(k, { key: k, raw: r[mp.rows], v: new Array(periods.length).fill(null), t: new Array(periods.length).fill(null) });
+            var o = rows.get(k); o.v[i] = (o.v[i] || 0) + (typeof r[mp.value] === "number" ? r[mp.value] : 0);
+            if (mp.target !== undefined && typeof r[mp.target] === "number") o.t[i] = (o.t[i] || 0) + r[mp.target];
+        });
+        var low = it.direction === "LOWER", tol = (it.tolerance === undefined || it.tolerance === null ? 5 : +it.tolerance) / 100, hasT = mp.target !== undefined;
+        var list = Array.from(rows.values()).map(function (o) {
+            var vals = o.v.filter(function (x) { return x !== null; }), lastI = o.v.length - 1; while (lastI > 0 && o.v[lastI] === null) lastI--;
+            var last = o.v[lastI], cmpI = it.compare === "FIRST" ? o.v.findIndex(function (x) { return x !== null; }) : lastI - 1;
+            while (it.compare !== "FIRST" && cmpI >= 0 && o.v[cmpI] === null) cmpI--;
+            var base = cmpI >= 0 && cmpI !== lastI ? o.v[cmpI] : null;
+            o.last = last; o.lastI = lastI; o.change = base !== null && last !== null ? last - base : null; o.pct = base ? (last - base) / Math.abs(base) : null;
+            o.headline = it.headline === "SUM" ? vals.reduce(function (a, b) { return a + b; }, 0) : it.headline === "MEAN" ? (vals.length ? vals.reduce(function (a, b) { return a + b; }, 0) / vals.length : null) : last;
+            if (hasT) {
+                var tv = it.headline === "SUM" || it.headline === "MEAN" ? o.t.filter(function (x) { return x !== null; }) : [o.t[lastI]];
+                var tsum = tv.reduce(function (a, b) { return a + (b || 0); }, 0), target = it.headline === "MEAN" ? tsum / Math.max(1, tv.length) : tsum;
+                o.target = target || null;
+                o.att = o.target ? o.headline / o.target : null;
+                if (o.att !== null) { var good = low ? o.headline <= o.target : o.headline >= o.target, near = low ? o.headline <= o.target * (1 + tol) : o.headline >= o.target * (1 - tol); o.status = good ? "good" : near ? "warn" : "bad"; }
+            }
+            return o;
+        });
+        var sorters = { HEADLINE_DESC: function (a, b) { return (b.headline || 0) - (a.headline || 0); }, CHANGE_DESC: function (a, b) { return (low ? -1 : 1) * ((b.pct || 0) - (a.pct || 0)); }, CHANGE_ASC: function (a, b) { return (low ? -1 : 1) * ((a.pct || 0) - (b.pct || 0)); },
+            ATTAINMENT_ASC: function (a, b) { return (low ? -1 : 1) * ((a.att === null ? 9 : a.att) - (b.att === null ? 9 : b.att)); }, NAME: function (a, b) { return a.key.localeCompare(b.key, undefined, { numeric: true }); } };
+        list.sort(sorters[it.sortBy] || sorters.HEADLINE_DESC);
+        S.model = { rows: list, periods: periods, hasT: hasT, low: low, it: it, fields: { rows: gf(it.rows), time: gf(it.time), value: it.value.inputField || "Value" } };
+        introIf(recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null));
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        draw();
+    }
+    function spark(o, w, h) {
+        var M = S.model, vals = o.v, n = vals.length, nums = vals.filter(function (x) { return x !== null; }).concat(M.hasT ? o.t.filter(function (x) { return x !== null; }) : []);
+        if (!nums.length) return "";
+        var lo = Math.min.apply(null, nums), hi = Math.max.apply(null, nums); if (hi === lo) { hi += 1; lo -= 1; }
+        var X = function (i) { return 3 + (w - 6) * (n > 1 ? i / (n - 1) : 0.5); }, Y = function (v) { return h - 3 - (h - 6) * (v - lo) / (hi - lo); };
+        var d = "", pen = false; vals.forEach(function (v, i) { if (v === null) { pen = false; return; } d += (pen ? "L" : "M") + X(i).toFixed(1) + "," + Y(v).toFixed(1); pen = true; });
+        var t = ""; if (M.hasT) { var pen2 = false; o.t.forEach(function (v, i) { if (v === null) { pen2 = false; return; } t += (pen2 ? "L" : "M") + X(i).toFixed(1) + "," + Y(v).toFixed(1); pen2 = true; }); }
+        var li = o.lastI, mx = vals.indexOf(Math.max.apply(null, vals.filter(function (x) { return x !== null; })));
+        return '<svg width="' + w + '" height="' + h + '" data-k="' + esc(o.key) + '">' + (t ? '<path d="' + t + '" fill="none" stroke="#898781" stroke-width="1" stroke-dasharray="3,2"/>' : '') +
+            '<path d="' + d + '" fill="none" stroke="' + LINE + '" stroke-width="1.6"/>' +
+            '<circle cx="' + X(li) + '" cy="' + Y(vals[li]) + '" r="2.6" fill="' + LINE + '"/>' +
+            (mx !== li ? '<circle cx="' + X(mx) + '" cy="' + Y(vals[mx]) + '" r="1.8" fill="#fcfcfb" stroke="' + LINE + '" stroke-width="1"/>' : '') +
+            '<rect x="0" y="0" width="' + w + '" height="' + h + '" fill="transparent" class="hit"/></svg>';
+    }
+    function draw() {
+        var intro = introDone();
+        var M = S.model, it = M.it, W = window.innerWidth, sw = Math.max(80, Math.min(200, Math.round(W * 0.2))), compact = W < 560;
+        var hl = { LAST: "Latest", SUM: "Total", MEAN: "Average" }[it.headline || "LAST"], first = M.periods[0], last = M.periods[M.periods.length - 1];
+        var h = '<table><thead><tr><th class="l">' + esc(M.fields.rows) + '</th><th class="l">Trend (' + M.periods.length + ')</th><th>' + hl + '</th><th>Change</th>' +
+            (M.hasT && !compact ? '<th>Target</th><th class="l">Attainment</th>' : '') + (M.hasT ? '<th class="l">Status</th>' : '') + '</tr></thead><tbody>';
+        M.rows.forEach(function (o, ri) {
+            var up = o.change > 0, cls = o.change === null || o.change === 0 ? "flat" : (up !== M.low ? "up" : "down");
+            var arrow = o.change === null || o.change === 0 ? "" : up ? "\u25b2 " : "\u25bc ";
+            var sel = S.sel && S.sel.key === o.key;
+            h += '<tr class="r' + (sel ? " sel" : "") + '" data-i="' + ri + '"><td class="l name" title="' + esc(o.key) + '">' + esc(o.key) + '</td><td class="spark">' + spark(o, sw, 26) + '</td><td class="big">' + fmt(o.headline) + '</td>' +
+                '<td class="' + cls + '">' + arrow + (o.pct === null ? fmt(o.change) : (o.pct * 100).toFixed(1) + "%") + '</td>';
+            if (M.hasT && !compact) {
+                var a = o.att === null ? 0 : Math.max(0, Math.min(1.2, o.att)), col = o.status ? ST[o.status].c : "#c3c2b7";
+                h += '<td>' + fmt(o.target) + '</td><td class="l"><span class="bar"><i style="width:' + (a / 1.2 * 100) + '%;background:' + col + '"></i><i style="left:' + (100 / 1.2) + '%;width:1px;background:#0b0b0b"></i></span>' + (o.att === null ? "" : Math.round(o.att * 100) + "%") + '</td>';
+            }
+            if (M.hasT) h += '<td class="l">' + (o.status ? '<span class="status"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7.5" fill="' + ST[o.status].c + '"/>' + ST[o.status].ico + '</svg>' + ST[o.status].t + '</span>' : '') + '</td>';
+            h += '</tr>';
+        });
+        h += '</tbody></table>';
+        document.getElementById("table").innerHTML = h;
+        var counts = { good: 0, warn: 0, bad: 0 }; M.rows.forEach(function (o) { if (o.status) counts[o.status]++; });
+        document.getElementById("foot").textContent = M.rows.length + " rows. Trend from " + first.label + " to " + last.label + "; change vs " + (it.compare === "FIRST" ? "the first period" : "the previous period") + "." +
+            (M.hasT ? " " + counts.good + " on track, " + counts.warn + " at risk, " + counts.bad + " off track (target shown dashed in the trend)." : "");
+        if (intro && document.body.animate) Array.prototype.forEach.call(document.querySelectorAll("tr.r"), function (tr, i) {
+            var d = stag(M.rows.length, 700) * i; tr.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350, delay: d, fill: "backwards" });
+            Array.prototype.forEach.call(tr.querySelectorAll("td.spark path"), function (p) { if (p.getAttribute("stroke-dasharray") || (p.getAttribute("fill") || "none") !== "none") return; var n = p.getTotalLength(); p.animate([{ strokeDasharray: n + " " + n, strokeDashoffset: n }, { strokeDasharray: n + " " + n, strokeDashoffset: 0 }], { duration: 900, delay: d + 150, easing: "ease-out", fill: "backwards" }); });
+        });
+        Array.prototype.forEach.call(document.querySelectorAll("tr.r"), function (tr) {
+            var o = M.rows[+tr.getAttribute("data-i")];
+            tr.addEventListener("click", function (e) { e.stopPropagation(); select(o, null); });
+            var svg = tr.querySelector("td.spark svg"); if (!svg) return;
+            svg.addEventListener("mousemove", function (e) { var r = svg.getBoundingClientRect(), i = Math.round((e.clientX - r.left - 3) / (r.width - 6) * (M.periods.length - 1)); tip(o, Math.max(0, Math.min(M.periods.length - 1, i)), e); });
+            svg.addEventListener("mouseleave", function () { tip(null); });
+            svg.addEventListener("click", function (e) { e.stopPropagation(); var r = svg.getBoundingClientRect(), i = Math.round((e.clientX - r.left - 3) / (r.width - 6) * (M.periods.length - 1)); select(o, Math.max(0, Math.min(M.periods.length - 1, i))); });
+        });
+    }
+    function tip(o, i, e) {
+        var el = document.getElementById("tooltip");
+        if (!o) { el.style.display = "none"; return; }
+        var M = S.model;
+        el.innerHTML = '<b>' + esc(o.key) + '</b>, ' + esc(M.periods[i].label) + '<br><span class="k">' + esc(M.fields.value) + ':</span> ' + fmt(o.v[i]) + (M.hasT ? '<br><span class="k">Target:</span> ' + fmt(o.t[i]) : '');
+        el.style.display = "block";
+        var X = e.clientX + 14, Y = e.clientY + 14;
+        if (X + el.offsetWidth > window.innerWidth - 4) X = e.clientX - el.offsetWidth - 14;
+        if (Y + el.offsetHeight > window.innerHeight - 4) Y = e.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+    function select(o, pi) {
+        var M = S.model, F = M.fields, f = { type: "FIELD_VALUE", inputField: F.rows, operator: "=", value: o.raw };
+        if (pi !== null) {
+            var raw = M.periods[pi].raw;
+            var tf = raw && typeof raw === "object" && "lower" in raw ? { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F.time, operator: ">=", value: raw.lower }, { type: "FIELD_VALUE", inputField: F.time, operator: "<", value: raw.upper }] } : { type: "FIELD_VALUE", inputField: F.time, operator: "=", value: raw };
+            f = { type: "AND", filters: [f, tf] };
+        }
+        S.sel = { key: o.key, period: pi };
+        omniscope.view.context().viewSelection = { filter: f, meta: S.sel };
+        omniscope.view.updated(); draw();
+    }
+    window.__score.select = function (k, pi) { select(S.model.rows.find(function (o) { return o.key === k; }), pi === undefined ? null : pi); };
+    document.body.addEventListener("click", function () { if (S.sel) { S.sel = null; draw(); } omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

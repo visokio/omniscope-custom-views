@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .cell { cursor: pointer; } .cell:hover { stroke: #0b0b0b; stroke-width: 1.5; }
+        .lab { cursor: pointer; fill: #52514e; font-size: 11px; } .lab:hover { fill: #2a78d6; } .lab.on { fill: #2161D9; font-weight: bold; }
+        .mbar { cursor: pointer; } .mbar:hover { opacity: .75; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<svg id="svg"></svg><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var RAMP = ["#f2f7fd", "#c9def8", "#9ec5f4", "#6fa8ec", "#3987e5", "#2a6fc4", "#184f95"], MARG = "#9ec5f4", SELECT = "#2161D9";
+    var DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    var S = { gen: 0, sel: null };
+    window.__week = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(1) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : a >= 10 ? v.toFixed(0) : (+v.toPrecision(2)).toString(); };
+    var hh = function (h) { return (h < 10 ? "0" : "") + h + ":00"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function tval(v) { if (v === null || v === undefined || v === "") return null; if (typeof v === "number") return v; var s = typeof v === "object" ? v.lower : v; var t = Date.parse(typeof s === "string" && s.length === 10 ? s + "T00:00:00Z" : s); return isNaN(t) ? null : t; }
+    function textOn(bg) { return d3.lab(bg).l > 60 ? "#0b0b0b" : "#ffffff"; }
+    function mlabel() { var m = it().value; return !m ? "Records" : m.function === "RECORD_COUNT" || !m.inputField ? "Records" : ({ SUM: "", MEAN: "Average ", MEDIAN: "Median " }[m.function] || "") + m.inputField; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { t: fld(o.time), m: o.value || null };
+        if (!F.t) { message("Choose the Timestamps field: a date and time for each record, such as when a call, order or visit happened."); return; }
+        var m = F.m && F.m.function && F.m.function !== "RECORD_COUNT" && F.m.inputField ? { inputField: F.m.inputField, function: F.m.function, name: "v" } : { function: "RECORD_COUNT", name: "v" };
+        var q = { groupings: [{ inputField: F.t, type: "HISTOGRAM", dateUnit: "HOUR", histogramInterval: 1 }], measures: [m], range: { start: 0, length: 200000 } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, m, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    function build(F, meas, recs) {
+        var o = it(), shift = Math.round(+o.utcOffset || 0), avg = o.show !== "TOTAL", additive = meas.function === "RECORD_COUNT" || meas.function === "SUM";
+        var cells = []; for (var d = 0; d < 7; d++) for (var h = 0; h < 24; h++) cells.push({ d: d, h: h, v: 0, sum: 0, n: 0, buckets: [] });
+        var tmin = Infinity, tmax = -Infinity, any = false, midnight = 0;
+        recs.forEach(function (r) {
+            var t = tval(r[0]), v = typeof r[1] === "number" ? r[1] : null; if (t === null || v === null) return; any = true;
+            var lt = t + shift * 36e5, dt = new Date(lt), d = (dt.getUTCDay() + 6) % 7, h = dt.getUTCHours(), c = cells[d * 24 + h];
+            if (h === 0 && dt.getUTCMinutes() === 0) midnight++;
+            c.sum += v; c.n++; c.buckets.push(t); if (t < tmin) tmin = t; if (t > tmax) tmax = t;
+        });
+        if (!any) { S.model = null; message("No data to show. Check the filters."); return; }
+        var total = d3.sum(cells, function (c) { return c.sum; });
+        if (cells.every(function (c) { return c.h === 0 || c.n === 0; })) { S.model = null; message("Every record falls at midnight, so the field seems to hold dates without times. Choose a field with a time of day."); return; }
+        message(null);
+        // occurrences of each weekday-hour slot between the first and last record, so averages are per week
+        var occ = cells.map(function () { return 0; }), t0 = Math.floor((tmin + shift * 36e5) / 36e5) * 36e5, t1 = tmax + shift * 36e5;
+        for (var t = t0; t <= t1; t += 36e5) { var dt = new Date(t); occ[((dt.getUTCDay() + 6) % 7) * 24 + dt.getUTCHours()]++; }
+        cells.forEach(function (c, i) { c.occ = occ[i]; c.v = !additive ? (c.n ? c.sum / c.n : null) : avg ? (c.occ ? c.sum / c.occ : 0) : c.sum; });
+        var weeks = (tmax - tmin) / (7 * 864e5);
+        S.model = { F: F, meas: meas, cells: cells, total: total, avg: avg && additive, additive: additive, weeks: weeks, shift: shift, tmin: tmin, tmax: tmax, label: mlabel() };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); return; } var intro = introDone();
+        var W = window.innerWidth, H = window.innerHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var narrow = W < 560, mt = 58 + (narrow ? 0 : 44), ml = narrow ? 36 : 82, mr = narrow ? 8 : 70, mb = 26;
+        var cw = Math.max(8, (W - ml - mr) / 24), ch = Math.max(10, Math.min(cw * 1.4, (H - mt - mb) / 7));
+        var vals = M.cells.map(function (c) { return c.v; }).filter(function (v) { return v !== null; }), vmax = d3.max(vals) || 1;
+        var col = d3.scaleQuantize().domain([0, vmax]).range(RAMP);
+        var g = svg.append("g").attr("transform", "translate(" + ml + "," + mt + ")");
+        var sel = S.sel, isOn = function (c) { return !sel || (sel.cell && sel.cell[0] === c.d && sel.cell[1] === c.h) || (sel.day !== undefined && sel.day === c.d) || (sel.hour !== undefined && sel.hour === c.h); };
+        g.selectAll("rect.cell").data(M.cells).enter().append("rect").attr("class", "cell")
+            .attr("x", function (c) { return c.h * cw + 1; }).attr("y", function (c) { return c.d * ch + 1; }).attr("width", cw - 2).attr("height", ch - 2).attr("rx", 2)
+            .attr("fill", function (c) { return c.v === null ? "#f6f6f3" : col(c.v); }).attr("opacity", function (c) { return isOn(c) ? 1 : 0.3; })
+            .on("mouseenter", function (ev, c) { tipCell(c, ev); }).on("mousemove", function (ev, c) { tipCell(c, ev); }).on("mouseleave", tip)
+            .on("click", function (ev, c) { ev.stopPropagation(); selectCells([c], { cell: [c.d, c.h] }); });
+        if (cw > 30 && ch > 18) g.selectAll("text.v").data(M.cells.filter(function (c) { return c.v !== null && c.v > 0; })).enter().append("text").attr("x", function (c) { return c.h * cw + cw / 2; }).attr("y", function (c) { return c.d * ch + ch / 2; }).attr("dy", "0.35em").attr("text-anchor", "middle").style("font-size", "10px").attr("pointer-events", "none").attr("fill", function (c) { return textOn(col(c.v)); }).text(function (c) { return fmt(c.v); });
+        // labels
+        g.selectAll("text.d").data(DAYS).enter().append("text").attr("class", function (d, i) { return "lab" + (sel && sel.day === i ? " on" : ""); }).attr("x", -8).attr("y", function (d, i) { return i * ch + ch / 2; }).attr("dy", "0.35em").attr("text-anchor", "end").text(function (d) { return narrow ? d.slice(0, 2) : d; })
+            .on("click", function (ev, d) { ev.stopPropagation(); var i = DAYS.indexOf(d); selectCells(M.cells.filter(function (c) { return c.d === i; }), { day: i }); });
+        var step = cw < 22 ? 3 : cw < 34 ? 2 : 1;
+        g.selectAll("text.h").data(d3.range(24).filter(function (h) { return h % step === 0; })).enter().append("text").attr("class", function (h) { return "lab" + (sel && sel.hour === h ? " on" : ""); }).attr("x", function (h) { return h * cw + cw / 2; }).attr("y", 7 * ch + 15).attr("text-anchor", "middle").text(function (h) { return narrow ? h : hh(h); })
+            .on("click", function (ev, h) { ev.stopPropagation(); selectCells(M.cells.filter(function (c) { return c.h === h; }), { hour: h }); });
+        // margins: average per hour across the week (top) and per day (right)
+        if (!narrow && M.additive) {
+            var hourTot = d3.range(24).map(function (h) { var cs = M.cells.filter(function (c) { return c.h === h; }); return { i: h, v: d3.sum(cs, function (c) { return c.v || 0; }) }; });
+            var dayTot = d3.range(7).map(function (d) { var cs = M.cells.filter(function (c) { return c.d === d; }); return { i: d, v: d3.sum(cs, function (c) { return c.v || 0; }) }; }), dsum = d3.sum(dayTot, function (o) { return o.v; });
+            var hy = d3.scaleLinear().domain([0, d3.max(hourTot, function (o) { return o.v; }) || 1]).range([0, 36]), dx = d3.scaleLinear().domain([0, d3.max(dayTot, function (o) { return o.v; }) || 1]).range([0, mr - 38]);
+            g.selectAll("rect.mh").data(hourTot).enter().append("rect").attr("class", "mbar").attr("x", function (o) { return o.i * cw + 2; }).attr("width", cw - 4).attr("y", function (o) { return -6 - hy(o.v); }).attr("height", function (o) { return hy(o.v); }).attr("fill", MARG)
+                .on("mousemove", function (ev, o) { var h = o.i, v = o.v; show('<b>' + hh(h) + ' to ' + hh((h + 1) % 24) + '</b><br><span class="k">' + (M.avg ? "Per week, all days" : "All days") + ':</span> ' + fmt(v), ev); }).on("mouseleave", tip)
+                .on("click", function (ev, o) { ev.stopPropagation(); var h = o.i; selectCells(M.cells.filter(function (c) { return c.h === h; }), { hour: h }); });
+            g.selectAll("rect.md").data(dayTot).enter().append("rect").attr("class", "mbar").attr("x", 24 * cw + 6).attr("y", function (o) { return o.i * ch + 3; }).attr("height", ch - 6).attr("width", function (o) { return dx(o.v); }).attr("fill", MARG)
+                .on("mousemove", function (ev, o) { var d = o.i, v = o.v; show('<b>' + DAYS[d] + '</b><br><span class="k">' + (M.avg ? "Per week" : "Total") + ':</span> ' + fmt(v) + ' (' + (100 * v / dsum).toFixed(1) + '% of the week)', ev); }).on("mouseleave", tip)
+                .on("click", function (ev, o) { ev.stopPropagation(); var d = o.i; selectCells(M.cells.filter(function (c) { return c.d === d; }), { day: d }); });
+            g.selectAll("text.md").data(dayTot).enter().append("text").attr("x", function (o) { return 24 * cw + 10 + dx(o.v); }).attr("y", function (o) { return o.i * ch + ch / 2; }).attr("dy", "0.35em").style("font-size", "10px").attr("fill", "#52514e").attr("pointer-events", "none").text(function (o) { return fmt(o.v); });
+        }
+        // headline
+        var peak = M.cells.filter(function (c) { return c.v !== null; }).sort(function (a, b) { return b.v - a.v; })[0];
+        var wk = M.cells.filter(function (c) { return c.d >= 5; }), weekendShare = M.total ? d3.sum(wk, function (c) { return c.sum; }) / M.total : 0;
+        var head = svg.append("text").attr("x", ml).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.label + (M.avg ? " per week" : M.additive ? "" : "") + " by day and hour");
+        head.append("tspan").attr("fill", "#52514e").text("  " + new Date(M.tmin).toISOString().slice(0, 10) + " to " + new Date(M.tmax).toISOString().slice(0, 10) + " (" + M.weeks.toFixed(1) + " weeks)" + (M.shift ? ", times shifted by " + (M.shift > 0 ? "+" : "") + M.shift + " h" : ""));
+        var sub = svg.append("text").attr("x", ml).attr("y", 36).style("font-size", "11.5px").attr("fill", "#52514e");
+        sub.append("tspan").text("Busiest: "); sub.append("tspan").style("font-weight", "bold").attr("fill", "#0b0b0b").text(DAYS[peak.d] + " " + hh(peak.h) + " to " + hh((peak.h + 1) % 24));
+        sub.append("tspan").text(" (" + fmt(peak.v) + (M.avg ? " a week" : "") + ")" + (M.additive ? ".  Weekends: " + (100 * weekendShare).toFixed(0) + "% of the total." : ""));
+        // colour key
+        var kw = 18;
+        if (!narrow) { var kg = svg.append("g").attr("transform", "translate(" + (W - mr - RAMP.length * kw - 4) + ",30)"); RAMP.forEach(function (c, i) { kg.append("rect").attr("x", i * kw).attr("width", kw - 1).attr("height", 8).attr("fill", c); }); kg.append("text").attr("x", 0).attr("y", 20).style("font-size", "10px").attr("fill", "#52514e").text("0"); kg.append("text").attr("x", RAMP.length * kw).attr("y", 20).attr("text-anchor", "end").style("font-size", "10px").attr("fill", "#52514e").text(fmt(vmax)); }
+        if (intro) { var cs = svg.selectAll("rect.cell"); fadeIn(cs, 300, stag(cs.size(), 900)); fadeIn(svg.selectAll("rect.mbar"), 700, 15); }
+    }
+
+    function tipCell(c, ev) {
+        var M = S.model;
+        show('<b>' + DAYS[c.d] + ' ' + hh(c.h) + ' to ' + hh((c.h + 1) % 24) + '</b><br>' + (M.additive ? '<span class="k">' + (M.avg ? M.label + " per week" : M.label) + ':</span> <b>' + fmt(c.v) + '</b>' + (M.avg ? '<br><span class="k">Total:</span> ' + fmt(c.sum) + ' over ' + c.occ + ' ' + DAYS[c.d] + 's' : '') + '<br><span class="k">Share of all:</span> ' + (M.total ? (100 * c.sum / M.total).toFixed(2) : 0) + '%' : '<span class="k">' + esc(M.label) + ':</span> <b>' + fmt(c.v) + '</b> <span class="k">(over ' + c.n + ' hours with data)</span>'), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    // A weekday-hour is not a field, so the selection is the list of hour ranges that fall in it (adjacent hours merged).
+    function selectCells(cs, meta) {
+        var key = JSON.stringify(meta); if (S.sel && JSON.stringify(S.sel) === key) return publish(null, null);
+        var ts = []; cs.forEach(function (c) { ts = ts.concat(c.buckets); }); ts.sort(function (a, b) { return a - b; });
+        if (!ts.length) return;
+        var ranges = []; ts.forEach(function (t) { var r = ranges[ranges.length - 1]; if (r && r[1] === t) r[1] = t + 36e5; else ranges.push([t, t + 36e5]); });
+        if (ranges.length > 1500) { omniscope.view.error("This selection covers " + ranges.length.toLocaleString() + " separate hours; the limit is 1,500. Filter to a shorter period first."); return; }
+        var F = S.model.F.t, iso = function (t) { return new Date(t).toISOString().replace(".000Z", "Z"); };
+        var cl = ranges.map(function (r) { return { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F, operator: ">=", value: iso(r[0]) }, { type: "FIELD_VALUE", inputField: F, operator: "<", value: iso(r[1]) }] }; });
+        publish(cl.length === 1 ? cl[0] : { type: "OR", filters: cl }, meta);
+    }
+    window.__week.selectCell = function (d, h) { var c = S.model.cells[d * 24 + h]; selectCells([c], { cell: [d, h] }); };
+    window.__week.selectDay = function (d) { selectCells(S.model.cells.filter(function (c) { return c.d === d; }), { day: d }); };
+
+    document.body.addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

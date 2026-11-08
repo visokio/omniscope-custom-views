@@ -1,0 +1,2001 @@
+Customer ID,Segment,Region,Recency (days),Orders per year,Annual spend (GBP),Lifetime value (GBP)
+C00001,High value,Wales,16,23.0,3240.58,18025
+C00002,High value,London,26,23.6,2464.93,12703
+C00003,High value,Wales,26,24.8,3229.12,13100
+C00004,High value,North West,18,22.1,2588.43,12315
+C00005,High value,South East,18,23.4,3706.73,16505
+C00006,High value,Scotland,1,26.2,4608.68,17449
+C00007,High value,Midlands,37,30.6,2616.09,14502
+C00008,High value,North West,5,33.6,4861.68,18089
+C00009,High value,London,26,16.7,3660.58,20034
+C00010,High value,South East,6,18.5,2118.29,13258
+C00011,High value,North West,26,19.6,1914.99,7575
+C00012,High value,Wales,25,25.2,3941.54,24133
+C00013,High value,North West,33,27.7,2995.24,14360
+C00014,High value,Wales,16,32.6,3636.5,18399
+C00015,High value,Scotland,9,33.2,4947.21,28467
+C00016,High value,Wales,26,23.5,3820.53,23459
+C00017,High value,North West,11,32.0,2451.24,11729
+C00018,High value,Wales,34,30.3,4503.54,22559
+C00019,High value,Midlands,1,17.5,2702.79,17009
+C00020,High value,South East,23,13.9,3005.22,17764
+C00021,High value,Scotland,3,16.4,2830.75,12932
+C00022,High value,London,20,8.3,2392.8,14142
+C00023,High value,North West,15,21.3,4127.18,23327
+C00024,High value,Wales,5,28.9,4038.15,19264
+C00025,High value,Wales,25,20.7,2788.85,16887
+C00026,High value,South East,18,21.4,4210.58,21917
+C00027,High value,Midlands,13,26.5,4977.22,30221
+C00028,High value,North West,10,23.5,3462.65,21127
+C00029,High value,London,19,28.4,3279.27,18198
+C00030,High value,Wales,16,31.3,3534.16,13614
+C00031,High value,South East,3,25.2,3272.71,15332
+C00032,High value,Wales,42,33.1,3215.86,17467
+C00033,High value,London,3,42.1,3643.07,18030
+C00034,High value,Midlands,8,24.0,3615.77,12868
+C00035,High value,London,19,28.2,4419.81,18303
+C00036,High value,Wales,25,25.5,3211.31,13380
+C00037,High value,South East,3,24.7,3145.99,16087
+C00038,High value,London,1,26.4,2213.26,8926
+C00039,High value,Wales,12,19.3,1985.83,7252
+C00040,High value,North West,31,26.7,3437.06,15904
+C00041,High value,South East,20,21.3,3561.72,13864
+C00042,High value,Scotland,32,23.2,3849.76,23426
+C00043,High value,London,26,13.0,3749.36,18798
+C00044,High value,South East,28,37.4,3588.32,21086
+C00045,High value,London,7,27.8,4508.79,17859
+C00046,High value,Scotland,1,28.7,3496.96,19917
+C00047,High value,Scotland,14,33.0,3572.03,19122
+C00048,High value,Midlands,1,26.8,3958.74,24593
+C00049,High value,Midlands,18,21.9,3187.86,15413
+C00050,High value,South East,22,32.4,5184.14,19307
+C00051,High value,Midlands,22,24.9,3857.6,23672
+C00052,High value,Scotland,9,24.2,4307.95,22549
+C00053,High value,North West,9,17.5,2880.84,15485
+C00054,High value,North West,27,24.4,4078.01,21943
+C00055,High value,Midlands,1,27.7,3594.66,18833
+C00056,High value,North West,17,26.3,3446.9,14121
+C00057,High value,Scotland,25,28.1,4000.17,17193
+C00058,High value,Wales,22,28.7,2604.05,13574
+C00059,High value,South East,1,22.4,1768.06,6701
+C00060,High value,South East,9,22.9,4778.08,26656
+C00061,High value,North West,16,32.1,3588.37,18932
+C00062,High value,London,10,19.4,3159.5,19092
+C00063,High value,Wales,29,27.5,3488.2,19740
+C00064,High value,Wales,19,27.5,3448.73,16337
+C00065,High value,Midlands,16,24.4,4665.96,28140
+C00066,High value,Scotland,29,29.6,3735.34,18853
+C00067,High value,North West,25,27.7,4513.16,26673
+C00068,High value,Midlands,5,25.1,3918.93,14844
+C00069,High value,South East,27,19.9,2902.38,17715
+C00070,High value,London,13,34.8,3602.8,21501
+C00071,High value,Wales,30,36.3,3998.4,21494
+C00072,High value,London,6,25.8,2918.63,16650
+C00073,High value,North West,16,25.1,2946.21,17888
+C00074,High value,London,19,20.4,4387.36,18152
+C00075,High value,North West,12,18.9,3108.2,17609
+C00076,High value,Midlands,22,20.2,2658.14,16606
+C00077,High value,North West,17,25.2,3799.62,19476
+C00078,High value,North West,11,31.9,3898.62,17419
+C00079,High value,London,1,30.7,4750.59,19155
+C00080,High value,Midlands,35,23.9,3317.05,20206
+C00081,High value,Wales,7,10.9,2796.78,13166
+C00082,High value,London,10,31.4,3187.63,17078
+C00083,High value,North West,16,19.0,2899.79,13417
+C00084,High value,Scotland,29,20.3,3059.25,16403
+C00085,High value,London,7,12.4,2451.84,12343
+C00086,High value,Midlands,11,22.6,3758.83,21426
+C00087,High value,Wales,10,18.5,2684.57,12953
+C00088,High value,Wales,21,25.2,3666.8,18126
+C00089,High value,South East,14,22.2,3776.7,16501
+C00090,High value,Midlands,15,25.1,3576.46,22371
+C00091,High value,Wales,21,22.1,2436.8,9855
+C00092,High value,Wales,27,19.5,3650.2,14284
+C00093,High value,South East,38,24.3,3415.69,16021
+C00094,High value,Midlands,12,27.1,2465.21,11835
+C00095,High value,Midlands,18,35.7,2614.27,14037
+C00096,High value,Midlands,24,11.9,1907.76,11439
+C00097,High value,South East,28,12.4,1528.86,7260
+C00098,High value,South East,30,23.7,2555.51,10799
+C00099,High value,Scotland,23,19.9,3336.03,13911
+C00100,High value,North West,4,28.4,3802.67,16202
+C00101,High value,South East,22,22.5,3700.21,14534
+C00102,High value,Scotland,28,29.6,3867.16,19410
+C00103,High value,London,39,28.3,2611.21,16056
+C00104,High value,London,31,30.4,2679.93,12234
+C00105,High value,Midlands,27,22.2,2151.82,12567
+C00106,High value,South East,34,23.9,2475.54,12846
+C00107,High value,Scotland,8,24.4,2682.31,14412
+C00108,High value,Midlands,19,22.1,1962.06,11919
+C00109,High value,Scotland,1,21.2,2383.65,8903
+C00110,High value,Scotland,8,28.4,4122.41,15009
+C00111,High value,Scotland,12,29.8,2841.06,12157
+C00112,High value,Midlands,39,24.0,3647.94,12966
+C00113,High value,London,46,28.8,3592.63,22204
+C00114,High value,London,22,24.4,1665.0,6757
+C00115,High value,Scotland,12,20.9,2897.34,17829
+C00116,High value,Midlands,19,20.8,2097.2,8325
+C00117,High value,Midlands,37,21.8,3346.43,14627
+C00118,High value,Scotland,11,29.1,3662.09,19763
+C00119,High value,London,3,29.7,4542.25,23875
+C00120,High value,London,26,22.3,2733.02,14802
+C00121,High value,London,22,16.6,3897.85,20862
+C00122,High value,Scotland,22,18.5,3116.93,18324
+C00123,High value,Scotland,42,33.4,2870.05,15729
+C00124,High value,Midlands,1,27.3,4250.76,22620
+C00125,High value,North West,23,17.0,2336.75,12962
+C00126,High value,North West,19,22.0,3753.07,22957
+C00127,High value,London,25,21.0,2300.99,10495
+C00128,High value,North West,22,18.7,3169.54,15420
+C00129,High value,London,21,18.8,3945.51,16861
+C00130,High value,Scotland,5,20.1,3157.03,13183
+C00131,High value,London,1,24.7,3021.27,14727
+C00132,High value,North West,2,27.5,3775.13,20525
+C00133,High value,Midlands,12,19.1,2555.95,16078
+C00134,High value,North West,14,19.5,4131.27,17593
+C00135,High value,Wales,20,33.5,3278.93,20206
+C00136,High value,Wales,36,25.7,3875.23,18817
+C00137,High value,North West,1,18.6,1531.32,8930
+C00138,High value,Midlands,1,24.5,3817.13,13511
+C00139,High value,Wales,21,25.3,3960.38,24330
+C00140,High value,Midlands,21,28.7,2950.65,17538
+C00141,High value,Scotland,15,30.7,2647.52,11138
+C00142,High value,Midlands,44,25.7,3595.59,17535
+C00143,High value,South East,15,22.6,3835.08,16685
+C00144,High value,Midlands,30,31.5,4466.56,23216
+C00145,High value,Scotland,20,31.2,2927.78,17299
+C00146,High value,Wales,22,21.1,4162.69,21675
+C00147,High value,South East,35,29.9,3210.84,11968
+C00148,High value,Scotland,11,25.1,3649.12,12799
+C00149,High value,Scotland,13,17.7,3673.97,15767
+C00150,High value,Wales,20,27.9,3738.52,15854
+C00151,High value,South East,1,18.2,3239.66,13378
+C00152,High value,South East,24,33.4,3023.75,11188
+C00153,High value,Scotland,22,16.2,3758.46,17776
+C00154,High value,Midlands,1,20.5,2213.86,13592
+C00155,High value,Midlands,6,22.4,2096.96,11652
+C00156,High value,Midlands,3,24.0,3666.11,22706
+C00157,High value,South East,16,23.4,3454.75,17666
+C00158,High value,South East,1,15.4,3204.8,19437
+C00159,High value,Scotland,31,23.9,4079.98,19649
+C00160,High value,North West,1,19.5,4084.27,24104
+C00161,High value,London,6,27.7,3138.32,17667
+C00162,High value,Scotland,8,19.0,3330.13,14670
+C00163,High value,London,33,15.6,4436.04,21264
+C00164,High value,Wales,18,26.2,4059.96,22809
+C00165,High value,Wales,14,24.7,3348.15,14419
+C00166,High value,South East,24,22.6,3318.43,17468
+C00167,High value,London,15,19.0,3873.64,15995
+C00168,High value,Scotland,19,21.1,3327.46,19399
+C00169,High value,Scotland,27,22.0,3077.54,14929
+C00170,High value,Midlands,6,24.3,4257.45,19474
+C00171,High value,Scotland,1,23.4,3704.11,21158
+C00172,High value,London,11,18.3,4174.95,17736
+C00173,High value,South East,16,28.9,1349.65,6574
+C00174,High value,Midlands,1,17.5,3364.73,14909
+C00175,High value,Scotland,1,33.7,5092.41,21229
+C00176,High value,Wales,1,25.1,4606.36,16685
+C00177,High value,Wales,1,26.2,1915.03,10951
+C00178,High value,Midlands,42,31.0,3540.21,12758
+C00179,High value,Scotland,29,22.8,4405.22,16648
+C00180,High value,South East,32,27.3,3530.9,20969
+C00181,High value,London,37,28.7,3457.45,15949
+C00182,High value,Scotland,35,31.0,2541.44,15010
+C00183,High value,Midlands,34,21.6,3879.89,19457
+C00184,High value,South East,9,31.7,4080.18,24802
+C00185,High value,Scotland,18,17.6,3912.33,23252
+C00186,High value,North West,28,26.5,3972.48,14226
+C00187,High value,Midlands,21,19.2,2890.97,14418
+C00188,High value,Midlands,23,22.4,2895.96,11555
+C00189,High value,Scotland,29,17.9,3206.97,12510
+C00190,High value,Scotland,44,19.7,2595.8,13932
+C00191,High value,Midlands,33,18.7,3563.04,15918
+C00192,High value,Scotland,29,19.3,4879.1,26508
+C00193,High value,Midlands,23,20.7,2625.56,10933
+C00194,High value,London,27,20.8,3687.08,20124
+C00195,High value,Wales,35,22.8,3172.86,17198
+C00196,High value,North West,33,37.0,3626.22,20258
+C00197,High value,North West,19,19.7,3346.46,13494
+C00198,High value,South East,10,19.8,2186.73,11690
+C00199,High value,Midlands,1,14.6,2620.87,12408
+C00200,High value,North West,10,21.9,3554.77,21496
+C00201,High value,Midlands,18,20.3,3798.85,23629
+C00202,High value,Scotland,29,19.2,3162.26,12525
+C00203,High value,London,28,23.0,4186.85,20144
+C00204,High value,Wales,2,33.9,5167.62,30532
+C00205,High value,Scotland,12,18.6,3650.93,13701
+C00206,High value,Wales,5,31.4,3732.35,17816
+C00207,High value,Wales,18,19.3,2440.49,11080
+C00208,High value,Midlands,30,24.1,3522.26,21049
+C00209,High value,Wales,10,31.3,3054.33,14661
+C00210,High value,London,4,22.0,3959.71,15409
+C00211,High value,Scotland,13,30.6,4821.62,18707
+C00212,High value,Midlands,32,13.9,4194.97,22863
+C00213,High value,Scotland,1,28.8,3961.44,14963
+C00214,High value,Wales,28,13.4,1835.59,7862
+C00215,High value,Wales,9,28.7,4859.63,18361
+C00216,High value,London,11,15.3,4128.72,21905
+C00217,High value,Wales,12,26.3,4430.82,21149
+C00218,High value,London,34,26.0,4412.57,27442
+C00219,High value,Midlands,20,19.6,3820.01,14104
+C00220,High value,North West,29,25.1,3875.22,23000
+C00221,High value,South East,21,13.5,2477.2,15496
+C00222,High value,London,13,13.6,2630.79,10018
+C00223,High value,North West,26,28.2,3749.7,13290
+C00224,High value,Wales,2,33.3,4106.09,20420
+C00225,High value,South East,30,26.5,2853.72,13600
+C00226,High value,Wales,30,25.7,3357.21,19113
+C00227,High value,Scotland,5,23.1,3565.99,17263
+C00228,High value,Scotland,17,21.4,3406.89,18720
+C00229,High value,Wales,22,25.1,3203.32,13678
+C00230,High value,Midlands,15,15.9,2469.9,11279
+C00231,High value,Wales,5,22.7,3057.37,16708
+C00232,High value,South East,15,18.0,2146.96,11848
+C00233,High value,Wales,1,29.3,2449.25,11307
+C00234,High value,North West,30,29.2,3984.74,21367
+C00235,High value,Scotland,36,21.4,2952.68,11040
+C00236,High value,Midlands,19,32.1,4337.07,25038
+C00237,High value,Wales,46,29.5,2616.21,12166
+C00238,High value,London,11,29.9,3329.28,20190
+C00239,High value,Wales,34,22.4,2747.8,11254
+C00240,High value,Midlands,31,12.4,3049.19,13661
+C00241,High value,Midlands,4,31.5,2525.98,14818
+C00242,High value,Wales,8,17.5,2442.32,8728
+C00243,High value,North West,23,19.8,3655.41,15956
+C00244,High value,Wales,35,21.7,3626.59,14148
+C00245,High value,South East,13,25.9,3320.49,18559
+C00246,High value,North West,16,19.3,3712.15,14629
+C00247,High value,South East,14,13.8,2682.16,9783
+C00248,High value,Scotland,16,24.1,3138.57,11702
+C00249,High value,London,11,18.1,2602.03,14607
+C00250,High value,Midlands,21,22.4,3574.98,19301
+C00251,High value,London,1,24.7,4063.54,21041
+C00252,High value,North West,21,28.1,5142.38,29047
+C00253,High value,Midlands,17,26.9,2734.77,10561
+C00254,High value,North West,18,22.0,2489.06,14520
+C00255,High value,North West,39,29.2,3700.29,22495
+C00256,High value,Scotland,19,17.0,2662.86,14610
+C00257,High value,Scotland,15,29.9,4017.32,24720
+C00258,High value,London,16,30.6,2257.57,8459
+C00259,High value,North West,19,32.0,2985.01,13041
+C00260,High value,Wales,16,25.9,4631.27,17200
+C00261,High value,Wales,29,28.7,4087.14,22629
+C00262,High value,South East,12,25.8,2958.38,11567
+C00263,High value,Wales,21,27.1,3498.51,21563
+C00264,High value,Scotland,13,14.0,3001.42,16891
+C00265,High value,Wales,8,12.7,1629.86,7180
+C00266,High value,Wales,1,21.4,3945.1,18988
+C00267,High value,Scotland,15,28.5,4323.43,18890
+C00268,High value,Wales,23,29.6,3741.0,16101
+C00269,High value,Midlands,34,15.1,2380.04,11414
+C00270,High value,Midlands,9,33.4,3411.8,12333
+C00271,High value,London,12,19.7,2791.91,10255
+C00272,High value,London,19,28.3,2293.5,14336
+C00273,High value,Midlands,11,23.9,3366.43,15924
+C00274,High value,Scotland,31,19.6,2760.12,16755
+C00275,High value,London,9,27.0,2469.41,13119
+C00276,High value,North West,6,20.3,3997.43,18318
+C00277,High value,Midlands,15,15.3,4197.39,18609
+C00278,High value,Wales,4,17.1,1747.11,7632
+C00279,High value,Scotland,14,18.3,1767.95,7720
+C00280,High value,Wales,2,20.7,2737.17,10560
+C00281,High value,Scotland,27,15.4,2676.32,14208
+C00282,High value,South East,5,22.9,3306.87,14434
+C00283,High value,North West,7,32.6,4855.12,19099
+C00284,High value,Wales,70,25.5,3153.96,17846
+C00285,High value,Scotland,20,22.9,2696.62,10428
+C00286,High value,Midlands,35,26.1,3810.32,20728
+C00287,High value,South East,21,20.6,2559.87,13807
+C00288,High value,Scotland,23,32.1,3501.03,19629
+C00289,High value,South East,19,28.4,4734.2,28553
+C00290,High value,Scotland,13,14.2,4220.4,26405
+C00291,High value,South East,21,13.7,2217.66,8768
+C00292,High value,Wales,18,25.0,3039.03,12764
+C00293,High value,London,7,24.7,4398.97,21751
+C00294,High value,Midlands,10,21.8,4430.29,18890
+C00295,High value,North West,26,29.1,4033.91,19214
+C00296,High value,North West,15,29.6,3278.51,15114
+C00297,High value,Wales,21,43.3,4013.15,24506
+C00298,High value,North West,20,17.8,2107.71,8189
+C00299,High value,Midlands,30,20.6,3801.34,18298
+C00300,High value,South East,1,26.4,3466.84,14618
+C00301,High value,North West,1,21.1,2908.51,12526
+C00302,High value,Midlands,17,27.2,3845.74,20340
+C00303,High value,Midlands,12,24.8,4171.73,14793
+C00304,High value,London,9,15.5,2513.21,10846
+C00305,High value,North West,11,21.1,2346.95,8777
+C00306,High value,Midlands,27,30.7,3980.06,19584
+C00307,High value,North West,7,22.0,2303.03,14387
+C00308,High value,South East,21,23.9,2698.32,9955
+C00309,High value,London,16,15.6,3178.0,14082
+C00310,High value,Wales,1,20.7,3738.63,19814
+C00311,High value,Scotland,1,26.0,2576.42,9473
+C00312,High value,London,2,27.9,3624.89,20717
+C00313,High value,London,14,28.7,2516.94,12146
+C00314,High value,London,31,24.1,2907.43,13082
+C00315,High value,Wales,25,20.0,3674.78,22014
+C00316,High value,South East,26,10.0,3449.55,15348
+C00317,High value,Wales,4,24.2,4119.94,23662
+C00318,High value,South East,11,18.3,3472.77,21831
+C00319,High value,Midlands,8,22.5,4202.4,18315
+C00320,High value,Scotland,27,23.3,2916.78,13834
+C00321,High value,London,41,27.2,1995.72,8519
+C00322,High value,Wales,52,31.6,4117.57,18600
+C00323,High value,London,5,10.6,3421.64,19461
+C00324,High value,North West,31,27.1,3849.53,20427
+C00325,High value,North West,6,29.2,2735.03,16839
+C00326,High value,North West,7,21.7,3366.49,13081
+C00327,High value,Scotland,4,29.2,3568.58,19841
+C00328,High value,North West,24,10.8,2659.9,10187
+C00329,High value,South East,16,20.0,2378.24,14974
+C00330,High value,Wales,6,32.4,4651.6,22168
+C00331,High value,North West,13,24.9,2833.63,12453
+C00332,High value,North West,1,22.1,2427.55,10470
+C00333,High value,Midlands,29,16.4,3950.92,22609
+C00334,High value,South East,10,26.8,5476.52,31314
+C00335,High value,Midlands,19,22.7,2673.06,15371
+C00336,High value,Scotland,14,32.5,4759.95,17536
+C00337,High value,London,37,24.0,2175.98,12632
+C00338,High value,Scotland,15,27.7,3941.03,14612
+C00339,High value,South East,13,19.0,4037.91,21366
+C00340,High value,London,4,24.4,3008.41,14765
+C00341,High value,South East,25,17.7,2968.3,18158
+C00342,High value,London,25,15.9,4407.11,26468
+C00343,High value,Midlands,18,32.5,3357.07,14596
+C00344,High value,Midlands,16,31.2,4200.99,21665
+C00345,High value,Midlands,28,31.3,3474.98,20360
+C00346,High value,Wales,2,35.6,4181.0,15584
+C00347,High value,London,19,19.3,3395.8,17762
+C00348,High value,North West,33,15.6,3035.01,13084
+C00349,High value,London,1,25.2,3172.77,11753
+C00350,High value,North West,9,27.4,4103.71,19700
+C00351,High value,Scotland,10,20.8,3005.91,17765
+C00352,High value,North West,1,27.9,4010.46,20344
+C00353,High value,Scotland,18,27.1,3115.97,11347
+C00354,High value,South East,20,28.1,2975.22,18433
+C00355,High value,Midlands,29,11.1,2762.76,10902
+C00356,High value,London,10,11.9,3175.2,15535
+C00357,High value,London,31,21.6,3740.53,16788
+C00358,High value,Wales,16,22.4,4222.76,24745
+C00359,High value,Wales,3,25.4,3840.85,22933
+C00360,High value,London,8,19.9,3729.08,13524
+C00361,High value,Midlands,11,22.3,3034.08,14903
+C00362,High value,London,16,20.7,5293.7,28613
+C00363,High value,North West,22,26.0,1998.81,10118
+C00364,High value,Midlands,43,24.1,2898.82,14278
+C00365,High value,South East,21,24.4,3090.36,15310
+C00366,High value,Midlands,1,18.3,2611.35,11538
+C00367,High value,Midlands,13,29.4,2576.62,13302
+C00368,High value,North West,3,27.5,2739.05,15022
+C00369,High value,North West,16,24.2,3202.12,14942
+C00370,High value,London,23,26.8,2394.62,12994
+C00371,High value,South East,10,21.3,2205.45,11291
+C00372,High value,Wales,1,22.6,2391.64,9513
+C00373,High value,Midlands,14,13.8,2003.87,8372
+C00374,High value,North West,33,26.7,3361.74,11944
+C00375,High value,Scotland,7,27.0,3717.06,19374
+C00376,High value,South East,32,30.8,2814.44,10341
+C00377,High value,South East,3,23.1,4122.49,18778
+C00378,High value,Wales,18,16.8,3289.87,16547
+C00379,High value,South East,21,14.5,2311.58,12039
+C00380,High value,North West,4,28.7,3397.23,14730
+C00381,High value,Midlands,20,14.7,2690.89,13033
+C00382,High value,London,5,33.8,3246.41,13848
+C00383,High value,South East,5,20.7,3782.3,16893
+C00384,High value,North West,11,22.8,3868.3,21274
+C00385,High value,North West,34,20.0,3190.77,18565
+C00386,High value,Midlands,10,32.5,3256.74,12650
+C00387,High value,South East,17,19.6,4625.59,19112
+C00388,High value,London,26,29.9,3828.61,21090
+C00389,High value,Wales,15,21.0,5126.63,20210
+C00390,High value,South East,11,35.3,3241.77,15680
+C00391,High value,Wales,18,19.1,3108.68,17572
+C00392,High value,London,22,17.4,2705.43,14947
+C00393,High value,Scotland,24,22.1,3604.26,21896
+C00394,High value,North West,13,24.9,2959.63,16566
+C00395,High value,North West,19,23.4,3033.53,18967
+C00396,High value,South East,16,15.8,3313.96,16464
+C00397,High value,Scotland,26,18.6,3263.26,12906
+C00398,High value,North West,23,18.3,2237.32,7919
+C00399,High value,Scotland,22,16.5,3079.18,18159
+C00400,High value,Wales,11,27.4,2748.56,10287
+C00401,High value,Scotland,46,33.6,2118.85,7457
+C00402,High value,North West,22,24.9,4563.58,28163
+C00403,High value,Wales,4,20.1,3157.04,13138
+C00404,High value,Midlands,29,27.8,3916.66,18154
+C00405,High value,North West,40,18.2,3260.06,17240
+C00406,High value,Scotland,1,21.1,3611.53,22321
+C00407,High value,Scotland,29,32.2,3115.42,15695
+C00408,High value,South East,10,24.5,2121.49,12329
+C00409,High value,North West,11,16.7,3266.27,16262
+C00410,High value,Midlands,4,30.8,4057.97,14905
+C00411,High value,Scotland,25,21.7,2858.93,16846
+C00412,High value,London,16,27.0,3797.91,19494
+C00413,High value,Midlands,28,20.1,3555.2,16579
+C00414,High value,Wales,20,30.2,3886.73,22385
+C00415,High value,Scotland,27,24.6,3875.77,14358
+C00416,High value,London,18,22.8,3521.83,22130
+C00417,High value,Wales,32,23.4,3234.56,12548
+C00418,High value,Scotland,25,32.6,3565.73,16677
+C00419,High value,Midlands,1,28.3,3324.58,20611
+C00420,High value,Midlands,21,32.0,4709.46,18047
+C00421,High value,North West,13,25.9,4754.55,26708
+C00422,High value,Scotland,15,14.7,3244.8,15210
+C00423,High value,Wales,22,19.9,2878.53,17630
+C00424,High value,Midlands,26,24.1,3187.67,17049
+C00425,High value,London,21,11.6,3337.88,12626
+C00426,High value,South East,19,15.5,3366.88,20007
+C00427,High value,London,17,17.9,3165.08,18732
+C00428,High value,Wales,26,36.1,5557.38,23095
+C00429,High value,South East,4,20.4,3397.51,14145
+C00430,High value,North West,1,31.3,3573.86,16647
+C00431,High value,Scotland,45,29.5,4700.49,24691
+C00432,High value,Wales,1,22.3,3215.58,14356
+C00433,High value,Scotland,8,14.7,2685.05,10520
+C00434,High value,South East,29,27.0,4276.2,17852
+C00435,High value,Scotland,12,32.9,4250.69,21571
+C00436,High value,South East,1,21.0,3107.16,12988
+C00437,High value,South East,16,26.1,2804.41,14021
+C00438,High value,London,22,29.5,3798.15,19727
+C00439,High value,Scotland,23,21.2,3331.98,16876
+C00440,High value,London,1,27.3,4968.79,21609
+C00441,High value,South East,20,27.8,3449.23,19358
+C00442,High value,South East,1,20.9,2205.76,10170
+C00443,High value,North West,1,20.7,2593.93,11688
+C00444,High value,Wales,28,16.1,4163.0,20002
+C00445,High value,Midlands,1,26.2,4025.95,18757
+C00446,High value,Midlands,12,30.5,2751.51,9755
+C00447,High value,Scotland,32,20.9,2884.39,12759
+C00448,High value,Wales,21,19.9,2973.61,14992
+C00449,High value,Scotland,7,32.7,2587.69,14416
+C00450,High value,Wales,19,29.2,4655.27,18500
+C00451,High value,Midlands,11,22.9,4953.14,30612
+C00452,High value,Wales,1,35.4,4100.29,25203
+C00453,High value,South East,19,24.2,4009.87,14798
+C00454,High value,Midlands,31,31.1,3692.15,16781
+C00455,High value,Midlands,1,13.4,3810.78,13506
+C00456,High value,North West,9,23.1,3290.41,16394
+C00457,High value,South East,8,22.9,2233.16,10508
+C00458,High value,South East,18,26.1,3640.73,14260
+C00459,High value,Scotland,11,20.9,2474.59,9209
+C00460,High value,North West,35,19.7,3319.89,18101
+C00461,High value,London,9,13.3,2146.9,12080
+C00462,High value,Wales,1,19.2,3548.5,17149
+C00463,High value,Midlands,25,24.2,2621.99,14936
+C00464,High value,London,18,40.0,3733.05,22419
+C00465,High value,London,21,36.8,3551.12,15124
+C00466,High value,Wales,3,22.1,2761.71,13865
+C00467,High value,Wales,45,26.8,2769.09,14243
+C00468,High value,Midlands,46,29.9,2145.38,9307
+C00469,High value,Wales,19,35.4,2670.74,11828
+C00470,High value,Midlands,34,35.4,5428.34,30006
+C00471,High value,Midlands,18,18.5,3554.9,13199
+C00472,High value,North West,23,25.8,1701.17,7844
+C00473,High value,Scotland,27,24.9,4207.65,18919
+C00474,High value,London,17,15.8,3469.16,18560
+C00475,High value,Scotland,19,19.0,3167.22,13462
+C00476,High value,North West,23,22.0,2315.15,12898
+C00477,High value,London,15,26.0,4151.79,23382
+C00478,High value,Midlands,13,26.6,3797.6,18064
+C00479,High value,North West,12,23.8,4103.68,21222
+C00480,High value,London,26,24.6,3301.45,15380
+C00481,High value,Wales,16,16.4,3577.96,17743
+C00482,High value,Scotland,18,21.6,3524.64,15308
+C00483,High value,North West,22,26.9,3379.27,19233
+C00484,High value,Midlands,28,24.0,3884.81,20396
+C00485,High value,Midlands,8,19.6,3236.05,14912
+C00486,High value,Scotland,19,15.3,3966.64,18773
+C00487,High value,Wales,28,13.1,3297.91,14504
+C00488,High value,North West,17,25.6,4002.54,24819
+C00489,High value,Scotland,13,32.9,2801.99,11709
+C00490,High value,Midlands,19,22.0,4487.02,20290
+C00491,High value,Wales,31,43.6,4653.55,16638
+C00492,High value,North West,37,14.9,3256.56,15396
+C00493,High value,South East,20,22.0,3999.21,21533
+C00494,High value,Wales,1,21.0,2853.18,15248
+C00495,High value,Midlands,8,26.7,2571.47,13192
+C00496,High value,Midlands,23,10.5,2755.12,14979
+C00497,High value,London,49,27.6,3121.31,16114
+C00498,High value,South East,1,27.5,3835.6,20563
+C00499,High value,North West,16,22.6,4349.84,20092
+C00500,High value,North West,16,30.2,3450.01,12177
+C00501,High value,North West,21,33.8,2753.9,11343
+C00502,High value,Midlands,11,16.0,3801.0,19568
+C00503,High value,London,42,41.0,3456.77,21009
+C00504,High value,North West,19,34.6,4894.01,19070
+C00505,High value,Wales,6,32.8,3068.42,11578
+C00506,High value,Wales,17,22.3,2711.45,11770
+C00507,High value,Wales,36,31.7,3039.4,12037
+C00508,High value,Midlands,4,24.1,3798.81,14999
+C00509,High value,Wales,6,27.0,3770.94,15166
+C00510,High value,South East,2,22.7,3377.29,17628
+C00511,High value,Wales,6,26.0,3925.84,16800
+C00512,High value,Midlands,18,24.8,3156.43,11947
+C00513,High value,Midlands,22,28.9,3029.9,17923
+C00514,High value,Scotland,20,29.1,3434.36,15758
+C00515,High value,Wales,9,21.1,3792.61,21915
+C00516,High value,Wales,4,28.2,2038.56,10504
+C00517,High value,Midlands,22,26.2,3297.86,17946
+C00518,High value,Scotland,25,17.8,3720.96,19012
+C00519,High value,Midlands,25,31.8,3322.87,20933
+C00520,High value,Scotland,2,26.5,3959.75,15934
+C00521,High value,Scotland,1,15.8,3801.54,15382
+C00522,High value,Wales,14,30.9,3450.31,16858
+C00523,High value,South East,1,24.5,2982.19,15159
+C00524,High value,South East,21,22.7,3851.4,19277
+C00525,High value,Midlands,21,16.4,3171.41,15636
+C00526,High value,North West,4,31.8,4467.53,25935
+C00527,High value,Scotland,1,21.4,3302.08,13578
+C00528,High value,North West,5,33.0,4512.24,25286
+C00529,High value,London,20,22.9,3204.41,11996
+C00530,High value,Midlands,42,24.7,2880.17,16618
+C00531,High value,South East,9,12.9,2348.15,12270
+C00532,High value,Midlands,10,28.2,2361.75,12036
+C00533,High value,North West,15,31.3,3165.24,13643
+C00534,High value,London,35,30.9,3387.75,20396
+C00535,High value,Wales,31,31.5,3452.84,14766
+C00536,High value,Wales,20,32.4,4700.49,19738
+C00537,High value,Wales,14,28.1,3910.45,15243
+C00538,High value,Wales,8,23.3,4049.84,19300
+C00539,High value,North West,24,14.1,2010.41,10947
+C00540,High value,Wales,29,17.3,3320.93,17035
+C00541,High value,Midlands,45,32.9,2998.33,17631
+C00542,High value,Scotland,4,11.4,3957.03,22989
+C00543,High value,Scotland,15,35.2,3325.86,16913
+C00544,High value,London,31,27.0,2040.46,11497
+C00545,High value,Scotland,35,30.2,3257.02,19221
+C00546,High value,Wales,20,6.1,3229.06,15170
+C00547,High value,London,39,17.3,2635.99,15696
+C00548,High value,Wales,41,21.4,2818.42,12799
+C00549,High value,Wales,24,29.2,3197.03,13286
+C00550,High value,London,35,26.3,3619.94,14833
+C00551,High value,London,24,27.2,3446.54,18776
+C00552,High value,London,17,30.3,3556.2,13763
+C00553,High value,North West,19,26.6,3575.44,16194
+C00554,High value,South East,13,30.7,4544.78,25491
+C00555,High value,South East,7,17.0,3898.77,20308
+C00556,High value,South East,24,15.1,3414.56,17956
+C00557,High value,South East,33,20.0,2741.64,16479
+C00558,High value,Scotland,21,24.1,2430.82,11122
+C00559,High value,Midlands,15,27.0,3431.53,17328
+C00560,High value,London,23,23.1,2760.69,16938
+C00561,High value,Wales,28,16.8,2803.14,13810
+C00562,High value,South East,32,17.3,3725.62,21216
+C00563,High value,London,12,24.1,2423.98,12070
+C00564,High value,Midlands,18,37.9,3783.22,14639
+C00565,High value,London,5,27.6,3872.4,24259
+C00566,High value,London,30,26.2,3476.66,14721
+C00567,High value,Scotland,44,17.2,2625.59,14429
+C00568,High value,Midlands,24,18.6,3472.11,18380
+C00569,High value,South East,11,20.8,2923.18,11894
+C00570,High value,Wales,31,18.2,2969.36,15666
+C00571,High value,London,16,22.0,2920.46,17143
+C00572,High value,Midlands,1,24.5,4969.7,19008
+C00573,High value,Wales,10,20.7,3169.57,12154
+C00574,High value,North West,1,24.6,3463.9,16938
+C00575,High value,North West,1,22.5,3222.29,12423
+C00576,High value,North West,11,23.7,2998.26,18049
+C00577,High value,London,21,19.5,4198.15,21472
+C00578,High value,Midlands,25,16.8,3093.36,11307
+C00579,High value,London,22,27.0,3698.43,19925
+C00580,High value,London,1,25.0,4225.75,15311
+C00581,High value,London,18,30.8,3334.92,20367
+C00582,High value,Scotland,23,11.4,2351.93,13109
+C00583,High value,Midlands,19,28.5,4069.76,23657
+C00584,High value,South East,13,19.1,3754.88,22625
+C00585,High value,North West,20,31.1,4324.25,25753
+C00586,High value,Scotland,21,24.8,2793.23,10452
+C00587,High value,Scotland,26,24.2,2819.44,14784
+C00588,High value,South East,14,13.2,4303.47,27085
+C00589,High value,London,16,16.5,3173.9,19395
+C00590,High value,London,11,24.6,4025.51,23553
+C00591,High value,London,19,23.9,2607.37,14435
+C00592,High value,London,1,28.8,5471.7,25583
+C00593,High value,Midlands,25,23.4,3298.1,13681
+C00594,High value,Wales,22,13.1,3697.11,17686
+C00595,High value,Midlands,23,25.4,4280.98,15880
+C00596,High value,North West,35,32.2,4080.46,15775
+C00597,High value,North West,17,29.2,3909.58,21733
+C00598,High value,South East,1,19.8,3341.94,20526
+C00599,High value,Scotland,21,16.2,3282.34,15771
+C00600,High value,Scotland,24,28.1,3977.65,22501
+C00601,Regular,Wales,53,11.2,1378.98,5340
+C00602,Regular,North West,70,8.7,1098.23,4582
+C00603,Regular,North West,83,12.8,1587.88,4125
+C00604,Regular,Scotland,55,8.4,1950.0,4996
+C00605,Regular,South East,79,6.0,948.66,2565
+C00606,Regular,South East,57,9.8,1275.06,5179
+C00607,Regular,Midlands,92,13.1,1088.84,4126
+C00608,Regular,London,85,3.3,651.17,1726
+C00609,Regular,North West,72,13.1,1385.28,5811
+C00610,Regular,Midlands,50,14.1,1818.01,4729
+C00611,Regular,North West,23,11.0,1003.24,3364
+C00612,Regular,South East,61,9.4,1360.27,4162
+C00613,Regular,Midlands,94,9.9,1221.77,4061
+C00614,Regular,Scotland,81,7.7,1143.66,3735
+C00615,Regular,London,76,14.9,1054.74,4329
+C00616,Regular,Midlands,54,14.2,1358.77,4373
+C00617,Regular,London,65,6.3,862.11,2622
+C00618,Regular,North West,51,8.1,1310.58,5624
+C00619,Regular,South East,132,12.3,877.29,3947
+C00620,Regular,Wales,52,12.5,1545.69,4688
+C00621,Regular,North West,139,12.5,1414.64,5793
+C00622,Regular,South East,108,17.5,1202.38,3424
+C00623,Regular,Wales,22,6.0,874.51,2236
+C00624,Regular,South East,8,6.7,1357.62,3780
+C00625,Regular,London,84,4.3,1312.21,3741
+C00626,Regular,Midlands,54,10.8,1355.29,3981
+C00627,Regular,South East,38,9.4,839.72,2672
+C00628,Regular,London,30,14.0,1137.02,3578
+C00629,Regular,North West,83,12.8,1409.38,5007
+C00630,Regular,Scotland,69,11.8,1230.84,5396
+C00631,Regular,Scotland,41,7.6,811.49,3217
+C00632,Regular,South East,121,11.0,620.66,2357
+C00633,Regular,Wales,51,5.3,1307.09,4201
+C00634,Regular,Wales,38,7.4,1031.21,3211
+C00635,Regular,Midlands,56,10.8,1656.7,6040
+C00636,Regular,Midlands,60,13.0,1410.97,6127
+C00637,Regular,South East,66,12.8,1464.34,5844
+C00638,Regular,London,55,7.5,1307.05,4931
+C00639,Regular,South East,76,5.0,988.59,2494
+C00640,Regular,London,38,9.0,1277.55,3850
+C00641,Regular,Scotland,59,8.1,891.9,2526
+C00642,Regular,London,70,6.1,1074.05,3858
+C00643,Regular,Scotland,81,4.3,607.33,1792
+C00644,Regular,North West,40,14.2,1612.17,4981
+C00645,Regular,London,59,10.4,939.63,2651
+C00646,Regular,Midlands,104,2.9,772.77,2076
+C00647,Regular,Midlands,113,8.4,1078.66,4107
+C00648,Regular,South East,35,10.3,1136.91,3073
+C00649,Regular,Wales,85,8.5,601.55,2154
+C00650,Regular,Midlands,41,8.6,1350.36,3510
+C00651,Regular,Wales,32,7.9,1158.6,3100
+C00652,Regular,South East,61,6.6,872.5,2350
+C00653,Regular,Scotland,70,11.2,1703.66,5310
+C00654,Regular,Wales,84,2.7,1029.72,3120
+C00655,Regular,North West,45,8.5,1346.79,4568
+C00656,Regular,Midlands,44,6.8,1167.96,4875
+C00657,Regular,Midlands,99,10.9,1201.16,3829
+C00658,Regular,London,51,4.7,1231.89,3640
+C00659,Regular,Scotland,85,4.3,712.63,3017
+C00660,Regular,Scotland,75,7.0,1016.97,3150
+C00661,Regular,Wales,92,6.3,512.59,2102
+C00662,Regular,Scotland,59,10.7,1231.5,5417
+C00663,Regular,Scotland,94,16.7,1951.71,5372
+C00664,Regular,Wales,52,13.0,1526.66,4433
+C00665,Regular,London,80,12.2,1131.45,4656
+C00666,Regular,North West,96,6.7,1257.06,3963
+C00667,Regular,Scotland,5,8.2,1549.42,5694
+C00668,Regular,Midlands,63,10.3,1328.11,4825
+C00669,Regular,North West,63,1.9,1193.92,3226
+C00670,Regular,North West,45,13.2,950.16,4044
+C00671,Regular,South East,39,11.3,1217.11,3713
+C00672,Regular,Scotland,56,5.7,780.63,2579
+C00673,Regular,North West,77,7.3,1144.68,4970
+C00674,Regular,North West,101,14.5,1460.3,4536
+C00675,Regular,North West,87,4.1,704.62,2083
+C00676,Regular,North West,1,12.2,1262.77,5243
+C00677,Regular,Scotland,55,4.9,1255.59,5433
+C00678,Regular,London,74,8.7,730.26,3092
+C00679,Regular,Midlands,45,8.8,1057.41,2930
+C00680,Regular,South East,88,9.5,1157.79,3341
+C00681,Regular,North West,70,7.1,542.42,2120
+C00682,Regular,London,75,6.7,1303.03,4292
+C00683,Regular,Scotland,52,7.0,816.99,3612
+C00684,Regular,North West,62,6.6,959.6,2713
+C00685,Regular,Midlands,60,4.4,940.46,2658
+C00686,Regular,South East,84,9.4,1018.11,2996
+C00687,Regular,Wales,51,6.9,1050.53,4266
+C00688,Regular,Midlands,63,15.6,1475.85,5600
+C00689,Regular,Wales,66,7.0,615.28,2415
+C00690,Regular,North West,22,7.0,888.04,2889
+C00691,Regular,Midlands,43,9.5,1099.99,4122
+C00692,Regular,North West,89,11.9,1481.55,5666
+C00693,Regular,North West,29,7.5,1038.83,3598
+C00694,Regular,North West,97,13.3,1324.04,5591
+C00695,Regular,South East,26,2.9,836.61,2957
+C00696,Regular,Midlands,47,13.4,1078.14,4425
+C00697,Regular,North West,42,10.5,1277.34,4464
+C00698,Regular,London,64,8.8,1442.89,4728
+C00699,Regular,Wales,1,4.2,1082.3,4250
+C00700,Regular,Wales,39,3.9,876.18,3779
+C00701,Regular,North West,47,11.0,1442.15,5216
+C00702,Regular,Midlands,92,10.3,1309.65,3952
+C00703,Regular,North West,61,7.1,1003.44,2688
+C00704,Regular,North West,40,10.0,1739.79,5813
+C00705,Regular,Wales,37,11.9,1168.14,3046
+C00706,Regular,South East,63,2.8,617.22,1631
+C00707,Regular,South East,10,9.0,1018.16,2655
+C00708,Regular,Midlands,74,10.3,1364.25,4527
+C00709,Regular,London,117,3.5,1282.08,3668
+C00710,Regular,Wales,99,4.8,1039.68,2967
+C00711,Regular,South East,86,10.2,1340.05,4895
+C00712,Regular,Midlands,102,3.9,1005.54,2691
+C00713,Regular,Midlands,36,10.3,964.19,2419
+C00714,Regular,North West,72,9.9,1454.92,3678
+C00715,Regular,South East,61,5.3,1055.95,4189
+C00716,Regular,Scotland,60,8.0,917.68,2531
+C00717,Regular,Scotland,39,8.9,1250.79,5500
+C00718,Regular,Wales,63,8.4,810.72,2575
+C00719,Regular,Scotland,83,8.9,1376.58,3960
+C00720,Regular,South East,46,11.1,1287.13,5753
+C00721,Regular,London,57,5.0,1141.71,4340
+C00722,Regular,Midlands,81,6.0,1321.1,5341
+C00723,Regular,Wales,137,11.9,1097.84,2788
+C00724,Regular,North West,29,11.4,1464.58,4023
+C00725,Regular,Wales,46,9.3,1067.25,3311
+C00726,Regular,Wales,27,11.9,1483.95,5558
+C00727,Regular,London,91,13.3,1679.02,4593
+C00728,Regular,North West,84,9.8,912.63,3393
+C00729,Regular,Midlands,93,2.0,731.19,2063
+C00730,Regular,North West,80,7.0,1102.2,4812
+C00731,Regular,Scotland,60,9.5,1305.75,4764
+C00732,Regular,Wales,66,9.8,1301.91,4587
+C00733,Regular,North West,51,2.6,746.35,3325
+C00734,Regular,London,38,7.7,1152.89,3285
+C00735,Regular,London,74,6.7,967.54,2643
+C00736,Regular,North West,36,10.6,1254.0,4758
+C00737,Regular,North West,43,11.5,895.52,2405
+C00738,Regular,North West,24,10.2,1469.79,6503
+C00739,Regular,South East,80,5.1,752.77,3216
+C00740,Regular,South East,64,12.5,1582.13,4141
+C00741,Regular,Midlands,104,13.0,1004.86,3393
+C00742,Regular,Wales,64,6.9,1265.7,3237
+C00743,Regular,Scotland,89,5.7,1279.77,4449
+C00744,Regular,London,42,8.0,1173.82,4472
+C00745,Regular,Wales,49,4.7,1044.14,3790
+C00746,Regular,Midlands,27,11.5,1056.43,4095
+C00747,Regular,Scotland,90,11.5,1281.67,4938
+C00748,Regular,Midlands,83,12.3,1704.76,7303
+C00749,Regular,South East,94,10.4,1516.94,6377
+C00750,Regular,North West,101,12.1,1441.51,4298
+C00751,Regular,Scotland,77,9.7,1042.37,3096
+C00752,Regular,Scotland,40,5.3,1149.5,3076
+C00753,Regular,Scotland,48,9.5,821.27,2222
+C00754,Regular,Midlands,61,12.7,1400.89,5816
+C00755,Regular,Scotland,95,8.0,1398.48,5327
+C00756,Regular,South East,40,11.7,1212.71,3163
+C00757,Regular,North West,73,6.8,1129.03,4441
+C00758,Regular,South East,26,8.7,1042.44,4189
+C00759,Regular,North West,83,9.0,870.18,3129
+C00760,Regular,South East,27,8.7,1093.09,3092
+C00761,Regular,London,78,4.6,834.49,2413
+C00762,Regular,South East,70,11.7,1178.27,4023
+C00763,Regular,Midlands,58,7.6,613.43,2561
+C00764,Regular,Midlands,89,13.5,1744.24,5956
+C00765,Regular,Scotland,73,8.6,842.81,2189
+C00766,Regular,South East,60,10.8,999.66,3515
+C00767,Regular,Midlands,54,7.3,1159.23,4423
+C00768,Regular,Midlands,49,11.6,1078.27,3525
+C00769,Regular,Scotland,97,6.4,978.58,4346
+C00770,Regular,Wales,124,9.6,1068.62,3959
+C00771,Regular,Midlands,12,8.6,946.59,3761
+C00772,Regular,North West,54,7.6,997.1,3737
+C00773,Regular,South East,38,2.8,1205.82,5366
+C00774,Regular,London,89,4.4,985.51,3099
+C00775,Regular,Wales,62,5.2,486.65,1908
+C00776,Regular,Scotland,30,8.9,678.02,2083
+C00777,Regular,South East,71,5.6,1187.61,4561
+C00778,Regular,Wales,62,8.4,1611.22,7197
+C00779,Regular,London,60,14.7,1330.2,5330
+C00780,Regular,Wales,41,6.9,1318.29,4920
+C00781,Regular,Wales,57,3.0,924.54,2751
+C00782,Regular,Scotland,28,8.0,1512.01,6582
+C00783,Regular,Wales,22,11.6,1018.06,2655
+C00784,Regular,Scotland,1,9.0,1540.54,6257
+C00785,Regular,Midlands,87,3.2,842.81,3380
+C00786,Regular,South East,25,8.9,1002.73,3961
+C00787,Regular,Midlands,56,10.8,1183.44,3370
+C00788,Regular,North West,45,9.6,1256.34,3842
+C00789,Regular,South East,83,11.9,1288.56,5050
+C00790,Regular,Wales,82,15.7,1595.45,5893
+C00791,Regular,Wales,32,6.1,724.18,2329
+C00792,Regular,London,62,8.1,1311.88,3762
+C00793,Regular,South East,63,7.3,856.48,2740
+C00794,Regular,Midlands,53,7.6,924.83,2855
+C00795,Regular,Wales,1,7.1,1430.11,3600
+C00796,Regular,Midlands,1,7.7,1288.28,4876
+C00797,Regular,London,60,9.9,1406.04,5754
+C00798,Regular,Midlands,44,6.2,1280.25,3925
+C00799,Regular,Wales,71,6.4,1167.4,3021
+C00800,Regular,South East,34,10.3,1523.07,6696
+C00801,Regular,Wales,102,8.1,786.15,2297
+C00802,Regular,London,53,9.9,700.88,2347
+C00803,Regular,London,73,14.4,1705.9,5750
+C00804,Regular,North West,32,9.0,1028.44,3516
+C00805,Regular,South East,69,9.3,1277.63,3374
+C00806,Regular,Scotland,77,11.6,1142.92,3888
+C00807,Regular,Midlands,56,9.2,1039.95,3934
+C00808,Regular,London,33,13.6,1529.73,3964
+C00809,Regular,North West,41,11.8,1192.6,4428
+C00810,Regular,Wales,97,9.3,914.64,3009
+C00811,Regular,Midlands,74,9.3,1274.57,5217
+C00812,Regular,Wales,101,7.8,1486.59,4603
+C00813,Regular,London,22,3.0,1467.11,4083
+C00814,Regular,London,64,13.0,1352.7,4835
+C00815,Regular,Wales,46,13.7,1563.85,5200
+C00816,Regular,Midlands,47,10.0,1103.76,3166
+C00817,Regular,Midlands,68,7.3,1306.94,5495
+C00818,Regular,London,101,5.3,1112.03,3427
+C00819,Regular,Wales,60,11.0,700.14,2250
+C00820,Regular,South East,30,8.2,1050.23,3927
+C00821,Regular,Midlands,49,12.0,1134.27,4161
+C00822,Regular,South East,46,4.0,788.48,3483
+C00823,Regular,North West,79,9.1,1258.66,4245
+C00824,Regular,Scotland,100,12.2,1625.31,6917
+C00825,Regular,London,19,10.7,1125.35,4266
+C00826,Regular,Midlands,61,12.2,878.29,2442
+C00827,Regular,Midlands,73,13.6,1070.82,4588
+C00828,Regular,Midlands,31,5.3,681.12,2491
+C00829,Regular,Wales,62,9.8,1175.19,4206
+C00830,Regular,Midlands,113,9.5,953.02,2808
+C00831,Regular,Midlands,58,6.5,777.9,2562
+C00832,Regular,Midlands,67,11.2,1281.24,5673
+C00833,Regular,Midlands,43,4.4,1092.45,3969
+C00834,Regular,Scotland,71,4.8,436.58,1734
+C00835,Regular,South East,67,8.7,1180.74,3576
+C00836,Regular,North West,42,11.0,1305.77,5635
+C00837,Regular,London,17,13.3,1408.08,5347
+C00838,Regular,Wales,55,8.0,835.86,3477
+C00839,Regular,Wales,57,12.7,1504.26,4860
+C00840,Regular,South East,92,10.0,1156.3,3473
+C00841,Regular,Midlands,37,8.7,1370.94,4749
+C00842,Regular,South East,39,15.2,1450.17,4901
+C00843,Regular,Wales,92,11.0,1300.3,4193
+C00844,Regular,North West,76,10.8,902.96,3006
+C00845,Regular,Scotland,55,5.6,867.58,2449
+C00846,Regular,South East,62,9.9,1226.14,4472
+C00847,Regular,South East,80,11.7,1401.14,3969
+C00848,Regular,Wales,51,6.0,1030.62,4574
+C00849,Regular,Scotland,100,9.6,1090.56,2913
+C00850,Regular,South East,43,6.3,891.57,3088
+C00851,Regular,Wales,76,5.4,1170.98,3353
+C00852,Regular,Scotland,15,7.2,1096.77,4246
+C00853,Regular,Midlands,52,8.4,1054.3,2671
+C00854,Regular,South East,69,11.3,1032.48,3448
+C00855,Regular,Midlands,48,7.8,1420.59,6045
+C00856,Regular,South East,40,7.5,1117.29,3871
+C00857,Regular,Scotland,85,6.8,1706.35,6582
+C00858,Regular,Midlands,60,6.1,1031.15,2667
+C00859,Regular,Wales,7,12.1,860.24,2754
+C00860,Regular,Scotland,65,13.8,1100.34,4019
+C00861,Regular,Midlands,79,11.5,1338.31,4104
+C00862,Regular,London,109,7.4,1206.16,4726
+C00863,Regular,North West,49,8.3,1530.42,5931
+C00864,Regular,Midlands,62,7.8,1199.02,4019
+C00865,Regular,Wales,59,14.9,1195.75,3648
+C00866,Regular,Midlands,71,7.4,1220.65,4399
+C00867,Regular,North West,36,9.3,1005.47,3130
+C00868,Regular,Wales,54,9.5,939.34,2608
+C00869,Regular,Midlands,73,10.5,1370.11,3700
+C00870,Regular,Wales,1,6.8,1229.77,4429
+C00871,Regular,South East,57,8.1,860.6,3536
+C00872,Regular,North West,83,5.0,1082.41,2897
+C00873,Regular,Midlands,62,10.2,1477.16,6601
+C00874,Regular,London,66,7.6,947.62,4195
+C00875,Regular,Wales,104,7.1,927.84,2694
+C00876,Regular,Midlands,39,12.3,1179.08,3407
+C00877,Regular,Wales,21,8.7,875.99,2820
+C00878,Regular,Scotland,35,10.8,1250.52,5619
+C00879,Regular,London,45,11.4,1006.76,4001
+C00880,Regular,Midlands,44,12.3,1152.75,4556
+C00881,Regular,South East,80,7.6,1327.15,4927
+C00882,Regular,South East,55,6.1,1137.0,2853
+C00883,Regular,Midlands,50,9.8,1406.37,6180
+C00884,Regular,Midlands,69,14.9,1273.47,5255
+C00885,Regular,North West,60,12.2,1095.66,3272
+C00886,Regular,Midlands,80,12.2,1239.58,4241
+C00887,Regular,South East,79,6.4,1062.53,4332
+C00888,Regular,North West,85,8.0,973.07,3047
+C00889,Regular,Wales,57,9.0,1275.24,3425
+C00890,Regular,South East,44,9.0,941.29,3397
+C00891,Regular,Wales,37,9.4,1358.57,5970
+C00892,Regular,South East,48,10.8,1178.92,4685
+C00893,Regular,Midlands,55,2.9,984.31,2952
+C00894,Regular,London,76,5.8,1406.3,3853
+C00895,Regular,London,43,5.0,688.11,2465
+C00896,Regular,Midlands,32,10.7,1042.33,3263
+C00897,Regular,South East,80,6.4,1653.55,5061
+C00898,Regular,Scotland,55,9.0,1043.85,3707
+C00899,Regular,South East,29,9.5,940.26,3641
+C00900,Regular,North West,60,7.5,1156.4,4090
+C00901,Regular,Midlands,59,8.6,1246.54,3928
+C00902,Regular,North West,92,10.2,1102.2,3335
+C00903,Regular,Wales,26,9.7,1006.2,2939
+C00904,Regular,Scotland,82,9.0,933.78,3083
+C00905,Regular,North West,66,10.4,1071.14,2892
+C00906,Regular,South East,52,10.3,918.84,3871
+C00907,Regular,Scotland,98,15.0,1698.48,4846
+C00908,Regular,Midlands,97,13.2,1759.86,6619
+C00909,Regular,Scotland,52,3.8,869.76,3162
+C00910,Regular,North West,91,10.5,1328.71,3894
+C00911,Regular,Midlands,25,9.6,981.7,3163
+C00912,Regular,Scotland,67,3.9,807.94,2576
+C00913,Regular,Wales,96,13.2,1515.04,5533
+C00914,Regular,North West,56,1,686.75,2108
+C00915,Regular,North West,47,5.9,1010.94,3298
+C00916,Regular,Wales,8,1.7,1034.23,4382
+C00917,Regular,London,68,6.5,848.43,3562
+C00918,Regular,Wales,36,11.4,1390.56,4348
+C00919,Regular,North West,55,11.3,1144.37,3879
+C00920,Regular,South East,44,9.0,862.67,2934
+C00921,Regular,Wales,62,9.6,1150.43,5040
+C00922,Regular,London,24,9.0,1001.07,3298
+C00923,Regular,London,107,11.4,1218.83,4015
+C00924,Regular,Scotland,58,12.3,1531.43,4087
+C00925,Regular,South East,53,11.1,1186.5,3278
+C00926,Regular,North West,94,13.4,1422.8,6005
+C00927,Regular,South East,78,6.5,1497.04,5385
+C00928,Regular,Midlands,18,13.6,1285.72,3670
+C00929,Regular,Midlands,20,10.3,1433.06,5416
+C00930,Regular,London,41,8.0,1362.86,4878
+C00931,Regular,South East,38,10.0,1207.29,3018
+C00932,Regular,Scotland,81,7.1,1348.04,3393
+C00933,Regular,South East,87,7.9,1410.71,4353
+C00934,Regular,Midlands,62,10.1,910.11,2619
+C00935,Regular,South East,43,9.9,1133.15,4710
+C00936,Regular,Midlands,25,8.7,1441.2,4294
+C00937,Regular,Scotland,73,4.7,916.86,3775
+C00938,Regular,London,100,9.4,1287.75,3571
+C00939,Regular,London,37,5.8,1003.54,2886
+C00940,Regular,London,95,13.6,1924.75,4897
+C00941,Regular,London,57,10.5,1209.86,3243
+C00942,Regular,Scotland,61,6.3,1079.91,3373
+C00943,Regular,South East,88,9.0,1238.2,5184
+C00944,Regular,Scotland,38,13.9,1529.77,4043
+C00945,Regular,Wales,82,14.8,1411.82,3565
+C00946,Regular,Wales,85,9.0,1627.9,5512
+C00947,Regular,South East,77,8.9,1166.62,4470
+C00948,Regular,North West,49,4.5,1067.95,3337
+C00949,Regular,Scotland,82,13.1,1331.76,3655
+C00950,Regular,Wales,28,7.7,996.19,4259
+C00951,Regular,North West,62,10.4,1082.98,3070
+C00952,Regular,London,44,6.4,943.76,2818
+C00953,Regular,South East,27,6.8,1033.39,4177
+C00954,Regular,Wales,47,9.7,1304.02,4873
+C00955,Regular,Scotland,82,10.0,1404.45,3813
+C00956,Regular,North West,86,9.9,1947.87,7942
+C00957,Regular,South East,69,6.0,1198.22,3854
+C00958,Regular,Midlands,96,9.0,1253.65,4906
+C00959,Regular,Wales,49,13.5,1419.92,4537
+C00960,Regular,Midlands,75,3.1,1046.56,3870
+C00961,Regular,Scotland,76,12.1,847.95,3038
+C00962,Regular,South East,74,13.3,1352.75,4407
+C00963,Regular,London,86,6.2,830.36,2608
+C00964,Regular,Midlands,86,7.0,827.34,2710
+C00965,Regular,North West,43,4.3,1113.48,3696
+C00966,Regular,South East,77,11.8,1494.68,3936
+C00967,Regular,Wales,63,9.7,1339.91,3435
+C00968,Regular,Wales,70,11.3,944.5,3355
+C00969,Regular,South East,53,8.5,1235.19,3120
+C00970,Regular,Scotland,99,5.2,530.79,2210
+C00971,Regular,North West,63,8.0,566.44,1887
+C00972,Regular,Midlands,39,9.3,1104.76,4125
+C00973,Regular,London,69,9.3,983.78,4349
+C00974,Regular,South East,117,10.7,1361.91,4454
+C00975,Regular,Scotland,41,8.6,1049.93,4198
+C00976,Regular,Wales,49,8.9,731.81,2673
+C00977,Regular,Scotland,24,10.1,1341.92,3839
+C00978,Regular,Midlands,50,4.6,993.18,3543
+C00979,Regular,North West,38,10.0,899.77,2834
+C00980,Regular,North West,131,5.4,1227.89,5099
+C00981,Regular,North West,35,6.6,1182.28,5146
+C00982,Regular,London,102,6.9,1315.9,5816
+C00983,Regular,North West,49,1,601.19,2697
+C00984,Regular,North West,43,17.6,1556.79,4561
+C00985,Regular,Midlands,106,9.8,1133.04,4087
+C00986,Regular,Scotland,41,5.5,893.47,2402
+C00987,Regular,North West,52,10.3,1001.09,2969
+C00988,Regular,Wales,84,11.5,1425.01,6178
+C00989,Regular,Wales,80,10.2,930.43,3999
+C00990,Regular,North West,63,3.2,685.99,2532
+C00991,Regular,North West,104,10.3,897.87,3900
+C00992,Regular,London,89,5.8,1443.69,4812
+C00993,Regular,Wales,72,7.4,914.68,2308
+C00994,Regular,Midlands,32,7.1,1253.54,3237
+C00995,Regular,Scotland,40,7.9,1089.33,4191
+C00996,Regular,London,46,13.9,1298.66,4741
+C00997,Regular,Midlands,64,11.4,1168.71,3115
+C00998,Regular,Scotland,68,8.9,847.96,2565
+C00999,Regular,Scotland,17,8.9,1273.19,4607
+C01000,Regular,Wales,70,5.9,1263.27,4576
+C01001,Regular,Midlands,42,8.7,1138.32,4405
+C01002,Regular,North West,86,12.8,1538.59,5150
+C01003,Regular,North West,68,11.6,1033.19,2933
+C01004,Regular,South East,25,2.2,380.95,1289
+C01005,Regular,Wales,7,11.5,1320.55,3713
+C01006,Regular,Midlands,98,9.9,1113.86,2906
+C01007,Regular,London,105,6.3,1091.0,4241
+C01008,Regular,Wales,56,7.9,1410.09,4461
+C01009,Regular,Wales,44,8.5,961.82,3334
+C01010,Regular,Scotland,57,13.6,1345.36,5161
+C01011,Regular,Wales,28,6.8,1244.75,3819
+C01012,Regular,London,64,8.3,1092.78,4163
+C01013,Regular,London,94,10.8,953.02,3069
+C01014,Regular,South East,13,15.0,1482.0,5630
+C01015,Regular,Midlands,90,8.5,1020.88,3542
+C01016,Regular,Scotland,8,7.1,1071.53,3752
+C01017,Regular,Scotland,23,7.2,1678.94,5221
+C01018,Regular,North West,74,7.6,1219.36,3894
+C01019,Regular,London,47,11.0,1980.97,6045
+C01020,Regular,London,58,4.7,627.1,2685
+C01021,Regular,South East,117,6.5,1115.64,3666
+C01022,Regular,Midlands,83,11.5,1414.03,6252
+C01023,Regular,North West,87,5.7,754.49,2530
+C01024,Regular,South East,76,11.3,1145.62,4106
+C01025,Regular,Wales,41,5.8,980.13,2721
+C01026,Regular,South East,45,8.0,835.12,2314
+C01027,Regular,Wales,42,5.8,1104.51,3939
+C01028,Regular,Wales,68,10.9,1411.11,6010
+C01029,Regular,Wales,82,9.5,1852.57,5755
+C01030,Regular,North West,49,14.8,1189.87,5196
+C01031,Regular,Midlands,69,10.6,1283.78,5741
+C01032,Regular,South East,64,8.6,1498.11,4437
+C01033,Regular,Midlands,61,9.7,1604.49,4442
+C01034,Regular,Scotland,81,4.7,1082.98,3106
+C01035,Regular,London,46,9.1,1206.73,4862
+C01036,Regular,Wales,66,15.6,1154.69,3401
+C01037,Regular,Midlands,102,8.6,1709.47,7643
+C01038,Regular,South East,83,6.3,1088.39,3717
+C01039,Regular,Scotland,21,11.3,893.67,3521
+C01040,Regular,Midlands,31,5.2,752.8,2776
+C01041,Regular,London,35,5.4,1156.12,3947
+C01042,Regular,Wales,63,10.6,1109.19,3966
+C01043,Regular,Scotland,84,9.7,1272.39,3664
+C01044,Regular,Scotland,1,7.0,1230.45,5113
+C01045,Regular,Scotland,70,11.2,1614.24,6953
+C01046,Regular,London,41,10.6,993.43,3919
+C01047,Regular,North West,74,12.6,1581.47,5197
+C01048,Regular,Wales,41,7.2,1157.8,4261
+C01049,Regular,Wales,101,5.2,1222.92,4644
+C01050,Regular,London,72,10.4,838.63,2304
+C01051,Regular,Midlands,50,4.9,1366.64,5403
+C01052,Regular,London,80,7.7,1026.65,3697
+C01053,Regular,South East,66,2.4,567.21,1588
+C01054,Regular,North West,45,11.0,1631.81,5449
+C01055,Regular,South East,52,1.4,837.14,3597
+C01056,Regular,Scotland,75,14.1,1394.12,3519
+C01057,Regular,Midlands,79,6.0,1599.42,4759
+C01058,Regular,Midlands,62,7.2,868.02,2937
+C01059,Regular,South East,45,7.7,781.42,2825
+C01060,Regular,London,50,10.6,1289.36,4908
+C01061,Regular,London,64,9.6,892.56,2822
+C01062,Regular,Wales,44,12.0,1380.67,3944
+C01063,Regular,Scotland,52,13.3,1247.36,4521
+C01064,Regular,North West,29,9.0,933.81,2401
+C01065,Regular,London,36,14.7,1597.06,6686
+C01066,Regular,North West,22,8.6,1297.59,5047
+C01067,Regular,Midlands,48,11.7,1333.42,3489
+C01068,Regular,Scotland,77,8.5,795.37,3559
+C01069,Regular,North West,54,5.0,1115.44,3741
+C01070,Regular,South East,22,8.8,1510.04,5657
+C01071,Regular,Midlands,38,6.7,1047.73,4312
+C01072,Regular,London,31,9.3,1404.9,4056
+C01073,Regular,Scotland,95,9.6,1577.66,6467
+C01074,Regular,Wales,93,6.7,1207.74,4373
+C01075,Regular,North West,68,13.2,1273.57,3357
+C01076,Regular,Wales,42,6.3,1064.25,2674
+C01077,Regular,South East,47,11.6,685.33,2854
+C01078,Regular,Scotland,33,7.7,1333.74,5128
+C01079,Regular,Midlands,71,4.9,651.93,2793
+C01080,Regular,Wales,64,11.7,1109.9,4582
+C01081,Regular,London,88,10.3,870.82,3144
+C01082,Regular,North West,45,10.2,1609.26,6596
+C01083,Regular,Midlands,73,9.7,1335.31,4340
+C01084,Regular,Midlands,41,11.1,982.81,3223
+C01085,Regular,North West,92,12.5,1136.52,4455
+C01086,Regular,Scotland,106,6.0,1216.44,3619
+C01087,Regular,London,70,6.8,931.27,3025
+C01088,Regular,London,58,10.2,659.8,2235
+C01089,Regular,Midlands,76,2.8,1066.3,3697
+C01090,Regular,London,79,8.0,1355.52,5475
+C01091,Regular,Scotland,86,2.6,863.92,3412
+C01092,Regular,North West,48,4.4,1334.95,3647
+C01093,Regular,London,95,7.1,1012.49,3477
+C01094,Regular,London,54,13.1,1610.61,6428
+C01095,Regular,North West,41,7.8,1309.57,3778
+C01096,Regular,North West,46,3.9,887.5,3410
+C01097,Regular,South East,72,10.9,1618.86,5712
+C01098,Regular,Wales,63,5.3,947.18,2881
+C01099,Regular,Midlands,71,5.3,1138.77,4879
+C01100,Regular,Wales,79,7.5,1168.17,4020
+C01101,Regular,Midlands,83,9.9,1439.09,5626
+C01102,Regular,North West,73,5.8,764.59,2593
+C01103,Regular,Scotland,42,14.1,1294.96,4619
+C01104,Regular,Wales,24,7.8,1084.3,4451
+C01105,Regular,South East,33,9.7,1042.45,3576
+C01106,Regular,North West,24,10.6,1196.28,5134
+C01107,Regular,North West,81,7.4,997.94,4069
+C01108,Regular,North West,25,8.3,1170.17,4038
+C01109,Regular,Midlands,12,9.8,1162.57,4243
+C01110,Regular,North West,83,13.4,1645.65,6737
+C01111,Regular,South East,51,8.6,1071.12,3943
+C01112,Regular,Scotland,86,6.3,844.75,3757
+C01113,Regular,Midlands,76,9.8,1117.98,4987
+C01114,Regular,Wales,35,9.9,897.83,2669
+C01115,Regular,Midlands,40,4.7,890.44,2430
+C01116,Regular,South East,14,5.3,1107.83,4591
+C01117,Regular,Scotland,51,11.9,971.92,3589
+C01118,Regular,South East,38,7.0,1430.07,3751
+C01119,Regular,South East,81,3.3,1254.67,3137
+C01120,Regular,Midlands,40,7.2,868.02,2676
+C01121,Regular,Wales,45,8.1,1048.12,3816
+C01122,Regular,North West,40,6.6,1670.11,5627
+C01123,Regular,North West,93,8.8,932.76,3913
+C01124,Regular,London,41,15.0,1632.26,7240
+C01125,Regular,South East,47,3.7,639.49,2706
+C01126,Regular,Wales,98,5.4,1178.71,4421
+C01127,Regular,South East,42,11.0,891.11,3074
+C01128,Regular,Scotland,50,3.6,792.0,2551
+C01129,Regular,London,109,17.5,1454.78,3846
+C01130,Regular,South East,48,12.9,1759.26,6713
+C01131,Regular,Midlands,91,11.2,1019.53,4158
+C01132,Regular,Scotland,74,12.8,1177.81,4015
+C01133,Regular,Midlands,34,7.9,1035.42,3841
+C01134,Regular,North West,73,4.1,990.45,3887
+C01135,Regular,Wales,33,11.0,777.8,2828
+C01136,Regular,London,111,6.3,1324.62,5859
+C01137,Regular,Scotland,85,12.8,2073.4,8413
+C01138,Regular,South East,53,5.4,1001.1,3724
+C01139,Regular,Midlands,19,9.9,1315.62,4956
+C01140,Regular,London,58,8.6,1243.98,3965
+C01141,Regular,North West,31,9.7,792.82,2650
+C01142,Regular,Wales,68,8.8,1239.78,5388
+C01143,Regular,Midlands,45,14.0,1354.37,4952
+C01144,Regular,Midlands,95,17.7,1779.06,7326
+C01145,Regular,North West,88,9.6,1276.27,5191
+C01146,Regular,London,67,10.6,1401.81,5910
+C01147,Regular,North West,58,4.9,1376.92,5258
+C01148,Regular,Scotland,38,9.8,1024.08,3995
+C01149,Regular,Midlands,73,12.3,2045.26,9070
+C01150,Regular,Scotland,75,10.6,1182.88,4130
+C01151,Regular,Wales,62,6.8,747.68,2185
+C01152,Regular,London,73,9.5,1129.05,3420
+C01153,Regular,Midlands,86,10.1,931.01,4093
+C01154,Regular,North West,64,9.5,1590.97,5219
+C01155,Regular,Wales,91,13.8,1965.33,6677
+C01156,Regular,London,64,7.5,1413.6,6236
+C01157,Regular,North West,91,6.9,1361.54,5904
+C01158,Regular,Wales,53,7.8,1308.31,3528
+C01159,Regular,South East,36,7.3,1025.16,3940
+C01160,Regular,North West,43,4.5,951.91,4271
+C01161,Regular,London,24,7.7,1146.94,3091
+C01162,Regular,North West,57,7.9,913.58,3609
+C01163,Regular,South East,62,9.6,1719.02,6555
+C01164,Regular,London,92,13.1,1229.41,4815
+C01165,Regular,South East,89,11.1,950.21,3607
+C01166,Regular,Scotland,90,12.7,1083.16,3257
+C01167,Regular,Wales,55,8.0,325.44,1314
+C01168,Regular,South East,84,13.2,1094.73,3445
+C01169,Regular,North West,64,6.6,1323.43,5945
+C01170,Regular,Scotland,69,11.3,1214.33,4106
+C01171,Regular,Midlands,77,8.7,877.23,2383
+C01172,Regular,Scotland,82,9.2,1008.62,3819
+C01173,Regular,Scotland,57,7.6,1428.8,4288
+C01174,Regular,London,74,12.5,1355.73,5160
+C01175,Regular,Midlands,94,7.2,1065.81,4593
+C01176,Regular,Scotland,99,13.7,1377.62,5568
+C01177,Regular,London,16,11.3,1358.57,4864
+C01178,Regular,London,17,5.6,1306.78,5305
+C01179,Regular,Wales,7,6.1,816.19,2694
+C01180,Regular,North West,89,13.3,1346.13,4349
+C01181,Regular,London,84,10.6,1283.37,3662
+C01182,Regular,Scotland,24,13.3,1275.29,3951
+C01183,Regular,Wales,88,6.4,1008.03,3796
+C01184,Regular,Midlands,68,9.3,1257.11,3207
+C01185,Regular,Scotland,62,12.0,1397.82,4892
+C01186,Regular,North West,25,9.5,1191.49,3787
+C01187,Regular,Scotland,62,8.1,1492.99,5725
+C01188,Regular,Wales,91,14.6,1212.38,4332
+C01189,Regular,Scotland,10,5.7,1189.3,4528
+C01190,Regular,Wales,63,12.5,1120.29,3344
+C01191,Regular,Scotland,70,10.3,1445.89,5910
+C01192,Regular,London,67,4.6,687.78,1807
+C01193,Regular,North West,85,11.7,1215.89,3533
+C01194,Regular,North West,54,12.2,624.88,2410
+C01195,Regular,South East,88,12.1,1085.79,4809
+C01196,Regular,London,54,9.4,847.1,2686
+C01197,Regular,South East,54,14.0,1502.8,4253
+C01198,Regular,Wales,81,9.8,1177.15,3178
+C01199,Regular,South East,27,5.6,1343.86,3377
+C01200,Regular,North West,63,13.2,1165.79,4299
+C01201,Regular,Wales,21,11.7,1345.84,3920
+C01202,Regular,South East,22,8.6,1444.79,4303
+C01203,Regular,Wales,55,8.5,1289.05,5673
+C01204,Regular,Midlands,87,10.2,1031.77,3444
+C01205,Regular,Midlands,61,10.5,1125.24,3628
+C01206,Regular,South East,58,5.7,1032.33,3874
+C01207,Regular,Scotland,57,10.9,1371.8,6087
+C01208,Regular,London,24,7.2,1111.6,4830
+C01209,Regular,Scotland,47,7.1,887.31,3647
+C01210,Regular,South East,69,13.7,1484.62,6458
+C01211,Regular,Scotland,63,9.6,1105.17,3283
+C01212,Regular,Wales,59,6.8,963.95,2793
+C01213,Regular,Scotland,75,7.7,1272.22,3784
+C01214,Regular,Scotland,71,11.0,1075.61,3164
+C01215,Regular,South East,53,8.5,992.63,3691
+C01216,Regular,Wales,67,7.8,1222.19,4815
+C01217,Regular,North West,48,10.8,1219.72,4437
+C01218,Regular,South East,65,12.8,1717.52,5869
+C01219,Regular,Midlands,61,6.9,1053.11,4306
+C01220,Regular,South East,74,12.3,1119.74,4037
+C01221,Regular,Scotland,102,12.1,446.65,1645
+C01222,Regular,South East,66,8.1,1558.31,6190
+C01223,Regular,Midlands,60,12.2,1410.81,6197
+C01224,Regular,Scotland,116,11.5,1118.82,2896
+C01225,Regular,Wales,57,5.5,806.11,3321
+C01226,Regular,Midlands,71,10.4,979.84,2921
+C01227,Regular,South East,61,4.4,843.73,2714
+C01228,Regular,North West,70,8.2,1057.87,3660
+C01229,Regular,Scotland,75,11.8,982.07,4373
+C01230,Regular,North West,46,9.8,688.98,2281
+C01231,Regular,Wales,33,5.7,1411.4,4615
+C01232,Regular,North West,60,8.6,1222.76,4098
+C01233,Regular,Midlands,49,5.1,865.76,3350
+C01234,Regular,Wales,52,12.6,1034.7,2700
+C01235,Regular,North West,55,9.7,993.69,2565
+C01236,Regular,Wales,79,10.7,1546.07,4072
+C01237,Regular,Wales,62,7.4,950.49,3610
+C01238,Regular,South East,87,12.7,1198.88,5297
+C01239,Regular,Scotland,61,3.9,739.07,2592
+C01240,Regular,Scotland,108,8.8,1265.34,4037
+C01241,Regular,North West,13,8.9,863.2,3583
+C01242,Regular,Wales,66,6.3,1144.24,4401
+C01243,Regular,London,81,2.3,1416.33,4838
+C01244,Regular,London,81,7.5,1225.25,5411
+C01245,Regular,Midlands,76,10.5,1141.78,4853
+C01246,Regular,Wales,32,9.6,1188.04,3960
+C01247,Regular,North West,47,8.6,1002.77,3800
+C01248,Regular,Midlands,82,9.2,1240.38,5090
+C01249,Regular,Midlands,44,6.6,876.18,2762
+C01250,Regular,Scotland,90,7.1,829.66,2984
+C01251,Regular,Scotland,56,10.5,1279.25,3863
+C01252,Regular,South East,45,7.3,1265.92,5305
+C01253,Regular,North West,43,11.6,1581.77,6206
+C01254,Regular,Wales,109,9.8,1357.82,5318
+C01255,Regular,Scotland,64,7.3,1726.53,6300
+C01256,Regular,London,113,8.9,1340.69,4860
+C01257,Regular,Midlands,25,1.9,1063.66,4734
+C01258,Regular,Scotland,82,6.9,1648.62,5455
+C01259,Regular,Midlands,67,1.8,1026.51,4558
+C01260,Regular,Scotland,54,11.7,1250.77,4892
+C01261,Regular,Midlands,112,4.2,1008.9,3868
+C01262,Regular,London,1,8.1,561.16,1783
+C01263,Regular,Scotland,54,2.6,1134.73,3536
+C01264,Regular,North West,84,7.4,993.9,3195
+C01265,Regular,North West,94,10.5,1078.7,4715
+C01266,Regular,Wales,51,9.4,1299.15,5455
+C01267,Regular,Midlands,55,7.9,964.28,3024
+C01268,Regular,Scotland,59,8.0,1132.94,4343
+C01269,Regular,North West,89,13.7,1197.08,3674
+C01270,Regular,South East,78,7.8,1397.27,5061
+C01271,Regular,Wales,56,5.8,1519.85,4677
+C01272,Regular,South East,58,12.1,1253.28,5380
+C01273,Regular,Midlands,77,5.5,1177.78,5273
+C01274,Regular,Scotland,77,10.1,1216.16,5376
+C01275,Regular,Wales,82,10.6,1476.03,5331
+C01276,Regular,Scotland,47,2.9,698.65,2025
+C01277,Regular,Scotland,53,12.4,1412.48,5184
+C01278,Regular,London,41,5.9,949.69,2425
+C01279,Regular,Wales,72,11.1,1028.7,2827
+C01280,Regular,Wales,33,11.4,1108.73,3863
+C01281,Regular,Midlands,56,8.4,1185.23,5264
+C01282,Regular,North West,31,8.9,832.75,3024
+C01283,Regular,Midlands,40,6.5,1036.69,3654
+C01284,Regular,South East,48,11.3,1294.64,4743
+C01285,Regular,Scotland,38,14.6,1505.38,4584
+C01286,Regular,North West,71,4.1,494.7,1285
+C01287,Regular,London,2,7.7,686.16,1967
+C01288,Regular,North West,56,7.5,1029.52,3238
+C01289,Regular,London,78,5.0,893.72,3465
+C01290,Regular,South East,96,6.3,1018.96,2840
+C01291,Regular,London,36,8.7,930.7,4022
+C01292,Regular,Midlands,62,9.7,1509.84,6286
+C01293,Regular,London,24,5.3,715.65,2578
+C01294,Regular,South East,55,3.2,1235.33,3376
+C01295,Regular,Midlands,85,7.4,1023.43,4231
+C01296,Regular,North West,82,1.1,765.66,2178
+C01297,Regular,South East,105,10.0,1308.18,3643
+C01298,Regular,Scotland,109,8.3,1317.88,5881
+C01299,Regular,London,44,4.1,1380.65,5543
+C01300,Regular,Midlands,80,9.3,1253.61,4788
+C01301,Regular,London,72,9.5,1200.15,4603
+C01302,Regular,South East,69,10.4,662.04,1927
+C01303,Regular,Midlands,69,11.6,1705.65,7477
+C01304,Regular,Wales,86,8.0,1264.72,4428
+C01305,Regular,Midlands,38,6.7,1524.78,6139
+C01306,Regular,Midlands,79,9.4,1362.03,4173
+C01307,Regular,Scotland,100,9.1,1705.25,7166
+C01308,Regular,London,34,6.3,1331.11,4498
+C01309,Regular,London,70,11.5,1150.58,3400
+C01310,Regular,Midlands,72,9.2,962.19,3302
+C01311,Regular,North West,88,12.8,1240.23,3201
+C01312,Regular,Wales,29,6.0,1071.93,3659
+C01313,Regular,Scotland,34,16.6,1173.39,3615
+C01314,Regular,Scotland,71,9.4,1288.65,5389
+C01315,Regular,Scotland,82,7.9,1525.22,5863
+C01316,Regular,South East,63,4.9,1161.86,3102
+C01317,Regular,South East,30,11.8,1716.92,7357
+C01318,Regular,Midlands,54,16.5,1759.32,5590
+C01319,Regular,Wales,74,6.5,1107.93,3876
+C01320,Regular,Wales,86,9.4,848.96,3407
+C01321,Regular,Midlands,82,8.0,822.36,3680
+C01322,Regular,North West,7,8.1,1580.11,4292
+C01323,Regular,London,42,9.1,1245.55,4952
+C01324,Regular,Midlands,58,8.3,1152.77,3295
+C01325,Regular,Midlands,54,7.4,1033.32,2741
+C01326,Regular,Wales,52,9.6,745.0,2163
+C01327,Regular,London,30,9.0,725.15,2597
+C01328,Regular,London,48,9.7,1189.73,3998
+C01329,Regular,Midlands,44,10.7,1043.95,2678
+C01330,Regular,South East,79,6.2,686.8,2932
+C01331,Regular,Wales,47,9.1,1119.21,3043
+C01332,Regular,Scotland,32,5.2,1047.41,3748
+C01333,Regular,Scotland,11,9.9,956.64,3338
+C01334,Regular,North West,59,6.9,934.36,4163
+C01335,Regular,Midlands,91,10.5,1412.43,5818
+C01336,Regular,London,77,15.2,1521.37,4842
+C01337,Regular,South East,1,13.1,1267.17,3787
+C01338,Regular,London,64,6.6,804.55,3476
+C01339,Regular,Wales,68,7.9,1292.74,3328
+C01340,Regular,North West,87,11.5,1026.65,4417
+C01341,Regular,North West,88,9.4,1421.9,5177
+C01342,Regular,Wales,63,4.1,776.13,2096
+C01343,Regular,North West,68,12.4,1460.55,4138
+C01344,Regular,London,26,6.9,1306.72,4566
+C01345,Regular,Scotland,77,5.9,1035.79,4653
+C01346,Regular,Wales,68,10.4,893.77,3947
+C01347,Regular,Scotland,66,7.9,1085.21,4452
+C01348,Regular,North West,68,6.5,1186.77,3149
+C01349,Regular,North West,39,8.9,1060.41,3530
+C01350,Regular,South East,41,6.7,884.77,3563
+C01351,Regular,Wales,86,6.1,898.99,3145
+C01352,Regular,Wales,58,13.8,1271.08,4366
+C01353,Regular,Wales,26,8.2,1179.41,4284
+C01354,Regular,South East,34,10.9,1318.63,4516
+C01355,Regular,London,82,12.7,1241.58,3895
+C01356,Regular,North West,85,5.1,650.36,1973
+C01357,Regular,South East,48,7.2,893.21,2436
+C01358,Regular,Scotland,45,14.3,1471.49,4593
+C01359,Regular,South East,35,7.8,1089.77,3072
+C01360,Regular,Midlands,55,14.2,1471.95,4498
+C01361,Regular,London,82,14.2,1682.02,4272
+C01362,Regular,Scotland,53,8.0,1341.86,3525
+C01363,Regular,South East,90,6.3,1268.72,5303
+C01364,Regular,London,43,9.3,1530.62,5358
+C01365,Regular,London,13,8.2,1721.27,5170
+C01366,Regular,North West,42,9.1,1317.01,5417
+C01367,Regular,South East,80,4.7,1156.99,5057
+C01368,Regular,Scotland,21,10.1,1352.95,6007
+C01369,Regular,London,18,12.3,1611.68,6284
+C01370,Regular,North West,71,7.7,1378.4,5328
+C01371,Regular,London,103,4.2,717.35,2972
+C01372,Regular,Wales,90,5.0,574.01,1475
+C01373,Regular,Midlands,29,2.9,769.98,2294
+C01374,Regular,Wales,19,5.8,1297.71,5063
+C01375,Regular,Scotland,96,13.2,1508.65,6517
+C01376,Regular,South East,41,15.0,1165.22,3614
+C01377,Regular,Wales,45,14.7,1556.65,4879
+C01378,Regular,Scotland,83,8.3,1191.71,5044
+C01379,Regular,London,35,9.6,1426.4,6067
+C01380,Regular,North West,27,11.1,904.32,3177
+C01381,Regular,London,24,11.3,1051.55,4091
+C01382,Regular,Wales,53,7.8,1003.21,3398
+C01383,Regular,South East,77,11.3,1115.44,2972
+C01384,Regular,Wales,44,9.0,1591.61,6422
+C01385,Regular,Scotland,64,3.2,767.13,2408
+C01386,Regular,Midlands,19,10.1,1125.65,3205
+C01387,Regular,Scotland,81,4.2,1074.68,3078
+C01388,Regular,London,85,14.9,1230.68,3629
+C01389,Regular,South East,92,7.0,703.1,3128
+C01390,Regular,Midlands,21,8.6,1669.35,4340
+C01391,Regular,London,42,10.0,1431.3,6290
+C01392,Regular,Scotland,73,12.7,1354.15,5480
+C01393,Regular,North West,74,5.9,1084.06,4761
+C01394,Regular,South East,77,8.2,1441.86,3980
+C01395,Regular,Scotland,1,3.2,868.9,2899
+C01396,Regular,South East,97,9.2,1127.04,5018
+C01397,Regular,London,20,4.6,734.03,2508
+C01398,Regular,Scotland,88,3.0,1043.88,4644
+C01399,Regular,London,45,4.6,895.51,2698
+C01400,Regular,Scotland,21,8.1,1113.41,4857
+C01401,Regular,Wales,131,3.5,1589.55,5876
+C01402,Regular,Scotland,36,9.1,1159.5,4069
+C01403,Regular,Midlands,52,11.8,823.85,2982
+C01404,Regular,North West,108,9.8,1354.72,4722
+C01405,Regular,London,70,7.9,1004.47,2796
+C01406,Regular,North West,88,5.8,1715.63,6002
+C01407,Regular,North West,59,2.2,796.7,2968
+C01408,Regular,Wales,110,5.8,1022.74,2894
+C01409,Regular,Scotland,102,8.8,1469.04,5604
+C01410,Regular,London,100,10.6,1292.71,3826
+C01411,Regular,Scotland,45,9.3,1066.95,4578
+C01412,Regular,Scotland,63,11.7,1350.89,5293
+C01413,Regular,South East,48,9.4,1167.58,3735
+C01414,Regular,Midlands,46,10.3,1110.29,3149
+C01415,Regular,London,74,5.5,948.06,4262
+C01416,Regular,London,45,5.2,970.98,3236
+C01417,Regular,Wales,61,12.5,1513.4,4644
+C01418,Regular,London,72,11.1,1438.02,6267
+C01419,Regular,Scotland,68,7.5,1548.58,5914
+C01420,Regular,North West,83,7.4,965.53,3684
+C01421,Regular,Wales,96,8.2,1366.49,5416
+C01422,Regular,London,53,13.5,1102.22,3041
+C01423,Regular,Midlands,66,6.7,1215.05,4367
+C01424,Regular,Scotland,21,6.8,1268.91,3624
+C01425,Regular,Wales,101,12.1,1539.91,4727
+C01426,Regular,Wales,97,10.4,1417.68,5816
+C01427,Regular,North West,67,6.6,1028.2,3939
+C01428,Regular,Scotland,48,5.5,1017.31,4345
+C01429,Regular,South East,56,13.0,1571.28,5085
+C01430,Regular,North West,74,6.1,1174.45,3031
+C01431,Regular,Midlands,97,8.2,903.22,3939
+C01432,Regular,Scotland,28,6.5,848.96,2616
+C01433,Regular,North West,100,11.6,1049.85,4061
+C01434,Regular,London,128,11.0,993.94,3072
+C01435,Regular,Scotland,7,6.9,785.87,2614
+C01436,Regular,North West,57,6.9,811.77,2441
+C01437,Regular,South East,23,6.4,1499.7,5138
+C01438,Regular,Wales,64,9.5,1134.1,3779
+C01439,Regular,North West,50,12.8,960.62,3600
+C01440,Regular,South East,70,5.4,1522.74,6274
+C01441,Regular,Midlands,76,13.6,944.46,2562
+C01442,Regular,Wales,29,12.0,1328.8,3357
+C01443,Regular,Scotland,22,9.7,1665.05,6167
+C01444,Regular,Wales,12,7.2,1558.66,5819
+C01445,Regular,London,42,4.9,842.49,2317
+C01446,Regular,South East,73,11.0,1705.91,6640
+C01447,Regular,Wales,71,7.4,892.33,3009
+C01448,Regular,Scotland,31,11.3,1022.33,2732
+C01449,Regular,Scotland,76,11.5,1698.1,6754
+C01450,Regular,Midlands,96,12.3,1245.95,5257
+C01451,Regular,London,61,11.5,1404.31,4448
+C01452,Regular,Scotland,38,5.8,750.31,3346
+C01453,Regular,Scotland,57,5.0,815.9,2835
+C01454,Regular,Scotland,53,4.2,952.96,4165
+C01455,Regular,North West,61,10.1,1560.55,5628
+C01456,Regular,Scotland,64,11.4,1109.08,3823
+C01457,Regular,Wales,34,6.0,795.65,2246
+C01458,Regular,South East,69,10.0,1442.25,4275
+C01459,Regular,Scotland,28,6.6,1533.72,6028
+C01460,Regular,Scotland,37,10.7,1406.96,5519
+C01461,Regular,South East,79,5.1,979.62,4016
+C01462,Regular,Wales,16,7.2,962.71,3849
+C01463,Regular,Scotland,45,9.2,1356.0,5542
+C01464,Regular,London,84,8.3,1321.01,3427
+C01465,Regular,Midlands,48,10.8,1180.93,4982
+C01466,Regular,Midlands,46,10.1,1241.47,4173
+C01467,Regular,London,65,12.8,508.35,2069
+C01468,Regular,Wales,67,9.5,870.13,3735
+C01469,Regular,Scotland,84,6.1,1129.88,4963
+C01470,Regular,Midlands,65,13.9,1274.44,5670
+C01471,Regular,South East,22,5.2,1297.29,4559
+C01472,Regular,South East,79,4.8,630.39,2725
+C01473,Regular,South East,55,4.3,1016.35,4310
+C01474,Regular,South East,31,7.4,927.43,2574
+C01475,Regular,North West,36,10.2,1249.72,5147
+C01476,Regular,Wales,41,8.6,1318.3,3997
+C01477,Regular,Scotland,61,6.2,990.65,3970
+C01478,Regular,Scotland,48,9.4,1057.32,3550
+C01479,Regular,Scotland,109,4.6,611.73,2684
+C01480,Regular,London,56,9.3,1219.49,5015
+C01481,Regular,London,79,10.3,1387.78,3640
+C01482,Regular,London,58,6.7,773.42,3330
+C01483,Regular,Scotland,129,7.8,1294.33,5754
+C01484,Regular,North West,11,5.3,1258.9,4541
+C01485,Regular,Midlands,56,6.4,805.92,3466
+C01486,Regular,South East,99,13.1,1150.05,3901
+C01487,Regular,Wales,87,6.3,864.05,2757
+C01488,Regular,London,42,7.4,1211.67,3760
+C01489,Regular,Midlands,36,8.3,1048.2,3712
+C01490,Regular,Midlands,10,8.7,1280.96,4616
+C01491,Regular,North West,41,12.6,1864.31,6674
+C01492,Regular,Midlands,68,9.3,1639.11,6479
+C01493,Regular,London,67,9.7,952.09,3055
+C01494,Regular,Midlands,85,9.3,573.08,1947
+C01495,Regular,Midlands,58,5.7,1516.32,6790
+C01496,Regular,Midlands,55,7.4,520.46,1994
+C01497,Regular,South East,62,11.5,1042.49,3800
+C01498,Regular,North West,20,8.2,840.72,2518
+C01499,Regular,Scotland,44,8.8,1222.96,3416
+C01500,Regular,South East,33,9.6,1108.76,2910
+C01501,Lapsing,Midlands,145,3.2,313.1,1151
+C01502,Lapsing,Wales,264,3.5,162.68,597
+C01503,Lapsing,South East,153,3.7,597.26,2656
+C01504,Lapsing,South East,181,3.5,496.78,1949
+C01505,Lapsing,London,281,2.6,193.65,661
+C01506,Lapsing,London,193,2.9,80.7,261
+C01507,Lapsing,South East,161,2.1,515.59,1331
+C01508,Lapsing,North West,264,3.9,538.3,1749
+C01509,Lapsing,North West,104,3.2,546.54,1420
+C01510,Lapsing,Scotland,272,3.8,389.43,1612
+C01511,Lapsing,North West,286,3.0,459.56,1591
+C01512,Lapsing,Scotland,217,1,219.29,891
+C01513,Lapsing,Scotland,268,1,391.34,1477
+C01514,Lapsing,London,234,2.6,334.06,1321
+C01515,Lapsing,Midlands,237,1,254.07,836
+C01516,Lapsing,North West,233,5.1,564.95,1913
+C01517,Lapsing,Wales,137,1,291.55,1193
+C01518,Lapsing,London,135,2.2,576.7,2184
+C01519,Lapsing,South East,239,4.9,457.06,1664
+C01520,Lapsing,Wales,201,3.0,254.78,646
+C01521,Lapsing,Wales,245,2.6,649.63,1943
+C01522,Lapsing,Midlands,223,4.0,305.59,816
+C01523,Lapsing,Scotland,162,2.1,649.73,1655
+C01524,Lapsing,Scotland,243,3.1,453.6,1613
+C01525,Lapsing,North West,209,3.7,518.52,1446
+C01526,Lapsing,Wales,231,3.1,343.49,1513
+C01527,Lapsing,Scotland,250,4.8,477.42,1249
+C01528,Lapsing,North West,223,3.7,492.19,2110
+C01529,Lapsing,Midlands,130,5.0,567.59,2273
+C01530,Lapsing,London,238,3.2,592.36,2078
+C01531,Lapsing,Wales,204,4.3,423.47,1083
+C01532,Lapsing,Midlands,203,3.3,723.09,2197
+C01533,Lapsing,Scotland,190,2.0,148.6,462
+C01534,Lapsing,South East,175,1,430.2,1506
+C01535,Lapsing,Midlands,88,6.1,579.32,1939
+C01536,Lapsing,Midlands,137,2.9,419.31,1438
+C01537,Lapsing,Midlands,171,6.9,901.63,3124
+C01538,Lapsing,Wales,210,3.0,630.83,2838
+C01539,Lapsing,London,237,5.8,515.63,1840
+C01540,Lapsing,South East,245,2.5,534.55,1468
+C01541,Lapsing,North West,176,1,409.52,1437
+C01542,Lapsing,Wales,181,5.7,302.92,1142
+C01543,Lapsing,Midlands,167,3.3,560.47,1917
+C01544,Lapsing,London,204,1.4,630.31,1744
+C01545,Lapsing,Wales,206,2.9,502.77,1816
+C01546,Lapsing,Wales,212,2.3,163.34,584
+C01547,Lapsing,London,167,1.5,560.41,1900
+C01548,Lapsing,North West,141,1.3,558.24,2319
+C01549,Lapsing,North West,123,4.9,647.27,1780
+C01550,Lapsing,London,51,4.5,420.71,1238
+C01551,Lapsing,Wales,215,1,316.85,1309
+C01552,Lapsing,Scotland,172,2.2,599.08,1778
+C01553,Lapsing,London,226,2.9,198.4,736
+C01554,Lapsing,North West,214,3.9,701.97,2311
+C01555,Lapsing,Wales,146,2.3,195.73,711
+C01556,Lapsing,Wales,182,2.3,337.82,1242
+C01557,Lapsing,North West,253,3.5,347.34,1232
+C01558,Lapsing,Wales,192,3.8,649.12,2911
+C01559,Lapsing,Scotland,174,1.1,223.17,559
+C01560,Lapsing,North West,97,1,80.44,209
+C01561,Lapsing,North West,32,5.0,468.68,1609
+C01562,Lapsing,London,300,2.6,397.7,1568
+C01563,Lapsing,London,199,4.5,468.16,1353
+C01564,Lapsing,South East,212,5.0,325.56,1459
+C01565,Lapsing,North West,272,2.8,506.14,1432
+C01566,Lapsing,Scotland,231,4.9,573.06,1465
+C01567,Lapsing,London,239,1.1,256.32,769
+C01568,Lapsing,North West,171,1,398.43,1659
+C01569,Lapsing,London,166,2.9,584.53,1974
+C01570,Lapsing,London,246,1.6,233.83,625
+C01571,Lapsing,London,261,2.3,556.75,2263
+C01572,Lapsing,Wales,151,4.4,403.03,1251
+C01573,Lapsing,Scotland,185,3.3,474.6,1993
+C01574,Lapsing,Midlands,217,5.1,634.98,1883
+C01575,Lapsing,Midlands,230,1,190.25,639
+C01576,Lapsing,London,229,2.0,293.12,1282
+C01577,Lapsing,London,159,3.4,458.27,1691
+C01578,Lapsing,South East,236,1,192.11,828
+C01579,Lapsing,South East,180,2.1,187.21,634
+C01580,Lapsing,Midlands,256,3.3,463.68,1278
+C01581,Lapsing,South East,70,4.5,482.98,2063
+C01582,Lapsing,North West,158,3.8,547.13,1743
+C01583,Lapsing,Midlands,281,2.7,363.66,1082
+C01584,Lapsing,South East,182,4.0,345.93,1000
+C01585,Lapsing,Wales,184,2.2,471.38,1627
+C01586,Lapsing,Midlands,226,5.0,479.2,1515
+C01587,Lapsing,London,160,2.5,359.76,975
+C01588,Lapsing,Wales,261,1,348.04,1315
+C01589,Lapsing,North West,220,5.1,518.99,2286
+C01590,Lapsing,London,307,3.5,313.28,1034
+C01591,Lapsing,South East,195,3.4,505.86,1559
+C01592,Lapsing,London,216,1,112.85,363
+C01593,Lapsing,Midlands,225,4.2,487.73,1389
+C01594,Lapsing,North West,256,3.0,513.45,1464
+C01595,Lapsing,London,220,2.8,353.27,1440
+C01596,Lapsing,North West,157,2.5,480.0,1638
+C01597,Lapsing,Scotland,242,1,698.77,3141
+C01598,Lapsing,South East,150,3.4,400.31,1116
+C01599,Lapsing,Wales,221,2.1,284.64,1053
+C01600,Lapsing,South East,250,3.0,463.66,1730
+C01601,Lapsing,North West,241,2.0,443.09,1666
+C01602,Lapsing,Scotland,246,5.0,305.8,1357
+C01603,Lapsing,Midlands,216,3.6,240.79,633
+C01604,Lapsing,North West,226,1,527.28,2110
+C01605,Lapsing,Wales,143,3.0,361.51,1406
+C01606,Lapsing,Wales,262,4.6,441.84,1618
+C01607,Lapsing,South East,280,2.1,478.21,1390
+C01608,Lapsing,Midlands,220,2.0,452.11,1934
+C01609,Lapsing,North West,274,5.4,514.62,2060
+C01610,Lapsing,Scotland,235,1.7,412.04,1511
+C01611,Lapsing,Scotland,156,2.9,273.76,886
+C01612,Lapsing,South East,229,2.4,521.35,1491
+C01613,Lapsing,Midlands,208,3.6,538.97,1888
+C01614,Lapsing,London,181,1.4,161.8,704
+C01615,Lapsing,North West,252,4.0,337.52,1300
+C01616,Lapsing,North West,195,2.1,627.55,2427
+C01617,Lapsing,Midlands,240,4.9,674.26,2651
+C01618,Lapsing,North West,300,3.2,417.11,1293
+C01619,Lapsing,Scotland,223,1.5,207.29,790
+C01620,Lapsing,Scotland,254,1,40,176
+C01621,Lapsing,Midlands,224,5.4,540.72,1987
+C01622,Lapsing,London,252,3.1,200.68,687
+C01623,Lapsing,Scotland,195,3.9,483.03,1410
+C01624,Lapsing,South East,118,3.2,401.32,1115
+C01625,Lapsing,South East,176,5.3,306.93,985
+C01626,Lapsing,Wales,210,1.0,443.86,1468
+C01627,Lapsing,South East,158,2.7,650.51,2826
+C01628,Lapsing,Midlands,225,7.8,546.69,1988
+C01629,Lapsing,London,277,2.0,273.38,1202
+C01630,Lapsing,Midlands,247,2.1,362.7,986
+C01631,Lapsing,South East,293,2.5,370.81,1428
+C01632,Lapsing,South East,245,5.2,552.66,1922
+C01633,Lapsing,Midlands,252,6.1,473.7,1460
+C01634,Lapsing,South East,237,3.5,459.18,1624
+C01635,Lapsing,Scotland,149,5.9,208.77,576
+C01636,Lapsing,South East,325,2.4,404.76,1785
+C01637,Lapsing,Midlands,238,3.7,249.17,860
+C01638,Lapsing,Wales,249,1.8,319.08,927
+C01639,Lapsing,Scotland,191,1.9,453.42,1192
+C01640,Lapsing,Midlands,212,2.1,319.75,1010
+C01641,Lapsing,Scotland,258,1.9,170.94,526
+C01642,Lapsing,Scotland,165,1.4,575.05,2349
+C01643,Lapsing,Wales,127,1.2,396.75,1706
+C01644,Lapsing,Wales,250,1.7,423.28,1616
+C01645,Lapsing,North West,155,2.4,492.59,2089
+C01646,Lapsing,London,195,4.4,358.14,1373
+C01647,Lapsing,Midlands,179,1,373.36,1674
+C01648,Lapsing,Midlands,279,4.0,554.33,2223
+C01649,Lapsing,Scotland,216,1.7,265.15,931
+C01650,Lapsing,Scotland,224,5.1,537.82,2071
+C01651,Lapsing,London,137,4.7,574.27,1448
+C01652,Lapsing,Scotland,163,2.8,338.39,1300
+C01653,Lapsing,South East,188,3.1,322.66,1420
+C01654,Lapsing,London,197,1.8,392.94,1109
+C01655,Lapsing,Wales,181,2.4,560.35,1590
+C01656,Lapsing,North West,279,3.2,217.88,612
+C01657,Lapsing,London,252,5.1,640.24,2167
+C01658,Lapsing,Wales,164,4.4,257.78,975
+C01659,Lapsing,London,195,2.4,340.87,1260
+C01660,Lapsing,North West,150,3.4,197.74,862
+C01661,Lapsing,South East,244,2.5,431.42,1091
+C01662,Lapsing,London,211,2.8,365.01,1612
+C01663,Lapsing,London,243,1,381.76,1272
+C01664,Lapsing,Midlands,242,3.5,328.0,1231
+C01665,Lapsing,North West,230,4.8,558.12,1634
+C01666,Lapsing,London,199,2.9,437.16,1665
+C01667,Lapsing,North West,159,4.1,698.05,2653
+C01668,Lapsing,Midlands,254,6.0,619.62,2058
+C01669,Lapsing,Midlands,27,3.0,362.68,1576
+C01670,Lapsing,Wales,107,4.8,803.52,2973
+C01671,Lapsing,Wales,180,1,552.13,1747
+C01672,Lapsing,Wales,194,3.2,213.74,952
+C01673,Lapsing,Wales,156,3.2,281.92,920
+C01674,Lapsing,London,160,2.9,250.92,981
+C01675,Lapsing,South East,219,5.1,598.46,2379
+C01676,Lapsing,North West,179,2.6,370.96,1205
+C01677,Lapsing,Scotland,227,4.4,410.84,1623
+C01678,Lapsing,Wales,176,2.9,291.68,891
+C01679,Lapsing,London,214,2.6,441.01,1819
+C01680,Lapsing,South East,150,3.3,658.32,2097
+C01681,Lapsing,Wales,83,2.2,334.21,1295
+C01682,Lapsing,South East,171,3.5,720.99,2554
+C01683,Lapsing,Wales,204,3.1,458.82,1324
+C01684,Lapsing,South East,193,6.5,544.85,1499
+C01685,Lapsing,Wales,115,1.4,451.29,1199
+C01686,Lapsing,Scotland,192,2.1,402.06,1164
+C01687,Lapsing,North West,230,4.0,427.0,1610
+C01688,Lapsing,North West,274,4.1,342.61,1508
+C01689,Lapsing,South East,181,3.5,286.74,1138
+C01690,Lapsing,Scotland,236,4.1,239.85,609
+C01691,Lapsing,Midlands,188,3.3,529.47,1893
+C01692,Lapsing,Scotland,182,2.8,306.41,1050
+C01693,Lapsing,South East,194,4.9,370.3,1455
+C01694,Lapsing,Midlands,216,3.5,516.92,1306
+C01695,Lapsing,Wales,203,1.6,242.51,798
+C01696,Lapsing,Midlands,245,1.8,487.51,1844
+C01697,Lapsing,South East,322,4.4,546.11,2383
+C01698,Lapsing,Wales,209,3.6,582.85,1755
+C01699,Lapsing,Scotland,155,4.9,408.04,1067
+C01700,Lapsing,London,167,5.2,405.89,1211
+C01701,Lapsing,South East,260,2.3,384.05,1471
+C01702,Lapsing,North West,196,2.9,569.26,2199
+C01703,Lapsing,London,211,5.0,455.48,1245
+C01704,Lapsing,Midlands,180,1,93.99,310
+C01705,Lapsing,Scotland,234,2.9,657.51,1862
+C01706,Lapsing,Wales,144,3.0,537.83,2385
+C01707,Lapsing,London,270,1.7,344.34,1497
+C01708,Lapsing,South East,110,4.5,596.22,2442
+C01709,Lapsing,South East,205,4.0,458.52,1152
+C01710,Lapsing,Wales,117,3.0,414.17,1093
+C01711,Lapsing,South East,156,3.8,415.29,1185
+C01712,Lapsing,London,272,2.7,319.49,915
+C01713,Lapsing,South East,105,3.8,472.8,1355
+C01714,Lapsing,Wales,229,2.8,713.81,2368
+C01715,Lapsing,London,235,2.6,367.62,982
+C01716,Lapsing,Scotland,191,2.8,537.13,1972
+C01717,Lapsing,Wales,109,3.2,539.35,2379
+C01718,Lapsing,Midlands,213,1,134.55,362
+C01719,Lapsing,Scotland,225,1.6,40,121
+C01720,Lapsing,North West,191,1.7,387.62,1302
+C01721,Lapsing,Scotland,187,1.7,328.68,1059
+C01722,Lapsing,North West,251,2.6,438.37,1408
+C01723,Lapsing,South East,212,2.9,513.08,2140
+C01724,Lapsing,Wales,166,3.8,461.85,1645
+C01725,Lapsing,Midlands,210,1.9,171.15,726
+C01726,Lapsing,North West,237,2.2,433.81,1940
+C01727,Lapsing,Scotland,266,3.1,669.65,2110
+C01728,Lapsing,London,241,3.2,587.44,2337
+C01729,Lapsing,Wales,128,5.9,684.25,2612
+C01730,Lapsing,South East,185,5.0,372.99,1152
+C01731,Lapsing,London,181,1,514.88,2025
+C01732,Lapsing,Wales,136,4.9,674.26,2092
+C01733,Lapsing,Scotland,387,2.9,124.22,548
+C01734,Lapsing,Wales,236,2.4,308.08,901
+C01735,Lapsing,North West,201,2.3,427.13,1861
+C01736,Lapsing,North West,209,5.1,366.68,1078
+C01737,Lapsing,Wales,136,1,240.87,1047
+C01738,Lapsing,South East,132,2.9,355.75,1382
+C01739,Lapsing,Wales,303,1.9,215.2,700
+C01740,Lapsing,Midlands,159,2.9,190.99,727
+C01741,Lapsing,London,273,2.7,417.77,1288
+C01742,Lapsing,Wales,256,5.1,625.69,2737
+C01743,Lapsing,Wales,283,2.3,476.64,1554
+C01744,Lapsing,Scotland,247,3.5,441.97,1578
+C01745,Lapsing,Midlands,262,2.8,273.7,1120
+C01746,Lapsing,London,278,2.0,218.3,592
+C01747,Lapsing,Scotland,145,2.6,609.93,2546
+C01748,Lapsing,Wales,323,2.6,334.03,1024
+C01749,Lapsing,Wales,155,1,284.89,888
+C01750,Lapsing,Scotland,132,6.6,898.12,3514
+C01751,Lapsing,North West,182,2.2,295.26,773
+C01752,Lapsing,South East,361,4.4,656.8,2756
+C01753,Lapsing,Scotland,204,2.5,459.56,1597
+C01754,Lapsing,South East,182,2.2,631.58,2731
+C01755,Lapsing,Scotland,285,2.9,305.75,1370
+C01756,Lapsing,Wales,287,1.6,471.49,1446
+C01757,Lapsing,Midlands,293,1.9,316.17,995
+C01758,Lapsing,North West,202,3.3,398.45,1741
+C01759,Lapsing,South East,175,3.2,569.7,1756
+C01760,Lapsing,Wales,280,3.7,691.96,2001
+C01761,Lapsing,South East,306,3.1,238.07,1066
+C01762,Lapsing,South East,169,1,619.22,2390
+C01763,Lapsing,Midlands,234,2.7,494.85,1289
+C01764,Lapsing,Wales,204,1.8,220.71,980
+C01765,Lapsing,Midlands,202,1.9,479.0,1487
+C01766,Lapsing,Wales,251,5.1,446.38,1451
+C01767,Lapsing,Scotland,299,2.9,547.19,2263
+C01768,Lapsing,London,246,2.7,607.42,1965
+C01769,Lapsing,Midlands,233,3.5,247.42,730
+C01770,Lapsing,Wales,108,1.2,269.04,820
+C01771,Lapsing,North West,277,4.1,40,156
+C01772,Lapsing,Midlands,389,2.4,367.46,965
+C01773,Lapsing,Midlands,254,5.5,697.83,2493
+C01774,Lapsing,Wales,219,1.2,359.76,1320
+C01775,Lapsing,London,247,1.0,342.98,1309
+C01776,Lapsing,Midlands,169,3.9,625.84,1790
+C01777,Lapsing,London,161,3.4,614.62,2339
+C01778,Lapsing,London,229,1,235.38,605
+C01779,Lapsing,London,153,2.9,276.65,1215
+C01780,Lapsing,North West,193,3.0,463.23,2034
+C01781,Lapsing,North West,175,1.6,174.25,618
+C01782,Lapsing,Wales,167,1.6,260.1,1008
+C01783,Lapsing,South East,229,2.0,424.86,1770
+C01784,Lapsing,South East,257,2.2,327.99,1056
+C01785,Lapsing,South East,202,1.4,254.2,966
+C01786,Lapsing,Scotland,196,2.5,434.05,1306
+C01787,Lapsing,Wales,241,2.7,464.27,1411
+C01788,Lapsing,Wales,291,2.7,320.61,1040
+C01789,Lapsing,Scotland,167,1.6,496.16,1554
+C01790,Lapsing,North West,306,1,588.87,1764
+C01791,Lapsing,North West,231,3.5,391.08,1478
+C01792,Lapsing,South East,203,5.2,376.5,1051
+C01793,Lapsing,London,206,3.7,545.38,2402
+C01794,Lapsing,Scotland,205,4.1,665.43,2072
+C01795,Lapsing,London,256,3.8,348.95,1062
+C01796,Lapsing,Scotland,189,3.7,397.39,1746
+C01797,Lapsing,Scotland,256,5.5,410.35,1479
+C01798,Lapsing,Midlands,115,2.2,399.58,1007
+C01799,Lapsing,Wales,190,1,453.19,1375
+C01800,Lapsing,Wales,271,2.1,279.71,1134
+C01801,Lapsing,Midlands,137,1.5,527.95,2163
+C01802,Lapsing,Wales,370,2.2,722.56,2559
+C01803,Lapsing,Scotland,291,1.1,251.37,1105
+C01804,Lapsing,London,321,3.4,166.75,629
+C01805,Lapsing,Midlands,192,1,364.48,1453
+C01806,Lapsing,Scotland,228,5.5,409.62,1033
+C01807,Lapsing,Wales,148,1,447.55,1732
+C01808,Lapsing,Midlands,263,4.8,350.73,1161
+C01809,Lapsing,North West,252,5.6,672.44,2400
+C01810,Lapsing,Midlands,213,3.1,652.88,2874
+C01811,Lapsing,Midlands,203,2.6,323.17,1409
+C01812,Lapsing,South East,222,3.8,401.28,1298
+C01813,Lapsing,London,62,2.7,286.4,930
+C01814,Lapsing,London,237,1.8,552.16,2299
+C01815,Lapsing,Scotland,193,4.7,485.89,1828
+C01816,Lapsing,Wales,214,3.3,547.28,2390
+C01817,Lapsing,London,84,2.7,679.29,2851
+C01818,Lapsing,North West,160,1.7,521.24,1646
+C01819,Lapsing,Scotland,254,3.9,430.24,1083
+C01820,Lapsing,South East,150,2.4,397.72,1403
+C01821,Lapsing,Scotland,98,4.8,730.16,2191
+C01822,Lapsing,South East,214,2.0,452.1,1518
+C01823,Lapsing,South East,164,2.7,613.36,2072
+C01824,Lapsing,Wales,204,2.0,499.91,1609
+C01825,Lapsing,London,222,3.9,592.67,2363
+C01826,Lapsing,Wales,225,3.5,520.19,1799
+C01827,Lapsing,South East,240,2.9,253.37,979
+C01828,Lapsing,Midlands,215,1.8,585.93,2498
+C01829,Lapsing,London,195,1,374.0,1651
+C01830,Lapsing,Wales,182,4.0,550.25,1391
+C01831,Lapsing,Scotland,218,5.3,300.32,1194
+C01832,Lapsing,Scotland,348,1.8,385.67,1028
+C01833,Lapsing,North West,210,3.9,348.71,1407
+C01834,Lapsing,South East,207,4.1,461.4,1911
+C01835,Lapsing,South East,107,3.4,617.92,2300
+C01836,Lapsing,South East,269,5.0,491.4,1852
+C01837,Lapsing,London,254,4.0,448.07,1251
+C01838,Lapsing,Scotland,249,2.5,359.66,936
+C01839,Lapsing,London,118,2.6,503.82,1689
+C01840,Lapsing,North West,205,1,327.54,1018
+C01841,Lapsing,South East,116,5.7,503.37,2160
+C01842,Lapsing,South East,166,3.5,450.63,1798
+C01843,Lapsing,Scotland,199,4.2,350.88,1054
+C01844,Lapsing,London,170,2.2,476.71,1284
+C01845,Lapsing,Wales,168,1,430.45,1773
+C01846,Lapsing,Wales,251,3.3,264.3,857
+C01847,Lapsing,Midlands,197,5.0,555.12,2087
+C01848,Lapsing,Wales,225,4.5,605.69,2619
+C01849,Lapsing,Midlands,226,2.1,324.05,1421
+C01850,Lapsing,South East,219,1.7,554.65,2484
+C01851,Lapsing,Midlands,176,2.8,513.93,2016
+C01852,Lapsing,Wales,255,6.1,499.55,1697
+C01853,Lapsing,London,258,4.1,293.67,1294
+C01854,Lapsing,North West,218,3.6,541.1,2400
+C01855,Lapsing,Scotland,284,3.5,501.14,1995
+C01856,Lapsing,London,121,1.2,351.44,1240
+C01857,Lapsing,North West,261,5.2,324.54,1072
+C01858,Lapsing,Midlands,279,3.0,432.82,1577
+C01859,Lapsing,Midlands,169,1,378.99,1484
+C01860,Lapsing,North West,146,2.8,686.96,2125
+C01861,Lapsing,South East,175,2.7,507.23,1308
+C01862,Lapsing,London,223,4.1,425.01,1176
+C01863,Lapsing,North West,182,2.1,461.64,1155
+C01864,Lapsing,Wales,144,1,62.5,197
+C01865,Lapsing,London,245,2.2,588.63,1819
+C01866,Lapsing,Wales,305,2.8,399.49,1283
+C01867,Lapsing,Midlands,247,2.8,582.96,2599
+C01868,Lapsing,Wales,197,4.9,641.57,2094
+C01869,Lapsing,North West,206,5.1,428.68,1451
+C01870,Lapsing,Scotland,185,2.8,594.21,2445
+C01871,Lapsing,London,234,3.9,436.2,1878
+C01872,Lapsing,South East,153,1.3,357.42,1477
+C01873,Lapsing,South East,236,4.6,458.61,1166
+C01874,Lapsing,South East,124,5.1,332.67,1289
+C01875,Lapsing,London,231,3.2,438.95,1949
+C01876,Lapsing,London,341,2.9,339.66,1359
+C01877,Lapsing,Wales,163,2.1,644.51,2595
+C01878,Lapsing,North West,225,3.7,419.55,1695
+C01879,Lapsing,London,263,4.6,849.18,3749
+C01880,Lapsing,London,223,1,271.98,1144
+C01881,Lapsing,North West,230,4.6,345.52,977
+C01882,Lapsing,North West,185,1.9,389.37,1397
+C01883,Lapsing,Midlands,189,2.4,427.5,1322
+C01884,Lapsing,South East,185,4.2,372.09,931
+C01885,Lapsing,Wales,273,3.2,552.34,1630
+C01886,Lapsing,London,280,1,532.61,2208
+C01887,Lapsing,London,27,3.2,485.31,1487
+C01888,Lapsing,London,358,2.4,350.8,1525
+C01889,Lapsing,Wales,275,1.8,445.33,1647
+C01890,Lapsing,Midlands,276,1,474.0,1836
+C01891,Lapsing,North West,233,1.7,617.04,2359
+C01892,Lapsing,London,291,3.9,250.4,664
+C01893,Lapsing,Scotland,317,1,353.69,989
+C01894,Lapsing,London,177,2.5,159.44,551
+C01895,Lapsing,South East,258,4.0,449.94,1416
+C01896,Lapsing,Scotland,177,3.6,570.15,1789
+C01897,Lapsing,Wales,50,3.5,279.04,775
+C01898,Lapsing,Midlands,159,4.3,406.89,1464
+C01899,Lapsing,Scotland,138,2.6,464.26,1700
+C01900,Lapsing,South East,157,1,299.16,1233
+C01901,Lapsing,Midlands,197,1.9,825.02,2091
+C01902,Lapsing,North West,213,2.2,400.53,1090
+C01903,Lapsing,Midlands,135,5.2,523.27,1790
+C01904,Lapsing,South East,178,6.3,496.02,1481
+C01905,Lapsing,London,241,3.3,643.5,2095
+C01906,Lapsing,London,188,2.5,260.19,679
+C01907,Lapsing,North West,198,2.5,547.75,1402
+C01908,Lapsing,Scotland,107,3.7,529.81,1338
+C01909,Lapsing,North West,232,3.8,441.36,1720
+C01910,Lapsing,Wales,110,1,381.75,1293
+C01911,Lapsing,South East,193,1.8,534.64,1371
+C01912,Lapsing,Wales,313,2.8,410.7,1711
+C01913,Lapsing,North West,273,2.5,372.93,1359
+C01914,Lapsing,London,165,2.6,261.88,737
+C01915,Lapsing,South East,46,2.4,465.94,1742
+C01916,Lapsing,Midlands,239,1,503.03,2239
+C01917,Lapsing,Scotland,270,1,221.02,836
+C01918,Lapsing,South East,220,4.4,692.37,2626
+C01919,Lapsing,South East,206,3.7,289.78,919
+C01920,Lapsing,Midlands,289,2.6,576.22,1516
+C01921,Lapsing,South East,341,3.2,464.9,2026
+C01922,Lapsing,Midlands,247,2.5,781.26,2836
+C01923,Lapsing,North West,279,2.9,473.28,1475
+C01924,Lapsing,North West,218,3.0,68.12,238
+C01925,Lapsing,Scotland,211,1,555.11,1496
+C01926,Lapsing,South East,195,4.4,376.21,1318
+C01927,Lapsing,South East,316,3.4,156.65,403
+C01928,Lapsing,London,227,4.0,586.01,2503
+C01929,Lapsing,Wales,252,2.7,452.63,1259
+C01930,Lapsing,Wales,299,5.0,807.55,2853
+C01931,Lapsing,North West,153,1.8,391.71,1082
+C01932,Lapsing,Wales,145,1.1,556.53,1871
+C01933,Lapsing,South East,219,1.5,410.44,1088
+C01934,Lapsing,London,290,1,156.01,420
+C01935,Lapsing,London,286,5.4,161.87,658
+C01936,Lapsing,North West,164,1.3,354.97,1008
+C01937,Lapsing,Scotland,236,4.0,421.76,1206
+C01938,Lapsing,Scotland,230,2.9,574.93,1732
+C01939,Lapsing,North West,191,2.3,522.48,1348
+C01940,Lapsing,South East,265,1,500.98,2171
+C01941,Lapsing,Scotland,143,3.7,360.04,960
+C01942,Lapsing,Wales,173,1.8,369.1,1569
+C01943,Lapsing,Midlands,369,4.1,695.6,2712
+C01944,Lapsing,South East,247,5.9,551.04,1698
+C01945,Lapsing,North West,104,1.7,417.85,1604
+C01946,Lapsing,Scotland,330,1,382.72,1646
+C01947,Lapsing,Scotland,239,3.6,719.51,2370
+C01948,Lapsing,Midlands,306,3.4,555.47,1741
+C01949,Lapsing,South East,117,3.2,316.2,815
+C01950,Lapsing,Midlands,217,3.8,426.96,1250
+C01951,Lapsing,Scotland,290,3.4,195.9,631
+C01952,Lapsing,London,306,4.0,448.17,1310
+C01953,Lapsing,London,297,2.3,368.56,983
+C01954,Lapsing,Scotland,295,2.9,473.45,2011
+C01955,Lapsing,London,261,1.7,314.57,1309
+C01956,Lapsing,North West,169,4.3,379.34,1679
+C01957,Lapsing,South East,238,4.2,328.85,1275
+C01958,Lapsing,Midlands,243,4.6,450.61,1949
+C01959,Lapsing,Wales,203,3.1,464.39,1233
+C01960,Lapsing,Wales,131,2.3,353.41,1353
+C01961,Lapsing,South East,206,1,307.55,1051
+C01962,Lapsing,Wales,241,1.7,368.09,1503
+C01963,Lapsing,South East,149,4.0,613.55,2555
+C01964,Lapsing,London,212,1.6,213.78,782
+C01965,Lapsing,Scotland,243,7.1,429.29,1216
+C01966,Lapsing,Wales,246,3.2,522.59,1506
+C01967,Lapsing,Midlands,201,2.9,425.13,1825
+C01968,Lapsing,Scotland,200,3.3,367.45,1285
+C01969,Lapsing,North West,162,3.7,518.29,2305
+C01970,Lapsing,South East,154,3.7,505.14,1696
+C01971,Lapsing,Wales,176,2.7,302.87,1157
+C01972,Lapsing,London,229,1.9,418.49,1565
+C01973,Lapsing,Scotland,319,2.9,577.97,2157
+C01974,Lapsing,Midlands,263,5.0,640.77,2401
+C01975,Lapsing,Scotland,263,4.0,426.65,1314
+C01976,Lapsing,London,202,3.6,680.23,2451
+C01977,Lapsing,Scotland,233,4.6,743.85,3219
+C01978,Lapsing,Scotland,321,4.8,382.23,1555
+C01979,Lapsing,North West,268,3.1,441.42,1880
+C01980,Lapsing,Wales,258,1.9,657.06,2838
+C01981,Lapsing,North West,217,6.2,527.34,1480
+C01982,Lapsing,North West,215,4.0,316.63,1261
+C01983,Lapsing,South East,133,6.3,654.64,2911
+C01984,Lapsing,Midlands,208,1.9,281.93,734
+C01985,Lapsing,North West,82,4.5,306.75,1014
+C01986,Lapsing,South East,272,1.4,339.76,917
+C01987,Lapsing,North West,125,2.9,475.32,1785
+C01988,Lapsing,London,97,3.5,368.12,1158
+C01989,Lapsing,Wales,264,3.9,326.09,833
+C01990,Lapsing,London,152,1,238.35,868
+C01991,Lapsing,South East,208,2.2,198.79,639
+C01992,Lapsing,South East,234,2.4,314.46,908
+C01993,Lapsing,London,194,1,261.61,681
+C01994,Lapsing,Midlands,242,4.9,419.22,1583
+C01995,Lapsing,North West,230,2.5,462.68,1288
+C01996,Lapsing,North West,196,3.5,402.89,1405
+C01997,Lapsing,Scotland,245,2.5,599.8,1996
+C01998,Lapsing,Scotland,273,3.6,428.99,1662
+C01999,Lapsing,South East,275,1.6,286.63,888
+C02000,Lapsing,London,221,1.9,207.7,874

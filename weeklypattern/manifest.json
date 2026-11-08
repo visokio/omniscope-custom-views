@@ -1,0 +1,138 @@
+{
+  "name": "Weekly Pattern",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "heatmap",
+    "day of week",
+    "hour of day",
+    "weekly pattern",
+    "staffing",
+    "capacity",
+    "punch card",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "time": {
+        "displayName": "Timestamps",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "Date and time of each record, e.g. call received, order placed, visit started"
+      },
+      "value": {
+        "displayName": "Measure",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional: what to count or add up per hour (default: number of records)"
+      },
+      "show": {
+        "displayName": "Show",
+        "type": "CHOICE",
+        "values": [
+          "AVERAGE",
+          "TOTAL"
+        ],
+        "displayValues": [
+          "Average per week",
+          "Total for the period"
+        ],
+        "detail": "Average per week makes periods of different lengths comparable"
+      },
+      "utcOffset": {
+        "displayName": "Shift hours",
+        "type": "NUMBER",
+        "minValue": -14,
+        "maxValue": 14,
+        "detail": "Shift all times by this many hours, e.g. to convert UTC to local time (default 0)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "time",
+        "value",
+        "show"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Data",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "time",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "show",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "utcOffset",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "show": "AVERAGE",
+      "utcOffset": 0
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 200
+  }
+}

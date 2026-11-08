@@ -1,0 +1,181 @@
+{
+  "name": "Year on Year",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "year on year",
+    "yoy",
+    "year to date",
+    "ytd",
+    "seasonal comparison",
+    "financial year",
+    "trend",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "date": {
+        "displayName": "Dated by",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "The date of each record, e.g. Order date"
+      },
+      "value": {
+        "displayName": "Measure",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "What to compare, e.g. sum of Revenue (default: number of records)"
+      },
+      "period": {
+        "displayName": "Period",
+        "type": "CHOICE",
+        "values": [
+          "MONTH",
+          "QUARTER",
+          "WEEK",
+          "DAY"
+        ],
+        "displayValues": [
+          "Month",
+          "Quarter",
+          "Week",
+          "Day"
+        ],
+        "detail": "Size of each point (default month)"
+      },
+      "mode": {
+        "displayName": "Show",
+        "type": "CHOICE",
+        "values": [
+          "PERIOD",
+          "CUMULATIVE"
+        ],
+        "displayValues": [
+          "Each period",
+          "Running total (year to date)"
+        ],
+        "detail": "Values per period, or cumulative through the year"
+      },
+      "years": {
+        "displayName": "Years shown",
+        "type": "NUMBER",
+        "minValue": 2,
+        "maxValue": 8,
+        "detail": "Number of most recent years drawn (default 3)"
+      },
+      "fiscalStart": {
+        "displayName": "Year starts in month",
+        "type": "NUMBER",
+        "minValue": 1,
+        "maxValue": 12,
+        "detail": "1 for calendar years, 4 for a UK financial year starting in April"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "date",
+        "value",
+        "period",
+        "mode"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Data",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "date",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Comparison",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "period",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "mode",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "years",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "fiscalStart",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "period": "MONTH",
+      "mode": "PERIOD",
+      "years": 3,
+      "fiscalStart": 1
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

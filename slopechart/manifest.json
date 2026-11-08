@@ -1,0 +1,213 @@
+{
+  "name": "Slope Chart",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "slope chart",
+    "before and after",
+    "change",
+    "comparison",
+    "ranking",
+    "market share",
+    "movers",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 20000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "item": {
+        "displayName": "Items",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "What to compare, e.g. Brand, Product, Region"
+      },
+      "period": {
+        "displayName": "Periods",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "The periods to compare, e.g. Year (the first and last are used unless From and To are set)"
+      },
+      "value": {
+        "displayName": "Measure",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "e.g. sum of Sales"
+      },
+      "from": {
+        "displayName": "From",
+        "type": "TEXT",
+        "detail": "Optional: the earlier period, as it appears in the data (e.g. 2022)"
+      },
+      "to": {
+        "displayName": "To",
+        "type": "TEXT",
+        "detail": "Optional: the later period (e.g. 2026)"
+      },
+      "show": {
+        "displayName": "Show",
+        "type": "CHOICE",
+        "values": [
+          "VALUE",
+          "SHARE",
+          "RANK"
+        ],
+        "displayValues": [
+          "Values",
+          "Share of total",
+          "Rank"
+        ],
+        "detail": "Compare values, shares of the total in each period, or ranks"
+      },
+      "topN": {
+        "displayName": "Items shown",
+        "type": "NUMBER",
+        "minValue": 2,
+        "maxValue": 60,
+        "detail": "The largest items are shown (default 15)"
+      },
+      "flat": {
+        "displayName": "Flat below %",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 100,
+        "detail": "Changes smaller than this are drawn in grey (default 5)"
+      },
+      "zeroBase": {
+        "displayName": "Start at zero",
+        "type": "TOGGLE",
+        "detail": "Start the value axis at zero; turn off to spread small differences"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "item",
+        "period",
+        "value",
+        "show"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Comparison",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "item",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "period",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "from",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "to",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "show",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "topN",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "flat",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "zeroBase",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "show": "VALUE",
+      "topN": 15,
+      "flat": 5,
+      "zeroBase": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

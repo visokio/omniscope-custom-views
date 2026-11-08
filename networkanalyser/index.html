@@ -1,0 +1,483 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body {
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px;
+            --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781; --line: #e1e0d9; --ring: rgba(11,11,11,0.10);
+            background: var(--surface); color: var(--ink);
+        }
+        #main { position: absolute; left: 0; top: 0; bottom: 0; right: 0; }
+        body.panel #main { right: 250px; }
+        canvas { display: block; }
+        #panel {
+            position: absolute; top: 0; right: 0; bottom: 0; width: 250px; box-sizing: border-box; overflow-y: auto;
+            border-left: 1px solid var(--line); padding: 10px 12px; display: none; background: var(--surface);
+        }
+        body.panel #panel { display: block; }
+        #panel h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink2); margin: 14px 0 6px; }
+        #panel h3:first-child { margin-top: 0; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .stat { background: rgba(127,127,127,0.07); border-radius: 6px; padding: 6px 8px; }
+        .stat b { display: block; font-size: 16px; }
+        .stat span { color: var(--ink2); font-size: 11px; }
+        .row { display: flex; align-items: center; gap: 6px; padding: 3px 4px; border-radius: 4px; cursor: pointer; }
+        .row:hover { background: rgba(127,127,127,0.12); }
+        .row.sel { outline: 1px dashed #2161D9; }
+        .row .sw { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+        .row .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+        .row .v { color: var(--muted); font-variant-numeric: tabular-nums; }
+        .bar { height: 3px; background: #2a78d6; border-radius: 2px; margin: 0 4px 2px 20px; opacity: .55; }
+        input[type=text] { width: 100%; box-sizing: border-box; font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 4px; margin-bottom: 4px; background: #fff; }
+        button { font: inherit; padding: 3px 10px; border: 1px solid var(--line); border-radius: 4px; background: #fff; cursor: pointer; color: var(--ink2); }
+        button:hover { color: var(--ink); }
+        #pathResult { color: var(--ink2); margin-top: 4px; line-height: 1.4; }
+        #tooltip {
+            position: absolute; display: none; pointer-events: none; z-index: 5; background: rgba(252,252,251,0.96);
+            border: 1px solid var(--ring); box-shadow: 0 4px 14px rgba(0,0,0,0.15); border-radius: 6px; padding: 8px 10px; line-height: 1.45; white-space: nowrap;
+        }
+        #tooltip .k { color: var(--ink2); }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: var(--ink2); font-size: 14px; padding: 20px; background: var(--surface); z-index: 6; }
+        #status { position: absolute; left: 8px; bottom: 6px; color: var(--muted); font-size: 11px; pointer-events: none; }
+        #focusBar { position: absolute; left: 8px; top: 8px; display: none; gap: 6px; align-items: center; background: rgba(252,252,251,0.92); border: 1px solid var(--ring); border-radius: 6px; padding: 4px 8px; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><canvas id="canvas"></canvas></div><!-- This element is where the view will render -->
+<div id="panel"></div>
+<div id="tooltip"></div>
+<div id="focusBar"><span id="focusText"></span><button id="clearFocus">Show all</button></div>
+<div id="status"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    var PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];
+    var OTHER = "#b5b3ac", SELECT = "#2161D9";
+    var METRIC_LABEL = { BETWEENNESS: "Betweenness", PAGERANK: "PageRank", DEGREE: "Degree", WEIGHTED_DEGREE: "Weighted degree" };
+    var S = { nodes: [], links: [], selected: new Set(), focus: null, path: null, hover: null, transform: d3.zoomIdentity, sim: null, key: null };
+    window.__network = S; // for tests
+
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || v === undefined || isNaN(v)) return "n/a"; var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(1) + "M" : a >= 1e3 ? Math.round(v).toLocaleString() : a >= 10 ? v.toFixed(0) : a >= 1 ? v.toFixed(1) : v.toFixed(3); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function gField(g) { return g ? (typeof g === "string" ? g : g.inputField) : null; }
+
+    // ================================================================ graph algorithms
+    // Louvain community detection (undirected, weighted). Returns community index per node.
+    function louvain(n, edges) {
+        var comm = new Array(n), level = [];
+        for (var i = 0; i < n; i++) comm[i] = i;
+        var nodeMap = comm.slice(), curN = n, curEdges = edges;
+        for (var pass = 0; pass < 10; pass++) {
+            var adj = []; for (i = 0; i < curN; i++) adj.push([]);
+            var k = new Float64Array(curN), m2 = 0;
+            curEdges.forEach(function (e) { adj[e[0]].push([e[1], e[2]]); if (e[0] !== e[1]) adj[e[1]].push([e[0], e[2]]); k[e[0]] += e[2]; k[e[1]] += e[2]; m2 += 2 * e[2]; });
+            if (!m2) break;
+            var c = new Int32Array(curN), tot = new Float64Array(curN);
+            for (i = 0; i < curN; i++) { c[i] = i; tot[i] = k[i]; }
+            var moved = true, any = false, rounds = 0;
+            while (moved && rounds++ < 20) {
+                moved = false;
+                for (i = 0; i < curN; i++) {
+                    var ci = c[i], w = {};
+                    adj[i].forEach(function (a) { if (a[0] !== i) w[c[a[0]]] = (w[c[a[0]]] || 0) + a[1]; });
+                    tot[ci] -= k[i];
+                    var best = ci, bestGain = (w[ci] || 0) - tot[ci] * k[i] / m2;
+                    for (var cc in w) { var g = w[cc] - tot[cc] * k[i] / m2; if (g > bestGain + 1e-12) { bestGain = g; best = +cc; } }
+                    tot[best] += k[i];
+                    if (best !== ci) { c[i] = best; moved = true; any = true; }
+                }
+            }
+            if (!any) break;
+            var remap = {}, nc = 0;
+            for (i = 0; i < curN; i++) if (remap[c[i]] === undefined) remap[c[i]] = nc++;
+            for (i = 0; i < n; i++) nodeMap[i] = remap[c[nodeMap[i]]];
+            var agg = {};
+            curEdges.forEach(function (e) { var a = remap[c[e[0]]], b = remap[c[e[1]]], key = a < b ? a + "," + b : b + "," + a; agg[key] = (agg[key] || 0) + e[2]; });
+            curEdges = Object.keys(agg).map(function (key) { var p = key.split(","); return [+p[0], +p[1], agg[key]]; });
+            curN = nc;
+        }
+        return nodeMap;
+    }
+    function modularity(n, edges, comm) {
+        var k = new Float64Array(n), m2 = 0, inW = {}, tot = {};
+        edges.forEach(function (e) { k[e[0]] += e[2]; k[e[1]] += e[2]; m2 += 2 * e[2]; if (comm[e[0]] === comm[e[1]]) inW[comm[e[0]]] = (inW[comm[e[0]]] || 0) + 2 * e[2]; });
+        if (!m2) return 0;
+        for (var i = 0; i < n; i++) tot[comm[i]] = (tot[comm[i]] || 0) + k[i];
+        var q = 0; for (var c in tot) q += (inW[c] || 0) / m2 - Math.pow(tot[c] / m2, 2);
+        return q;
+    }
+    // Brandes betweenness on the unweighted graph; samples pivots on large graphs.
+    function betweenness(n, nbrs) {
+        var cb = new Float64Array(n), pivots = [], i;
+        for (i = 0; i < n; i++) pivots.push(i);
+        var sample = n > 1500 ? 400 : n;
+        if (sample < n) { for (i = n - 1; i > 0; i--) { var j = (i * 7919 + 13) % (i + 1); var t = pivots[i]; pivots[i] = pivots[j]; pivots[j] = t; } pivots = pivots.slice(0, sample); }
+        var sigma = new Float64Array(n), dist = new Int32Array(n), delta = new Float64Array(n);
+        pivots.forEach(function (s) {
+            var stack = [], pred = []; for (var v = 0; v < n; v++) { pred.push(null); sigma[v] = 0; dist[v] = -1; delta[v] = 0; }
+            sigma[s] = 1; dist[s] = 0; var q = [s], h = 0;
+            while (h < q.length) {
+                var v2 = q[h++]; stack.push(v2);
+                var nb = nbrs[v2];
+                for (var x = 0; x < nb.length; x++) {
+                    var w = nb[x];
+                    if (dist[w] < 0) { dist[w] = dist[v2] + 1; q.push(w); }
+                    if (dist[w] === dist[v2] + 1) { sigma[w] += sigma[v2]; (pred[w] = pred[w] || []).push(v2); }
+                }
+            }
+            while (stack.length) { var w2 = stack.pop(); (pred[w2] || []).forEach(function (u) { delta[u] += sigma[u] / sigma[w2] * (1 + delta[w2]); }); if (w2 !== s) cb[w2] += delta[w2]; }
+        });
+        var scale = n / pivots.length, norm = n > 2 ? 1 / ((n - 1) * (n - 2)) : 1;
+        for (i = 0; i < n; i++) cb[i] = cb[i] * scale * norm; // normalised (undirected graphs count each pair twice, as does this sum)
+        return cb;
+    }
+    function pagerank(n, out, wOut) {
+        var pr = new Float64Array(n).fill(1 / n), d = 0.85;
+        for (var it = 0; it < 40; it++) {
+            var nx = new Float64Array(n).fill((1 - d) / n), dangling = 0;
+            for (var i = 0; i < n; i++) {
+                if (!out[i].length) { dangling += pr[i]; continue; }
+                var tw = wOut[i];
+                for (var j = 0; j < out[i].length; j++) nx[out[i][j][0]] += d * pr[i] * out[i][j][1] / tw;
+            }
+            for (i = 0; i < n; i++) nx[i] += d * dangling / n;
+            pr = nx;
+        }
+        return pr;
+    }
+    function shortestPath(a, b, nbrs) {
+        if (a === b) return [a];
+        var prev = new Int32Array(nbrs.length).fill(-1), q = [a], h = 0; prev[a] = a;
+        while (h < q.length) { var v = q[h++]; for (var i = 0; i < nbrs[v].length; i++) { var w = nbrs[v][i]; if (prev[w] < 0) { prev[w] = v; if (w === b) { var p = [b]; while (p[0] !== a) p.unshift(prev[p[0]]); return p; } q.push(w); } } }
+        return null;
+    }
+
+    // ================================================================ build model from context
+    function build(ctx) {
+        var it = ctx.options.items, res = ctx.result, mp = res.mappings || {};
+        var recs = res.data.records || [], minW = +it.minWeight || 0, directed = !!it.directed;
+        var idx = {}, nodes = [], pairs = {};
+        function node(v) { var k = String(v); if (idx[k] === undefined) { idx[k] = nodes.length; nodes.push({ id: v, key: k, i: nodes.length }); } return idx[k]; }
+        recs.forEach(function (r) {
+            var a = r[mp.source], b = r[mp.target]; if (a === null || b === null || a === undefined || b === undefined) return;
+            var w = mp.weight !== undefined ? r[mp.weight] : 1; if (typeof w !== "number" || !isFinite(w)) w = 0;
+            if (w < minW || (minW > 0 && w <= 0)) return;
+            var i = node(a), j = node(b), key = directed ? i + ">" + j : (i < j ? i + "-" + j : j + "-" + i);
+            if (!pairs[key]) pairs[key] = { source: i, target: j, w: 0, rows: 0 };
+            pairs[key].w += w; pairs[key].rows++;
+        });
+        var links = Object.keys(pairs).map(function (k) { return pairs[k]; });
+        var n = nodes.length;
+        var und = {}, nbrs = [], out = [], wOut = new Float64Array(n), deg = new Float64Array(n), wdeg = new Float64Array(n);
+        for (var i = 0; i < n; i++) { nbrs.push([]); out.push([]); }
+        links.forEach(function (l) {
+            var a = l.source, b = l.target, key = a < b ? a + "-" + b : b + "-" + a;
+            und[key] = (und[key] || 0) + Math.max(l.w, 1e-9);
+            out[a].push([b, Math.max(l.w, 1e-9)]); wOut[a] += Math.max(l.w, 1e-9);
+            if (!directed) { out[b].push([a, Math.max(l.w, 1e-9)]); wOut[b] += Math.max(l.w, 1e-9); }
+            wdeg[a] += l.w; wdeg[b] += l.w;
+        });
+        var uedges = Object.keys(und).map(function (k) { var p = k.split("-"); return [+p[0], +p[1], und[k]]; });
+        uedges.forEach(function (e) { if (e[0] !== e[1]) { nbrs[e[0]].push(e[1]); nbrs[e[1]].push(e[0]); deg[e[0]]++; deg[e[1]]++; } });
+        var dnbrs = directed ? out.map(function (o) { return o.map(function (x) { return x[0]; }); }) : nbrs;
+        var comm = louvain(n, uedges), q = modularity(n, uedges, comm);
+        var bc = betweenness(n, nbrs), pr = pagerank(n, out, wOut);
+        // Communities sorted by size; the eight largest get palette slots.
+        var sizes = {}; comm.forEach(function (c) { sizes[c] = (sizes[c] || 0) + 1; });
+        var order = Object.keys(sizes).sort(function (a, b) { return sizes[b] - sizes[a] || a - b; });
+        var rank = {}; order.forEach(function (c, r) { rank[c] = r; });
+        nodes.forEach(function (d, i) {
+            d.comm = rank[comm[i]]; d.degree = deg[i]; d.wdegree = wdeg[i]; d.betweenness = bc[i]; d.pagerank = pr[i];
+        });
+        var communities = order.map(function (c, r) { return { index: r, size: sizes[c], members: nodes.filter(function (d) { return d.comm === r; }) }; });
+        var metric = it.sizeBy || "BETWEENNESS";
+        var mval = function (d) { return metric === "PAGERANK" ? d.pagerank : metric === "DEGREE" ? d.degree : metric === "WEIGHTED_DEGREE" ? d.wdegree : d.betweenness; };
+        var mx = d3.max(nodes, mval) || 1;
+        nodes.forEach(function (d) { d.m = mval(d); d.r = 3 + 11 * Math.sqrt(Math.max(0, d.m) / mx); });
+        var ranked = nodes.slice().sort(function (a, b) { return b.m - a.m; });
+        ranked.forEach(function (d, r) { d.rank = r + 1; });
+        var wmax = d3.max(links, function (l) { return l.w; }) || 1;
+        links.forEach(function (l) { l.width = 0.6 + 3.4 * Math.sqrt(Math.max(0, l.w) / wmax); });
+        return { nodes: nodes, links: links, nbrs: nbrs, dnbrs: dnbrs, communities: communities, modularity: q, ranked: ranked, metric: metric, directed: directed,
+                 fields: { source: gField(it.source), target: gField(it.target), weight: it.weight ? (it.weight.inputField || it.weight.name) : null } };
+    }
+
+    // ================================================================ rendering
+    var canvas = document.getElementById("canvas"), g2 = canvas.getContext("2d"), W = 0, H = 0, DPR = Math.min(2, window.devicePixelRatio || 1);
+    function sizeCanvas() {
+        var m = document.getElementById("main"); W = m.clientWidth; H = m.clientHeight;
+        canvas.width = W * DPR; canvas.height = H * DPR; canvas.style.width = W + "px"; canvas.style.height = H + "px";
+    }
+    function colourOf(d) { return S.colourBy === "NONE" ? PALETTE[0] : (d.comm < 8 ? PALETTE[d.comm] : OTHER); }
+    function isActive(d) {
+        if (S.path) return S.pathSet.has(d.i);
+        if (S.focus !== null) return d.i === S.focus || S.focusSet.has(d.i);
+        if (S.selected.size) return S.selected.has(d.key) || S.selNeighbours.has(d.i);
+        return true;
+    }
+    function draw() {
+        var t = S.transform, nodes = S.nodes, links = S.links;
+        g2.setTransform(DPR, 0, 0, DPR, 0, 0); g2.clearRect(0, 0, W, H);
+        g2.save(); g2.translate(t.x, t.y); g2.scale(t.k, t.k);
+        var anyFilter = S.path || S.focus !== null || S.selected.size;
+        // links
+        links.forEach(function (l) {
+            var a = nodes[l.source], b = nodes[l.target], on = !anyFilter || (isActive(a) && isActive(b) && (!S.path || S.pathLinks.has(l.source + "-" + l.target) || S.pathLinks.has(l.target + "-" + l.source)));
+            if (S.focus !== null && on) on = a.i === S.focus || b.i === S.focus || !S.focusOnlyDirect;
+            g2.globalAlpha = on ? (S.path ? 0.95 : 0.45) : 0.06;
+            g2.strokeStyle = S.path && on ? SELECT : (a.comm === b.comm && S.colourBy !== "NONE" ? colourOf(a) : "#9a988f");
+            g2.lineWidth = (S.path && on ? 3 : l.width) / Math.sqrt(t.k);
+            g2.beginPath(); g2.moveTo(a.x, a.y); g2.lineTo(b.x, b.y); g2.stroke();
+            if (S.directed && on && t.k > 0.5) {
+                var ang = Math.atan2(b.y - a.y, b.x - a.x), ex = b.x - Math.cos(ang) * (b.r + 2), ey = b.y - Math.sin(ang) * (b.r + 2), s = 5 / Math.sqrt(t.k);
+                g2.fillStyle = g2.strokeStyle; g2.beginPath(); g2.moveTo(ex, ey); g2.lineTo(ex - s * Math.cos(ang - 0.4), ey - s * Math.sin(ang - 0.4)); g2.lineTo(ex - s * Math.cos(ang + 0.4), ey - s * Math.sin(ang + 0.4)); g2.fill();
+            }
+        });
+        // nodes: fill, 2px surface ring; selection dashed outline
+        g2.globalAlpha = 1;
+        nodes.forEach(function (d) {
+            var on = !anyFilter || isActive(d);
+            g2.globalAlpha = on ? 1 : 0.15;
+            g2.beginPath(); g2.arc(d.x, d.y, d.r, 0, 2 * Math.PI);
+            g2.fillStyle = colourOf(d); g2.fill();
+            g2.lineWidth = 1.6 / t.k; g2.strokeStyle = "#fcfcfb"; g2.stroke();
+            if (S.selected.has(d.key) || d === S.hover || (S.path && (d.i === S.path[0] || d.i === S.path[S.path.length - 1]))) {
+                g2.lineWidth = 2 / t.k; g2.strokeStyle = SELECT; g2.setLineDash([3 / t.k, 2 / t.k]);
+                g2.beginPath(); g2.arc(d.x, d.y, d.r + 3 / t.k, 0, 2 * Math.PI); g2.stroke(); g2.setLineDash([]);
+            }
+        });
+        // labels
+        g2.globalAlpha = 1; g2.textBaseline = "middle";
+        var fs = 11 / t.k; g2.font = "600 " + fs + "px Lato, 'Segoe UI', Arial, sans-serif";
+        S.nodes.forEach(function (d) {
+            var show = S.labelMode === "ALL" ? true : S.labelMode === "NONE" ? false : d.rank <= S.labelCount;
+            if (anyFilter) show = isActive(d) && (show || S.path || S.focus !== null || S.selected.has(d.key));
+            if (d === S.hover) show = true;
+            if (!show) return;
+            var txt = String(d.id); g2.lineWidth = 3 / t.k; g2.strokeStyle = "rgba(252,252,251,0.9)"; g2.strokeText(txt, d.x + d.r + 3 / t.k, d.y);
+            g2.fillStyle = "#0b0b0b"; g2.fillText(txt, d.x + d.r + 3 / t.k, d.y);
+        });
+        g2.restore();
+    }
+
+    function fit() {
+        var ns = S.nodes; if (!ns.length) return;
+        var x0 = d3.min(ns, function (d) { return d.x - d.r; }), x1 = d3.max(ns, function (d) { return d.x + d.r; });
+        var y0 = d3.min(ns, function (d) { return d.y - d.r; }), y1 = d3.max(ns, function (d) { return d.y + d.r; });
+        var pad = 30, k = Math.min((W - 2 * pad) / Math.max(1, x1 - x0), (H - 2 * pad) / Math.max(1, y1 - y0), 3);
+        var t = d3.zoomIdentity.translate(W / 2 - k * (x0 + x1) / 2, H / 2 - k * (y0 + y1) / 2).scale(k);
+        d3.select(canvas).call(S.zoom.transform, t);
+    }
+
+    function layout(model, prev) {
+        var nodes = model.nodes, n = nodes.length;
+        nodes.forEach(function (d, i) {
+            var p = prev && prev[d.key];
+            if (p) { d.x = p.x; d.y = p.y; }
+            else { var a = i * 2.399963, r = 8 * Math.sqrt(i + 1); d.x = Math.cos(a) * r + d.comm * 3; d.y = Math.sin(a) * r; }
+        });
+        if (S.sim) S.sim.stop();
+        var linkData = model.links.map(function (l) { return { source: l.source, target: l.target, same: nodes[l.source].comm === nodes[l.target].comm }; });
+        var sim = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(linkData).id(function (d) { return d.i; }).distance(function (l) { return l.same ? 22 : 70; }).strength(function (l) { return l.same ? 0.6 : 0.08; }))
+            .force("charge", d3.forceManyBody().strength(n > 2000 ? -12 : -40).distanceMax(350).theta(0.9))
+            .force("collide", d3.forceCollide(function (d) { return d.r + 1.5; }).iterations(1))
+            .force("x", d3.forceX(0).strength(0.04)).force("y", d3.forceY(0).strength(0.04))
+            .stop();
+        var ticks = prev ? 60 : Math.max(60, Math.min(300, Math.round(200000 / Math.max(1, n + model.links.length))));
+        for (var t = 0; t < ticks; t++) sim.tick();
+        S.sim = sim;
+        sim.alpha(0.02).alphaDecay(0.05).on("tick", draw).restart();
+    }
+
+    // ================================================================ panel
+    function panel(model) {
+        var el = document.getElementById("panel");
+        var n = model.nodes.length, m = model.links.length, dens = n > 1 ? (model.directed ? m / (n * (n - 1)) : 2 * m / (n * (n - 1))) : 0;
+        var h = '<h3>Network</h3><div class="stats">' +
+            '<div class="stat"><b>' + n.toLocaleString() + '</b><span>nodes</span></div>' +
+            '<div class="stat"><b>' + m.toLocaleString() + '</b><span>links</span></div>' +
+            '<div class="stat"><b>' + model.communities.length.toLocaleString() + '</b><span>communities</span></div>' +
+            '<div class="stat"><b>' + model.modularity.toFixed(2) + '</b><span>modularity</span></div></div>' +
+            '<div style="color:var(--muted);margin-top:4px">Density ' + (dens * 100).toFixed(2) + '%</div>';
+        h += '<h3>Find a node</h3><input id="search" type="text" list="nodeList" placeholder="Type a name"><datalist id="nodeList">' +
+            model.ranked.slice(0, 2000).map(function (d) { return '<option value="' + esc(d.id) + '">'; }).join("") + '</datalist>';
+        h += '<h3>Most central: ' + esc(METRIC_LABEL[model.metric]) + '</h3>';
+        var top = model.ranked.slice(0, 10), mx = top.length ? top[0].m || 1 : 1;
+        top.forEach(function (d) {
+            h += '<div class="row node' + (S.selected.has(d.key) ? " sel" : "") + '" data-i="' + d.i + '"><span class="sw" style="background:' + colourOf(d) + '"></span><span class="nm" title="' + esc(d.id) + '">' + esc(d.id) + '</span><span class="v">' + fmt(d.m) + '</span></div>' +
+                '<div class="bar" style="width:' + Math.max(2, 190 * d.m / mx) + 'px"></div>';
+        });
+        if (S.colourBy !== "NONE") {
+            h += '<h3>Communities</h3>';
+            model.communities.slice(0, 8).forEach(function (c) {
+                var hub = c.members.slice().sort(function (a, b) { return b.m - a.m; })[0];
+                h += '<div class="row comm" data-c="' + c.index + '"><span class="sw" style="background:' + PALETTE[c.index] + '"></span><span class="nm">Around ' + esc(hub.id) + '</span><span class="v">' + c.size + '</span></div>';
+            });
+            if (model.communities.length > 8) h += '<div class="row" style="cursor:default"><span class="sw" style="background:' + OTHER + '"></span><span class="nm">' + (model.communities.length - 8) + ' smaller</span><span class="v">' + model.communities.slice(8).reduce(function (a, c) { return a + c.size; }, 0) + '</span></div>';
+        }
+        h += '<h3>Shortest path</h3><input id="pathA" type="text" list="nodeList" placeholder="From"><input id="pathB" type="text" list="nodeList" placeholder="To"><button id="pathGo">Find path</button> <button id="pathClear">Clear</button><div id="pathResult"></div>';
+        el.innerHTML = h;
+        el.querySelectorAll(".row.node").forEach(function (r) { r.addEventListener("click", function (e) { e.stopPropagation(); var d = S.nodes[+r.getAttribute("data-i")]; focusNode(d.i); selectNodes([d], e.shiftKey || e.ctrlKey || e.metaKey); }); });
+        el.querySelectorAll(".row.comm").forEach(function (r) { r.addEventListener("click", function (e) { e.stopPropagation(); selectCommunity(+r.getAttribute("data-c")); }); });
+        var byName = function (v) { return S.nodes.find(function (d) { return d.key === v; }) || S.nodes.find(function (d) { return d.key.toLowerCase() === String(v).toLowerCase(); }); };
+        document.getElementById("search").addEventListener("change", function () { var d = byName(this.value); if (d) { focusNode(d.i); zoomTo(d); } });
+        document.getElementById("pathGo").addEventListener("click", function (e) {
+            e.stopPropagation();
+            var a = byName(document.getElementById("pathA").value), b = byName(document.getElementById("pathB").value), out = document.getElementById("pathResult");
+            if (!a || !b) { out.textContent = "Choose two nodes from the list."; return; }
+            showPath(a, b);
+        });
+        document.getElementById("pathClear").addEventListener("click", function (e) { e.stopPropagation(); S.path = null; document.getElementById("pathResult").textContent = ""; draw(); });
+        el.addEventListener("click", function (e) { e.stopPropagation(); });
+    }
+    function showPath(a, b) {
+        var p = shortestPath(a.i, b.i, S.model.dnbrs), out = document.getElementById("pathResult");
+        if (!p) { S.path = null; out.textContent = "No path between these nodes" + (S.directed ? " in the link direction." : "."); draw(); return; }
+        S.path = p; S.pathSet = new Set(p); S.pathLinks = new Set(); for (var i = 1; i < p.length; i++) S.pathLinks.add(p[i - 1] + "-" + p[i]);
+        S.focus = null; updateFocusBar();
+        if (out) out.innerHTML = (p.length - 1) + " step" + (p.length === 2 ? "" : "s") + ": " + p.map(function (i) { return esc(S.nodes[i].id); }).join(" &rarr; ");
+        draw();
+        return p;
+    }
+    window.__network.showPath = function (a, b) { var x = S.nodes.find(function (d) { return d.key === a; }), y = S.nodes.find(function (d) { return d.key === b; }); return x && y ? showPath(x, y) : null; };
+
+    // ================================================================ selection and focus
+    function recomputeSelNeighbours() { S.selNeighbours = new Set(); S.nodes.forEach(function (d) { if (S.selected.has(d.key)) S.model.nbrs[d.i].forEach(function (j) { S.selNeighbours.add(j); }); }); }
+    function publish(filter) { omniscope.view.context().viewSelection = filter ? { filter: filter } : null; omniscope.view.updated(); }
+    function eqF(field, v) { return { type: "FIELD_VALUE", inputField: field, operator: "=", value: v }; }
+    function selectNodes(list, additive) {
+        if (!additive) S.selected = new Set();
+        list.forEach(function (d) { if (additive && S.selected.has(d.key) && list.length === 1) S.selected.delete(d.key); else S.selected.add(d.key); });
+        recomputeSelNeighbours(); draw(); panel(S.model);
+        if (!S.selected.size) return publish(null);
+        var f = S.model.fields, parts = [];
+        S.nodes.forEach(function (d) { if (S.selected.has(d.key)) { parts.push(eqF(f.source, d.id)); parts.push(eqF(f.target, d.id)); } });
+        publish({ type: "OR", filters: parts });
+    }
+    function selectCommunity(ci) {
+        var c = S.model.communities[ci], f = S.model.fields;
+        S.selected = new Set(c.members.map(function (d) { return d.key; })); recomputeSelNeighbours(); S.focus = null; updateFocusBar(); draw(); panel(S.model);
+        // Links inside the community: From is a member AND To is a member.
+        publish({ type: "AND", filters: [{ type: "OR", filters: c.members.map(function (d) { return eqF(f.source, d.id); }) }, { type: "OR", filters: c.members.map(function (d) { return eqF(f.target, d.id); }) }] });
+    }
+    function restoreSelection(ctx) {
+        S.selected = new Set();
+        var sel = ctx.viewSelection, f = sel && (sel.filter || (sel.type ? sel : null)), fs = S.model.fields;
+        (function walk(x) { if (!x) return; if (x.filters) x.filters.forEach(walk); if ((x.inputField === fs.source || x.inputField === fs.target) && x.value !== undefined) S.selected.add(String(x.value)); })(f);
+        recomputeSelNeighbours();
+    }
+    function focusNode(i) {
+        S.focus = i; S.path = null; S.focusSet = new Set(S.model.nbrs[i]);
+        updateFocusBar(); draw();
+    }
+    function updateFocusBar() {
+        var b = document.getElementById("focusBar");
+        if (S.focus === null) { b.style.display = "none"; return; }
+        var d = S.nodes[S.focus];
+        document.getElementById("focusText").textContent = "Neighbourhood of " + d.id + " (" + S.focusSet.size + " connections)";
+        b.style.display = "flex";
+    }
+    function zoomTo(d) { var k = Math.max(1.5, S.transform.k); d3.select(canvas).transition().duration(500).call(S.zoom.transform, d3.zoomIdentity.translate(W / 2 - k * d.x, H / 2 - k * d.y).scale(k)); }
+    document.getElementById("clearFocus").addEventListener("click", function (e) { e.stopPropagation(); S.focus = null; updateFocusBar(); draw(); });
+
+    // ================================================================ pointer
+    function hit(mx, my) {
+        var t = S.transform, x = (mx - t.x) / t.k, y = (my - t.y) / t.k, best = null, bd = Infinity;
+        S.nodes.forEach(function (d) { var dd = (d.x - x) * (d.x - x) + (d.y - y) * (d.y - y), rr = Math.pow(d.r + 4 / t.k, 2); if (dd < rr && dd < bd) { bd = dd; best = d; } });
+        return best;
+    }
+    function tip(d, ev) {
+        var el = document.getElementById("tooltip");
+        if (!d) { el.style.display = "none"; return; }
+        var m = S.model;
+        el.innerHTML = '<b>' + esc(d.id) + '</b><br><span class="k">Connections:</span> ' + d.degree +
+            (m.fields.weight ? '<br><span class="k">' + esc(m.fields.weight) + ' (total):</span> ' + fmt(d.wdegree) : '') +
+            '<br><span class="k">Betweenness:</span> ' + d.betweenness.toFixed(4) + '<br><span class="k">PageRank:</span> ' + d.pagerank.toFixed(4) +
+            (S.colourBy !== "NONE" ? '<br><span class="k">Community:</span> ' + (d.comm + 1) + ' of ' + m.communities.length : '') +
+            '<br><span class="k">Rank by ' + esc(METRIC_LABEL[m.metric]) + ':</span> ' + d.rank + ' of ' + m.nodes.length;
+        el.style.display = "block";
+        var x = ev.clientX + 14, y = ev.clientY + 14;
+        if (x + el.offsetWidth > window.innerWidth - 4) x = ev.clientX - el.offsetWidth - 14;
+        if (y + el.offsetHeight > window.innerHeight - 4) y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, x) + "px"; el.style.top = Math.max(4, y) + "px";
+    }
+    var dragNode = null, downAt = null;
+    S.zoom = d3.zoom().scaleExtent([0.05, 12])
+        .filter(function (ev) { if (ev.type === "mousedown" || ev.type === "pointerdown") { var r = canvas.getBoundingClientRect(); return !hit(ev.clientX - r.left, ev.clientY - r.top); } return !ev.button; })
+        .on("zoom", function (ev) { S.transform = ev.transform; draw(); });
+    d3.select(canvas).call(S.zoom).on("dblclick.zoom", null);
+    canvas.addEventListener("pointerdown", function (ev) {
+        var r = canvas.getBoundingClientRect(), d = hit(ev.clientX - r.left, ev.clientY - r.top);
+        downAt = { x: ev.clientX, y: ev.clientY, d: d };
+        if (d) { dragNode = d; }
+    });
+    window.addEventListener("pointermove", function (ev) {
+        var r = canvas.getBoundingClientRect(), mx = ev.clientX - r.left, my = ev.clientY - r.top;
+        if (dragNode && downAt && Math.abs(ev.clientX - downAt.x) + Math.abs(ev.clientY - downAt.y) > 3) {
+            var t = S.transform; dragNode.x = dragNode.fx = (mx - t.x) / t.k; dragNode.y = dragNode.fy = (my - t.y) / t.k;
+            if (S.sim) S.sim.alpha(0.15).restart(); tip(null); return;
+        }
+        if (ev.target !== canvas) return;
+        var d = hit(mx, my);
+        if (d !== S.hover) { S.hover = d; draw(); }
+        canvas.style.cursor = d ? "pointer" : "default";
+        tip(d, ev);
+    });
+    window.addEventListener("pointerup", function (ev) {
+        var wasDrag = dragNode && downAt && Math.abs(ev.clientX - downAt.x) + Math.abs(ev.clientY - downAt.y) > 3;
+        if (dragNode) { dragNode.fx = dragNode.fy = null; }
+        var start = downAt; dragNode = null; downAt = null;
+        if (!start || wasDrag || ev.target !== canvas) return;
+        if (Math.abs(ev.clientX - start.x) + Math.abs(ev.clientY - start.y) > 3) return;
+        if (start.d) { focusNode(start.d.i); selectNodes([start.d], ev.shiftKey || ev.ctrlKey || ev.metaKey); }
+        else { S.selected = new Set(); recomputeSelNeighbours(); S.focus = null; S.path = null; updateFocusBar(); draw(); panel(S.model); omniscope.view.whitespaceClick(); }
+    });
+    canvas.addEventListener("pointerleave", function () { S.hover = null; tip(null); draw(); });
+
+    // ================================================================ main
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items;
+        document.body.classList.toggle("panel", it.showPanel !== false && window.innerWidth > 560);
+        if (!it.source || !it.target) { message("Choose From and To fields: each row is a link between two items."); return; }
+        if (!ctx.result || !ctx.result.data) { message("Waiting for data"); return; }
+        var model = build(ctx);
+        if (!model.nodes.length) { message(ctx.result.data.records.length ? "No links pass the minimum link weight." : "No data to show. Check the filters."); document.getElementById("panel").innerHTML = ""; return; }
+        message(null);
+        sizeCanvas();
+        var prev = {}; S.nodes.forEach(function (d) { prev[d.key] = { x: d.x, y: d.y }; });
+        var sameShape = S.key === gField(it.source) + "|" + gField(it.target);
+        S.model = model; S.nodes = model.nodes; S.links = model.links; S.directed = model.directed;
+        S.colourBy = it.colourBy || "COMMUNITY"; S.labelMode = it.labels || "TOP"; S.labelCount = it.labelCount === undefined || it.labelCount === null ? 12 : +it.labelCount;
+        S.focus = null; S.path = null; updateFocusBar();
+        restoreSelection(ctx);
+        layout(model, sameShape && S.nodes.length ? prev : null);
+        if (!sameShape || !S.fitted) { fit(); S.fitted = true; }
+        S.key = gField(it.source) + "|" + gField(it.target);
+        panel(model); draw();
+        document.getElementById("status").textContent = model.nodes.length > 1500 ? "Betweenness estimated from a sample of 400 nodes" : "";
+    }
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () {
+        if (!S.model) return render();
+        document.body.classList.toggle("panel", omniscope.view.context().options.items.showPanel !== false && window.innerWidth > 560);
+        sizeCanvas(); fit(); draw();
+    });
+    document.body.addEventListener("click", function (e) { if (e.target === document.body || e.target.id === "message") omniscope.view.whitespaceClick(); });
+})();
+</script>
+</body>
+</html>
