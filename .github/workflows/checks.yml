@@ -1,0 +1,57 @@
+name: Checks
+
+# On every push: rebuild views.json, check the manifests, and run the tool tests and every view's harness tests in headless Chrome.
+# On master, an out-of-date views.json (typically after a view folder is added in GitHub's web editor) is regenerated
+# and committed by this workflow. Pushes made with GITHUB_TOKEN do not start workflows, so its own
+# commit does not run it again.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# A newer push to the same branch cancels the run still going for the older one.
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    # A pull request from a branch of this repository is already checked by its push; only forks need this run.
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Rebuild views.json and check the manifests
+        run: npm run build -- --no-site
+
+      - name: Commit the regenerated views.json (master only)
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          if git diff --quiet -- views.json; then echo "views.json is up to date"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Regenerate views.json after ${GITHUB_SHA::7}" -- views.json
+          git push
+
+      - name: views.json is up to date (branches and pull requests)
+        if: github.ref != 'refs/heads/master'
+        run: git diff --exit-code -- views.json
+
+      - run: npm run typecheck
+      # One view at a time (about 43 minutes): many cases wait a fixed time, too short on this runner at four at once.
+      - run: npm test
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
+          TEST_VIEWS_JOBS: "1"

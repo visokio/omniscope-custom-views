@@ -1,0 +1,46 @@
+name: Pages
+
+# Builds the gallery (_site/) and publishes it with GitHub Pages on every push to master.
+# Settings > Pages > Source must be "GitHub Actions".
+# going-public: publishes the gallery from the review branch before it is merged (its source links then point
+# at that branch). Needs going-public allowed in Settings > Environments > github-pages > Deployment branches.
+# Remove it from this list when the branch is merged.
+on:
+  push:
+    branches: [master, going-public]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          GALLERY_BRANCH: ${{ github.ref_name }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
