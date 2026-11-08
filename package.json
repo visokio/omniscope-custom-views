@@ -1,0 +1,33 @@
+{
+  "name": "omniscope-custom-views-tools",
+  "private": true,
+  "license": "MIT",
+  "description": "Build, test and gallery tools for the Omniscope custom views repository",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsx tools/build.ts",
+    "check:index": "tsx tools/build.ts --check",
+    "test": "npm run test:tools && npm run test:views",
+    "test:tools": "tsx --test tools/tests/*.test.ts",
+    "test:views": "tsx tools/test-views.ts",
+    "typecheck": "tsc --noEmit",
+    "serve": "tsx tools/serve.ts",
+    "bundle:demo-server": "tsx tools/bundle-demo-server.ts",
+    "publish:demo-server": "tsx tools/publish-demo-server.ts",
+    "check:demo-links": "tsx tools/check-demo-links.ts",
+    "slim-ioz": "tsx tools/slim-ioz.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "ajv": "^6.12.6",
+    "fflate": "^0.8.3",
+    "marked": "^15.0.0",
+    "playwright-core": "^1.49.0",
+    "pngjs": "^7.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

@@ -1,0 +1,210 @@
+{
+	"abcxyz": [
+		"table"
+	],
+	"abtest": [
+		"bar"
+	],
+	"barchartrace": [
+		"bar"
+	],
+	"beeswarm": [
+		"line/scatter"
+	],
+	"benford": [
+		"bar"
+	],
+	"bubblechart": [
+		"diagram"
+	],
+	"building3d": [
+		"diagram"
+	],
+	"bumpchart": [
+		"line/scatter"
+	],
+	"calendar": [
+		"table"
+	],
+	"cohortretention": [
+		"table"
+	],
+	"concentration": [
+		"line/scatter"
+	],
+	"correlationmatrix": [
+		"table"
+	],
+	"customhtml": [
+		"tool"
+	],
+	"customviewdemo": [
+		"bar"
+	],
+	"decomposition": [
+		"line/scatter"
+	],
+	"decomptree": [
+		"network"
+	],
+	"densityscatter": [
+		"line/scatter"
+	],
+	"distribution": [
+		"bar"
+	],
+	"eventfunnel": [
+		"diagram"
+	],
+	"forcecoordinategraph": [
+		"network"
+	],
+	"forecast": [
+		"line/scatter"
+	],
+	"francechoropleth": [
+		"map"
+	],
+	"globeflows": [
+		"map"
+	],
+	"indexheatmap": [
+		"table"
+	],
+	"jsontree": [
+		"table"
+	],
+	"kpi": [
+		"tool"
+	],
+	"lambdaworkflowexecution": [
+		"tool"
+	],
+	"likert": [
+		"bar"
+	],
+	"marimekko": [
+		"bar"
+	],
+	"marketbasket": [
+		"table",
+		"network"
+	],
+	"mixpanel": [
+		"tool"
+	],
+	"modelevaluation": [
+		"line/scatter"
+	],
+	"motionbubbles": [
+		"line/scatter"
+	],
+	"networkanalyser": [
+		"network"
+	],
+	"orbitaltransactionflow": [
+		"network"
+	],
+	"orgchart": [
+		"network"
+	],
+	"paygap": [
+		"bar"
+	],
+	"processmap": [
+		"network"
+	],
+	"pvmbridge": [
+		"bar"
+	],
+	"quadrant": [
+		"line/scatter"
+	],
+	"rfmsegments": [
+		"table"
+	],
+	"ridgeline": [
+		"line/scatter"
+	],
+	"runningpivot": [
+		"table"
+	],
+	"scatter3d": [
+		"line/scatter"
+	],
+	"sequentialworkflowexecution": [
+		"tool"
+	],
+	"setparamandexecute": [
+		"tool"
+	],
+	"slopechart": [
+		"line/scatter"
+	],
+	"spainforcedotdensitymap": [
+		"map"
+	],
+	"sparklinescorecard": [
+		"table"
+	],
+	"spcchart": [
+		"line/scatter"
+	],
+	"strata": [
+		"line/scatter"
+	],
+	"surface3d": [
+		"diagram"
+	],
+	"survivalcurve": [
+		"line/scatter"
+	],
+	"switchparam": [
+		"tool"
+	],
+	"switchparamandexecute": [
+		"tool"
+	],
+	"targettracker": [
+		"line/scatter"
+	],
+	"threeforcegraph": [
+		"network"
+	],
+	"tilemap": [
+		"map"
+	],
+	"tradingview": [
+		"line/scatter"
+	],
+	"transitions": [
+		"table"
+	],
+	"twitterview": [
+		"tool"
+	],
+	"uploadandexecute": [
+		"tool"
+	],
+	"variancechart": [
+		"bar"
+	],
+	"venndiagram": [
+		"diagram"
+	],
+	"waffle": [
+		"diagram"
+	],
+	"web": [
+		"tool"
+	],
+	"weeklypattern": [
+		"table"
+	],
+	"workflowexecution": [
+		"tool"
+	],
+	"yearonyear": [
+		"line/scatter"
+	]
+}

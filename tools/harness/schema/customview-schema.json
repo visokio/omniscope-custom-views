@@ -1,0 +1,1372 @@
+{
+  "title": "JSON Schema for CustomViewApi",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "Definitions:",
+  "properties": {
+    "CustomViewApi.ViewApiManifest": {
+      "$ref": "#/definitions/CustomViewApi.ViewApiManifest"
+    },
+    "CustomViewApi.ViewApiContext": {
+      "$ref": "#/definitions/CustomViewApi.ViewApiContext"
+    }
+  },
+  "definitions": {
+    "CustomViewApi.AbstractEmbeddedViewOptions": {
+      "title": "CustomViewApi.AbstractEmbeddedViewOptions",
+      "additionalProperties": false,
+      "properties": {}
+    },
+    "CustomViewApi.AutoPaneCell": {
+      "title": "CustomViewApi.AutoPaneCell",
+      "description": "When auto-pane is enabled, describes the enclosing pane cell's coordinates in the pane grid, in contexts given to per-pane rendering logic.",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/definitions/CustomViewApi.AutoPaneCellPosition",
+          "description": "X position of the chart within the pane."
+        },
+        "y": {
+          "$ref": "#/definitions/CustomViewApi.AutoPaneCellPosition",
+          "description": "Y position of the chart within the pane."
+        }
+      }
+    },
+    "CustomViewApi.AutoPaneCellPosition": {
+      "title": "CustomViewApi.AutoPaneCellPosition",
+      "description": "Describes a position of the chart within the pane grid",
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "type": "integer",
+          "description": "Index into the pane grid.\nExample: 345",
+          "default": 0
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number",
+                "description": "Example: 123.45"
+              },
+              {
+                "type": "string",
+                "format": "date-opt-time",
+                "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+              },
+              {
+                "$ref": "#/definitions/QueryApi.ValueRange"
+              },
+              {
+                "$ref": "#/definitions/QueryApi.DifferenceMarker"
+              },
+              {
+                "$ref": "#/definitions/QueryApi.AllMarker"
+              }
+            ]
+          },
+          "description": "A respective array of data values for each level in the pane groupings. When paning by just one tier (most common) then this is a singleton array containing the pane value. Identical to output headers in Query grid API"
+        }
+      }
+    },
+    "CustomViewApi.AutoPaneOptions": {
+      "title": "CustomViewApi.AutoPaneOptions",
+      "description": "Contains user configurable options relating to auto paning.",
+      "additionalProperties": false,
+      "properties": {
+        "yAxisHeaderWidth": {
+          "type": "integer",
+          "description": "The header width for Y axis in pixels. Irrelevant if placement is NONE.\nExample: 345",
+          "default": 75
+        },
+        "paneWidth": {
+          "type": "integer",
+          "description": "The width of the pane in pixels, then stretch to fill.\nExample: 345",
+          "default": 200
+        },
+        "paneHeight": {
+          "type": "integer",
+          "description": "The height of the pane in pixels, then stretch to fill.\nExample: 345",
+          "default": 200
+        },
+        "showGridLines": {
+          "type": "boolean",
+          "description": "Show or hide the pane grid.\nExample: true",
+          "default": true
+        },
+        "gridLineThickness": {
+          "type": "integer",
+          "description": "The thickness of the pane grid, in pixels.\nExample: 345",
+          "default": 1
+        },
+        "gridLineColour": {
+          "type": "string",
+          "format": "color",
+          "description": "The colour of the pane grid.\nExample: \"rgba(255,255,255,1)\""
+        },
+        "headerStyle": {
+          "$ref": "#/definitions/CustomViewApi.TextStyle"
+        },
+        "showPaneXHeader": {
+          "type": "boolean",
+          "description": "Example: true",
+          "default": true
+        },
+        "showPaneYHeader": {
+          "type": "boolean",
+          "description": "Example: true",
+          "default": true
+        },
+        "showTileHeader": {
+          "type": "boolean",
+          "description": "Example: true",
+          "default": true
+        },
+        "xHeaderStyle": {
+          "$ref": "#/definitions/CustomViewApi.TextStyle"
+        },
+        "yHeaderStyle": {
+          "$ref": "#/definitions/CustomViewApi.TextStyle"
+        },
+        "tileHeaderStyle": {
+          "$ref": "#/definitions/CustomViewApi.TextStyle"
+        },
+        "xHeaderLines": {
+          "type": "integer",
+          "description": "Example: 345",
+          "default": 1
+        },
+        "tileHeaderLines": {
+          "type": "integer",
+          "description": "Example: 345",
+          "default": 1
+        },
+        "xHeaderPlacement": {
+          "type": "string",
+          "enum": [
+            "TOP",
+            "BOTTOM",
+            "NONE"
+          ],
+          "description": "The header placement of the X axis.",
+          "default": "TOP"
+        },
+        "yHeaderPlacement": {
+          "type": "string",
+          "enum": [
+            "LEFT",
+            "RIGHT",
+            "NONE"
+          ],
+          "description": "The header placement of the Y axis.",
+          "default": "LEFT"
+        },
+        "showColourKeyInEveryPane": {
+          "type": "boolean",
+          "description": "If true, show a colour key inside each pane. If false then show a colour key for all the panes.\nExample: true",
+          "default": false
+        },
+        "enableTouchScrolling": {
+          "type": "boolean",
+          "description": "If true, enable scrolling anywhere on the pane. For advanced use only, as this may interfere with the interactions on the view underneath.\nExample: true",
+          "default": false
+        }
+      },
+      "required": [
+        "yAxisHeaderWidth",
+        "paneWidth",
+        "paneHeight",
+        "gridLineThickness",
+        "headerStyle",
+        "xHeaderPlacement",
+        "yHeaderPlacement",
+        "showColourKeyInEveryPane",
+        "enableTouchScrolling"
+      ]
+    },
+    "CustomViewApi.AutoQueryResult": {
+      "title": "CustomViewApi.AutoQueryResult",
+      "description": "Contains the result of the auto-query.",
+      "additionalProperties": false,
+      "properties": {
+        "data": {
+          "$ref": "#/definitions/QueryApi.TableQueryOutput",
+          "description": "The table query api output."
+        },
+        "shadowData": {
+          "$ref": "#/definitions/QueryApi.TableQueryOutput",
+          "description": "The table query api output for the brushed out data. Can be null/undefined."
+        },
+        "mappings": {
+          "type": "object",
+          "format": "map",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "description": "Example: 345"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "description": "Example: 345"
+                }
+              }
+            ]
+          },
+          "description": "Maps the option key to the column index in the query output (#data and #shadowData). If the option is defined as a 'list' in the manifest, this will be an array of column indexes respective to the list of options configured."
+        }
+      }
+    },
+    "CustomViewApi.DataConfig": {
+      "title": "CustomViewApi.DataConfig",
+      "description": "Describes how the view gets its data.",
+      "additionalProperties": false,
+      "properties": {
+        "queryApiEndpoint": {
+          "type": "string",
+          "description": "The query API endpoint. Can be a relative (to enclosing document) or absolute URL. Never null in practice. If the view is invalid/unconfigured, it won't be rendered."
+        },
+        "queryApiRootNode": {
+          "type": "object",
+          "description": "The root node to supply in all submitted queries, which corresponds to the base data ('ALL') for the view's configured data source. This may be a report input, or a derivation of a report input by adding formulas, for example."
+        },
+        "filter": {
+          "$ref": "#/definitions/QueryApi.Filter",
+          "description": "The main filter rule that should be used when querying the active data for the view. Typically includes the state of the application filter devices.\n\nAutomatically also narrows for a selection in another view, if any (auto brushing).\nIf auto-paning is enabled, automatically also narrowed for the pane cell's filter rule.\nMay be null/undefined if no filter rule applies at all."
+        },
+        "shadowFilter": {
+          "$ref": "#/definitions/QueryApi.Filter",
+          "description": "Relevant only when brushing is active (when another view has a selection). A filter rule to use when querying data before brushing took effect. Use this to optionally add rendering of the brushing 'shadow' typically shown underneath the main view rendering.\nNull/undefined when brushing is inactive."
+        },
+        "baseFilter": {
+          "$ref": "#/definitions/QueryApi.Filter",
+          "description": "Relevant only when auto-paning is enabled. A filter rule to use if you need to query data for the entire view, not just the enclosing pane cell.\nNull/undefined when paning is disabled."
+        },
+        "baseShadowFilter": {
+          "$ref": "#/definitions/QueryApi.Filter",
+          "description": "Relevant only when auto-paning is enabled and brushing is active. A filter rule to use to query data for the entire view, before brushing took effect, as per shadowFilter.\nNull/undefined when paning is disabled."
+        }
+      }
+    },
+    "CustomViewApi.FileReference": {
+      "title": "CustomViewApi.FileReference",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "URL",
+            "PROJECT_ATTACHMENT",
+            "BUNDLED"
+          ],
+          "default": "URL"
+        },
+        "location": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "CustomViewApi.NamedFieldReference": {
+      "title": "CustomViewApi.NamedFieldReference",
+      "additionalProperties": false,
+      "properties": {
+        "namedField": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "namedField"
+      ]
+    },
+    "CustomViewApi.OptionDefinition": {
+      "title": "CustomViewApi.OptionDefinition",
+      "description": "Defines an option which is available in instances of the view.\nUsed for several purposes:\n  1. to define the schema in the View Context.  E.g. \"measures\" is an array of measure objects\n  2. to define the UI for configuring these options.\n  3. to influence how data querying is performed if using auto-query.",
+      "additionalProperties": false,
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "The display name of the option.\nCan be omitted; the option key will be used. Allows you to rename a common concept such as 'split' (e.g. carried over on switch view) but giving it a different display name."
+        },
+        "detail": {
+          "type": "string",
+          "description": "Allows you to set a detail text for the option which is then shown on tooltip"
+        },
+        "documentation": {
+          "type": "string",
+          "description": "Allows you to specify a detailed description which is then shown below the option. Supports markdown."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "GROUPING",
+            "MEASURE",
+            "CHOICE",
+            "TOGGLE",
+            "ACTION",
+            "TEXT",
+            "FIELD",
+            "COLOUR",
+            "NUMBER",
+            "DATE",
+            "STYLE",
+            "FILE_REFERENCE",
+            "EMBEDDED_VIEW_OPTIONS"
+          ],
+          "description": "Defines the type of the option.\nACTION: button that has an effect; n/a, there is no corresponding option/state;\nCHOICE: arbitrary choice from list of choices; schema is whatever is available in #values, or array thereof;\nFIELD: allows you to choose a schema field; schema is a string, or an array of field names as string depending on #list value.;\nGROUPING: groups/splits the data into buckets, or discrete axes in the view; schema is query API Grouping, or array thereof;\nMEASURE: calculates a sum/mean etc. for each group value, often for continuous axes in the view; schema is query API Measure, or array thereof;\nTEXT: free-text entry; schema is string;\nNUMBER: number entry; schema is number;\nSTYLE: style entry;\nTOGGLE: yes/no checkbox; schema is boolean."
+        },
+        "list": {
+          "type": "boolean",
+          "description": "Determines whether this is a multi-list-of-items or a single (perhaps nullable) item.\n\nDetermines the schema in the view options - if true, it's a JSON array of zero or more objects; if false, it's a single JSON object (perhaps null).\n\nEach item is of type #type, with the list extent limited by #minItems and #maxItems.\nNote that lists cannot contain nulls. Whereas #mandatory controls whether the array itself can be null.\nNote we may only support lists of measures or groupings, and may not support complex items like lists of choices.\nExample: true"
+        },
+        "minItems": {
+          "type": "integer",
+          "description": "The minimum number of items for this list.\nRelevant only if #list is true, e.g. for measures, splits. Default 0, or 1 if #mandatory.\nExample: 345"
+        },
+        "maxItems": {
+          "type": "integer",
+          "description": "The maximum number of items for this list.\nRelevant only if #list is true, e.g. for measures, splits. Default null/undefined, meaning unlimited.\nExample: 345"
+        },
+        "mandatory": {
+          "type": "boolean",
+          "description": "If true, the value for this option MUST be specified.\nIn the view options, the value cannot be null. If this is a list, the array must have at least 1 item. If false, the value for this option can be null, unless it is a list, in which case it cannot be null, but can be empty. (For lists, mandatory=true has the same meaning as minItems=1).\nExample: true"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Arbitrary values that can be chosen from, for the case of CHOICE. For GROUPING, MEASURE and FIELD, any special values other than field names that should be visible to end user to choose from.\nFor example, you might want to pick 'Node value' in a network view's colour-by; this would result in a string in the view options, instead of a Measure, if the user chose this special value - in this case, the schema for the view options would effectively be 'Measure|String' or List<Measure|String>' union type. Note: You should use #displayValues to specify display values for each entry."
+        },
+        "displayValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A respective array corresponding to the #values property containing the display text to use for the entry found in the #values. Any missing entries or if this left blank then #values entry is used for display purposes."
+        },
+        "descriptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A respective array corresponding to the #values property containing the description text to use for the entry found in the #values."
+        },
+        "choicesLayout": {
+          "type": "string",
+          "enum": [
+            "AUTO",
+            "LIST",
+            "COMPACT",
+            "MULTICOLUMN"
+          ],
+          "description": "If null, choices will be displayed via dropdown. If set, the value can be either AUTO (automatically decides layout), LIST (vertical list of radio buttons), MULTICOLUMN (multiple columns are used) or COMPACT (displays all radio buttons in a single line)."
+        },
+        "minValue": {
+          "type": "number",
+          "description": "The minimum value for this number.\nExample: 123.45"
+        },
+        "maxValue": {
+          "type": "number",
+          "description": "The maximum number for this number.\nExample: 123.45"
+        },
+        "validFieldTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "NUMBER",
+              "DATE",
+              "RANGE_NUMBER",
+              "RANGE_DATE"
+            ]
+          },
+          "description": "Relevant when option type is FIELD, MEASURE or GROUPING. Controls the type of fields to show. If empty array will result in all schema fields from being included. Leave null to allow field types. Available values are: NUMBER, DATE, TEXT."
+        },
+        "validFieldNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Relevant when option type is FIELD, MEASURE or GROUPING. Allows you to restrict to only allow certain fields to be picked. This is useful if you want to allow picking of certain fields only."
+        },
+        "validMeasureResultTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "NUMBER",
+              "DATE",
+              "RANGE_NUMBER",
+              "RANGE_DATE"
+            ]
+          },
+          "description": "Relevant for when the #type is MEASURE. Controls the type of measure function results supported. This is useful if the view will only handle certain types of measure function results.\nAvailable values are: NUMBER, DATE, TEXT."
+        },
+        "validMeasureFunctions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "RECORD_COUNT",
+              "MIN",
+              "MAX",
+              "MEAN",
+              "SUM",
+              "SINGLETON",
+              "UNIQUE_VALUE_COUNT",
+              "STANDARD_DEVIATION",
+              "MEDIAN",
+              "LOWER_QUARTILE",
+              "UPPER_QUARTILE",
+              "PERCENTILE",
+              "MODE",
+              "EMPTY_COUNT",
+              "NON_EMPTY_COUNT",
+              "FORMULA"
+            ]
+          },
+          "description": "Relevant for when the #type is MEASURE. Allows you to restrict the type measure functions supported.\n"
+        },
+        "validGroupingTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "UNIQUE_VALUES",
+              "HISTOGRAM"
+            ]
+          },
+          "description": "Relevant for when the #type is GROUPING. Allows you to restrict the type grouping types supported.\nAvailable values are: \"HISTOGRAM\" or \"UNIQUE_VALUES\". If not specified then all types are supported."
+        },
+        "groupingFitToScreenOnUniqueValues": {
+          "type": "boolean",
+          "description": "Example: true"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "CustomViewApi.OptionDefinitions": {
+      "title": "CustomViewApi.OptionDefinitions",
+      "description": "Definitions for the menu options and actions/buttons relevant to views of this type.",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "object",
+          "format": "map",
+          "additionalProperties": {
+            "$ref": "#/definitions/CustomViewApi.OptionDefinition"
+          },
+          "description": "Defines a mapping of all the items the user can configure in this view. Each item describes groupings, measures and other UI options/actions.The key in the mapping is the property name which is also used to store the user defined setting in the context. Only options listed here will be available in this view. On switching view, settings with the same key will be transferred where possible.\n\nNote that 'paneX' and 'paneY' are special properties that apply to auto paning and are always skipped by auto query."
+        },
+        "structure": {
+          "$ref": "#/definitions/CustomViewApi.ToolbarStructure",
+          "description": "Defines the order of items within the UI area for each placement choice."
+        }
+      }
+    },
+    "CustomViewApi.PaneConstraints": {
+      "title": "CustomViewApi.PaneConstraints",
+      "description": "Defines the view's paning constraints defined by the user.",
+      "additionalProperties": false,
+      "properties": {
+        "minWidth": {
+          "type": "integer",
+          "description": "Defines the minimum width of a pane in pixels.\nExample: 345",
+          "default": 50
+        },
+        "minHeight": {
+          "type": "integer",
+          "description": "Defines the minimum height of a pane in pixels.\nExample: 345",
+          "default": 50
+        },
+        "maxCells": {
+          "type": "integer",
+          "description": "Defines the maximum number of panes to load concurrently in the visible viewport of a single view. Null means there is no limit. This is the default for most views. If we specify a limit the framework will attempt to resize the views to ensure no more than maxCells are visible at any one time. This means PaneOptions.paneWidth and PaneOptions.paneHeight may be ignored.\nExample: 345"
+        }
+      }
+    },
+    "CustomViewApi.TextStyle": {
+      "title": "CustomViewApi.TextStyle",
+      "additionalProperties": false,
+      "properties": {
+        "font": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number",
+          "description": "Example: 123.45"
+        },
+        "bold": {
+          "type": "boolean",
+          "description": "Example: true"
+        },
+        "italic": {
+          "type": "boolean",
+          "description": "Example: true"
+        },
+        "colour": {
+          "type": "string"
+        },
+        "backgroundColour": {
+          "type": "string"
+        },
+        "align": {
+          "type": "string",
+          "enum": [
+            "LEFT",
+            "CENTER",
+            "RIGHT"
+          ]
+        },
+        "verticalAlign": {
+          "type": "string",
+          "enum": [
+            "TOP",
+            "MIDDLE",
+            "BOTTOM"
+          ]
+        }
+      }
+    },
+    "CustomViewApi.ToolbarStructure": {
+      "title": "CustomViewApi.ToolbarStructure",
+      "description": "Defines the order of options within the UI area for each placement choice.\nEach array lists property key names from the options map. Any missing items will be appear only in the view menus.",
+      "additionalProperties": false,
+      "properties": {
+        "toolbar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The main toolbar, above the view"
+        },
+        "x": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The X axis, below the view."
+        },
+        "y": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The Y axis, left of the view."
+        }
+      }
+    },
+    "CustomViewApi.ViewApiContext": {
+      "title": "CustomViewApi.ViewApiContext",
+      "description": "The context object that is shared between the Container and the View Framework, to describe the data and configuration of the view",
+      "additionalProperties": false,
+      "properties": {
+        "viewName": {
+          "type": "string",
+          "description": "The displayed name of this view, and also the unique name within the IOK file."
+        },
+        "viewInstanceId": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer",
+              "description": "Example: 345"
+            }
+          ],
+          "description": "ID used to identify an instance of a view uniquely within a tab. For internal use only."
+        },
+        "baseUrl": {
+          "type": "string",
+          "description": "The full absolute base URL for static resources for this custom view."
+        },
+        "dataConfig": {
+          "$ref": "#/definitions/CustomViewApi.DataConfig",
+          "description": "Configuration describing how the view receives it's data"
+        },
+        "viewSelection": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/CustomViewApi.ViewSelection"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.Filter"
+            }
+          ],
+          "description": "A ViewSelection object, or null/undefined. Describes the view's own selection, or null if no selection is present.\nFor convenience you can put a Filter here, but the framework will wrap it in a ViewSelection."
+        },
+        "options": {
+          "$ref": "#/definitions/CustomViewApi.ViewOptions",
+          "description": "View instance options and permissions."
+        },
+        "manifest": {
+          "$ref": "#/definitions/CustomViewApi.ViewApiManifest",
+          "description": "A read-only copy of the custom view's manifest.json file, which describes the view's implementation and behaviour. This can be null if the manifest is not valid with the reason specified in the invalidReason property."
+        },
+        "result": {
+          "$ref": "#/definitions/CustomViewApi.AutoQueryResult",
+          "description": "Contains the result of the auto-query, if auto-query is enabled in the manifest. Can be null/undefined."
+        },
+        "pane": {
+          "$ref": "#/definitions/CustomViewApi.AutoPaneCell",
+          "description": "When auto-pane is enabled, describes the enclosing pane cell's coordinates in the pane grid, in contexts given to per-pane rendering logic."
+        },
+        "variables": {
+          "type": "object",
+          "format": "map",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "boolean",
+                "description": "Example: true"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "number",
+                "description": "Example: 123.45"
+              },
+              {
+                "type": "string",
+                "format": "date-opt-time",
+                "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+              }
+            ]
+          },
+          "description": "The current values for all variables. Depending on the variable configuration, this value may be specific to the current tab or global to all tabs. The key is the precise name given to the variable and displayed on screen, which may contain spaces or illegal JS identifier characters so should be accessed using [\"Name\"] notation."
+        }
+      },
+      "required": [
+        "viewName",
+        "viewInstanceId",
+        "baseUrl",
+        "dataConfig",
+        "options",
+        "variables"
+      ]
+    },
+    "CustomViewApi.ViewApiManifest": {
+      "title": "CustomViewApi.ViewApiManifest",
+      "description": "Describes the manifest.json file, which contains naming, settings, behaviour etc. for a custom view.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The displayed name of this custom view when shared/exported. This is read-only property. This is set when you create the view. Allows views to use it as a key for storing custom data that is shared across views or tabs."
+        },
+        "frameworkVersion": {
+          "type": "string",
+          "description": "The version of the custom view framework; determines what JS libraries and methods are available, and internal workings such as communication with the enclosing application.\nMust match with the JS client library version."
+        },
+        "icon": {
+          "type": "string",
+          "description": "SVG icon file name with extension."
+        },
+        "thumbnail": {
+          "type": "string",
+          "description": "Thumbnail file name with extension."
+        },
+        "readme": {
+          "type": "string",
+          "description": "README.md file name with extension."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of tags used to search for the view."
+        },
+        "sandbox": {
+          "type": "boolean",
+          "description": "Defines if the view is loaded in sandboxed iframe or not. Used to control the sandbox property of the iframe.\nExample: true",
+          "default": false
+        },
+        "autoPane": {
+          "type": "boolean",
+          "description": "Enables auto-paning logic and options for the view.\nExample: true",
+          "default": true
+        },
+        "autoQuery": {
+          "type": "boolean",
+          "description": "Enables the view to receive data within the context automatically, otherwise the view will need to query server by itself.\nExample: true",
+          "default": true
+        },
+        "dataLimit": {
+          "type": "integer",
+          "description": "The limit to use in the query api calls if autoQuery is true. This will apply a limit to the query and show a watermark showing that there was some truncation if the number of rows exceed it.\nExample: 345"
+        },
+        "options": {
+          "$ref": "#/definitions/CustomViewApi.OptionDefinitions",
+          "description": "Definitions for the menu options and actions/buttons relevant to views of this type.\nThese definitions are respective to the option instances in 'context.options'."
+        },
+        "defaultOptions": {
+          "$ref": "#/definitions/CustomViewApi.ViewOptions",
+          "description": "The default option values to use in a newly created instance of this view.\n\nDoes not need to have values for all mandatory items, although it is recommended for any non-data-related options for better usability. You can also list defaults for data-related options such as Groupings and Measures, but these will be ignored if the fields do not exist at point of use."
+        },
+        "custom": {
+          "type": [
+            "object"
+          ],
+          "description": "An arbitrary JSON object containing custom manifest settings, such as API key. Not to be confused with 'options.custom'. Guaranteed not to be populated by visokio."
+        },
+        "pane": {
+          "$ref": "#/definitions/CustomViewApi.PaneConstraints",
+          "description": "Pane constraints for the view."
+        }
+      },
+      "required": [
+        "tags",
+        "sandbox",
+        "autoPane",
+        "autoQuery"
+      ]
+    },
+    "CustomViewApi.ViewOptions": {
+      "title": "CustomViewApi.ViewOptions",
+      "description": "View instance options.\nPersisted and provided by the enclosing application",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "object",
+          "format": "map",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number",
+                "description": "Example: 123.45"
+              },
+              {
+                "type": "boolean",
+                "description": "Example: true"
+              },
+              {
+                "type": "string",
+                "format": "date-opt-time",
+                "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+              },
+              {
+                "$ref": "#/definitions/QueryApi.Grouping"
+              },
+              {
+                "$ref": "#/definitions/QueryApi.Measure"
+              },
+              {
+                "$ref": "#/definitions/CustomViewApi.TextStyle"
+              },
+              {
+                "$ref": "#/definitions/CustomViewApi.FileReference"
+              },
+              {
+                "$ref": "#/definitions/CustomViewApi.NamedFieldReference"
+              },
+              {
+                "$ref": "#/definitions/CustomViewApi.AbstractEmbeddedViewOptions"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number",
+                      "description": "Example: 123.45"
+                    },
+                    {
+                      "type": "boolean",
+                      "description": "Example: true"
+                    },
+                    {
+                      "type": "string",
+                      "format": "date-opt-time",
+                      "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+                    },
+                    {
+                      "$ref": "#/definitions/QueryApi.Grouping"
+                    },
+                    {
+                      "$ref": "#/definitions/QueryApi.Measure"
+                    },
+                    {
+                      "$ref": "#/definitions/CustomViewApi.TextStyle"
+                    },
+                    {
+                      "$ref": "#/definitions/CustomViewApi.FileReference"
+                    },
+                    {
+                      "$ref": "#/definitions/CustomViewApi.NamedFieldReference"
+                    },
+                    {
+                      "$ref": "#/definitions/CustomViewApi.AbstractEmbeddedViewOptions"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "description": "Contains the mapping of user's choice for different options defined by the manifest. The key of the map is the same key defined by the manifest to represent the item. Values are String, Number, Boolean, Date, Color, QueryApi.Grouping, QueryApi.Measure, or a list of these."
+        },
+        "pane": {
+          "$ref": "#/definitions/CustomViewApi.AutoPaneOptions",
+          "description": "Describes user-configurable options related to auto-paning. These apply to all panes, and are not specific to a given cell."
+        }
+      },
+      "required": [
+        "pane"
+      ]
+    },
+    "CustomViewApi.ViewSelection": {
+      "title": "CustomViewApi.ViewSelection",
+      "description": "Describes a selection within a view",
+      "additionalProperties": false,
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/QueryApi.Filter",
+          "description": "A mandatory Filter object; if null, the selection (and this object) will be cleared. As per dataConfig.filter.\nDescribes the view's selection in terms of the query rules it equates to. Should not include the view's base filters from dataConfig.filter. This validated on the server when schema changes and invalid reason is stored in \"invalidReason\" property."
+        },
+        "invalidReason": {
+          "type": "string",
+          "description": "States the invalid reason if the Filter object is not valid against the schema. For example, the field the Filter object references is no longer present in the schema. Your view will be marked as invalid if this is set."
+        }
+      }
+    },
+    "QueryApi.AllMarker": {
+      "title": "QueryApi.AllMarker",
+      "description": "Marker that indicates the 'All' value when totals are included in a grouping, e.g. for grid total rows/columns",
+      "additionalProperties": false,
+      "properties": {
+        "all": {
+          "type": "boolean",
+          "description": "Always present, always true\nExample: true",
+          "default": true
+        }
+      },
+      "required": [
+        "all"
+      ]
+    },
+    "QueryApi.DateFieldFormattingOptions": {
+      "title": "QueryApi.DateFieldFormattingOptions",
+      "description": "Describes how date values should be formatted",
+      "additionalProperties": false,
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "description": "Specifies the pattern on how the date value should be formatted. e.g, yyyy-MM-dd'T'HH:mm:ss"
+        }
+      },
+      "required": [
+        "pattern"
+      ]
+    },
+    "QueryApi.DateRangeFieldFormattingOptions": {
+      "title": "QueryApi.DateRangeFieldFormattingOptions",
+      "description": "Describes a how field should be formatted when displayed",
+      "additionalProperties": false,
+      "properties": {
+        "datePattern": {
+          "type": "string"
+        },
+        "justLower": {
+          "type": "boolean",
+          "description": "Example: true",
+          "default": false
+        },
+        "quarterFormattingPattern": {
+          "type": "string",
+          "enum": [
+            "Q",
+            "Q_YYYY"
+          ]
+        }
+      },
+      "required": [
+        "justLower"
+      ]
+    },
+    "QueryApi.DifferenceMarker": {
+      "title": "QueryApi.DifferenceMarker",
+      "description": "Stores a difference header cell marking a difference column/row.",
+      "additionalProperties": false,
+      "properties": {
+        "before": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.ValueRange"
+            }
+          ]
+        },
+        "after": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.ValueRange"
+            }
+          ]
+        }
+      }
+    },
+    "QueryApi.Filter": {
+      "title": "QueryApi.Filter",
+      "description": "Describes a single constraint (or a group of constraints with logical combination), equivalent to an SQL WHERE clause item.",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "FIELD_VALUE",
+            "AND",
+            "OR",
+            "NOT",
+            "GEO_DISTANCE"
+          ],
+          "default": "FIELD_VALUE"
+        },
+        "inputField": {
+          "type": "string",
+          "description": "Relevant when #type is FIELD_VALUE only. The name of the input field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace.\nAliases: field"
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "=",
+            "EQUALS_IGNORE_CASE",
+            "!=",
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "IN",
+            "CONTAINS",
+            "CONTAINS_IGNORE_CASE"
+          ],
+          "description": "Relevant when #type is FIELD_VALUE only. Default EQUALS. Note that operators such as \">=\" implicitly exclude NULL values."
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.ValueRange"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number",
+                    "description": "Example: 123.45"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-opt-time",
+                    "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+                  },
+                  {
+                    "$ref": "#/definitions/QueryApi.ValueRange"
+                  }
+                ]
+              }
+            }
+          ],
+          "description": "Relevant when #type is FIELD_VALUE only. The value to compare against, or for #operator IN, an array of values. Can be null for \"EQUALS null\" rule, or an array containing null for \"IN (..., null, ...)\" rule. Note that (e.g.) EQUALS(42) will match only 42 and will implicitly exclude all nulls; likewise NOT(EQUALS(42)) will match only 'not 42' so will implicitly include nulls and all other numbers. ValueRange objects can be used here to provide minumum and maximum bounds. Long values greater than 2^53 can be written as String to maintain precision.\nAliases: values"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.Filter"
+          },
+          "description": "Relevant when #type is AND, OR or NOT. The nested filters to combine in an AND or OR rule (can be empty for FULL or NONE selections respectively), or a single nested filter for a NOT rule.\nAliases: filter"
+        },
+        "geoDistance": {
+          "$ref": "#/definitions/QueryApi.GeoDistanceFilter",
+          "description": "Relevant when #type is GEO_DISTANCE only. The geographic-distance payload containing the coordinate field references, centre point, and maximum distance in kilometres."
+        }
+      }
+    },
+    "QueryApi.GeoDistanceFilter": {
+      "title": "QueryApi.GeoDistanceFilter",
+      "description": "Geographic distance payload for {@link FilterType#GEO_DISTANCE} filters. Records must have their coordinate value within {@link #maxDistanceKm} kilometres of ({@link #centreLatitude}, {@link #centreLongitude }) as measured by the Spherical Law of Cosines.",
+      "additionalProperties": false,
+      "properties": {
+        "latField": {
+          "type": "string",
+          "description": "Schema field containing the record's latitude in decimal degrees."
+        },
+        "lonField": {
+          "type": "string",
+          "description": "Schema field containing the record's longitude in decimal degrees."
+        },
+        "centreLatitude": {
+          "type": "number",
+          "description": "Centre point latitude in decimal degrees (valid range [-90, 90]).\nExample: 123.45"
+        },
+        "centreLongitude": {
+          "type": "number",
+          "description": "Centre point longitude in decimal degrees (valid range [-180, 180]).\nExample: 123.45"
+        },
+        "maxDistanceKm": {
+          "type": "number",
+          "description": "Maximum distance in kilometres (inclusive, must be >= 0). A value of 0 matches only records at the exact centre point.\nExample: 123.45"
+        }
+      },
+      "required": [
+        "latField",
+        "lonField",
+        "centreLatitude",
+        "centreLongitude",
+        "maxDistanceKm"
+      ]
+    },
+    "QueryApi.Grouping": {
+      "title": "QueryApi.Grouping",
+      "description": "Describes a single level/tier of grouping, similar an SQL GROUP BY condition or Omniscope \"Bar\" view's 'Split' option.",
+      "additionalProperties": false,
+      "properties": {
+        "inputField": {
+          "type": "string",
+          "description": "The name of the input field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace.\nAliases: field"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "UNIQUE_VALUES",
+            "HISTOGRAM"
+          ],
+          "description": "The method for bucketing/grouping the data. UNIQUE_VALUES is comparable to GROUP BY in SQL.",
+          "default": "UNIQUE_VALUES"
+        },
+        "dateUnit": {
+          "type": "string",
+          "enum": [
+            "YEAR",
+            "QUARTER",
+            "MONTH",
+            "WEEK",
+            "DAY",
+            "HOUR",
+            "MINUTE",
+            "SECOND"
+          ],
+          "description": "Relevant when #type is HISTOGRAM and #inputField is a date type.\nIf the input field has some formatting options, these will be amended to drop no longer significant sections.\nIf the input field does not have formatting options, a new date formatting will be introduced with pattern 'yyyy-MM-dd hh:mm:ss'\n dropped to the unit specified.\nFor example, if the input field does not have a formatting and we are grouping by hour, the \n output field will have a date formatting options with pattern  dd/MM/yyyy HH"
+        },
+        "histogramInterval": {
+          "type": "number",
+          "description": "Required when #type is HISTOGRAM. The width of each histogram interval. For DATE fields, must be integer and also factors of 60 (for minutes/seconds), 24 (hours), 12 (months), precisely 1 (days), or any integer (years).\nExample: 123.45"
+        },
+        "fitToScreen": {
+          "type": "boolean",
+          "description": "Example: true"
+        },
+        "maxValuesForOthering": {
+          "type": "integer",
+          "description": "Example: 345"
+        },
+        "includeOther": {
+          "type": "boolean",
+          "description": "Example: true"
+        },
+        "maxSplits": {
+          "type": "integer",
+          "description": "Example: 345"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the output field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace."
+        }
+      }
+    },
+    "QueryApi.Measure": {
+      "title": "QueryApi.Measure",
+      "description": "Describes how to roll up numeric/date data, thereby producing an additional aggregated column in the output.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the output field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace.\nIf left unspecified a default name will be assigned as the name of the input field followed by the name of the function between parenthesis. It is a good practice to not, rely on this automatic name generation but use an explicit name where necessary"
+        },
+        "inputField": {
+          "type": "string",
+          "description": "Relevant when #function is a field-specific function such as SUM, MIN, MEAN. The name of the input field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace.\nAliases: field"
+        },
+        "weightField": {
+          "type": "string",
+          "description": "Relevant when #function is {@link MeasureFunction#MEAN} to specify a weighted mean."
+        },
+        "function": {
+          "type": "string",
+          "enum": [
+            "RECORD_COUNT",
+            "MIN",
+            "MAX",
+            "MEAN",
+            "SUM",
+            "SINGLETON",
+            "UNIQUE_VALUE_COUNT",
+            "STANDARD_DEVIATION",
+            "MEDIAN",
+            "LOWER_QUARTILE",
+            "UPPER_QUARTILE",
+            "PERCENTILE",
+            "MODE",
+            "EMPTY_COUNT",
+            "NON_EMPTY_COUNT",
+            "FORMULA"
+          ],
+          "description": "The aggregation function to roll up a series of values."
+        },
+        "percentileValue": {
+          "type": "number",
+          "description": "Must be populated if and only if the function is PERCENTILE. If populated its value must be between 0 and 100 inclusive.\n+The result of the measure will be the value of the field below which a this percentage of values will fall.\nFor example, if set to 20, the result of the measure will be the value below which 20% of the field values are found\nExample: 123.45"
+        },
+        "formula": {
+          "type": "string",
+          "description": "Relevant when #function is FORMULA only. The formula itself, such as `SUBSET_SUM([a]) / SUBSET_MEAN([b])`."
+        }
+      },
+      "required": [
+        "function"
+      ]
+    },
+    "QueryApi.NumericFieldFormattingOptions": {
+      "title": "QueryApi.NumericFieldFormattingOptions",
+      "description": "Describes a numeric values should be formatted for a field",
+      "additionalProperties": false,
+      "properties": {
+        "percent": {
+          "type": "boolean",
+          "description": "If true the numeric values should be rendered as a percentage.\nExample: true",
+          "default": false
+        },
+        "thousandSeparator": {
+          "type": "boolean",
+          "description": "If true, thousand separator should be visible, false it should not be visible\nExample: true",
+          "default": true
+        },
+        "decimalPlaces": {
+          "type": "integer",
+          "description": "If present specifies the number of decimal places to be shown\nExample: 345"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "If present a prefix to be displayed before the numeric value"
+        },
+        "suffix": {
+          "type": "string",
+          "description": "If present a suffix to be displayed after the numeric value (before the % sign, if relevant)"
+        },
+        "negativeNumberFormat": {
+          "type": "string",
+          "enum": [
+            "MINUS_SIGN",
+            "ACCOUNTING",
+            "LEDGER"
+          ]
+        }
+      },
+      "required": [
+        "percent",
+        "thousandSeparator"
+      ]
+    },
+    "QueryApi.SchemaField": {
+      "title": "QueryApi.SchemaField",
+      "description": "Describes a single field in the source data.\nAn array of these objects forms the response body for the /schema/fields endpoint.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the output field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "TEXT",
+            "NUMBER",
+            "DATE",
+            "RANGE_NUMBER",
+            "RANGE_DATE"
+          ],
+          "description": "The data type of the field."
+        },
+        "formatting": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/QueryApi.NumericFieldFormattingOptions"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.DateFieldFormattingOptions"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.DateRangeFieldFormattingOptions"
+            }
+          ],
+          "description": "Formatting options for the field."
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "QueryApi.SchemaFieldsQueryOutput": {
+      "title": "QueryApi.SchemaFieldsQueryOutput",
+      "description": "Describes the schema (field names and data types) of a table query source or result table.",
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.SchemaField"
+          },
+          "description": "The fields in this table."
+        },
+        "isEditable": {
+          "type": "boolean",
+          "description": "If the QueryNode is editable in the implementation.\nThis refers to 'structural editability' and does not include editing permissions.\nIn other words this would true if the source of the query support editing, and each operation \nalso allows for editing. If this is true, and EditAgainst query could be submitted with the query as input\nExample: true",
+          "default": false
+        }
+      },
+      "required": [
+        "fields",
+        "isEditable"
+      ]
+    },
+    "QueryApi.TableQueryOutput": {
+      "title": "QueryApi.TableQueryOutput",
+      "description": "Response body for the /table endpoints.",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "$ref": "#/definitions/QueryApi.SchemaFieldsQueryOutput",
+          "description": "Metadata about each output column."
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number",
+                  "description": "Example: 123.45"
+                },
+                {
+                  "type": "string",
+                  "format": "date-opt-time",
+                  "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+                },
+                {
+                  "$ref": "#/definitions/QueryApi.ValueRange"
+                }
+              ]
+            }
+          },
+          "description": "Output data table containing the resulting data rows and columns. A 2d array indexed [row][column]. Cells are data values (numbers, dates, strings) or ValueRanges (in group columns for histogram groupings)."
+        }
+      },
+      "required": [
+        "schema",
+        "records"
+      ]
+    },
+    "QueryApi.ValueRange": {
+      "title": "QueryApi.ValueRange",
+      "description": "Stores lower and upper bound values of a range.",
+      "additionalProperties": false,
+      "properties": {
+        "lower": {
+          "oneOf": [
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            }
+          ],
+          "description": "Lower bound of range - inclusive"
+        },
+        "upper": {
+          "oneOf": [
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            }
+          ],
+          "description": "Upper bound of range - exclusive"
+        }
+      },
+      "required": [
+        "lower",
+        "upper"
+      ]
+    }
+  }
+}

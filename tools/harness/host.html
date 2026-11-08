@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Custom view harness</title>
+<style>
+  body { font-family: Lato, "Helvetica Neue", Arial, sans-serif; margin: 0; background: #eef1f5; color: #242d3b; }
+  header { padding: 8px 14px; background: #242d3b; color: #fff; font-size: 14px; display: flex; gap: 12px; align-items: center; }
+  #frameWrap { margin: 14px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.15); display: inline-block; }
+  iframe { border: 0; display: block; }
+  #log { margin: 0 14px 14px; font: 12px monospace; white-space: pre-wrap; max-height: 220px; overflow: auto; }
+</style>
+<script src="dataset.js"></script>
+</head>
+<body>
+<header><b>Omniscope custom view harness</b> <span id="title"></span></header>
+<div id="frameWrap"></div>
+<div id="log"></div>
+<script>
+  // window.mount(config, {width,height}) is called by run-test.js; humans can use ?view=<id>&case=<name>.
+  window.__omniEvents = [];
+  window.__omniHostEvent = function (e) {
+    window.__omniEvents.push(e);
+    if (e.type !== 'query') document.getElementById('log').textContent += e.type + ' ' + (e.data ? JSON.stringify(e.data).slice(0, 300) : '') + '\n';
+  };
+  window.mount = function (config, size) {
+    window.__OMNI_MOCK_CONFIG__ = config;
+    document.getElementById('title').textContent = config.viewName + (config.caseName ? ' / ' + config.caseName : '');
+    var f = document.createElement('iframe');
+    f.id = 'view'; f.width = size.width; f.height = size.height;
+    f.src = '/' + config.viewId + '/index.html';
+    var w = document.getElementById('frameWrap'); w.innerHTML = ''; w.appendChild(f);
+    return new Promise(function (r) { f.onload = r; });
+  };
+  window.resizeView = function (w, h) { var f = document.getElementById('view'); f.width = w; f.height = h; };
+  (async function () {
+    var q = new URLSearchParams(location.search);
+    if (!q.get('view')) return;
+    var id = q.get('view');
+    var manifest = await (await fetch('/' + id + '/manifest.json')).json();
+    var cases = await (await fetch('/' + id + '/tests/cases.json')).json();
+    var c = cases.find(function (x) { return x.name === (q.get('case') || cases[0].name); });
+    var csv = c.data ? await (await fetch('/' + id + '/' + c.data)).text() : '';
+    var ds = csv ? OmniDataset.toDataset(csv, c.types) : { fields: c.fields || [], rows: [] };
+    mount({ viewId: id, viewName: manifest.name, caseName: c.name, manifest: manifest, options: c.options, dataset: ds,
+      variables: c.variables, baseUrl: c.baseUrl, workflow: c.workflow }, { width: c.width || 900, height: c.height || 600 });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+{
+ "simple": {
+  "keys": [
+   "type",
+   "data"
+  ],
+  "data": {
+   "schema": {
+    "fields": [
+     {
+      "name": "Region",
+      "type": "TEXT",
+      "extendedMeta": {
+       "source": "loop.csv"
+      }
+     },
+     {
+      "name": "Sales (Sum)",
+      "type": "NUMBER",
+      "granularity": 1,
+      "formatting": {
+       "percent": false,
+       "thousandSeparator": true
+      },
+      "extendedMeta": {
+       "source": "loop.csv"
+      }
+     },
+     {
+      "name": "Record count",
+      "type": "NUMBER",
+      "granularity": 1,
+      "formatting": {
+       "percent": false,
+       "thousandSeparator": true
+      }
+     }
+    ],
+    "isEditable": false
+   },
+   "records": [
+    [
+     "West",
+     1500,
+     1
+    ],
+    [
+     "South",
+     800,
+     1
+    ],
+    [
+     "North",
+     1650,
+     2
+    ],
+    [
+     "East",
+     990,
+     1
+    ]
+   ]
+  }
+ },
+ "schema": {
+  "fields": [
+   {
+    "name": "Region",
+    "type": "TEXT",
+    "extendedMeta": {
+     "source": "loop.csv"
+    }
+   },
+   {
+    "name": "Product",
+    "type": "TEXT",
+    "extendedMeta": {
+     "source": "loop.csv"
+    }
+   },
+   {
+    "name": "Sales",
+    "type": "NUMBER",
+    "granularity": 1,
+    "formatting": {
+     "percent": false,
+     "thousandSeparator": true
+    },
+    "extendedMeta": {
+     "source": "loop.csv"
+    }
+   },
+   {
+    "name": "Units",
+    "type": "NUMBER",
+    "granularity": 1,
+    "formatting": {
+     "percent": false,
+     "thousandSeparator": true
+    },
+    "extendedMeta": {
+     "source": "loop.csv"
+    }
+   }
+  ],
+  "isEditable": false
+ },
+ "raw": {
+  "schema": {
+   "fields": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "extendedMeta": {
+      "source": "loop.csv"
+     }
+    },
+    {
+     "name": "Sales",
+     "type": "NUMBER",
+     "granularity": 1,
+     "formatting": {
+      "percent": false,
+      "thousandSeparator": true
+     },
+     "extendedMeta": {
+      "source": "loop.csv"
+     }
+    }
+   ],
+   "isEditable": false
+  },
+  "records": [
+   [
+    "North",
+    1200
+   ],
+   [
+    "East",
+    990
+   ]
+  ]
+ },
+ "err": {
+  "message": "Invalid request received on the server: No such field: Nope",
+  "internal": {
+   "validationMessage": "No such field: Nope",
+   "iF": null,
+   "debug": "No such field: Nope",
+   "Z": null,
+   "reason": "INVALID_REQUEST",
+   "dC": "Invalid request received on the server: No such field: Nope",
+   "Wk": "VALIDATION_ERROR"
+  },
+  "responseCode": 400
+ }
+}

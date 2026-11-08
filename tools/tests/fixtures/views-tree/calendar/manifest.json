@@ -1,0 +1,67 @@
+{
+  "name": "Calendar",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "table",
+    "time"
+  ],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 1000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "date": {
+        "displayName": "Date",
+        "type": "FIELD",
+        "detail": "Date field to split/group the rows by",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ]
+      },
+      "value": {
+        "displayName": "Colour",
+        "iconName": "visokio-option-icon:colour-measure",
+        "type": "MEASURE",
+        "mandatory": true,
+        "detail": "Numerical measure value to colour the dates by",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ]
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "value",
+        "date"
+      ],
+      "x": [],
+      "y": []
+    }
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50,
+    "maxCells": 20
+  }
+}

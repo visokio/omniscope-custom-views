@@ -1,0 +1,84 @@
+{
+  "name": "Custom HTML",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": ["HTML","web","widget","content"],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "aStaticHTML": {
+        "displayName": "Static HTML",
+        "documentation": "A HTML snippet to embed in the View. Takes effect when 'Dynamic content' is unticked.",
+        "type": "TEXT"
+      },
+      "dynamicHTML": {
+        "displayName": "Dynamic content",
+        "documentation": "If ticked, the view will display the HTML retrieved from the configure query (using the Measure + Split configuration)",
+        "type": "TOGGLE"
+      },
+      "measures": {
+        "displayName": "Measure",
+        "type": "MEASURE",
+        "mandatory": true
+      },
+      "msplit": {
+        "displayName": "Split",
+        "type": "GROUPING"
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "measures",
+        "msplit"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    }
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "showGridLines": true,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "xHeaderStyle": {},
+      "yHeaderStyle": {},
+      "tileHeaderStyle": {},
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}
