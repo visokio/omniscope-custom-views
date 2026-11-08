@@ -348,17 +348,6 @@
 			"version": 2
 		},
 		{
-			"name": "calendar",
-			"displayName": "Calendar",
-			"tags": [
-				"custom",
-				"table",
-				"time"
-			],
-			"files": [],
-			"version": 1
-		},
-		{
 			"name": "abcxyz",
 			"displayName": "ABC-XYZ Analysis",
 			"tags": [
@@ -1095,6 +1084,17 @@
 			],
 			"files": [],
 			"version": 0
+		},
+		{
+			"name": "calendar",
+			"displayName": "Calendar",
+			"tags": [
+				"custom",
+				"table",
+				"time"
+			],
+			"files": [],
+			"version": 1
 		}
 	]
 }
