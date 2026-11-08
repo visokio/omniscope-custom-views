@@ -1,100 +1,130 @@
 {
 	"views": [
 		{
-		    "name": "web",
-		    "displayName": "Web View",
-		    "tags": [
-			    "custom",
-			    "web",
-			    "www",
-			    "browser",
-			    "internet",
-			    "url"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "web",
+			"displayName": "Web View",
+			"tags": [
+				"custom",
+				"web",
+				"www",
+				"browser",
+				"internet",
+				"url"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "customhtml",
-		    "displayName": "Custom HTML",
-		    "tags": [
-			    "HTML",
-			    "web",
-			    "widget",
-			    "content"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "customhtml",
+			"displayName": "Custom HTML",
+			"tags": [
+				"HTML",
+				"web",
+				"widget",
+				"content"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "tradingview",
-		    "displayName": "TradingView",
-		    "tags": [
-			    "trading",
-			    "tradingview",
-			    "quotes",
-			    "stocks",
-			    "exchange",
-			    "crypto"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "tradingview",
+			"displayName": "TradingView",
+			"tags": [
+				"trading",
+				"tradingview",
+				"quotes",
+				"stocks",
+				"exchange",
+				"crypto"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "runningpivot",
-		    "displayName": "Running Pivot View",
-		    "tags": [
-			    "cumulative",
-			    "running",
-			    "total",
-			    "running total"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "runningpivot",
+			"displayName": "Running Pivot View",
+			"tags": [
+				"cumulative",
+				"running",
+				"total",
+				"running total"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "twitterview",
-		    "displayName": "Twitter View",
-		    "tags": [
-			    "twitter",
-			    "tweet"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "twitterview",
+			"displayName": "Twitter View",
+			"tags": [
+				"twitter",
+				"tweet"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
 			"name": "bubblechart",
 			"displayName": "Bubble Chart",
-			"tags": ["custom", "bubble"],
+			"tags": [
+				"custom",
+				"bubble"
+			],
 			"files": [],
 			"version": 0
 		},
 		{
 			"name": "francechoropleth",
 			"displayName": "France Choropleth",
-			"tags": ["custom", "map", "france"],
-			"files": ["regions_fr.json", "d3.v4.min.js"],
+			"tags": [
+				"custom",
+				"map",
+				"france"
+			],
+			"files": [
+				"regions_fr.json",
+				"d3.v4.min.js"
+			],
 			"version": 0
 		},
 		{
 			"name": "venndiagram",
 			"displayName": "Venn Diagram",
-			"tags": ["custom", "subset"],
+			"tags": [
+				"custom",
+				"subset"
+			],
 			"files": [],
 			"version": 0
 		},
 		{
 			"name": "beeswarm",
 			"displayName": "Beeswarm",
-			"tags": ["custom", "bee", "swarm", "circle", "dot", "jitter"],
+			"tags": [
+				"custom",
+				"bee",
+				"swarm",
+				"circle",
+				"dot",
+				"jitter"
+			],
 			"files": [],
 			"version": 0
 		},
 		{
 			"name": "spainforcedotdensitymap",
 			"displayName": "Spain Force Dot Density Map",
-			"tags": ["custom", "map", "dot", "density", "force", "jitter", "spain"],
-			"files": ["spain_peninsula.json"],
+			"tags": [
+				"custom",
+				"map",
+				"dot",
+				"density",
+				"force",
+				"jitter",
+				"spain"
+			],
+			"files": [
+				"spain_peninsula.json"
+			],
 			"version": 0
 		},
 		{
@@ -114,7 +144,11 @@
 				"network",
 				"structure"
 			],
-			"files": ["d3-ForceEdgeBundling.js", "bundler.js", "forcesimulation.js"],
+			"files": [
+				"d3-ForceEdgeBundling.js",
+				"bundler.js",
+				"forcesimulation.js"
+			],
 			"version": 0
 		},
 		{
@@ -132,122 +166,124 @@
 			"version": 0
 		},
 		{
-		    "name": "switchparam",
-		    "displayName": "Switch Param",
-		    "tags": [
-			    "custom",
-			    "workflow",
-			    "param",
-			    "parameter",
-			    "project",
-			    "api"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "switchparam",
+			"displayName": "Switch Param",
+			"tags": [
+				"custom",
+				"workflow",
+				"param",
+				"parameter",
+				"project",
+				"api"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "switchparamandexecute",
-		    "displayName": "Switch Param and Execute Workflow",
-		    "tags": [
-			    "custom",
-			    "workflow",
-			    "param",
-			    "parameter",
-			    "project",
-			    "api",
-					"execution",
-					"block",
-					"job"
-
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "switchparamandexecute",
+			"displayName": "Switch Param and Execute Workflow",
+			"tags": [
+				"custom",
+				"workflow",
+				"param",
+				"parameter",
+				"project",
+				"api",
+				"execution",
+				"block",
+				"job"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "workflowexecution",
-		    "displayName": "Workflow Execution",
-		    "tags": [
-			    "custom",
-			    "workflow",
-			    "job",
-			    "execution",
-			    "block",
-			    "api"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "workflowexecution",
+			"displayName": "Workflow Execution",
+			"tags": [
+				"custom",
+				"workflow",
+				"job",
+				"execution",
+				"block",
+				"api"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "sequentialworkflowexecution",
-		    "displayName": "Sequential Workflow Execution",
-		    "tags": [
-			    "custom",
-			    "sequential",
-			    "order",
-			    "workflow",
-			    "job",
-			    "execution",
-			    "block",
-			    "api"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "sequentialworkflowexecution",
+			"displayName": "Sequential Workflow Execution",
+			"tags": [
+				"custom",
+				"sequential",
+				"order",
+				"workflow",
+				"job",
+				"execution",
+				"block",
+				"api"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "setparamandexecute",
-		    "displayName": "Set Parameters and Execute",
-		    "tags": [
-			    "custom",
-			    "workflow",
-			    "job",
-			    "execution",
-			    "parameter",
-			    "param",
-			    "block",
-			    "api"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "setparamandexecute",
+			"displayName": "Set Parameters and Execute",
+			"tags": [
+				"custom",
+				"workflow",
+				"job",
+				"execution",
+				"parameter",
+				"param",
+				"block",
+				"api"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "lambdaworkflowexecution",
-		    "displayName": "Lambda Workflow Execution",
-		    "tags": [
-			    "custom",
-			    "lambda",
-			    "parameter",
-			    "param",
-			    "workflow",
-			    "job",
-			    "execute",
-			    "execution",
-			    "block",
-			    "api"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "lambdaworkflowexecution",
+			"displayName": "Lambda Workflow Execution",
+			"tags": [
+				"custom",
+				"lambda",
+				"parameter",
+				"param",
+				"workflow",
+				"job",
+				"execute",
+				"execution",
+				"block",
+				"api"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
-		    "name": "uploadandexecute",
-		    "displayName": "Upload and Execute",
-		    "tags": [
-			    "custom",
-			    "lambda",
-			    "upload",
-			    "workflow",
-			    "job",
-			    "execute",
-			    "execution",
-			    "block",
-			    "api"
-		    ],
-		    "files": [],
-		    "version": 0
+			"name": "uploadandexecute",
+			"displayName": "Upload and Execute",
+			"tags": [
+				"custom",
+				"lambda",
+				"upload",
+				"workflow",
+				"job",
+				"execute",
+				"execution",
+				"block",
+				"api"
+			],
+			"files": [],
+			"version": 0
 		},
 		{
 			"name": "kpi",
 			"displayName": "KPI (custom view demo)",
-			"tags": ["custom", "key"],
+			"tags": [
+				"custom",
+				"key"
+			],
 			"files": [],
 			"version": 0
 		},
@@ -263,32 +299,69 @@
 			"version": 0
 		},
 		{
-        	"name": "threeforcegraph",
-            "displayName": "3D Force Graph",
-            "tags": ["custom", "3d", "graph", "network", "three.js"],
-            "files": [],
-            "version": 0
-        },
+			"name": "threeforcegraph",
+			"displayName": "3D Force Graph",
+			"tags": [
+				"custom",
+				"3d",
+				"graph",
+				"network",
+				"three.js"
+			],
+			"files": [],
+			"version": 0
+		},
 		{
-        	"name": "jsontree",
-            "displayName": "JSON Tree",
-            "tags": ["custom", "tree", "json"],
-            "files": [],
-            "version": 0
-        },
+			"name": "jsontree",
+			"displayName": "JSON Tree",
+			"tags": [
+				"custom",
+				"tree",
+				"json"
+			],
+			"files": [],
+			"version": 0
+		},
 		{
-        	"name": "mixpanel",
-            "displayName": "Mixpanel tracker",
-            "tags": ["mixpanel", "tracker"],
-            "files": [],
-            "version": 0
-        },
+			"name": "mixpanel",
+			"displayName": "Mixpanel tracker",
+			"tags": [
+				"mixpanel",
+				"tracker"
+			],
+			"files": [],
+			"version": 0
+		},
 		{
-        	"name": "strata",
-            "displayName": "Strata",
-            "tags": ["custom", "time", "timeline", "gantt", "stacked", "strata", "layers", "sessions"],
-            "files": ["strata-cloth.js", "strata-view.js", "strata-ui.js"],
-            "version": 1
-        }
+			"name": "strata",
+			"displayName": "Strata",
+			"tags": [
+				"custom",
+				"time",
+				"timeline",
+				"gantt",
+				"stacked",
+				"strata",
+				"layers",
+				"sessions"
+			],
+			"files": [
+				"strata-cloth.js",
+				"strata-view.js",
+				"strata-ui.js"
+			],
+			"version": 1
+		},
+		{
+			"name": "calendar",
+			"displayName": "Calendar",
+			"tags": [
+				"custom",
+				"table",
+				"time"
+			],
+			"files": [],
+			"version": 0
+		}
 	]
 }
