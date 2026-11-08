@@ -1,0 +1,348 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/messages.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    },
+    "group": {
+     "inputField": "Team",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkWidth": {
+     "inputField": "Messages",
+     "function": "SUM"
+    },
+    "background": "#ffffff"
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "showcaseHeight": 560,
+  "wait": 7000,
+  "caption": "Live: a month of invented messages between 60 people in six teams. Drag to turn the graph, scroll to zoom, hover a person or a link for its figures; click a person to select their messages.",
+  "expect": {
+   "notBlank": true,
+   "minColours": 8
+  },
+  "actions": [
+   {
+    "eval": "window.__forceGraph.model.nodes===60 && window.__forceGraph.model.links===216 && document.querySelectorAll('#key span').length===6 && !!document.querySelector('canvas')",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "plain",
+  "showcase": true,
+  "data": "sample-data/messages.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    },
+    "background": "#1d2330"
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "showcaseHeight": 560,
+  "wait": 7000,
+  "caption": "Live: the same network with no colour or link width, on a dark background. People who message each other often still pull together into clusters.",
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "!document.querySelector('#key span') && window.__forceGraph.graph.backgroundColor()==='#1d2330' && document.getElementById('main').style.color==='rgb(232, 232, 232)'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/messages.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    },
+    "group": {
+     "inputField": "Team",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkWidth": {
+     "inputField": "Messages",
+     "function": "SUM"
+    },
+    "background": "#ffffff"
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 8000,
+  "actions": [
+   {
+    "eval": "(function(){window.__c0={};window.__forceGraph.nodes.forEach(function(n){if(n.group)window.__c0[n.group]=window.__forceGraph.colourOf(n)});return Object.keys(window.__c0).length===6})()",
+    "expectTruthy": true
+   },
+   {
+    "hoverEval": "window.__forceGraph.screenOf('Alex A.')"
+   },
+   {
+    "eval": "(function(){var t=document.querySelector('.float-tooltip-kap');return !!t&&t.textContent.indexOf('Alex A.')===0&&t.textContent.indexOf('Team: Sales')>0&&t.textContent.indexOf('8 links')>0})()",
+    "expectTruthy": true
+   },
+   {
+    "clickEval": "window.__forceGraph.screenOf('Alex A.')"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.type==='OR'&&f.filters[0].inputField==='From'&&f.filters[1].inputField==='To'&&f.filters[0].value==='Alex A.'})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "clickEval": "window.__forceGraph.screenOf('Alex A.')"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "clickEval": "window.__forceGraph.screenOf('Alex A.')"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     890,
+     550
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Team",
+     "operator": "=",
+     "value": "Sales"
+    }
+   },
+   {
+    "wait": 3000
+   },
+   {
+    "eval": "(function(){var g=window.__forceGraph,ok=g.model.links===36;g.nodes.forEach(function(n){if(n.group&&window.__c0[n.group]!==g.colourOf(n))ok=false});return ok})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "filtered"
+   },
+   {
+    "update": {
+     "source": {
+      "inputField": "From",
+      "type": "UNIQUE_VALUES"
+     },
+     "target": {
+      "inputField": "To",
+      "type": "UNIQUE_VALUES"
+     },
+     "background": "not a colour"
+    }
+   },
+   {
+    "eval": "window.__forceGraph.graph.backgroundColor()==='#ffffff' && !document.querySelector('#key span')",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/messages.csv",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    },
+    "group": {
+     "inputField": "Team",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkWidth": {
+     "inputField": "Messages",
+     "function": "SUM"
+    },
+    "background": "#ffffff"
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 6000,
+  "actions": [
+   {
+    "resize": [
+     200,
+     150
+    ],
+    "waitAfter": 3000
+   },
+   {
+    "eval": "(function(){var c=document.querySelector('canvas');return c.clientWidth===200&&c.clientHeight===150&&document.querySelectorAll('canvas').length===1&&!document.querySelector('#key span')})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "200x150"
+   }
+  ],
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "From",
+    "type": "TEXT"
+   },
+   {
+    "name": "To",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 2500,
+  "expect": {
+   "text": "No data to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/messages.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 2500,
+  "expect": {
+   "text": "Choose a Source and a Target"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    },
+    "group": {
+     "inputField": "Team",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkWidth": {
+     "inputField": "Messages",
+     "function": "SUM"
+    },
+    "background": "#ffffff"
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 15000,
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "window.__forceGraph.model.nodes===2000 && window.__forceGraph.model.links===10000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "too-many",
+  "generate": "tests/large.js",
+  "generateArgs": {
+   "people": 4000,
+   "links": 8000
+  },
+  "options": {
+   "items": {
+    "source": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "target": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    },
+    "group": {
+     "inputField": "Team",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkWidth": {
+     "inputField": "Messages",
+     "function": "SUM"
+    },
+    "background": "#ffffff"
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 3000,
+  "expect": {
+   "text": "Too many nodes to draw"
+  }
+ }
+]

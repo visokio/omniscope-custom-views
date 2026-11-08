@@ -23,38 +23,45 @@
   "options": {
     "items": {
       "block": {
-        "displayName": "Blocks to execute (comma separated names)",
-        "documentation": "Leave blank to execute all blocks; Use the current report name as a way to refresh the report data",
-        "type": "TEXT"
+        "displayName": "Blocks to execute",
+        "type": "TEXT",
+        "detail": "Names of the workflow blocks to execute, separated by commas, e.g. Load orders, Report. Leave empty to execute the whole workflow."
       },
       "buttonText": {
         "displayName": "Button text",
-        "type": "TEXT"
+        "type": "TEXT",
+        "detail": "Text on the button. If empty: Execute"
       },
       "paramNames": {
-        "displayName": "Param names (comma separated names)",
-        "type": "TEXT"
+        "displayName": "Parameters to show",
+        "type": "TEXT",
+        "detail": "Names of the project parameters to show, in this order, separated by commas. Leave empty to show them all."
       },
       "refreshFromSource": {
         "displayName": "Refresh from source",
-        "documentation": "If ticked, Omniscope discards any previous execution data and reloads fresh data from the sources;\n\n \n\n If unticked, Omniscope executes only the necessary blocks in the workflow based on their current configuration and previous execution data; it will reuse cached data from upstream blocks if available, executing only those blocks that require fresh data.",
-        "type": "TOGGLE"
+        "type": "TOGGLE",
+        "detail": "On: the blocks reload their data from the sources. Off: data already loaded upstream is reused where possible.",
+        "documentation": "If ticked, Omniscope discards any previous execution data and reloads fresh data from the sources.\n\nIf unticked, Omniscope executes only the blocks that need it, based on their current configuration and previous execution data, and reuses data from upstream blocks where available."
       },
       "showJobState": {
         "displayName": "Show job state",
-        "type": "TOGGLE"
+        "type": "TOGGLE",
+        "detail": "Show the execution's progress (queued, running, finished) under the button. Errors are always shown."
       },
       "wGrid": {
-        "displayName": "Grid Width (px)",
-        "type": "NUMBER"
+        "displayName": "Parameter cell width (px)",
+        "type": "NUMBER",
+        "detail": "Width of each parameter's label and input (default 200)."
       },
       "wInputWidth": {
-        "displayName": "Input Width (px)",
-        "type": "NUMBER"
+        "displayName": "Input width (px)",
+        "type": "NUMBER",
+        "detail": "Width of each input box (default 100)."
       },
       "zlabelFontSize": {
-        "displayName": "Label Font Size (px)",
-        "type": "NUMBER"
+        "displayName": "Label size (px)",
+        "type": "NUMBER",
+        "detail": "Font size of the parameter names (default 13)."
       }
     },
     "structure": {
@@ -73,6 +80,7 @@
     "items": {
       "buttonText": "Execute",
       "refreshFromSource": true,
+      "showJobState": true,
       "wGrid": 200,
       "wInputWidth": 100,
       "zlabelFontSize": 13

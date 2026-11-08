@@ -1,14 +1,14 @@
 {
-  "name": "Switch Param View",
+  "name": "Switch Param",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
   "tags": [
-			    "custom",
-			    "parameter",
-			    "param",
-			    "api"
-		    ],
+    "custom",
+    "parameter",
+    "param",
+    "api"
+  ],
   "sandbox": false,
   "autoPane": false,
   "autoQuery": true,
@@ -17,17 +17,24 @@
   "options": {
     "items": {
       "paramName": {
-        "displayName": "Param name",
+        "displayName": "Parameter name",
         "type": "TEXT",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "Name of the project parameter to set, exactly as in the workflow's parameters."
+      },
+      "selectionLimit": {
+        "displayName": "Most values shown",
+        "type": "NUMBER",
+        "detail": "Show at most this many values (default 100)."
       },
       "split": {
-        "displayName": "Field with param values",
+        "displayName": "Values from",
         "type": "GROUPING",
         "mandatory": true,
         "validGroupingTypes": [
           "UNIQUE_VALUES"
-        ]
+        ],
+        "detail": "Field whose distinct values become the choices. Use a data source with every value, so the choices do not depend on the parameter itself."
       }
     },
     "structure": {
@@ -39,7 +46,9 @@
     }
   },
   "defaultOptions": {
-    "items": {},
+    "items": {
+      "selectionLimit": 100
+    },
     "pane": {
       "yAxisHeaderWidth": 75,
       "paneWidth": 200,

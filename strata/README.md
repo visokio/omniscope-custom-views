@@ -139,7 +139,7 @@ time filter reaches it - a filter linked across the tables, say; one on Sessions
 ## Settings
 
 In four sections of the options panel: Chart (Layer, Start, End, Stacking), Line (Label, Line labels, Colour by,
-Emphasis, Moment time, Moment kind), Foot (Foot line, Working-day marks, Daily meeting) and Animation (Opening).
+Emphasis, Emphasis names, Moment time, Moment kind), Foot (Foot line, Working-day marks, Daily meeting) and Animation (Opening).
 
 - **Layer** (mandatory): what each line is.
 - **Start**, **End** (mandatory, dates): each row's stretch.
@@ -147,6 +147,8 @@ Emphasis, Moment time, Moment kind), Foot (Foot line, Working-day marks, Daily m
 - **Colour by**: lines sharing a value share a colour, in the order of the most time. Defaults to one per line.
 - **Emphasis**: per row, 2 strong (the colour darkened), 1 medium (a clear tint), 0 or blank faint (a pale
   tint). Each pixel shows the strongest stretch in it.
+- **Emphasis names**: what the tooltip calls the three kinds of stretch, separated by commas, strong first -
+  for example `Being worked, Waiting on requester, Queued`. Empty: strong, medium, faint.
 - **Foot line**: the field whose values mark foot-line rows (rows with no Layer). Blank: drawn from the lines,
   wherever any is strong.
 - **Moment time**: rows with a time here, and no Start or End, are moments on their line at that time (a
@@ -176,6 +178,31 @@ Times are shown as Omniscope shows them, the same clock time wherever the report
 The view fills its pane's height: with room to spare, as headroom above the lines (nothing is stretched); in a
 pane too short for every line open at once, the shortest-lived lines at the crowded moments are left out -
 never one at a quiet time - and the view says how many ("12 shorter lines left out to fit").
+
+## Interaction
+
+- **Zoom** with the slider above the chart, from *all* (the whole range, or as many days as read well) to a
+  day; on a touch screen, pinch. Scroll sideways to move through time.
+- **The overview strip** shows the whole range with the part on screen boxed: drag the box, or click to jump.
+- **Point at a line** to light it and see its name, the stretch under the pointer (named by Emphasis names)
+  and when it was open; point at a moment for its kind and time.
+- **Click a line** to select its rows, so other views in the report show that one line's data; click empty
+  space to clear the selection.
+
+In a narrow pane the zoom slider is shorter, so the overview keeps most of the width. Where more lines are open
+at once than the pane's height holds, the note beside the slider says how many are left out.
+
+## Sample data
+
+`sample-data/tickets.csv` is invented: two weeks of an IT service desk, 120 tickets in four teams, each a line of
+Queued (Emphasis 0), Waiting on requester (1) and Being worked (2) stretches, with Reply and Escalation moments.
+`sample-data/generate.py` made it. Settings for it: Layer = Ticket, Start, End, Label = Title, Colour by = Team,
+Emphasis, Emphasis names = `Being worked, Waiting on requester, Queued`, Moment time, Moment kind = Moment.
+
+## Third-party libraries
+
+None: the view draws its own SVG with the three scripts below and needs nothing beyond Omniscope's custom view
+API, so it works without internet access.
 
 ## Files
 

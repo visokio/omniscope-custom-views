@@ -1,0 +1,329 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/tickets.csv",
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "End",
+    "label": "Title",
+    "colour": "Team",
+    "emphasis": "Emphasis",
+    "momentAt": "Moment time",
+    "moment": "Moment",
+    "order": "Longest-lived on top",
+    "labels": "At the end",
+    "intro": "None",
+    "workday": true,
+    "standup": "09:30",
+    "emphasisNames": "Being worked, Waiting on requester, Queued"
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "showcaseHeight": 600,
+  "wait": 3000,
+  "caption": "Live: two weeks of an invented IT service desk, one line per ticket, coloured by team. Strong stretches are work on the ticket, medium ones waiting on the requester, pale ones the queue; small triangles are replies. Drag the zoom slider or the overview strip, and point at a line for its ticket.",
+  "expect": {
+   "selector": ".chart .line",
+   "min": 40
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.overview .ov-box').length===1 && document.querySelectorAll('.chart .pinch').length>10 && document.querySelectorAll('.chart .badge').length>=1",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "whole-range",
+  "showcase": true,
+  "data": "sample-data/tickets.csv",
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "End",
+    "label": "Title",
+    "colour": "Team",
+    "emphasis": "Emphasis",
+    "momentAt": "Moment time",
+    "moment": "Moment",
+    "order": "Oldest at the bottom",
+    "labels": "None",
+    "intro": "None",
+    "workday": true,
+    "standup": "09:30",
+    "emphasisNames": "Being worked, Waiting on requester, Queued"
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "showcaseHeight": 600,
+  "wait": 3000,
+  "caption": "Live: the whole fortnight at once, stacked oldest at the bottom. Each day's new tickets go on top, and the stack drops where older tickets close; weekends are quiet.",
+  "actions": [
+   {
+    "eval": "(function(){var z=document.querySelector('.zoom input');z.value='0';z.dispatchEvent(new Event('input'));return true})()"
+   },
+   {
+    "wait": 1500
+   },
+   {
+    "eval": "document.querySelectorAll('.chart .lab').length===0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/tickets.csv",
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "End",
+    "label": "Title",
+    "colour": "Team",
+    "emphasis": "Emphasis",
+    "momentAt": "Moment time",
+    "moment": "Moment",
+    "order": "Longest-lived on top",
+    "labels": "At the end",
+    "intro": "None",
+    "workday": true,
+    "standup": "09:30",
+    "emphasisNames": "Being worked, Waiting on requester, Queued"
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 3000,
+  "actions": [
+   {
+    "hoverEval": "(function(){var r=document.querySelector('.scroller').getBoundingClientRect();var ps=document.querySelectorAll('.chart .grab');for(var i=0;i<ps.length;i++){var p=ps[i],L=p.getTotalLength();for(var k=1;k<40;k++){var q=p.getPointAtLength(L*k/40),m=p.getScreenCTM(),x=m.a*q.x+m.c*q.y+m.e,y=m.b*q.x+m.d*q.y+m.f;if(x>r.left+20&&x<r.right-200&&y>r.top+5&&y<r.bottom-30){var h=document.elementFromPoint(x,y);if(h===p){window.__pickIndex=+p.dataset.index;return [x,y];}}}}return null})()"
+   },
+   {
+    "eval": "(function(){var t=document.querySelector('.tip'),lit=document.querySelectorAll('.chart .line.lit'),ix={};lit.forEach(function(l){ix[l.dataset.index]=1});return t.style.display==='block'&&/^T-1\\d{3} /.test(t.textContent)&&t.textContent.indexOf('open:')>0&&/(Being worked|Waiting on requester|Queued): /.test(t.textContent)&&lit.length>0&&Object.keys(ix).length===1})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "clickEval": "(function(){var r=document.querySelector('.scroller').getBoundingClientRect();var ps=document.querySelectorAll('.chart .grab');for(var i=0;i<ps.length;i++){var p=ps[i],L=p.getTotalLength();for(var k=1;k<40;k++){var q=p.getPointAtLength(L*k/40),m=p.getScreenCTM(),x=m.a*q.x+m.c*q.y+m.e,y=m.b*q.x+m.d*q.y+m.f;if(x>r.left+20&&x<r.right-200&&y>r.top+5&&y<r.bottom-30){var h=document.elementFromPoint(x,y);if(h===p){window.__pickIndex=+p.dataset.index;return [x,y];}}}}return null})()"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var s=omniscope.view.context().viewSelection,f=s.filter||s;f=f.filters?f.filters[0]:f;return f.inputField==='Ticket'&&f.operator==='='&&/^T-1\\d{3}$/.test(f.value)})()",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     500,
+     590
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Team",
+     "operator": "=",
+     "value": "Network"
+    }
+   },
+   {
+    "eval": "(function(){var ix={};document.querySelectorAll('.chart .line').forEach(function(l){ix[l.dataset.index]=1});var n=Object.keys(ix).length;return n>0&&n<=38})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "filtered"
+   }
+  ]
+ },
+ {
+  "name": "plain",
+  "data": "sample-data/tickets.csv",
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "End",
+    "intro": "None"
+   }
+  },
+  "width": 800,
+  "height": 400,
+  "wait": 3000,
+  "expect": {
+   "selector": ".chart .line",
+   "min": 10
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.chart .pinch').length===0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/tickets.csv",
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "End",
+    "label": "Title",
+    "colour": "Team",
+    "emphasis": "Emphasis",
+    "momentAt": "Moment time",
+    "moment": "Moment",
+    "order": "Longest-lived on top",
+    "labels": "At the end",
+    "intro": "None",
+    "workday": true,
+    "standup": "09:30"
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 3000,
+  "actions": [
+   {
+    "resize": [
+     320,
+     200
+    ]
+   },
+   {
+    "eval": "(function(){var c=document.querySelector('.chart').getBoundingClientRect();return document.body.scrollHeight<=200+2&&c.height>0&&document.querySelectorAll('.chart .line').length>0})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "320x200"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Ticket",
+    "type": "TEXT"
+   },
+   {
+    "name": "Start",
+    "type": "DATE"
+   },
+   {
+    "name": "End",
+    "type": "DATE"
+   }
+  ],
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "End"
+   }
+  },
+  "width": 800,
+  "height": 400,
+  "wait": 1500,
+  "expect": {
+   "text": "No rows with an End after their Start"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/tickets.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 800,
+  "height": 400,
+  "wait": 1500,
+  "expect": {
+   "text": "Choose a Layer, a Start and an End field"
+  }
+ },
+ {
+  "name": "same-field",
+  "data": "sample-data/tickets.csv",
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "Start"
+   }
+  },
+  "width": 800,
+  "height": 400,
+  "wait": 1500,
+  "expect": {
+   "text": "Start and End are the same field"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "End",
+    "label": "Title",
+    "colour": "Team",
+    "emphasis": "Emphasis",
+    "intro": "None"
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 6000,
+  "expect": {
+   "selector": ".chart .line",
+   "min": 20
+  },
+  "actions": [
+   {
+    "eval": "document.querySelector('.left-out').textContent"
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/tickets.csv",
+  "options": {
+   "items": {
+    "layer": "Ticket",
+    "start": "Start",
+    "end": "End",
+    "label": "Title",
+    "colour": "Team",
+    "emphasis": "Emphasis",
+    "momentAt": "Moment time",
+    "moment": "Moment",
+    "order": "Longest-lived on top",
+    "labels": "None",
+    "intro": "None",
+    "workday": true,
+    "standup": "09:30",
+    "emphasisNames": "Being worked, Waiting on requester, Queued"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 3000
+ }
+]

@@ -4,28 +4,48 @@
     <meta charset="utf-8"/>
 
     <style>
-        html, body, main {
-
-            /* Ensure the body fills the view, so clicks are handled everywhere: */
-            width: 99%;
-            height: 99%;
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #41475e;
+            background: #fff;
         }
-        main {
-            font-family: monospace;
+        body.dark { background: #15202b; color: #c9d1d9; }
+        #scroller {
+            position: absolute;
+            inset: 0;
+            overflow: auto;
+            box-sizing: border-box;
+            padding: 8px;
+        }
+        #post { max-width: 550px; margin: 0 auto; }
+        #post .twitter-tweet { margin: 0 auto !important; }
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px;
+            box-sizing: border-box;
             font-size: 13px;
+            line-height: 1.45;
         }
+        #message .box { max-width: 340px; }
+        #message .title { font-weight: 600; margin-bottom: 4px; }
+        #message .detail { color: #8a8f9c; }
+        body.dark #message .detail { color: #8b98a5; }
     </style>
-
-    <!-- Put SCRIPT tags to load 3rd party libraries here -->
-
 </head>
 
 <body>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
- <main  style="overflow-y:scroll;">
-  <div id="warn">Select a single record to show the Tweet</div>
-  <div id="thetweet"></div>
- </main>
+<div id="scroller"><div id="post"></div></div>
+<div id="message"><div class="box"><div class="title" id="msgTitle"></div><div class="detail" id="msgDetail"></div></div></div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
@@ -34,50 +54,147 @@
     omniscope.view.on("load", function() {
         window.onerror = function(msg) {
             omniscope.view.error(msg);
-        }
+        };
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    // A click on the view clears the selection in the report, as a click on empty space in any view does.
     document.body.addEventListener("click", function() {
         omniscope.view.whitespaceClick();
     });
 
-    // Naively redraw on any of these events 
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    // X's embedding script (documented loader: https://docs.x.com/x-for-websites/javascript-api/guides/set-up-x-for-websites).
+    var WIDGETS_URL = "https://platform.x.com/widgets.js";
+    var MIN_WIDTH = 220;       // embedded posts are 250 to 550 pixels wide
+    var LOAD_TIMEOUT = 20000;  // ms to wait for the script or for one post
+    var widgets = { state: "idle", waiting: [] };  // idle | loading | ready | failed
+    var shown = null;          // signature of the post on screen, so a resize does not reload it
+    var renderToken = 0;
 
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        var data = omniscope.view.context().result.data.records;
-      
-        var theme = omniscope.view.context().options.items.darkMode === true ? 'dark' : '';
-        var conversation = omniscope.view.context().options.items.hideConversation === true ? 'none' : '';
+    function loadWidgets(done) {
+        if (widgets.state === "ready") return done(true);
+        if (widgets.state === "failed") return done(false);
+        widgets.waiting.push(done);
+        if (widgets.state === "loading") return;
+        widgets.state = "loading";
+        var t = window.twttr = window.twttr || {};
+        t._e = t._e || [];
+        t.ready = t.ready || function(f) { t._e.push(f); };
+        var finish = function(ok) {
+            if (widgets.state !== "loading") return;
+            widgets.state = ok ? "ready" : "failed";
+            var w = widgets.waiting; widgets.waiting = [];
+            w.forEach(function(f) { f(ok); });
+        };
+        var s = document.createElement("script");
+        s.id = "twitter-wjs";
+        s.async = true;
+        s.src = WIDGETS_URL;
+        s.onerror = function() { finish(false); };
+        document.head.appendChild(s);
+        window.twttr.ready(function() { finish(!!(window.twttr && window.twttr.widgets)); });
+        setTimeout(function() { finish(false); }, LOAD_TIMEOUT);
+    }
 
-        var id = data[0][0];
-         
-        if (id === null || id === "null") {
-          //nothing to show, warn user 
-		  document.getElementById("warn").style.display = "block";
-          var el = document.getElementById("thetweet");
-          if (el) el.style.display = "none";
-          return;
+    function message(title, detail) {
+        shown = null;
+        renderToken++;
+        document.getElementById("post").innerHTML = "";
+        document.getElementById("scroller").style.display = "none";
+        document.getElementById("msgTitle").textContent = title;
+        document.getElementById("msgDetail").textContent = detail || "";
+        document.getElementById("message").style.display = "flex";
+    }
+
+    function hideMessage() {
+        document.getElementById("message").style.display = "none";
+        document.getElementById("scroller").style.display = "block";
+    }
+
+    // The post ID from a field value: an ID (text, or a number small enough to be exact), or a post URL.
+    function postId(v) {
+        if (typeof v === "number") {
+            if (!Number.isSafeInteger(v) || v <= 0) return { error: "number" };
+            return { id: String(v) };
         }
-        document.getElementById("warn").style.display = "none";
-        var el = document.getElementById("thetweet");
-        if (el) {
-            el.style.display = "block";
+        var s = String(v).trim();
+        if (/^\d{1,20}$/.test(s)) return { id: s };
+        var m = /^(?:https?:\/\/)?(?:www\.|mobile\.)?(?:x|twitter)\.com\/[^\/?#]+\/status(?:es)?\/(\d{1,20})/i.exec(s);
+        if (m) return { id: m[1] };
+        return { error: "text" };
+    }
+
+    var NOT_AN_ID = ["RECORD_COUNT", "UNIQUE_VALUE_COUNT", "NON_EMPTY_COUNT", "EMPTY_COUNT", "SUM", "MEAN",
+        "STANDARD_DEVIATION", "LOWER_QUARTILE", "UPPER_QUARTILE"];
+
+    function draw() {
+        var ctx = omniscope.view.context();
+        var items = (ctx.options && ctx.options.items) || {};
+        var measure = items.atweetID;
+        var dark = items.darkMode === true;
+        document.body.className = dark ? "dark" : "";
+
+        if (!measure) return message("Choose the field with the post IDs", "Set Post ID or URL in the view's settings.");
+        if (NOT_AN_ID.indexOf(measure["function"]) >= 0) {
+            return message("Post ID or URL needs a field value, not a count or a total",
+                "Pick the field with the post IDs or URLs and use the Singleton function (or Min or Max).");
+        }
+        var result = ctx.result;
+        var records = result && result.data && result.data.records;
+        if (!records || !records.length) return message("No data", "No records match the current filter.");
+        var col = result.mappings && result.mappings.atweetID !== undefined ? result.mappings.atweetID : 0;
+        var value = records[0][col];
+        if (value === null || value === undefined || value === "") {
+            return message("No single post to show",
+                "Several records match, or none. Filter or select a single record in another view to show its post.");
+        }
+        var p = postId(value);
+        if (p.error === "number") {
+            return message("This post ID has lost digits",
+                "Post IDs are longer than a number can hold exactly. Change the field's type to Text in the workflow, or use the post's URL.");
+        }
+        if (p.error) return message("Not a post ID or URL", String(value).slice(0, 120));
+        if (window.innerWidth < MIN_WIDTH) {
+            return message("Too narrow for a post", "Make the view at least " + MIN_WIDTH + " pixels wide.");
+        }
+
+        var opts = {
+            theme: dark ? "dark" : "light",
+            conversation: items.hideConversation === true ? "none" : "all",
+            cards: items.hideMedia === true ? "hidden" : "visible",
+            align: "center",
+            dnt: true
+        };
+        var sig = JSON.stringify([p.id, opts]);
+        if (sig === shown) { hideMessage(); return; }
+        var token = ++renderToken;
+        loadWidgets(function(ok) {
+            if (token !== renderToken) return;
+            if (!ok) {
+                return message("The post can't be shown here",
+                    "The browser could not load X's embedding script (" + WIDGETS_URL + "). A firewall, content blocker or browser privacy setting may be blocking it.");
+            }
+            var el = document.getElementById("post");
             el.innerHTML = "";
-            twttr.widgets.createTweet(
-              id,
-              document.getElementById('thetweet'),
-              {
-                theme: theme,
-                conversation: conversation
-              }
-            );
-        }
-    });
-  
- 
+            hideMessage();
+            shown = sig;
+            var settled = false;
+            var timer = setTimeout(function() {
+                if (!settled && token === renderToken) message("The post did not load", "X did not answer for post " + p.id + ".");
+            }, LOAD_TIMEOUT);
+            window.twttr.widgets.createTweet(p.id, el, opts).then(function(node) {
+                settled = true;
+                clearTimeout(timer);
+                if (token !== renderToken) return;
+                if (!node) message("Post " + p.id + " is not available", "It may have been deleted or made private, or the ID is wrong.");
+            }, function() {
+                settled = true;
+                clearTimeout(timer);
+                if (token === renderToken) message("Post " + p.id + " could not be shown", "");
+            });
+        });
+    }
+
+    omniscope.view.on(["load", "update", "resize"], draw);
 </script>
 
 </body>

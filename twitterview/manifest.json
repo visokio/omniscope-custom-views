@@ -5,7 +5,11 @@
   "thumbnail": "thumbnail.png",
   "tags": [
     "twitter",
-    "tweet"
+    "tweet",
+    "x",
+    "post",
+    "social media",
+    "embed"
   ],
   "sandbox": false,
   "autoPane": true,
@@ -15,30 +19,37 @@
   "options": {
     "items": {
       "atweetID": {
-        "displayName": "Tweet ID",
-        "documentation": "Select the field and function to retrieve the Tweet ID",
+        "displayName": "Post ID or URL",
+        "documentation": "The field with each post's ID or URL (https://x.com/<account>/status/<id>). Keep IDs in a Text field: as numbers they lose digits. With the Singleton function a post shows when the filter or selection leaves one post; Min or Max always shows one.",
         "type": "MEASURE",
         "mandatory": true
       },
       "darkMode": {
         "displayName": "Dark mode",
         "type": "TOGGLE",
-        "documentation": "If ticked, displays Tweet with light text over a dark background."
+        "documentation": "Light text on a dark background, for the post and the view."
       },
       "hideConversation": {
         "displayName": "Hide conversation",
         "type": "TOGGLE",
-        "documentation": "If ticked, only the cited Tweet will be displayed even if it is in reply to another Tweet."
+        "documentation": "Show only the post itself, without the post it replies to."
+      },
+      "hideMedia": {
+        "displayName": "Hide photos and link previews",
+        "type": "TOGGLE",
+        "documentation": "Show the post's text only: no photos, videos or link preview cards."
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "documentation": "Optional: one post per value of this field, side by side."
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "documentation": "Optional: one post per value of this field, one above the other."
       }
     },
     "structure": {
@@ -77,7 +88,7 @@
     }
   },
   "pane": {
-    "minWidth": 50,
-    "minHeight": 50
+    "minWidth": 250,
+    "minHeight": 150
   }
 }

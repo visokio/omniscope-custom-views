@@ -2,300 +2,475 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <!-- Set Parameters and Execute: inputs for project parameters and a button that executes workflow blocks with them -->
         <style>
             html,
-            body,
-            main {
-                width: 100%;
-                height: 100%;
-                font-family: Lato, sans-serif;
-                overflow: auto; /* Enable scrolling */
+            body {
                 margin: 0;
+                height: 100%;
             }
-
-            /* Flex container for wrapping items */
-            #params {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 2px; /* Space between cells */
-            }
-
-            /* Each input container with max width from gridWidth */
-            .input-container {
-                display: flex;
-                flex-direction: column;
-                padding: 4px; /* Padding inside each cell */
-                box-sizing: border-box; /* Ensures padding doesn’t expand the width */
-                flex: 1 1 auto;
-            }
-
-            label {
-                font-size: 13px;
-                font-weight: 600;
-                padding: 2px;
-                display: block;
+            body {
                 box-sizing: border-box;
+                padding: 10px 12px;
+                overflow: auto;
+                font-family: Lato, "Helvetica Neue", Arial, sans-serif;
+                font-size: 13px;
+                color: #242d3b;
             }
-
-            input[type="text"] {
-                border: 1px solid #e5e5e5;
-                padding: 2px;
-                box-sizing: border-box; /* Ensures padding doesn’t expand the input */
-            }
-
-            a.button {
-                background: #ececec;
-                border-radius: 10px;
-                padding: 5px 20px;
-                font-weight: bold;
-                font-size: 16px;
-                color: #3f3f3f;
-                text-decoration: none;
-                text-shadow: 0px 1px 0px #fff;
-                border: 1px solid #a7a7a7;
-                margin: 0px auto;
-                box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1),
-                    0px 8px 10px rgba(0, 0, 0, 0.1);
-                -webkit-transition: box-shadow 0.5s;
+            .btn {
                 display: inline-flex;
                 align-items: center;
+                gap: 8px;
+                max-width: 100%;
+                box-sizing: border-box;
+                padding: 8px 16px;
+                border: 0;
+                border-radius: 4px;
+                background: #2f6fb2;
+                color: #fff;
+                font: inherit;
+                font-weight: bold;
+                cursor: pointer;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
-
-            a.button.disabled {
-                pointer-events: none;
-                opacity: 0.6;
+            .btn:hover {
+                background: #255d97;
+            }
+            .btn:focus-visible {
+                outline: 2px solid #9cc3ea;
+                outline-offset: 2px;
+            }
+            .btn:disabled {
+                background: #8aa9c9;
+                cursor: default;
+            }
+            .btn .label {
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .spinner {
-                  width: 20px;
-                  height: 20px;
-                  border: 2px solid transparent;
-                  border-top: 2px solid #3f3f3f;
-                  border-radius: 50%;
-                  margin-left: 10px;
-                  animation: spin 1s linear infinite;
+                display: none;
+                flex: none;
+                width: 12px;
+                height: 12px;
+                border: 2px solid rgba(255, 255, 255, 0.4);
+                border-top-color: #fff;
+                border-radius: 50%;
+                animation: spin 0.9s linear infinite;
+            }
+            .busy .spinner {
+                display: inline-block;
             }
             @keyframes spin {
-                from {
-                    transform: rotate(0deg);
-                }
                 to {
                     transform: rotate(360deg);
                 }
             }
+            @media (prefers-reduced-motion: reduce) {
+                .spinner {
+                    animation: none;
+                }
+            }
+            .status {
+                margin-top: 8px;
+                line-height: 1.4;
+                overflow-wrap: anywhere;
+                color: #4a5463;
+            }
+            .status:empty {
+                display: none;
+            }
+            .status.ok {
+                color: #2e7d32;
+            }
+            .status.error {
+                color: #b3261e;
+            }
+            .status a {
+                color: #2f6fb2;
+            }
+            .message {
+                color: #6b7480;
+                line-height: 1.4;
+            }
+            .params {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px 12px;
+                margin-bottom: 10px;
+            }
+            .param {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                max-width: 100%;
+            }
+            .param label {
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .param input {
+                box-sizing: border-box;
+                max-width: 100%;
+                padding: 4px 6px;
+                border: 1px solid #c9cfd8;
+                border-radius: 3px;
+                font: inherit;
+                color: inherit;
+            }
+            .param input:focus {
+                outline: none;
+                border-color: #2f6fb2;
+            }
+            .param input[readonly] {
+                background: #f3f5f8;
+            }
+            .param .note {
+                color: #b3261e;
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
-        <div>
-            <div id="params"></div>
-            <br />
-            <a href="#" class="button" id="btnid" onclick="startWorkflow()">Execute</a>
-            <br /><br />
-            <div id="jobState"></div>
-        </div>
+        <div id="params" class="params"></div>
+        <div id="message" class="message"></div>
+        <button type="button" class="btn" id="run"><span class="spinner"></span><span class="label">Execute</span></button>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
         <script src="/_global_/customview/v1/omniscope.js"></script>
         <script>
-            var _jobId = "NA";
-            var _blocksToExecute;
-            var _paramNames;
-            var _paramValues;
-            var _showJobState;
-            var _projEndpoint;
-            var _check;
-            var originalButtonText = "Execute";
-            var gridWidth = 200; // Default grid cell width
-            var inputWidth = 100; // Default input width
-            var labelFontSize = 13;
+            if (!omniscope || !omniscope.view) throw new Error("Omniscope custom view API is not loaded");
 
-            if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+            // ---- Workflow REST API helpers, shared by the workflow control views ----
+            // The view is served from <project>.iox/<er or r>/<Report>/customview/<View>/; the project's Workflow
+            // REST API is <project>.iox/w/... (execute, job/<id>/state, param, updateparams, lambdaexecute, ...).
+            var STATE_LABEL = {
+                QUEUED: "Queued",
+                RUNNING: "Running",
+                BLOCKED: "Waiting for another execution",
+                COMPLETED: "Finished",
+                FAILED: "Failed",
+                CANCELLED: "Cancelled"
+            };
+            var POLL_MS = 1000;
 
-            function updateUI() {
-                var container = document.getElementById("params");
-
-                while (container.hasChildNodes()) {
-                    container.removeChild(container.lastChild);
-                }
-                if (_paramValues) {
-                    for (let i = 0; i < _paramValues.length; i++) {
-                        var param = _paramValues[i];
-                        var label = document.createElement("label");
-                        label.innerHTML = param.name;
-                        label.style.width = gridWidth + "px"; // Set label width to gridWidth
-                        label.style.fontSize = labelFontSize + "px";
-                        
-                        var input = document.createElement("input");
-                        input.type = "text";
-                        input.name = param.name;
-                        input.value = param.value;
-                        input.style.width = inputWidth + "px"; // Set input width to inputWidth
-
-                        var inputContainer = document.createElement("div");
-                        inputContainer.className = "input-container";
-                        inputContainer.style.width = gridWidth + "px"; // Set width from gridWidth option
-                        inputContainer.appendChild(label);
-                        inputContainer.appendChild(input);
-
-                        container.appendChild(inputContainer);
-                    }
-                }
+            function items() {
+                var c = omniscope.view.context();
+                return (c && c.options && c.options.items) || {};
             }
-
-            function getParamValues() {
+            function baseUrl() {
+                var c = omniscope.view.context();
+                return (c && c.baseUrl) || "";
+            }
+            function projectUrl() {
+                var b = baseUrl(), i = b.indexOf(".iox/");
+                return i >= 0 ? b.slice(0, i + 5) : b + "../../../../";
+            }
+            // The name of the Report block showing this view (the path segment after er/ or r/).
+            function reportBlockName() {
+                var m = /\.iox\/[^\/]+\/([^\/]+)\//.exec(baseUrl());
+                return m ? decodeURIComponent(m[1].replace(/\+/g, " ")) : null;
+            }
+            // "Load orders, Report" -> ["Load orders", "Report"]
+            function nameList(text) {
+                return String(text == null ? "" : text)
+                    .split(",")
+                    .map(function (s) { return s.trim(); })
+                    .filter(Boolean);
+            }
+            function errorText(status, json, text, permission) {
+                if (json && json.errorMessage) return json.errorMessage;
+                if (status === 401 || status === 403)
+                    return "Not allowed (HTTP " + status + "): the user needs the \"" + permission + "\" permission on this server.";
+                if (!status) return "No answer from the server.";
+                var t = String(text || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+                return "HTTP " + status + (t ? ": " + t.slice(0, 160) : "");
+            }
+            // Calls the Workflow REST API; done(error message or null, parsed JSON answer).
+            function api(method, path, body, done, permission) {
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", _projEndpoint + "w/param/", true);
+                xhr.open(method, projectUrl() + path, true);
                 xhr.onreadystatechange = function () {
-                    if (xhr.readyState == XMLHttpRequest.DONE) {
-                        if (this.status == 200) {
-                            let responseParams = JSON.parse(xhr.responseText).paramValues;
-                            if (_paramNames) {
-                                // Ensure parameters are in the order specified in _paramNames
-                                _paramValues = _paramNames.map(name => responseParams.find(item => item.name === name)).filter(Boolean);
-                            } else {
-                                // Use the order in responseParams if no specific order is defined
-                                _paramValues = responseParams;
-                            }
-                            document.getElementById("jobState").innerHTML = "";
-                            updateUI();
-                        } else if (this.status == 403) {
-                            document.getElementById("jobState").innerHTML = xhr.responseText;
-                            updateUI();
-                            return;
-                        } else {
-                            document.getElementById("jobState").innerHTML = xhr.responseText;
-                            updateUI();
-                            return;
-                        }
-                    }
+                    if (xhr.readyState !== 4) return;
+                    var json = null;
+                    try { json = JSON.parse(xhr.responseText); } catch (e) { }
+                    if (xhr.status === 200) done(null, json || {});
+                    else done(errorText(xhr.status, json, xhr.responseText, permission || "Workflow Execution via APIs"), json);
                 };
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.send();
+                if (body instanceof FormData) xhr.send(body);
+                else if (body !== undefined) {
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.send(JSON.stringify(body));
+                } else xhr.send();
             }
-
-            function startWorkflow() {
-                var myParams = document.getElementById("params");
-                var inputs = myParams.getElementsByTagName("input");
-                var paramsToSet = [];
-                for (let i = 0; i < inputs.length; i++) {
-                    let param = {};
-                    param.name = inputs[i].name;
-                    param.value = inputs[i].value;
-                    paramsToSet.push(param);
+            // Polls a job's state until it ends; onState(state) on each answer, onEnd(error, finalState, errorJson) once.
+            function watchJob(jobId, onState, onEnd) {
+                var stopped = false;
+                function tick() {
+                    if (stopped) return;
+                    api("GET", "w/job/" + encodeURIComponent(jobId) + "/state", undefined, function (err, json) {
+                        if (stopped) return;
+                        if (err) { stopped = true; return onEnd(err, null, json); }
+                        var s = json.jobState;
+                        onState(s);
+                        if (s === "COMPLETED" || s === "FAILED" || s === "CANCELLED") { stopped = true; return onEnd(null, s); }
+                        setTimeout(tick, POLL_MS);
+                    });
                 }
-                var paramsUpdate = {};
-                paramsUpdate.updates = paramsToSet;
-
-                var options = omniscope.view.context().options;
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", _projEndpoint + "w/execute", true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == XMLHttpRequest.DONE) {
-                        if (this.status == 200) {
-                            _jobId = JSON.parse(xhr.responseText).jobId;
-                            _check = setInterval(checkWorkflowState, 1000);
-                            document.getElementById("jobState").innerHTML =
-                                "Job state = STARTED; Job ID = " + _jobId;
-                        } else if (this.status == 403) {
-                            document.getElementById("jobState").innerHTML = xhr.responseText;
-                            resetButton();
-                        } else {
-                            document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
-                            resetButton();
-                        }
-                    }
-                };
-
-                disableButton(); // Disable button and show spinner
-                xhr.setRequestHeader("Content-Type", "application/json");
-
-                let blocksParam = "";
-                if (_blocksToExecute !== null) {
-					blocksParam = '"blocks": ["' + _blocksToExecute.join('","') + '"], ';
+                setTimeout(tick, POLL_MS / 2);
+                return function () { stopped = true; };
+            }
+            function stateLabel(s) {
+                return STATE_LABEL[s] || String(s);
+            }
+            function timeNow() {
+                var d = new Date();
+                return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
+            }
+            // Status line under the controls. Progress shows only with Show job state on; errors always show.
+            // Progress messages show with Show job state on (or, in views without that option, always).
+            function showProgress() {
+                return typeof ALWAYS_SHOW_STATUS !== "undefined" && ALWAYS_SHOW_STATUS ? true : !!items().showJobState;
+            }
+            function setStatus(text, kind, link) {
+                var el = document.getElementById("status");
+                if (tracked) {
+                    tracked.text = text || "";
+                    tracked.kind = kind || "";
+                    tracked.link = link || null;
+                    saveRun(tracked);
                 }
-                xhr.send(
-                    '{'+ blocksParam +
-                      '"refreshFromSource": ' + options.items.refreshFromSource +
-                        ', "cancelExisting": false, "params": ' +
-                        JSON.stringify(paramsUpdate) +
-                        "}"
-                );
+                if (kind !== "error" && !showProgress()) text = "";
+                el.className = "status" + (kind ? " " + kind : "");
+                el.textContent = text || "";
+                if (text && link) {
+                    var a = document.createElement("a");
+                    a.href = link.href;
+                    a.target = "_blank";
+                    a.rel = "noopener";
+                    a.textContent = link.text;
+                    el.appendChild(document.createTextNode(" "));
+                    el.appendChild(a);
+                }
+            }
+            // ---- Surviving a reload ----
+            // Omniscope recreates the view when a block it reads is executed or its parameters change, often while
+            // the view's own job is running. The run's state (job id, step, message) is kept in sessionStorage, keyed
+            // by the report URL, the view's name and its options, and picked up again on load.
+            var RUN_TTL_MS = 3600000; // a run older than this is forgotten
+            var DONE_TTL_MS = 120000; // a finished run's message is shown again on reload for this long
+            var tracked = null; // the run in progress, as stored
+            function storeKey() {
+                var c = omniscope.view.context() || {}, it = items(), keys = Object.keys(it).sort(), text = "", h = 5381;
+                keys.forEach(function (k) { text += k + "=" + JSON.stringify(it[k]) + ";"; });
+                for (var i = 0; i < text.length; i++) h = ((h * 33) ^ text.charCodeAt(i)) >>> 0;
+                return "omniscope-workflow-view|" + baseUrl() + "|" + (c.viewName || "") + "|" + h.toString(36);
+            }
+            function saveRun(state) {
+                state.saved = Date.now();
+                try { sessionStorage.setItem(storeKey(), JSON.stringify(state)); } catch (e) { }
+            }
+            function clearRun() {
+                try { sessionStorage.removeItem(storeKey()); } catch (e) { }
+            }
+            function loadRun() {
+                var s = null;
+                try { s = JSON.parse(sessionStorage.getItem(storeKey()) || "null"); } catch (e) { }
+                if (s && Date.now() - (s.saved || 0) > (s.done ? DONE_TTL_MS : RUN_TTL_MS)) { clearRun(); s = null; }
+                return s;
+            }
+            // Starts tracking a new run (extra: what the view needs to resume it).
+            function beginRun(extra) {
+                tracked = extra || {};
+                tracked.started = Date.now();
+                saveRun(tracked);
+                return tracked;
+            }
+            // Ends the run: its final message is kept for a while, so a reload straight after still shows it.
+            function endRun(text, kind, link) {
+                tracked = null;
+                saveRun({ done: true, text: text || "", kind: kind || "", link: link || null });
+                setStatus(text, kind, link);
+            }
+            // On the first load: show a finished run's message, or hand an unfinished run to resume(state).
+            var resumeChecked = false;
+            function resumeRun(resume) {
+                if (resumeChecked) return;
+                resumeChecked = true;
+                var s = loadRun();
+                if (!s) return;
+                if (s.done) return setStatus(s.text, s.kind, s.link);
+                if (!s.jobId) {
+                    clearRun();
+                    var d = new Date(s.started || Date.now());
+                    return setStatus("Execution requested at " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) +
+                        "; the view was reloaded before the server answered, so its progress is not shown.", "");
+                }
+                tracked = s;
+                setStatus(s.text, s.kind, s.link);
+                resume(s);
+            }
+            function setBusy(button, busy, label) {
+                button.disabled = !!busy;
+                button.classList.toggle("busy", !!busy);
+                button.querySelector(".label").textContent = label;
             }
 
-            function checkWorkflowState() {
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", _projEndpoint + "w/job/" + _jobId + "/state", true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == XMLHttpRequest.DONE) {
-                        if (this.status == 200) {
-                            var _jobState = JSON.parse(xhr.responseText).jobState;
-                            document.getElementById("jobState").innerHTML =
-                                "Job state = " + _jobState + "; Job ID = " + _jobId;
-
-                            if (_jobState === "COMPLETED" || _jobState === "FAILED") {
-                                clearInterval(_check);
-                                resetButton(); // Reset button after job completes
-                            }
-                        } else {
-                            document.getElementById("jobState").innerHTML = xhr.responseText;
-                            clearInterval(_check);
-                            resetButton();
-                        }
-                    }
-                };
-                xhr.send();
-            }
-
-            function disableButton() {
-                var button = document.getElementById("btnid");
-                button.classList.add("disabled");
-                button.innerHTML = "Executing...<span class='spinner'></span>";
-            }
-
-            function resetButton() {
-                var button = document.getElementById("btnid");
-                button.classList.remove("disabled");
-                button.innerHTML = originalButtonText;
-            }
-
+            // Show job state turned off: hide progress already shown (errors stay).
+            omniscope.view.on("update", function () {
+                var el = document.getElementById("status");
+                if (!showProgress() && el.className.indexOf("error") < 0) el.textContent = "";
+            });
             omniscope.view.on("load", function () {
                 window.onerror = function (msg) {
                     omniscope.view.error(msg);
                 };
             });
-
-            document.body.addEventListener("click", function () {
+            // A click on empty space clears the report's selection, as in other views; a click on a control does not.
+            document.addEventListener("click", function (e) {
+                if (e.target && e.target.closest && e.target.closest("button, input, label, a")) return;
                 omniscope.view.whitespaceClick();
             });
-
-            omniscope.view.on(["load", "update", "resize"], function () {
-                _projEndpoint = omniscope.view.context().baseUrl + "../../../../";
-                var options = omniscope.view.context().options;
-              
-                if (options.items.block) {
-                	_blocksToExecute = options.items.block.split(",");
-                } else {
-                    _blocksToExecute = null;
+            // ---- Project parameter inputs (Set Parameters and Execute, Lambda Workflow Execution) ----
+            // Parameters come from GET w/param/: {paramValues: [{name, type, value}]}.
+            function pickParams(all, wanted) {
+                if (!wanted.length) return { params: all, missing: [] };
+                var byName = {};
+                all.forEach(function (p) { byName[p.name] = p; });
+                return {
+                    params: wanted.filter(function (n) { return byName[n]; }).map(function (n) { return byName[n]; }),
+                    missing: wanted.filter(function (n) { return !byName[n]; })
+                };
+            }
+            // A value typed for a parameter, in the parameter's type: NUMBER parameters get numbers.
+            function typedValue(param, text) {
+                if (param.type === "NUMBER") {
+                    var n = Number(String(text).trim().replace(/,/g, ""));
+                    return String(text).trim() !== "" && isFinite(n) ? n : undefined;
                 }
-
-                originalButtonText = options.items.buttonText || "Execute";
-                document.getElementById("btnid").textContent = originalButtonText;
-
-                if (options.items.paramNames) {
-                    _paramNames = options.items.paramNames.split(",");
+                return text;
+            }
+            function paramInput(param, value, readOnly, note, width) {
+                var box = document.createElement("div");
+                box.className = "param";
+                var id = "param-" + param.name.replace(/[^A-Za-z0-9_-]/g, "_");
+                var label = document.createElement("label");
+                label.htmlFor = id;
+                label.textContent = param.name;
+                label.title = param.name + (param.type ? " (" + param.type.toLowerCase() + ")" : "");
+                var input = document.createElement("input");
+                input.id = id;
+                input.type = "text";
+                input.name = param.name;
+                if (param.type === "NUMBER") input.inputMode = "decimal";
+                input.value = value === null || value === undefined ? "" : String(value);
+                input.readOnly = !!readOnly;
+                if (width) input.style.width = width + "px";
+                box.appendChild(label);
+                box.appendChild(input);
+                if (note) {
+                    var n = document.createElement("div");
+                    n.className = "note";
+                    n.textContent = note;
+                    box.appendChild(n);
                 }
+                return box;
+            }
 
-                // Set grid width from options if provided
-                gridWidth = options.items.wGrid || 200;
-              
-                // Set input width from options if provided
-                inputWidth = options.items.wInputWidth || 100;
-              
-                // Set label font size from options if provided
-                labelFontSize = options.items.zlabelFontSize || 13;
-                
-                getParamValues();
-                document.getElementById("jobState").style.display = options.items.showJobState
-                    ? "block"
-                    : "none";
-            });
+            // ---- Set Parameters and Execute: edit project parameters, then execute blocks with them ----
+            var running = false;
+            var loadedFor = null; // the Parameters to show setting the inputs were built for
+            var shown = []; // parameters shown, [{name, type, value}]
+            var button = document.getElementById("run");
+
+            function buttonText() {
+                return items().buttonText || "Execute";
+            }
+            function loadParams() {
+                var key = String(items().paramNames || "");
+                if (key === loadedFor) return layout();
+                loadedFor = key;
+                api("GET", "w/param/", undefined, function (err, json) {
+                    var box = document.getElementById("params");
+                    box.innerHTML = "";
+                    shown = [];
+                    if (err) return setStatus("Could not read the project parameters: " + err, "error");
+                    var pick = pickParams(json.paramValues || [], nameList(items().paramNames));
+                    shown = pick.params;
+                    shown.forEach(function (p) { box.appendChild(paramInput(p, p.value, false, null)); });
+                    var msg = document.getElementById("message");
+                    msg.textContent = pick.missing.length ? "Not parameters of this project: " + pick.missing.join(", ")
+                        : shown.length ? "" : "This project has no parameters.";
+                    msg.style.marginBottom = msg.textContent ? "8px" : "0";
+                    layout();
+                }, "Project parameters access via APIs");
+            }
+            function layout() {
+                var it = items();
+                var cell = it.wGrid || 200, input = it.wInputWidth || 100, font = it.zlabelFontSize || 13;
+                Array.prototype.forEach.call(document.querySelectorAll(".param"), function (el) {
+                    el.style.width = Math.min(cell, Math.max(60, window.innerWidth - 24)) + "px";
+                    el.querySelector("label").style.fontSize = font + "px";
+                    el.querySelector("input").style.width = input + "px";
+                });
+            }
+            function render() {
+                if (!running) setBusy(button, false, buttonText());
+                var blocks = nameList(items().block);
+                button.title = blocks.length ? "Sets the parameters, then executes " + blocks.join(", ") : "Sets the parameters, then executes the whole workflow";
+                loadParams();
+            }
+            function run() {
+                if (running) return;
+                var updates = [], bad = [];
+                shown.forEach(function (p) {
+                    var el = document.getElementById("param-" + p.name.replace(/[^A-Za-z0-9_-]/g, "_"));
+                    var v = typedValue(p, el ? el.value : "");
+                    if (v === undefined) bad.push(p.name);
+                    else updates.push({ name: p.name, value: v });
+                });
+                if (bad.length) return setStatus("Enter a number for " + bad.join(", ") + ".", "error");
+                running = true;
+                setBusy(button, true, buttonText());
+                beginRun({});
+                setStatus("Starting", "");
+                api("POST", "w/execute", {
+                    blocks: nameList(items().block),
+                    refreshFromSource: !!items().refreshFromSource,
+                    cancelExisting: false,
+                    params: { updates: updates }
+                }, function (err, json) {
+                    if (err) return finish(err, "error");
+                    tracked.jobId = json.jobId;
+                    setStatus(stateLabel("QUEUED"), "");
+                    follow(tracked);
+                });
+            }
+            function follow(state) {
+                watchJob(state.jobId, function (s) {
+                    setStatus(stateLabel(s), "");
+                }, function (err, s) {
+                    if (err) finish(err, "error");
+                    else finish(stateLabel(s) + " at " + timeNow(), s === "COMPLETED" ? "ok" : "error");
+                });
+            }
+            // After a reload mid-job: carry on following the same job.
+            function resume(state) {
+                running = true;
+                setBusy(button, true, buttonText());
+                follow(state);
+            }
+            function finish(text, kind) {
+                running = false;
+                setBusy(button, false, buttonText());
+                endRun(text, kind);
+            }
+            button.addEventListener("click", run);
+            omniscope.view.on(["load", "update", "resize"], render);
+            omniscope.view.on("load", function () { resumeRun(resume); });
         </script>
     </body>
 </html>

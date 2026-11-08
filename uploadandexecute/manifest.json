@@ -24,32 +24,43 @@
   "options": {
     "items": {
       "block": {
-        "displayName": "Blocks to execute (comma separated names)",
+        "displayName": "Blocks to execute",
         "type": "TEXT",
-        "mandatory": true
+        "detail": "Names of the workflow blocks to execute, separated by commas, e.g. Load orders, Report. Leave empty to execute the whole workflow."
       },
       "buttonText": {
         "displayName": "Button text",
-        "type": "TEXT"
+        "type": "TEXT",
+        "detail": "Text on the button. If empty: Upload and execute"
       },
       "deleteExecutionOnFinish": {
-        "displayName": "Delete spawned project and data on execution finish",
-        "type": "TOGGLE"
+        "displayName": "Delete the copy when finished",
+        "type": "TOGGLE",
+        "detail": "Delete the copy of the project, and its execution data, when the execution ends. Off: the copy is kept."
+      },
+      "paramName": {
+        "displayName": "File parameter",
+        "type": "TEXT",
+        "detail": "Name of the project parameter that receives the uploaded file; link it to the File block's path. Default: uploadedFile."
       },
       "refreshThisReportOnFinish": {
-        "displayName": "Refresh this report on execution finish",
-        "type": "TOGGLE"
+        "displayName": "Refresh this report when finished",
+        "type": "TOGGLE",
+        "detail": "When the execution has finished, execute this report's block (from source) so the report shows what the execution wrote."
       },
       "showJobState": {
         "displayName": "Show job state",
-        "type": "TOGGLE"
+        "type": "TOGGLE",
+        "detail": "Show the execution's progress (queued, running, finished) under the button. Errors are always shown."
       }
     },
     "structure": {
       "toolbar": [
         "block",
         "buttonText",
+        "paramName",
         "deleteExecutionOnFinish",
+        "refreshThisReportOnFinish",
         "showJobState"
       ],
       "x": [],
@@ -58,7 +69,10 @@
   },
   "defaultOptions": {
     "items": {
-      "deleteExecutionOnFinish": true
+      "deleteExecutionOnFinish": true,
+      "paramName": "uploadedFile",
+      "refreshThisReportOnFinish": true,
+      "showJobState": true
     },
     "pane": {
       "yAxisHeaderWidth": 75,

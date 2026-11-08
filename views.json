@@ -12,7 +12,7 @@
 				"url"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "customhtml",
@@ -38,7 +38,7 @@
 				"crypto"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "runningpivot",
@@ -50,7 +50,7 @@
 				"running total"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "twitterview",
@@ -60,7 +60,7 @@
 				"tweet"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "bubblechart",
@@ -93,7 +93,7 @@
 				"subset"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "beeswarm",
@@ -124,7 +124,7 @@
 			"files": [
 				"spain_peninsula.json"
 			],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "forcecoordinategraph",
@@ -172,7 +172,7 @@
 				"api"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "switchparamandexecute",
@@ -189,7 +189,7 @@
 				"job"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "workflowexecution",
@@ -203,7 +203,7 @@
 				"api"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "sequentialworkflowexecution",
@@ -219,7 +219,7 @@
 				"api"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "setparamandexecute",
@@ -235,7 +235,7 @@
 				"api"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "lambdaworkflowexecution",
@@ -270,7 +270,7 @@
 				"api"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "kpi",
@@ -304,7 +304,7 @@
 				"three.js"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "jsontree",
@@ -345,7 +345,7 @@
 				"strata-view.js",
 				"strata-ui.js"
 			],
-			"version": 1
+			"version": 2
 		},
 		{
 			"name": "calendar",

@@ -1,0 +1,120 @@
+[
+ {
+  "name": "showcase", "showcase": true,
+  "data": "sample-data/orders.csv",
+  "options": { "items": {
+    "measures": { "inputField": "Units", "function": "SUM" },
+    "paneY": [ { "inputField": "Order date", "type": "HISTOGRAM", "dateUnit": "MONTH", "histogramInterval": 1 } ],
+    "paneX": [ { "inputField": "Region", "type": "UNIQUE_VALUES" } ] } },
+  "width": 640, "height": 460, "showcaseHeight": 460, "wait": 1500,
+  "caption": "Live: units sold to date, month by month, in each region (invented orders). The last row is the year's total.",
+  "expect": { "text": "Running total of Units (sum)", "selector": "tbody tr", "min": 12, "max": 12 },
+  "actions": [
+   { "eval": "document.querySelector('tbody tr td.dim').textContent === 'Jan 2025' && document.querySelector('tbody tr.last td.dim').textContent === 'Dec 2025'", "expectTruthy": true },
+   { "eval": "[...document.querySelectorAll('tbody tr.last td:not(.dim)')].map(td => td.textContent).join() === '2,041,1,777,2,804,1,022'", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "nested",
+  "data": "sample-data/orders.csv",
+  "options": { "items": {
+    "measures": { "inputField": "Sales", "function": "SUM" },
+    "paneY": [ { "inputField": "Order date", "type": "HISTOGRAM", "dateUnit": "QUARTER", "histogramInterval": 1 } ],
+    "paneX": [ { "inputField": "Channel", "type": "UNIQUE_VALUES" }, { "inputField": "Region", "type": "UNIQUE_VALUES" } ] } },
+  "width": 900, "height": 300, "wait": 1500,
+  "expect": { "text": "Channel / Region", "selector": "thead th.col", "min": 8, "max": 8 },
+  "actions": [
+   { "eval": "document.querySelector('tbody tr td.dim').textContent === 'Q1 2025'", "expectTruthy": true },
+   { "eval": "Math.abs([...document.querySelectorAll('tbody tr.last td:not(.dim)')].reduce((a, td) => a + parseFloat(td.textContent.replace(/,/g, '')), 0) - 147636.65) < 8", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/orders.csv",
+  "options": { "items": {
+    "measures": { "inputField": "Units", "function": "SUM" },
+    "paneY": [ { "inputField": "Order date", "type": "HISTOGRAM", "dateUnit": "MONTH", "histogramInterval": 1 } ],
+    "paneX": [ { "inputField": "Region", "type": "UNIQUE_VALUES" } ] } },
+  "width": 640, "height": 460, "wait": 1500,
+  "actions": [
+   { "click": "td.dim[data-row='2']" },
+   { "expectSelection": true },
+   { "eval": "JSON.stringify(omniscope.view.context().viewSelection.filter.filters[0].filters.map(f => f.value)) === JSON.stringify(['2025-03-01', '2025-04-01'])", "expectTruthy": true },
+   { "eval": "document.querySelectorAll('.sel').length === 5", "expectTruthy": true },
+   { "click": "td.dim[data-row='2']" },
+   { "expectSelection": false },
+   { "click": "th.col[data-col='2']" },
+   { "expectSelection": true },
+   { "eval": "omniscope.view.context().viewSelection.filter.filters[0].value === 'South'", "expectTruthy": true },
+   { "click": "td[data-row='4'][data-col='0']" },
+   { "expectSelection": true },
+   { "eval": "omniscope.view.context().viewSelection.filter.filters.length === 2 && document.querySelectorAll('.sel').length === 1", "expectTruthy": true },
+   { "screenshot": "cell" },
+   { "clickAt": [630, 450] },
+   { "expectSelection": false }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/orders.csv",
+  "options": { "items": {
+    "measures": { "function": "RECORD_COUNT" },
+    "paneY": [ { "inputField": "Order date", "type": "HISTOGRAM", "dateUnit": "MONTH", "histogramInterval": 1 } ] } },
+  "width": 640, "height": 460, "wait": 1500,
+  "expect": { "text": "Running total of Record count" },
+  "actions": [
+   { "eval": "document.querySelector('tbody tr.last td:not(.dim)').textContent === '1,200'", "expectTruthy": true },
+   { "filter": { "type": "FIELD_VALUE", "inputField": "Region", "operator": "=", "value": "Wales" } },
+   { "eval": "(() => { const n = +document.querySelector('tbody tr.last td:not(.dim)').textContent.replace(/,/g, ''); return n > 0 && n < 1200; })()", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/orders.csv",
+  "options": { "items": {
+    "measures": { "inputField": "Units", "function": "SUM" },
+    "paneY": [ { "inputField": "Order date", "type": "HISTOGRAM", "dateUnit": "MONTH", "histogramInterval": 1 } ],
+    "paneX": [ { "inputField": "Region", "type": "UNIQUE_VALUES" } ] } },
+  "width": 640, "height": 460, "wait": 1500,
+  "actions": [
+   { "resize": [200, 120] },
+   { "eval": "(() => { const p = document.getElementById('pivot'); return p.scrollWidth > p.clientWidth && p.scrollHeight > p.clientHeight; })()", "expectTruthy": true },
+   { "screenshot": "200x120" }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [ { "name": "Region", "type": "TEXT" }, { "name": "Units", "type": "NUMBER" } ],
+  "options": { "items": { "measures": { "inputField": "Units", "function": "SUM" }, "paneY": [ { "inputField": "Region", "type": "UNIQUE_VALUES" } ] } },
+  "width": 400, "height": 300, "wait": 1000,
+  "expect": { "text": "No data to show" }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": { "items": { "measures": { "function": "RECORD_COUNT" } } },
+  "width": 400, "height": 300, "wait": 1000,
+  "expect": { "text": "Choose one or more Rows" }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": { "items": {
+    "measures": { "inputField": "Units", "function": "SUM" },
+    "paneY": [ { "inputField": "Day", "type": "HISTOGRAM", "dateUnit": "DAY", "histogramInterval": 1 } ],
+    "paneX": [ { "inputField": "Store", "type": "UNIQUE_VALUES" } ] } },
+  "width": 640, "height": 460, "wait": 3000,
+  "actions": [
+   { "eval": "document.querySelectorAll('tbody tr').length === 500 && [...document.querySelectorAll('tbody tr.last td:not(.dim)')].reduce((a, td) => a + +td.textContent.replace(/,/g, ''), 0) === 1010000", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "thumb", "thumbnail": true,
+  "data": "sample-data/orders.csv",
+  "options": { "items": {
+    "measures": { "inputField": "Units", "function": "SUM" },
+    "paneY": [ { "inputField": "Order date", "type": "HISTOGRAM", "dateUnit": "MONTH", "histogramInterval": 1 } ],
+    "paneX": [ { "inputField": "Region", "type": "UNIQUE_VALUES" } ] } },
+  "width": 580, "height": 580, "scale": 0.5, "wait": 1500
+ }
+]

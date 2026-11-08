@@ -1,0 +1,9 @@
+Office,Country,Region,Staff,Map,Article
+London,United Kingdom,Europe,38,https://www.openstreetmap.org/export/embed.html?bbox=-0.188%2C51.477%2C-0.068%2C51.537&layer=mapnik&marker=51.507%2C-0.128,https://en.wikipedia.org/wiki/London
+Paris,France,Europe,83,https://www.openstreetmap.org/export/embed.html?bbox=2.292%2C48.827%2C2.412%2C48.887&layer=mapnik&marker=48.857%2C2.352,https://en.wikipedia.org/wiki/Paris
+Berlin,Germany,Europe,77,https://www.openstreetmap.org/export/embed.html?bbox=13.345%2C52.490%2C13.465%2C52.550&layer=mapnik&marker=52.520%2C13.405,https://en.wikipedia.org/wiki/Berlin
+Madrid,Spain,Europe,24,https://www.openstreetmap.org/export/embed.html?bbox=-3.764%2C40.387%2C-3.644%2C40.447&layer=mapnik&marker=40.417%2C-3.704,https://en.wikipedia.org/wiki/Madrid
+New York,United States,Americas,55,https://www.openstreetmap.org/export/embed.html?bbox=-74.066%2C40.683%2C-73.946%2C40.743&layer=mapnik&marker=40.713%2C-74.006,https://en.wikipedia.org/wiki/New_York_City
+Toronto,Canada,Americas,85,https://www.openstreetmap.org/export/embed.html?bbox=-79.443%2C43.623%2C-79.323%2C43.683&layer=mapnik&marker=43.653%2C-79.383,https://en.wikipedia.org/wiki/Toronto
+Tokyo,Japan,Asia Pacific,68,https://www.openstreetmap.org/export/embed.html?bbox=139.590%2C35.646%2C139.710%2C35.706&layer=mapnik&marker=35.676%2C139.650,https://en.wikipedia.org/wiki/Tokyo
+Sydney,Australia,Asia Pacific,88,https://www.openstreetmap.org/export/embed.html?bbox=151.149%2C-33.899%2C151.269%2C-33.839&layer=mapnik&marker=-33.869%2C151.209,https://en.wikipedia.org/wiki/Sydney

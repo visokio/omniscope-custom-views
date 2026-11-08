@@ -15,76 +15,75 @@
   "options": {
     "items": {
       "filterAField": {
-        "displayName": "Filter A field",
+        "displayName": "Set A field",
         "type": "FIELD",
-        "detail": "Field used to create a range filter for the set A",
+        "detail": "Numeric field that defines set A, with its Min and Max",
         "mandatory": true,
         "validFieldTypes": [
           "NUMBER"
         ]
       },
       "filterAMax": {
-        "displayName": "Filter A max",
-        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
+        "displayName": "Set A max",
+        "detail": "Set A holds the records whose value is at most this number. Leave empty for no upper limit",
         "type": "TEXT"
       },
       "filterAMin": {
-        "displayName": "Filter A min",
-        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
+        "displayName": "Set A min",
+        "detail": "Set A holds the records whose value is above this number (not equal to it). Leave empty for no lower limit",
         "type": "TEXT"
       },
       "filterBField": {
-        "displayName": "Filter B field",
+        "displayName": "Set B field",
         "type": "FIELD",
-        "detail": "Field used to create a range filter for the set B",
+        "detail": "Numeric field that defines set B, with its Min and Max",
         "mandatory": true,
         "validFieldTypes": [
           "NUMBER"
         ]
       },
       "filterBMax": {
-        "displayName": "Filter B max",
-        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
+        "displayName": "Set B max",
+        "detail": "Set B holds the records whose value is at most this number. Leave empty for no upper limit",
         "type": "TEXT"
       },
       "filterBMin": {
-        "displayName": "Filter B min",
-        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
+        "displayName": "Set B min",
+        "detail": "Set B holds the records whose value is above this number (not equal to it). Leave empty for no lower limit",
         "type": "TEXT"
       },
       "filterCField": {
-        "displayName": "Filter C field",
+        "displayName": "Set C field",
         "type": "FIELD",
-        "detail": "Field used to create a range filter for the set C",
+        "detail": "Numeric field that defines set C, with its Min and Max",
         "mandatory": true,
         "validFieldTypes": [
           "NUMBER"
         ]
       },
       "filterCMax": {
-        "displayName": "Filter C max",
-        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
+        "displayName": "Set C max",
+        "detail": "Set C holds the records whose value is at most this number. Leave empty for no upper limit",
         "type": "TEXT"
       },
       "filterCMin": {
-        "displayName": "Filter C min",
-        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
+        "displayName": "Set C min",
+        "detail": "Set C holds the records whose value is above this number (not equal to it). Leave empty for no lower limit",
         "type": "TEXT"
       },
       "setAName": {
         "displayName": "Set A name",
-        "detail": "Custom name for set A, if not set, the field name will be used",
+        "detail": "Name shown for set A. If empty, the field name is shown",
         "type": "TEXT"
       },
       "setBName": {
         "displayName": "Set B name",
         "type": "TEXT",
-        "detail": "Custom name for set B, if not set, the field name will be used"
+        "detail": "Name shown for set B. If empty, the field name is shown"
       },
       "setCName": {
         "displayName": "Set C name",
-        "detail": "Custom name for set C, if not set, the field name will be used",
-
+        "detail": "Name shown for set C. If empty, the field name is shown",
         "type": "TEXT"
       }
     },
@@ -94,11 +93,11 @@
       "y": []
     },
     "optionGroups": [{
-      "displayName": "Filters",
+      "displayName": "Sets",
       "rows": [
         {
           "@visokiotype": "CustomViewApi.OptionGroupRow",
-          "title": "Filter A",
+          "title": "Set A",
           "cells": []
         },
         {
@@ -128,7 +127,7 @@
         },
         {
           "@visokiotype": "CustomViewApi.OptionGroupRow",
-          "title": "Filter B",
+          "title": "Set B",
           "cells": []
         },
         {
@@ -158,7 +157,7 @@
         },
         {
           "@visokiotype": "CustomViewApi.OptionGroupRow",
-          "title": "Filter C",
+          "title": "Set C",
           "cells": []
         },
         {

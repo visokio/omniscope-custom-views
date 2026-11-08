@@ -46,6 +46,8 @@ svg text { font-family: inherit; }
 .overview { display: block; flex: 1; min-width: 0; cursor: pointer; touch-action: none; }
 .zoom { display: flex; align-items: center; gap: 6px; color: #5f5e57; font-size: 11px; white-space: nowrap; }
 .zoom input { width: 140px; accent-color: #5f5e57; }
+/* A narrow pane: a shorter zoom slider, so the overview strip keeps most of the width. */
+@media (max-width: 520px) { .nav { gap: 8px; } .zoom input { width: 70px; } }
 .left-out { color: #5f5e57; font-size: 11px; white-space: nowrap; }
 .left-out:empty { display: none; }
 .ov-area { fill: #d6d5cc; }
@@ -227,8 +229,17 @@ svg text { font-family: inherit; }
         : footKeys[0] ? merge(feet[footKeys[0]]) : [],
       foot2: footKeys[1] ? merge(feet[footKeys[1]]) : [],
       // The tooltip's words for the foot line: the Foot field's own values.
-      names: {foot: at.foot < 0 ? "strong, on any line" : String(footKeys[0]), foot2: String(footKeys[1])}
+      names: namesOf(items.emphasisNames, at.foot < 0 ? null : String(footKeys[0]), String(footKeys[1]))
     };
+  }
+  // The tooltip's words for the stretches (Emphasis names: "strong, medium, faint" in the reader's terms) and
+  // for the foot line (the Foot field's own values, or the strong stretches of any line).
+  function namesOf(text, foot, foot2) {
+    var parts = String(text || "").split(",").map(function (p) { return p.trim(); });
+    var names = {foot2: foot2};
+    ["strong", "medium", "faint"].forEach(function (k, i) { if (parts[i]) names[k] = parts[i]; });
+    names.foot = foot !== null ? foot : (names.strong || "strong") + ", on any line";
+    return names;
   }
   // The Opening setting (an older view saved it as a toggle).
   function introOf(value) {

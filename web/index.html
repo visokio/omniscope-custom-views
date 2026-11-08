@@ -4,28 +4,77 @@
     <meta charset="utf-8"/>
 
     <style>
-        html, body, main {
-	        margin: 0px;
-            /* Ensure the body fills the view, so clicks are handled everywhere: */
+        html, body {
             width: 100%;
             height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #41475e;
+            background: #fff;
         }
-        main {
-            font-family: monospace;
-            display: flex;
-            font-size: 20px;
-            white-space: pre;
+        #bar {
+            position: absolute;
+            left: 0; right: 0; top: 0;
+            height: 28px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 0 8px;
+            box-sizing: border-box;
+            font-size: 12px;
+            background: #f4f5f7;
+            border-bottom: 1px solid #e1e3e8;
         }
+        #address {
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #5c6273;
+        }
+        #open { white-space: nowrap; color: #1a73e8; text-decoration: none; }
+        #open:hover { text-decoration: underline; }
+        #page {
+            position: absolute;
+            left: 0; right: 0; bottom: 0; top: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: none;
+        }
+        body.withBar #bar { display: flex; }
+        body.withBar #page { top: 28px; height: calc(100% - 28px); }
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px;
+            box-sizing: border-box;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+        body.withBar #message { top: 28px; }
+        #message .box { max-width: 360px; }
+        #message .title { font-weight: 600; margin-bottom: 4px; }
+        #message .detail { color: #8a8f9c; word-break: break-word; }
     </style>
-
 </head>
 
 <body>
-
-<main id="main">
-  <iframe id="webview" src="about:blank" frameborder="0" allowfullscreen
-    style="width:100%;height:100%;margin:0px;"></iframe>
- </main>
+<div id="bar">
+    <span id="address"></span>
+    <a id="open" target="_blank" rel="noopener noreferrer" title="If the page stays blank, the site does not allow being shown inside another page">Open in a new tab &#8599;</a>
+</div>
+<!-- The sandbox keeps the page from navigating the report away (no allow-top-navigation); the rest is allowed. -->
+<iframe id="page" title="Web page" src="about:blank" allow="fullscreen" referrerpolicy="strict-origin-when-cross-origin"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals"></iframe>
+<div id="message"><div class="box"><div class="title" id="msgTitle"></div><div class="detail" id="msgDetail"></div></div></div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
@@ -34,29 +83,92 @@
     omniscope.view.on("load", function() {
         window.onerror = function(msg) {
             omniscope.view.error(msg);
-        }
+        };
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
-    document.body.addEventListener("click", function() {
+    // A click on the bar or a message clears the selection in the report, as a click on empty space does.
+    document.body.addEventListener("click", function(e) {
+        if (e.target && e.target.id === "open") return;
         omniscope.view.whitespaceClick();
     });
 
-    // Redraw on any of these events 
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    var shownUrl = null;   // the page in the frame: a resize or an unrelated update does not reload it
 
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        var data = omniscope.view.context().result.data.records;
+    function message(title, detail, url) {
+        shownUrl = null;
+        var frame = document.getElementById("page");
+        frame.style.display = "none";
+        frame.src = "about:blank";
+        document.getElementById("msgTitle").textContent = title;
+        document.getElementById("msgDetail").textContent = detail || "";
+        document.getElementById("message").style.display = "flex";
+        setBar(url || null);
+    }
 
-        var url = data[0];
-        if (url == null || url[0] == null) {
-      		url = "data:text/html;charset=utf-8," + "No single value is selected. Filter or select a single record in another view to navigate.";
+    function setBar(url) {
+        document.getElementById("address").textContent = url || "";
+        var a = document.getElementById("open");
+        if (url) { a.href = url; a.style.display = ""; } else { a.removeAttribute("href"); a.style.display = "none"; }
+    }
+
+    // A field value as an address the frame may open: http(s) only, a bare host gets https://, a path stays on
+    // the Omniscope server. Anything else (javascript:, data:, file:) is refused.
+    function toUrl(v) {
+        var s = String(v).trim();
+        if (!s) return { error: "empty" };
+        if (/^\/\//.test(s)) s = "https:" + s;
+        else if (/^\/[^\/]/.test(s)) return { url: s };
+        else if (!/^[a-z][a-z0-9+.\-]*:/i.test(s)) {
+            if (!/^[^\s\/?#]+\.[^\s\/?#]+/.test(s)) return { error: "text" };
+            s = "https://" + s;
         }
-          
-        document.getElementById("webview").src = url;
-    });
+        var u;
+        try { u = new URL(s); } catch (e) { return { error: "text" }; }
+        if (u.protocol !== "https:" && u.protocol !== "http:") return { error: "scheme", scheme: u.protocol };
+        return { url: u.href, insecure: u.protocol === "http:" && location.protocol === "https:" };
+    }
 
+    var NOT_A_URL = ["RECORD_COUNT", "UNIQUE_VALUE_COUNT", "NON_EMPTY_COUNT", "EMPTY_COUNT", "SUM", "MEAN"];
+
+    function draw() {
+        var ctx = omniscope.view.context();
+        var items = (ctx.options && ctx.options.items) || {};
+        var bar = items.showBar !== false && window.innerHeight >= 120;
+        document.body.className = bar ? "withBar" : "";
+        var measure = items.measures;
+        if (!measure) return message("Choose the field with the web addresses", "Set Page URL in the view's settings.");
+        if (NOT_A_URL.indexOf(measure["function"]) >= 0) {
+            return message("Page URL needs a field value, not a count",
+                "Pick the field with the web addresses and use the Singleton function (or Min or Max).");
+        }
+        var result = ctx.result;
+        var records = result && result.data && result.data.records;
+        if (!records || !records.length) return message("No data", "No records match the current filter.");
+        var col = result.mappings && result.mappings.measures !== undefined ? result.mappings.measures : 0;
+        var value = records[0][col];
+        if (value === null || value === undefined || value === "") {
+            return message("No single page to show",
+                "Several records match, or none. Filter or select a single record in another view to open its page.");
+        }
+        var t = toUrl(value);
+        if (t.error === "scheme") return message("Only web pages can be shown", "Addresses starting " + t.scheme + " are not opened.");
+        if (t.error) return message("Not a web address", String(value).slice(0, 160));
+        if (t.insecure) {
+            return message("This page can't be shown inside the report",
+                "It uses http://, and browsers block insecure pages inside a secure (https://) report. Open it in a new tab.", t.url);
+        }
+
+        document.getElementById("message").style.display = "none";
+        setBar(t.url);
+        var frame = document.getElementById("page");
+        frame.style.display = "block";
+        if (t.url !== shownUrl) {
+            shownUrl = t.url;
+            frame.src = t.url;
+        }
+    }
+
+    omniscope.view.on(["load", "update", "resize"], draw);
 </script>
 
 </body>

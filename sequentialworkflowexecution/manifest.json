@@ -1,17 +1,17 @@
 {
-  "name": "Workflow Execution View",
+  "name": "Sequential Workflow Execution",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
   "tags": [
-			    "custom",
-			    "workflow",
-			    "job",
-			    "execute",
-			    "execution",
-			    "block",
-			    "api"
-		    ],
+    "custom",
+    "workflow",
+    "job",
+    "execute",
+    "execution",
+    "block",
+    "api"
+  ],
   "sandbox": false,
   "autoPane": false,
   "autoQuery": false,
@@ -20,27 +20,33 @@
   "options": {
     "items": {
       "block": {
-        "displayName": "Blocks to execute (comma separated names)",
+        "displayName": "Blocks to execute",
         "type": "TEXT",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "Names of the workflow blocks to execute, in order, separated by commas, e.g. Load orders, Clean, Report. Each one starts when the one before has finished; a failure stops the rest."
       },
       "buttonText": {
         "displayName": "Button text",
-        "type": "TEXT"
+        "type": "TEXT",
+        "detail": "Text on the button. If empty: Execute"
       },
       "refreshFromSource": {
         "displayName": "Refresh from source",
-        "type": "TOGGLE"
+        "type": "TOGGLE",
+        "detail": "On: the blocks reload their data from the sources. Off: data already loaded upstream is reused where possible.",
+        "documentation": "If ticked, Omniscope discards any previous execution data and reloads fresh data from the sources.\n\nIf unticked, Omniscope executes only the blocks that need it, based on their current configuration and previous execution data, and reuses data from upstream blocks where available."
       },
       "showJobState": {
         "displayName": "Show job state",
-        "type": "TOGGLE"
+        "type": "TOGGLE",
+        "detail": "Show the execution's progress (queued, running, finished) under the button. Errors are always shown."
       }
     },
     "structure": {
       "toolbar": [
         "block",
         "buttonText",
+        "refreshFromSource",
         "showJobState"
       ],
       "x": [],
@@ -49,7 +55,8 @@
   },
   "defaultOptions": {
     "items": {
-      "refreshFromSource": true
+      "refreshFromSource": true,
+      "showJobState": true
     },
     "pane": {
       "yAxisHeaderWidth": 75,

@@ -2,134 +2,350 @@
 <html>
     <head>
         <meta charset="utf-8" />
+        <!-- Workflow Execution: a button that executes workflow blocks through the Workflow REST API -->
         <style>
             html,
-            body,
-            main {
-                /* Ensure the body fills the view, so clicks are handled everywhere: */
-                width: 100%;
+            body {
+                margin: 0;
                 height: 100%;
-                font-family: Monospace;
             }
-            a.button {
-                background: #ececec;
-                border-radius: 10px;
-                padding: 5px 20px;
-                font-family: Lato;
+            body {
+                box-sizing: border-box;
+                padding: 10px 12px;
+                overflow: auto;
+                font-family: Lato, "Helvetica Neue", Arial, sans-serif;
+                font-size: 13px;
+                color: #242d3b;
+            }
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                max-width: 100%;
+                box-sizing: border-box;
+                padding: 8px 16px;
+                border: 0;
+                border-radius: 4px;
+                background: #2f6fb2;
+                color: #fff;
+                font: inherit;
                 font-weight: bold;
-                color: #3f3f3f;
-                text-decoration: none;
-                text-shadow: 0px 1px 0px #fff;
-                border: 1px solid #a7a7a7;
-                margin: 0px auto;
-                box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
-                -webkit-transition: box-shadow 0.5s;
+                cursor: pointer;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
-            a.button i {
-                float: right;
-                margin: 2px;
+            .btn:hover {
+                background: #255d97;
             }
-            a.button:hover {
-                box-shadow: 0px 2px 1px lightgrey inset, 0px -2px 20px lightgrey, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+            .btn:focus-visible {
+                outline: 2px solid #9cc3ea;
+                outline-offset: 2px;
             }
-            a.button:active {
-                box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5) inset, 0px -2px 20px white, 0px 1px 5px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.1);
-                background: -webkit-linear-gradient(top, #d1d1d1 0%, #ececec 100%);
+            .btn:disabled {
+                background: #8aa9c9;
+                cursor: default;
+            }
+            .btn .label {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .spinner {
+                display: none;
+                flex: none;
+                width: 12px;
+                height: 12px;
+                border: 2px solid rgba(255, 255, 255, 0.4);
+                border-top-color: #fff;
+                border-radius: 50%;
+                animation: spin 0.9s linear infinite;
+            }
+            .busy .spinner {
+                display: inline-block;
+            }
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .spinner {
+                    animation: none;
+                }
+            }
+            .status {
+                margin-top: 8px;
+                line-height: 1.4;
+                overflow-wrap: anywhere;
+                color: #4a5463;
+            }
+            .status:empty {
+                display: none;
+            }
+            .status.ok {
+                color: #2e7d32;
+            }
+            .status.error {
+                color: #b3261e;
+            }
+            .status a {
+                color: #2f6fb2;
+            }
+            .message {
+                color: #6b7480;
+                line-height: 1.4;
             }
         </style>
-        <!-- Put SCRIPT tags to load 3rd party libraries here -->
     </head>
     <body>
-        <div>
-            <a href="#" class="button" id="btnid" onclick="startWorkflow()">Refresh Workflow</a><br />
-            <br />
-            <div id="jobState"></div>
-        </div>
+        <button type="button" class="btn" id="run"><span class="spinner"></span><span class="label">Execute</span></button>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
         <script src="/_global_/customview/v1/omniscope.js"></script>
-        <!-- Add the Omniscope custom view API -->
         <script>
-            var _jobId = "NA";
-            var _blocksToExecute;
-            var _showJobState;
-            var _projEndpoint;
-            var _check;
+            if (!omniscope || !omniscope.view) throw new Error("Omniscope custom view API is not loaded");
 
-            if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
-          
-            function startWorkflow() {   
-                var options = omniscope.view.context().options;
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", _projEndpoint + "w/execute", true);
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == XMLHttpRequest.DONE) {
-                        if (this.status == 200) {
-                            _jobId = JSON.parse(xhr.responseText).jobId;
-                            document.getElementById("jobState").innerHTML = "Job state = STARTED";
-                        } else if (this.status == 403) {
-                            document.getElementById("jobState").innerHTML = xhr.responseText;
-                        } else {
-                            document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
-                        }
-                    }
-                };
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.send('{"blocks": ["' + _blocksToExecute.join('","') + '"], "refreshFromSource": ' + options.items.refreshFromSource + ', "cancelExisting": false}');
+            // ---- Workflow REST API helpers, shared by the workflow control views ----
+            // The view is served from <project>.iox/<er or r>/<Report>/customview/<View>/; the project's Workflow
+            // REST API is <project>.iox/w/... (execute, job/<id>/state, param, updateparams, lambdaexecute, ...).
+            var STATE_LABEL = {
+                QUEUED: "Queued",
+                RUNNING: "Running",
+                BLOCKED: "Waiting for another execution",
+                COMPLETED: "Finished",
+                FAILED: "Failed",
+                CANCELLED: "Cancelled"
+            };
+            var POLL_MS = 1000;
 
-                _check = setInterval(checkWorkflowState, 1000);
+            function items() {
+                var c = omniscope.view.context();
+                return (c && c.options && c.options.items) || {};
             }
-          
-            function checkWorkflowState() {
+            function baseUrl() {
+                var c = omniscope.view.context();
+                return (c && c.baseUrl) || "";
+            }
+            function projectUrl() {
+                var b = baseUrl(), i = b.indexOf(".iox/");
+                return i >= 0 ? b.slice(0, i + 5) : b + "../../../../";
+            }
+            // The name of the Report block showing this view (the path segment after er/ or r/).
+            function reportBlockName() {
+                var m = /\.iox\/[^\/]+\/([^\/]+)\//.exec(baseUrl());
+                return m ? decodeURIComponent(m[1].replace(/\+/g, " ")) : null;
+            }
+            // "Load orders, Report" -> ["Load orders", "Report"]
+            function nameList(text) {
+                return String(text == null ? "" : text)
+                    .split(",")
+                    .map(function (s) { return s.trim(); })
+                    .filter(Boolean);
+            }
+            function errorText(status, json, text, permission) {
+                if (json && json.errorMessage) return json.errorMessage;
+                if (status === 401 || status === 403)
+                    return "Not allowed (HTTP " + status + "): the user needs the \"" + permission + "\" permission on this server.";
+                if (!status) return "No answer from the server.";
+                var t = String(text || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+                return "HTTP " + status + (t ? ": " + t.slice(0, 160) : "");
+            }
+            // Calls the Workflow REST API; done(error message or null, parsed JSON answer).
+            function api(method, path, body, done, permission) {
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", _projEndpoint + "w/job/" + _jobId + "/state", true);
+                xhr.open(method, projectUrl() + path, true);
                 xhr.onreadystatechange = function () {
-                    if (xhr.readyState == XMLHttpRequest.DONE) {
-                        if (this.status == 200) {
-                            var _jobState = JSON.parse(xhr.responseText).jobState;
-                            document.getElementById("jobState").innerHTML = "Job state = " + _jobState;
-                            if (_jobState === "COMPLETED") {
-                                clearInterval(_check);
-                            }
-                        } else if (this.status == 403) {
-                            document.getElementById("jobState").innerHTML = xhr.responseText;
-                            clearInterval(_check);
-                        } else {
-                            document.getElementById("jobState").innerHTML = JSON.parse(xhr.responseText).errorMessage;
-                            clearInterval(_check);
-                        }
-                    }
+                    if (xhr.readyState !== 4) return;
+                    var json = null;
+                    try { json = JSON.parse(xhr.responseText); } catch (e) { }
+                    if (xhr.status === 200) done(null, json || {});
+                    else done(errorText(xhr.status, json, xhr.responseText, permission || "Workflow Execution via APIs"), json);
                 };
-                xhr.send();
+                if (body instanceof FormData) xhr.send(body);
+                else if (body !== undefined) {
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.send(JSON.stringify(body));
+                } else xhr.send();
+            }
+            // Polls a job's state until it ends; onState(state) on each answer, onEnd(error, finalState, errorJson) once.
+            function watchJob(jobId, onState, onEnd) {
+                var stopped = false;
+                function tick() {
+                    if (stopped) return;
+                    api("GET", "w/job/" + encodeURIComponent(jobId) + "/state", undefined, function (err, json) {
+                        if (stopped) return;
+                        if (err) { stopped = true; return onEnd(err, null, json); }
+                        var s = json.jobState;
+                        onState(s);
+                        if (s === "COMPLETED" || s === "FAILED" || s === "CANCELLED") { stopped = true; return onEnd(null, s); }
+                        setTimeout(tick, POLL_MS);
+                    });
+                }
+                setTimeout(tick, POLL_MS / 2);
+                return function () { stopped = true; };
+            }
+            function stateLabel(s) {
+                return STATE_LABEL[s] || String(s);
+            }
+            function timeNow() {
+                var d = new Date();
+                return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
+            }
+            // Status line under the controls. Progress shows only with Show job state on; errors always show.
+            // Progress messages show with Show job state on (or, in views without that option, always).
+            function showProgress() {
+                return typeof ALWAYS_SHOW_STATUS !== "undefined" && ALWAYS_SHOW_STATUS ? true : !!items().showJobState;
+            }
+            function setStatus(text, kind, link) {
+                var el = document.getElementById("status");
+                if (tracked) {
+                    tracked.text = text || "";
+                    tracked.kind = kind || "";
+                    tracked.link = link || null;
+                    saveRun(tracked);
+                }
+                if (kind !== "error" && !showProgress()) text = "";
+                el.className = "status" + (kind ? " " + kind : "");
+                el.textContent = text || "";
+                if (text && link) {
+                    var a = document.createElement("a");
+                    a.href = link.href;
+                    a.target = "_blank";
+                    a.rel = "noopener";
+                    a.textContent = link.text;
+                    el.appendChild(document.createTextNode(" "));
+                    el.appendChild(a);
+                }
+            }
+            // ---- Surviving a reload ----
+            // Omniscope recreates the view when a block it reads is executed or its parameters change, often while
+            // the view's own job is running. The run's state (job id, step, message) is kept in sessionStorage, keyed
+            // by the report URL, the view's name and its options, and picked up again on load.
+            var RUN_TTL_MS = 3600000; // a run older than this is forgotten
+            var DONE_TTL_MS = 120000; // a finished run's message is shown again on reload for this long
+            var tracked = null; // the run in progress, as stored
+            function storeKey() {
+                var c = omniscope.view.context() || {}, it = items(), keys = Object.keys(it).sort(), text = "", h = 5381;
+                keys.forEach(function (k) { text += k + "=" + JSON.stringify(it[k]) + ";"; });
+                for (var i = 0; i < text.length; i++) h = ((h * 33) ^ text.charCodeAt(i)) >>> 0;
+                return "omniscope-workflow-view|" + baseUrl() + "|" + (c.viewName || "") + "|" + h.toString(36);
+            }
+            function saveRun(state) {
+                state.saved = Date.now();
+                try { sessionStorage.setItem(storeKey(), JSON.stringify(state)); } catch (e) { }
+            }
+            function clearRun() {
+                try { sessionStorage.removeItem(storeKey()); } catch (e) { }
+            }
+            function loadRun() {
+                var s = null;
+                try { s = JSON.parse(sessionStorage.getItem(storeKey()) || "null"); } catch (e) { }
+                if (s && Date.now() - (s.saved || 0) > (s.done ? DONE_TTL_MS : RUN_TTL_MS)) { clearRun(); s = null; }
+                return s;
+            }
+            // Starts tracking a new run (extra: what the view needs to resume it).
+            function beginRun(extra) {
+                tracked = extra || {};
+                tracked.started = Date.now();
+                saveRun(tracked);
+                return tracked;
+            }
+            // Ends the run: its final message is kept for a while, so a reload straight after still shows it.
+            function endRun(text, kind, link) {
+                tracked = null;
+                saveRun({ done: true, text: text || "", kind: kind || "", link: link || null });
+                setStatus(text, kind, link);
+            }
+            // On the first load: show a finished run's message, or hand an unfinished run to resume(state).
+            var resumeChecked = false;
+            function resumeRun(resume) {
+                if (resumeChecked) return;
+                resumeChecked = true;
+                var s = loadRun();
+                if (!s) return;
+                if (s.done) return setStatus(s.text, s.kind, s.link);
+                if (!s.jobId) {
+                    clearRun();
+                    var d = new Date(s.started || Date.now());
+                    return setStatus("Execution requested at " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) +
+                        "; the view was reloaded before the server answered, so its progress is not shown.", "");
+                }
+                tracked = s;
+                setStatus(s.text, s.kind, s.link);
+                resume(s);
+            }
+            function setBusy(button, busy, label) {
+                button.disabled = !!busy;
+                button.classList.toggle("busy", !!busy);
+                button.querySelector(".label").textContent = label;
             }
 
+            // Show job state turned off: hide progress already shown (errors stay).
+            omniscope.view.on("update", function () {
+                var el = document.getElementById("status");
+                if (!showProgress() && el.className.indexOf("error") < 0) el.textContent = "";
+            });
             omniscope.view.on("load", function () {
                 window.onerror = function (msg) {
                     omniscope.view.error(msg);
                 };
             });
-
-            // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
-            document.body.addEventListener("click", function () {
+            // A click on empty space clears the report's selection, as in other views; a click on a control does not.
+            document.addEventListener("click", function (e) {
+                if (e.target && e.target.closest && e.target.closest("button, input, label, a")) return;
                 omniscope.view.whitespaceClick();
             });
 
-            // Naively redraw on any of these events
-            // (load = first init, update = external settings/state change, resize = browser window resized)
-            omniscope.view.on(["load", "update", "resize"], function () {
-                var options = omniscope.view.context().options;
+            // ---- Workflow Execution: one button that executes the chosen blocks ----
+            var running = false;
+            var button = document.getElementById("run");
 
-                _blocksToExecute = options.items.block.split(",");
-
-                document.getElementById("btnid").textContent = options.items.buttonText ? options.items.buttonText : "Refresh Workflow";
-
-                if (options.items.showJobState) {
-                    document.getElementById("jobState").style.display = "block";
-                } else {
-                    document.getElementById("jobState").style.display = "none";
-                }
-
-                _projEndpoint = omniscope.view.context().baseUrl + "../../../../";
-                //console.log(_projEndpoint + " -> " +_blocksToExecute);
-            });
+            function buttonText() {
+                return items().buttonText || "Execute";
+            }
+            function render() {
+                var blocks = nameList(items().block);
+                if (!running) setBusy(button, false, buttonText());
+                button.title = blocks.length ? "Executes " + blocks.join(", ") : "Executes the whole workflow";
+            }
+            function run() {
+                if (running) return;
+                running = true;
+                setBusy(button, true, buttonText());
+                beginRun({});
+                setStatus("Starting", "");
+                api("POST", "w/execute", {
+                    blocks: nameList(items().block),
+                    refreshFromSource: !!items().refreshFromSource,
+                    cancelExisting: false
+                }, function (err, json) {
+                    if (err) return finish(err, "error");
+                    tracked.jobId = json.jobId;
+                    setStatus(stateLabel("QUEUED"), "");
+                    follow(tracked);
+                });
+            }
+            function follow(state) {
+                watchJob(state.jobId, function (s) {
+                    setStatus(stateLabel(s), "");
+                }, function (err, s) {
+                    if (err) finish(err, "error");
+                    else finish(stateLabel(s) + " at " + timeNow(), s === "COMPLETED" ? "ok" : "error");
+                });
+            }
+            // After a reload mid-job: carry on following the same job.
+            function resume(state) {
+                running = true;
+                setBusy(button, true, buttonText());
+                follow(state);
+            }
+            function finish(text, kind) {
+                running = false;
+                setBusy(button, false, buttonText());
+                endRun(text, kind);
+            }
+            button.addEventListener("click", run);
+            omniscope.view.on(["load", "update", "resize"], render);
+            omniscope.view.on("load", function () { resumeRun(resume); });
         </script>
     </body>
 </html>

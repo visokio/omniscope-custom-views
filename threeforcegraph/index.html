@@ -3,22 +3,87 @@
 <head>
     <meta charset="utf-8"/>
     <style>
-        html, body, main {
+        html, body {
             width: 100%;
             height: 100%;
             margin: 0;
-        }
-        #main {
-            width: 100%;
-            height: 100%;
-            position: absolute;
             overflow: hidden;
         }
+        #main {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
+        }
+        #graph {
+            position: absolute;
+            inset: 0;
+        }
+        #key {
+            position: absolute;
+            left: 8px;
+            top: 6px;
+            pointer-events: none;
+            font-size: 11px;
+            line-height: 18px;
+        }
+        #key span {
+            display: inline-block;
+            margin-right: 12px;
+            white-space: nowrap;
+        }
+        #key i {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 4px;
+            vertical-align: -1px;
+        }
+        #note {
+            position: absolute;
+            right: 8px;
+            bottom: 6px;
+            pointer-events: none;
+            font-size: 11px;
+            opacity: 0.75;
+        }
+        /* The library's hover label */
+        .float-tooltip-kap {
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif !important;
+            font-size: 12px !important;
+            color: #333 !important;
+            background: rgba(255, 255, 255, 0.96) !important;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 4px 8px !important;
+            line-height: 1.4;
+        }
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #555;
+            background: #fff;
+        }
     </style>
-    <script src="https://unpkg.com/3d-force-graph"></script>
+    <!-- 3d-force-graph includes three.js and its force layout -->
+    <script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1.80.2/dist/3d-force-graph.min.js"></script>
 </head>
 <body>
-<main id="main"></main>
+<div id="main">
+    <div id="graph"></div>
+    <div id="key"></div>
+    <div id="note"></div>
+    <div id="message"></div>
+</div>
 <script src="/_global_/customview/v1/omniscope.js"></script>
 <script>
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
@@ -29,60 +94,296 @@
         }
     });
 
-    omniscope.view.on(["load", "update", "resize"], function() {
-        const context = omniscope.view.context();
-        const records = context.result.data.records;
-        const mappings = context.result.mappings;
-        const options = context.options.items;
+    // Colours follow the category's name (from an unfiltered list of the group field's values), not its rank in
+    // the current data, so a filter does not recolour the nodes.
+    var PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948", "#7f8c8d", "#00a3bf"];
+    var NONE = "#b9b8b2", PLAIN = "#2a78d6", FADED = "#dcdcdc";
+    var MAX_NODES = 3000;
+    var state = { graph: null, signature: null, selected: null, colourDomain: {}, nodes: [], links: [], fitted: false };
+    window.__forceGraph = state;
 
-        const sourceIdx = mappings.source;
-        const targetIdx = mappings.target;
-        const groupIdx = mappings.group;
-        const widthIdx = mappings.linkWidth;
+    // The 3D scene is created once and reused: each new WebGL context costs memory, and browsers allow only a few.
+    function graph() {
+        if (state.graph) return state.graph;
+        var el = document.getElementById("graph");
+        state.graph = ForceGraph3D({ controlType: "orbit" })(el)
+            .showNavInfo(false)
+            .nodeId("id")
+            .nodeRelSize(4)
+            .nodeVal(function(n) { return 1 + n.degree; })
+            .nodeOpacity(0.95)
+            .nodeLabel(nodeLabel)
+            .linkLabel(linkLabel)
+            .linkOpacity(0.5)
+            .cooldownTicks(150)
+            .onEngineStop(function() {
+                state.settled = true;
+                if (!state.fitted) { state.fitted = true; state.graph.zoomToFit(400, 30); }
+            })
+            .onNodeClick(function(n) { select({ node: n.id }); })
+            .onLinkClick(function(l) { select({ link: [l.source.id, l.target.id] }); })
+            .onBackgroundClick(function() { clearSelection(); });
+        return state.graph;
+    }
 
-        const nodesMap = new Map();
-        const links = [];
-        let minWidth = Infinity;
-        let maxWidth = -Infinity;
+    document.getElementById("message").addEventListener("click", function() { omniscope.view.whitespaceClick(); });
 
-        records.forEach(record => {
-            const src = record[sourceIdx];
-            const tgt = record[targetIdx];
-            if (src == null || tgt == null) return;
-            if (!nodesMap.has(src)) nodesMap.set(src, { id: src, group: groupIdx !== undefined ? record[groupIdx] : null });
-            if (!nodesMap.has(tgt)) nodesMap.set(tgt, { id: tgt, group: groupIdx !== undefined ? record[groupIdx] : null });
-            const widthVal = widthIdx !== undefined ? Number(record[widthIdx]) : 1;
-            if (widthIdx !== undefined) {
-                if (widthVal < minWidth) minWidth = widthVal;
-                if (widthVal > maxWidth) maxWidth = widthVal;
-            }
-            links.push({ source: src, target: tgt, widthValue: widthVal });
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"]/g, function(c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; });
+    }
+    function isRange(v) { return v !== null && typeof v === "object" && ("lower" in v || "upper" in v); }
+    function label(v) {
+        if (v === null || v === undefined) return "(blank)";
+        if (isRange(v)) return label(v.lower) + " to " + label(v.upper);
+        if (typeof v === "number") return (+v.toPrecision(6)).toLocaleString();
+        return String(v);
+    }
+    function measureName(m) {
+        if (!m) return "";
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField;
+    }
+    function validColour(c) {
+        if (c && typeof c === "object") c = c.colour || c.value || c.hex;
+        if (typeof c !== "string" || !c.trim()) return "#ffffff";
+        return CSS.supports("color", c.trim()) ? c.trim() : "#ffffff";
+    }
+
+    // Key and note text: light on a dark background.
+    function isDark(c) {
+        var probe = document.createElement("div");
+        probe.style.color = c;
+        document.body.appendChild(probe);
+        var m = getComputedStyle(probe).color.match(/[\d.]+/g);
+        probe.remove();
+        return !!m && (0.299 * m[0] + 0.587 * m[1] + 0.114 * m[2]) < 128;
+    }
+
+    // Filters: one value (equality, or a range for a histogram grouping).
+    function valueFilter(field, v) {
+        if (isRange(v)) {
+            return { type: "AND", filters: [
+                { type: "FIELD_VALUE", inputField: field, operator: ">=", value: v.lower },
+                { type: "FIELD_VALUE", inputField: field, operator: "<", value: v.upper } ] };
+        }
+        return { type: "FIELD_VALUE", inputField: field, operator: "=", value: v === undefined ? null : v };
+    }
+
+    // Unfiltered list of the group field's values, fetched once per field.
+    function colourDomain(g, done) {
+        if (!g || !g.inputField) return null;
+        var key = g.inputField, cached = state.colourDomain[key];
+        if (cached) return cached.values;
+        state.colourDomain[key] = { values: null };
+        omniscope.view.queryBuilder().table({ groupings: [{ inputField: key, type: "UNIQUE_VALUES" }],
+            measures: [{ function: "RECORD_COUNT" }], range: { start: 0, length: 51 } })
+            .on("load", function(e) {
+                var vals = e.data.records.map(function(r) { return r[0]; }).filter(function(v) { return v !== null; });
+                state.colourDomain[key] = { values: vals.length <= 50 ? vals.map(String).sort() : null };
+                done();
+            })
+            .on("error", function() { done(); })
+            .execute();
+        return null;
+    }
+
+    function nodeLabel(n) {
+        var lines = ["<b>" + escapeHtml(label(n.value)) + "</b>"];
+        if (state.hasGroup) lines.push(escapeHtml(state.groupName) + ": " + escapeHtml(n.group === null ? "(not a source)" : label(n.group)));
+        lines.push(n.degree + (n.degree === 1 ? " link" : " links"));
+        return lines.join("<br>");
+    }
+    function linkLabel(l) {
+        var s = escapeHtml(label(l.source.value)) + " &rarr; " + escapeHtml(label(l.target.value));
+        if (state.hasWidth) s += "<br>" + escapeHtml(state.widthName) + ": " + escapeHtml(label(l.widthValue));
+        return s;
+    }
+
+    omniscope.view.on(["load", "update", "resize"], render);
+
+    function render() {
+        var context = omniscope.view.context(), options = context.options.items || {};
+        document.getElementById("key").innerHTML = "";
+        document.getElementById("note").textContent = "";
+        if (!options.source || !options.target) {
+            hideGraph();
+            message("Choose a Source and a Target grouping: each record links its Source value to its Target value, for example From and To.");
+            return;
+        }
+        var result = context.result;
+        if (!result || !result.data) { hideGraph(); message("Waiting for data"); return; }
+        var records = result.data.records || [];
+        var mappings = result.mappings || {};
+        if (!records.length) { hideGraph(); message("No data to show. Check the report's filters."); return; }
+        if (mappings.source === undefined || mappings.target === undefined) { hideGraph(); message("Waiting for data"); return; }
+
+        var groupIdx = mappings.group, widthIdx = mappings.linkWidth;
+        state.hasGroup = groupIdx !== undefined;
+        state.hasWidth = widthIdx !== undefined;
+        state.groupName = options.group ? options.group.inputField : "";
+        state.widthName = measureName(options.linkWidth);
+
+        // Nodes are the Source and Target values. A node's group is its group as a Source; a node that is only
+        // ever a Target has none.
+        var nodesMap = new Map(), links = [], skipped = 0;
+        function nodeOf(v) {
+            var k = JSON.stringify(v);
+            var n = nodesMap.get(k);
+            if (!n) { n = { id: k, value: v, group: null, degree: 0 }; nodesMap.set(k, n); }
+            return n;
+        }
+        records.forEach(function(record) {
+            var src = record[mappings.source], tgt = record[mappings.target];
+            if (src === null || src === undefined || tgt === null || tgt === undefined) { skipped++; return; }
+            var a = nodeOf(src), b = nodeOf(tgt);
+            if (state.hasGroup && record[groupIdx] !== null && record[groupIdx] !== undefined && a.group === null) a.group = record[groupIdx];
+            a.degree++; if (b !== a) b.degree++;
+            var w = state.hasWidth ? Number(record[widthIdx]) : null;
+            links.push({ source: a.id, target: b.id, widthValue: w });
+        });
+        var nodes = Array.from(nodesMap.values());
+        if (!nodes.length) { hideGraph(); message("Every record has a blank Source or Target."); return; }
+        if (nodes.length > MAX_NODES) {
+            hideGraph();
+            message("Too many nodes to draw (" + nodes.length.toLocaleString() + "; the limit is " + MAX_NODES.toLocaleString() +
+                "). Choose a Source and Target with fewer values, or filter the report.");
+            return;
+        }
+        message(null);
+
+        // Link width: 0.5 to 4 units across the measure's range; plain lines without a measure.
+        var ws = links.map(function(l) { return l.widthValue; }).filter(function(w) { return isFinite(w) && w !== null; });
+        var lo = Math.min.apply(null, ws), hi = Math.max.apply(null, ws);
+        links.forEach(function(l) {
+            if (!state.hasWidth || !isFinite(l.widthValue) || l.widthValue === null) l.width = 0;
+            else l.width = hi > lo ? 0.5 + 3.5 * (l.widthValue - lo) / (hi - lo) : 1;
         });
 
-        const nodes = Array.from(nodesMap.values());
-
-        if (widthIdx !== undefined && links.length) {
-            if (maxWidth === minWidth) {
-                links.forEach(l => { l.width = 1; });
-            } else {
-                links.forEach(l => {
-                    l.width = 1 + 9 * (l.widthValue - minWidth) / (maxWidth - minWidth);
-                });
-            }
-        } else {
-            links.forEach(l => { l.width = 1; });
+        // Colours and key.
+        var domain = null, cats = [];
+        if (state.hasGroup) {
+            domain = colourDomain(options.group, render);
+            var present = {};
+            nodes.forEach(function(n) { if (n.group !== null) present[String(n.group)] = true; });
+            if (!domain) domain = Object.keys(present).sort();
+            cats = domain.filter(function(c) { return present[c]; });
         }
+        state.colourOf = function(n) {
+            if (!state.hasGroup) return PLAIN;
+            if (n.group === null) return NONE;
+            var i = domain.indexOf(String(n.group));
+            return i < 0 ? NONE : PALETTE[i % PALETTE.length];
+        };
+        var W = document.getElementById("main").clientWidth, H = document.getElementById("main").clientHeight;
+        if (cats.length && cats.length <= 10 && W > 220 && H > 160) {
+            document.getElementById("key").innerHTML = cats.map(function(c) {
+                return '<span><i style="background:' + PALETTE[domain.indexOf(c) % PALETTE.length] + '"></i>' + escapeHtml(c) + "</span>";
+            }).join("");
+        }
+        if (skipped && H > 160) document.getElementById("note").textContent = skipped.toLocaleString() + (skipped === 1 ? " record has" : " records have") + " a blank Source or Target";
 
-        document.getElementById('main').innerHTML = '';
+        if (!context.viewSelection) state.selected = null;
 
-        const Graph = ForceGraph3D()(document.getElementById('main'))
-            .graphData({ nodes: nodes, links: links })
-            .nodeAutoColorBy('group')
-            .nodeLabel(node => node.id)
-            .linkLabel(link => link.source.id + ' -> ' + link.target.id)
-            .linkWidth(link => link.width || 1)
-            .backgroundColor(options.background || '#ffffff');
-    });
+        var G = graph();
+        document.getElementById("graph").style.display = "block";
+        var bg = validColour(options.background);
+        G.width(W).height(H).backgroundColor(bg);
+        document.getElementById("main").style.color = isDark(bg) ? "#e8e8e8" : "#333";
+
+        // New data restarts the layout and refits the camera; a resize, selection or colour change does not.
+        var signature = JSON.stringify([records.length, nodes.map(function(n) { return n.id; }), links.length,
+            options.source, options.target]);
+        if (signature !== state.signature) {
+            state.signature = signature;
+            state.fitted = false;
+            state.settled = false;
+            state.nodes = nodes;
+            state.links = links;
+            G.graphData({ nodes: nodes, links: links });
+        } else {
+            // Same graph: keep the positions, refresh the values shown.
+            var byId = {};
+            state.nodes.forEach(function(n) { byId[n.id] = n; });
+            nodes.forEach(function(n) { var o = byId[n.id]; if (o) { o.group = n.group; o.degree = n.degree; } });
+            state.links.forEach(function(l, i) { if (links[i]) { l.widthValue = links[i].widthValue; l.width = links[i].width; } });
+        }
+        restyle();
+        state.model = { nodes: state.nodes.length, links: state.links.length, cats: cats, skipped: skipped };
+    }
+
+    function hideGraph() {
+        if (state.graph) { state.graph.graphData({ nodes: [], links: [] }); }
+        state.signature = null;
+        state.nodes = []; state.links = [];
+        state.model = null;
+        document.getElementById("graph").style.display = "none";
+    }
+
+    // Selection: a node selects the records where it is the Source or the Target; a link selects that pair.
+    function select(sel) {
+        var key = JSON.stringify(sel);
+        if (state.selected && JSON.stringify(state.selected) === key) { clearSelection(); return; }
+        var it = omniscope.view.context().options.items;
+        var sf = it.source.inputField, tf = it.target.inputField, filter;
+        if (sel.node) {
+            var v = JSON.parse(sel.node);
+            filter = { type: "OR", filters: [valueFilter(sf, v), valueFilter(tf, v)] };
+        } else {
+            filter = { type: "AND", filters: [valueFilter(sf, JSON.parse(sel.link[0])), valueFilter(tf, JSON.parse(sel.link[1]))] };
+        }
+        state.selected = sel;
+        omniscope.view.context().viewSelection = { filter: filter };
+        omniscope.view.updated();
+        restyle();
+    }
+
+    function clearSelection() {
+        state.selected = null;
+        restyle();
+        omniscope.view.whitespaceClick();
+    }
+
+    // Selected node: it, its links and its neighbours keep their colours; everything else fades.
+    function restyle() {
+        var G = state.graph;
+        if (!G) return;
+        var sel = state.selected, keepNodes = null, keepLink = null;
+        if (sel) {
+            keepNodes = {};
+            if (sel.node) {
+                keepNodes[sel.node] = true;
+                state.links.forEach(function(l) {
+                    var s = l.source.id || l.source, t = l.target.id || l.target;
+                    if (s === sel.node) keepNodes[t] = true;
+                    if (t === sel.node) keepNodes[s] = true;
+                });
+            } else {
+                keepNodes[sel.link[0]] = keepNodes[sel.link[1]] = true;
+            }
+            keepLink = function(l) {
+                var s = l.source.id || l.source, t = l.target.id || l.target;
+                return sel.node ? (s === sel.node || t === sel.node) : (s === sel.link[0] && t === sel.link[1]);
+            };
+        }
+        G.nodeColor(function(n) { return !keepNodes || keepNodes[n.id] ? state.colourOf(n) : FADED; })
+            .linkColor(function(l) { return keepLink && keepLink(l) ? "#1b1b1b" : (keepLink ? "#e4e4e4" : "#9a9a9a"); })
+            .linkWidth(function(l) { return keepLink && keepLink(l) ? Math.max(1, l.width) : l.width; });
+    }
+
+    // Test hook: where a node is on screen, so a test can hover or click it with the mouse.
+    state.screenOf = function(value) {
+        var n = state.nodes.filter(function(d) { return d.value === value; })[0];
+        if (!n || n.x === undefined) return null;
+        var p = state.graph.graph2ScreenCoords(n.x, n.y, n.z);
+        return [p.x, p.y];
+    };
 </script>
 </body>
 </html>
