@@ -1,0 +1,206 @@
+{
+  "name": "Bar Chart Race",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "bar chart race",
+    "animation",
+    "ranking",
+    "race",
+    "over time",
+    "storytelling",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 50000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "time": {
+        "displayName": "Time",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "The frames of the race, e.g. Month or Year (a date grouped by month works well)"
+      },
+      "item": {
+        "displayName": "Bars",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "What races, e.g. Product, Town, Team or Brand"
+      },
+      "value": {
+        "displayName": "Value",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Bar length, e.g. sum of Sales"
+      },
+      "colour": {
+        "displayName": "Colour by",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Optional category for bar colours, e.g. Region (up to eight colours)"
+      },
+      "cumulative": {
+        "displayName": "Running total",
+        "type": "TOGGLE",
+        "detail": "Race the running total up to each period instead of each period's own value"
+      },
+      "topN": {
+        "displayName": "Bars shown",
+        "type": "NUMBER",
+        "minValue": 3,
+        "maxValue": 30,
+        "detail": "Number of bars in the race (default 10)"
+      },
+      "duration": {
+        "displayName": "Seconds per period",
+        "type": "NUMBER",
+        "minValue": 0.1,
+        "maxValue": 10,
+        "detail": "Speed of the animation (default 0.8)"
+      },
+      "autoplay": {
+        "displayName": "Play automatically",
+        "type": "TOGGLE",
+        "detail": "Start playing when the report opens"
+      },
+      "loop": {
+        "displayName": "Loop",
+        "type": "TOGGLE",
+        "detail": "Start again after the last period"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "time",
+        "item",
+        "value",
+        "colour"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Race",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "time",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "item",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "cumulative",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Playback",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "topN",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "duration",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "autoplay",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "loop",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "cumulative": false,
+      "topN": 10,
+      "duration": 0.8,
+      "autoplay": true,
+      "loop": false
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 200
+  }
+}

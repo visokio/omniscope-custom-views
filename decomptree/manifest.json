@@ -1,0 +1,168 @@
+{
+  "name": "Decomposition Tree",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "decomposition",
+    "tree",
+    "drill down",
+    "root cause",
+    "variance",
+    "breakdown",
+    "explain",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "measure": {
+        "displayName": "Analyse",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "The value to break down, e.g. sum of Revenue, count of Defects, mean of Delivery days"
+      },
+      "dimensions": {
+        "displayName": "Explain by",
+        "type": "FIELD",
+        "list": true,
+        "validFieldTypes": [
+          "TEXT",
+          "NUMBER",
+          "DATE"
+        ],
+        "detail": "Fields the viewer can split by, in any order: Region, Product, Channel, Customer type..."
+      },
+      "maxBars": {
+        "displayName": "Bars per level",
+        "type": "NUMBER",
+        "minValue": 2,
+        "maxValue": 50,
+        "detail": "How many categories to show in each level; the rest are summarised as Other for additive measures"
+      },
+      "sortOrder": {
+        "displayName": "Sort",
+        "type": "CHOICE",
+        "values": [
+          "DESCENDING",
+          "ASCENDING"
+        ],
+        "displayValues": [
+          "Highest first",
+          "Lowest first"
+        ],
+        "detail": "Order of bars within each level"
+      },
+      "autoSplits": {
+        "displayName": "Offer automatic splits",
+        "type": "TOGGLE",
+        "detail": "Add 'Highest value' and 'Lowest value' to the split menu: the view tries every remaining field and picks the one with the most extreme category"
+      },
+      "showPercent": {
+        "displayName": "Show share of parent",
+        "type": "TOGGLE",
+        "detail": "Show each bar's share of its parent (sum and count measures only)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "measure",
+        "dimensions"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Breakdown",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "measure",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "dimensions",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "maxBars",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "sortOrder",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "autoSplits",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showPercent",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "maxBars": 8,
+      "sortOrder": "DESCENDING",
+      "autoSplits": true,
+      "showPercent": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 200,
+    "minHeight": 150
+  }
+}

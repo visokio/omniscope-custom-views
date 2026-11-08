@@ -1,0 +1,282 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "fields": [
+     "Store size (sq m)",
+     "Staff hours per week",
+     "Weekly footfall",
+     "Conversion rate (%)",
+     "Average basket (GBP)",
+     "Weekly sales (GBP)",
+     "Customer satisfaction",
+     "Returns rate (%)",
+     "Distance to competitor (km)",
+     "Online share of sales (%)",
+     "Car parking spaces"
+    ],
+    "method": "PEARSON",
+    "order": "CLUSTERED",
+    "triangle": "LOWER",
+    "showValues": true,
+    "maxRows": 20000
+   }
+  },
+  "width": 1060,
+  "height": 600,
+  "wait": 1500,
+  "showcaseHeight": 600,
+  "caption": "Live: eleven metrics for 600 illustrative stores. Hover a cell for the coefficient; click it to see that pair as a scatter plot; drag across the scatter plot to select stores.",
+  "expect": {
+   "selector": "rect.cell",
+   "min": 60
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "fields": [
+     "Store size (sq m)",
+     "Staff hours per week",
+     "Weekly footfall",
+     "Conversion rate (%)",
+     "Average basket (GBP)",
+     "Weekly sales (GBP)",
+     "Customer satisfaction",
+     "Returns rate (%)",
+     "Distance to competitor (km)",
+     "Online share of sales (%)",
+     "Car parking spaces"
+    ],
+    "method": "PEARSON",
+    "order": "CLUSTERED",
+    "triangle": "LOWER",
+    "showValues": true,
+    "maxRows": 20000
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__corr.model,a=M.F.indexOf('Store size (sq m)'),b=M.F.indexOf('Staff hours per week'),c=M.F.indexOf('Returns rate (%)'),d=M.F.indexOf('Customer satisfaction');return M.R[a][b]>0.8 && M.R[c][d]<-0.3})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "rect.cell",
+    "nth": 12
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "click": "rect.cell",
+    "nth": 20
+   },
+   {
+    "eval": "!!window.__corr.pair",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "pair"
+   },
+   {
+    "eval": "window.__corr.pick('Customer satisfaction','Returns rate (%)')"
+   },
+   {
+    "eval": "window.__corr.selectBox(1,4,6,10)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "brushed"
+   },
+   {
+    "clickAt": [
+     20,
+     590
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "London"
+    }
+   },
+   {
+    "eval": "window.__corr.model.rows<200",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     420
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "spearman-full",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "fields": [
+     "Store size (sq m)",
+     "Staff hours per week",
+     "Weekly footfall",
+     "Conversion rate (%)",
+     "Average basket (GBP)",
+     "Weekly sales (GBP)",
+     "Customer satisfaction",
+     "Returns rate (%)",
+     "Distance to competitor (km)",
+     "Online share of sales (%)",
+     "Car parking spaces"
+    ],
+    "method": "SPEARMAN",
+    "order": "LISTED",
+    "triangle": "FULL",
+    "showValues": true,
+    "maxRows": 20000
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 1500,
+  "expect": {
+   "selector": "rect.cell",
+   "min": 121
+  }
+ },
+ {
+  "name": "one-field",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "fields": [
+     "Weekly footfall"
+    ],
+    "method": "PEARSON",
+    "order": "CLUSTERED",
+    "triangle": "LOWER",
+    "showValues": true,
+    "maxRows": 20000
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "two or more"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "A",
+    "type": "NUMBER"
+   },
+   {
+    "name": "B",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "fields": [
+     "A",
+     "B"
+    ],
+    "method": "PEARSON",
+    "order": "CLUSTERED",
+    "triangle": "LOWER",
+    "showValues": true,
+    "maxRows": 20000
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "selector": "rect.cell",
+   "min": 1
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "fields": [
+     "M00",
+     "M01",
+     "M02",
+     "M03",
+     "M04",
+     "M05",
+     "M06",
+     "M07",
+     "M08",
+     "M09",
+     "M10",
+     "M11",
+     "M12",
+     "M13",
+     "M14"
+    ],
+    "maxRows": 50000
+   }
+  },
+  "width": 1100,
+  "height": 700,
+  "wait": 4000,
+  "expect": {
+   "selector": "rect.cell",
+   "min": 100
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "fields": [
+     "Store size (sq m)",
+     "Staff hours per week",
+     "Weekly footfall",
+     "Conversion rate (%)",
+     "Average basket (GBP)",
+     "Weekly sales (GBP)",
+     "Customer satisfaction",
+     "Returns rate (%)"
+    ],
+    "method": "PEARSON",
+    "order": "CLUSTERED",
+    "triangle": "LOWER",
+    "showValues": true,
+    "maxRows": 20000
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

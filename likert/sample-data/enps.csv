@@ -1,0 +1,641 @@
+Respondent,Department,Tenure,Recommend score
+R0001,Operations,3 to 5 years,6
+R0002,Customer service,1 to 3 years,10
+R0003,Technology,3 to 5 years,10
+R0004,Operations,Over 5 years,5
+R0005,Sales,Under 1 year,10
+R0006,Finance,1 to 3 years,6
+R0007,Technology,3 to 5 years,6
+R0008,Technology,Under 1 year,9
+R0009,Sales,3 to 5 years,5
+R0010,Sales,3 to 5 years,3
+R0011,Technology,Over 5 years,8
+R0012,Customer service,1 to 3 years,5
+R0013,Operations,3 to 5 years,8
+R0014,Sales,1 to 3 years,9
+R0015,Technology,3 to 5 years,8
+R0016,Technology,Over 5 years,8
+R0017,Operations,1 to 3 years,6
+R0018,Operations,3 to 5 years,3
+R0019,Customer service,Over 5 years,6
+R0020,Operations,3 to 5 years,5
+R0021,Operations,Over 5 years,4
+R0022,Sales,1 to 3 years,8
+R0023,Customer service,3 to 5 years,10
+R0024,Sales,1 to 3 years,10
+R0025,Customer service,Over 5 years,10
+R0026,Technology,1 to 3 years,8
+R0027,Technology,3 to 5 years,6
+R0028,Technology,Under 1 year,6
+R0029,Finance,Over 5 years,5
+R0030,Finance,Over 5 years,9
+R0031,Customer service,Under 1 year,6
+R0032,Customer service,3 to 5 years,5
+R0033,Customer service,1 to 3 years,5
+R0034,Operations,3 to 5 years,7
+R0035,Operations,1 to 3 years,9
+R0036,Technology,1 to 3 years,7
+R0037,Sales,1 to 3 years,7
+R0038,Sales,3 to 5 years,9
+R0039,Technology,Under 1 year,8
+R0040,Operations,1 to 3 years,9
+R0041,Customer service,1 to 3 years,6
+R0042,Operations,Under 1 year,5
+R0043,Customer service,3 to 5 years,4
+R0044,Operations,Over 5 years,4
+R0045,Operations,1 to 3 years,7
+R0046,Sales,Under 1 year,8
+R0047,Technology,Over 5 years,7
+R0048,Technology,Under 1 year,6
+R0049,Sales,Over 5 years,6
+R0050,Sales,3 to 5 years,4
+R0051,Technology,1 to 3 years,10
+R0052,Customer service,1 to 3 years,7
+R0053,Operations,Over 5 years,3
+R0054,Technology,Over 5 years,6
+R0055,Customer service,1 to 3 years,8
+R0056,Customer service,Over 5 years,10
+R0057,Technology,1 to 3 years,10
+R0058,Operations,Over 5 years,8
+R0059,Sales,Under 1 year,2
+R0060,Operations,Under 1 year,7
+R0061,Customer service,Over 5 years,6
+R0062,Sales,1 to 3 years,7
+R0063,Sales,1 to 3 years,7
+R0064,Operations,1 to 3 years,6
+R0065,Sales,3 to 5 years,6
+R0066,Operations,1 to 3 years,6
+R0067,Operations,Under 1 year,7
+R0068,Sales,1 to 3 years,7
+R0069,Operations,Under 1 year,6
+R0070,Sales,1 to 3 years,5
+R0071,Sales,1 to 3 years,4
+R0072,Operations,1 to 3 years,3
+R0073,Customer service,Under 1 year,10
+R0074,Customer service,3 to 5 years,8
+R0075,Technology,1 to 3 years,10
+R0076,Sales,Under 1 year,9
+R0077,Technology,Over 5 years,5
+R0078,Customer service,1 to 3 years,9
+R0079,Operations,1 to 3 years,8
+R0080,Customer service,Over 5 years,4
+R0081,Operations,Under 1 year,8
+R0082,Operations,Over 5 years,3
+R0083,Finance,Under 1 year,10
+R0084,Finance,3 to 5 years,5
+R0085,Operations,1 to 3 years,3
+R0086,Sales,1 to 3 years,5
+R0087,Technology,1 to 3 years,5
+R0088,Technology,Over 5 years,7
+R0089,Customer service,3 to 5 years,6
+R0090,Technology,Under 1 year,8
+R0091,Operations,1 to 3 years,3
+R0092,Sales,3 to 5 years,6
+R0093,Technology,3 to 5 years,8
+R0094,Sales,Over 5 years,7
+R0095,Technology,1 to 3 years,10
+R0096,Operations,Under 1 year,3
+R0097,Sales,Over 5 years,8
+R0098,Sales,Over 5 years,3
+R0099,Sales,3 to 5 years,10
+R0100,Customer service,Under 1 year,7
+R0101,Customer service,1 to 3 years,7
+R0102,Operations,1 to 3 years,6
+R0103,Customer service,Over 5 years,6
+R0104,Sales,Under 1 year,5
+R0105,Sales,Over 5 years,8
+R0106,Operations,1 to 3 years,7
+R0107,Sales,1 to 3 years,8
+R0108,Sales,Under 1 year,9
+R0109,Sales,Under 1 year,6
+R0110,Finance,1 to 3 years,10
+R0111,Finance,1 to 3 years,8
+R0112,Operations,3 to 5 years,7
+R0113,Customer service,Under 1 year,5
+R0114,Operations,3 to 5 years,10
+R0115,Customer service,3 to 5 years,3
+R0116,Operations,3 to 5 years,6
+R0117,Sales,1 to 3 years,7
+R0118,Operations,Under 1 year,5
+R0119,Customer service,Under 1 year,3
+R0120,Operations,Over 5 years,0
+R0121,Customer service,Over 5 years,7
+R0122,Sales,3 to 5 years,10
+R0123,Sales,Under 1 year,8
+R0124,Technology,3 to 5 years,9
+R0125,Operations,1 to 3 years,5
+R0126,Operations,1 to 3 years,10
+R0127,Operations,Under 1 year,3
+R0128,Customer service,Over 5 years,4
+R0129,Operations,Over 5 years,7
+R0130,Sales,Under 1 year,5
+R0131,Sales,Over 5 years,5
+R0132,Sales,Over 5 years,9
+R0133,Customer service,1 to 3 years,10
+R0134,Operations,Under 1 year,0
+R0135,Sales,Under 1 year,10
+R0136,Customer service,1 to 3 years,6
+R0137,Customer service,1 to 3 years,1
+R0138,Operations,Over 5 years,5
+R0139,Operations,Over 5 years,5
+R0140,Customer service,Over 5 years,5
+R0141,Sales,Over 5 years,10
+R0142,Finance,3 to 5 years,9
+R0143,Operations,3 to 5 years,6
+R0144,Sales,Over 5 years,5
+R0145,Operations,Over 5 years,8
+R0146,Customer service,Over 5 years,5
+R0147,Sales,Under 1 year,3
+R0148,Sales,Over 5 years,8
+R0149,Operations,Under 1 year,7
+R0150,Operations,1 to 3 years,9
+R0151,Operations,3 to 5 years,5
+R0152,Operations,Over 5 years,4
+R0153,Finance,1 to 3 years,6
+R0154,Operations,1 to 3 years,8
+R0155,Sales,Under 1 year,4
+R0156,Operations,1 to 3 years,5
+R0157,Operations,Under 1 year,2
+R0158,Finance,3 to 5 years,9
+R0159,Operations,3 to 5 years,4
+R0160,Customer service,1 to 3 years,6
+R0161,Operations,3 to 5 years,6
+R0162,Sales,Over 5 years,4
+R0163,Operations,Over 5 years,7
+R0164,Customer service,Under 1 year,9
+R0165,Technology,Over 5 years,8
+R0166,Operations,Over 5 years,7
+R0167,Operations,Under 1 year,6
+R0168,Sales,1 to 3 years,7
+R0169,Operations,Under 1 year,8
+R0170,Sales,Over 5 years,7
+R0171,Operations,1 to 3 years,6
+R0172,Customer service,1 to 3 years,5
+R0173,Sales,1 to 3 years,7
+R0174,Operations,3 to 5 years,5
+R0175,Sales,Under 1 year,6
+R0176,Customer service,Under 1 year,8
+R0177,Operations,3 to 5 years,6
+R0178,Customer service,1 to 3 years,1
+R0179,Operations,Under 1 year,6
+R0180,Operations,Under 1 year,5
+R0181,Sales,1 to 3 years,1
+R0182,Customer service,3 to 5 years,7
+R0183,Customer service,Under 1 year,5
+R0184,Technology,1 to 3 years,7
+R0185,Sales,Over 5 years,8
+R0186,Operations,3 to 5 years,7
+R0187,Technology,1 to 3 years,4
+R0188,Technology,1 to 3 years,10
+R0189,Sales,1 to 3 years,4
+R0190,Sales,Over 5 years,9
+R0191,Customer service,Under 1 year,9
+R0192,Sales,1 to 3 years,10
+R0193,Technology,Over 5 years,5
+R0194,Finance,Over 5 years,7
+R0195,Customer service,1 to 3 years,9
+R0196,Sales,3 to 5 years,4
+R0197,Customer service,Under 1 year,6
+R0198,Operations,Over 5 years,6
+R0199,Operations,Under 1 year,9
+R0200,Technology,Under 1 year,10
+R0201,Technology,3 to 5 years,5
+R0202,Technology,Under 1 year,9
+R0203,Operations,3 to 5 years,5
+R0204,Customer service,Over 5 years,6
+R0205,Operations,1 to 3 years,5
+R0206,Sales,3 to 5 years,4
+R0207,Sales,1 to 3 years,7
+R0208,Operations,Over 5 years,9
+R0209,Sales,3 to 5 years,0
+R0210,Technology,3 to 5 years,10
+R0211,Operations,3 to 5 years,9
+R0212,Finance,3 to 5 years,8
+R0213,Sales,Under 1 year,6
+R0214,Sales,Under 1 year,6
+R0215,Technology,Over 5 years,9
+R0216,Operations,Over 5 years,7
+R0217,Operations,Under 1 year,6
+R0218,Operations,Under 1 year,4
+R0219,Operations,Under 1 year,4
+R0220,Operations,1 to 3 years,10
+R0221,Operations,1 to 3 years,8
+R0222,Technology,1 to 3 years,8
+R0223,Operations,3 to 5 years,3
+R0224,Operations,1 to 3 years,5
+R0225,Technology,1 to 3 years,8
+R0226,Operations,Under 1 year,7
+R0227,Customer service,1 to 3 years,7
+R0228,Technology,3 to 5 years,5
+R0229,Technology,Over 5 years,10
+R0230,Operations,Under 1 year,5
+R0231,Customer service,3 to 5 years,7
+R0232,Operations,1 to 3 years,10
+R0233,Operations,1 to 3 years,8
+R0234,Operations,1 to 3 years,3
+R0235,Sales,Over 5 years,5
+R0236,Operations,Under 1 year,5
+R0237,Customer service,1 to 3 years,7
+R0238,Technology,1 to 3 years,7
+R0239,Operations,1 to 3 years,10
+R0240,Technology,1 to 3 years,10
+R0241,Customer service,3 to 5 years,6
+R0242,Technology,Under 1 year,9
+R0243,Sales,Over 5 years,4
+R0244,Operations,Under 1 year,6
+R0245,Technology,Under 1 year,8
+R0246,Operations,3 to 5 years,5
+R0247,Finance,Over 5 years,10
+R0248,Customer service,3 to 5 years,5
+R0249,Customer service,1 to 3 years,4
+R0250,Operations,1 to 3 years,5
+R0251,Customer service,3 to 5 years,10
+R0252,Operations,1 to 3 years,7
+R0253,Finance,3 to 5 years,3
+R0254,Operations,3 to 5 years,4
+R0255,Operations,Under 1 year,5
+R0256,Finance,Under 1 year,9
+R0257,Operations,Under 1 year,5
+R0258,Technology,Over 5 years,6
+R0259,Operations,Under 1 year,9
+R0260,Operations,Over 5 years,3
+R0261,Technology,1 to 3 years,8
+R0262,Operations,Over 5 years,4
+R0263,Finance,3 to 5 years,6
+R0264,Operations,Under 1 year,4
+R0265,Technology,1 to 3 years,10
+R0266,Customer service,Under 1 year,9
+R0267,Finance,3 to 5 years,6
+R0268,Operations,3 to 5 years,5
+R0269,Operations,1 to 3 years,8
+R0270,Customer service,Under 1 year,10
+R0271,Operations,1 to 3 years,8
+R0272,Finance,Under 1 year,4
+R0273,Finance,1 to 3 years,10
+R0274,Customer service,1 to 3 years,9
+R0275,Technology,Under 1 year,7
+R0276,Sales,Under 1 year,4
+R0277,Operations,1 to 3 years,9
+R0278,Operations,1 to 3 years,7
+R0279,Finance,1 to 3 years,8
+R0280,Customer service,Under 1 year,8
+R0281,Operations,1 to 3 years,5
+R0282,Operations,Over 5 years,1
+R0283,Customer service,Over 5 years,7
+R0284,Operations,Over 5 years,8
+R0285,Operations,Over 5 years,5
+R0286,Operations,Under 1 year,4
+R0287,Operations,Under 1 year,4
+R0288,Customer service,3 to 5 years,6
+R0289,Customer service,3 to 5 years,10
+R0290,Operations,Under 1 year,6
+R0291,Operations,Under 1 year,10
+R0292,Customer service,Under 1 year,7
+R0293,Operations,Under 1 year,7
+R0294,Customer service,3 to 5 years,8
+R0295,Operations,Under 1 year,6
+R0296,Operations,Under 1 year,7
+R0297,Technology,Under 1 year,10
+R0298,Operations,Under 1 year,9
+R0299,Operations,Over 5 years,7
+R0300,Finance,1 to 3 years,9
+R0301,Sales,Over 5 years,6
+R0302,Sales,1 to 3 years,9
+R0303,Finance,3 to 5 years,8
+R0304,Operations,Over 5 years,7
+R0305,Customer service,Over 5 years,6
+R0306,Finance,1 to 3 years,9
+R0307,Customer service,Under 1 year,10
+R0308,Technology,3 to 5 years,6
+R0309,Customer service,Under 1 year,4
+R0310,Sales,3 to 5 years,10
+R0311,Customer service,1 to 3 years,9
+R0312,Operations,1 to 3 years,8
+R0313,Customer service,Over 5 years,7
+R0314,Finance,Under 1 year,8
+R0315,Customer service,Over 5 years,4
+R0316,Operations,Under 1 year,5
+R0317,Operations,Over 5 years,8
+R0318,Customer service,3 to 5 years,6
+R0319,Finance,Over 5 years,3
+R0320,Operations,3 to 5 years,7
+R0321,Finance,Over 5 years,6
+R0322,Operations,3 to 5 years,4
+R0323,Customer service,3 to 5 years,6
+R0324,Technology,3 to 5 years,4
+R0325,Customer service,3 to 5 years,3
+R0326,Customer service,Over 5 years,5
+R0327,Sales,3 to 5 years,6
+R0328,Operations,1 to 3 years,8
+R0329,Customer service,3 to 5 years,8
+R0330,Sales,Under 1 year,3
+R0331,Operations,Over 5 years,7
+R0332,Customer service,Over 5 years,10
+R0333,Operations,Under 1 year,6
+R0334,Finance,Under 1 year,7
+R0335,Operations,Over 5 years,6
+R0336,Customer service,3 to 5 years,4
+R0337,Operations,3 to 5 years,6
+R0338,Customer service,3 to 5 years,10
+R0339,Customer service,Under 1 year,10
+R0340,Operations,Under 1 year,5
+R0341,Operations,3 to 5 years,7
+R0342,Sales,1 to 3 years,8
+R0343,Operations,Under 1 year,6
+R0344,Operations,3 to 5 years,5
+R0345,Technology,Under 1 year,4
+R0346,Sales,3 to 5 years,9
+R0347,Sales,Under 1 year,6
+R0348,Operations,3 to 5 years,7
+R0349,Customer service,1 to 3 years,8
+R0350,Customer service,1 to 3 years,6
+R0351,Operations,Over 5 years,8
+R0352,Sales,3 to 5 years,8
+R0353,Customer service,3 to 5 years,7
+R0354,Sales,1 to 3 years,10
+R0355,Operations,1 to 3 years,10
+R0356,Operations,1 to 3 years,5
+R0357,Sales,Under 1 year,4
+R0358,Operations,Under 1 year,7
+R0359,Technology,1 to 3 years,8
+R0360,Sales,3 to 5 years,10
+R0361,Technology,Over 5 years,8
+R0362,Operations,1 to 3 years,7
+R0363,Operations,1 to 3 years,5
+R0364,Customer service,3 to 5 years,6
+R0365,Sales,Over 5 years,1
+R0366,Sales,1 to 3 years,7
+R0367,Operations,Over 5 years,4
+R0368,Finance,3 to 5 years,7
+R0369,Customer service,Under 1 year,7
+R0370,Finance,Under 1 year,6
+R0371,Customer service,Under 1 year,6
+R0372,Technology,3 to 5 years,9
+R0373,Technology,Over 5 years,7
+R0374,Sales,Over 5 years,4
+R0375,Sales,Over 5 years,7
+R0376,Sales,3 to 5 years,4
+R0377,Customer service,Under 1 year,1
+R0378,Operations,Over 5 years,6
+R0379,Operations,3 to 5 years,8
+R0380,Technology,1 to 3 years,9
+R0381,Sales,Over 5 years,7
+R0382,Customer service,3 to 5 years,4
+R0383,Operations,1 to 3 years,6
+R0384,Sales,Over 5 years,6
+R0385,Customer service,Under 1 year,8
+R0386,Operations,Over 5 years,5
+R0387,Operations,3 to 5 years,7
+R0388,Operations,3 to 5 years,10
+R0389,Operations,3 to 5 years,8
+R0390,Customer service,1 to 3 years,4
+R0391,Sales,1 to 3 years,6
+R0392,Sales,3 to 5 years,6
+R0393,Operations,1 to 3 years,7
+R0394,Operations,1 to 3 years,2
+R0395,Operations,Over 5 years,7
+R0396,Sales,Under 1 year,8
+R0397,Technology,3 to 5 years,6
+R0398,Customer service,1 to 3 years,7
+R0399,Customer service,Over 5 years,8
+R0400,Operations,3 to 5 years,6
+R0401,Technology,Over 5 years,9
+R0402,Technology,3 to 5 years,6
+R0403,Customer service,1 to 3 years,5
+R0404,Operations,Over 5 years,5
+R0405,Technology,1 to 3 years,10
+R0406,Operations,Under 1 year,2
+R0407,Finance,Under 1 year,10
+R0408,Sales,Under 1 year,7
+R0409,Customer service,1 to 3 years,7
+R0410,Technology,Under 1 year,9
+R0411,Technology,Under 1 year,7
+R0412,Finance,Over 5 years,5
+R0413,Operations,3 to 5 years,3
+R0414,Sales,1 to 3 years,9
+R0415,Sales,1 to 3 years,6
+R0416,Finance,Over 5 years,5
+R0417,Operations,Over 5 years,3
+R0418,Customer service,1 to 3 years,2
+R0419,Operations,1 to 3 years,8
+R0420,Finance,Over 5 years,4
+R0421,Customer service,Under 1 year,6
+R0422,Operations,Under 1 year,3
+R0423,Operations,1 to 3 years,5
+R0424,Sales,1 to 3 years,8
+R0425,Operations,3 to 5 years,7
+R0426,Technology,Over 5 years,5
+R0427,Technology,Over 5 years,4
+R0428,Operations,3 to 5 years,7
+R0429,Technology,Over 5 years,5
+R0430,Technology,1 to 3 years,9
+R0431,Sales,Over 5 years,6
+R0432,Sales,Under 1 year,8
+R0433,Customer service,1 to 3 years,6
+R0434,Operations,1 to 3 years,5
+R0435,Customer service,3 to 5 years,5
+R0436,Customer service,1 to 3 years,10
+R0437,Sales,Over 5 years,6
+R0438,Operations,3 to 5 years,4
+R0439,Customer service,Over 5 years,6
+R0440,Technology,Under 1 year,9
+R0441,Operations,Over 5 years,2
+R0442,Operations,Under 1 year,7
+R0443,Sales,3 to 5 years,3
+R0444,Technology,Under 1 year,9
+R0445,Customer service,Over 5 years,7
+R0446,Technology,3 to 5 years,10
+R0447,Sales,Under 1 year,8
+R0448,Customer service,3 to 5 years,8
+R0449,Operations,Under 1 year,5
+R0450,Customer service,Over 5 years,6
+R0451,Sales,3 to 5 years,6
+R0452,Sales,Over 5 years,7
+R0453,Technology,Over 5 years,6
+R0454,Customer service,1 to 3 years,8
+R0455,Operations,Over 5 years,10
+R0456,Finance,3 to 5 years,8
+R0457,Operations,3 to 5 years,4
+R0458,Customer service,3 to 5 years,8
+R0459,Sales,1 to 3 years,5
+R0460,Customer service,3 to 5 years,9
+R0461,Operations,Over 5 years,5
+R0462,Customer service,Under 1 year,4
+R0463,Finance,3 to 5 years,9
+R0464,Operations,Under 1 year,10
+R0465,Customer service,3 to 5 years,5
+R0466,Sales,Over 5 years,8
+R0467,Finance,Under 1 year,9
+R0468,Customer service,Under 1 year,8
+R0469,Operations,Over 5 years,7
+R0470,Finance,3 to 5 years,9
+R0471,Technology,3 to 5 years,5
+R0472,Sales,Over 5 years,10
+R0473,Customer service,Under 1 year,6
+R0474,Operations,Under 1 year,5
+R0475,Technology,1 to 3 years,7
+R0476,Technology,1 to 3 years,6
+R0477,Customer service,3 to 5 years,4
+R0478,Technology,3 to 5 years,6
+R0479,Operations,Under 1 year,9
+R0480,Customer service,3 to 5 years,9
+R0481,Sales,3 to 5 years,10
+R0482,Sales,1 to 3 years,7
+R0483,Customer service,3 to 5 years,9
+R0484,Technology,Over 5 years,5
+R0485,Customer service,Under 1 year,5
+R0486,Sales,Over 5 years,8
+R0487,Sales,Over 5 years,8
+R0488,Sales,3 to 5 years,5
+R0489,Sales,Under 1 year,4
+R0490,Customer service,3 to 5 years,5
+R0491,Finance,1 to 3 years,8
+R0492,Customer service,1 to 3 years,9
+R0493,Operations,Under 1 year,8
+R0494,Sales,Under 1 year,5
+R0495,Customer service,Over 5 years,3
+R0496,Customer service,Under 1 year,6
+R0497,Technology,3 to 5 years,8
+R0498,Sales,3 to 5 years,9
+R0499,Customer service,3 to 5 years,5
+R0500,Sales,Over 5 years,9
+R0501,Technology,Under 1 year,8
+R0502,Technology,Over 5 years,9
+R0503,Customer service,1 to 3 years,6
+R0504,Technology,1 to 3 years,3
+R0505,Sales,3 to 5 years,7
+R0506,Technology,1 to 3 years,5
+R0507,Customer service,3 to 5 years,6
+R0508,Sales,3 to 5 years,4
+R0509,Technology,1 to 3 years,5
+R0510,Sales,Under 1 year,6
+R0511,Sales,Over 5 years,5
+R0512,Operations,Over 5 years,6
+R0513,Customer service,3 to 5 years,8
+R0514,Technology,1 to 3 years,6
+R0515,Operations,1 to 3 years,10
+R0516,Technology,1 to 3 years,4
+R0517,Technology,3 to 5 years,10
+R0518,Sales,1 to 3 years,7
+R0519,Sales,1 to 3 years,7
+R0520,Customer service,3 to 5 years,6
+R0521,Operations,Over 5 years,10
+R0522,Finance,Over 5 years,8
+R0523,Technology,Under 1 year,10
+R0524,Operations,3 to 5 years,3
+R0525,Operations,Under 1 year,7
+R0526,Sales,Under 1 year,9
+R0527,Customer service,3 to 5 years,7
+R0528,Operations,3 to 5 years,3
+R0529,Technology,3 to 5 years,10
+R0530,Sales,Over 5 years,5
+R0531,Technology,Over 5 years,10
+R0532,Operations,Under 1 year,5
+R0533,Technology,Under 1 year,8
+R0534,Customer service,Over 5 years,7
+R0535,Sales,3 to 5 years,6
+R0536,Finance,Over 5 years,9
+R0537,Customer service,Under 1 year,7
+R0538,Customer service,Over 5 years,6
+R0539,Technology,3 to 5 years,7
+R0540,Technology,Over 5 years,10
+R0541,Operations,Over 5 years,5
+R0542,Technology,3 to 5 years,8
+R0543,Operations,3 to 5 years,4
+R0544,Operations,1 to 3 years,9
+R0545,Technology,Over 5 years,5
+R0546,Operations,3 to 5 years,1
+R0547,Operations,Over 5 years,9
+R0548,Operations,1 to 3 years,7
+R0549,Technology,1 to 3 years,7
+R0550,Customer service,1 to 3 years,9
+R0551,Sales,3 to 5 years,8
+R0552,Customer service,Over 5 years,8
+R0553,Operations,3 to 5 years,3
+R0554,Customer service,1 to 3 years,4
+R0555,Operations,Over 5 years,5
+R0556,Finance,1 to 3 years,6
+R0557,Operations,Under 1 year,7
+R0558,Technology,Under 1 year,8
+R0559,Customer service,Under 1 year,5
+R0560,Finance,Under 1 year,6
+R0561,Technology,Under 1 year,7
+R0562,Operations,3 to 5 years,4
+R0563,Technology,Over 5 years,8
+R0564,Operations,Under 1 year,8
+R0565,Customer service,Over 5 years,9
+R0566,Sales,Over 5 years,6
+R0567,Operations,Over 5 years,8
+R0568,Operations,1 to 3 years,3
+R0569,Technology,Over 5 years,4
+R0570,Sales,1 to 3 years,8
+R0571,Customer service,Over 5 years,8
+R0572,Customer service,1 to 3 years,6
+R0573,Operations,Under 1 year,7
+R0574,Customer service,Over 5 years,4
+R0575,Operations,Under 1 year,6
+R0576,Sales,Under 1 year,5
+R0577,Customer service,1 to 3 years,6
+R0578,Sales,3 to 5 years,5
+R0579,Sales,3 to 5 years,5
+R0580,Customer service,Over 5 years,2
+R0581,Operations,1 to 3 years,9
+R0582,Operations,Over 5 years,7
+R0583,Operations,Under 1 year,8
+R0584,Operations,Over 5 years,5
+R0585,Finance,1 to 3 years,7
+R0586,Sales,1 to 3 years,5
+R0587,Operations,Over 5 years,5
+R0588,Operations,Over 5 years,5
+R0589,Operations,3 to 5 years,6
+R0590,Customer service,1 to 3 years,4
+R0591,Operations,Over 5 years,10
+R0592,Sales,Under 1 year,4
+R0593,Operations,Under 1 year,4
+R0594,Operations,1 to 3 years,5
+R0595,Sales,3 to 5 years,8
+R0596,Operations,1 to 3 years,8
+R0597,Operations,1 to 3 years,8
+R0598,Sales,Under 1 year,6
+R0599,Sales,1 to 3 years,6
+R0600,Operations,Under 1 year,8
+R0601,Sales,Under 1 year,10
+R0602,Operations,Over 5 years,4
+R0603,Operations,Under 1 year,7
+R0604,Customer service,Under 1 year,6
+R0605,Operations,1 to 3 years,7
+R0606,Operations,Under 1 year,4
+R0607,Operations,Over 5 years,10
+R0608,Customer service,Over 5 years,4
+R0609,Finance,Over 5 years,10
+R0610,Sales,Over 5 years,6
+R0611,Customer service,1 to 3 years,10
+R0612,Customer service,1 to 3 years,8
+R0613,Sales,Under 1 year,6
+R0614,Sales,Over 5 years,6
+R0615,Operations,Over 5 years,9
+R0616,Operations,Under 1 year,6
+R0617,Technology,Under 1 year,10
+R0618,Customer service,1 to 3 years,10
+R0619,Sales,3 to 5 years,8
+R0620,Sales,1 to 3 years,9
+R0621,Technology,Over 5 years,6
+R0622,Customer service,Under 1 year,10
+R0623,Customer service,Under 1 year,7
+R0624,Finance,Over 5 years,6
+R0625,Sales,Under 1 year,4
+R0626,Operations,Under 1 year,5
+R0627,Sales,Over 5 years,8
+R0628,Customer service,Under 1 year,7
+R0629,Technology,Under 1 year,10
+R0630,Customer service,Over 5 years,3
+R0631,Customer service,1 to 3 years,7
+R0632,Customer service,3 to 5 years,6
+R0633,Operations,Under 1 year,6
+R0634,Customer service,Over 5 years,10
+R0635,Technology,Over 5 years,6
+R0636,Technology,Over 5 years,10
+R0637,Technology,Under 1 year,6
+R0638,Sales,Over 5 years,9
+R0639,Sales,Over 5 years,5
+R0640,Customer service,Under 1 year,6

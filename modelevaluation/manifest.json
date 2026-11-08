@@ -1,0 +1,136 @@
+{
+  "name": "Model Evaluation",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "model",
+    "machine learning",
+    "roc",
+    "auc",
+    "lift",
+    "gain",
+    "confusion matrix",
+    "classification",
+    "prediction",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "actual": {
+        "displayName": "Actual outcome",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Field holding the true class, e.g. Churned (Yes/No), Defaulted (1/0), Fraud (True/False)"
+      },
+      "score": {
+        "displayName": "Predicted score",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "The model's probability or score for the positive class, e.g. the output of the Prediction block"
+      },
+      "positive": {
+        "displayName": "Positive value",
+        "type": "TEXT",
+        "detail": "Value of Actual outcome that counts as positive. Leave empty to detect it (1, Yes, True, or the rarer class)."
+      },
+      "threshold": {
+        "displayName": "Threshold",
+        "type": "NUMBER",
+        "detail": "Starting decision threshold (default 0.5, or the middle of the score range); adjust it live with the slider in the view"
+      },
+      "bins": {
+        "displayName": "Score resolution",
+        "type": "NUMBER",
+        "minValue": 20,
+        "maxValue": 1000,
+        "detail": "Number of score bins used for the curves (default 100)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "actual",
+        "score"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Model",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "actual",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "score",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "positive",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "threshold",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "bins",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "bins": 100
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

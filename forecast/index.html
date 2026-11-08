@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #chart { flex: 1; position: relative; min-width: 0; }
+        #side { width: 230px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .axis text { fill: #52514e; font-size: 11px; } .axis path, .axis line { stroke: #c9c8c1; }
+        .grid line { stroke: #ebeae5; } .grid path { display: none; } svg line, .grid, .axis, path.ln { pointer-events: none; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        table { border-collapse: collapse; width: 100%; font-size: 11.5px; } td, th { padding: 2px 3px; text-align: right; white-space: nowrap; } th { color: #52514e; font-weight: normal; font-size: 10.5px; border-bottom: 1px solid #e1e0d9; } td:first-child, th:first-child { text-align: left; }
+        td.r { color: #898781; font-size: 10.5px; }
+        .note { color: #898781; font-size: 11px; margin-top: 6px; line-height: 1.4; } .big { font-size: 16px; font-weight: bold; } .stat { color: #52514e; margin-bottom: 4px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    var INK = "#3a3936", FC = "#2a78d6", BACK = "#eb6834", SELECT = "#2161D9";
+    var SEASON = { DAY: 7, WEEK: 52, MONTH: 12, QUARTER: 4, YEAR: 1 }, UNITN = { DAY: "days", WEEK: "weeks", MONTH: "months", QUARTER: "quarters", YEAR: "years" };
+    var S = { gen: 0, sel: null };
+    window.__fc = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(a >= 1e7 ? 1 : 2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 10 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var pct = function (v) { return (v > 0 ? "+" : v < 0 ? "\u2212" : "") + (Math.abs(v) * 100).toFixed(1) + "%"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function tval(v) { if (v === null || v === undefined || v === "") return null; if (typeof v === "number") return v; var s = typeof v === "object" ? v.lower : v; var t = Date.parse(typeof s === "string" && s.length === 10 ? s + "T00:00:00Z" : s); return isNaN(t) ? null : t; }
+    function addUnit(t, unit, n) { var d = new Date(t); if (unit === "DAY") d.setUTCDate(d.getUTCDate() + n); else if (unit === "WEEK") d.setUTCDate(d.getUTCDate() + 7 * n); else if (unit === "MONTH") d.setUTCMonth(d.getUTCMonth() + n); else if (unit === "QUARTER") d.setUTCMonth(d.getUTCMonth() + 3 * n); else d.setUTCFullYear(d.getUTCFullYear() + n); return d.getTime(); }
+    var LABEL = { DAY: d3.utcFormat("%d %b %Y"), WEEK: d3.utcFormat("w/c %d %b %Y"), MONTH: d3.utcFormat("%b %Y"), QUARTER: function (d) { return "Q" + (Math.floor(d.getUTCMonth() / 3) + 1) + " " + d.getUTCFullYear(); }, YEAR: d3.utcFormat("%Y") };
+
+    // RECORD_COUNT must be sent without an inputField (the server rejects it otherwise)
+    function measureOf(m) { if (typeof m === "string") return { inputField: m, function: "SUM", name: "v" }; var fn = m.function || "RECORD_COUNT"; return fn === "RECORD_COUNT" ? { function: fn, name: "v" } : { inputField: m.inputField, function: fn, name: "v" }; }
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { d: fld(o.date), m: o.value };
+        if (!F.d || !F.m) { message("Choose the date field (Dated by) and the measure to forecast."); return; }
+        var unit = SEASON[o.period] !== undefined ? o.period : "MONTH";
+        var q = { groupings: [{ inputField: F.d, type: "HISTOGRAM", dateUnit: unit, histogramInterval: 1 }], measures: [measureOf(F.m)] };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, unit, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    // Holt-Winters exponential smoothing (additive or multiplicative season, damped trend).
+    function hw(y, m, a, b, g, phi, mult) {
+        var n = y.length, l, tr, s = [], start, fit = new Array(n).fill(null), sse = 0, cnt = 0, i;
+        if (m > 1) {
+            var m1 = d3.mean(y.slice(0, m)), m2 = d3.mean(y.slice(m, 2 * m)); l = m1; tr = (m2 - m1) / m;
+            for (i = 0; i < m; i++) s.push(mult ? y[i] / m1 : y[i] - m1); start = m;
+        } else { l = y[0]; tr = y[1] - y[0]; s = [mult ? 1 : 0]; start = 1; }
+        // roll the initial level forward to the end of the first season
+        if (m > 1) l = m1 + tr * (m - 1) / 2;
+        for (var t = start; t < n; t++) {
+            var si = s[t % m], yh = mult ? (l + phi * tr) * si : l + phi * tr + si;
+            fit[t] = yh; var e = y[t] - yh; sse += e * e; cnt++;
+            var lp = l;
+            l = mult ? a * (y[t] / si) + (1 - a) * (lp + phi * tr) : a * (y[t] - si) + (1 - a) * (lp + phi * tr);
+            tr = b * (l - lp) + (1 - b) * phi * tr;
+            s[t % m] = mult ? g * (y[t] / l) + (1 - g) * si : g * (y[t] - l) + (1 - g) * si;
+        }
+        return { a: a, b: b, g: g, phi: phi, mult: mult, m: m, l: l, tr: tr, s: s.slice(), n: n, fit: fit, sse: sse, cnt: cnt };
+    }
+    function forecast(M, h) { var out = [], cum = 0; for (var j = 1; j <= h; j++) { cum += Math.pow(M.phi, j); var si = M.s[(M.n + j - 1) % M.m]; out.push(M.mult ? (M.l + cum * M.tr) * si : M.l + cum * M.tr + si); } return out; }
+    function fitBest(y, m, model) {
+        var A = [0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9], B = [0, 0.02, 0.05, 0.1, 0.2], G = m > 1 ? [0.02, 0.05, 0.1, 0.2, 0.4] : [0], P = [0.9, 0.98, 1];
+        var pos = y.every(function (v) { return v > 0; }), kinds = model === "ADDITIVE" ? [false] : model === "MULTIPLICATIVE" ? (pos ? [true] : [false]) : pos && m > 1 ? [false, true] : [false];
+        var best = null;
+        kinds.forEach(function (mult) { A.forEach(function (a) { B.forEach(function (b) { if (b > a) return; G.forEach(function (g) { P.forEach(function (phi) {
+            var r = hw(y, m, a, b, g, phi, mult); if (!isFinite(r.sse)) return;
+            if (!best || r.sse < best.sse) best = r;
+        }); }); }); }); });
+        return best;
+    }
+    // Approximate prediction interval widths (Hyndman et al., additive Holt-Winters), using the one-step residual spread.
+    function sigmas(M, h) { var sd = Math.sqrt(M.sse / Math.max(1, M.cnt - 3)), out = [], acc = 1; for (var j = 1; j <= h; j++) { if (j > 1) { var c = M.a * (1 + (j - 1) * M.b) + (M.m > 1 && (j - 1) % M.m === 0 ? M.g : 0); acc += c * c; } out.push(sd * Math.sqrt(acc)); } return out; }
+
+    function build(F, unit, recs) {
+        var o = it(), pts = recs.map(function (r) { return { t: tval(r[0]), raw: r[0], v: typeof r[1] === "number" ? r[1] : null }; }).filter(function (p) { return p.t !== null; }).sort(function (a, b) { return a.t - b.t; });
+        if (!pts.length) { S.model = null; message("No data to show. Check the filters."); return; }
+        // fill missing periods (linear interpolation) so the series is regular
+        var byT = new Map(); pts.forEach(function (p) { byT.set(p.t, p); });
+        var series = [], t = pts[0].t, guard = 0;
+        while (t <= pts[pts.length - 1].t && guard++ < 20000) { var p0 = byT.get(t); series.push(p0 ? { t: t, v: p0.v, raw: p0.raw } : { t: t, v: null, raw: null }); t = addUnit(t, unit, 1); }
+        if (series.length < pts.length * 0.5) series = pts.map(function (p) { return { t: p.t, v: p.v, raw: p.raw }; }); // irregular periods: use as they are
+        series.forEach(function (p, i) { if (p.v === null) { var a = i - 1, b = i + 1; while (b < series.length && series[b].v === null) b++; var va = a >= 0 ? series[a].v : null, vb = b < series.length ? series[b].v : null; p.v = va !== null && vb !== null ? va + (vb - va) / (b - a) : va !== null ? va : vb !== null ? vb : 0; p.filled = true; } });
+        var y = series.map(function (p) { return p.v; }), n = y.length, mSeason = SEASON[unit];
+        var m = o.seasonal === false ? 1 : mSeason, model = o.model || "AUTO";
+        if (n < 2 * m + 2) m = 1;
+        if (n < 4) { S.model = null; message("At least 4 " + UNITN[unit] + " of history are needed to forecast (found " + n + ")."); return; }
+        message(null);
+        var H = Math.max(1, Math.min(120, Math.round(+o.horizon || mSeason || 6)));
+        var best = fitBest(y, m, model), fc = forecast(best, H), sd = sigmas(best, H);
+        var fut = fc.map(function (v, j) { return { t: addUnit(series[n - 1].t, unit, j + 1), v: v, lo80: v - 1.2816 * sd[j], hi80: v + 1.2816 * sd[j], lo95: v - 1.96 * sd[j], hi95: v + 1.96 * sd[j] }; });
+        // backtest: refit without the last stretch of history and compare with what happened
+        var bt = null, Hb = Math.min(H, Math.floor(n / 4));
+        if (o.backtest !== false && Hb >= 2 && n - Hb >= (m > 1 ? 2 * m + 2 : 4)) {
+            var yt = y.slice(0, n - Hb), Mb = fitBest(yt, m, model), fb = forecast(Mb, Hb), act = y.slice(n - Hb);
+            var mape = d3.mean(act.map(function (a, i) { return a ? Math.abs(a - fb[i]) / Math.abs(a) : null; }).filter(function (x) { return x !== null; }));
+            var naive = m > 1 ? d3.mean(act.map(function (a, i) { var p = y[n - Hb + i - m]; return a && p !== undefined ? Math.abs(a - p) / Math.abs(a) : null; }).filter(function (x) { return x !== null; })) : d3.mean(act.map(function (a) { return a ? Math.abs(a - yt[yt.length - 1]) / Math.abs(a) : null; }).filter(function (x) { return x !== null; }));
+            bt = { H: Hb, pts: fb.map(function (v, i) { return { t: series[n - Hb + i].t, v: v }; }), mape: mape, naive: naive };
+        }
+        var prev = n >= H && (m === 1 || H % m === 0) ? d3.sum(y.slice(n - H)) : null; // only compare like with like (whole seasons)
+        S.model = { F: F, unit: unit, series: series, fit: best, fut: fut, bt: bt, H: H, m: m, total: d3.sum(fc), prev: prev, label: LABEL[unit], mname: typeof F.m === "string" ? F.m : (F.m.name || F.m.inputField), filled: series.filter(function (p) { return p.filled; }).length };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var o = it(), m = { l: 56, r: 18, t: 46, b: 30 }, w = Math.max(60, W - m.l - m.r), h = Math.max(60, H - m.t - m.b);
+        var hist = M.series, fut = M.fut;
+        var from = o.historyShown ? Math.max(0, hist.length - Math.round(+o.historyShown)) : 0, H0 = hist.slice(from);
+        var x = d3.scaleUtc().domain([H0[0].t, fut[fut.length - 1].t]).range([0, w]);
+        var ext = d3.extent(H0.map(function (p) { return p.v; }).concat(fut.map(function (p) { return p.lo95; }), fut.map(function (p) { return p.hi95; })));
+        var y = d3.scaleLinear().domain([Math.min(0, ext[0]), ext[1]]).nice().range([h, 0]);
+        var g = svg.append("g").attr("transform", "translate(" + m.l + "," + m.t + ")");
+        g.append("g").attr("class", "grid").call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(""));
+        g.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(5).tickFormat(fmt));
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + h + ")").call(d3.axisBottom(x).ticks(Math.max(3, Math.floor(w / 90))));
+        var last = hist[hist.length - 1];
+        g.append("rect").attr("x", x(last.t)).attr("width", w - x(last.t)).attr("y", 0).attr("height", h).attr("fill", "rgba(42,120,214,.04)").attr("pointer-events", "none");
+        g.append("line").attr("x1", x(last.t)).attr("x2", x(last.t)).attr("y1", -6).attr("y2", h).attr("stroke", "#9a988f").attr("stroke-dasharray", "3 3");
+        g.append("text").attr("x", x(last.t) + 5).attr("y", 4).style("font-size", "10.5px").attr("fill", "#52514e").text("Forecast");
+        var bandPts = [{ t: last.t, lo80: last.v, hi80: last.v, lo95: last.v, hi95: last.v }].concat(fut);
+        g.append("path").attr("class", "ln").attr("d", d3.area().x(function (p) { return x(p.t); }).y0(function (p) { return y(p.lo95); }).y1(function (p) { return y(p.hi95); })(bandPts)).attr("fill", FC).attr("opacity", 0.12);
+        g.append("path").attr("class", "ln").attr("d", d3.area().x(function (p) { return x(p.t); }).y0(function (p) { return y(p.lo80); }).y1(function (p) { return y(p.hi80); })(bandPts)).attr("fill", FC).attr("opacity", 0.2);
+        var line = d3.line().x(function (p) { return x(p.t); }).y(function (p) { return y(p.v); });
+        g.append("path").attr("class", "ln").attr("d", line(H0)).attr("fill", "none").attr("stroke", INK).attr("stroke-width", 1.8);
+        g.append("path").attr("class", "ln").attr("d", line([{ t: last.t, v: last.v }].concat(fut))).attr("fill", "none").attr("stroke", FC).attr("stroke-width", 2.2);
+        if (M.bt && o.backtest !== false) g.append("path").attr("class", "ln").attr("d", line([hist[hist.length - M.bt.H - 1]].concat(M.bt.pts))).attr("fill", "none").attr("stroke", BACK).attr("stroke-width", 1.6).attr("stroke-dasharray", "5 3");
+        var selT = S.sel ? S.sel.t : null;
+        g.selectAll("circle.h").data(H0).enter().append("circle").attr("cx", function (p) { return x(p.t); }).attr("cy", function (p) { return y(p.v); }).attr("r", function (p) { return p.t === selT ? 5 : H0.length > 80 ? 0 : 2.2; }).attr("fill", function (p) { return p.t === selT ? SELECT : p.filled ? "#fcfcfb" : INK; }).attr("stroke", function (p) { return p.filled ? INK : "none"; }).attr("pointer-events", "none");
+        g.selectAll("circle.f").data(fut).enter().append("circle").attr("cx", function (p) { return x(p.t); }).attr("cy", function (p) { return y(p.v); }).attr("r", fut.length > 60 ? 0 : 2.4).attr("fill", FC).attr("pointer-events", "none");
+        // legend
+        var lg = svg.append("g").attr("transform", "translate(" + m.l + ",30)").style("font-size", "11px").attr("fill", "#52514e"), lx = 0;
+        [[INK, "Actual", ""], [FC, "Forecast", ""], [FC, "80% and 95% ranges", "band"]].concat(M.bt && o.backtest !== false ? [[BACK, "Backtest (forecast made " + M.bt.H + " " + UNITN[M.unit] + " ago)", "dash"]] : []).forEach(function (L) {
+            var e = lg.append("g").attr("transform", "translate(" + lx + ",0)");
+            if (L[2] === "band") e.append("rect").attr("y", -6).attr("width", 16).attr("height", 9).attr("fill", L[0]).attr("opacity", 0.25); else e.append("line").attr("x1", 0).attr("x2", 16).attr("y1", -2).attr("y2", -2).attr("stroke", L[0]).attr("stroke-width", 2).attr("stroke-dasharray", L[2] === "dash" ? "5 3" : null);
+            var t = e.append("text").attr("x", 21).attr("dy", "0.1em").text(L[1]); lx += 21 + t.node().getComputedTextLength() + 16;
+        });
+        // headline
+        var head = svg.append("text").attr("x", m.l).attr("y", 16).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.mname + ", next " + M.H + " " + UNITN[M.unit] + ": " + fmt(M.total));
+        if (M.prev) head.append("tspan").attr("fill", "#52514e").text("  (" + pct(M.total / M.prev - 1) + " on the previous " + M.H + ")");
+        // hover and click
+        var cross = g.append("line").attr("y1", 0).attr("y2", h).attr("stroke", "#52514e").attr("opacity", 0);
+        var allPts = H0.map(function (p) { return { p: p, hist: true }; }).concat(fut.map(function (p) { return { p: p, hist: false }; }));
+        var nearest = function (ev) { var t = x.invert(d3.pointer(ev, g.node())[0]).getTime(), best = null; allPts.forEach(function (q) { if (!best || Math.abs(q.p.t - t) < Math.abs(best.p.t - t)) best = q; }); return best; };
+        g.insert("rect", ":first-child").attr("class", "plot").attr("width", w).attr("height", h).attr("fill", "transparent").style("cursor", "pointer")
+            .on("mousemove", function (ev) { var q = nearest(ev); cross.attr("x1", x(q.p.t)).attr("x2", x(q.p.t)).attr("opacity", 0.4); tipAt(q, ev); })
+            .on("mouseleave", function () { cross.attr("opacity", 0); tip(); })
+            .on("click", function (ev) { ev.stopPropagation(); var q = nearest(ev); if (q.hist) selectPeriod(q.p); else if (S.sel) publish(null, null); });
+        if (intro) { linesIn(svg, 1100); }
+        side();
+    }
+
+    function tipAt(q, ev) {
+        var M = S.model, p = q.p, h = '<b>' + esc(M.label(new Date(p.t))) + '</b>';
+        if (q.hist) { h += '<br><span class="k">Actual:</span> ' + fmt(p.v) + (p.filled ? ' <span class="k">(missing, interpolated)</span>' : ''); var b = M.bt && M.bt.pts.find(function (z) { return z.t === p.t; }); if (b) h += '<br><span class="k">Backtest forecast:</span> ' + fmt(b.v) + ' (' + pct(b.v / p.v - 1) + ')'; }
+        else h += '<br><span class="k">Forecast:</span> <b>' + fmt(p.v) + '</b><br><span class="k">80% range:</span> ' + fmt(p.lo80) + ' to ' + fmt(p.hi80) + '<br><span class="k">95% range:</span> ' + fmt(p.lo95) + ' to ' + fmt(p.hi95);
+        show(h, ev);
+    }
+    function side() {
+        var M = S.model, el = document.getElementById("side"), f = M.fit;
+        var model = (M.m > 1 ? (f.mult ? "multiplicative" : "additive") + " season of " + M.m + " " + UNITN[M.unit] : "no season") + (f.phi < 1 ? ", damped trend" : ", linear trend");
+        var h = '<h3>Forecast</h3><div class="stat"><span class="big">' + fmt(M.total) + '</span><br>next ' + M.H + ' ' + UNITN[M.unit] + (M.prev ? ', ' + pct(M.total / M.prev - 1) + ' on the previous ' + M.H : '') + '</div>';
+        if (M.bt) h += '<h3>Backtest</h3><div class="stat">Forecasting the last ' + M.bt.H + ' ' + UNITN[M.unit] + ' from the history before them: average error <b>' + (M.bt.mape * 100).toFixed(1) + '%</b>' + (M.bt.naive ? ' (repeating ' + (M.m > 1 ? 'the same ' + UNITN[M.unit].replace(/s$/, '') + ' a season earlier' : 'the last value') + ': ' + (M.bt.naive * 100).toFixed(1) + '%)' : '') + '.</div>';
+        h += '<h3>Periods</h3><table><tr><th></th><th>Forecast</th><th>80% range</th></tr>';
+        M.fut.forEach(function (p) { h += '<tr><td>' + esc(M.label(new Date(p.t))) + '</td><td>' + fmt(p.v) + '</td><td class="r">' + fmt(p.lo80) + ' to ' + fmt(p.hi80) + '</td></tr>'; });
+        h += '</table><div class="note">Model: Holt-Winters exponential smoothing with ' + model + ', fitted to ' + M.series.length + ' ' + UNITN[M.unit] + ' of history' + (M.filled ? ', ' + M.filled + ' missing filled by interpolation' : '') + '. Ranges are approximate and assume the past pattern continues. Click a past period to select it.</div>';
+        el.innerHTML = h;
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectPeriod(p) {
+        if (S.sel && S.sel.t === p.t) return publish(null, null);
+        var M = S.model, F = M.F.d, lo = new Date(p.t).toISOString().slice(0, 10), hi = new Date(addUnit(p.t, M.unit, 1)).toISOString().slice(0, 10);
+        publish({ type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F, operator: ">=", value: lo }, { type: "FIELD_VALUE", inputField: F, operator: "<", value: hi }] }, { t: p.t });
+    }
+    window.__fc.selectIndex = function (i) { selectPeriod(S.model.series[i]); };
+
+    document.getElementById("chart").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

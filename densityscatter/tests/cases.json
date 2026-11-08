@@ -1,0 +1,208 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/deliveries.csv",
+  "options": {
+   "items": {
+    "x": "Distance (km)",
+    "y": "Delivery time (minutes)",
+    "bins": 80,
+    "logScale": true,
+    "trim": true,
+    "marginals": true,
+    "minCount": 1
+   }
+  },
+  "width": 1040,
+  "height": 580,
+  "wait": 2000,
+  "showcaseHeight": 580,
+  "caption": "Live: 40,000 illustrative delivery jobs, binned by the Query API into a density grid. Two fleets show up as two clouds. Hover a cell; drag a box to select those jobs.",
+  "expect": {
+   "text": "40,000"
+  }
+ },
+ {
+  "name": "late-rate",
+  "showcase": true,
+  "data": "sample-data/deliveries.csv",
+  "options": {
+   "items": {
+    "x": "Distance (km)",
+    "y": "Delivery time (minutes)",
+    "bins": 80,
+    "logScale": true,
+    "trim": true,
+    "marginals": true,
+    "minCount": 5,
+    "value": "Late"
+   }
+  },
+  "width": 1040,
+  "height": 520,
+  "wait": 2000,
+  "showcaseHeight": 520,
+  "caption": "Live: the same grid coloured by the share of late deliveries in each cell (cells with at least five jobs)."
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/deliveries.csv",
+  "options": {
+   "items": {
+    "x": "Distance (km)",
+    "y": "Delivery time (minutes)",
+    "bins": 80,
+    "logScale": true,
+    "trim": true,
+    "marginals": true,
+    "minCount": 1
+   }
+  },
+  "width": 1000,
+  "height": 560,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__density.model;return M.total===40000 && M.cells.length>200})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "svg .overlay"
+   },
+   {
+    "eval": "window.__density.selectBox(5,15,30,60)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "box"
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Fleet",
+     "operator": "=",
+     "value": "E-bike"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__density.model.total<25000",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     520,
+     360
+    ]
+   },
+   {
+    "screenshot": "small"
+   }
+  ]
+ },
+ {
+  "name": "linear-no-trim",
+  "data": "sample-data/deliveries.csv",
+  "options": {
+   "items": {
+    "x": "Distance (km)",
+    "y": "Delivery time (minutes)",
+    "bins": 40,
+    "logScale": false,
+    "trim": false,
+    "marginals": false,
+    "minCount": 1
+   }
+  },
+  "width": 900,
+  "height": 520,
+  "wait": 2000,
+  "expect": {
+   "text": "records"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Distance (km)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Delivery time (minutes)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "x": "Distance (km)",
+    "y": "Delivery time (minutes)",
+    "bins": 80,
+    "logScale": true,
+    "trim": true,
+    "marginals": true,
+    "minCount": 1
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/deliveries.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose numeric fields"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "x": "A",
+    "y": "B",
+    "bins": 120
+   }
+  },
+  "width": 1000,
+  "height": 640,
+  "wait": 12000,
+  "expect": {
+   "text": "1,000,000"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/deliveries.csv",
+  "options": {
+   "items": {
+    "x": "Distance (km)",
+    "y": "Delivery time (minutes)",
+    "bins": 80,
+    "logScale": true,
+    "trim": true,
+    "marginals": false,
+    "minCount": 1
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 2000
+ }
+]

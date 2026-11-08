@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #chart { position: absolute; inset: 0; }
+        canvas, svg { position: absolute; left: 0; top: 0; display: block; }
+        .axis text { fill: #898781; font-size: 10px; } .axis path, .axis line { stroke: #c3c2b7; }
+        #info { position: absolute; right: 12px; top: 8px; text-align: right; color: #52514e; font-size: 11px; pointer-events: none; }
+        #info b { color: #0b0b0b; font-size: 13px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="chart"><canvas id="cv"></canvas><svg id="svg"></svg><div id="info"></div></div><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var SEQ = ["#e8f1fc", "#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"];
+    var VAL = ["#fbe0d4", "#f6b49a", "#ef8762", "#e56437", "#c84b22", "#9b3716"]; // second sequential hue (orange) for means
+    var S = { gen: 0, brush: null };
+    window.__density = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || v === undefined || isNaN(v)) return "n/a"; var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toLocaleString() : (+v.toPrecision(3)).toString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function niceStep(raw) { var p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
+    function q(query) { return new Promise(function (res, rej) { omniscope.view.queryBuilder().table(query).on("load", function (e) { res(e.data); }).on("error", function (e) { rej(e.data); }).execute(); }); }
+    function withFilter(query, extra) { var f = omniscope.view.context().dataConfig.filter, fs = []; if (f && (!f.filters || f.filters.length)) fs.push(f); (extra || []).forEach(function (x) { fs.push(x); }); if (fs.length) query.filter = fs.length === 1 ? fs[0] : { type: "AND", filters: fs }; return query; }
+    function ramp(cols, t) { t = Math.max(0, Math.min(1, t)); var f = t * (cols.length - 1), i = Math.min(cols.length - 2, Math.floor(f)); return d3.interpolateRgb(cols[i], cols[i + 1])(f - i); }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), X = fld(o.x), Y = fld(o.y), V = fld(o.value);
+        if (!X || !Y) { message("Choose numeric fields for the X and Y axes."); return; }
+        var nn = [{ type: "FIELD_VALUE", inputField: X, operator: "!=", value: null }, { type: "FIELD_VALUE", inputField: Y, operator: "!=", value: null }];
+        var st = function (f) { return [{ inputField: f, function: "MIN", name: f + "lo" }, { inputField: f, function: "MAX", name: f + "hi" }, { inputField: f, function: "LOWER_QUARTILE", name: f + "q1" }, { inputField: f, function: "UPPER_QUARTILE", name: f + "q3" }]; };
+        var gen = ++S.gen; omniscope.view.busy(true);
+        q(withFilter({ measures: st(X).concat(st(Y)).concat([{ function: "RECORD_COUNT", name: "n" }]) }, nn)).then(function (r) {
+            if (gen !== S.gen) return;
+            var g = r.records[0] || [], n = g[8];
+            if (!n) { omniscope.view.busy(false); S.model = null; message("No data to show. Check the filters."); return; }
+            var range = function (lo, hi, q1, q3) { if (o.trim !== false && q3 > q1) { var iqr = q3 - q1; lo = Math.max(lo, q1 - 3 * iqr); hi = Math.min(hi, q3 + 3 * iqr); } if (hi <= lo) hi = lo + 1; return [lo, hi]; };
+            var rx = range(g[0], g[1], g[2], g[3]), ry = range(g[4], g[5], g[6], g[7]), bins = Math.max(10, Math.min(300, +o.bins || 80));
+            var sx = niceStep((rx[1] - rx[0]) / bins), sy = niceStep((ry[1] - ry[0]) / bins);
+            var x0 = Math.floor(rx[0] / sx) * sx, y0 = Math.floor(ry[0] / sy) * sy;
+            var meas = [{ function: "RECORD_COUNT", name: "n" }]; if (V) meas.push({ inputField: V, function: "MEAN", name: "m" });
+            return q(withFilter({ groupings: [{ inputField: X, type: "HISTOGRAM", histogramInterval: sx }, { inputField: Y, type: "HISTOGRAM", histogramInterval: sy }], measures: meas, range: { start: 0, length: 200000 } },
+                nn.concat([{ type: "FIELD_VALUE", inputField: X, operator: ">=", value: x0 }, { type: "FIELD_VALUE", inputField: X, operator: "<=", value: rx[1] }, { type: "FIELD_VALUE", inputField: Y, operator: ">=", value: y0 }, { type: "FIELD_VALUE", inputField: Y, operator: "<=", value: ry[1] }]))).then(function (h) {
+                if (gen !== S.gen) return; omniscope.view.busy(false);
+                var cells = h.records.map(function (rr) { var a = rr[0], b = rr[1]; return { x: a && typeof a === "object" ? a.lower : a, y: b && typeof b === "object" ? b.lower : b, n: rr[2], m: V ? rr[3] : null }; }).filter(function (c) { return typeof c.x === "number" && typeof c.y === "number"; });
+                S.model = { X: X, Y: Y, V: V, cells: cells, sx: sx, sy: sy, xd: [x0, Math.ceil(rx[1] / sx) * sx + sx * 0], yd: [y0, Math.ceil(ry[1] / sy) * sy], total: n, shown: d3.sum(cells, function (c) { return c.n; }) };
+                if (S.model.xd[1] <= S.model.xd[0]) S.model.xd[1] = S.model.xd[0] + sx; if (S.model.yd[1] <= S.model.yd[0]) S.model.yd[1] = S.model.yd[0] + sy;
+                var sel = omniscope.view.context().viewSelection; if (!sel) S.brush = null;
+                draw();
+            });
+        }).catch(function (e) { omniscope.view.busy(false); omniscope.view.error((e && e.message) || "Query failed", e); });
+    }
+    function draw() {
+        var M = S.model; if (!M) return; message(null); var intro = introDone();
+        var o = it(), W = window.innerWidth, H = window.innerHeight, marg = o.marginals !== false && W > 360 && H > 260 ? 46 : 0;
+        var m = { l: 52, r: 16 + marg, t: 16 + marg, b: 36 };
+        var x = d3.scaleLinear().domain(M.xd).range([m.l, W - m.r]), y = d3.scaleLinear().domain(M.yd).range([H - m.b, m.t]);
+        var cv = document.getElementById("cv"), dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + "px"; cv.style.height = H + "px";
+        var g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+        var minN = Math.max(1, +o.minCount || 1), cells = M.cells.filter(function (c) { return c.n >= minN; });
+        var nmax = d3.max(cells, function (c) { return c.n; }) || 1, log = o.logScale !== false;
+        var mvals = cells.map(function (c) { return c.m; }).filter(function (v) { return typeof v === "number"; }), mlo = d3.min(mvals), mhi = d3.max(mvals); if (mhi === mlo) mhi = mlo + 1;
+        var cw = Math.max(1, x(M.sx) - x(0)), chh = Math.max(1, y(0) - y(M.sy));
+        cells.forEach(function (c) {
+            var t = log ? Math.log(1 + c.n) / Math.log(1 + nmax) : c.n / nmax;
+            g.fillStyle = M.V && typeof c.m === "number" ? ramp(VAL, (c.m - mlo) / (mhi - mlo)) : ramp(SEQ, 0.12 + 0.88 * t);
+            if (M.V) g.globalAlpha = 0.35 + 0.65 * Math.min(1, t * 1.4); else g.globalAlpha = 1;
+            g.fillRect(x(c.x), y(c.y + M.sy), cw + 0.5, chh + 0.5);
+        });
+        g.globalAlpha = 1;
+        var svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (H - m.b) + ")").call(d3.axisBottom(x).ticks(Math.max(3, Math.floor(W / 90))).tickFormat(fmt));
+        svg.append("g").attr("class", "axis").attr("transform", "translate(" + m.l + ",0)").call(d3.axisLeft(y).ticks(6).tickFormat(fmt));
+        svg.append("text").attr("x", W - m.r).attr("y", H - 4).attr("text-anchor", "end").attr("font-size", 11).attr("fill", "#52514e").text(M.X);
+        svg.append("text").attr("x", m.l + 6).attr("y", m.t + 12).attr("font-size", 11).attr("fill", "#52514e").text(M.Y);
+        if (marg) {
+            var hx = d3.rollup(M.cells, function (v) { return d3.sum(v, function (c) { return c.n; }); }, function (c) { return c.x; }), hy = d3.rollup(M.cells, function (v) { return d3.sum(v, function (c) { return c.n; }); }, function (c) { return c.y; });
+            var mx = d3.max(hx.values()) || 1, my = d3.max(hy.values()) || 1;
+            hx.forEach(function (n, xv) { var h = (marg - 8) * n / mx; svg.append("rect").attr("x", x(xv)).attr("y", m.t - 6 - h).attr("width", Math.max(1, cw - 0.5)).attr("height", h).attr("fill", "#9ec5f4"); });
+            hy.forEach(function (n, yv) { var w = (marg - 8) * n / my; svg.append("rect").attr("x", W - m.r + 6).attr("y", y(yv + M.sy)).attr("width", w).attr("height", Math.max(1, chh - 0.5)).attr("fill", "#9ec5f4"); });
+        }
+        var info = '<b>' + M.total.toLocaleString() + '</b> records' + (M.shown < M.total ? ' (' + (M.total - M.shown).toLocaleString() + ' outside the range shown)' : '') + '<br>cells ' + fmt(M.sx) + ' &times; ' + fmt(M.sy);
+        if (M.V) info += '<br><span style="display:inline-block;width:90px;height:8px;border-radius:2px;background:linear-gradient(90deg,' + VAL.join(",") + ')"></span> mean ' + esc(M.V) + ' ' + fmt(mlo) + ' to ' + fmt(mhi);
+        else info += '<br><span style="display:inline-block;width:90px;height:8px;border-radius:2px;background:linear-gradient(90deg,' + SEQ.slice(1).join(",") + ')"></span> records per cell' + (log ? ' (log)' : '') + ', up to ' + nmax.toLocaleString();
+        document.getElementById("info").innerHTML = info;
+        if (S.brush) svg.append("rect").attr("x", x(S.brush.x0)).attr("y", y(S.brush.y1)).attr("width", x(S.brush.x1) - x(S.brush.x0)).attr("height", y(S.brush.y0) - y(S.brush.y1)).attr("fill", "none").attr("stroke", "#2161D9").attr("stroke-width", 1.5).attr("stroke-dasharray", "5,3");
+        // hover tooltip and box selection
+        var idx = new Map(); M.cells.forEach(function (c) { idx.set(Math.round(c.x / M.sx) + "," + Math.round(c.y / M.sy), c); });
+        var brush = d3.brush().extent([[m.l, m.t], [W - m.r, H - m.b]]).on("end", function (ev) {
+            if (!ev.selection) { if (S.brush) { S.brush = null; omniscope.view.whitespaceClick(); draw(); } return; }
+            var s = ev.selection; selectBox(x.invert(s[0][0]), x.invert(s[1][0]), y.invert(s[1][1]), y.invert(s[0][1]));
+        });
+        var bg = svg.append("g").attr("class", "brush").call(brush);
+        bg.select(".overlay").on("mousemove.tip", function (ev) {
+            var p = d3.pointer(ev), xv = x.invert(p[0]), yv = y.invert(p[1]), c = idx.get(Math.floor(xv / M.sx + 1e-9) + "," + Math.floor(yv / M.sy + 1e-9));
+            tip(c, ev);
+        }).on("mouseleave.tip", function () { tip(null); });
+        if (intro) { fadeCss(d3.select(cv), 700, 0); fadeIn(svg.selectAll("rect"), 450, 4); }
+    }
+    function tip(c, ev) {
+        var el = document.getElementById("tooltip");
+        if (!c) { el.style.display = "none"; return; }
+        var M = S.model;
+        el.innerHTML = '<span class="k">' + esc(M.X) + ':</span> ' + fmt(c.x) + ' to ' + fmt(c.x + M.sx) + '<br><span class="k">' + esc(M.Y) + ':</span> ' + fmt(c.y) + ' to ' + fmt(c.y + M.sy) + '<br><b>' + c.n.toLocaleString() + '</b> records' + (M.V ? '<br><span class="k">Mean ' + esc(M.V) + ':</span> ' + fmt(c.m) : '');
+        el.style.display = "block";
+        var X = ev.clientX + 14, Y = ev.clientY + 14;
+        if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14;
+        if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+    function selectBox(x0, x1, y0, y1) {
+        var M = S.model, p = function (v) { return +v.toPrecision(6); };
+        S.brush = { x0: x0, x1: x1, y0: y0, y1: y1 };
+        omniscope.view.context().viewSelection = { filter: { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: M.X, operator: ">=", value: p(x0) }, { type: "FIELD_VALUE", inputField: M.X, operator: "<=", value: p(x1) }, { type: "FIELD_VALUE", inputField: M.Y, operator: ">=", value: p(y0) }, { type: "FIELD_VALUE", inputField: M.Y, operator: "<=", value: p(y1) }] } };
+        omniscope.view.updated(); draw();
+    }
+    window.__density.selectBox = selectBox;
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

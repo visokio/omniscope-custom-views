@@ -1,0 +1,1297 @@
+Quarter,Region,Segment,Brand,Sales (GBP),Units
+2025 Q1,London,Mainstream,Our brand,132194,15067
+2025 Q1,London,Mainstream,Competitor A,277025,38322
+2025 Q1,London,Mainstream,Competitor B,168107,37485
+2025 Q1,London,Mainstream,Private label,248344,58346
+2025 Q1,London,Mainstream,Competitor C,125107,21740
+2025 Q1,London,Mainstream,Competitor D,70988,11891
+2025 Q1,London,Mainstream,Competitor E,54460,6822
+2025 Q1,London,Mainstream,Competitor F,42090,9555
+2025 Q1,London,Mainstream,Competitor G,30816,6698
+2025 Q1,London,Value,Our brand,32669,3883
+2025 Q1,London,Value,Competitor A,97143,26381
+2025 Q1,London,Value,Competitor B,62328,6964
+2025 Q1,London,Value,Private label,306557,45612
+2025 Q1,London,Value,Competitor C,80906,11616
+2025 Q1,London,Value,Competitor D,63943,8946
+2025 Q1,London,Value,Competitor E,50363,7301
+2025 Q1,London,Value,Competitor F,47057,7252
+2025 Q1,London,Value,Competitor G,37491,11072
+2025 Q1,London,Premium,Our brand,171433,28900
+2025 Q1,London,Premium,Competitor A,49040,5652
+2025 Q1,London,Premium,Competitor B,121614,16493
+2025 Q1,London,Premium,Private label,30086,6382
+2025 Q1,London,Premium,Competitor C,72350,8750
+2025 Q1,London,Premium,Competitor D,28852,3803
+2025 Q1,London,Premium,Competitor E,37985,5319
+2025 Q1,London,Premium,Competitor F,22910,2633
+2025 Q1,London,Premium,Competitor G,17869,2967
+2025 Q1,London,Online,Our brand,91220,23384
+2025 Q1,London,Online,Competitor A,64390,10628
+2025 Q1,London,Online,Competitor B,47684,5664
+2025 Q1,London,Online,Private label,45701,6341
+2025 Q1,London,Online,Competitor C,33415,7487
+2025 Q1,London,Online,Competitor D,62277,12309
+2025 Q1,London,Online,Competitor E,25446,4593
+2025 Q1,London,Online,Competitor F,30741,3840
+2025 Q1,London,Online,Competitor G,25478,6288
+2025 Q1,London,Convenience,Our brand,23021,5759
+2025 Q1,London,Convenience,Competitor A,55385,6259
+2025 Q1,London,Convenience,Competitor B,33654,4429
+2025 Q1,London,Convenience,Private label,24816,8059
+2025 Q1,London,Convenience,Competitor C,45589,9026
+2025 Q1,London,Convenience,Competitor D,23788,4237
+2025 Q1,London,Convenience,Competitor E,19420,3556
+2025 Q1,London,Convenience,Competitor F,18181,3301
+2025 Q1,London,Convenience,Competitor G,16261,3436
+2025 Q1,London,Food service,Our brand,9488,2702
+2025 Q1,London,Food service,Competitor A,28575,4665
+2025 Q1,London,Food service,Competitor B,17245,2198
+2025 Q1,London,Food service,Private label,36053,4973
+2025 Q1,London,Food service,Competitor C,24711,7316
+2025 Q1,London,Food service,Competitor D,12313,3205
+2025 Q1,London,Food service,Competitor E,24341,3778
+2025 Q1,London,Food service,Competitor F,13521,2647
+2025 Q1,London,Food service,Competitor G,10255,3398
+2025 Q1,South East,Mainstream,Our brand,132084,31002
+2025 Q1,South East,Mainstream,Competitor A,289264,90431
+2025 Q1,South East,Mainstream,Competitor B,182328,24129
+2025 Q1,South East,Mainstream,Private label,206485,31865
+2025 Q1,South East,Mainstream,Competitor C,90334,10243
+2025 Q1,South East,Mainstream,Competitor D,58947,16842
+2025 Q1,South East,Mainstream,Competitor E,51581,8621
+2025 Q1,South East,Mainstream,Competitor F,39678,10104
+2025 Q1,South East,Mainstream,Competitor G,26598,4102
+2025 Q1,South East,Value,Our brand,27603,7344
+2025 Q1,South East,Value,Competitor A,82475,11216
+2025 Q1,South East,Value,Competitor B,59620,10230
+2025 Q1,South East,Value,Private label,284629,55109
+2025 Q1,South East,Value,Competitor C,64236,15349
+2025 Q1,South East,Value,Competitor D,55097,15099
+2025 Q1,South East,Value,Competitor E,44837,6184
+2025 Q1,South East,Value,Competitor F,36171,11535
+2025 Q1,South East,Value,Competitor G,33573,6001
+2025 Q1,South East,Premium,Our brand,110628,12562
+2025 Q1,South East,Premium,Competitor A,48451,8054
+2025 Q1,South East,Premium,Competitor B,105094,24998
+2025 Q1,South East,Premium,Private label,20674,3359
+2025 Q1,South East,Premium,Competitor C,67611,9822
+2025 Q1,South East,Premium,Competitor D,23004,3444
+2025 Q1,South East,Premium,Competitor E,40416,5418
+2025 Q1,South East,Premium,Competitor F,20309,2284
+2025 Q1,South East,Premium,Competitor G,12381,2591
+2025 Q1,South East,Online,Our brand,84787,9569
+2025 Q1,South East,Online,Competitor A,51113,5910
+2025 Q1,South East,Online,Competitor B,50395,8265
+2025 Q1,South East,Online,Private label,39426,4510
+2025 Q1,South East,Online,Competitor C,32983,6908
+2025 Q1,South East,Online,Competitor D,67106,16075
+2025 Q1,South East,Online,Competitor E,21911,2504
+2025 Q1,South East,Online,Competitor F,29370,6028
+2025 Q1,South East,Online,Competitor G,17806,2666
+2025 Q1,South East,Convenience,Our brand,21835,3073
+2025 Q1,South East,Convenience,Competitor A,49756,6753
+2025 Q1,South East,Convenience,Competitor B,33765,5093
+2025 Q1,South East,Convenience,Private label,21090,3790
+2025 Q1,South East,Convenience,Competitor C,35094,5684
+2025 Q1,South East,Convenience,Competitor D,24232,5253
+2025 Q1,South East,Convenience,Competitor E,15322,2071
+2025 Q1,South East,Convenience,Competitor F,14341,2599
+2025 Q1,South East,Convenience,Competitor G,11683,1465
+2025 Q1,South East,Food service,Our brand,8390,1766
+2025 Q1,South East,Food service,Competitor A,29464,4890
+2025 Q1,South East,Food service,Competitor B,13998,1680
+2025 Q1,South East,Food service,Private label,29206,5651
+2025 Q1,South East,Food service,Competitor C,20513,2650
+2025 Q1,South East,Food service,Competitor D,12891,2865
+2025 Q1,South East,Food service,Competitor E,22974,3492
+2025 Q1,South East,Food service,Competitor F,11539,2216
+2025 Q1,South East,Food service,Competitor G,8132,1048
+2025 Q1,North,Mainstream,Our brand,104369,15065
+2025 Q1,North,Mainstream,Competitor A,253673,28316
+2025 Q1,North,Mainstream,Competitor B,162163,21012
+2025 Q1,North,Mainstream,Private label,144349,21668
+2025 Q1,North,Mainstream,Competitor C,94996,26970
+2025 Q1,North,Mainstream,Competitor D,53396,6502
+2025 Q1,North,Mainstream,Competitor E,50473,5902
+2025 Q1,North,Mainstream,Competitor F,31601,4757
+2025 Q1,North,Mainstream,Competitor G,29957,4331
+2025 Q1,North,Value,Our brand,23839,7375
+2025 Q1,North,Value,Competitor A,85121,10439
+2025 Q1,North,Value,Competitor B,52723,10144
+2025 Q1,North,Value,Private label,290672,36846
+2025 Q1,North,Value,Competitor C,67247,10191
+2025 Q1,North,Value,Competitor D,47668,9973
+2025 Q1,North,Value,Competitor E,36184,7294
+2025 Q1,North,Value,Competitor F,31690,8602
+2025 Q1,North,Value,Competitor G,33592,6602
+2025 Q1,North,Premium,Our brand,101824,22480
+2025 Q1,North,Premium,Competitor A,39155,7008
+2025 Q1,North,Premium,Competitor B,96643,26855
+2025 Q1,North,Premium,Private label,18565,3901
+2025 Q1,North,Premium,Competitor C,51200,6830
+2025 Q1,North,Premium,Competitor D,21450,6490
+2025 Q1,North,Premium,Competitor E,32943,4442
+2025 Q1,North,Premium,Competitor F,17780,2797
+2025 Q1,North,Premium,Competitor G,11519,1389
+2025 Q1,North,Online,Our brand,80570,13718
+2025 Q1,North,Online,Competitor A,48783,5662
+2025 Q1,North,Online,Competitor B,47163,5492
+2025 Q1,North,Online,Private label,30431,6134
+2025 Q1,North,Online,Competitor C,26603,6628
+2025 Q1,North,Online,Competitor D,59022,17540
+2025 Q1,North,Online,Competitor E,22905,3517
+2025 Q1,North,Online,Competitor F,24757,4510
+2025 Q1,North,Online,Competitor G,19339,2989
+2025 Q1,North,Convenience,Our brand,19940,2336
+2025 Q1,North,Convenience,Competitor A,41882,4706
+2025 Q1,North,Convenience,Competitor B,27634,5315
+2025 Q1,North,Convenience,Private label,21843,3541
+2025 Q1,North,Convenience,Competitor C,29863,4217
+2025 Q1,North,Convenience,Competitor D,19657,5218
+2025 Q1,North,Convenience,Competitor E,17445,2908
+2025 Q1,North,Convenience,Competitor F,15821,2551
+2025 Q1,North,Convenience,Competitor G,13437,2838
+2025 Q1,North,Food service,Our brand,7414,1204
+2025 Q1,North,Food service,Competitor A,26244,3302
+2025 Q1,North,Food service,Competitor B,14097,3764
+2025 Q1,North,Food service,Private label,26142,8145
+2025 Q1,North,Food service,Competitor C,15575,1797
+2025 Q1,North,Food service,Competitor D,10304,1432
+2025 Q1,North,Food service,Competitor E,19589,5076
+2025 Q1,North,Food service,Competitor F,9984,2870
+2025 Q1,North,Food service,Competitor G,6111,943
+2025 Q1,Midlands,Mainstream,Our brand,85269,9704
+2025 Q1,Midlands,Mainstream,Competitor A,203353,29986
+2025 Q1,Midlands,Mainstream,Competitor B,145861,39981
+2025 Q1,Midlands,Mainstream,Private label,165560,51136
+2025 Q1,Midlands,Mainstream,Competitor C,82430,11885
+2025 Q1,Midlands,Mainstream,Competitor D,54996,10681
+2025 Q1,Midlands,Mainstream,Competitor E,45361,6573
+2025 Q1,Midlands,Mainstream,Competitor F,31776,7907
+2025 Q1,Midlands,Mainstream,Competitor G,22098,4257
+2025 Q1,Midlands,Value,Our brand,21367,4085
+2025 Q1,Midlands,Value,Competitor A,73411,13984
+2025 Q1,Midlands,Value,Competitor B,46530,14399
+2025 Q1,Midlands,Value,Private label,209848,28907
+2025 Q1,Midlands,Value,Competitor C,62562,12823
+2025 Q1,Midlands,Value,Competitor D,38516,8762
+2025 Q1,Midlands,Value,Competitor E,32194,6193
+2025 Q1,Midlands,Value,Competitor F,28517,5928
+2025 Q1,Midlands,Value,Competitor G,29235,3789
+2025 Q1,Midlands,Premium,Our brand,109365,14683
+2025 Q1,Midlands,Premium,Competitor A,36908,8085
+2025 Q1,Midlands,Premium,Competitor B,87312,18430
+2025 Q1,Midlands,Premium,Private label,19944,3510
+2025 Q1,Midlands,Premium,Competitor C,52354,8732
+2025 Q1,Midlands,Premium,Competitor D,22597,4478
+2025 Q1,Midlands,Premium,Competitor E,29477,3973
+2025 Q1,Midlands,Premium,Competitor F,13801,2090
+2025 Q1,Midlands,Premium,Competitor G,10659,1831
+2025 Q1,Midlands,Online,Our brand,64545,10278
+2025 Q1,Midlands,Online,Competitor A,45233,11190
+2025 Q1,Midlands,Online,Competitor B,32607,4107
+2025 Q1,Midlands,Online,Private label,26647,3435
+2025 Q1,Midlands,Online,Competitor C,26210,6087
+2025 Q1,Midlands,Online,Competitor D,50625,11199
+2025 Q1,Midlands,Online,Competitor E,20328,4859
+2025 Q1,Midlands,Online,Competitor F,18826,5848
+2025 Q1,Midlands,Online,Competitor G,16196,3792
+2025 Q1,Midlands,Convenience,Our brand,14958,1688
+2025 Q1,Midlands,Convenience,Competitor A,37693,5076
+2025 Q1,Midlands,Convenience,Competitor B,25201,3682
+2025 Q1,Midlands,Convenience,Private label,15018,1907
+2025 Q1,Midlands,Convenience,Competitor C,26716,3287
+2025 Q1,Midlands,Convenience,Competitor D,17149,2025
+2025 Q1,Midlands,Convenience,Competitor E,11970,1348
+2025 Q1,Midlands,Convenience,Competitor F,10826,1785
+2025 Q1,Midlands,Convenience,Competitor G,10502,1178
+2025 Q1,Midlands,Food service,Our brand,7668,862
+2025 Q1,Midlands,Food service,Competitor A,24229,4365
+2025 Q1,Midlands,Food service,Competitor B,10732,2769
+2025 Q1,Midlands,Food service,Private label,25508,2929
+2025 Q1,Midlands,Food service,Competitor C,15113,2977
+2025 Q1,Midlands,Food service,Competitor D,9880,1423
+2025 Q1,Midlands,Food service,Competitor E,15555,2171
+2025 Q1,Midlands,Food service,Competitor F,7642,2413
+2025 Q1,Midlands,Food service,Competitor G,5216,880
+2025 Q1,Scotland,Mainstream,Our brand,63529,14593
+2025 Q1,Scotland,Mainstream,Competitor A,125978,17598
+2025 Q1,Scotland,Mainstream,Competitor B,74315,12115
+2025 Q1,Scotland,Mainstream,Private label,92778,17066
+2025 Q1,Scotland,Mainstream,Competitor C,45627,6376
+2025 Q1,Scotland,Mainstream,Competitor D,31810,7695
+2025 Q1,Scotland,Mainstream,Competitor E,27305,3939
+2025 Q1,Scotland,Mainstream,Competitor F,22199,2890
+2025 Q1,Scotland,Mainstream,Competitor G,14975,2053
+2025 Q1,Scotland,Value,Our brand,13221,1910
+2025 Q1,Scotland,Value,Competitor A,36738,7238
+2025 Q1,Scotland,Value,Competitor B,28051,3374
+2025 Q1,Scotland,Value,Private label,155107,18347
+2025 Q1,Scotland,Value,Competitor C,38878,4406
+2025 Q1,Scotland,Value,Competitor D,28988,4326
+2025 Q1,Scotland,Value,Competitor E,20804,4808
+2025 Q1,Scotland,Value,Competitor F,19057,2860
+2025 Q1,Scotland,Value,Competitor G,15724,3542
+2025 Q1,Scotland,Premium,Our brand,57724,7869
+2025 Q1,Scotland,Premium,Competitor A,23157,5506
+2025 Q1,Scotland,Premium,Competitor B,52286,8195
+2025 Q1,Scotland,Premium,Private label,10462,1846
+2025 Q1,Scotland,Premium,Competitor C,36156,9401
+2025 Q1,Scotland,Premium,Competitor D,12433,1894
+2025 Q1,Scotland,Premium,Competitor E,19836,2325
+2025 Q1,Scotland,Premium,Competitor F,8728,1146
+2025 Q1,Scotland,Premium,Competitor G,5977,1124
+2025 Q1,Scotland,Online,Our brand,46276,6620
+2025 Q1,Scotland,Online,Competitor A,26174,3971
+2025 Q1,Scotland,Online,Competitor B,22714,3612
+2025 Q1,Scotland,Online,Private label,21189,2393
+2025 Q1,Scotland,Online,Competitor C,13834,1837
+2025 Q1,Scotland,Online,Competitor D,34456,5186
+2025 Q1,Scotland,Online,Competitor E,11402,2178
+2025 Q1,Scotland,Online,Competitor F,13236,2041
+2025 Q1,Scotland,Online,Competitor G,9818,2665
+2025 Q1,Scotland,Convenience,Our brand,11381,2445
+2025 Q1,Scotland,Convenience,Competitor A,22314,5326
+2025 Q1,Scotland,Convenience,Competitor B,16007,4643
+2025 Q1,Scotland,Convenience,Private label,10457,1970
+2025 Q1,Scotland,Convenience,Competitor C,16613,2805
+2025 Q1,Scotland,Convenience,Competitor D,9872,1661
+2025 Q1,Scotland,Convenience,Competitor E,9580,1415
+2025 Q1,Scotland,Convenience,Competitor F,8786,1010
+2025 Q1,Scotland,Convenience,Competitor G,6555,1129
+2025 Q1,Scotland,Food service,Our brand,4854,586
+2025 Q1,Scotland,Food service,Competitor A,13666,1951
+2025 Q1,Scotland,Food service,Competitor B,7929,1303
+2025 Q1,Scotland,Food service,Private label,15037,2781
+2025 Q1,Scotland,Food service,Competitor C,8862,1516
+2025 Q1,Scotland,Food service,Competitor D,6545,1653
+2025 Q1,Scotland,Food service,Competitor E,9296,1088
+2025 Q1,Scotland,Food service,Competitor F,5266,733
+2025 Q1,Scotland,Food service,Competitor G,4218,569
+2025 Q1,Wales,Mainstream,Our brand,36718,4214
+2025 Q1,Wales,Mainstream,Competitor A,80904,14244
+2025 Q1,Wales,Mainstream,Competitor B,43431,10979
+2025 Q1,Wales,Mainstream,Private label,58736,7010
+2025 Q1,Wales,Mainstream,Competitor C,28713,4651
+2025 Q1,Wales,Mainstream,Competitor D,18964,2856
+2025 Q1,Wales,Mainstream,Competitor E,13989,1652
+2025 Q1,Wales,Mainstream,Competitor F,12187,1673
+2025 Q1,Wales,Mainstream,Competitor G,9509,1689
+2025 Q1,Wales,Value,Our brand,8907,2152
+2025 Q1,Wales,Value,Competitor A,25562,3700
+2025 Q1,Wales,Value,Competitor B,17452,3671
+2025 Q1,Wales,Value,Private label,79771,22111
+2025 Q1,Wales,Value,Competitor C,18630,4538
+2025 Q1,Wales,Value,Competitor D,16726,2609
+2025 Q1,Wales,Value,Competitor E,13379,2377
+2025 Q1,Wales,Value,Competitor F,11343,3570
+2025 Q1,Wales,Value,Competitor G,10022,2697
+2025 Q1,Wales,Premium,Our brand,37987,5903
+2025 Q1,Wales,Premium,Competitor A,13837,2444
+2025 Q1,Wales,Premium,Competitor B,28525,5738
+2025 Q1,Wales,Premium,Private label,5953,1431
+2025 Q1,Wales,Premium,Competitor C,18824,2939
+2025 Q1,Wales,Premium,Competitor D,7129,883
+2025 Q1,Wales,Premium,Competitor E,9270,2468
+2025 Q1,Wales,Premium,Competitor F,5316,1064
+2025 Q1,Wales,Premium,Competitor G,4074,571
+2025 Q1,Wales,Online,Our brand,25792,3345
+2025 Q1,Wales,Online,Competitor A,15817,2241
+2025 Q1,Wales,Online,Competitor B,13343,3551
+2025 Q1,Wales,Online,Private label,9944,2430
+2025 Q1,Wales,Online,Competitor C,8966,1925
+2025 Q1,Wales,Online,Competitor D,18572,2652
+2025 Q1,Wales,Online,Competitor E,7700,1975
+2025 Q1,Wales,Online,Competitor F,9076,3018
+2025 Q1,Wales,Online,Competitor G,6366,715
+2025 Q1,Wales,Convenience,Our brand,5700,732
+2025 Q1,Wales,Convenience,Competitor A,13221,2075
+2025 Q1,Wales,Convenience,Competitor B,10231,1183
+2025 Q1,Wales,Convenience,Private label,6204,1437
+2025 Q1,Wales,Convenience,Competitor C,11879,1813
+2025 Q1,Wales,Convenience,Competitor D,7396,1709
+2025 Q1,Wales,Convenience,Competitor E,5833,1474
+2025 Q1,Wales,Convenience,Competitor F,4130,873
+2025 Q1,Wales,Convenience,Competitor G,4468,839
+2025 Q1,Wales,Food service,Our brand,2652,560
+2025 Q1,Wales,Food service,Competitor A,7067,1251
+2025 Q1,Wales,Food service,Competitor B,4496,898
+2025 Q1,Wales,Food service,Private label,9623,1981
+2025 Q1,Wales,Food service,Competitor C,6177,730
+2025 Q1,Wales,Food service,Competitor D,3685,1021
+2025 Q1,Wales,Food service,Competitor E,6413,953
+2025 Q1,Wales,Food service,Competitor F,3292,593
+2025 Q1,Wales,Food service,Competitor G,2402,267
+2025 Q2,London,Mainstream,Our brand,152741,47049
+2025 Q2,London,Mainstream,Competitor A,323992,48075
+2025 Q2,London,Mainstream,Competitor B,194611,22552
+2025 Q2,London,Mainstream,Private label,186997,60263
+2025 Q2,London,Mainstream,Competitor C,128002,35532
+2025 Q2,London,Mainstream,Competitor D,64166,8118
+2025 Q2,London,Mainstream,Competitor E,57508,6929
+2025 Q2,London,Mainstream,Competitor F,52332,7502
+2025 Q2,London,Mainstream,Competitor G,34476,9864
+2025 Q2,London,Value,Our brand,38399,4669
+2025 Q2,London,Value,Competitor A,113420,18735
+2025 Q2,London,Value,Competitor B,62782,9279
+2025 Q2,London,Value,Private label,344250,82927
+2025 Q2,London,Value,Competitor C,74241,13630
+2025 Q2,London,Value,Competitor D,60110,13045
+2025 Q2,London,Value,Competitor E,57617,6698
+2025 Q2,London,Value,Competitor F,46859,7715
+2025 Q2,London,Value,Competitor G,45311,11376
+2025 Q2,London,Premium,Our brand,156674,17710
+2025 Q2,London,Premium,Competitor A,58711,6583
+2025 Q2,London,Premium,Competitor B,123356,25577
+2025 Q2,London,Premium,Private label,23117,5000
+2025 Q2,London,Premium,Competitor C,83060,13468
+2025 Q2,London,Premium,Competitor D,33600,4299
+2025 Q2,London,Premium,Competitor E,40548,10548
+2025 Q2,London,Premium,Competitor F,24109,3650
+2025 Q2,London,Premium,Competitor G,13902,1936
+2025 Q2,London,Online,Our brand,106976,14135
+2025 Q2,London,Online,Competitor A,56777,12237
+2025 Q2,London,Online,Competitor B,58389,8323
+2025 Q2,London,Online,Private label,43498,4936
+2025 Q2,London,Online,Competitor C,34315,4111
+2025 Q2,London,Online,Competitor D,64984,11314
+2025 Q2,London,Online,Competitor E,31402,4382
+2025 Q2,London,Online,Competitor F,34381,4142
+2025 Q2,London,Online,Competitor G,23670,3772
+2025 Q2,London,Convenience,Our brand,26076,4213
+2025 Q2,London,Convenience,Competitor A,60055,7937
+2025 Q2,London,Convenience,Competitor B,31430,6651
+2025 Q2,London,Convenience,Private label,29449,7953
+2025 Q2,London,Convenience,Competitor C,36096,5562
+2025 Q2,London,Convenience,Competitor D,27935,3144
+2025 Q2,London,Convenience,Competitor E,24052,3558
+2025 Q2,London,Convenience,Competitor F,19587,3168
+2025 Q2,London,Convenience,Competitor G,17502,2447
+2025 Q2,London,Food service,Our brand,9597,1420
+2025 Q2,London,Food service,Competitor A,28029,5593
+2025 Q2,London,Food service,Competitor B,17101,2007
+2025 Q2,London,Food service,Private label,32982,6273
+2025 Q2,London,Food service,Competitor C,22018,5203
+2025 Q2,London,Food service,Competitor D,14198,2970
+2025 Q2,London,Food service,Competitor E,26875,3463
+2025 Q2,London,Food service,Competitor F,12911,1573
+2025 Q2,London,Food service,Competitor G,8976,1200
+2025 Q2,South East,Mainstream,Our brand,105407,19803
+2025 Q2,South East,Mainstream,Competitor A,246172,29583
+2025 Q2,South East,Mainstream,Competitor B,159909,30408
+2025 Q2,South East,Mainstream,Private label,189016,21663
+2025 Q2,South East,Mainstream,Competitor C,109905,14052
+2025 Q2,South East,Mainstream,Competitor D,62990,8053
+2025 Q2,South East,Mainstream,Competitor E,50928,9553
+2025 Q2,South East,Mainstream,Competitor F,37803,8258
+2025 Q2,South East,Mainstream,Competitor G,28533,4751
+2025 Q2,South East,Value,Our brand,31039,7026
+2025 Q2,South East,Value,Competitor A,81266,17791
+2025 Q2,South East,Value,Competitor B,55694,16545
+2025 Q2,South East,Value,Private label,304837,37406
+2025 Q2,South East,Value,Competitor C,78640,15264
+2025 Q2,South East,Value,Competitor D,50438,6830
+2025 Q2,South East,Value,Competitor E,45219,10918
+2025 Q2,South East,Value,Competitor F,30388,4329
+2025 Q2,South East,Value,Competitor G,33736,5500
+2025 Q2,South East,Premium,Our brand,128443,15468
+2025 Q2,South East,Premium,Competitor A,39948,8765
+2025 Q2,South East,Premium,Competitor B,85170,11940
+2025 Q2,South East,Premium,Private label,19659,2422
+2025 Q2,South East,Premium,Competitor C,65077,10716
+2025 Q2,South East,Premium,Competitor D,25116,3057
+2025 Q2,South East,Premium,Competitor E,31836,4910
+2025 Q2,South East,Premium,Competitor F,19781,2848
+2025 Q2,South East,Premium,Competitor G,11675,3181
+2025 Q2,South East,Online,Our brand,78224,10593
+2025 Q2,South East,Online,Competitor A,47407,5427
+2025 Q2,South East,Online,Competitor B,50879,7910
+2025 Q2,South East,Online,Private label,42297,6210
+2025 Q2,South East,Online,Competitor C,27300,5031
+2025 Q2,South East,Online,Competitor D,52119,9259
+2025 Q2,South East,Online,Competitor E,26146,4821
+2025 Q2,South East,Online,Competitor F,27910,5410
+2025 Q2,South East,Online,Competitor G,19996,3991
+2025 Q2,South East,Convenience,Our brand,22256,4075
+2025 Q2,South East,Convenience,Competitor A,40952,7343
+2025 Q2,South East,Convenience,Competitor B,26874,5398
+2025 Q2,South East,Convenience,Private label,23577,4345
+2025 Q2,South East,Convenience,Competitor C,34639,7857
+2025 Q2,South East,Convenience,Competitor D,24141,2906
+2025 Q2,South East,Convenience,Competitor E,17119,5685
+2025 Q2,South East,Convenience,Competitor F,15066,1827
+2025 Q2,South East,Convenience,Competitor G,13800,3159
+2025 Q2,South East,Food service,Our brand,7934,954
+2025 Q2,South East,Food service,Competitor A,23592,3525
+2025 Q2,South East,Food service,Competitor B,15430,3769
+2025 Q2,South East,Food service,Private label,29475,3606
+2025 Q2,South East,Food service,Competitor C,20686,5998
+2025 Q2,South East,Food service,Competitor D,10312,2262
+2025 Q2,South East,Food service,Competitor E,18166,2120
+2025 Q2,South East,Food service,Competitor F,9178,1764
+2025 Q2,South East,Food service,Competitor G,8303,1435
+2025 Q2,North,Mainstream,Our brand,99368,29444
+2025 Q2,North,Mainstream,Competitor A,214809,44199
+2025 Q2,North,Mainstream,Competitor B,158999,28379
+2025 Q2,North,Mainstream,Private label,164554,35955
+2025 Q2,North,Mainstream,Competitor C,87512,10215
+2025 Q2,North,Mainstream,Competitor D,47752,6626
+2025 Q2,North,Mainstream,Competitor E,42482,7713
+2025 Q2,North,Mainstream,Competitor F,38377,7533
+2025 Q2,North,Mainstream,Competitor G,26910,4541
+2025 Q2,North,Value,Our brand,25084,7284
+2025 Q2,North,Value,Competitor A,73163,13857
+2025 Q2,North,Value,Competitor B,49184,10418
+2025 Q2,North,Value,Private label,260520,34994
+2025 Q2,North,Value,Competitor C,54940,15918
+2025 Q2,North,Value,Competitor D,50930,7876
+2025 Q2,North,Value,Competitor E,41192,12889
+2025 Q2,North,Value,Competitor F,26865,4043
+2025 Q2,North,Value,Competitor G,28812,4832
+2025 Q2,North,Premium,Our brand,106393,30197
+2025 Q2,North,Premium,Competitor A,41240,8431
+2025 Q2,North,Premium,Competitor B,88749,10804
+2025 Q2,North,Premium,Private label,19946,2477
+2025 Q2,North,Premium,Competitor C,53174,13001
+2025 Q2,North,Premium,Competitor D,23589,4929
+2025 Q2,North,Premium,Competitor E,34607,9291
+2025 Q2,North,Premium,Competitor F,17285,4004
+2025 Q2,North,Premium,Competitor G,11816,2751
+2025 Q2,North,Online,Our brand,67218,17533
+2025 Q2,North,Online,Competitor A,54862,15259
+2025 Q2,North,Online,Competitor B,46267,8031
+2025 Q2,North,Online,Private label,38121,9354
+2025 Q2,North,Online,Competitor C,28049,3954
+2025 Q2,North,Online,Competitor D,51541,7714
+2025 Q2,North,Online,Competitor E,23003,4184
+2025 Q2,North,Online,Competitor F,20558,3087
+2025 Q2,North,Online,Competitor G,18542,3237
+2025 Q2,North,Convenience,Our brand,19634,3826
+2025 Q2,North,Convenience,Competitor A,39025,6976
+2025 Q2,North,Convenience,Competitor B,24347,7101
+2025 Q2,North,Convenience,Private label,20618,2474
+2025 Q2,North,Convenience,Competitor C,28673,3402
+2025 Q2,North,Convenience,Competitor D,18767,3407
+2025 Q2,North,Convenience,Competitor E,13664,4489
+2025 Q2,North,Convenience,Competitor F,14175,1707
+2025 Q2,North,Convenience,Competitor G,12364,3272
+2025 Q2,North,Food service,Our brand,8493,2247
+2025 Q2,North,Food service,Competitor A,24081,3211
+2025 Q2,North,Food service,Competitor B,13044,2658
+2025 Q2,North,Food service,Private label,25544,5384
+2025 Q2,North,Food service,Competitor C,13846,1881
+2025 Q2,North,Food service,Competitor D,10449,2535
+2025 Q2,North,Food service,Competitor E,17828,5491
+2025 Q2,North,Food service,Competitor F,9365,1441
+2025 Q2,North,Food service,Competitor G,6995,1234
+2025 Q2,Midlands,Mainstream,Our brand,110085,28212
+2025 Q2,Midlands,Mainstream,Competitor A,189054,29684
+2025 Q2,Midlands,Mainstream,Competitor B,124634,25864
+2025 Q2,Midlands,Mainstream,Private label,153733,25246
+2025 Q2,Midlands,Mainstream,Competitor C,81582,11409
+2025 Q2,Midlands,Mainstream,Competitor D,46867,7719
+2025 Q2,Midlands,Mainstream,Competitor E,45853,11548
+2025 Q2,Midlands,Mainstream,Competitor F,31664,4744
+2025 Q2,Midlands,Mainstream,Competitor G,25897,7329
+2025 Q2,Midlands,Value,Our brand,19815,4303
+2025 Q2,Midlands,Value,Competitor A,70570,16573
+2025 Q2,Midlands,Value,Competitor B,38551,6989
+2025 Q2,Midlands,Value,Private label,210818,29595
+2025 Q2,Midlands,Value,Competitor C,63547,8448
+2025 Q2,Midlands,Value,Competitor D,45721,8402
+2025 Q2,Midlands,Value,Competitor E,28828,5139
+2025 Q2,Midlands,Value,Competitor F,28176,5866
+2025 Q2,Midlands,Value,Competitor G,27228,3146
+2025 Q2,Midlands,Premium,Our brand,96943,21193
+2025 Q2,Midlands,Premium,Competitor A,35365,4108
+2025 Q2,Midlands,Premium,Competitor B,68315,11779
+2025 Q2,Midlands,Premium,Private label,20642,3344
+2025 Q2,Midlands,Premium,Competitor C,47644,9540
+2025 Q2,Midlands,Premium,Competitor D,22844,6025
+2025 Q2,Midlands,Premium,Competitor E,32693,4569
+2025 Q2,Midlands,Premium,Competitor F,16175,4074
+2025 Q2,Midlands,Premium,Competitor G,9237,1876
+2025 Q2,Midlands,Online,Our brand,66224,10735
+2025 Q2,Midlands,Online,Competitor A,44121,13742
+2025 Q2,Midlands,Online,Competitor B,41256,10550
+2025 Q2,Midlands,Online,Private label,27536,7328
+2025 Q2,Midlands,Online,Competitor C,23452,5913
+2025 Q2,Midlands,Online,Competitor D,51767,10120
+2025 Q2,Midlands,Online,Competitor E,16193,3112
+2025 Q2,Midlands,Online,Competitor F,23337,3709
+2025 Q2,Midlands,Online,Competitor G,13230,2028
+2025 Q2,Midlands,Convenience,Our brand,15803,2585
+2025 Q2,Midlands,Convenience,Competitor A,37833,9788
+2025 Q2,Midlands,Convenience,Competitor B,26105,3421
+2025 Q2,Midlands,Convenience,Private label,19797,3724
+2025 Q2,Midlands,Convenience,Competitor C,25819,3558
+2025 Q2,Midlands,Convenience,Competitor D,20223,2292
+2025 Q2,Midlands,Convenience,Competitor E,14478,2940
+2025 Q2,Midlands,Convenience,Competitor F,13880,3547
+2025 Q2,Midlands,Convenience,Competitor G,11015,1353
+2025 Q2,Midlands,Food service,Our brand,7332,984
+2025 Q2,Midlands,Food service,Competitor A,21139,2927
+2025 Q2,Midlands,Food service,Competitor B,10972,1548
+2025 Q2,Midlands,Food service,Private label,21396,5292
+2025 Q2,Midlands,Food service,Competitor C,12761,2585
+2025 Q2,Midlands,Food service,Competitor D,8178,1134
+2025 Q2,Midlands,Food service,Competitor E,18884,2351
+2025 Q2,Midlands,Food service,Competitor F,7245,1215
+2025 Q2,Midlands,Food service,Competitor G,5339,829
+2025 Q2,Scotland,Mainstream,Our brand,51230,5877
+2025 Q2,Scotland,Mainstream,Competitor A,128226,31688
+2025 Q2,Scotland,Mainstream,Competitor B,77952,16009
+2025 Q2,Scotland,Mainstream,Private label,89574,16359
+2025 Q2,Scotland,Mainstream,Competitor C,57016,11669
+2025 Q2,Scotland,Mainstream,Competitor D,26092,4131
+2025 Q2,Scotland,Mainstream,Competitor E,24822,4830
+2025 Q2,Scotland,Mainstream,Competitor F,22776,2824
+2025 Q2,Scotland,Mainstream,Competitor G,14594,3811
+2025 Q2,Scotland,Value,Our brand,15601,1995
+2025 Q2,Scotland,Value,Competitor A,47362,8765
+2025 Q2,Scotland,Value,Competitor B,25766,4197
+2025 Q2,Scotland,Value,Private label,148188,20014
+2025 Q2,Scotland,Value,Competitor C,31222,3553
+2025 Q2,Scotland,Value,Competitor D,28316,5978
+2025 Q2,Scotland,Value,Competitor E,21644,6369
+2025 Q2,Scotland,Value,Competitor F,19224,3084
+2025 Q2,Scotland,Value,Competitor G,15940,4824
+2025 Q2,Scotland,Premium,Our brand,63627,8168
+2025 Q2,Scotland,Premium,Competitor A,20736,2373
+2025 Q2,Scotland,Premium,Competitor B,51115,8412
+2025 Q2,Scotland,Premium,Private label,12831,2503
+2025 Q2,Scotland,Premium,Competitor C,33409,6349
+2025 Q2,Scotland,Premium,Competitor D,12890,2094
+2025 Q2,Scotland,Premium,Competitor E,20435,5709
+2025 Q2,Scotland,Premium,Competitor F,8728,2626
+2025 Q2,Scotland,Premium,Competitor G,6574,1936
+2025 Q2,Scotland,Online,Our brand,45599,6447
+2025 Q2,Scotland,Online,Competitor A,30279,4090
+2025 Q2,Scotland,Online,Competitor B,21755,3241
+2025 Q2,Scotland,Online,Private label,17062,3044
+2025 Q2,Scotland,Online,Competitor C,13401,1522
+2025 Q2,Scotland,Online,Competitor D,31919,7051
+2025 Q2,Scotland,Online,Competitor E,11529,2156
+2025 Q2,Scotland,Online,Competitor F,14849,2105
+2025 Q2,Scotland,Online,Competitor G,10085,1494
+2025 Q2,Scotland,Convenience,Our brand,8865,1381
+2025 Q2,Scotland,Convenience,Competitor A,24302,4651
+2025 Q2,Scotland,Convenience,Competitor B,13111,2699
+2025 Q2,Scotland,Convenience,Private label,9411,1469
+2025 Q2,Scotland,Convenience,Competitor C,17480,4778
+2025 Q2,Scotland,Convenience,Competitor D,12204,2709
+2025 Q2,Scotland,Convenience,Competitor E,8649,2224
+2025 Q2,Scotland,Convenience,Competitor F,7756,1207
+2025 Q2,Scotland,Convenience,Competitor G,7009,2276
+2025 Q2,Scotland,Food service,Our brand,4035,1033
+2025 Q2,Scotland,Food service,Competitor A,12717,1620
+2025 Q2,Scotland,Food service,Competitor B,8289,1116
+2025 Q2,Scotland,Food service,Private label,15269,4848
+2025 Q2,Scotland,Food service,Competitor C,8426,1390
+2025 Q2,Scotland,Food service,Competitor D,6424,1215
+2025 Q2,Scotland,Food service,Competitor E,10349,2116
+2025 Q2,Scotland,Food service,Competitor F,5291,945
+2025 Q2,Scotland,Food service,Competitor G,3598,421
+2025 Q2,Wales,Mainstream,Our brand,37166,5327
+2025 Q2,Wales,Mainstream,Competitor A,86345,11598
+2025 Q2,Wales,Mainstream,Competitor B,44525,5933
+2025 Q2,Wales,Mainstream,Private label,55889,9091
+2025 Q2,Wales,Mainstream,Competitor C,31818,3978
+2025 Q2,Wales,Mainstream,Competitor D,16878,3559
+2025 Q2,Wales,Mainstream,Competitor E,15154,4231
+2025 Q2,Wales,Mainstream,Competitor F,13032,3094
+2025 Q2,Wales,Mainstream,Competitor G,8487,1103
+2025 Q2,Wales,Value,Our brand,9380,2058
+2025 Q2,Wales,Value,Competitor A,22351,3178
+2025 Q2,Wales,Value,Competitor B,17365,3207
+2025 Q2,Wales,Value,Private label,79606,9023
+2025 Q2,Wales,Value,Competitor C,18475,2260
+2025 Q2,Wales,Value,Competitor D,15467,3444
+2025 Q2,Wales,Value,Competitor E,12279,3224
+2025 Q2,Wales,Value,Competitor F,11318,2733
+2025 Q2,Wales,Value,Competitor G,9787,1940
+2025 Q2,Wales,Premium,Our brand,41265,12803
+2025 Q2,Wales,Premium,Competitor A,14463,3090
+2025 Q2,Wales,Premium,Competitor B,31067,3527
+2025 Q2,Wales,Premium,Private label,6110,1921
+2025 Q2,Wales,Premium,Competitor C,17758,2446
+2025 Q2,Wales,Premium,Competitor D,7446,1507
+2025 Q2,Wales,Premium,Competitor E,12361,1512
+2025 Q2,Wales,Premium,Competitor F,6145,1434
+2025 Q2,Wales,Premium,Competitor G,4285,881
+2025 Q2,Wales,Online,Our brand,26605,3348
+2025 Q2,Wales,Online,Competitor A,16725,2784
+2025 Q2,Wales,Online,Competitor B,14305,2007
+2025 Q2,Wales,Online,Private label,10248,1410
+2025 Q2,Wales,Online,Competitor C,8098,997
+2025 Q2,Wales,Online,Competitor D,17381,4912
+2025 Q2,Wales,Online,Competitor E,5851,882
+2025 Q2,Wales,Online,Competitor F,6951,1279
+2025 Q2,Wales,Online,Competitor G,4919,690
+2025 Q2,Wales,Convenience,Our brand,6587,2092
+2025 Q2,Wales,Convenience,Competitor A,13649,1982
+2025 Q2,Wales,Convenience,Competitor B,9398,1067
+2025 Q2,Wales,Convenience,Private label,6226,744
+2025 Q2,Wales,Convenience,Competitor C,10685,2461
+2025 Q2,Wales,Convenience,Competitor D,6159,1706
+2025 Q2,Wales,Convenience,Competitor E,5698,1315
+2025 Q2,Wales,Convenience,Competitor F,4742,620
+2025 Q2,Wales,Convenience,Competitor G,3670,531
+2025 Q2,Wales,Food service,Our brand,2845,511
+2025 Q2,Wales,Food service,Competitor A,8788,1578
+2025 Q2,Wales,Food service,Competitor B,4021,1133
+2025 Q2,Wales,Food service,Private label,8044,1094
+2025 Q2,Wales,Food service,Competitor C,5408,1406
+2025 Q2,Wales,Food service,Competitor D,4081,1329
+2025 Q2,Wales,Food service,Competitor E,6475,1103
+2025 Q2,Wales,Food service,Competitor F,3517,533
+2025 Q2,Wales,Food service,Competitor G,2482,572
+2025 Q3,London,Mainstream,Our brand,145341,18914
+2025 Q3,London,Mainstream,Competitor A,300056,40636
+2025 Q3,London,Mainstream,Competitor B,187124,36984
+2025 Q3,London,Mainstream,Private label,201311,28382
+2025 Q3,London,Mainstream,Competitor C,137523,42469
+2025 Q3,London,Mainstream,Competitor D,65819,19414
+2025 Q3,London,Mainstream,Competitor E,54076,8966
+2025 Q3,London,Mainstream,Competitor F,48883,6827
+2025 Q3,London,Mainstream,Competitor G,31970,3950
+2025 Q3,London,Value,Our brand,30542,3974
+2025 Q3,London,Value,Competitor A,97634,16025
+2025 Q3,London,Value,Competitor B,74013,8729
+2025 Q3,London,Value,Private label,357019,106168
+2025 Q3,London,Value,Competitor C,79244,10889
+2025 Q3,London,Value,Competitor D,73614,8832
+2025 Q3,London,Value,Competitor E,51234,14158
+2025 Q3,London,Value,Competitor F,39220,7066
+2025 Q3,London,Value,Competitor G,37394,7345
+2025 Q3,London,Premium,Our brand,142583,19391
+2025 Q3,London,Premium,Competitor A,53400,8277
+2025 Q3,London,Premium,Competitor B,111530,15200
+2025 Q3,London,Premium,Private label,27408,7834
+2025 Q3,London,Premium,Competitor C,85213,23351
+2025 Q3,London,Premium,Competitor D,29949,8517
+2025 Q3,London,Premium,Competitor E,47060,5771
+2025 Q3,London,Premium,Competitor F,21331,2814
+2025 Q3,London,Premium,Competitor G,17656,2167
+2025 Q3,London,Online,Our brand,130772,18955
+2025 Q3,London,Online,Competitor A,65764,20520
+2025 Q3,London,Online,Competitor B,50112,5596
+2025 Q3,London,Online,Private label,45998,5325
+2025 Q3,London,Online,Competitor C,33437,4230
+2025 Q3,London,Online,Competitor D,79404,10738
+2025 Q3,London,Online,Competitor E,25803,2877
+2025 Q3,London,Online,Competitor F,30329,3381
+2025 Q3,London,Online,Competitor G,25809,7306
+2025 Q3,London,Convenience,Our brand,20728,3805
+2025 Q3,London,Convenience,Competitor A,49056,9123
+2025 Q3,London,Convenience,Competitor B,33412,4450
+2025 Q3,London,Convenience,Private label,23194,3519
+2025 Q3,London,Convenience,Competitor C,40050,7986
+2025 Q3,London,Convenience,Competitor D,27235,8787
+2025 Q3,London,Convenience,Competitor E,22706,3917
+2025 Q3,London,Convenience,Competitor F,19811,2498
+2025 Q3,London,Convenience,Competitor G,17827,5817
+2025 Q3,London,Food service,Our brand,10030,1979
+2025 Q3,London,Food service,Competitor A,32830,6868
+2025 Q3,London,Food service,Competitor B,17650,2933
+2025 Q3,London,Food service,Private label,38891,11090
+2025 Q3,London,Food service,Competitor C,20786,4704
+2025 Q3,London,Food service,Competitor D,14079,2738
+2025 Q3,London,Food service,Competitor E,23243,2698
+2025 Q3,London,Food service,Competitor F,10716,3335
+2025 Q3,London,Food service,Competitor G,9622,2246
+2025 Q3,South East,Mainstream,Our brand,135076,19810
+2025 Q3,South East,Mainstream,Competitor A,285775,32725
+2025 Q3,South East,Mainstream,Competitor B,172009,19567
+2025 Q3,South East,Mainstream,Private label,162512,38554
+2025 Q3,South East,Mainstream,Competitor C,85720,28529
+2025 Q3,South East,Mainstream,Competitor D,65404,9028
+2025 Q3,South East,Mainstream,Competitor E,46993,12150
+2025 Q3,South East,Mainstream,Competitor F,35192,5792
+2025 Q3,South East,Mainstream,Competitor G,34402,11440
+2025 Q3,South East,Value,Our brand,28520,3965
+2025 Q3,South East,Value,Competitor A,77712,19719
+2025 Q3,South East,Value,Competitor B,63036,8206
+2025 Q3,South East,Value,Private label,279317,31975
+2025 Q3,South East,Value,Competitor C,68990,8572
+2025 Q3,South East,Value,Competitor D,59403,10290
+2025 Q3,South East,Value,Competitor E,40326,11287
+2025 Q3,South East,Value,Competitor F,33654,4567
+2025 Q3,South East,Value,Competitor G,33171,6823
+2025 Q3,South East,Premium,Our brand,119510,34308
+2025 Q3,South East,Premium,Competitor A,49988,7262
+2025 Q3,South East,Premium,Competitor B,102566,12724
+2025 Q3,South East,Premium,Private label,23202,4238
+2025 Q3,South East,Premium,Competitor C,69703,15972
+2025 Q3,South East,Premium,Competitor D,29000,3272
+2025 Q3,South East,Premium,Competitor E,31950,7221
+2025 Q3,South East,Premium,Competitor F,17281,2341
+2025 Q3,South East,Premium,Competitor G,13583,2514
+2025 Q3,South East,Online,Our brand,107771,19567
+2025 Q3,South East,Online,Competitor A,48787,15291
+2025 Q3,South East,Online,Competitor B,52048,5804
+2025 Q3,South East,Online,Private label,43383,6623
+2025 Q3,South East,Online,Competitor C,30769,3539
+2025 Q3,South East,Online,Competitor D,61622,12077
+2025 Q3,South East,Online,Competitor E,23893,5367
+2025 Q3,South East,Online,Competitor F,26676,6446
+2025 Q3,South East,Online,Competitor G,17466,3309
+2025 Q3,South East,Convenience,Our brand,20959,2652
+2025 Q3,South East,Convenience,Competitor A,38282,6387
+2025 Q3,South East,Convenience,Competitor B,33975,9488
+2025 Q3,South East,Convenience,Private label,20256,2961
+2025 Q3,South East,Convenience,Competitor C,33070,3931
+2025 Q3,South East,Convenience,Competitor D,18918,2682
+2025 Q3,South East,Convenience,Competitor E,18043,3912
+2025 Q3,South East,Convenience,Competitor F,16441,3455
+2025 Q3,South East,Convenience,Competitor G,11528,1909
+2025 Q3,South East,Food service,Our brand,7823,1210
+2025 Q3,South East,Food service,Competitor A,24632,4139
+2025 Q3,South East,Food service,Competitor B,17086,2406
+2025 Q3,South East,Food service,Private label,30543,3946
+2025 Q3,South East,Food service,Competitor C,17571,2726
+2025 Q3,South East,Food service,Competitor D,13579,1533
+2025 Q3,South East,Food service,Competitor E,17892,2642
+2025 Q3,South East,Food service,Competitor F,11299,1397
+2025 Q3,South East,Food service,Competitor G,7543,2043
+2025 Q3,North,Mainstream,Our brand,105418,22902
+2025 Q3,North,Mainstream,Competitor A,234391,62596
+2025 Q3,North,Mainstream,Competitor B,127478,14691
+2025 Q3,North,Mainstream,Private label,160519,20746
+2025 Q3,North,Mainstream,Competitor C,93003,17290
+2025 Q3,North,Mainstream,Competitor D,55716,6627
+2025 Q3,North,Mainstream,Competitor E,40252,5671
+2025 Q3,North,Mainstream,Competitor F,40998,4615
+2025 Q3,North,Mainstream,Competitor G,27546,8322
+2025 Q3,North,Value,Our brand,26660,4528
+2025 Q3,North,Value,Competitor A,86362,19410
+2025 Q3,North,Value,Competitor B,44705,12501
+2025 Q3,North,Value,Private label,269674,39325
+2025 Q3,North,Value,Competitor C,62716,7622
+2025 Q3,North,Value,Competitor D,57813,15048
+2025 Q3,North,Value,Competitor E,38133,6737
+2025 Q3,North,Value,Competitor F,27585,6617
+2025 Q3,North,Value,Competitor G,31997,5730
+2025 Q3,North,Premium,Our brand,106076,31343
+2025 Q3,North,Premium,Competitor A,42998,5150
+2025 Q3,North,Premium,Competitor B,79878,9727
+2025 Q3,North,Premium,Private label,19649,2291
+2025 Q3,North,Premium,Competitor C,64329,7330
+2025 Q3,North,Premium,Competitor D,20840,2793
+2025 Q3,North,Premium,Competitor E,27948,8586
+2025 Q3,North,Premium,Competitor F,16581,3558
+2025 Q3,North,Premium,Competitor G,13830,2269
+2025 Q3,North,Online,Our brand,80741,13279
+2025 Q3,North,Online,Competitor A,47684,15406
+2025 Q3,North,Online,Competitor B,45692,6926
+2025 Q3,North,Online,Private label,36422,4538
+2025 Q3,North,Online,Competitor C,29644,9592
+2025 Q3,North,Online,Competitor D,57816,8529
+2025 Q3,North,Online,Competitor E,21487,3316
+2025 Q3,North,Online,Competitor F,26639,7627
+2025 Q3,North,Online,Competitor G,16477,2124
+2025 Q3,North,Convenience,Our brand,17219,2008
+2025 Q3,North,Convenience,Competitor A,44667,7004
+2025 Q3,North,Convenience,Competitor B,29562,8759
+2025 Q3,North,Convenience,Private label,18512,2990
+2025 Q3,North,Convenience,Competitor C,26945,3909
+2025 Q3,North,Convenience,Competitor D,19907,5190
+2025 Q3,North,Convenience,Competitor E,16628,2920
+2025 Q3,North,Convenience,Competitor F,12070,2796
+2025 Q3,North,Convenience,Competitor G,10769,1752
+2025 Q3,North,Food service,Our brand,8138,1491
+2025 Q3,North,Food service,Competitor A,27109,8404
+2025 Q3,North,Food service,Competitor B,14832,2611
+2025 Q3,North,Food service,Private label,24380,5295
+2025 Q3,North,Food service,Competitor C,14938,1667
+2025 Q3,North,Food service,Competitor D,11061,2332
+2025 Q3,North,Food service,Competitor E,17689,2101
+2025 Q3,North,Food service,Competitor F,8783,1085
+2025 Q3,North,Food service,Competitor G,6403,2062
+2025 Q3,Midlands,Mainstream,Our brand,81726,9666
+2025 Q3,Midlands,Mainstream,Competitor A,235408,28878
+2025 Q3,Midlands,Mainstream,Competitor B,129539,41896
+2025 Q3,Midlands,Mainstream,Private label,145641,32293
+2025 Q3,Midlands,Mainstream,Competitor C,78938,9601
+2025 Q3,Midlands,Mainstream,Competitor D,43489,6026
+2025 Q3,Midlands,Mainstream,Competitor E,35493,10869
+2025 Q3,Midlands,Mainstream,Competitor F,28348,5396
+2025 Q3,Midlands,Mainstream,Competitor G,21211,2842
+2025 Q3,Midlands,Value,Our brand,21929,3690
+2025 Q3,Midlands,Value,Competitor A,61516,9498
+2025 Q3,Midlands,Value,Competitor B,38423,10329
+2025 Q3,Midlands,Value,Private label,211295,43775
+2025 Q3,Midlands,Value,Competitor C,61638,13063
+2025 Q3,Midlands,Value,Competitor D,40865,6967
+2025 Q3,Midlands,Value,Competitor E,28592,5547
+2025 Q3,Midlands,Value,Competitor F,28953,4474
+2025 Q3,Midlands,Value,Competitor G,31107,5418
+2025 Q3,Midlands,Premium,Our brand,102020,26814
+2025 Q3,Midlands,Premium,Competitor A,36455,4374
+2025 Q3,Midlands,Premium,Competitor B,81659,24316
+2025 Q3,Midlands,Premium,Private label,17516,2328
+2025 Q3,Midlands,Premium,Competitor C,43273,5101
+2025 Q3,Midlands,Premium,Competitor D,23377,3450
+2025 Q3,Midlands,Premium,Competitor E,31053,5215
+2025 Q3,Midlands,Premium,Competitor F,15057,2547
+2025 Q3,Midlands,Premium,Competitor G,11456,2771
+2025 Q3,Midlands,Online,Our brand,72532,15182
+2025 Q3,Midlands,Online,Competitor A,43388,5256
+2025 Q3,Midlands,Online,Competitor B,36266,5886
+2025 Q3,Midlands,Online,Private label,34019,8754
+2025 Q3,Midlands,Online,Competitor C,22630,3259
+2025 Q3,Midlands,Online,Competitor D,53042,8578
+2025 Q3,Midlands,Online,Competitor E,16901,2152
+2025 Q3,Midlands,Online,Competitor F,21343,6756
+2025 Q3,Midlands,Online,Competitor G,13541,1713
+2025 Q3,Midlands,Convenience,Our brand,14891,4016
+2025 Q3,Midlands,Convenience,Competitor A,32937,4288
+2025 Q3,Midlands,Convenience,Competitor B,21832,4099
+2025 Q3,Midlands,Convenience,Private label,19355,3555
+2025 Q3,Midlands,Convenience,Competitor C,27641,7493
+2025 Q3,Midlands,Convenience,Competitor D,15828,3442
+2025 Q3,Midlands,Convenience,Competitor E,13081,2895
+2025 Q3,Midlands,Convenience,Competitor F,10898,2387
+2025 Q3,Midlands,Convenience,Competitor G,10902,1258
+2025 Q3,Midlands,Food service,Our brand,6906,1136
+2025 Q3,Midlands,Food service,Competitor A,19567,3648
+2025 Q3,Midlands,Food service,Competitor B,11001,2131
+2025 Q3,Midlands,Food service,Private label,21531,2536
+2025 Q3,Midlands,Food service,Competitor C,15755,3948
+2025 Q3,Midlands,Food service,Competitor D,8255,1458
+2025 Q3,Midlands,Food service,Competitor E,16060,1918
+2025 Q3,Midlands,Food service,Competitor F,7651,920
+2025 Q3,Midlands,Food service,Competitor G,6700,1094
+2025 Q3,Scotland,Mainstream,Our brand,66750,8472
+2025 Q3,Scotland,Mainstream,Competitor A,116346,14011
+2025 Q3,Scotland,Mainstream,Competitor B,90824,16142
+2025 Q3,Scotland,Mainstream,Private label,98416,29181
+2025 Q3,Scotland,Mainstream,Competitor C,56156,6284
+2025 Q3,Scotland,Mainstream,Competitor D,34466,4091
+2025 Q3,Scotland,Mainstream,Competitor E,26623,3894
+2025 Q3,Scotland,Mainstream,Competitor F,19592,3422
+2025 Q3,Scotland,Mainstream,Competitor G,14605,3598
+2025 Q3,Scotland,Value,Our brand,12050,2337
+2025 Q3,Scotland,Value,Competitor A,47837,13524
+2025 Q3,Scotland,Value,Competitor B,26771,4166
+2025 Q3,Scotland,Value,Private label,159522,18951
+2025 Q3,Scotland,Value,Competitor C,36026,5965
+2025 Q3,Scotland,Value,Competitor D,31343,6685
+2025 Q3,Scotland,Value,Competitor E,21406,3817
+2025 Q3,Scotland,Value,Competitor F,17049,3320
+2025 Q3,Scotland,Value,Competitor G,17479,2092
+2025 Q3,Scotland,Premium,Our brand,70835,20492
+2025 Q3,Scotland,Premium,Competitor A,22029,5051
+2025 Q3,Scotland,Premium,Competitor B,56186,8818
+2025 Q3,Scotland,Premium,Private label,11553,2091
+2025 Q3,Scotland,Premium,Competitor C,28403,5069
+2025 Q3,Scotland,Premium,Competitor D,12809,1593
+2025 Q3,Scotland,Premium,Competitor E,19343,3909
+2025 Q3,Scotland,Premium,Competitor F,8643,1933
+2025 Q3,Scotland,Premium,Competitor G,7647,1096
+2025 Q3,Scotland,Online,Our brand,49647,12042
+2025 Q3,Scotland,Online,Competitor A,30354,3663
+2025 Q3,Scotland,Online,Competitor B,20447,4609
+2025 Q3,Scotland,Online,Private label,21144,6314
+2025 Q3,Scotland,Online,Competitor C,15165,2930
+2025 Q3,Scotland,Online,Competitor D,32541,5524
+2025 Q3,Scotland,Online,Competitor E,11154,2474
+2025 Q3,Scotland,Online,Competitor F,12819,4224
+2025 Q3,Scotland,Online,Competitor G,8314,1216
+2025 Q3,Scotland,Convenience,Our brand,9863,2518
+2025 Q3,Scotland,Convenience,Competitor A,22483,3519
+2025 Q3,Scotland,Convenience,Competitor B,14137,2742
+2025 Q3,Scotland,Convenience,Private label,10616,2404
+2025 Q3,Scotland,Convenience,Competitor C,16471,2557
+2025 Q3,Scotland,Convenience,Competitor D,9712,1191
+2025 Q3,Scotland,Convenience,Competitor E,8406,2049
+2025 Q3,Scotland,Convenience,Competitor F,8158,2142
+2025 Q3,Scotland,Convenience,Competitor G,6919,2221
+2025 Q3,Scotland,Food service,Our brand,4991,1242
+2025 Q3,Scotland,Food service,Competitor A,12148,1975
+2025 Q3,Scotland,Food service,Competitor B,7856,1406
+2025 Q3,Scotland,Food service,Private label,14293,2436
+2025 Q3,Scotland,Food service,Competitor C,9793,1563
+2025 Q3,Scotland,Food service,Competitor D,5448,679
+2025 Q3,Scotland,Food service,Competitor E,9342,1480
+2025 Q3,Scotland,Food service,Competitor F,4808,1016
+2025 Q3,Scotland,Food service,Competitor G,3214,504
+2025 Q3,Wales,Mainstream,Our brand,31602,3549
+2025 Q3,Wales,Mainstream,Competitor A,84017,9952
+2025 Q3,Wales,Mainstream,Competitor B,47797,5835
+2025 Q3,Wales,Mainstream,Private label,47961,8160
+2025 Q3,Wales,Mainstream,Competitor C,32047,5138
+2025 Q3,Wales,Mainstream,Competitor D,16136,3563
+2025 Q3,Wales,Mainstream,Competitor E,16069,4987
+2025 Q3,Wales,Mainstream,Competitor F,10212,1378
+2025 Q3,Wales,Mainstream,Competitor G,8404,1319
+2025 Q3,Wales,Value,Our brand,7662,1726
+2025 Q3,Wales,Value,Competitor A,28653,3297
+2025 Q3,Wales,Value,Competitor B,18740,3224
+2025 Q3,Wales,Value,Private label,82301,11134
+2025 Q3,Wales,Value,Competitor C,20567,2672
+2025 Q3,Wales,Value,Competitor D,16502,2445
+2025 Q3,Wales,Value,Competitor E,12431,1854
+2025 Q3,Wales,Value,Competitor F,10186,1719
+2025 Q3,Wales,Value,Competitor G,9290,1511
+2025 Q3,Wales,Premium,Our brand,43140,11739
+2025 Q3,Wales,Premium,Competitor A,11995,3149
+2025 Q3,Wales,Premium,Competitor B,26860,3580
+2025 Q3,Wales,Premium,Private label,7504,1491
+2025 Q3,Wales,Premium,Competitor C,17787,4652
+2025 Q3,Wales,Premium,Competitor D,7947,1040
+2025 Q3,Wales,Premium,Competitor E,12161,2175
+2025 Q3,Wales,Premium,Competitor F,5940,1440
+2025 Q3,Wales,Premium,Competitor G,4569,646
+2025 Q3,Wales,Online,Our brand,26664,4503
+2025 Q3,Wales,Online,Competitor A,17031,2133
+2025 Q3,Wales,Online,Competitor B,12989,1761
+2025 Q3,Wales,Online,Private label,12822,3156
+2025 Q3,Wales,Online,Competitor C,8059,1820
+2025 Q3,Wales,Online,Competitor D,19512,2222
+2025 Q3,Wales,Online,Competitor E,7296,870
+2025 Q3,Wales,Online,Competitor F,7934,1247
+2025 Q3,Wales,Online,Competitor G,5717,1037
+2025 Q3,Wales,Convenience,Our brand,6271,1973
+2025 Q3,Wales,Convenience,Competitor A,11899,2566
+2025 Q3,Wales,Convenience,Competitor B,8648,2168
+2025 Q3,Wales,Convenience,Private label,5713,1323
+2025 Q3,Wales,Convenience,Competitor C,9269,1785
+2025 Q3,Wales,Convenience,Competitor D,7134,943
+2025 Q3,Wales,Convenience,Competitor E,4768,1016
+2025 Q3,Wales,Convenience,Competitor F,4348,1294
+2025 Q3,Wales,Convenience,Competitor G,4447,600
+2025 Q3,Wales,Food service,Our brand,2657,600
+2025 Q3,Wales,Food service,Competitor A,7861,2616
+2025 Q3,Wales,Food service,Competitor B,3966,693
+2025 Q3,Wales,Food service,Private label,8192,1553
+2025 Q3,Wales,Food service,Competitor C,5814,745
+2025 Q3,Wales,Food service,Competitor D,3880,946
+2025 Q3,Wales,Food service,Competitor E,7238,846
+2025 Q3,Wales,Food service,Competitor F,2960,467
+2025 Q3,Wales,Food service,Competitor G,1969,350
+2025 Q4,London,Mainstream,Our brand,144825,18291
+2025 Q4,London,Mainstream,Competitor A,274659,75042
+2025 Q4,London,Mainstream,Competitor B,188600,39836
+2025 Q4,London,Mainstream,Private label,185583,25408
+2025 Q4,London,Mainstream,Competitor C,104391,13027
+2025 Q4,London,Mainstream,Competitor D,76861,20303
+2025 Q4,London,Mainstream,Competitor E,65160,10390
+2025 Q4,London,Mainstream,Competitor F,47687,9397
+2025 Q4,London,Mainstream,Competitor G,35192,7121
+2025 Q4,London,Value,Our brand,32173,6837
+2025 Q4,London,Value,Competitor A,106479,30817
+2025 Q4,London,Value,Competitor B,72568,15367
+2025 Q4,London,Value,Private label,387150,119442
+2025 Q4,London,Value,Competitor C,91736,22412
+2025 Q4,London,Value,Competitor D,66639,9268
+2025 Q4,London,Value,Competitor E,48485,9260
+2025 Q4,London,Value,Competitor F,39640,7263
+2025 Q4,London,Value,Competitor G,39504,7166
+2025 Q4,London,Premium,Our brand,139311,45753
+2025 Q4,London,Premium,Competitor A,59062,10758
+2025 Q4,London,Premium,Competitor B,108662,17607
+2025 Q4,London,Premium,Private label,26959,3030
+2025 Q4,London,Premium,Competitor C,67984,20387
+2025 Q4,London,Premium,Competitor D,30914,3636
+2025 Q4,London,Premium,Competitor E,37287,8718
+2025 Q4,London,Premium,Competitor F,19599,2432
+2025 Q4,London,Premium,Competitor G,15351,2735
+2025 Q4,London,Online,Our brand,117024,13569
+2025 Q4,London,Online,Competitor A,66325,9036
+2025 Q4,London,Online,Competitor B,51909,12660
+2025 Q4,London,Online,Private label,51232,8145
+2025 Q4,London,Online,Competitor C,37612,7108
+2025 Q4,London,Online,Competitor D,70899,10842
+2025 Q4,London,Online,Competitor E,28695,7125
+2025 Q4,London,Online,Competitor F,27615,5655
+2025 Q4,London,Online,Competitor G,26074,6112
+2025 Q4,London,Convenience,Our brand,23025,6954
+2025 Q4,London,Convenience,Competitor A,50385,6153
+2025 Q4,London,Convenience,Competitor B,40380,8204
+2025 Q4,London,Convenience,Private label,30290,5403
+2025 Q4,London,Convenience,Competitor C,47520,9856
+2025 Q4,London,Convenience,Competitor D,24875,2786
+2025 Q4,London,Convenience,Competitor E,22564,4027
+2025 Q4,London,Convenience,Competitor F,20127,3428
+2025 Q4,London,Convenience,Competitor G,17662,2383
+2025 Q4,London,Food service,Our brand,9938,1528
+2025 Q4,London,Food service,Competitor A,37021,6421
+2025 Q4,London,Food service,Competitor B,17384,2144
+2025 Q4,London,Food service,Private label,36274,10502
+2025 Q4,London,Food service,Competitor C,22009,5211
+2025 Q4,London,Food service,Competitor D,13454,3080
+2025 Q4,London,Food service,Competitor E,25709,3999
+2025 Q4,London,Food service,Competitor F,11201,2868
+2025 Q4,London,Food service,Competitor G,9206,1338
+2025 Q4,South East,Mainstream,Our brand,104331,32168
+2025 Q4,South East,Mainstream,Competitor A,229422,34962
+2025 Q4,South East,Mainstream,Competitor B,138177,30134
+2025 Q4,South East,Mainstream,Private label,171248,47144
+2025 Q4,South East,Mainstream,Competitor C,105636,12101
+2025 Q4,South East,Mainstream,Competitor D,62634,10203
+2025 Q4,South East,Mainstream,Competitor E,57245,10882
+2025 Q4,South East,Mainstream,Competitor F,45483,11354
+2025 Q4,South East,Mainstream,Competitor G,27271,3880
+2025 Q4,South East,Value,Our brand,25401,2951
+2025 Q4,South East,Value,Competitor A,81500,20471
+2025 Q4,South East,Value,Competitor B,63703,8538
+2025 Q4,South East,Value,Private label,304080,46812
+2025 Q4,South East,Value,Competitor C,72655,16619
+2025 Q4,South East,Value,Competitor D,54042,7274
+2025 Q4,South East,Value,Competitor E,46568,7371
+2025 Q4,South East,Value,Competitor F,36112,5596
+2025 Q4,South East,Value,Competitor G,32168,7270
+2025 Q4,South East,Premium,Our brand,112483,13886
+2025 Q4,South East,Premium,Competitor A,47039,6155
+2025 Q4,South East,Premium,Competitor B,110229,16192
+2025 Q4,South East,Premium,Private label,21205,5776
+2025 Q4,South East,Premium,Competitor C,63849,18020
+2025 Q4,South East,Premium,Competitor D,30092,3731
+2025 Q4,South East,Premium,Competitor E,32207,6304
+2025 Q4,South East,Premium,Competitor F,18172,2380
+2025 Q4,South East,Premium,Competitor G,13349,1554
+2025 Q4,South East,Online,Our brand,86844,13602
+2025 Q4,South East,Online,Competitor A,46613,11070
+2025 Q4,South East,Online,Competitor B,40614,8677
+2025 Q4,South East,Online,Private label,36769,5073
+2025 Q4,South East,Online,Competitor C,26067,3080
+2025 Q4,South East,Online,Competitor D,55035,7861
+2025 Q4,South East,Online,Competitor E,20424,6403
+2025 Q4,South East,Online,Competitor F,26316,4566
+2025 Q4,South East,Online,Competitor G,21585,5538
+2025 Q4,South East,Convenience,Our brand,22081,3941
+2025 Q4,South East,Convenience,Competitor A,50295,14173
+2025 Q4,South East,Convenience,Competitor B,30661,3687
+2025 Q4,South East,Convenience,Private label,20941,4076
+2025 Q4,South East,Convenience,Competitor C,32042,7120
+2025 Q4,South East,Convenience,Competitor D,20584,5137
+2025 Q4,South East,Convenience,Competitor E,18597,2168
+2025 Q4,South East,Convenience,Competitor F,14049,2797
+2025 Q4,South East,Convenience,Competitor G,13081,2110
+2025 Q4,South East,Food service,Our brand,9248,1095
+2025 Q4,South East,Food service,Competitor A,29541,8773
+2025 Q4,South East,Food service,Competitor B,14304,1886
+2025 Q4,South East,Food service,Private label,32615,6394
+2025 Q4,South East,Food service,Competitor C,20042,5841
+2025 Q4,South East,Food service,Competitor D,11368,1931
+2025 Q4,South East,Food service,Competitor E,19090,2742
+2025 Q4,South East,Food service,Competitor F,8984,1036
+2025 Q4,South East,Food service,Competitor G,8066,1921
+2025 Q4,North,Mainstream,Our brand,119320,18738
+2025 Q4,North,Mainstream,Competitor A,257560,28829
+2025 Q4,North,Mainstream,Competitor B,131289,15502
+2025 Q4,North,Mainstream,Private label,144857,38387
+2025 Q4,North,Mainstream,Competitor C,82663,15609
+2025 Q4,North,Mainstream,Competitor D,54022,7742
+2025 Q4,North,Mainstream,Competitor E,41579,6016
+2025 Q4,North,Mainstream,Competitor F,37237,6636
+2025 Q4,North,Mainstream,Competitor G,30841,5532
+2025 Q4,North,Value,Our brand,22706,7252
+2025 Q4,North,Value,Competitor A,74580,14197
+2025 Q4,North,Value,Competitor B,53425,7404
+2025 Q4,North,Value,Private label,241270,59343
+2025 Q4,North,Value,Competitor C,56549,11711
+2025 Q4,North,Value,Competitor D,47369,6270
+2025 Q4,North,Value,Competitor E,37614,10584
+2025 Q4,North,Value,Competitor F,35124,7705
+2025 Q4,North,Value,Competitor G,36215,4858
+2025 Q4,North,Premium,Our brand,116465,26828
+2025 Q4,North,Premium,Competitor A,36633,6401
+2025 Q4,North,Premium,Competitor B,98357,15843
+2025 Q4,North,Premium,Private label,21357,2920
+2025 Q4,North,Premium,Competitor C,60048,7838
+2025 Q4,North,Premium,Competitor D,27794,3873
+2025 Q4,North,Premium,Competitor E,33044,6672
+2025 Q4,North,Premium,Competitor F,18518,4393
+2025 Q4,North,Premium,Competitor G,11402,2237
+2025 Q4,North,Online,Our brand,82740,27538
+2025 Q4,North,Online,Competitor A,51600,9539
+2025 Q4,North,Online,Competitor B,36983,6850
+2025 Q4,North,Online,Private label,37131,4165
+2025 Q4,North,Online,Competitor C,28107,4445
+2025 Q4,North,Online,Competitor D,47826,6039
+2025 Q4,North,Online,Competitor E,23190,2808
+2025 Q4,North,Online,Competitor F,24797,4723
+2025 Q4,North,Online,Competitor G,16267,2087
+2025 Q4,North,Convenience,Our brand,16179,5161
+2025 Q4,North,Convenience,Competitor A,33850,4502
+2025 Q4,North,Convenience,Competitor B,31641,8394
+2025 Q4,North,Convenience,Private label,19124,2299
+2025 Q4,North,Convenience,Competitor C,31557,7302
+2025 Q4,North,Convenience,Competitor D,21510,2403
+2025 Q4,North,Convenience,Competitor E,13599,2183
+2025 Q4,North,Convenience,Competitor F,13491,2260
+2025 Q4,North,Convenience,Competitor G,12236,2320
+2025 Q4,North,Food service,Our brand,7994,1213
+2025 Q4,North,Food service,Competitor A,27329,5290
+2025 Q4,North,Food service,Competitor B,15080,1742
+2025 Q4,North,Food service,Private label,28117,3808
+2025 Q4,North,Food service,Competitor C,17863,3350
+2025 Q4,North,Food service,Competitor D,11030,1852
+2025 Q4,North,Food service,Competitor E,16777,2116
+2025 Q4,North,Food service,Competitor F,8216,1477
+2025 Q4,North,Food service,Competitor G,6699,928
+2025 Q4,Midlands,Mainstream,Our brand,84397,12630
+2025 Q4,Midlands,Mainstream,Competitor A,178555,26939
+2025 Q4,Midlands,Mainstream,Competitor B,136915,15860
+2025 Q4,Midlands,Mainstream,Private label,123716,16024
+2025 Q4,Midlands,Mainstream,Competitor C,91391,19931
+2025 Q4,Midlands,Mainstream,Competitor D,54175,6834
+2025 Q4,Midlands,Mainstream,Competitor E,37544,6562
+2025 Q4,Midlands,Mainstream,Competitor F,33728,3969
+2025 Q4,Midlands,Mainstream,Competitor G,24731,5385
+2025 Q4,Midlands,Value,Our brand,19829,4345
+2025 Q4,Midlands,Value,Competitor A,66269,14108
+2025 Q4,Midlands,Value,Competitor B,44775,8478
+2025 Q4,Midlands,Value,Private label,204434,67154
+2025 Q4,Midlands,Value,Competitor C,59027,10844
+2025 Q4,Midlands,Value,Competitor D,50114,5778
+2025 Q4,Midlands,Value,Competitor E,32478,9157
+2025 Q4,Midlands,Value,Competitor F,31210,3776
+2025 Q4,Midlands,Value,Competitor G,30319,3789
+2025 Q4,Midlands,Premium,Our brand,85752,16289
+2025 Q4,Midlands,Premium,Competitor A,37871,4699
+2025 Q4,Midlands,Premium,Competitor B,78190,16057
+2025 Q4,Midlands,Premium,Private label,18099,2373
+2025 Q4,Midlands,Premium,Competitor C,45301,9199
+2025 Q4,Midlands,Premium,Competitor D,19828,4935
+2025 Q4,Midlands,Premium,Competitor E,26072,8340
+2025 Q4,Midlands,Premium,Competitor F,13866,3094
+2025 Q4,Midlands,Premium,Competitor G,11790,1466
+2025 Q4,Midlands,Online,Our brand,69984,10806
+2025 Q4,Midlands,Online,Competitor A,41763,6038
+2025 Q4,Midlands,Online,Competitor B,35839,4127
+2025 Q4,Midlands,Online,Private label,31706,3624
+2025 Q4,Midlands,Online,Competitor C,26621,4139
+2025 Q4,Midlands,Online,Competitor D,43674,5458
+2025 Q4,Midlands,Online,Competitor E,20217,3398
+2025 Q4,Midlands,Online,Competitor F,23031,4360
+2025 Q4,Midlands,Online,Competitor G,16312,2592
+2025 Q4,Midlands,Convenience,Our brand,14684,4528
+2025 Q4,Midlands,Convenience,Competitor A,34208,6439
+2025 Q4,Midlands,Convenience,Competitor B,25452,3231
+2025 Q4,Midlands,Convenience,Private label,16603,2287
+2025 Q4,Midlands,Convenience,Competitor C,25273,6929
+2025 Q4,Midlands,Convenience,Competitor D,19651,2318
+2025 Q4,Midlands,Convenience,Competitor E,13194,2906
+2025 Q4,Midlands,Convenience,Competitor F,13232,2809
+2025 Q4,Midlands,Convenience,Competitor G,11058,2784
+2025 Q4,Midlands,Food service,Our brand,7767,905
+2025 Q4,Midlands,Food service,Competitor A,19550,5425
+2025 Q4,Midlands,Food service,Competitor B,11268,1564
+2025 Q4,Midlands,Food service,Private label,21923,3864
+2025 Q4,Midlands,Food service,Competitor C,16275,2507
+2025 Q4,Midlands,Food service,Competitor D,9482,2430
+2025 Q4,Midlands,Food service,Competitor E,17336,2870
+2025 Q4,Midlands,Food service,Competitor F,7972,1386
+2025 Q4,Midlands,Food service,Competitor G,5685,733
+2025 Q4,Scotland,Mainstream,Our brand,61346,9563
+2025 Q4,Scotland,Mainstream,Competitor A,116502,20707
+2025 Q4,Scotland,Mainstream,Competitor B,87764,10378
+2025 Q4,Scotland,Mainstream,Private label,83447,13721
+2025 Q4,Scotland,Mainstream,Competitor C,49082,5927
+2025 Q4,Scotland,Mainstream,Competitor D,31082,4820
+2025 Q4,Scotland,Mainstream,Competitor E,24196,3946
+2025 Q4,Scotland,Mainstream,Competitor F,22006,5661
+2025 Q4,Scotland,Mainstream,Competitor G,12936,1460
+2025 Q4,Scotland,Value,Our brand,15771,3446
+2025 Q4,Scotland,Value,Competitor A,48119,7078
+2025 Q4,Scotland,Value,Competitor B,32096,7233
+2025 Q4,Scotland,Value,Private label,167626,37922
+2025 Q4,Scotland,Value,Competitor C,37257,8519
+2025 Q4,Scotland,Value,Competitor D,27174,7552
+2025 Q4,Scotland,Value,Competitor E,23970,4077
+2025 Q4,Scotland,Value,Competitor F,17718,4271
+2025 Q4,Scotland,Value,Competitor G,16857,2795
+2025 Q4,Scotland,Premium,Our brand,70934,12872
+2025 Q4,Scotland,Premium,Competitor A,21562,6322
+2025 Q4,Scotland,Premium,Competitor B,51980,8823
+2025 Q4,Scotland,Premium,Private label,11818,1499
+2025 Q4,Scotland,Premium,Competitor C,27257,5674
+2025 Q4,Scotland,Premium,Competitor D,14130,2730
+2025 Q4,Scotland,Premium,Competitor E,19149,4428
+2025 Q4,Scotland,Premium,Competitor F,8767,1500
+2025 Q4,Scotland,Premium,Competitor G,6433,835
+2025 Q4,Scotland,Online,Our brand,48474,5565
+2025 Q4,Scotland,Online,Competitor A,26226,3163
+2025 Q4,Scotland,Online,Competitor B,24352,5927
+2025 Q4,Scotland,Online,Private label,19575,2351
+2025 Q4,Scotland,Online,Competitor C,12951,2545
+2025 Q4,Scotland,Online,Competitor D,27663,4628
+2025 Q4,Scotland,Online,Competitor E,11583,2852
+2025 Q4,Scotland,Online,Competitor F,13624,2123
+2025 Q4,Scotland,Online,Competitor G,10303,2519
+2025 Q4,Scotland,Convenience,Our brand,9571,1128
+2025 Q4,Scotland,Convenience,Competitor A,22920,4851
+2025 Q4,Scotland,Convenience,Competitor B,16912,2081
+2025 Q4,Scotland,Convenience,Private label,11720,2662
+2025 Q4,Scotland,Convenience,Competitor C,17430,2505
+2025 Q4,Scotland,Convenience,Competitor D,11145,2296
+2025 Q4,Scotland,Convenience,Competitor E,8040,1513
+2025 Q4,Scotland,Convenience,Competitor F,8413,1110
+2025 Q4,Scotland,Convenience,Competitor G,6669,2176
+2025 Q4,Scotland,Food service,Our brand,4399,645
+2025 Q4,Scotland,Food service,Competitor A,12377,2181
+2025 Q4,Scotland,Food service,Competitor B,7595,1885
+2025 Q4,Scotland,Food service,Private label,13518,2954
+2025 Q4,Scotland,Food service,Competitor C,10261,1183
+2025 Q4,Scotland,Food service,Competitor D,5196,740
+2025 Q4,Scotland,Food service,Competitor E,11696,2143
+2025 Q4,Scotland,Food service,Competitor F,5439,1017
+2025 Q4,Scotland,Food service,Competitor G,4257,620
+2025 Q4,Wales,Mainstream,Our brand,34513,6012
+2025 Q4,Wales,Mainstream,Competitor A,88914,11689
+2025 Q4,Wales,Mainstream,Competitor B,42892,5302
+2025 Q4,Wales,Mainstream,Private label,52354,6378
+2025 Q4,Wales,Mainstream,Competitor C,33652,4658
+2025 Q4,Wales,Mainstream,Competitor D,17859,3718
+2025 Q4,Wales,Mainstream,Competitor E,14511,1763
+2025 Q4,Wales,Mainstream,Competitor F,11518,2048
+2025 Q4,Wales,Mainstream,Competitor G,10258,1227
+2025 Q4,Wales,Value,Our brand,7249,880
+2025 Q4,Wales,Value,Competitor A,26084,3304
+2025 Q4,Wales,Value,Competitor B,14968,1666
+2025 Q4,Wales,Value,Private label,101142,23526
+2025 Q4,Wales,Value,Competitor C,21249,3646
+2025 Q4,Wales,Value,Competitor D,18149,2679
+2025 Q4,Wales,Value,Competitor E,13814,4129
+2025 Q4,Wales,Value,Competitor F,10891,2126
+2025 Q4,Wales,Value,Competitor G,9584,1098
+2025 Q4,Wales,Premium,Our brand,34778,5403
+2025 Q4,Wales,Premium,Competitor A,15063,2473
+2025 Q4,Wales,Premium,Competitor B,27204,4285
+2025 Q4,Wales,Premium,Private label,6137,1553
+2025 Q4,Wales,Premium,Competitor C,16883,3140
+2025 Q4,Wales,Premium,Competitor D,9090,1028
+2025 Q4,Wales,Premium,Competitor E,12354,2352
+2025 Q4,Wales,Premium,Competitor F,4590,595
+2025 Q4,Wales,Premium,Competitor G,4324,510
+2025 Q4,Wales,Online,Our brand,24662,2923
+2025 Q4,Wales,Online,Competitor A,17714,2110
+2025 Q4,Wales,Online,Competitor B,11674,1385
+2025 Q4,Wales,Online,Private label,10089,1622
+2025 Q4,Wales,Online,Competitor C,8575,1320
+2025 Q4,Wales,Online,Competitor D,18074,2122
+2025 Q4,Wales,Online,Competitor E,5819,763
+2025 Q4,Wales,Online,Competitor F,8140,1646
+2025 Q4,Wales,Online,Competitor G,6305,1343
+2025 Q4,Wales,Convenience,Our brand,6436,1121
+2025 Q4,Wales,Convenience,Competitor A,13068,1551
+2025 Q4,Wales,Convenience,Competitor B,9980,2283
+2025 Q4,Wales,Convenience,Private label,5791,1043
+2025 Q4,Wales,Convenience,Competitor C,9559,1063
+2025 Q4,Wales,Convenience,Competitor D,6492,773
+2025 Q4,Wales,Convenience,Competitor E,6056,739
+2025 Q4,Wales,Convenience,Competitor F,4432,1088
+2025 Q4,Wales,Convenience,Competitor G,3876,870
+2025 Q4,Wales,Food service,Our brand,2872,378
+2025 Q4,Wales,Food service,Competitor A,9172,1773
+2025 Q4,Wales,Food service,Competitor B,4845,654
+2025 Q4,Wales,Food service,Private label,9484,2286
+2025 Q4,Wales,Food service,Competitor C,5935,1156
+2025 Q4,Wales,Food service,Competitor D,3559,473
+2025 Q4,Wales,Food service,Competitor E,7197,878
+2025 Q4,Wales,Food service,Competitor F,3595,404
+2025 Q4,Wales,Food service,Competitor G,2479,502

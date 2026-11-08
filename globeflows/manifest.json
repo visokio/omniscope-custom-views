@@ -1,0 +1,323 @@
+{
+  "name": "Globe Flows",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "globe",
+    "3d",
+    "three.js",
+    "flows",
+    "map",
+    "origin destination",
+    "trade",
+    "logistics",
+    "arcs",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 20000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "origin": {
+        "displayName": "Origin",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Name of where each flow starts, e.g. Origin port, Sender country",
+        "mandatory": true
+      },
+      "destination": {
+        "displayName": "Destination",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Name of where each flow ends",
+        "mandatory": true
+      },
+      "originLat": {
+        "displayName": "Origin latitude",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Latitude of the origin in decimal degrees (mean is used if it varies)",
+        "validMeasureFunctions": [
+          "MEAN",
+          "MEDIAN",
+          "MIN",
+          "MAX",
+          "SINGLETON"
+        ]
+      },
+      "originLon": {
+        "displayName": "Origin longitude",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Longitude of the origin in decimal degrees",
+        "validMeasureFunctions": [
+          "MEAN",
+          "MEDIAN",
+          "MIN",
+          "MAX",
+          "SINGLETON"
+        ]
+      },
+      "destLat": {
+        "displayName": "Destination latitude",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Latitude of the destination in decimal degrees",
+        "validMeasureFunctions": [
+          "MEAN",
+          "MEDIAN",
+          "MIN",
+          "MAX",
+          "SINGLETON"
+        ]
+      },
+      "destLon": {
+        "displayName": "Destination longitude",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Longitude of the destination in decimal degrees",
+        "validMeasureFunctions": [
+          "MEAN",
+          "MEDIAN",
+          "MIN",
+          "MAX",
+          "SINGLETON"
+        ]
+      },
+      "value": {
+        "displayName": "Flow size",
+        "type": "MEASURE",
+        "mandatory": false,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional size of each flow, e.g. sum of Containers or Amount; without it each pair counts once"
+      },
+      "colour": {
+        "displayName": "Colour by field",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Optional category to colour flows by, e.g. Origin region or Product. Overrides Colour flows by. Up to eight colours; the rest are grey."
+      },
+      "colourBy": {
+        "displayName": "Colour flows by",
+        "type": "CHOICE",
+        "values": [
+          "ORIGIN",
+          "DESTINATION",
+          "SINGLE"
+        ],
+        "displayValues": [
+          "Origin",
+          "Destination",
+          "Single colour"
+        ],
+        "detail": "The eight largest origins (or destinations) get their own colour"
+      },
+      "maxFlows": {
+        "displayName": "Flows to draw",
+        "type": "NUMBER",
+        "minValue": 10,
+        "maxValue": 3000,
+        "detail": "Draw the largest N flows (default 400)"
+      },
+      "animate": {
+        "displayName": "Animate flows",
+        "type": "TOGGLE",
+        "detail": "Pulses travel along the largest flows from origin to destination"
+      },
+      "autoRotate": {
+        "displayName": "Auto rotate",
+        "type": "TOGGLE",
+        "detail": "Slowly spin the globe"
+      },
+      "labels": {
+        "displayName": "Label places",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 100,
+        "detail": "Label the N places with the most flow (default 12)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "origin",
+        "destination",
+        "value",
+        "colourBy"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Flows",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "origin",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "destination",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Coordinates",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "originLat",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "originLon",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "destLat",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "destLon",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "colourBy",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxFlows",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "labels",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "animate",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "autoRotate",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "colourBy": "ORIGIN",
+      "maxFlows": 400,
+      "animate": true,
+      "autoRotate": false,
+      "labels": 12
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 200,
+    "minHeight": 200
+  }
+}

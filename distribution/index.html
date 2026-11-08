@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #chart { flex: 1; position: relative; min-width: 0; }
+        #side { width: 270px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .axis text { fill: #52514e; font-size: 10.5px; } .axis path, .axis line { stroke: #c9c8c1; } .grid line { stroke: #ebeae5; } .grid path { display: none; } svg line, .grid, .axis, path.ln { pointer-events: none; }
+        .bar { cursor: pointer; } .bar:hover { opacity: .75; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        table { border-collapse: collapse; width: 100%; font-size: 11.5px; } td, th { padding: 2px 3px; text-align: right; white-space: nowrap; } th { color: #52514e; font-weight: normal; font-size: 10.5px; border-bottom: 1px solid #e1e0d9; } td:first-child, th:first-child { text-align: left; }
+        .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 5px; }
+        .note { color: #898781; font-size: 11px; margin-top: 8px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    var CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], ONE = "#2a78d6", INK = "#3a3936", SELECT = "#2161D9";
+    var S = { gen: 0, sel: null };
+    window.__dist = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toLocaleString() : (+v.toPrecision(3)).toString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { v: fld(o.value), g: fld(o.group) };
+        if (!F.v) { message("Choose the Values field: any number, such as delivery time, order value or age."); return; }
+        if (F.g === F.v) F.g = null;
+        var q = { fields: F.g ? [F.v, F.g] : [F.v], range: { start: 0, length: Math.max(1000, Math.min(1000000, +o.maxRows || 500000)) } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    function stats(v) {
+        v = v.slice().sort(function (a, b) { return a - b; }); var q = function (p) { return d3.quantileSorted(v, p); }, q1 = q(0.25), q3 = q(0.75), iqr = q3 - q1, lo = q1 - 1.5 * iqr, hi = q3 + 1.5 * iqr, mean = d3.mean(v), sd = d3.deviation(v) || 0;
+        var skew = sd ? d3.mean(v, function (x) { return Math.pow((x - mean) / sd, 3); }) : 0;
+        return { n: v.length, min: v[0], max: v[v.length - 1], mean: mean, sd: sd, p5: q(0.05), p10: q(0.1), q1: q1, med: q(0.5), q3: q3, p90: q(0.9), p95: q(0.95), out: v.filter(function (x) { return x < lo || x > hi; }).length, lo: lo, hi: hi, skew: skew, sorted: v };
+    }
+    function build(F, recs) {
+        var vals = [], by = new Map(), bad = 0;
+        recs.forEach(function (r) { var v = typeof r[0] === "number" ? r[0] : parseFloat(r[0]); if (!isFinite(v)) { bad++; return; } vals.push(v); if (F.g) { var g = r[1] === null || r[1] === undefined ? "(blank)" : String(r[1]); if (!by.has(g)) by.set(g, { raw: r[1], v: [] }); by.get(g).v.push(v); } });
+        if (vals.length < 3) { S.model = null; message(vals.length ? "Too few values to describe a distribution." : "No data to show. Check the filters and that Values holds numbers."); return; }
+        message(null);
+        var all = stats(vals); all.name = "All"; all.colour = ONE;
+        var names = Array.from(by.keys()).sort(function (a, b) { return by.get(b).v.length - by.get(a).v.length; }).slice(0, 6), alpha = names.slice().sort();
+        var groups = names.filter(function (n) { return by.get(n).v.length >= 3; }).map(function (n) { var s = stats(by.get(n).v); s.name = n; s.raw = by.get(n).raw; s.colour = CAT[alpha.indexOf(n) % CAT.length]; return s; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+        S.model = { F: F, all: all, groups: groups, bad: bad, more: by.size - names.length };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var o = it(), box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var m = { l: 52, r: 16, t: 52, b: 36 }, w = Math.max(60, W - m.l - m.r), h = Math.max(60, H - m.t - m.b), A = M.all;
+        var clip = o.clip !== false, x0 = A.min, x1 = clip ? Math.max(A.p95, Math.min(A.max, A.hi)) : A.max; // by default the far tail beyond the outlier fence is not drawn
+        var x = d3.scaleLinear().domain([x0, x1]).nice(Math.max(10, Math.round(+o.bins || 40))), bins = d3.bin().domain(x.domain()).thresholds(x.ticks(Math.max(10, Math.min(120, Math.round(+o.bins || 40)))));
+        var series = M.groups.length ? M.groups : [A], hist = series.map(function (s) { var b = bins(s.sorted.filter(function (v) { return v >= x.domain()[0] && v <= x.domain()[1]; })); return { s: s, b: b }; });
+        var share = o.scale !== "COUNT", ymax = d3.max(hist, function (hh) { return d3.max(hh.b, function (b) { return share ? b.length / hh.s.n : b.length; }); }) || 1;
+        x.range([0, w]); var y = d3.scaleLinear().domain([0, ymax]).nice().range([h, 0]);
+        var g = svg.append("g").attr("transform", "translate(" + m.l + "," + m.t + ")");
+        g.append("g").attr("class", "grid").call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(""));
+        g.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(5).tickFormat(share ? d3.format(".0%") : fmt));
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + h + ")").call(d3.axisBottom(x).ticks(Math.max(3, Math.floor(w / 80))).tickFormat(fmt));
+        g.append("text").attr("x", w).attr("y", h + 30).attr("text-anchor", "end").style("font-size", "11px").attr("fill", "#52514e").text(M.F.v + (clip && A.max > x1 ? " (longest tail beyond " + fmt(x1) + " not drawn)" : ""));
+        var sel = S.sel;
+        hist.forEach(function (hh) {
+            var many = hist.length > 1, s = hh.s;
+            if (many) g.append("path").attr("class", "ln").attr("d", d3.line().curve(d3.curveStepAfter).x(function (b) { return x(b.x0); }).y(function (b) { return y(b.length / s.n); })(hh.b.concat([{ x0: hh.b[hh.b.length - 1].x1, length: 0 }]))).attr("fill", "none").attr("stroke", s.colour).attr("stroke-width", 2);
+            else g.selectAll(null).data(hh.b).enter().append("rect").attr("class", "bar").attr("x", function (b) { return x(b.x0) + 0.5; }).attr("width", function (b) { return Math.max(0.5, x(b.x1) - x(b.x0) - 1); }).attr("y", function (b) { return y(share ? b.length / s.n : b.length); }).attr("height", function (b) { return h - y(share ? b.length / s.n : b.length); })
+                .attr("fill", function (b) { return sel && sel.lo === b.x0 ? SELECT : s.colour; }).attr("opacity", function (b) { return sel && sel.lo !== undefined && sel.lo !== b.x0 ? 0.35 : 0.8; })
+                .on("mousemove", function (ev, b) { show('<b>' + fmt(b.x0) + ' to ' + fmt(b.x1) + '</b><br><span class="k">Records:</span> ' + b.length.toLocaleString() + ' (' + (100 * b.length / s.n).toFixed(1) + '%)<br><span class="k">At or below ' + fmt(b.x1) + ':</span> ' + (100 * d3.bisectRight(s.sorted, b.x1) / s.n).toFixed(1) + '%', ev); }).on("mouseleave", tip)
+                .on("click", function (ev, b) { ev.stopPropagation(); selectRange(b.x0, b.x1); });
+        });
+        // percentile markers for the whole distribution
+        [[A.p10, "P10"], [A.med, "Median"], [A.mean, "Mean"], [A.p90, "P90"]].forEach(function (mk, i) { if (mk[0] < x.domain()[0] || mk[0] > x.domain()[1]) return; var xx = x(mk[0]); g.append("line").attr("x1", xx).attr("x2", xx).attr("y1", -4).attr("y2", h).attr("stroke", INK).attr("stroke-dasharray", mk[1] === "Mean" ? "2 3" : "5 3").attr("opacity", 0.7); g.append("text").attr("x", xx).attr("y", -8 - (i % 2) * 11).attr("text-anchor", "middle").style("font-size", "10px").attr("fill", INK).text(mk[1] + " " + fmt(mk[0])); });
+        var head = svg.append("text").attr("x", 10).attr("y", 16).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.F.v + ": median " + fmt(A.med) + ", middle half " + fmt(A.q1) + " to " + fmt(A.q3));
+        head.append("tspan").attr("fill", "#52514e").text("  " + A.n.toLocaleString() + " values" + (A.skew > 0.5 ? ", long tail to the right" : A.skew < -0.5 ? ", long tail to the left" : ", roughly symmetric"));
+        if (M.groups.length) { var lg = svg.append("g").attr("transform", "translate(" + (m.l + w) + ",30)").style("font-size", "11px"), lx = 0, items = M.groups.slice().reverse(); items.forEach(function (s) { var t = lg.append("text").attr("x", -lx).attr("text-anchor", "end").attr("fill", "#2b2a28").text(s.name); var tw = t.node().getComputedTextLength(); lg.append("rect").attr("x", -lx - tw - 14).attr("y", -8).attr("width", 10).attr("height", 3).attr("fill", s.colour); lx += tw + 26; }); }
+        if (intro) { var bs = svg.selectAll("rect.bar"); growUp(bs, 600, stag(bs.size(), 500)); linesIn(svg, 1000); }
+        side();
+    }
+    function side() {
+        var M = S.model, el = document.getElementById("side"), list = M.groups.length ? M.groups.slice(0, 3).concat([M.all]) : [M.all];
+        var rowsT = [["Values", "n"], ["Mean", "mean"], ["Std dev", "sd"], ["Min", "min"], ["P10", "p10"], ["Q1", "q1"], ["Median", "med"], ["Q3", "q3"], ["P90", "p90"], ["P95", "p95"], ["Max", "max"], ["Outliers", "out"]];
+        var h = '<h3>Summary</h3><table><tr><th></th>' + list.map(function (s) { return '<th><span class="sw" style="background:' + s.colour + '"></span>' + esc(s.name.length > 9 ? s.name.slice(0, 8) + "\u2026" : s.name) + '</th>'; }).join("") + '</tr>';
+        rowsT.forEach(function (r) { h += '<tr><td>' + r[0] + '</td>' + list.map(function (s) { var v = s[r[1]]; return '<td>' + (r[1] === "n" || r[1] === "out" ? v.toLocaleString() : fmt(v)) + '</td>'; }).join("") + '</tr>'; });
+        h += '</table><div class="note">P10, P90 and P95 are percentiles, Q1 and Q3 quartiles (interpolated).' + (M.groups.length > 3 ? ' The table shows the first three groups.' : '') + ' Outliers are values more than 1.5 times the interquartile range beyond the quartiles (below ' + fmt(M.all.lo) + ' or above ' + fmt(M.all.hi) + ' overall).' + (M.bad ? ' ' + M.bad.toLocaleString() + ' non-numeric values left out.' : '') + (M.more > 0 ? ' ' + M.more + ' smaller groups not shown.' : '') + ' Click a bar to select the records in that range.</div>';
+        el.innerHTML = h;
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectRange(lo, hi) { if (S.sel && S.sel.lo === lo) return publish(null, null); var F = S.model.F.v; publish({ type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F, operator: ">=", value: lo }, { type: "FIELD_VALUE", inputField: F, operator: "<", value: hi }] }, { lo: lo, hi: hi }); }
+    window.__dist.selectRange = selectRange;
+
+    document.getElementById("chart").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

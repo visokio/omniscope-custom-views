@@ -1,0 +1,265 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/market.csv",
+  "options": {
+   "items": {
+    "columns": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "stack": {
+     "inputField": "Brand",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "maxSeries": 6,
+    "sortColumns": "SIZE",
+    "labels": true,
+    "highlight": "Our brand"
+   }
+  },
+  "width": 1040,
+  "height": 540,
+  "wait": 1500,
+  "showcaseHeight": 540,
+  "caption": "Live: an illustrative market by segment and brand, with 'Our brand' highlighted. Column width is the segment's share of the market; hover any block, click to select.",
+  "expect": {
+   "selector": "rect.seg",
+   "min": 30
+  }
+ },
+ {
+  "name": "all-colours",
+  "data": "sample-data/market.csv",
+  "options": {
+   "items": {
+    "columns": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "stack": {
+     "inputField": "Brand",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "maxSeries": 6,
+    "sortColumns": "SIZE",
+    "labels": true
+   }
+  },
+  "width": 1000,
+  "height": 520,
+  "wait": 1500,
+  "expect": {
+   "selector": "rect.seg",
+   "min": 30
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/market.csv",
+  "options": {
+   "items": {
+    "columns": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "stack": {
+     "inputField": "Brand",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "maxSeries": 6,
+    "sortColumns": "SIZE",
+    "labels": true,
+    "highlight": "Our brand"
+   }
+  },
+  "width": 1000,
+  "height": 520,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__mekko.model.cols[0].key==='Mainstream' && Math.abs(window.__mekko.model.cols.reduce(function(a,c){return a+c.total},0)-window.__mekko.model.grand)<1",
+    "expectTruthy": true
+   },
+   {
+    "click": "rect.seg",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "cell"
+   },
+   {
+    "click": "#legend .it[data-k='Private label']"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "series"
+   },
+   {
+    "click": "g.colLab rect",
+    "nth": 2
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     500,
+     515
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "London"
+    }
+   },
+   {
+    "eval": "window.__mekko.model.grand>0",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     520,
+     320
+    ]
+   },
+   {
+    "screenshot": "small"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Segment",
+    "type": "TEXT"
+   },
+   {
+    "name": "Brand",
+    "type": "TEXT"
+   },
+   {
+    "name": "Sales (GBP)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "columns": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "stack": {
+     "inputField": "Brand",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "maxSeries": 6,
+    "sortColumns": "SIZE",
+    "labels": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/market.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose Columns"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "columns": {
+     "inputField": "Col",
+     "type": "UNIQUE_VALUES"
+    },
+    "stack": {
+     "inputField": "Ser",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "V",
+     "function": "SUM"
+    },
+    "maxSeries": 8
+   }
+  },
+  "width": 1200,
+  "height": 600,
+  "wait": 2000,
+  "expect": {
+   "selector": "rect.seg",
+   "min": 300
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/market.csv",
+  "options": {
+   "items": {
+    "columns": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "stack": {
+     "inputField": "Brand",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "maxSeries": 6,
+    "sortColumns": "SIZE",
+    "labels": false,
+    "highlight": "Our brand"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "wait": 1500,
+  "scale": 0.5
+ }
+]

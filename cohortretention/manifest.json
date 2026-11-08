@@ -1,0 +1,209 @@
+{
+  "name": "Cohort Retention",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "cohort",
+    "retention",
+    "churn",
+    "customer",
+    "heatmap",
+    "subscription",
+    "lifetime value",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "customer": {
+        "displayName": "Customer",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Field identifying each customer, user or account"
+      },
+      "date": {
+        "displayName": "Activity date",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "Date of each order, visit, login or payment. A customer's cohort is the period of their first activity."
+      },
+      "value": {
+        "displayName": "Value",
+        "type": "FIELD",
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional amount per row (e.g. Order value) for the revenue metrics"
+      },
+      "unit": {
+        "displayName": "Period",
+        "type": "CHOICE",
+        "values": [
+          "MONTH",
+          "WEEK",
+          "QUARTER"
+        ],
+        "displayValues": [
+          "Month",
+          "Week",
+          "Quarter"
+        ],
+        "detail": "Size of each cohort and of each step after acquisition"
+      },
+      "metric": {
+        "displayName": "Show",
+        "type": "CHOICE",
+        "values": [
+          "RETENTION",
+          "ACTIVE",
+          "REVENUE",
+          "CUMULATIVE_PER_CUSTOMER"
+        ],
+        "displayValues": [
+          "Retention (% of cohort active)",
+          "Active customers",
+          "Revenue",
+          "Cumulative revenue per customer"
+        ],
+        "detail": "What each cell shows. The revenue metrics need a Value field."
+      },
+      "maxPeriods": {
+        "displayName": "Periods after acquisition",
+        "type": "NUMBER",
+        "minValue": 2,
+        "maxValue": 60,
+        "detail": "Number of columns after the acquisition period"
+      },
+      "showAverage": {
+        "displayName": "Show average row",
+        "type": "TOGGLE",
+        "detail": "Add a row with the average across cohorts (weighted by cohort size)"
+      },
+      "showCurves": {
+        "displayName": "Show retention curves",
+        "type": "TOGGLE",
+        "detail": "Draw each cohort as a line beside the table, so cohorts can be compared"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "customer",
+        "date",
+        "metric",
+        "unit"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Cohorts",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "customer",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "date",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "unit",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "metric",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxPeriods",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showAverage",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showCurves",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "unit": "MONTH",
+      "metric": "RETENTION",
+      "maxPeriods": 12,
+      "showAverage": true,
+      "showCurves": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 150
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "name": "Benford Analysis",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "benford",
+    "audit",
+    "fraud",
+    "forensic",
+    "first digit",
+    "anomaly",
+    "compliance",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "value": {
+        "displayName": "Amounts",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Naturally occurring values: payments, invoices, expense claims, transactions"
+      },
+      "group": {
+        "displayName": "Compare by",
+        "type": "FIELD",
+        "detail": "Optional: rank groups by how far they depart from Benford, e.g. Supplier, Approver, Branch"
+      },
+      "digits": {
+        "displayName": "Test",
+        "type": "CHOICE",
+        "values": [
+          "FIRST",
+          "FIRST_TWO",
+          "SECOND"
+        ],
+        "displayValues": [
+          "First digit",
+          "First two digits",
+          "Second digit"
+        ],
+        "detail": "The first-two-digits test is the most precise for spotting amounts kept under a limit"
+      },
+      "minValue": {
+        "displayName": "Ignore values below",
+        "type": "NUMBER",
+        "minValue": 0,
+        "detail": "Small values are usually excluded (default 10)"
+      },
+      "negatives": {
+        "displayName": "Include negatives",
+        "type": "TOGGLE",
+        "detail": "Analyse negative values by their absolute size (credit notes, refunds)"
+      },
+      "minGroup": {
+        "displayName": "Minimum values per group",
+        "type": "NUMBER",
+        "minValue": 20,
+        "detail": "Groups with fewer values are not ranked (default 100)"
+      },
+      "maxRows": {
+        "displayName": "Values used",
+        "type": "NUMBER",
+        "minValue": 1000,
+        "maxValue": 1000000,
+        "detail": "Maximum records fetched (default 500,000)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "value",
+        "group",
+        "digits"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Data",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "group",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Test",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "digits",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "minValue",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "negatives",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "minGroup",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxRows",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "digits": "FIRST",
+      "minValue": 10,
+      "negatives": true,
+      "minGroup": 100,
+      "maxRows": 500000
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #mat { flex: 1; position: relative; min-width: 0; }
+        #side { width: 300px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .lab { cursor: pointer; fill: #2b2a28; } .lab:hover { fill: #2a78d6; } .lab.focus { font-weight: bold; fill: #2161D9; }
+        .cell { cursor: pointer; } .cell:hover { stroke: #0b0b0b; stroke-width: 1.5; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        .stat { margin-bottom: 4px; color: #52514e; } .stat b { font-size: 16px; color: #0b0b0b; }
+        .rule { padding: 5px 6px; border-radius: 5px; cursor: pointer; margin-bottom: 2px; } .rule:hover { background: rgba(127,127,127,.1); } .rule.sel { outline: 1px dashed #2161D9; }
+        .rule .r { font-weight: bold; } .rule .m { color: #52514e; font-size: 11px; margin-top: 1px; }
+        .rule .bar { height: 3px; background: #e34948; border-radius: 2px; opacity: .7; margin-top: 3px; }
+        .note { color: #898781; font-size: 11px; margin-top: 6px; line-height: 1.4; }
+        .chip { display: inline-block; font-size: 11px; background: #e8f1fc; color: #184f95; border-radius: 10px; padding: 1px 8px; margin-left: 4px; cursor: pointer; }
+        .key { display: inline-flex; align-items: center; margin: 0 10px 3px 0; color: #52514e; } .key i { width: 9px; height: 9px; border-radius: 2px; margin-right: 4px; display: inline-block; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; max-width: 320px; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="mat"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    // Diverging: blue = bought together less often than chance, grey = independent, red = more often than chance.
+    var DIV = ["#184f95", "#3987e5", "#9ec5f4", "#f0efec", "#f4a6a5", "#e34948", "#a32a2a"], SELECT = "#2161D9";
+    var CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];
+    var colour = d3.scaleLinear().domain([-2, -1.33, -0.67, 0, 0.67, 1.33, 2]).range(DIV).interpolate(d3.interpolateLab).clamp(true);
+    var S = { gen: 0, sel: null, focus: null };
+    window.__basket = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var pct = function (v) { return v >= 0.1 ? (100 * v).toFixed(0) + "%" : v >= 0.01 ? (100 * v).toFixed(1) + "%" : (100 * v).toFixed(2) + "%"; };
+    var lx = function (v) { return (v >= 10 ? v.toFixed(0) : v.toFixed(1)) + "\u00d7"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function num(v, d, lo, hi) { v = v === null || v === undefined || v === "" || isNaN(+v) ? d : +v; return Math.max(lo, Math.min(hi, v)); }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { b: fld(o.basket), i: fld(o.item), g: fld(o.group) };
+        if (!F.b || !F.i) { message("Choose the Baskets field (transaction or order ID) and the Items field (product) of your order lines."); return; }
+        if (F.g === F.i || F.g === F.b) F.g = null;
+        var fields = [F.b, F.i]; if (F.g) fields.push(F.g);
+        var q = { fields: fields, range: { start: 0, length: num(o.maxLines, 300000, 1000, 1000000) } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    function build(F, recs) {
+        var o = it(), N = Math.round(num(o.topItems, 25, 4, 60));
+        var itemCount = new Map(), baskets = new Map(), groupOf = new Map();
+        recs.forEach(function (r) {
+            if (r[0] === null || r[0] === undefined || r[1] === null || r[1] === undefined) return;
+            var b = String(r[0]), i = String(r[1]);
+            if (!baskets.has(b)) baskets.set(b, { raw: r[0], items: new Set() });
+            var B = baskets.get(b); if (B.items.has(i)) return; B.items.add(i);
+            itemCount.set(i, (itemCount.get(i) || 0) + 1);
+            if (F.g && r[2] !== null && r[2] !== undefined && !groupOf.has(i)) groupOf.set(i, String(r[2]));
+        });
+        var nb = baskets.size;
+        if (!nb) { S.model = null; message("No data to show. Check the filters."); return; }
+        var lines = 0; baskets.forEach(function (B) { lines += B.items.size; });
+        if (lines / nb < 1.05) { S.model = null; message("Almost every basket has a single item (" + nb.toLocaleString() + " baskets, " + lines.toLocaleString() + " lines). Check that Baskets is the transaction or order ID and Items is the product."); return; }
+        message(null);
+        var items = Array.from(itemCount.entries()).sort(function (a, b) { return b[1] - a[1] || (a[0] < b[0] ? -1 : 1); }).slice(0, N).map(function (e, k) { return { name: e[0], n: e[1], s: e[1] / nb, k: k, g: groupOf.get(e[0]) || null }; });
+        var idx = new Map(); items.forEach(function (I) { idx.set(I.name, I.k); });
+        var n = items.length, pair = new Float64Array(n * n);
+        baskets.forEach(function (B) {
+            var ks = []; B.items.forEach(function (i) { var k = idx.get(i); if (k !== undefined) ks.push(k); });
+            for (var x = 0; x < ks.length; x++) for (var y = x + 1; y < ks.length; y++) { pair[ks[x] * n + ks[y]]++; pair[ks[y] * n + ks[x]]++; }
+        });
+        var lift = new Float64Array(n * n);
+        for (var a = 0; a < n; a++) for (var b = 0; b < n; b++) if (a !== b) lift[a * n + b] = (pair[a * n + b] / nb) / (items[a].s * items[b].s);
+        var minSup = num(o.minSupport, 0.5, 0, 100) / 100, minCount = Math.max(3, Math.ceil(minSup * nb));
+        var rules = [];
+        for (a = 0; a < n; a++) for (b = 0; b < n; b++) if (a !== b && pair[a * n + b] >= minCount) rules.push({ a: a, b: b, c: pair[a * n + b], sup: pair[a * n + b] / nb, conf: pair[a * n + b] / items[a].n, lift: lift[a * n + b] });
+        // colours follow the group, so they come from every group in the data, not just the items shown
+        var groups = F.g ? Array.from(new Set(Array.from(groupOf.values()))).sort() : [], shownGroups = new Set(items.map(function (I) { return I.g; }));
+        S.model = { F: F, nb: nb, lines: lines, distinct: itemCount.size, items: items, n: n, pair: pair, lift: lift, rules: rules, minCount: minCount, minSup: minSup, baskets: baskets, groups: groups, shown: shownGroups, order: order(o.order || "CLUSTER", items, lift, pair, n, minCount) };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        if (S.sel && S.sel.item !== undefined) S.focus = S.sel.item;
+    }
+
+    // Average-linkage clustering on positive log-lift, so items bought together sit next to each other.
+    function order(mode, items, lift, pair, n, minCount) {
+        var ids = items.map(function (I) { return I.k; });
+        if (mode === "FREQUENCY" || n < 3) return ids;
+        var sim = function (a, b) { return pair[a * n + b] >= minCount ? Math.max(0, Math.log2(lift[a * n + b])) : 0; };
+        var cl = ids.map(function (k) { return [k]; });
+        var avg = function (A, B) { var s = 0; A.forEach(function (a) { B.forEach(function (b) { s += sim(a, b); }); }); return s / (A.length * B.length); };
+        while (cl.length > 1) {
+            var best = -1, bi = 0, bj = 1;
+            for (var i = 0; i < cl.length; i++) for (var j = i + 1; j < cl.length; j++) { var v = avg(cl[i], cl[j]) + 1e-9 * (cl.length - j); if (v > best) { best = v; bi = i; bj = j; } }
+            var A = cl[bi], B = cl[bj], opts = [A.concat(B), A.concat(B.slice().reverse()), A.slice().reverse().concat(B), B.concat(A)];
+            var edge = function (o, at) { return sim(o[at - 1], o[at]); }, m = opts.map(function (o) { return edge(o, A.length); });
+            var pick = opts[m.indexOf(Math.max.apply(null, m))];
+            cl.splice(bj, 1); cl[bi] = pick;
+        }
+        return cl[0];
+    }
+
+    function gcol(g) { var M = S.model; var i = M.groups.indexOf(g); return i < 0 ? "#9a988f" : CAT[i % CAT.length]; }
+    var svg = d3.select("#svg");
+
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var box = document.getElementById("mat"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H);
+        svg.selectAll("*").remove();
+        var n = M.n, ord = M.order, maxLab = d3.max(M.items, function (I) { return I.name.length; }) || 4;
+        var fs = n > 30 ? 10 : 11, gw = M.groups.length ? 12 : 0, L = Math.min(150, maxLab * fs * 0.56 + 10 + gw), T = Math.min(120, maxLab * fs * 0.5 + 14);
+        var c = Math.floor(Math.max(6, Math.min(36, (W - L - 20) / n, (H - T - 66) / n))), x0 = L + Math.max(0, (W - L - 20 - c * n) / 2), y0 = T + 8;
+        var g = svg.append("g"), pos = new Map(); ord.forEach(function (k, i) { pos.set(k, i); });
+        var sel = S.sel, focus = S.focus;
+        var data = [];
+        ord.forEach(function (a, i) { ord.forEach(function (b, j) { if (a !== b) data.push({ a: a, b: b, i: i, j: j }); }); });
+        g.selectAll("rect.cell").data(data).enter().append("rect").attr("class", "cell")
+            .attr("x", function (d) { return x0 + d.j * c + 0.5; }).attr("y", function (d) { return y0 + d.i * c + 0.5; }).attr("width", c - 1).attr("height", c - 1).attr("rx", c > 14 ? 2 : 0)
+            .attr("fill", function (d) { var cnt = M.pair[d.a * n + d.b]; return cnt < M.minCount ? "#f6f6f3" : colour(Math.log2(M.lift[d.a * n + d.b])); })
+            .attr("opacity", function (d) { return focus !== null && focus !== undefined && M.items[d.a].name !== focus && M.items[d.b].name !== focus ? 0.35 : 1; })
+            .on("mouseenter", function (ev, d) { tipCell(d.a, d.b, ev); }).on("mousemove", function (ev, d) { tipCell(d.a, d.b, ev); }).on("mouseleave", tip)
+            .on("click", function (ev, d) { ev.stopPropagation(); selectPair(d.a, d.b); });
+        g.selectAll("rect.diag").data(ord).enter().append("rect").attr("x", function (k, i) { return x0 + i * c + 0.5; }).attr("y", function (k, i) { return y0 + i * c + 0.5; }).attr("width", c - 1).attr("height", c - 1).attr("fill", "#fcfcfb").attr("stroke", "#e1e0d9");
+        if (sel && sel.pair) { var pa = M.items.find(function (I) { return I.name === sel.pair[0]; }), pb = M.items.find(function (I) { return I.name === sel.pair[1]; }); if (pa && pb) [[pa.k, pb.k], [pb.k, pa.k]].forEach(function (p) { g.append("rect").attr("x", x0 + pos.get(p[1]) * c).attr("y", y0 + pos.get(p[0]) * c).attr("width", c).attr("height", c).attr("fill", "none").attr("stroke", SELECT).attr("stroke-width", 2.5).attr("pointer-events", "none"); }); }
+        var labs = function (sel2, isTop) {
+            sel2.attr("class", function (k) { return "lab" + (M.items[k].name === focus ? " focus" : ""); }).style("font-size", fs + "px").text(function (k) { return M.items[k].name; })
+                .on("mouseenter", function (ev, k) { tipItem(k, ev); }).on("mousemove", function (ev, k) { tipItem(k, ev); }).on("mouseleave", tip)
+                .on("click", function (ev, k) { ev.stopPropagation(); selectItem(k); });
+        };
+        labs(g.selectAll("text.l").data(ord).enter().append("text").attr("x", x0 - 6 - gw).attr("y", function (k, i) { return y0 + i * c + c / 2; }).attr("dy", "0.35em").attr("text-anchor", "end"), false);
+        labs(g.selectAll("text.t").data(ord).enter().append("text").attr("transform", function (k, i) { return "translate(" + (x0 + i * c + c / 2 + 3) + "," + (y0 - 6 - (gw ? 10 : 0)) + ") rotate(-62)"; }), true);
+        if (gw) {
+            g.selectAll("rect.gl").data(ord).enter().append("rect").attr("x", x0 - gw).attr("y", function (k, i) { return y0 + i * c + c / 2 - 4; }).attr("width", 8).attr("height", 8).attr("rx", 2).attr("fill", function (k) { return gcol(M.items[k].g); });
+            g.selectAll("rect.gt").data(ord).enter().append("rect").attr("x", function (k, i) { return x0 + i * c + c / 2 - 4; }).attr("y", y0 - gw).attr("width", 8).attr("height", 8).attr("rx", 2).attr("fill", function (k) { return gcol(M.items[k].g); });
+        }
+        // legend
+        var ly = y0 + n * c + 14, lw = Math.min(260, Math.max(160, c * n * 0.6)), lx0 = x0, defs = svg.append("defs"), gr = defs.append("linearGradient").attr("id", "lg");
+        DIV.forEach(function (col, i) { gr.append("stop").attr("offset", (i / (DIV.length - 1) * 100) + "%").attr("stop-color", col); });
+        if (ly + 44 < H) {
+            var lg = svg.append("g").attr("transform", "translate(" + lx0 + "," + ly + ")").style("font-size", "10px").attr("fill", "#52514e");
+            lg.append("rect").attr("width", lw).attr("height", 8).attr("rx", 2).attr("fill", "url(#lg)");
+            [["\u00bc\u00d7", 0], ["1\u00d7 (chance)", 0.5], ["4\u00d7+", 1]].forEach(function (t) { lg.append("text").attr("x", t[1] * lw).attr("y", 20).attr("text-anchor", t[1] === 0 ? "start" : t[1] === 1 ? "end" : "middle").text(t[0]); });
+            lg.append("text").attr("x", 0).attr("y", 34).text("Lift: how much more often two items share a basket than chance");
+            lg.append("rect").attr("x", lw + 14).attr("y", 0).attr("width", 9).attr("height", 9).attr("fill", "#f6f6f3").attr("stroke", "#e1e0d9");
+            lg.append("text").attr("x", lw + 27).attr("y", 8).text("Too few baskets");
+        }
+        if (intro) { var cs = svg.selectAll("rect.cell"); fadeIn(cs, 350, Math.min(3, 700 / Math.max(1, cs.size()))); fadeIn(svg.selectAll("text.lab"), 500, 0); }
+        side();
+    }
+
+    function side() {
+        var M = S.model, el = document.getElementById("side"), o = it(), rank = o.rank || "LIFT", focus = S.focus;
+        var key = rank === "CONFIDENCE" ? "conf" : rank === "SUPPORT" ? "sup" : "lift";
+        var rs = M.rules.filter(function (r) { return focus === null || focus === undefined || M.items[r.a].name === focus || M.items[r.b].name === focus; });
+        rs.sort(function (x, y) { return y[key] - x[key] || y.c - x.c; });
+        // lift and support are symmetric: keep one direction per pair, the one with the higher confidence
+        if (key === "lift" || key === "sup") { var best = {}; rs.forEach(function (r) { var k2 = Math.min(r.a, r.b) + "|" + Math.max(r.a, r.b); if (!best[k2] || r.conf > best[k2].conf) best[k2] = r; }); rs = rs.filter(function (r) { return best[Math.min(r.a, r.b) + "|" + Math.max(r.a, r.b)] === r; }); }
+        var top = rs.slice(0, 12), mx = top.length ? top[0][key] : 1;
+        var h = '<h3>Baskets</h3><div class="stat"><b>' + M.nb.toLocaleString() + '</b> baskets, <b>' + M.lines.toLocaleString() + '</b> lines</div><div class="stat"><b>' + M.distinct.toLocaleString() + '</b> distinct items, <b>' + (M.lines / M.nb).toFixed(1) + '</b> per basket</div>' +
+            '<div class="note" style="margin-top:0">Showing the ' + M.n + ' most frequent items. Rules need at least ' + M.minCount.toLocaleString() + ' baskets (' + pct(M.minCount / M.nb) + ').</div>';
+        if (M.groups.length) h += '<div style="margin-top:6px">' + M.groups.filter(function (gname) { return M.shown.has(gname); }).map(function (gname) { return '<span class="key"><i style="background:' + gcol(gname) + '"></i>' + esc(gname) + '</span>'; }).join("") + '</div>';
+        h += '<h3>Top rules by ' + (key === "conf" ? "confidence" : key === "sup" ? "support" : "lift") + (focus !== null && focus !== undefined ? '<span class="chip" id="unfocus">' + esc(focus) + ' \u00d7</span>' : '') + '</h3>';
+        if (!top.length) h += '<div class="note">No pair of items reaches the minimum support. Lower Minimum support in the view settings.</div>';
+        top.forEach(function (r, i) {
+            var A = M.items[r.a].name, B = M.items[r.b].name, isSel = S.sel && S.sel.pair && S.sel.pair[0] === A && S.sel.pair[1] === B;
+            h += '<div class="rule' + (isSel ? " sel" : "") + '" data-a="' + r.a + '" data-b="' + r.b + '"><div class="r">' + esc(A) + ' \u2192 ' + esc(B) + '</div><div class="m">' + pct(r.conf) + ' of baskets with ' + esc(A) + ' also have ' + esc(B) + '; lift ' + lx(r.lift) + '; ' + r.c.toLocaleString() + ' baskets (' + pct(r.sup) + ')</div><div class="bar" style="width:' + Math.max(3, 260 * r[key] / mx) + 'px"></div></div>';
+        });
+        h += '<div class="note">Click an item to focus on its rules and select its lines; click a cell or a rule to select the baskets containing both items.</div>';
+        el.innerHTML = h;
+        Array.prototype.forEach.call(el.querySelectorAll(".rule"), function (d) {
+            d.addEventListener("click", function (e) { e.stopPropagation(); selectPair(+d.getAttribute("data-a"), +d.getAttribute("data-b")); });
+            d.addEventListener("mouseenter", function (e) { tipCell(+d.getAttribute("data-a"), +d.getAttribute("data-b"), e, true); }); d.addEventListener("mouseleave", tip);
+        });
+        var u = document.getElementById("unfocus"); if (u) u.addEventListener("click", function (e) { e.stopPropagation(); S.focus = null; if (S.sel && S.sel.item !== undefined) publish(null, null); else draw(); });
+    }
+
+    function tipCell(a, b, ev, isRule) {
+        var M = S.model, n = M.n, A = M.items[a], B = M.items[b], c = M.pair[a * n + b], l = M.lift[a * n + b];
+        var h = '<b>' + esc(A.name) + ' &amp; ' + esc(B.name) + '</b><br><span class="k">Together in</span> ' + c.toLocaleString() + ' baskets (' + pct(c / M.nb) + ')';
+        if (c < M.minCount) h += '<br><span class="k">Too few baskets to judge (minimum ' + M.minCount.toLocaleString() + ')</span>';
+        else h += '<br><span class="k">Lift</span> ' + lx(l) + (l >= 1.2 ? ': bought together more often than chance' : l <= 0.83 ? ': bought together less often than chance' : ': about as often as chance') +
+            '<br>' + pct(c / A.n) + ' of baskets with ' + esc(A.name) + ' also have ' + esc(B.name) + '<br>' + pct(c / B.n) + ' of baskets with ' + esc(B.name) + ' also have ' + esc(A.name);
+        show(h, ev, isRule);
+    }
+    function tipItem(k, ev) { var M = S.model, I = M.items[k]; show('<b>' + esc(I.name) + '</b>' + (I.g ? ' <span class="k">(' + esc(I.g) + ')</span>' : '') + '<br><span class="k">In</span> ' + I.n.toLocaleString() + ' baskets (' + pct(I.s) + ')', ev); }
+    function show(html, ev, left) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = left ? Math.max(4, window.innerWidth - 310 - el.offsetWidth) : ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectItem(k) {
+        var M = S.model, name = M.items[k].name;
+        if (S.focus === name) { S.focus = null; return publish(null, null); }
+        S.focus = name; publish({ type: "FIELD_VALUE", inputField: M.F.i, operator: "=", value: name }, { item: name });
+    }
+    function selectPair(a, b) {
+        var M = S.model, A = M.items[a].name, B = M.items[b].name;
+        if (S.sel && S.sel.pair && S.sel.pair[0] === A && S.sel.pair[1] === B) return publish(null, null);
+        var raws = []; M.baskets.forEach(function (bk) { if (bk.items.has(A) && bk.items.has(B)) raws.push(bk.raw); });
+        if (!raws.length) return;
+        if (raws.length > 3000) { omniscope.view.error(raws.length.toLocaleString() + " baskets; selection is limited to 3,000."); return; }
+        var eq = function (v) { return { type: "FIELD_VALUE", inputField: M.F.b, operator: "=", value: v }; };
+        publish(raws.length === 1 ? eq(raws[0]) : { type: "OR", filters: raws.map(eq) }, { pair: [A, B] });
+    }
+    window.__basket.selectPair = function (A, B) { var M = S.model, f = function (n) { return M.items.find(function (I) { return I.name === n; }).k; }; selectPair(f(A), f(B)); };
+    window.__basket.selectItem = function (A) { selectItem(S.model.items.find(function (I) { return I.name === A; }).k); };
+    window.__basket.liftOf = function (A, B) { var M = S.model, f = function (n) { return M.items.find(function (I) { return I.name === n; }).k; }; return M.lift[f(A) * M.n + f(B)]; };
+
+    document.getElementById("mat").addEventListener("click", function () { S.focus = null; if (S.sel) publish(null, null); else draw(); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/purchases.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    },
+    "cols": {
+     "inputField": "Age band",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "function": "RECORD_COUNT"
+    },
+    "show": "INDEX",
+    "sort": "NAME",
+    "marks": true
+   }
+  },
+  "width": 1000,
+  "height": 460,
+  "wait": 1200,
+  "showcaseHeight": 460,
+  "caption": "Live: 30,000 illustrative purchases, category by age band as an index (100 = average). Blue cells are over-represented, red under-represented; * marks differences beyond chance. Hover for the counts; click to select.",
+  "expect": {
+   "selector": "g.cell",
+   "min": 48
+  }
+ },
+ {
+  "name": "spend",
+  "showcase": true,
+  "data": "sample-data/purchases.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    },
+    "cols": {
+     "inputField": "Channel",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Spend",
+     "function": "SUM"
+    },
+    "show": "ROWPCT",
+    "sort": "TOTAL",
+    "marks": true
+   }
+  },
+  "width": 700,
+  "height": 420,
+  "wait": 1200,
+  "showcaseHeight": 420,
+  "caption": "Live: spend by category and channel, showing each category's split, coloured by index.",
+  "expect": {
+   "selector": "g.cell",
+   "min": 16
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/purchases.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    },
+    "cols": {
+     "inputField": "Age band",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "function": "RECORD_COUNT"
+    },
+    "show": "INDEX",
+    "sort": "NAME",
+    "marks": true
+   }
+  },
+  "width": 1000,
+  "height": 460,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "(function(){var c=window.__idx.model.cells.find(function(x){return x.r.name==='Gaming'&&x.c.name==='18-24'});return Math.abs(c.idx-209.72325789263158)<1e-6 && Math.abs(c.adj-25.91533594324439)<1e-6 && c.sig})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "g.cell",
+    "nth": 9
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "g.cell",
+    "nth": 9
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.type==='AND'",
+    "expectTruthy": true
+   },
+   {
+    "click": "text.hd",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     5,
+     455
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "North"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__idx.model.T<9000",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     420
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "toomany",
+  "data": "sample-data/purchases.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Transaction",
+     "type": "UNIQUE_VALUES"
+    },
+    "cols": {
+     "inputField": "Age band",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "function": "RECORD_COUNT"
+    },
+    "show": "INDEX",
+    "sort": "NAME",
+    "marks": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "Too many"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Category",
+    "type": "TEXT"
+   },
+   {
+    "name": "Age band",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    },
+    "cols": {
+     "inputField": "Age band",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "function": "RECORD_COUNT"
+    },
+    "show": "INDEX",
+    "sort": "NAME",
+    "marks": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/purchases.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Rows"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/purchases.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    },
+    "cols": {
+     "inputField": "Age band",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "function": "RECORD_COUNT"
+    },
+    "show": "INDEX",
+    "sort": "NAME",
+    "marks": true
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1200
+ }
+]

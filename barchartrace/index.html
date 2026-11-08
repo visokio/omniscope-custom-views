@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; flex-direction: column; }
+        #chart { flex: 1; position: relative; min-height: 80px; }
+        svg { display: block; }
+        #controls { display: flex; align-items: center; gap: 10px; padding: 6px 12px 10px; }
+        #play { font: inherit; width: 34px; height: 30px; border-radius: 6px; border: 1px solid rgba(11,11,11,.15); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        #play:hover { background: #eef4fd; }
+        #scrub { flex: 1; accent-color: #2a78d6; }
+        #plabel { min-width: 90px; text-align: right; color: #52514e; font-variant-numeric: tabular-nums; }
+        #legend { display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 8px 12px 0; font-size: 11px; color: #52514e; }
+        #legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+        .axis text { fill: #898781; font-size: 10px; } .axis path { display: none; } .axis line { stroke: #e1e0d9; }
+        .bar { cursor: pointer; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="legend"></div>
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="controls"><button id="play" title="Play or pause"></button><input id="scrub" type="range" min="0" max="0" step="0.001" value="0"><span id="plabel"></span></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    var PAL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], NEUTRAL = "#9ec5f4", SELECT = "#2161D9";
+    var S = { pos: 0, playing: false, sel: null, raf: null, order: {} };
+    window.__race = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : Math.round(v).toLocaleString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function gf(g) { return g ? (typeof g === "string" ? g : g.inputField) : null; }
+    var DATE_RE = /^\d{4}-\d{2}-\d{2}/;
+    function tinfo(v) { var s = v && typeof v === "object" && "lower" in v ? v.lower : v; if (typeof s === "string" && DATE_RE.test(s)) { var d = new Date(s.length === 10 ? s + "T00:00:00Z" : s); return { sort: d.getTime(), date: d, key: JSON.stringify(v), raw: v }; } if (typeof s === "number") return { sort: s, label: String(s), key: JSON.stringify(v), raw: v }; return { sort: null, label: s === null || s === undefined ? "(blank)" : String(s), key: JSON.stringify(v), raw: v }; }
+    var PLAY = '<svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 1.5 L12 7 L3 12.5 Z" fill="#2a78d6"/></svg>', PAUSE = '<svg width="14" height="14" viewBox="0 0 14 14"><rect x="2.5" y="1.5" width="3" height="11" fill="#2a78d6"/><rect x="8.5" y="1.5" width="3" height="11" fill="#2a78d6"/></svg>';
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.time || !it.item || !it.value) { message("Choose a Time grouping, the Bars and a Value."); stop(); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = res.data.records || [];
+        var rows = recs.map(function (r) { return { t: tinfo(r[mp.time]), item: r[mp.item], v: r[mp.value], c: mp.colour !== undefined ? r[mp.colour] : null }; }).filter(function (x) { return typeof x.v === "number" && x.item !== null; });
+        if (!rows.length) { message("No data to show. Check the filters."); stop(); d3.select("#svg").selectAll("*").remove(); return; }
+        message(null);
+        var pm = new Map(); rows.forEach(function (x) { if (!pm.has(x.t.key)) pm.set(x.t.key, x.t); });
+        var periods = Array.from(pm.values()); if (periods.every(function (p) { return p.sort !== null; })) periods.sort(function (a, b) { return a.sort - b.sort; });
+        var step = periods.length > 1 && periods[0].date ? periods[1].sort - periods[0].sort : 0;
+        var df = step && step < 20 * 864e5 ? d3.utcFormat("%-d %b %Y") : step && step < 200 * 864e5 ? d3.utcFormat("%B %Y") : d3.utcFormat("%Y");
+        periods.forEach(function (p, i) { p.i = i; p.label = p.label || df(p.date); });
+        var pidx = {}; periods.forEach(function (p) { pidx[p.key] = p.i; });
+        var items = new Map();
+        rows.forEach(function (x) {
+            var k = String(x.item); if (!items.has(k)) items.set(k, { key: k, raw: x.item, vals: new Float64Array(periods.length), cat: x.c });
+            items.get(k).vals[pidx[x.t.key]] += x.v;
+        });
+        if (it.cumulative) items.forEach(function (o) { for (var i = 1; i < o.vals.length; i++) o.vals[i] += o.vals[i - 1]; });
+        var list = Array.from(items.values());
+        // colours: by category if set, otherwise the eight items with the highest final value; cache keyed on fields and measure
+        var ck = JSON.stringify([gf(it.item), gf(it.colour), it.value.inputField, it.value.function, !!it.cumulative]);
+        if (!S.order[ck]) S.order[ck] = it.colour ? Array.from(new Set(list.map(function (o) { return String(o.cat); }))).sort() : list.slice().sort(function (a, b) { return d3.max(b.vals) - d3.max(a.vals); }).map(function (o) { return o.key; });
+        var ord = S.order[ck];
+        list.forEach(function (o) { var i = ord.indexOf(it.colour ? String(o.cat) : o.key); o.colour = i >= 0 && i < 8 ? PAL[i] : NEUTRAL; });
+        S.model = { periods: periods, items: list, N: Math.max(3, Math.min(30, +it.topN || 10)), fields: { item: gf(it.item), value: it.value.inputField || "Value", colour: gf(it.colour) }, dur: Math.max(0.1, +it.duration || 0.8) * 1000, loop: !!it.loop, cumulative: !!it.cumulative };
+        var lg = document.getElementById("legend");
+        lg.innerHTML = it.colour ? ord.slice(0, 8).map(function (c, i) { return '<span><i style="background:' + PAL[i] + '"></i>' + esc(c) + '</span>'; }).join("") + (ord.length > 8 ? '<span><i style="background:' + NEUTRAL + '"></i>Other</span>' : '') : "";
+        var sc = document.getElementById("scrub"); sc.max = String(periods.length - 1);
+        if (S.pos > periods.length - 1) S.pos = periods.length - 1;
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta.key : null;
+        S.x = null; draw(S.pos, false);
+        if (!S.started) { S.started = true; if (it.autoplay !== false && periods.length > 1) { S.pos = 0; play(); } }
+    }
+    // value of an item at a fractional position (linear interpolation between periods)
+    function valAt(o, p) { var i = Math.floor(p), f = p - i; if (i >= o.vals.length - 1) return o.vals[o.vals.length - 1]; return o.vals[i] * (1 - f) + o.vals[i + 1] * f; }
+    function draw(p, animate) {
+        var M = S.model; if (!M) return;
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight, m = { l: 10, r: 70, t: 26, b: 8 };
+        var svg = d3.select("#svg").attr("width", W).attr("height", H);
+        var ranked = M.items.map(function (o) { return { o: o, v: valAt(o, p) }; }).sort(function (a, b) { return b.v - a.v; });
+        var top = ranked.slice(0, M.N), maxV = top.length ? top[0].v : 1;
+        var barH = (H - m.t - m.b) / M.N, x = d3.scaleLinear().domain([0, maxV || 1]).range([m.l, W - m.r]);
+        var g = svg.select("g.main"); if (g.empty()) { g = svg.append("g").attr("class", "main"); g.append("g").attr("class", "axis"); g.append("g").attr("class", "bars"); g.append("text").attr("class", "big"); g.append("text").attr("class", "total"); }
+        g.select("g.axis").attr("transform", "translate(0," + (m.t - 4) + ")").call(d3.axisTop(x).ticks(Math.max(2, Math.floor(W / 120))).tickSize(-(H - m.t - m.b)).tickFormat(function (v) { return fmt(v); }));
+        var rankOf = new Map(); ranked.forEach(function (r, i) { rankOf.set(r.o.key, i); });
+        var bars = g.select("g.bars").selectAll("g.bar").data(top, function (d) { return d.o.key; });
+        var enter = bars.enter().append("g").attr("class", "bar").attr("transform", "translate(0," + (m.t + M.N * barH) + ")");
+        enter.append("rect").attr("rx", 3); enter.append("text").attr("class", "nm"); enter.append("text").attr("class", "val");
+        enter.on("click", function (ev, d) { ev.stopPropagation(); select(d.o); }).on("mousemove", function (ev, d) { tip(d, ev); }).on("mouseleave", function () { tip(null); });
+        var all = enter.merge(bars), t = animate ? d3.transition().duration(M.dur / 4).ease(d3.easeLinear) : null;
+        var place = function (sel) { return t ? sel.transition(t) : sel; };
+        place(all).attr("transform", function (d) { return "translate(0," + (m.t + rankOf.get(d.o.key) * barH) + ")"; });
+        place(all.select("rect")).attr("x", m.l).attr("y", barH * 0.1).attr("height", barH * 0.8).attr("width", function (d) { return Math.max(1, x(d.v) - m.l); })
+            .attr("fill", function (d) { return d.o.colour; }).attr("opacity", function (d) { return S.sel && S.sel !== d.o.key ? 0.35 : 1; })
+            .attr("stroke", function (d) { return S.sel === d.o.key ? SELECT : "none"; }).attr("stroke-dasharray", "4,2").attr("stroke-width", 1.5);
+        var fs = Math.max(9, Math.min(14, barH * 0.42));
+        place(all.select("text.nm")).attr("x", function (d) { return Math.max(m.l + 4, x(d.v) - 6); }).attr("y", barH / 2).attr("dy", "0.35em").attr("text-anchor", function (d) { return x(d.v) - m.l > 90 ? "end" : "start"; })
+            .attr("font-size", fs).attr("font-weight", "bold").attr("fill", function (d) { return x(d.v) - m.l > 90 ? (d3.lab(d.o.colour).l > 62 ? "#0b0b0b" : "#fff") : "#0b0b0b"; }).text(function (d) { return d.o.key; })
+            .attr("transform", function (d) { return x(d.v) - m.l > 90 ? null : "translate(" + (x(d.v) - m.l + 4) + ",0)"; });
+        place(all.select("text.val")).attr("x", function (d) { return x(d.v) + 5; }).attr("y", barH / 2).attr("dy", "0.35em").attr("font-size", fs * 0.9).attr("fill", "#52514e").text(function (d) { return fmt(d.v); });
+        place(bars.exit()).attr("transform", "translate(0," + (m.t + M.N * barH + barH) + ")").remove();
+        var per = M.periods[Math.min(M.periods.length - 1, Math.round(p))];
+        g.select("text.big").attr("x", W - m.r + 60).attr("y", H - m.b - barH * 0.9).attr("text-anchor", "end").attr("font-size", Math.max(18, Math.min(46, H / 9))).attr("font-weight", "bold").attr("fill", "#c3c2b7").attr("stroke", "#fcfcfb").attr("stroke-width", 6).attr("paint-order", "stroke").attr("stroke-linejoin", "round").text(per.label);
+        g.select("text.total").attr("x", W - m.r + 60).attr("y", H - m.b - 6).attr("text-anchor", "end").attr("font-size", 12).attr("fill", "#898781").text("Total " + fmt(d3.sum(ranked, function (r) { return r.v; })));
+        document.getElementById("scrub").value = String(p);
+        document.getElementById("plabel").textContent = per.label;
+        document.getElementById("play").innerHTML = S.playing ? PAUSE : PLAY;
+    }
+    function play() {
+        var M = S.model; if (!M) return;
+        if (S.pos >= M.periods.length - 1) S.pos = 0;
+        S.playing = true; var last = performance.now(), acc = 0;
+        cancelAnimationFrame(S.raf);
+        (function tick(now) {
+            if (!S.playing) return;
+            var dt = now - last; last = now; acc += dt;
+            if (acc >= M.dur / 4) { // a sub-frame every quarter period; bars animate between them
+                acc = 0; S.pos = Math.min(M.periods.length - 1, S.pos + 0.25); draw(S.pos, true);
+                if (S.pos >= M.periods.length - 1) { if (M.loop) { S.pos = 0; } else { S.playing = false; draw(S.pos, false); return; } }
+            }
+            S.raf = requestAnimationFrame(tick);
+        })(last);
+    }
+    function stop() { S.playing = false; cancelAnimationFrame(S.raf); }
+    document.getElementById("play").addEventListener("click", function (e) { e.stopPropagation(); if (S.playing) { stop(); draw(S.pos, false); } else play(); });
+    document.getElementById("scrub").addEventListener("input", function (e) { stop(); S.pos = +this.value; draw(S.pos, false); });
+    document.getElementById("controls").addEventListener("click", function (e) { e.stopPropagation(); });
+    function tip(d, ev) {
+        var el = document.getElementById("tooltip");
+        if (!d) { el.style.display = "none"; return; }
+        var M = S.model, p = Math.round(S.pos);
+        el.innerHTML = '<b>' + esc(d.o.key) + '</b>' + (M.fields.colour ? ' <span class="k">(' + esc(d.o.cat) + ')</span>' : '') + '<br><span class="k">' + esc(M.periods[p].label) + ':</span> ' + fmt(d.o.vals[p]) + (M.cumulative ? ' <span class="k">running total</span>' : '');
+        el.style.display = "block";
+        var X = ev.clientX + 14, Y = ev.clientY + 14;
+        if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14;
+        if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+    function select(o) {
+        S.sel = S.sel === o.key ? null : o.key;
+        omniscope.view.context().viewSelection = S.sel ? { filter: { type: "FIELD_VALUE", inputField: S.model.fields.item, operator: "=", value: o.raw }, meta: { key: o.key } } : null;
+        omniscope.view.updated(); draw(S.pos, false);
+    }
+    window.__race.seek = function (p) { stop(); S.pos = p; draw(p, false); };
+    window.__race.stop = stop;
+    document.body.addEventListener("click", function () { if (S.sel) { S.sel = null; draw(S.pos, false); } omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.model) draw(S.pos, false); });
+})();
+</script>
+</body>
+</html>

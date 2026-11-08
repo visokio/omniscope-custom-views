@@ -362,6 +362,386 @@
 			],
 			"files": [],
 			"version": 0
+		},
+		{
+			"name": "abcxyz",
+			"displayName": "ABC-XYZ Analysis",
+			"tags": [
+				"custom",
+				"abc analysis",
+				"xyz analysis",
+				"inventory",
+				"pareto",
+				"demand variability",
+				"supply chain",
+				"stock",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "abtest",
+			"displayName": "A/B Test",
+			"tags": [
+				"custom",
+				"a/b test",
+				"experiment",
+				"conversion",
+				"significance",
+				"uplift",
+				"statistics",
+				"marketing",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "barchartrace",
+			"displayName": "Bar Chart Race",
+			"tags": [
+				"custom",
+				"bar chart race",
+				"animation",
+				"ranking",
+				"race",
+				"over time",
+				"storytelling",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "benford",
+			"displayName": "Benford Analysis",
+			"tags": [
+				"custom",
+				"benford",
+				"audit",
+				"fraud",
+				"forensic",
+				"first digit",
+				"anomaly",
+				"compliance",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "building3d",
+			"displayName": "3D Building",
+			"tags": [
+				"custom",
+				"3d",
+				"three.js",
+				"building",
+				"floor plan",
+				"digital twin",
+				"facilities",
+				"occupancy",
+				"energy",
+				"iot",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "bumpchart",
+			"displayName": "Bump Chart",
+			"tags": [
+				"custom",
+				"bump",
+				"rank",
+				"ranking",
+				"league table",
+				"over time",
+				"slope",
+				"position",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "cohortretention",
+			"displayName": "Cohort Retention",
+			"tags": [
+				"custom",
+				"cohort",
+				"retention",
+				"churn",
+				"customer",
+				"heatmap",
+				"subscription",
+				"lifetime value",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "concentration",
+			"displayName": "Concentration",
+			"tags": [
+				"custom",
+				"lorenz curve",
+				"gini",
+				"concentration",
+				"pareto",
+				"hhi",
+				"inequality",
+				"dependency",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "correlationmatrix",
+			"displayName": "Correlation Matrix",
+			"tags": [
+				"custom",
+				"correlation",
+				"matrix",
+				"heatmap",
+				"pearson",
+				"spearman",
+				"statistics",
+				"drivers",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "decomposition",
+			"displayName": "Seasonal Decomposition",
+			"tags": [
+				"custom",
+				"decomposition",
+				"seasonality",
+				"trend",
+				"anomaly",
+				"time series",
+				"residual",
+				"outliers",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "decomptree",
+			"displayName": "Decomposition Tree",
+			"tags": [
+				"custom",
+				"decomposition",
+				"tree",
+				"drill down",
+				"root cause",
+				"variance",
+				"breakdown",
+				"explain",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "densityscatter",
+			"displayName": "Density Scatter",
+			"tags": [
+				"custom",
+				"density",
+				"heatmap",
+				"scatter",
+				"hexbin",
+				"2d histogram",
+				"big data",
+				"distribution",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "distribution",
+			"displayName": "Distribution",
+			"tags": [
+				"custom",
+				"histogram",
+				"distribution",
+				"percentiles",
+				"outliers",
+				"statistics",
+				"spread",
+				"skew",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "eventfunnel",
+			"displayName": "Event Funnel",
+			"tags": [
+				"custom",
+				"funnel",
+				"conversion",
+				"event log",
+				"product analytics",
+				"drop-off",
+				"journey",
+				"ecommerce",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "forecast",
+			"displayName": "Forecast",
+			"tags": [
+				"custom",
+				"forecast",
+				"time series",
+				"holt-winters",
+				"exponential smoothing",
+				"prediction",
+				"seasonality",
+				"planning",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "globeflows",
+			"displayName": "Globe Flows",
+			"tags": [
+				"custom",
+				"globe",
+				"3d",
+				"three.js",
+				"flows",
+				"map",
+				"origin destination",
+				"trade",
+				"logistics",
+				"arcs",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "indexheatmap",
+			"displayName": "Index Heatmap",
+			"tags": [
+				"custom",
+				"index",
+				"cross-tab",
+				"heatmap",
+				"over-index",
+				"market research",
+				"residuals",
+				"profiling",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "likert",
+			"displayName": "Likert Survey",
+			"tags": [
+				"custom",
+				"likert",
+				"survey",
+				"diverging bar",
+				"nps",
+				"engagement",
+				"feedback",
+				"questionnaire",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "marimekko",
+			"displayName": "Marimekko",
+			"tags": [
+				"custom",
+				"marimekko",
+				"mekko",
+				"market map",
+				"share",
+				"mosaic",
+				"variable width",
+				"competitor",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "marketbasket",
+			"displayName": "Market Basket",
+			"tags": [
+				"custom",
+				"market basket",
+				"association rules",
+				"affinity",
+				"cross-sell",
+				"basket analysis",
+				"lift",
+				"retail",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "modelevaluation",
+			"displayName": "Model Evaluation",
+			"tags": [
+				"custom",
+				"model",
+				"machine learning",
+				"roc",
+				"auc",
+				"lift",
+				"gain",
+				"confusion matrix",
+				"classification",
+				"prediction",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
+		},
+		{
+			"name": "motionbubbles",
+			"displayName": "Motion Bubbles",
+			"tags": [
+				"custom",
+				"animation",
+				"bubble",
+				"scatter",
+				"motion chart",
+				"over time",
+				"portfolio",
+				"bcg",
+				"storytelling",
+				"visokio-agents"
+			],
+			"files": [],
+			"version": 0
 		}
 	]
 }

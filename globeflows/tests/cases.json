@@ -1,0 +1,394 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/shipments.csv",
+  "options": {
+   "items": {
+    "origin": {
+     "inputField": "Origin port",
+     "type": "UNIQUE_VALUES"
+    },
+    "destination": {
+     "inputField": "Destination port",
+     "type": "UNIQUE_VALUES"
+    },
+    "originLat": {
+     "inputField": "Origin latitude",
+     "function": "MEAN"
+    },
+    "originLon": {
+     "inputField": "Origin longitude",
+     "function": "MEAN"
+    },
+    "destLat": {
+     "inputField": "Destination latitude",
+     "function": "MEAN"
+    },
+    "destLon": {
+     "inputField": "Destination longitude",
+     "function": "MEAN"
+    },
+    "value": {
+     "inputField": "Containers (TEU)",
+     "function": "SUM"
+    },
+    "colourBy": "ORIGIN",
+    "maxFlows": 400,
+    "animate": true,
+    "autoRotate": false,
+    "labels": 12,
+    "colour": {
+     "inputField": "Origin region",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 1040,
+  "height": 640,
+  "wait": 6000,
+  "showcaseHeight": 640,
+  "caption": "Live: illustrative container flows between major ports in 2025. Drag to turn the globe, scroll to zoom, hover a route or a port, click to select.",
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/shipments.csv",
+  "options": {
+   "items": {
+    "origin": {
+     "inputField": "Origin port",
+     "type": "UNIQUE_VALUES"
+    },
+    "destination": {
+     "inputField": "Destination port",
+     "type": "UNIQUE_VALUES"
+    },
+    "originLat": {
+     "inputField": "Origin latitude",
+     "function": "MEAN"
+    },
+    "originLon": {
+     "inputField": "Origin longitude",
+     "function": "MEAN"
+    },
+    "destLat": {
+     "inputField": "Destination latitude",
+     "function": "MEAN"
+    },
+    "destLon": {
+     "inputField": "Destination longitude",
+     "function": "MEAN"
+    },
+    "value": {
+     "inputField": "Containers (TEU)",
+     "function": "SUM"
+    },
+    "colourBy": "ORIGIN",
+    "maxFlows": 400,
+    "animate": true,
+    "autoRotate": false,
+    "labels": 12,
+    "colour": {
+     "inputField": "Origin region",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 6000,
+  "actions": [
+   {
+    "eval": "window.__globe.flows.length>50 && window.__globe.places.length===34",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__globe.selectFlow(0)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "clickEval": "window.__globe.project(1.26,103.84)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "place"
+   },
+   {
+    "clickAt": [
+     20,
+     300
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Destination region",
+     "operator": "=",
+     "value": "Europe"
+    }
+   },
+   {
+    "eval": "window.__globe.flows.every(function(f){return ['Rotterdam','Antwerp','Hamburg','Felixstowe','Southampton','Valencia','Piraeus','Algeciras'].indexOf(f.d.name)>=0})",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     420
+    ]
+   },
+   {
+    "screenshot": "small"
+   }
+  ],
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "by-destination",
+  "data": "sample-data/shipments.csv",
+  "options": {
+   "items": {
+    "origin": {
+     "inputField": "Origin port",
+     "type": "UNIQUE_VALUES"
+    },
+    "destination": {
+     "inputField": "Destination port",
+     "type": "UNIQUE_VALUES"
+    },
+    "originLat": {
+     "inputField": "Origin latitude",
+     "function": "MEAN"
+    },
+    "originLon": {
+     "inputField": "Origin longitude",
+     "function": "MEAN"
+    },
+    "destLat": {
+     "inputField": "Destination latitude",
+     "function": "MEAN"
+    },
+    "destLon": {
+     "inputField": "Destination longitude",
+     "function": "MEAN"
+    },
+    "value": {
+     "inputField": "Containers (TEU)",
+     "function": "SUM"
+    },
+    "colourBy": "DESTINATION",
+    "maxFlows": 400,
+    "animate": false,
+    "autoRotate": false,
+    "labels": 12
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 6000,
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Origin port",
+    "type": "TEXT"
+   },
+   {
+    "name": "Destination port",
+    "type": "TEXT"
+   },
+   {
+    "name": "Origin latitude",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Origin longitude",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Destination latitude",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Destination longitude",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Containers (TEU)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "origin": {
+     "inputField": "Origin port",
+     "type": "UNIQUE_VALUES"
+    },
+    "destination": {
+     "inputField": "Destination port",
+     "type": "UNIQUE_VALUES"
+    },
+    "originLat": {
+     "inputField": "Origin latitude",
+     "function": "MEAN"
+    },
+    "originLon": {
+     "inputField": "Origin longitude",
+     "function": "MEAN"
+    },
+    "destLat": {
+     "inputField": "Destination latitude",
+     "function": "MEAN"
+    },
+    "destLon": {
+     "inputField": "Destination longitude",
+     "function": "MEAN"
+    },
+    "value": {
+     "inputField": "Containers (TEU)",
+     "function": "SUM"
+    },
+    "colourBy": "ORIGIN",
+    "maxFlows": 400,
+    "animate": true,
+    "autoRotate": false,
+    "labels": 12
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/shipments.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 400,
+  "expect": {
+   "text": "Choose Origin"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "origin": {
+     "inputField": "From",
+     "type": "UNIQUE_VALUES"
+    },
+    "destination": {
+     "inputField": "To",
+     "type": "UNIQUE_VALUES"
+    },
+    "originLat": {
+     "inputField": "From lat",
+     "function": "MEAN"
+    },
+    "originLon": {
+     "inputField": "From lon",
+     "function": "MEAN"
+    },
+    "destLat": {
+     "inputField": "To lat",
+     "function": "MEAN"
+    },
+    "destLon": {
+     "inputField": "To lon",
+     "function": "MEAN"
+    },
+    "value": {
+     "inputField": "Value",
+     "function": "SUM"
+    },
+    "maxFlows": 3000,
+    "labels": 0
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 9000,
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "window.__globe.flows.length>=2900",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/shipments.csv",
+  "options": {
+   "items": {
+    "origin": {
+     "inputField": "Origin port",
+     "type": "UNIQUE_VALUES"
+    },
+    "destination": {
+     "inputField": "Destination port",
+     "type": "UNIQUE_VALUES"
+    },
+    "originLat": {
+     "inputField": "Origin latitude",
+     "function": "MEAN"
+    },
+    "originLon": {
+     "inputField": "Origin longitude",
+     "function": "MEAN"
+    },
+    "destLat": {
+     "inputField": "Destination latitude",
+     "function": "MEAN"
+    },
+    "destLon": {
+     "inputField": "Destination longitude",
+     "function": "MEAN"
+    },
+    "value": {
+     "inputField": "Containers (TEU)",
+     "function": "SUM"
+    },
+    "colourBy": "ORIGIN",
+    "maxFlows": 400,
+    "animate": true,
+    "autoRotate": false,
+    "labels": 0,
+    "colour": {
+     "inputField": "Origin region",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 290,
+  "height": 290,
+  "wait": 6000
+ }
+]

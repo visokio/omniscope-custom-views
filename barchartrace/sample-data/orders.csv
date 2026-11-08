@@ -1,0 +1,1081 @@
+Month,Town,Region,Orders,Revenue (GBP)
+2023-07-01,Leeds,North,231,11056.62
+2023-08-01,Leeds,North,255,10698.82
+2023-09-01,Leeds,North,281,11677.07
+2023-10-01,Leeds,North,283,12425.2
+2023-11-01,Leeds,North,395,19464.41
+2023-12-01,Leeds,North,389,18502.18
+2024-01-01,Leeds,North,300,11985.2
+2024-02-01,Leeds,North,298,11893.21
+2024-03-01,Leeds,North,320,13030.63
+2024-04-01,Leeds,North,334,15163.39
+2024-05-01,Leeds,North,337,16037.36
+2024-06-01,Leeds,North,315,12507.38
+2024-07-01,Leeds,North,349,13582.05
+2024-08-01,Leeds,North,336,15174.95
+2024-09-01,Leeds,North,377,17685.66
+2024-10-01,Leeds,North,368,17478.9
+2024-11-01,Leeds,North,490,22079.95
+2024-12-01,Leeds,North,495,21801.52
+2025-01-01,Leeds,North,394,19927.72
+2025-02-01,Leeds,North,418,16160.5
+2025-03-01,Leeds,North,407,18761.87
+2025-04-01,Leeds,North,378,16492.08
+2025-05-01,Leeds,North,397,16268.03
+2025-06-01,Leeds,North,419,21514.48
+2025-07-01,Leeds,North,412,16026.38
+2025-08-01,Leeds,North,443,21452.94
+2025-09-01,Leeds,North,507,23027.74
+2025-10-01,Leeds,North,527,21852.64
+2025-11-01,Leeds,North,649,27812.48
+2025-12-01,Leeds,North,646,25413.44
+2026-01-01,Leeds,North,533,26115.71
+2026-02-01,Leeds,North,521,20175.96
+2026-03-01,Leeds,North,607,23227.91
+2026-04-01,Leeds,North,595,26537.15
+2026-05-01,Leeds,North,529,21587.51
+2026-06-01,Leeds,North,567,27497.0
+2023-07-01,Manchester,North,303,14613.13
+2023-08-01,Manchester,North,343,15873.96
+2023-09-01,Manchester,North,313,12740.27
+2023-10-01,Manchester,North,309,12394.93
+2023-11-01,Manchester,North,412,16872.02
+2023-12-01,Manchester,North,485,22092.63
+2024-01-01,Manchester,North,363,18480.48
+2024-02-01,Manchester,North,370,14311.4
+2024-03-01,Manchester,North,384,15107.6
+2024-04-01,Manchester,North,380,18897.92
+2024-05-01,Manchester,North,378,16506.07
+2024-06-01,Manchester,North,341,13373.25
+2024-07-01,Manchester,North,390,16127.98
+2024-08-01,Manchester,North,388,16201.53
+2024-09-01,Manchester,North,366,15427.07
+2024-10-01,Manchester,North,417,18702.2
+2024-11-01,Manchester,North,537,24049.02
+2024-12-01,Manchester,North,564,25500.85
+2025-01-01,Manchester,North,416,21431.06
+2025-02-01,Manchester,North,449,18510.04
+2025-03-01,Manchester,North,419,17039.16
+2025-04-01,Manchester,North,431,16531.42
+2025-05-01,Manchester,North,472,21698.92
+2025-06-01,Manchester,North,451,22774.2
+2025-07-01,Manchester,North,450,20742.15
+2025-08-01,Manchester,North,515,23562.88
+2025-09-01,Manchester,North,493,21274.4
+2025-10-01,Manchester,North,539,26192.61
+2025-11-01,Manchester,North,647,27808.5
+2025-12-01,Manchester,North,698,31579.23
+2026-01-01,Manchester,North,519,21105.89
+2026-02-01,Manchester,North,533,25515.05
+2026-03-01,Manchester,North,563,24918.57
+2026-04-01,Manchester,North,538,24223.99
+2026-05-01,Manchester,North,557,24865.57
+2026-06-01,Manchester,North,508,21159.49
+2023-07-01,Sheffield,North,416,17040.77
+2023-08-01,Sheffield,North,387,17531.73
+2023-09-01,Sheffield,North,434,16643.14
+2023-10-01,Sheffield,North,425,21560.03
+2023-11-01,Sheffield,North,606,31444.65
+2023-12-01,Sheffield,North,559,28359.54
+2024-01-01,Sheffield,North,493,18922.14
+2024-02-01,Sheffield,North,477,23220.66
+2024-03-01,Sheffield,North,459,21629.16
+2024-04-01,Sheffield,North,534,26226.01
+2024-05-01,Sheffield,North,505,19586.86
+2024-06-01,Sheffield,North,529,21510.31
+2024-07-01,Sheffield,North,543,22685.87
+2024-08-01,Sheffield,North,536,24449.86
+2024-09-01,Sheffield,North,604,31176.15
+2024-10-01,Sheffield,North,571,21759.09
+2024-11-01,Sheffield,North,847,36187.78
+2024-12-01,Sheffield,North,870,43163.52
+2025-01-01,Sheffield,North,570,27490.18
+2025-02-01,Sheffield,North,617,26232.44
+2025-03-01,Sheffield,North,640,29133.45
+2025-04-01,Sheffield,North,644,28932.09
+2025-05-01,Sheffield,North,666,26484.48
+2025-06-01,Sheffield,North,679,32271.04
+2025-07-01,Sheffield,North,705,28784.97
+2025-08-01,Sheffield,North,732,30007.63
+2025-09-01,Sheffield,North,847,41502.6
+2025-10-01,Sheffield,North,737,31025.97
+2025-11-01,Sheffield,North,1083,49150.68
+2025-12-01,Sheffield,North,1100,49870.1
+2026-01-01,Sheffield,North,900,36132.36
+2026-02-01,Sheffield,North,888,35783.78
+2026-03-01,Sheffield,North,907,38473.69
+2026-04-01,Sheffield,North,980,49312.19
+2026-05-01,Sheffield,North,1034,45197.08
+2026-06-01,Sheffield,North,995,40160.17
+2023-07-01,Newcastle,North,310,13712.87
+2023-08-01,Newcastle,North,315,12554.69
+2023-09-01,Newcastle,North,351,15796.08
+2023-10-01,Newcastle,North,331,14316.77
+2023-11-01,Newcastle,North,471,20086.26
+2023-12-01,Newcastle,North,430,16849.96
+2024-01-01,Newcastle,North,357,14802.23
+2024-02-01,Newcastle,North,334,14070.86
+2024-03-01,Newcastle,North,358,18168.38
+2024-04-01,Newcastle,North,381,15253.88
+2024-05-01,Newcastle,North,365,15246.48
+2024-06-01,Newcastle,North,393,16737.46
+2024-07-01,Newcastle,North,419,19622.56
+2024-08-01,Newcastle,North,417,21409.15
+2024-09-01,Newcastle,North,455,23578.78
+2024-10-01,Newcastle,North,455,23021.17
+2024-11-01,Newcastle,North,585,23984.79
+2024-12-01,Newcastle,North,635,27419.15
+2025-01-01,Newcastle,North,500,21607.05
+2025-02-01,Newcastle,North,533,22560.65
+2025-03-01,Newcastle,North,549,25836.18
+2025-04-01,Newcastle,North,553,21122.69
+2025-05-01,Newcastle,North,566,26112.5
+2025-06-01,Newcastle,North,524,24680.87
+2025-07-01,Newcastle,North,543,25258.62
+2025-08-01,Newcastle,North,589,26066.02
+2025-09-01,Newcastle,North,613,24675.83
+2025-10-01,Newcastle,North,585,23794.42
+2025-11-01,Newcastle,North,882,42622.48
+2025-12-01,Newcastle,North,879,35819.22
+2026-01-01,Newcastle,North,675,33590.92
+2026-02-01,Newcastle,North,600,28352.05
+2026-03-01,Newcastle,North,653,29408.42
+2026-04-01,Newcastle,North,638,29454.77
+2026-05-01,Newcastle,North,740,36563.25
+2026-06-01,Newcastle,North,664,27440.64
+2023-07-01,York,North,219,10928.86
+2023-08-01,York,North,231,9567.3
+2023-09-01,York,North,247,12577.62
+2023-10-01,York,North,246,11041.72
+2023-11-01,York,North,313,13665.93
+2023-12-01,York,North,350,15644.38
+2024-01-01,York,North,262,10631.28
+2024-02-01,York,North,221,9844.11
+2024-03-01,York,North,232,9661.8
+2024-04-01,York,North,228,9045.41
+2024-05-01,York,North,252,9870.72
+2024-06-01,York,North,248,11546.94
+2024-07-01,York,North,250,10577.88
+2024-08-01,York,North,260,10828.36
+2024-09-01,York,North,274,13374.44
+2024-10-01,York,North,249,11311.1
+2024-11-01,York,North,378,19243.51
+2024-12-01,York,North,397,16611.51
+2025-01-01,York,North,293,14848.94
+2025-02-01,York,North,317,15467.3
+2025-03-01,York,North,272,11761.09
+2025-04-01,York,North,299,12720.14
+2025-05-01,York,North,512,22991.77
+2025-06-01,York,North,541,20633.84
+2025-07-01,York,North,532,21078.39
+2025-08-01,York,North,511,20479.93
+2025-09-01,York,North,504,23487.77
+2025-10-01,York,North,572,22082.11
+2025-11-01,York,North,703,27788.81
+2025-12-01,York,North,765,30594.59
+2026-01-01,York,North,515,25402.19
+2026-02-01,York,North,506,25501.66
+2026-03-01,York,North,539,27976.82
+2026-04-01,York,North,528,20777.5
+2026-05-01,York,North,579,24506.31
+2026-06-01,York,North,608,25660.4
+2023-07-01,Liverpool,North,167,7440.5
+2023-08-01,Liverpool,North,201,9143.25
+2023-09-01,Liverpool,North,181,8051.06
+2023-10-01,Liverpool,North,199,9982.52
+2023-11-01,Liverpool,North,235,11080.16
+2023-12-01,Liverpool,North,247,12613.02
+2024-01-01,Liverpool,North,201,9279.82
+2024-02-01,Liverpool,North,199,9705.15
+2024-03-01,Liverpool,North,177,7541.51
+2024-04-01,Liverpool,North,177,7112.67
+2024-05-01,Liverpool,North,213,9797.5
+2024-06-01,Liverpool,North,185,7811.29
+2024-07-01,Liverpool,North,312,12235.36
+2024-08-01,Liverpool,North,339,14694.67
+2024-09-01,Liverpool,North,292,13212.42
+2024-10-01,Liverpool,North,317,15428.18
+2024-11-01,Liverpool,North,417,17237.56
+2024-12-01,Liverpool,North,440,19223.59
+2025-01-01,Liverpool,North,303,14656.39
+2025-02-01,Liverpool,North,354,17554.38
+2025-03-01,Liverpool,North,342,15241.06
+2025-04-01,Liverpool,North,352,14435.55
+2025-05-01,Liverpool,North,308,12590.99
+2025-06-01,Liverpool,North,339,13862.7
+2025-07-01,Liverpool,North,334,16503.14
+2025-08-01,Liverpool,North,348,14211.1
+2025-09-01,Liverpool,North,316,12048.22
+2025-10-01,Liverpool,North,313,13050.13
+2025-11-01,Liverpool,North,487,24156.97
+2025-12-01,Liverpool,North,459,17735.08
+2026-01-01,Liverpool,North,354,18149.3
+2026-02-01,Liverpool,North,318,14863.93
+2026-03-01,Liverpool,North,389,16537.33
+2026-04-01,Liverpool,North,362,17868.39
+2026-05-01,Liverpool,North,369,14926.51
+2026-06-01,Liverpool,North,380,17554.69
+2023-07-01,Birmingham,Midlands,316,12493.51
+2023-08-01,Birmingham,Midlands,269,10733.54
+2023-09-01,Birmingham,Midlands,304,14589.94
+2023-10-01,Birmingham,Midlands,335,12766.71
+2023-11-01,Birmingham,Midlands,384,16647.24
+2023-12-01,Birmingham,Midlands,448,19532.76
+2024-01-01,Birmingham,Midlands,314,12817.72
+2024-02-01,Birmingham,Midlands,349,16235.21
+2024-03-01,Birmingham,Midlands,373,15867.31
+2024-04-01,Birmingham,Midlands,347,17856.77
+2024-05-01,Birmingham,Midlands,370,15407.81
+2024-06-01,Birmingham,Midlands,379,16793.68
+2024-07-01,Birmingham,Midlands,340,13411.2
+2024-08-01,Birmingham,Midlands,377,15989.24
+2024-09-01,Birmingham,Midlands,367,17647.83
+2024-10-01,Birmingham,Midlands,374,16571.05
+2024-11-01,Birmingham,Midlands,542,20662.33
+2024-12-01,Birmingham,Midlands,586,24453.62
+2025-01-01,Birmingham,Midlands,622,28136.69
+2025-02-01,Birmingham,Midlands,642,24686.85
+2025-03-01,Birmingham,Midlands,641,24724.97
+2025-04-01,Birmingham,Midlands,688,29296.43
+2025-05-01,Birmingham,Midlands,681,27553.13
+2025-06-01,Birmingham,Midlands,789,36324.63
+2025-07-01,Birmingham,Midlands,769,29312.88
+2025-08-01,Birmingham,Midlands,833,32023.21
+2025-09-01,Birmingham,Midlands,825,38883.25
+2025-10-01,Birmingham,Midlands,785,33507.26
+2025-11-01,Birmingham,Midlands,1110,51194.69
+2025-12-01,Birmingham,Midlands,1200,46541.58
+2026-01-01,Birmingham,Midlands,779,36399.53
+2026-02-01,Birmingham,Midlands,828,38195.76
+2026-03-01,Birmingham,Midlands,862,33179.83
+2026-04-01,Birmingham,Midlands,959,38956.43
+2026-05-01,Birmingham,Midlands,888,43006.86
+2026-06-01,Birmingham,Midlands,1015,50748.15
+2023-07-01,Nottingham,Midlands,412,17362.06
+2023-08-01,Nottingham,Midlands,400,20762.75
+2023-09-01,Nottingham,Midlands,381,15371.45
+2023-10-01,Nottingham,Midlands,400,20309.63
+2023-11-01,Nottingham,Midlands,584,25970.35
+2023-12-01,Nottingham,Midlands,523,20337.97
+2024-01-01,Nottingham,Midlands,430,19523.66
+2024-02-01,Nottingham,Midlands,399,20583.67
+2024-03-01,Nottingham,Midlands,404,15392.37
+2024-04-01,Nottingham,Midlands,464,22720.98
+2024-05-01,Nottingham,Midlands,394,18214.27
+2024-06-01,Nottingham,Midlands,435,22155.52
+2024-07-01,Nottingham,Midlands,405,19658.02
+2024-08-01,Nottingham,Midlands,416,20742.72
+2024-09-01,Nottingham,Midlands,451,22970.14
+2024-10-01,Nottingham,Midlands,488,24177.28
+2024-11-01,Nottingham,Midlands,624,25620.42
+2024-12-01,Nottingham,Midlands,961,48884.06
+2025-01-01,Nottingham,Midlands,691,28576.55
+2025-02-01,Nottingham,Midlands,781,38699.9
+2025-03-01,Nottingham,Midlands,825,38773.42
+2025-04-01,Nottingham,Midlands,780,32333.15
+2025-05-01,Nottingham,Midlands,767,32301.29
+2025-06-01,Nottingham,Midlands,761,33716.81
+2025-07-01,Nottingham,Midlands,851,43811.72
+2025-08-01,Nottingham,Midlands,796,30982.64
+2025-09-01,Nottingham,Midlands,884,39460.78
+2025-10-01,Nottingham,Midlands,927,40276.35
+2025-11-01,Nottingham,Midlands,1215,55031.79
+2025-12-01,Nottingham,Midlands,1108,57470.39
+2026-01-01,Nottingham,Midlands,863,35330.91
+2026-02-01,Nottingham,Midlands,948,42427.76
+2026-03-01,Nottingham,Midlands,846,41734.2
+2026-04-01,Nottingham,Midlands,953,48293.9
+2026-05-01,Nottingham,Midlands,941,45036.64
+2026-06-01,Nottingham,Midlands,989,38017.29
+2023-07-01,Leicester,Midlands,86,4414.36
+2023-08-01,Leicester,Midlands,86,4269.5
+2023-09-01,Leicester,Midlands,95,4604.1
+2023-10-01,Leicester,Midlands,97,4516.13
+2023-11-01,Leicester,Midlands,131,5496.6
+2023-12-01,Leicester,Midlands,123,5658.69
+2024-01-01,Leicester,Midlands,92,3584.55
+2024-02-01,Leicester,Midlands,88,4114.16
+2024-03-01,Leicester,Midlands,90,4326.6
+2024-04-01,Leicester,Midlands,98,4479.61
+2024-05-01,Leicester,Midlands,87,3861.96
+2024-06-01,Leicester,Midlands,103,4361.55
+2024-07-01,Leicester,Midlands,88,4274.02
+2024-08-01,Leicester,Midlands,94,3817.21
+2024-09-01,Leicester,Midlands,97,4929.83
+2024-10-01,Leicester,Midlands,99,4040.65
+2024-11-01,Leicester,Midlands,119,5243.43
+2024-12-01,Leicester,Midlands,127,6539.9
+2025-01-01,Leicester,Midlands,107,5533.12
+2025-02-01,Leicester,Midlands,108,4543.78
+2025-03-01,Leicester,Midlands,104,4733.35
+2025-04-01,Leicester,Midlands,102,4654.77
+2025-05-01,Leicester,Midlands,96,3872.13
+2025-06-01,Leicester,Midlands,94,4465.56
+2025-07-01,Leicester,Midlands,97,4842.25
+2025-08-01,Leicester,Midlands,107,4539.89
+2025-09-01,Leicester,Midlands,113,4449.58
+2025-10-01,Leicester,Midlands,99,4882.32
+2025-11-01,Leicester,Midlands,140,7093.64
+2025-12-01,Leicester,Midlands,144,5486.51
+2026-01-01,Leicester,Midlands,117,6070.41
+2026-02-01,Leicester,Midlands,108,5162.08
+2026-03-01,Leicester,Midlands,113,4466.54
+2026-04-01,Leicester,Midlands,116,5192.09
+2026-05-01,Leicester,Midlands,115,4381.19
+2026-06-01,Leicester,Midlands,110,4463.55
+2023-07-01,Coventry,Midlands,363,17965.9
+2023-08-01,Coventry,Midlands,355,16904.77
+2023-09-01,Coventry,Midlands,403,18666.8
+2023-10-01,Coventry,Midlands,374,18132.66
+2023-11-01,Coventry,Midlands,481,20062.72
+2023-12-01,Coventry,Midlands,561,23020.12
+2024-01-01,Coventry,Midlands,371,14801.98
+2024-02-01,Coventry,Midlands,395,20124.7
+2024-03-01,Coventry,Midlands,366,16550.64
+2024-04-01,Coventry,Midlands,428,16776.26
+2024-05-01,Coventry,Midlands,398,16775.93
+2024-06-01,Coventry,Midlands,405,20738.6
+2024-07-01,Coventry,Midlands,439,18708.79
+2024-08-01,Coventry,Midlands,382,17241.28
+2024-09-01,Coventry,Midlands,444,18383.84
+2024-10-01,Coventry,Midlands,392,17009.75
+2024-11-01,Coventry,Midlands,606,25552.64
+2024-12-01,Coventry,Midlands,526,22948.76
+2025-01-01,Coventry,Midlands,421,17315.16
+2025-02-01,Coventry,Midlands,443,18044.45
+2025-03-01,Coventry,Midlands,425,18267.18
+2025-04-01,Coventry,Midlands,457,23627.14
+2025-05-01,Coventry,Midlands,424,18494.71
+2025-06-01,Coventry,Midlands,422,19720.5
+2025-07-01,Coventry,Midlands,403,15529.35
+2025-08-01,Coventry,Midlands,414,19040.89
+2025-09-01,Coventry,Midlands,424,17061.68
+2025-10-01,Coventry,Midlands,444,22854.8
+2025-11-01,Coventry,Midlands,650,26940.59
+2025-12-01,Coventry,Midlands,564,26803.2
+2026-01-01,Coventry,Midlands,480,19046.42
+2026-02-01,Coventry,Midlands,451,19135.46
+2026-03-01,Coventry,Midlands,494,25340.91
+2026-04-01,Coventry,Midlands,432,22207.38
+2026-05-01,Coventry,Midlands,425,17646.4
+2026-06-01,Coventry,Midlands,501,21443.05
+2023-07-01,Derby,Midlands,372,16320.7
+2023-08-01,Derby,Midlands,381,15761.2
+2023-09-01,Derby,Midlands,386,18493.04
+2023-10-01,Derby,Midlands,403,15627.18
+2023-11-01,Derby,Midlands,598,28273.38
+2023-12-01,Derby,Midlands,621,28610.56
+2024-01-01,Derby,Midlands,419,20621.48
+2024-02-01,Derby,Midlands,459,21178.56
+2024-03-01,Derby,Midlands,460,19837.8
+2024-04-01,Derby,Midlands,439,16881.56
+2024-05-01,Derby,Midlands,462,20859.19
+2024-06-01,Derby,Midlands,446,22786.43
+2024-07-01,Derby,Midlands,527,22426.31
+2024-08-01,Derby,Midlands,460,17987.45
+2024-09-01,Derby,Midlands,519,25267.59
+2024-10-01,Derby,Midlands,509,24921.1
+2024-11-01,Derby,Midlands,675,28731.69
+2024-12-01,Derby,Midlands,685,26226.88
+2025-01-01,Derby,Midlands,493,24864.75
+2025-02-01,Derby,Midlands,518,20336.6
+2025-03-01,Derby,Midlands,586,24942.93
+2025-04-01,Derby,Midlands,585,22465.22
+2025-05-01,Derby,Midlands,539,24110.57
+2025-06-01,Derby,Midlands,658,26598.62
+2025-07-01,Derby,Midlands,571,27863.96
+2025-08-01,Derby,Midlands,659,29762.4
+2025-09-01,Derby,Midlands,668,28541.9
+2025-10-01,Derby,Midlands,616,26226.58
+2025-11-01,Derby,Midlands,858,39455.06
+2025-12-01,Derby,Midlands,961,47389.19
+2026-01-01,Derby,Midlands,713,29010.35
+2026-02-01,Derby,Midlands,734,30434.18
+2026-03-01,Derby,Midlands,666,29273.81
+2026-04-01,Derby,Midlands,805,35152.06
+2026-05-01,Derby,Midlands,774,37830.28
+2026-06-01,Derby,Midlands,782,31597.46
+2023-07-01,Bristol,South West,267,10368.65
+2023-08-01,Bristol,South West,307,15610.94
+2023-09-01,Bristol,South West,273,11942.04
+2023-10-01,Bristol,South West,327,16332.63
+2023-11-01,Bristol,South West,449,18060.65
+2023-12-01,Bristol,South West,423,16396.69
+2024-01-01,Bristol,South West,322,15614.0
+2024-02-01,Bristol,South West,321,16576.46
+2024-03-01,Bristol,South West,328,14736.14
+2024-04-01,Bristol,South West,356,16106.39
+2024-05-01,Bristol,South West,376,16946.9
+2024-06-01,Bristol,South West,391,18033.15
+2024-07-01,Bristol,South West,411,20443.23
+2024-08-01,Bristol,South West,415,21231.77
+2024-09-01,Bristol,South West,405,17805.69
+2024-10-01,Bristol,South West,376,15593.26
+2024-11-01,Bristol,South West,555,26969.92
+2024-12-01,Bristol,South West,565,21883.35
+2025-01-01,Bristol,South West,411,18770.83
+2025-02-01,Bristol,South West,411,20718.27
+2025-03-01,Bristol,South West,432,17080.38
+2025-04-01,Bristol,South West,497,22085.33
+2025-05-01,Bristol,South West,442,17360.34
+2025-06-01,Bristol,South West,482,24638.83
+2025-07-01,Bristol,South West,472,20334.59
+2025-08-01,Bristol,South West,537,25283.48
+2025-09-01,Bristol,South West,540,20554.13
+2025-10-01,Bristol,South West,561,29103.66
+2025-11-01,Bristol,South West,706,34829.47
+2025-12-01,Bristol,South West,683,28372.8
+2026-01-01,Bristol,South West,606,24928.95
+2026-02-01,Bristol,South West,558,23690.29
+2026-03-01,Bristol,South West,543,27524.33
+2026-04-01,Bristol,South West,548,28113.2
+2026-05-01,Bristol,South West,591,27944.85
+2026-06-01,Bristol,South West,604,25447.62
+2023-07-01,Exeter,South West,278,13199.93
+2023-08-01,Exeter,South West,306,13319.91
+2023-09-01,Exeter,South West,311,13815.81
+2023-10-01,Exeter,South West,325,14852.24
+2023-11-01,Exeter,South West,392,18833.51
+2023-12-01,Exeter,South West,458,18336.26
+2024-01-01,Exeter,South West,314,14026.89
+2024-02-01,Exeter,South West,359,18225.02
+2024-03-01,Exeter,South West,323,15210.17
+2024-04-01,Exeter,South West,361,16595.23
+2024-05-01,Exeter,South West,328,14399.36
+2024-06-01,Exeter,South West,401,16765.98
+2024-07-01,Exeter,South West,415,20227.66
+2024-08-01,Exeter,South West,384,15842.0
+2024-09-01,Exeter,South West,380,19069.86
+2024-10-01,Exeter,South West,425,21056.44
+2024-11-01,Exeter,South West,908,42620.12
+2024-12-01,Exeter,South West,916,36873.32
+2025-01-01,Exeter,South West,717,29293.72
+2025-02-01,Exeter,South West,740,31744.11
+2025-03-01,Exeter,South West,715,30239.18
+2025-04-01,Exeter,South West,849,42700.35
+2025-05-01,Exeter,South West,869,35690.58
+2025-06-01,Exeter,South West,826,39133.88
+2025-07-01,Exeter,South West,801,34789.8
+2025-08-01,Exeter,South West,929,47712.67
+2025-09-01,Exeter,South West,843,37992.24
+2025-10-01,Exeter,South West,932,41093.97
+2025-11-01,Exeter,South West,1393,53235.2
+2025-12-01,Exeter,South West,1418,70400.12
+2026-01-01,Exeter,South West,990,48064.7
+2026-02-01,Exeter,South West,1102,48261.96
+2026-03-01,Exeter,South West,994,40929.3
+2026-04-01,Exeter,South West,1203,51699.16
+2026-05-01,Exeter,South West,1201,47060.51
+2026-06-01,Exeter,South West,1240,51844.99
+2023-07-01,Bath,South West,289,11059.04
+2023-08-01,Bath,South West,283,12024.37
+2023-09-01,Bath,South West,270,12911.98
+2023-10-01,Bath,South West,301,12474.71
+2023-11-01,Bath,South West,403,18638.39
+2023-12-01,Bath,South West,419,16613.13
+2024-01-01,Bath,South West,287,11118.22
+2024-02-01,Bath,South West,349,13712.44
+2024-03-01,Bath,South West,314,15330.57
+2024-04-01,Bath,South West,299,15474.73
+2024-05-01,Bath,South West,315,13288.55
+2024-06-01,Bath,South West,342,17652.26
+2024-07-01,Bath,South West,323,14476.84
+2024-08-01,Bath,South West,315,13524.85
+2024-09-01,Bath,South West,342,15014.4
+2024-10-01,Bath,South West,338,13338.53
+2024-11-01,Bath,South West,696,32594.17
+2024-12-01,Bath,South West,844,38246.76
+2025-01-01,Bath,South West,621,24781.01
+2025-02-01,Bath,South West,584,22297.56
+2025-03-01,Bath,South West,590,27934.4
+2025-04-01,Bath,South West,607,25005.87
+2025-05-01,Bath,South West,619,29255.03
+2025-06-01,Bath,South West,675,28993.79
+2025-07-01,Bath,South West,662,33243.74
+2025-08-01,Bath,South West,632,31248.75
+2025-09-01,Bath,South West,621,25007.58
+2025-10-01,Bath,South West,588,28007.2
+2025-11-01,Bath,South West,809,36266.66
+2025-12-01,Bath,South West,977,46744.02
+2026-01-01,Bath,South West,722,30196.21
+2026-02-01,Bath,South West,742,32844.07
+2026-03-01,Bath,South West,753,30930.24
+2026-04-01,Bath,South West,666,28257.35
+2026-05-01,Bath,South West,698,35005.0
+2026-06-01,Bath,South West,761,34628.08
+2023-07-01,Plymouth,South West,158,6213.94
+2023-08-01,Plymouth,South West,159,7777.17
+2023-09-01,Plymouth,South West,151,6192.4
+2023-10-01,Plymouth,South West,150,5816.38
+2023-11-01,Plymouth,South West,224,11569.81
+2023-12-01,Plymouth,South West,216,11175.47
+2024-01-01,Plymouth,South West,179,7788.33
+2024-02-01,Plymouth,South West,150,7590.0
+2024-03-01,Plymouth,South West,186,8714.05
+2024-04-01,Plymouth,South West,176,8692.04
+2024-05-01,Plymouth,South West,160,7497.29
+2024-06-01,Plymouth,South West,196,9706.78
+2024-07-01,Plymouth,South West,166,7443.63
+2024-08-01,Plymouth,South West,190,8907.39
+2024-09-01,Plymouth,South West,190,8359.36
+2024-10-01,Plymouth,South West,194,9539.46
+2024-11-01,Plymouth,South West,258,12180.11
+2024-12-01,Plymouth,South West,247,9848.53
+2025-01-01,Plymouth,South West,221,9500.03
+2025-02-01,Plymouth,South West,220,11143.12
+2025-03-01,Plymouth,South West,219,10211.55
+2025-04-01,Plymouth,South West,216,8378.0
+2025-05-01,Plymouth,South West,232,10262.28
+2025-06-01,Plymouth,South West,219,8993.99
+2025-07-01,Plymouth,South West,214,10580.47
+2025-08-01,Plymouth,South West,219,10062.97
+2025-09-01,Plymouth,South West,242,10561.92
+2025-10-01,Plymouth,South West,263,11427.11
+2025-11-01,Plymouth,South West,324,14253.34
+2025-12-01,Plymouth,South West,325,13665.2
+2026-01-01,Plymouth,South West,239,10900.05
+2026-02-01,Plymouth,South West,253,12830.98
+2026-03-01,Plymouth,South West,252,9869.48
+2026-04-01,Plymouth,South West,299,12096.76
+2026-05-01,Plymouth,South West,280,12114.36
+2026-06-01,Plymouth,South West,306,11771.37
+2023-07-01,Brighton,South East,99,4203.46
+2023-08-01,Brighton,South East,99,4073.95
+2023-09-01,Brighton,South East,99,4322.47
+2023-10-01,Brighton,South East,109,4876.41
+2023-11-01,Brighton,South East,143,6494.37
+2023-12-01,Brighton,South East,138,5379.71
+2024-01-01,Brighton,South East,119,4730.51
+2024-02-01,Brighton,South East,124,5081.87
+2024-03-01,Brighton,South East,121,5044.91
+2024-04-01,Brighton,South East,125,5683.91
+2024-05-01,Brighton,South East,129,4955.2
+2024-06-01,Brighton,South East,129,6374.18
+2024-07-01,Brighton,South East,123,5198.98
+2024-08-01,Brighton,South East,134,6751.73
+2024-09-01,Brighton,South East,146,7136.71
+2024-10-01,Brighton,South East,152,7428.72
+2024-11-01,Brighton,South East,204,8451.22
+2024-12-01,Brighton,South East,223,8976.22
+2025-01-01,Brighton,South East,169,7517.8
+2025-02-01,Brighton,South East,172,7114.44
+2025-03-01,Brighton,South East,157,7021.55
+2025-04-01,Brighton,South East,158,6165.79
+2025-05-01,Brighton,South East,187,8318.33
+2025-06-01,Brighton,South East,172,8004.46
+2025-07-01,Brighton,South East,177,8755.72
+2025-08-01,Brighton,South East,186,8798.33
+2025-09-01,Brighton,South East,192,8752.83
+2025-10-01,Brighton,South East,210,10649.33
+2025-11-01,Brighton,South East,292,12551.17
+2025-12-01,Brighton,South East,259,12848.4
+2026-01-01,Brighton,South East,227,10652.66
+2026-02-01,Brighton,South East,241,11595.91
+2026-03-01,Brighton,South East,208,9631.49
+2026-04-01,Brighton,South East,222,9564.12
+2026-05-01,Brighton,South East,246,12057.22
+2026-06-01,Brighton,South East,254,12469.4
+2023-07-01,Reading,South East,138,6953.01
+2023-08-01,Reading,South East,154,6799.91
+2023-09-01,Reading,South East,145,6544.73
+2023-10-01,Reading,South East,141,7208.7
+2023-11-01,Reading,South East,203,9210.62
+2023-12-01,Reading,South East,221,9927.23
+2024-01-01,Reading,South East,159,7801.47
+2024-02-01,Reading,South East,168,8386.58
+2024-03-01,Reading,South East,181,9152.03
+2024-04-01,Reading,South East,197,9630.7
+2024-05-01,Reading,South East,184,7381.05
+2024-06-01,Reading,South East,186,7556.91
+2024-07-01,Reading,South East,179,8365.31
+2024-08-01,Reading,South East,184,8669.54
+2024-09-01,Reading,South East,186,7102.54
+2024-10-01,Reading,South East,360,17473.0
+2024-11-01,Reading,South East,478,22659.23
+2024-12-01,Reading,South East,497,20986.41
+2025-01-01,Reading,South East,367,17568.55
+2025-02-01,Reading,South East,379,15222.15
+2025-03-01,Reading,South East,410,20028.41
+2025-04-01,Reading,South East,385,15573.01
+2025-05-01,Reading,South East,392,16841.59
+2025-06-01,Reading,South East,399,15416.22
+2025-07-01,Reading,South East,427,16907.21
+2025-08-01,Reading,South East,460,20912.57
+2025-09-01,Reading,South East,405,19736.67
+2025-10-01,Reading,South East,477,23651.77
+2025-11-01,Reading,South East,575,24836.37
+2025-12-01,Reading,South East,600,26686.89
+2026-01-01,Reading,South East,507,25012.33
+2026-02-01,Reading,South East,523,21786.12
+2026-03-01,Reading,South East,470,18153.3
+2026-04-01,Reading,South East,544,23490.99
+2026-05-01,Reading,South East,587,26384.12
+2026-06-01,Reading,South East,538,27203.81
+2023-07-01,Oxford,South East,158,7651.8
+2023-08-01,Oxford,South East,157,7926.77
+2023-09-01,Oxford,South East,144,7387.9
+2023-10-01,Oxford,South East,168,7222.38
+2023-11-01,Oxford,South East,204,9556.53
+2023-12-01,Oxford,South East,214,8237.28
+2024-01-01,Oxford,South East,170,7339.72
+2024-02-01,Oxford,South East,165,7980.52
+2024-03-01,Oxford,South East,178,7731.53
+2024-04-01,Oxford,South East,168,8572.72
+2024-05-01,Oxford,South East,173,7294.57
+2024-06-01,Oxford,South East,160,7429.17
+2024-07-01,Oxford,South East,175,7635.09
+2024-08-01,Oxford,South East,180,7047.19
+2024-09-01,Oxford,South East,176,8950.2
+2024-10-01,Oxford,South East,173,7238.24
+2024-11-01,Oxford,South East,250,11379.72
+2024-12-01,Oxford,South East,228,9495.93
+2025-01-01,Oxford,South East,173,6938.81
+2025-02-01,Oxford,South East,170,7199.77
+2025-03-01,Oxford,South East,202,9048.71
+2025-04-01,Oxford,South East,169,7841.36
+2025-05-01,Oxford,South East,196,8945.55
+2025-06-01,Oxford,South East,187,7170.26
+2025-07-01,Oxford,South East,202,8481.62
+2025-08-01,Oxford,South East,202,9678.94
+2025-09-01,Oxford,South East,202,9331.82
+2025-10-01,Oxford,South East,206,8056.57
+2025-11-01,Oxford,South East,268,13771.1
+2025-12-01,Oxford,South East,257,12423.48
+2026-01-01,Oxford,South East,186,7330.04
+2026-02-01,Oxford,South East,187,9425.02
+2026-03-01,Oxford,South East,215,10799.29
+2026-04-01,Oxford,South East,208,9329.66
+2026-05-01,Oxford,South East,235,10904.79
+2026-06-01,Oxford,South East,212,9117.54
+2023-07-01,Southampton,South East,104,4746.28
+2023-08-01,Southampton,South East,110,4467.35
+2023-09-01,Southampton,South East,99,4233.96
+2023-10-01,Southampton,South East,118,5171.21
+2023-11-01,Southampton,South East,158,6528.46
+2023-12-01,Southampton,South East,165,7466.24
+2024-01-01,Southampton,South East,120,5539.97
+2024-02-01,Southampton,South East,111,4586.88
+2024-03-01,Southampton,South East,113,5275.33
+2024-04-01,Southampton,South East,113,4979.2
+2024-05-01,Southampton,South East,135,6595.34
+2024-06-01,Southampton,South East,118,5211.13
+2024-07-01,Southampton,South East,223,11482.34
+2024-08-01,Southampton,South East,232,9749.62
+2024-09-01,Southampton,South East,219,11059.85
+2024-10-01,Southampton,South East,202,8659.27
+2024-11-01,Southampton,South East,311,14596.82
+2024-12-01,Southampton,South East,307,13923.09
+2025-01-01,Southampton,South East,210,8125.81
+2025-02-01,Southampton,South East,223,8598.36
+2025-03-01,Southampton,South East,237,12051.21
+2025-04-01,Southampton,South East,266,10856.14
+2025-05-01,Southampton,South East,239,10965.14
+2025-06-01,Southampton,South East,266,11744.31
+2025-07-01,Southampton,South East,242,11091.04
+2025-08-01,Southampton,South East,279,11548.7
+2025-09-01,Southampton,South East,285,12582.57
+2025-10-01,Southampton,South East,301,12145.34
+2025-11-01,Southampton,South East,369,15132.87
+2025-12-01,Southampton,South East,352,16469.69
+2026-01-01,Southampton,South East,285,14501.6
+2026-02-01,Southampton,South East,314,11981.36
+2026-03-01,Southampton,South East,299,14432.31
+2026-04-01,Southampton,South East,284,13509.63
+2026-05-01,Southampton,South East,297,14233.7
+2026-06-01,Southampton,South East,323,12269.51
+2023-07-01,Milton Keynes,South East,282,11701.27
+2023-08-01,Milton Keynes,South East,322,13308.96
+2023-09-01,Milton Keynes,South East,332,12819.27
+2023-10-01,Milton Keynes,South East,307,12226.81
+2023-11-01,Milton Keynes,South East,452,22109.74
+2023-12-01,Milton Keynes,South East,416,18464.73
+2024-01-01,Milton Keynes,South East,341,16835.89
+2024-02-01,Milton Keynes,South East,308,12549.92
+2024-03-01,Milton Keynes,South East,331,12744.76
+2024-04-01,Milton Keynes,South East,355,14345.14
+2024-05-01,Milton Keynes,South East,350,15620.36
+2024-06-01,Milton Keynes,South East,356,15073.68
+2024-07-01,Milton Keynes,South East,343,13150.99
+2024-08-01,Milton Keynes,South East,373,17835.06
+2024-09-01,Milton Keynes,South East,319,14231.48
+2024-10-01,Milton Keynes,South East,348,15888.23
+2024-11-01,Milton Keynes,South East,468,19683.82
+2024-12-01,Milton Keynes,South East,462,22824.51
+2025-01-01,Milton Keynes,South East,374,18324.4
+2025-02-01,Milton Keynes,South East,363,18627.03
+2025-03-01,Milton Keynes,South East,368,18419.66
+2025-04-01,Milton Keynes,South East,376,17329.9
+2025-05-01,Milton Keynes,South East,383,19066.27
+2025-06-01,Milton Keynes,South East,373,14355.66
+2025-07-01,Milton Keynes,South East,405,15761.11
+2025-08-01,Milton Keynes,South East,369,16036.67
+2025-09-01,Milton Keynes,South East,394,15718.09
+2025-10-01,Milton Keynes,South East,397,19123.69
+2025-11-01,Milton Keynes,South East,570,24482.81
+2025-12-01,Milton Keynes,South East,529,26116.2
+2026-01-01,Milton Keynes,South East,391,17040.68
+2026-02-01,Milton Keynes,South East,369,18078.6
+2026-03-01,Milton Keynes,South East,372,16562.15
+2026-04-01,Milton Keynes,South East,377,17817.45
+2026-05-01,Milton Keynes,South East,391,18509.31
+2026-06-01,Milton Keynes,South East,380,19389.15
+2023-07-01,Camden,London,191,9688.89
+2023-08-01,Camden,London,181,8567.56
+2023-09-01,Camden,London,194,9956.04
+2023-10-01,Camden,London,186,7546.58
+2023-11-01,Camden,London,251,11495.2
+2023-12-01,Camden,London,284,10921.36
+2024-01-01,Camden,London,192,9911.63
+2024-02-01,Camden,London,216,9131.47
+2024-03-01,Camden,London,204,8214.26
+2024-04-01,Camden,London,223,11354.56
+2024-05-01,Camden,London,240,9967.78
+2024-06-01,Camden,London,213,8732.16
+2024-07-01,Camden,London,246,10318.27
+2024-08-01,Camden,London,229,9010.94
+2024-09-01,Camden,London,257,12932.64
+2024-10-01,Camden,London,254,10733.41
+2024-11-01,Camden,London,354,16999.21
+2024-12-01,Camden,London,371,15302.66
+2025-01-01,Camden,London,271,12644.9
+2025-02-01,Camden,London,263,11542.83
+2025-03-01,Camden,London,264,10998.29
+2025-04-01,Camden,London,306,11822.11
+2025-05-01,Camden,London,314,12703.68
+2025-06-01,Camden,London,312,12449.98
+2025-07-01,Camden,London,291,11303.44
+2025-08-01,Camden,London,332,12834.1
+2025-09-01,Camden,London,344,14014.11
+2025-10-01,Camden,London,296,11655.59
+2025-11-01,Camden,London,461,17579.45
+2025-12-01,Camden,London,461,21539.02
+2026-01-01,Camden,London,377,17725.6
+2026-02-01,Camden,London,364,14723.32
+2026-03-01,Camden,London,369,16918.44
+2026-04-01,Camden,London,367,15160.71
+2026-05-01,Camden,London,369,14340.55
+2026-06-01,Camden,London,418,20084.51
+2023-07-01,Hackney,London,96,4745.56
+2023-08-01,Hackney,London,95,4475.77
+2023-09-01,Hackney,London,109,5445.27
+2023-10-01,Hackney,London,97,4981.94
+2023-11-01,Hackney,London,149,6319.2
+2023-12-01,Hackney,London,162,7643.28
+2024-01-01,Hackney,London,126,6337.88
+2024-02-01,Hackney,London,115,5120.25
+2024-03-01,Hackney,London,113,4423.02
+2024-04-01,Hackney,London,133,6516.71
+2024-05-01,Hackney,London,126,5737.52
+2024-06-01,Hackney,London,143,5427.09
+2024-07-01,Hackney,London,133,6115.96
+2024-08-01,Hackney,London,149,6118.99
+2024-09-01,Hackney,London,143,5681.56
+2024-10-01,Hackney,London,166,6924.45
+2024-11-01,Hackney,London,198,9774.24
+2024-12-01,Hackney,London,197,7907.84
+2025-01-01,Hackney,London,180,7806.6
+2025-02-01,Hackney,London,162,6255.8
+2025-03-01,Hackney,London,183,8585.9
+2025-04-01,Hackney,London,173,7456.13
+2025-05-01,Hackney,London,170,7097.16
+2025-06-01,Hackney,London,185,8093.98
+2025-07-01,Hackney,London,190,7870.57
+2025-08-01,Hackney,London,189,8312.09
+2025-09-01,Hackney,London,187,8464.37
+2025-10-01,Hackney,London,214,10332.31
+2025-11-01,Hackney,London,275,12320.79
+2025-12-01,Hackney,London,305,14526.12
+2026-01-01,Hackney,London,228,11451.85
+2026-02-01,Hackney,London,254,10320.36
+2026-03-01,Hackney,London,255,13025.63
+2026-04-01,Hackney,London,261,10299.97
+2026-05-01,Hackney,London,249,11877.7
+2026-06-01,Hackney,London,247,9521.61
+2023-07-01,Croydon,London,276,11269.85
+2023-08-01,Croydon,London,286,12746.29
+2023-09-01,Croydon,London,259,12317.76
+2023-10-01,Croydon,London,301,15038.18
+2023-11-01,Croydon,London,412,17263.95
+2023-12-01,Croydon,London,410,16452.46
+2024-01-01,Croydon,London,304,15310.82
+2024-02-01,Croydon,London,285,13501.67
+2024-03-01,Croydon,London,322,13422.85
+2024-04-01,Croydon,London,332,14458.3
+2024-05-01,Croydon,London,305,15686.0
+2024-06-01,Croydon,London,355,17636.24
+2024-07-01,Croydon,London,344,14437.53
+2024-08-01,Croydon,London,342,16905.25
+2024-09-01,Croydon,London,364,18254.15
+2024-10-01,Croydon,London,340,16012.7
+2024-11-01,Croydon,London,497,20255.06
+2024-12-01,Croydon,London,470,18192.85
+2025-01-01,Croydon,London,411,16714.44
+2025-02-01,Croydon,London,400,17906.53
+2025-03-01,Croydon,London,405,20521.07
+2025-04-01,Croydon,London,361,15037.48
+2025-05-01,Croydon,London,415,19303.43
+2025-06-01,Croydon,London,443,19587.63
+2025-07-01,Croydon,London,442,17552.44
+2025-08-01,Croydon,London,442,18668.11
+2025-09-01,Croydon,London,426,21200.71
+2025-10-01,Croydon,London,464,20848.49
+2025-11-01,Croydon,London,562,28576.26
+2025-12-01,Croydon,London,675,34320.42
+2026-01-01,Croydon,London,455,20632.75
+2026-02-01,Croydon,London,483,22121.63
+2026-03-01,Croydon,London,484,20910.48
+2026-04-01,Croydon,London,498,21109.71
+2026-05-01,Croydon,London,472,24212.25
+2026-06-01,Croydon,London,566,28807.98
+2023-07-01,Islington,London,151,7715.9
+2023-08-01,Islington,London,146,7380.16
+2023-09-01,Islington,London,154,7394.25
+2023-10-01,Islington,London,148,6500.18
+2023-11-01,Islington,London,209,9517.31
+2023-12-01,Islington,London,218,8293.61
+2024-01-01,Islington,London,157,7728.51
+2024-02-01,Islington,London,163,7421.62
+2024-03-01,Islington,London,164,8045.83
+2024-04-01,Islington,London,171,8415.83
+2024-05-01,Islington,London,174,8088.83
+2024-06-01,Islington,London,183,8574.27
+2024-07-01,Islington,London,210,9731.43
+2024-08-01,Islington,London,214,10685.1
+2024-09-01,Islington,London,193,8475.7
+2024-10-01,Islington,London,359,17191.35
+2024-11-01,Islington,London,443,17786.95
+2024-12-01,Islington,London,483,24857.31
+2025-01-01,Islington,London,376,18412.33
+2025-02-01,Islington,London,338,17393.21
+2025-03-01,Islington,London,394,16035.9
+2025-04-01,Islington,London,398,16535.1
+2025-05-01,Islington,London,397,17864.61
+2025-06-01,Islington,London,377,17425.58
+2025-07-01,Islington,London,377,19214.27
+2025-08-01,Islington,London,396,20575.8
+2025-09-01,Islington,London,419,18669.03
+2025-10-01,Islington,London,415,20360.41
+2025-11-01,Islington,London,624,28863.4
+2025-12-01,Islington,London,628,28598.26
+2026-01-01,Islington,London,430,22323.81
+2026-02-01,Islington,London,457,19413.35
+2026-03-01,Islington,London,453,23158.39
+2026-04-01,Islington,London,519,25398.04
+2026-05-01,Islington,London,489,22256.89
+2026-06-01,Islington,London,490,19397.13
+2023-07-01,Glasgow,Scotland,97,4385.78
+2023-08-01,Glasgow,Scotland,104,4796.28
+2023-09-01,Glasgow,Scotland,105,4973.54
+2023-10-01,Glasgow,Scotland,111,4801.6
+2023-11-01,Glasgow,Scotland,156,6752.51
+2023-12-01,Glasgow,Scotland,157,6652.82
+2024-01-01,Glasgow,Scotland,110,5402.13
+2024-02-01,Glasgow,Scotland,115,4856.04
+2024-03-01,Glasgow,Scotland,105,4294.21
+2024-04-01,Glasgow,Scotland,109,4949.59
+2024-05-01,Glasgow,Scotland,124,5804.42
+2024-06-01,Glasgow,Scotland,111,5377.5
+2024-07-01,Glasgow,Scotland,104,4810.0
+2024-08-01,Glasgow,Scotland,115,5678.18
+2024-09-01,Glasgow,Scotland,117,5274.87
+2024-10-01,Glasgow,Scotland,125,5750.67
+2024-11-01,Glasgow,Scotland,171,8694.94
+2024-12-01,Glasgow,Scotland,145,5586.53
+2025-01-01,Glasgow,Scotland,114,5410.91
+2025-02-01,Glasgow,Scotland,119,4601.6
+2025-03-01,Glasgow,Scotland,122,4835.83
+2025-04-01,Glasgow,Scotland,125,5920.16
+2025-05-01,Glasgow,Scotland,121,6252.25
+2025-06-01,Glasgow,Scotland,129,5038.01
+2025-07-01,Glasgow,Scotland,130,5564.35
+2025-08-01,Glasgow,Scotland,112,4601.88
+2025-09-01,Glasgow,Scotland,112,4545.97
+2025-10-01,Glasgow,Scotland,115,5010.43
+2025-11-01,Glasgow,Scotland,176,7686.16
+2025-12-01,Glasgow,Scotland,157,7610.91
+2026-01-01,Glasgow,Scotland,116,5706.04
+2026-02-01,Glasgow,Scotland,121,4768.89
+2026-03-01,Glasgow,Scotland,137,5354.26
+2026-04-01,Glasgow,Scotland,121,5828.06
+2026-05-01,Glasgow,Scotland,138,5969.23
+2026-06-01,Glasgow,Scotland,142,6481.8
+2023-07-01,Edinburgh,Scotland,242,12190.44
+2023-08-01,Edinburgh,Scotland,244,10405.89
+2023-09-01,Edinburgh,Scotland,240,11636.01
+2023-10-01,Edinburgh,Scotland,249,10128.18
+2023-11-01,Edinburgh,Scotland,332,16552.56
+2023-12-01,Edinburgh,Scotland,391,16791.25
+2024-01-01,Edinburgh,Scotland,295,11800.86
+2024-02-01,Edinburgh,Scotland,273,11480.9
+2024-03-01,Edinburgh,Scotland,283,12327.3
+2024-04-01,Edinburgh,Scotland,274,13651.09
+2024-05-01,Edinburgh,Scotland,337,15360.52
+2024-06-01,Edinburgh,Scotland,340,17451.49
+2024-07-01,Edinburgh,Scotland,313,12946.37
+2024-08-01,Edinburgh,Scotland,335,14314.01
+2024-09-01,Edinburgh,Scotland,327,12613.26
+2024-10-01,Edinburgh,Scotland,326,12824.96
+2024-11-01,Edinburgh,Scotland,534,25188.89
+2024-12-01,Edinburgh,Scotland,468,21690.1
+2025-01-01,Edinburgh,Scotland,389,18719.59
+2025-02-01,Edinburgh,Scotland,365,16039.57
+2025-03-01,Edinburgh,Scotland,441,21338.98
+2025-04-01,Edinburgh,Scotland,428,19752.77
+2025-05-01,Edinburgh,Scotland,427,20415.81
+2025-06-01,Edinburgh,Scotland,474,23365.49
+2025-07-01,Edinburgh,Scotland,463,21240.93
+2025-08-01,Edinburgh,Scotland,508,21093.31
+2025-09-01,Edinburgh,Scotland,450,20423.56
+2025-10-01,Edinburgh,Scotland,500,19194.56
+2025-11-01,Edinburgh,Scotland,708,34437.07
+2025-12-01,Edinburgh,Scotland,794,41228.29
+2026-01-01,Edinburgh,Scotland,505,22533.07
+2026-02-01,Edinburgh,Scotland,625,24533.38
+2026-03-01,Edinburgh,Scotland,563,26423.05
+2026-04-01,Edinburgh,Scotland,574,23080.75
+2026-05-01,Edinburgh,Scotland,622,26130.03
+2026-06-01,Edinburgh,Scotland,658,28400.35
+2023-07-01,Aberdeen,Scotland,256,11939.89
+2023-08-01,Aberdeen,Scotland,267,11914.88
+2023-09-01,Aberdeen,Scotland,257,13340.48
+2023-10-01,Aberdeen,Scotland,280,14547.82
+2023-11-01,Aberdeen,Scotland,383,19586.08
+2023-12-01,Aberdeen,Scotland,383,18250.9
+2024-01-01,Aberdeen,Scotland,285,13501.57
+2024-02-01,Aberdeen,Scotland,304,15619.93
+2024-03-01,Aberdeen,Scotland,314,13688.69
+2024-04-01,Aberdeen,Scotland,309,15042.24
+2024-05-01,Aberdeen,Scotland,351,14353.48
+2024-06-01,Aberdeen,Scotland,296,14082.86
+2024-07-01,Aberdeen,Scotland,311,14958.0
+2024-08-01,Aberdeen,Scotland,337,14371.31
+2024-09-01,Aberdeen,Scotland,344,15653.15
+2024-10-01,Aberdeen,Scotland,336,14087.96
+2024-11-01,Aberdeen,Scotland,531,22849.94
+2024-12-01,Aberdeen,Scotland,523,24225.56
+2025-01-01,Aberdeen,Scotland,364,15764.67
+2025-02-01,Aberdeen,Scotland,349,16727.95
+2025-03-01,Aberdeen,Scotland,379,15307.11
+2025-04-01,Aberdeen,Scotland,424,21464.01
+2025-05-01,Aberdeen,Scotland,388,19265.57
+2025-06-01,Aberdeen,Scotland,432,21394.95
+2025-07-01,Aberdeen,Scotland,409,19818.39
+2025-08-01,Aberdeen,Scotland,446,19165.23
+2025-09-01,Aberdeen,Scotland,657,30481.37
+2025-10-01,Aberdeen,Scotland,693,30657.17
+2025-11-01,Aberdeen,Scotland,1002,50491.81
+2025-12-01,Aberdeen,Scotland,933,40346.82
+2026-01-01,Aberdeen,Scotland,721,28443.67
+2026-02-01,Aberdeen,Scotland,814,40662.24
+2026-03-01,Aberdeen,Scotland,727,36548.21
+2026-04-01,Aberdeen,Scotland,824,40908.6
+2026-05-01,Aberdeen,Scotland,796,32018.5
+2026-06-01,Aberdeen,Scotland,749,33870.54
+2023-07-01,Cardiff,Wales,158,8063.16
+2023-08-01,Cardiff,Wales,165,8110.2
+2023-09-01,Cardiff,Wales,159,7767.71
+2023-10-01,Cardiff,Wales,185,8901.8
+2023-11-01,Cardiff,Wales,238,11243.04
+2023-12-01,Cardiff,Wales,223,8830.88
+2024-01-01,Cardiff,Wales,169,8032.04
+2024-02-01,Cardiff,Wales,185,7059.53
+2024-03-01,Cardiff,Wales,201,9078.13
+2024-04-01,Cardiff,Wales,198,8519.84
+2024-05-01,Cardiff,Wales,191,8196.55
+2024-06-01,Cardiff,Wales,190,9489.27
+2024-07-01,Cardiff,Wales,195,7934.81
+2024-08-01,Cardiff,Wales,193,7845.94
+2024-09-01,Cardiff,Wales,179,8797.64
+2024-10-01,Cardiff,Wales,184,7464.39
+2024-11-01,Cardiff,Wales,392,15917.57
+2024-12-01,Cardiff,Wales,442,17837.79
+2025-01-01,Cardiff,Wales,341,14613.81
+2025-02-01,Cardiff,Wales,320,15902.44
+2025-03-01,Cardiff,Wales,320,15059.66
+2025-04-01,Cardiff,Wales,322,14233.71
+2025-05-01,Cardiff,Wales,346,13650.63
+2025-06-01,Cardiff,Wales,324,13796.93
+2025-07-01,Cardiff,Wales,352,17096.22
+2025-08-01,Cardiff,Wales,335,14916.33
+2025-09-01,Cardiff,Wales,295,13502.88
+2025-10-01,Cardiff,Wales,336,16984.61
+2025-11-01,Cardiff,Wales,472,20168.56
+2025-12-01,Cardiff,Wales,462,17953.7
+2026-01-01,Cardiff,Wales,345,16769.81
+2026-02-01,Cardiff,Wales,314,15860.09
+2026-03-01,Cardiff,Wales,311,15846.16
+2026-04-01,Cardiff,Wales,373,16211.66
+2026-05-01,Cardiff,Wales,343,14282.64
+2026-06-01,Cardiff,Wales,362,15233.98
+2023-07-01,Swansea,Wales,353,14069.59
+2023-08-01,Swansea,Wales,361,13775.42
+2023-09-01,Swansea,Wales,380,17025.99
+2023-10-01,Swansea,Wales,402,19879.97
+2023-11-01,Swansea,Wales,554,25522.62
+2023-12-01,Swansea,Wales,498,19994.69
+2024-01-01,Swansea,Wales,408,17158.98
+2024-02-01,Swansea,Wales,453,18239.66
+2024-03-01,Swansea,Wales,399,16966.92
+2024-04-01,Swansea,Wales,416,17379.81
+2024-05-01,Swansea,Wales,452,23465.39
+2024-06-01,Swansea,Wales,452,22109.92
+2024-07-01,Swansea,Wales,496,19381.93
+2024-08-01,Swansea,Wales,469,23429.55
+2024-09-01,Swansea,Wales,525,20201.18
+2024-10-01,Swansea,Wales,486,23405.41
+2024-11-01,Swansea,Wales,670,26384.14
+2024-12-01,Swansea,Wales,683,31767.18
+2025-01-01,Swansea,Wales,574,23968.62
+2025-02-01,Swansea,Wales,548,27828.13
+2025-03-01,Swansea,Wales,557,21202.53
+2025-04-01,Swansea,Wales,641,31205.15
+2025-05-01,Swansea,Wales,571,25883.23
+2025-06-01,Swansea,Wales,632,28020.01
+2025-07-01,Swansea,Wales,692,26504.39
+2025-08-01,Swansea,Wales,612,30034.25
+2025-09-01,Swansea,Wales,694,31764.01
+2025-10-01,Swansea,Wales,715,33212.21
+2025-11-01,Swansea,Wales,979,40231.75
+2025-12-01,Swansea,Wales,971,37881.9
+2026-01-01,Swansea,Wales,720,27426.12
+2026-02-01,Swansea,Wales,815,42279.13
+2026-03-01,Swansea,Wales,832,36495.18
+2026-04-01,Swansea,Wales,793,38333.02
+2026-05-01,Swansea,Wales,906,44839.52
+2026-06-01,Swansea,Wales,869,35506.63
+2023-07-01,Belfast,Northern Ireland,287,11193.78
+2023-08-01,Belfast,Northern Ireland,331,15415.58
+2023-09-01,Belfast,Northern Ireland,331,14609.48
+2023-10-01,Belfast,Northern Ireland,338,16391.01
+2023-11-01,Belfast,Northern Ireland,493,20276.43
+2023-12-01,Belfast,Northern Ireland,443,18665.96
+2024-01-01,Belfast,Northern Ireland,395,16996.48
+2024-02-01,Belfast,Northern Ireland,377,16249.18
+2024-03-01,Belfast,Northern Ireland,415,15890.82
+2024-04-01,Belfast,Northern Ireland,431,21271.61
+2024-05-01,Belfast,Northern Ireland,387,17591.94
+2024-06-01,Belfast,Northern Ireland,443,18609.83
+2024-07-01,Belfast,Northern Ireland,422,19324.33
+2024-08-01,Belfast,Northern Ireland,436,21983.12
+2024-09-01,Belfast,Northern Ireland,428,16664.27
+2024-10-01,Belfast,Northern Ireland,507,19356.98
+2024-11-01,Belfast,Northern Ireland,735,35898.24
+2024-12-01,Belfast,Northern Ireland,734,31211.71
+2025-01-01,Belfast,Northern Ireland,492,24150.27
+2025-02-01,Belfast,Northern Ireland,573,27374.12
+2025-03-01,Belfast,Northern Ireland,601,25459.36
+2025-04-01,Belfast,Northern Ireland,529,23208.89
+2025-05-01,Belfast,Northern Ireland,602,26634.13
+2025-06-01,Belfast,Northern Ireland,651,25762.87
+2025-07-01,Belfast,Northern Ireland,630,29693.28
+2025-08-01,Belfast,Northern Ireland,614,29243.94
+2025-09-01,Belfast,Northern Ireland,699,32942.05
+2025-10-01,Belfast,Northern Ireland,630,30838.72
+2025-11-01,Belfast,Northern Ireland,1050,46976.86
+2025-12-01,Belfast,Northern Ireland,900,34544.29
+2026-01-01,Belfast,Northern Ireland,792,32230.97
+2026-02-01,Belfast,Northern Ireland,761,31192.18
+2026-03-01,Belfast,Northern Ireland,838,33342.87
+2026-04-01,Belfast,Northern Ireland,890,37984.85
+2026-05-01,Belfast,Northern Ireland,883,43419.33
+2026-06-01,Belfast,Northern Ireland,877,40652.96

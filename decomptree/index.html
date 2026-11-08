@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; }
+        body {
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb;
+            --ink2: #52514e; --muted: #898781; --line: #e1e0d9; --bar: #9ec5f4; --barSel: #2a78d6; --ring: rgba(11,11,11,0.10);
+            overflow: hidden;
+        }
+        #main { position: absolute; inset: 0; overflow: auto; }
+        #tree { position: relative; display: flex; gap: 46px; padding: 14px 18px 18px; min-height: calc(100% - 32px); align-items: flex-start; }
+        svg#links { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; }
+        .col { width: 210px; flex: none; position: relative; z-index: 1; }
+        .head { display: flex; align-items: baseline; gap: 6px; border-bottom: 1px solid var(--line); padding-bottom: 5px; margin-bottom: 8px; min-height: 30px; }
+        .head .t { font-weight: bold; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+        .head .sub { color: var(--muted); font-size: 11px; display: block; font-weight: normal; }
+        .head .x { cursor: pointer; color: var(--muted); padding: 0 3px; border-radius: 3px; }
+        .head .x:hover { color: #0b0b0b; background: rgba(127,127,127,.12); }
+        .node { position: relative; padding: 4px 26px 5px 6px; border-radius: 5px; cursor: pointer; margin-bottom: 2px; }
+        .node:hover { background: rgba(127,127,127,0.08); }
+        .node .lab { display: flex; gap: 6px; align-items: baseline; }
+        .node .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .node .v { font-variant-numeric: tabular-nums; font-weight: bold; }
+        .node .pc { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 34px; text-align: right; }
+        .node .track { height: 8px; margin-top: 3px; position: relative; }
+        .node .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--bar); border-radius: 0 4px 4px 0; min-width: 2px; }
+        .node.on .fill { background: var(--barSel); }
+        .node.on .nm { font-weight: bold; }
+        .node.other { cursor: default; color: var(--ink2); }
+        .node.other .fill { background: #e1e0d9; }
+        .node.selected { outline: 1px dashed #2161D9; outline-offset: -1px; }
+        .plus {
+            position: absolute; right: 2px; top: 50%; margin-top: -10px; width: 20px; height: 20px; border-radius: 50%;
+            border: 1px solid var(--ring); background: #fff; color: var(--ink2); font-size: 15px; line-height: 18px; text-align: center; display: none;
+        }
+        .node:hover .plus, .node.on .plus { display: block; }
+        .plus:hover { color: #fff; background: var(--barSel); border-color: var(--barSel); }
+        .root .big { font-size: 26px; font-weight: bold; margin: 2px 0 2px; font-variant-numeric: tabular-nums; }
+        .loading { color: var(--muted); padding: 6px; }
+        #menu { position: fixed; display: none; z-index: 10; background: #fff; border: 1px solid var(--ring); box-shadow: 0 6px 18px rgba(0,0,0,.16); border-radius: 6px; padding: 4px 0; min-width: 180px; max-height: 70%; overflow: auto; }
+        #menu .mi { padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+        #menu .mi:hover { background: #eef4fd; }
+        #menu .sep { border-top: 1px solid var(--line); margin: 4px 0; }
+        #menu .hint { color: var(--muted); font-size: 11px; padding: 2px 12px 4px; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: var(--ink2); font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+</head>
+
+<body>
+<div id="main"><div id="tree"><svg id="links"></svg></div></div><!-- This element is where the view will render -->
+<div id="menu"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var V = "__value";
+    var S = { levels: [], gen: 0, selected: null };   // levels[0] is the root; levels[i>0] = {dim, rows, other, sel}
+    window.__decomp = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function fmt(v) {
+        if (v === null || v === undefined || isNaN(v)) return "n/a";
+        var a = Math.abs(v);
+        if (a >= 1e9) return (v / 1e9).toFixed(2) + "bn";
+        if (a >= 1e6) return (v / 1e6).toFixed(a >= 1e7 ? 1 : 2) + "M";
+        if (a >= 1e4) return (v / 1e3).toFixed(a >= 1e5 ? 0 : 1) + "k";
+        if (a >= 100) return Math.round(v).toLocaleString();
+        return a >= 1 ? (+v.toFixed(2)).toLocaleString() : v.toPrecision(3);
+    }
+    function label(v) { return v === null || v === undefined || v === "" ? "(blank)" : String(v); }
+
+    function opts() { return omniscope.view.context().options.items || {}; }
+    function measure() { var m = opts().measure; return { inputField: m.inputField, function: m.function || "SUM", name: V }; }
+    function additive() { var f = (opts().measure || {}).function; return !f || f === "SUM" || f === "RECORD_COUNT" || f === "NON_EMPTY_COUNT"; }
+    function measureLabel() { var m = opts().measure || {}; if (m.function === "RECORD_COUNT" || !m.inputField) return "Record count"; var f = { SUM: "Total", MEAN: "Average", MEDIAN: "Median", MIN: "Minimum", MAX: "Maximum" }[m.function] || m.function; return m.displayName || (f + " " + m.inputField); }
+    function dims() { var d = opts().dimensions; return (Array.isArray(d) ? d : d ? [d] : []).map(function (x) { return typeof x === "string" ? x : x.inputField; }).filter(Boolean); }
+    function viewFilter() { var f = omniscope.view.context().dataConfig.filter; return f && (f.filters ? f.filters.length : true) ? f : null; }
+    function pathFilters(uptoLevel) {
+        var out = [];
+        for (var i = 1; i <= uptoLevel; i++) { var L = S.levels[i]; if (!L || L.sel === undefined) break; out.push({ type: "FIELD_VALUE", inputField: L.dim, operator: "=", value: L.sel }); }
+        return out;
+    }
+    function combined(extra) { var fs = extra.slice(); var vf = viewFilter(); if (vf) fs.unshift(vf); return fs.length ? { type: "AND", filters: fs } : null; }
+    function query(q) {
+        return new Promise(function (res, rej) {
+            omniscope.view.queryBuilder().table(q).on("load", function (e) { res(e.data); }).on("error", function (e) { rej(e.data); }).execute();
+        });
+    }
+    function levelQuery(dim, filters, n, dir) {
+        var q = { groupings: [{ inputField: dim, type: "UNIQUE_VALUES" }], measures: [measure()], sorts: [{ inputField: V, direction: dir || opts().sortOrder || "DESCENDING" }], range: { start: 0, length: n } };
+        var f = combined(filters); if (f) q.filter = f;
+        return query(q).then(function (d) { return d.records.map(function (r) { return { value: r[0], v: r[1] }; }); });
+    }
+    function countQuery(dim, filters) {
+        var q = { groupings: [{ inputField: dim, type: "UNIQUE_VALUES" }], measures: [{ function: "RECORD_COUNT", name: "n" }], range: { start: 0, length: 100000 } };
+        var f = combined(filters); if (f) q.filter = f;
+        return query(q).then(function (d) { return d.records.length; });
+    }
+
+    // ------------------------------------------------------------ state persistence (survives reloads)
+    function storeKey() { var c = omniscope.view.context(); return "decomptree:" + (c.keyForShortTermLocalStorage || c.viewInstanceId || "x"); }
+    function save() { try { localStorage.setItem(storeKey(), JSON.stringify(S.levels.slice(1).map(function (L) { return { dim: L.dim, sel: L.sel }; }))); } catch (e) { } }
+    function restore() { try { return JSON.parse(localStorage.getItem(storeKey()) || "[]"); } catch (e) { return []; } }
+
+    // ------------------------------------------------------------ loading levels
+    function maxBars() { var n = +opts().maxBars; return n >= 2 ? Math.min(50, Math.round(n)) : 8; }
+    function loadLevel(i) {
+        var L = S.levels[i], parent = S.levels[i - 1], filters = pathFilters(i - 1), gen = S.gen;
+        L.loading = true;
+        return Promise.all([levelQuery(L.dim, filters, maxBars()), countQuery(L.dim, filters)]).then(function (r) {
+            if (gen !== S.gen) return;
+            L.rows = r[0]; L.count = r[1]; L.loading = false;
+            var shown = L.rows.reduce(function (a, x) { return a + (x.v || 0); }, 0);
+            L.total = parent.totalForChildren;
+            L.other = additive() && L.count > L.rows.length && typeof L.total === "number" ? { n: L.count - L.rows.length, v: L.total - shown } : null;
+            if (L.sel !== undefined && !L.rows.some(function (x) { return label(x.value) === label(L.sel); })) L.sel = undefined;
+        });
+    }
+    function rootTotal() {
+        var q = { measures: [measure()] }, f = combined([]); if (f) q.filter = f;
+        return query(q).then(function (d) { return d.records.length ? d.records[0][0] : null; });
+    }
+    // Re-query from level `from` down, following each level's selected bar.
+    function refresh(from) {
+        var gen = ++S.gen;
+        omniscope.view.busy(true);
+        var p = from <= 0 ? rootTotal().then(function (t) { if (gen === S.gen) S.levels[0].total = t; }) : Promise.resolve();
+        var chain = p;
+        for (var i = Math.max(1, from); i < S.levels.length; i++) (function (i) {
+            chain = chain.then(function () {
+                if (gen !== S.gen) return;
+                var prev = S.levels[i - 1];
+                if (i > 1 && prev.sel === undefined) { S.levels.length = i; return; }
+                if (i > 1) { var row = prev.rows.find(function (x) { return label(x.value) === label(prev.sel); }); S.levels[i - 1].selTotal = row ? row.v : null; }
+                S.levels[i - 1].totalForChildren = i === 1 ? S.levels[0].total : prev.selTotal;
+                return loadLevel(i).then(function () { if (gen === S.gen) draw(); });
+            });
+        })(i);
+        return chain.then(function () { if (gen === S.gen) { omniscope.view.busy(false); draw(); save(); } }).catch(function (e) {
+            omniscope.view.busy(false);
+            omniscope.view.error((e && e.message) || "Query failed", e);
+        });
+    }
+    function expand(fromLevel, rowValue, dim) {
+        var L = S.levels[fromLevel]; if (!L) return;
+        if (fromLevel > 0) L.sel = rowValue;
+        S.levels.length = fromLevel + 1;
+        S.levels.push({ dim: dim, rows: [], sel: undefined });
+        draw(); refresh(fromLevel + 1);
+    }
+    function autoSplit(fromLevel, rowValue, highest) {
+        var L = S.levels[fromLevel]; if (!L) return; if (fromLevel > 0) L.sel = rowValue;
+        S.levels.length = fromLevel + 1;
+        var used = S.levels.slice(1).map(function (x) { return x.dim; }), cand = dims().filter(function (d) { return used.indexOf(d) < 0; });
+        var filters = pathFilters(fromLevel);
+        omniscope.view.busy(true);
+        Promise.all(cand.map(function (d) { return levelQuery(d, filters, 1, highest ? "DESCENDING" : "ASCENDING").then(function (r) { return { dim: d, v: r.length ? r[0].v : null }; }); }))
+            .then(function (res) {
+                res = res.filter(function (x) { return typeof x.v === "number"; });
+                if (!res.length) { omniscope.view.busy(false); return; }
+                res.sort(function (a, b) { return highest ? b.v - a.v : a.v - b.v; });
+                S.levels.push({ dim: res[0].dim, rows: [], sel: undefined, auto: highest ? "highest" : "lowest" });
+                draw(); refresh(fromLevel + 1);
+            }).catch(function (e) { omniscope.view.busy(false); omniscope.view.error((e && e.message) || "Query failed", e); });
+    }
+    window.__decomp.expand = function (level, value, dim) { expand(level, value, dim); };
+    window.__decomp.auto = function (level, value, hi) { autoSplit(level, value, hi); };
+
+    // ------------------------------------------------------------ selection (Omniscope)
+    function selectPath(level, value) {
+        var f = pathFilters(level - 1); f.push({ type: "FIELD_VALUE", inputField: S.levels[level].dim, operator: "=", value: value });
+        S.selected = { level: level, value: label(value) };
+        omniscope.view.context().viewSelection = { filter: f.length === 1 ? f[0] : { type: "AND", filters: f } };
+        omniscope.view.updated();
+    }
+    function clearSelection() { if (S.selected) { S.selected = null; draw(); } omniscope.view.whitespaceClick(); }
+
+    // ------------------------------------------------------------ drawing
+    function draw() {
+        var tree = document.getElementById("tree"), svg = document.getElementById("links");
+        Array.prototype.slice.call(tree.querySelectorAll(".col")).forEach(function (c) { c.remove(); });
+        var add = additive(), showPc = opts().showPercent !== false && add, remaining = function (level) { var used = S.levels.slice(1, level + 1).map(function (x) { return x.dim; }); return dims().filter(function (d) { return used.indexOf(d) < 0; }); };
+        // root
+        var root = document.createElement("div"); root.className = "col root";
+        root.innerHTML = '<div class="head"><span class="t">' + esc(measureLabel()) + '<span class="sub">All records' + (viewFilter() ? ' (filtered)' : '') + '</span></span></div>' +
+            '<div class="node on" data-level="0"><div class="big">' + fmt(S.levels[0].total) + '</div><div class="track"><div class="fill" style="width:100%"></div></div>' +
+            (remaining(0).length ? '<div class="plus" title="Split by">+</div>' : '') + '</div>';
+        tree.appendChild(root);
+        S.anim = S.anim || {}; var rk = S.sig + "|" + S.levels[0].total;
+        if (MOTION && root.animate && S.levels[0].total !== null && S.anim.root !== rk) { S.anim.root = rk; var rf = root.querySelector(".fill"); if (rf) { rf.style.transformOrigin = "left center"; rf.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 700, easing: "cubic-bezier(.2,.7,.3,1)", fill: "backwards" }); } root.querySelector(".big") && root.querySelector(".big").animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, fill: "backwards" }); }
+        root.querySelector(".node").addEventListener("click", function (e) { e.stopPropagation(); if (e.target.classList.contains("plus")) openMenu(e, 0, undefined); else clearSelection(); });
+        for (var i = 1; i < S.levels.length; i++) (function (i) {
+            var L = S.levels[i], col = document.createElement("div"); col.className = "col";
+            var hdr = '<div class="head"><span class="t" title="' + esc(L.dim) + '">' + esc(L.dim) + '<span class="sub">' + (L.auto ? "Auto split: " + L.auto + " value" : (L.count ? L.count + " categories" : "")) + '</span></span><span class="x" title="Remove this level">&times;</span></div>';
+            var body = "";
+            if (L.loading && !L.rows.length) body = '<div class="loading">Loading...</div>';
+            var max = Math.max.apply(null, L.rows.map(function (x) { return Math.abs(x.v || 0); }).concat([L.other ? Math.abs(L.other.v) : 0, 1e-12]));
+            L.rows.forEach(function (x, k) {
+                var on = L.sel !== undefined && label(L.sel) === label(x.value), sel = S.selected && S.selected.level === i && S.selected.value === label(x.value);
+                var pc = showPc && L.total ? Math.round(100 * x.v / L.total) + "%" : "";
+                body += '<div class="node' + (on ? " on" : "") + (sel ? " selected" : "") + '" data-k="' + k + '"><div class="lab"><span class="nm" title="' + esc(label(x.value)) + '">' + esc(label(x.value)) + '</span><span class="v">' + fmt(x.v) + '</span>' + (pc ? '<span class="pc">' + pc + '</span>' : '') + '</div>' +
+                    '<div class="track"><div class="fill" style="width:' + Math.max(0.5, 100 * Math.abs(x.v || 0) / max) + '%"></div></div>' + (remaining(i).length ? '<div class="plus" title="Split by">+</div>' : '') + '</div>';
+            });
+            if (L.other) body += '<div class="node other"><div class="lab"><span class="nm">Other (' + L.other.n + ')</span><span class="v">' + fmt(L.other.v) + '</span>' + (showPc && L.total ? '<span class="pc">' + Math.round(100 * L.other.v / L.total) + '%</span>' : '') + '</div><div class="track"><div class="fill" style="width:' + Math.max(0.5, 100 * Math.abs(L.other.v) / max) + '%"></div></div></div>';
+            if (!L.loading && !L.rows.length) body = '<div class="loading">No data</div>';
+            col.innerHTML = hdr + body; tree.appendChild(col);
+            var ak = S.sig + "|" + (L.dim || "") + "|" + L.rows.map(function (x) { return label(x.value) + ":" + x.v; }).join(",");
+            S.anim = S.anim || {};
+            if (MOTION && col.animate && !L.loading && L.rows.length && S.anim[i] !== ak) { S.anim[i] = ak; Array.prototype.forEach.call(col.querySelectorAll(".fill"), function (f, k) { f.style.transformOrigin = "left center"; f.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 550, delay: Math.min(30 * k, 450), easing: "cubic-bezier(.2,.7,.3,1)", fill: "backwards" }); }); }
+            col.querySelector(".x").addEventListener("click", function (e) { e.stopPropagation(); S.levels.length = i; draw(); save(); });
+            Array.prototype.forEach.call(col.querySelectorAll(".node[data-k]"), function (n) {
+                n.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    var x = L.rows[+n.getAttribute("data-k")];
+                    if (e.target.classList.contains("plus")) return openMenu(e, i, x.value);
+                    var changed = label(L.sel) !== label(x.value) || L.sel === undefined;
+                    L.sel = x.value;
+                    selectPath(i, x.value);
+                    if (changed && i < S.levels.length - 1) refresh(i + 1); else { draw(); save(); }
+                });
+            });
+        })(i);
+        requestAnimationFrame(drawLinks);
+    }
+    function drawLinks() {
+        var tree = document.getElementById("tree"), svg = document.getElementById("links"), tb = tree.getBoundingClientRect();
+        svg.setAttribute("width", tree.scrollWidth); svg.setAttribute("height", tree.scrollHeight);
+        var cols = tree.querySelectorAll(".col"), paths = "";
+        for (var i = 0; i < cols.length - 1; i++) {
+            var from = cols[i].querySelector(".node.on"), to = cols[i + 1].querySelectorAll(".node");
+            if (!from || !to.length) continue;
+            var fb = from.getBoundingClientRect(), x0 = fb.right - tb.left, y0 = fb.top + fb.height / 2 - tb.top;
+            Array.prototype.forEach.call(to, function (t) {
+                var b = t.getBoundingClientRect(), x1 = b.left - tb.left, y1 = b.top + b.height / 2 - tb.top, mx = (x0 + x1) / 2, on = t.classList.contains("on");
+                paths += '<path d="M' + x0 + ',' + y0 + ' C' + mx + ',' + y0 + ' ' + mx + ',' + y1 + ' ' + x1 + ',' + y1 + '" fill="none" stroke="' + (on ? "#2a78d6" : "#c3c2b7") + '" stroke-width="' + (on ? 2 : 1) + '" opacity="' + (on ? 0.9 : 0.6) + '"/>';
+            });
+        }
+        svg.innerHTML = paths;
+    }
+
+    // ------------------------------------------------------------ split menu
+    function openMenu(e, level, value) {
+        var m = document.getElementById("menu"), used = S.levels.slice(1, level + 1).map(function (x) { return x.dim; });
+        var cand = dims().filter(function (d) { return used.indexOf(d) < 0; });
+        var h = '<div class="hint">Split ' + esc(level ? label(value) : "the total") + ' by</div>';
+        if (opts().autoSplits !== false && cand.length > 1) h += '<div class="mi" data-auto="hi">Auto: highest value</div><div class="mi" data-auto="lo">Auto: lowest value</div><div class="sep"></div>';
+        cand.forEach(function (d) { h += '<div class="mi" data-dim="' + esc(d) + '">' + esc(d) + '</div>'; });
+        m.innerHTML = h; m.style.display = "block";
+        var x = Math.min(e.clientX + 8, window.innerWidth - m.offsetWidth - 6), y = Math.min(e.clientY - 10, window.innerHeight - m.offsetHeight - 6);
+        m.style.left = Math.max(4, x) + "px"; m.style.top = Math.max(4, y) + "px";
+        Array.prototype.forEach.call(m.querySelectorAll(".mi"), function (it) {
+            it.addEventListener("click", function (ev) {
+                ev.stopPropagation(); m.style.display = "none";
+                if (it.getAttribute("data-auto")) autoSplit(level, value, it.getAttribute("data-auto") === "hi"); else expand(level, value, it.getAttribute("data-dim"));
+            });
+        });
+    }
+    document.addEventListener("click", function () { document.getElementById("menu").style.display = "none"; });
+    document.getElementById("main").addEventListener("click", function (e) { if (e.target.id === "main" || e.target.id === "tree" || e.target.tagName === "svg") clearSelection(); });
+
+    // ------------------------------------------------------------ lifecycle
+    function render(isLoad) {
+        var it = opts();
+        S.sig = JSON.stringify(it) + "|" + JSON.stringify(viewFilter());
+        if (!it.measure) { message("Choose a measure to Analyse, and one or more fields to Explain by."); return; }
+        if (!dims().length) { message("Add one or more fields to Explain by. Then use + on any bar to split it."); return; }
+        message(null);
+        var valid = dims();
+        if (!S.levels.length || isLoad) {
+            S.levels = [{ total: null }];
+            restore().forEach(function (L) { if (valid.indexOf(L.dim) >= 0 && !S.levels.some(function (x) { return x.dim === L.dim; })) S.levels.push({ dim: L.dim, sel: L.sel === null ? null : L.sel, rows: [] }); });
+        } else {
+            for (var i = 1; i < S.levels.length; i++) if (valid.indexOf(S.levels[i].dim) < 0) { S.levels.length = i; break; }
+        }
+        var sel = omniscope.view.context().viewSelection; if (!sel) S.selected = null;
+        draw(); refresh(0);
+    }
+    omniscope.view.on("load", function () { render(true); });
+    omniscope.view.on("update", function () { render(false); });
+    omniscope.view.on("resize", function () { requestAnimationFrame(drawLinks); });
+})();
+</script>
+</body>
+</html>

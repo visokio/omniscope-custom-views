@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --panel: rgba(252,252,251,.93); --ring: rgba(11,11,11,.1); background: var(--surface); color: var(--ink); }
+        body.dark { --surface: #1a1a19; --ink: #f0efec; --ink2: #c3c2b7; --panel: rgba(26,26,25,.9); --ring: rgba(255,255,255,.12); }
+        #main { position: absolute; inset: 0; }
+        #main canvas { display: block; outline: none; }
+        #floors { position: absolute; left: 8px; top: 8px; z-index: 4; display: flex; flex-direction: column; gap: 3px; max-height: calc(100% - 60px); overflow: auto; }
+        #floors button, #toolbar button { font: inherit; font-size: 11px; color: var(--ink2); background: var(--panel); border: 1px solid var(--ring); border-radius: 4px; padding: 3px 8px; cursor: pointer; text-align: left; }
+        #floors button.on { color: #fff; background: #2a78d6; border-color: #2a78d6; }
+        #legend { position: absolute; right: 8px; top: 8px; z-index: 4; background: var(--panel); border: 1px solid var(--ring); border-radius: 6px; padding: 6px 9px; display: none; }
+        #legend .t { color: var(--ink2); font-weight: bold; margin-bottom: 4px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #legend .ramp { width: 160px; height: 10px; border-radius: 3px; }
+        #legend .ends { display: flex; justify-content: space-between; color: var(--ink2); font-size: 11px; margin-top: 2px; }
+        #toolbar { position: absolute; left: 8px; bottom: 8px; z-index: 4; display: flex; gap: 6px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; z-index: 5; background: var(--panel); color: var(--ink); border: 1px solid var(--ring); border-radius: 6px; padding: 7px 10px; line-height: 1.45; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
+        #tooltip .k { color: var(--ink2); }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: var(--ink2); font-size: 14px; padding: 20px; background: var(--surface); z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+
+<body>
+<div id="main"></div><!-- This element is where the view will render -->
+<div id="floors"></div>
+<div id="legend"></div>
+<div id="tooltip"></div>
+<div id="toolbar"><button id="resetBtn">Reset view</button><button id="spinBtn">Rotate</button></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    var SEQ = ["#e8f1fc", "#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"];
+    var DIV = ["#184f95", "#3987e5", "#9ec5f4", "#f0efec", "#f4a6a5", "#e34948", "#a32a2a"]; // blue <-> red, grey midpoint
+    var NODATA = "#d9d8d2", SELECT = 0x2161D9;
+    var S = { zones: [], selected: new Set(), hover: null, isolate: null };
+    window.__bldg = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || v === undefined || isNaN(v)) return "no data"; var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toLocaleString() : (+v.toFixed(1)).toLocaleString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function gf(g) { return g ? (typeof g === "string" ? g : g.inputField) : null; }
+    function webglOk() { try { var c = document.createElement("canvas"); return !!(c.getContext("webgl") || c.getContext("experimental-webgl")); } catch (e) { return false; } }
+    function ramp(cols, t) { t = Math.max(0, Math.min(1, t)); var f = t * (cols.length - 1), i = Math.min(cols.length - 2, Math.floor(f)); return new THREE.Color(cols[i]).lerp(new THREE.Color(cols[i + 1]), f - i); }
+
+    function init() {
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById("main").appendChild(renderer.domElement);
+        var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(35, window.innerWidth / Math.max(1, window.innerHeight), 0.1, 5000);
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; controls.dampingFactor = 0.08; controls.maxPolarAngle = Math.PI * 0.49; controls.autoRotateSpeed = 0.8;
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x9a9a92, 0.85));
+        var sun = new THREE.DirectionalLight(0xffffff, 0.6); sun.position.set(1, 2, 1.5); scene.add(sun);
+        S.renderer = renderer; S.scene = scene; S.camera = camera; S.controls = controls; S.group = new THREE.Group(); scene.add(S.group);
+        bindPointer(renderer.domElement);
+        document.getElementById("resetBtn").addEventListener("click", function (e) { e.stopPropagation(); frame(); });
+        document.getElementById("spinBtn").addEventListener("click", function (e) { e.stopPropagation(); controls.autoRotate = !controls.autoRotate; });
+        (function loop(now) { requestAnimationFrame(loop); intro(now || performance.now()); controls.update(); renderer.render(scene, camera); })();
+    }
+    // entrance: each floor drops into place, lowest first (plays when the data, options or filters change)
+    function intro(now) {
+        var I = S.intro; if (!I) return; var done = true; if (I.t0 === null) I.t0 = now; // the clock starts on the first frame drawn, so an offscreen view still plays it when scrolled to
+        I.items.forEach(function (o) { var t = (now - I.t0 - o.d) / 700; if (t < 0) { o.m.visible = false; done = false; return; } o.m.visible = true; if (t >= 1) { o.m.position.y = o.y; return; } done = false; o.m.position.y = o.y + I.drop * Math.pow(1 - t, 3); });
+        if (done) S.intro = null;
+    }
+    function frame() {
+        var b = S.bounds; if (!b) return;
+        var c = new THREE.Vector3((b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2, (b.z0 + b.z1) / 2), size = Math.max(b.x1 - b.x0, b.y1 - b.y0, b.z1 - b.z0);
+        S.controls.target.copy(c);
+        S.camera.position.set(c.x + size * 1.25, c.y + size * 1.0, c.z + size * 1.55);
+        S.camera.near = size / 200; S.camera.far = size * 20; S.camera.updateProjectionMatrix(); S.controls.update();
+    }
+    function textSprite(text, colour, depth) {
+        var c = document.createElement("canvas"), g = c.getContext("2d"), f = "600 28px Lato, 'Segoe UI', Arial, sans-serif";
+        g.font = f; var w = Math.ceil(g.measureText(text).width) + 12; c.width = w; c.height = 40; g.font = f; g.fillStyle = colour; g.textBaseline = "middle"; g.fillText(text, 6, 20);
+        var t = new THREE.CanvasTexture(c); t.minFilter = THREE.LinearFilter;
+        var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthTest: !!depth })); s.userData.aspect = w / 40; return s;
+    }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        var dark = it.theme === "DARK"; document.body.classList.toggle("dark", dark);
+        if (!webglOk()) { message("3D Building needs WebGL, which this browser does not provide."); return; }
+        if (!it.floor || !it.zone || !it.x || !it.y || !it.w || !it.d) { message("Choose Floor and Zone, and the layout measures Left (x), Front (y), Width and Depth."); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        if (!S.renderer) init();
+        S.renderer.setClearColor(dark ? 0x1a1a19 : 0xfcfcfb, 1);
+        var mp = res.mappings, recs = res.data.records || [];
+        var zones = recs.map(function (r) {
+            return { b: mp.building !== undefined ? r[mp.building] : null, f: r[mp.floor], z: r[mp.zone], x: r[mp.x], y: r[mp.y], w: r[mp.w], d: r[mp.d], v: mp.value !== undefined ? r[mp.value] : null };
+        }).filter(function (z) { return [z.x, z.y, z.w, z.d].every(function (n) { return typeof n === "number" && isFinite(n); }) && z.w > 0 && z.d > 0; });
+        S.group.children.slice().forEach(function (ch) { S.group.remove(ch); ch.traverse(function (o) { if (o.geometry) o.geometry.dispose(); if (o.material) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); });
+        if (!zones.length) { message(recs.length ? "No zones have a valid layout (x, y, width and depth)." : "No data to show. Check the filters."); document.getElementById("floors").innerHTML = ""; document.getElementById("legend").style.display = "none"; return; }
+        message(null);
+        // floors in order; buildings side by side
+        var fkeys = Array.from(new Set(zones.map(function (z) { return z.f; })));
+        var numeric = fkeys.every(function (f) { return typeof f === "number"; });
+        fkeys.sort(function (a, b) { return numeric ? a - b : String(a).localeCompare(String(b), undefined, { numeric: true }); });
+        var fh = +it.floorHeight > 0 ? +it.floorHeight : 3.5, gap = it.explode === undefined || it.explode === null ? 3 : Math.max(0, +it.explode);
+        var bkeys = Array.from(new Set(zones.map(function (z) { return String(z.b); }))), bOff = {}, off = 0;
+        bkeys.forEach(function (bk) { var bz = zones.filter(function (z) { return String(z.b) === bk; }); var x0 = Math.min.apply(null, bz.map(function (z) { return z.x; })), x1 = Math.max.apply(null, bz.map(function (z) { return z.x + z.w; })); bOff[bk] = off - x0; off += (x1 - x0) * 1.25; });
+        var vals = zones.map(function (z) { return z.v; }).filter(function (v) { return typeof v === "number"; });
+        var lo = vals.length ? Math.min.apply(null, vals) : 0, hi = vals.length ? Math.max.apply(null, vals) : 1; if (hi === lo) hi = lo + 1;
+        var div = it.scale === "DIVERGING", mid = div ? (it.midpoint !== null && it.midpoint !== undefined && it.midpoint !== "" && !isNaN(+it.midpoint) ? +it.midpoint : (lo + hi) / 2) : null;
+        var span = div ? Math.max(hi - mid, mid - lo) || 1 : 0;
+        var colourOf = function (v) { if (typeof v !== "number") return new THREE.Color(NODATA); return div ? ramp(DIV, 0.5 + (v - mid) / (2 * span)) : ramp(SEQ, 0.12 + 0.88 * (v - lo) / (hi - lo)); };
+        var bounds = { x0: Infinity, x1: -Infinity, y0: 0, y1: 0, z0: Infinity, z1: -Infinity };
+        var edgeCol = dark ? 0x0b0b0b : 0xffffff, slabCol = dark ? 0x2c2c2a : 0xe1e0d9;
+        zones.forEach(function (z) {
+            var fi = fkeys.indexOf(z.f), base = fi * (fh + gap), ox = bOff[String(z.b)];
+            var geo = new THREE.BoxGeometry(z.w * 0.97, fh * 0.82, z.d * 0.97);
+            var mat = new THREE.MeshLambertMaterial({ color: colourOf(z.v), transparent: true, opacity: 0.96 });
+            var mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(ox + z.x + z.w / 2, base + fh * 0.41 + 0.12, z.y + z.d / 2);
+            var edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: edgeCol, transparent: true, opacity: 0.7 }));
+            mesh.add(edges);
+            z.mesh = mesh; z.fi = fi; z.base = base; z.key = JSON.stringify([z.b, z.f, z.z]); z.colour = mat.color.clone(); mesh.userData.zone = z;
+            S.group.add(mesh);
+            bounds.x0 = Math.min(bounds.x0, ox + z.x); bounds.x1 = Math.max(bounds.x1, ox + z.x + z.w); bounds.z0 = Math.min(bounds.z0, z.y); bounds.z1 = Math.max(bounds.z1, z.y + z.d); bounds.y1 = Math.max(bounds.y1, base + fh);
+        });
+        // a thin slab under each floor of each building, and floor labels
+        var labelCol = dark ? "#c3c2b7" : "#52514e";
+        bkeys.forEach(function (bk) {
+            fkeys.forEach(function (f, fi) {
+                var fz = zones.filter(function (z) { return String(z.b) === bk && z.f === f; }); if (!fz.length) return;
+                var x0 = Math.min.apply(null, fz.map(function (z) { return z.x; })), x1 = Math.max.apply(null, fz.map(function (z) { return z.x + z.w; }));
+                var y0 = Math.min.apply(null, fz.map(function (z) { return z.y; })), y1 = Math.max.apply(null, fz.map(function (z) { return z.y + z.d; }));
+                var slab = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0 + 1, 0.2, y1 - y0 + 1), new THREE.MeshLambertMaterial({ color: slabCol }));
+                slab.position.set(bOff[bk] + (x0 + x1) / 2, fi * (fh + gap) + 0.02, (y0 + y1) / 2); slab.userData.floor = fi; S.group.add(slab);
+                var lab = textSprite((bkeys.length > 1 ? bk + " " : "") + floorName(f), labelCol), h = fh * 0.55;
+                lab.scale.set(h * lab.userData.aspect, h, 1); lab.center.set(1, 0.5); lab.position.set(bOff[bk] + x0 - 1.5, fi * (fh + gap) + fh * 0.45, y1); lab.userData.floor = fi; S.group.add(lab);
+            });
+        });
+        // zone labels on the largest zones
+        var isig = recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null);
+        if ((isig !== S.introSig && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) || S.intro) S.intro = { t0: S.intro && isig === S.introSig ? S.intro.t0 : null, drop: (fh + gap) * 4, items: zones.map(function (z) { return { m: z.mesh, y: z.mesh.position.y, d: z.fi * 160 + Math.random() * 140 }; }) };
+        S.introSig = isig;
+        if (it.labels !== false) {
+            var big = zones.slice().sort(function (a, b) { return b.w * b.d - a.w * a.d; }).slice(0, Math.min(60, Math.ceil(zones.length * 0.45)));
+            big.forEach(function (z) { var s = textSprite(String(z.z), dark ? "#f0efec" : "#0b0b0b", true), h = Math.min(fh * 0.26, z.w / s.userData.aspect * 0.85); s.scale.set(h * s.userData.aspect, h, 1); s.position.set(z.mesh.position.x, z.base + fh * 0.95, z.mesh.position.z); s.userData.floor = z.fi; s.userData.zoneLabel = true; z.label = s; S.group.add(s); });
+        }
+        S.zones = zones; S.fkeys = fkeys; S.bounds = bounds; S.fields = { floor: gf(it.floor), zone: gf(it.zone), building: gf(it.building), value: it.value ? (it.value.inputField || "Value") : null };
+        // Re-frame when the model's extent changes a lot (e.g. the first render used auto-filled options),
+        // but not when a filter only changes colours.
+        var size = Math.max(bounds.x1 - bounds.x0, bounds.y1 - bounds.y0, bounds.z1 - bounds.z0);
+        if (!S.framedSize || size > S.framedSize * 1.3 || size < S.framedSize / 1.3) { frame(); S.framedSize = size; }
+        // floor buttons: isolate a floor (view only), "All" restores
+        var fb = document.getElementById("floors");
+        fb.innerHTML = '<button data-f="" class="' + (S.isolate === null ? "on" : "") + '">All floors</button>' + fkeys.slice().reverse().map(function (f) { var i = fkeys.indexOf(f); return '<button data-f="' + i + '" class="' + (S.isolate === i ? "on" : "") + '">' + esc(floorName(f)) + '</button>'; }).join("");
+        Array.prototype.forEach.call(fb.querySelectorAll("button"), function (b) { b.addEventListener("click", function (e) { e.stopPropagation(); var f = b.getAttribute("data-f"); S.isolate = f === "" ? null : +f; render(); }); });
+        if (S.isolate !== null && S.isolate >= fkeys.length) S.isolate = null;
+        applyIsolate();
+        var lg = document.getElementById("legend");
+        if (S.fields.value) {
+            lg.style.display = "block";
+            lg.innerHTML = '<div class="t">' + esc((it.value.function === "MEAN" ? "Average " : "") + S.fields.value) + '</div><div class="ramp" style="background:linear-gradient(90deg,' + (div ? DIV : SEQ.slice(1)).join(",") + ')"></div><div class="ends"><span>' + fmt(div ? mid - span : lo) + '</span>' + (div ? '<span>' + fmt(mid) + '</span>' : '') + '<span>' + fmt(div ? mid + span : hi) + '</span></div>';
+        } else lg.style.display = "none";
+        S.controls.autoRotate = false;
+        restoreSelection(ctx); highlight();
+    }
+    function floorName(f) { return typeof f === "number" ? (f === 0 ? "Ground" : "Floor " + f) : String(f); }
+    function applyIsolate() {
+        S.group.children.forEach(function (o) { var fi = o.userData.zone ? o.userData.zone.fi : o.userData.floor; if (fi === undefined) return; o.visible = S.isolate === null || fi === S.isolate; });
+    }
+    function highlight() {
+        var any = S.selected.size > 0;
+        S.zones.forEach(function (z) {
+            var on = !any || S.selected.has(z.key), hov = S.hover === z;
+            var c = z.colour.clone(); if (!on) c.lerp(new THREE.Color(document.body.classList.contains("dark") ? 0x2c2c2a : 0xeeede8), 0.75);
+            if (hov) c.offsetHSL(0, 0, 0.08);
+            z.mesh.material.color.copy(c); z.mesh.material.opacity = on ? 0.96 : 0.45;
+            z.mesh.children[0].material.color.set(S.selected.has(z.key) || hov ? SELECT : (document.body.classList.contains("dark") ? 0x0b0b0b : 0xffffff));
+        });
+    }
+    function publish() {
+        var F = S.fields, sel = S.zones.filter(function (z) { return S.selected.has(z.key); });
+        if (!sel.length) { omniscope.view.context().viewSelection = null; omniscope.view.updated(); return; }
+        var eq = function (f, v) { return { type: "FIELD_VALUE", inputField: f, operator: "=", value: v }; };
+        var parts = sel.map(function (z) { var a = [eq(F.floor, z.f), eq(F.zone, z.z)]; if (F.building) a.push(eq(F.building, z.b)); return { type: "AND", filters: a }; });
+        omniscope.view.context().viewSelection = { filter: parts.length === 1 ? parts[0] : { type: "OR", filters: parts }, meta: { keys: Array.from(S.selected) } };
+        omniscope.view.updated();
+    }
+    function restoreSelection(ctx) { var s = ctx.viewSelection; S.selected = new Set(s && s.meta && s.meta.keys ? s.meta.keys : []); }
+    function bindPointer(canvas) {
+        var ray = new THREE.Raycaster(), mouse = new THREE.Vector2(), down = null, pend = null;
+        function pick(ev) {
+            var r = canvas.getBoundingClientRect(); mouse.x = ((ev.clientX - r.left) / r.width) * 2 - 1; mouse.y = -((ev.clientY - r.top) / r.height) * 2 + 1;
+            ray.setFromCamera(mouse, S.camera);
+            var hits = ray.intersectObjects(S.zones.filter(function (z) { return z.mesh.visible; }).map(function (z) { return z.mesh; }), false);
+            return hits.length ? hits[0].object.userData.zone : null;
+        }
+        canvas.addEventListener("pointermove", function (ev) { pend = ev; requestAnimationFrame(function () { if (!pend) return; var e = pend; pend = null; var z = pick(e); if (z !== S.hover) { S.hover = z; highlight(); } tip(z, e); canvas.style.cursor = z ? "pointer" : "grab"; }); });
+        canvas.addEventListener("pointerleave", function () { S.hover = null; highlight(); tip(null); });
+        canvas.addEventListener("pointerdown", function (ev) { down = { x: ev.clientX, y: ev.clientY }; });
+        canvas.addEventListener("pointerup", function (ev) {
+            if (!down || ev.button !== 0) return; var moved = Math.abs(ev.clientX - down.x) + Math.abs(ev.clientY - down.y) > 5; down = null; if (moved) return;
+            var z = pick(ev), add = ev.shiftKey || ev.ctrlKey || ev.metaKey;
+            if (z) { if (!add) { var had = S.selected.has(z.key) && S.selected.size === 1; S.selected = new Set(had ? [] : [z.key]); } else if (S.selected.has(z.key)) S.selected.delete(z.key); else S.selected.add(z.key); highlight(); publish(); }
+            else { S.selected = new Set(); highlight(); omniscope.view.whitespaceClick(); }
+        });
+    }
+    function tip(z, ev) {
+        var el = document.getElementById("tooltip");
+        if (!z) { el.style.display = "none"; return; }
+        el.innerHTML = '<b>' + esc(z.z) + '</b><br><span class="k">' + (S.fields.building ? esc(z.b) + ', ' : '') + esc(floorName(z.f)) + '</span>' + (S.fields.value ? '<br><span class="k">' + esc(S.fields.value) + ':</span> <b>' + fmt(z.v) + '</b>' : '') + '<br><span class="k">Area:</span> ' + Math.round(z.w * z.d).toLocaleString();
+        el.style.display = "block";
+        var x = ev.clientX + 14, y = ev.clientY + 14;
+        if (x + el.offsetWidth > window.innerWidth - 4) x = ev.clientX - el.offsetWidth - 14;
+        if (y + el.offsetHeight > window.innerHeight - 4) y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, x) + "px"; el.style.top = Math.max(4, y) + "px";
+    }
+    window.__bldg.select = function (i) { S.selected = new Set([S.zones[i].key]); highlight(); publish(); };
+    window.__bldg.project = function (i) { var p = S.zones[i].mesh.position.clone().project(S.camera), c = S.renderer.domElement.getBoundingClientRect(); return [(p.x + 1) / 2 * c.width, (1 - p.y) / 2 * c.height]; };
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (!S.renderer) return render(); S.renderer.setSize(window.innerWidth, window.innerHeight); S.camera.aspect = window.innerWidth / Math.max(1, window.innerHeight); S.camera.updateProjectionMatrix(); });
+    document.body.addEventListener("click", function (e) { if (e.target === document.body || e.target.id === "message") omniscope.view.whitespaceClick(); });
+})();
+</script>
+</body>
+</html>

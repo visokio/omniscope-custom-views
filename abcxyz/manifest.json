@@ -1,0 +1,220 @@
+{
+  "name": "ABC-XYZ Analysis",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "abc analysis",
+    "xyz analysis",
+    "inventory",
+    "pareto",
+    "demand variability",
+    "supply chain",
+    "stock",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "item": {
+        "displayName": "Items",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "The product, SKU or part to classify"
+      },
+      "date": {
+        "displayName": "Dated by",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "Date of each sale, issue or order line"
+      },
+      "demand": {
+        "displayName": "Demand",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Units sold, issued or ordered"
+      },
+      "value": {
+        "displayName": "Value",
+        "type": "FIELD",
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional: revenue or cost to rank by (default: units)"
+      },
+      "period": {
+        "displayName": "Period",
+        "type": "CHOICE",
+        "values": [
+          "MONTH",
+          "WEEK",
+          "QUARTER"
+        ],
+        "displayValues": [
+          "Month",
+          "Week",
+          "Quarter"
+        ],
+        "detail": "Period over which demand variability is measured (default month)"
+      },
+      "aShare": {
+        "displayName": "A share %",
+        "type": "NUMBER",
+        "minValue": 1,
+        "maxValue": 99,
+        "detail": "A items make up this share of value (default 80)"
+      },
+      "bShare": {
+        "displayName": "A and B share %",
+        "type": "NUMBER",
+        "minValue": 1,
+        "maxValue": 100,
+        "detail": "A and B items together make up this share (default 95)"
+      },
+      "xCV": {
+        "displayName": "X up to CV",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 10,
+        "detail": "Coefficient of variation limit for X, steady demand (default 0.5)"
+      },
+      "yCV": {
+        "displayName": "Y up to CV",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 20,
+        "detail": "Coefficient of variation limit for Y, variable demand (default 1.0)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "item",
+        "date",
+        "demand",
+        "value"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Data",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "item",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "date",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "demand",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "period",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Thresholds",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "aShare",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "bShare",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "xCV",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "yCV",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "period": "MONTH",
+      "aShare": 80,
+      "bShare": 95,
+      "xCV": 0.5,
+      "yCV": 1.0
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

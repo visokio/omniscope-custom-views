@@ -1,0 +1,249 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/baskets.csv",
+  "options": {
+   "items": {
+    "basket": "Basket ID",
+    "item": "Product",
+    "rank": "LIFT",
+    "order": "CLUSTER",
+    "topItems": 35,
+    "minSupport": 0.5,
+    "maxLines": 300000,
+    "group": "Department"
+   }
+  },
+  "width": 1060,
+  "height": 660,
+  "wait": 1500,
+  "showcaseHeight": 660,
+  "caption": "Live: an illustrative grocery dataset of 6,000 baskets. Red cells are pairs bought together more often than chance. Hover a cell, click an item to focus on its rules, or click a cell or rule to select those baskets.",
+  "expect": {
+   "selector": "rect.cell",
+   "min": 500
+  }
+ },
+ {
+  "name": "confidence",
+  "showcase": true,
+  "data": "sample-data/baskets.csv",
+  "options": {
+   "items": {
+    "basket": "Basket ID",
+    "item": "Product",
+    "rank": "CONFIDENCE",
+    "order": "FREQUENCY",
+    "topItems": 15,
+    "minSupport": 1,
+    "maxLines": 300000
+   }
+  },
+  "width": 1000,
+  "height": 560,
+  "wait": 1500,
+  "showcaseHeight": 560,
+  "caption": "Live: the 15 most frequent items in frequency order, with rules ranked by confidence.",
+  "expect": {
+   "selector": "div.rule",
+   "min": 5
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/baskets.csv",
+  "options": {
+   "items": {
+    "basket": "Basket ID",
+    "item": "Product",
+    "rank": "LIFT",
+    "order": "CLUSTER",
+    "topItems": 35,
+    "minSupport": 0.5,
+    "maxLines": 300000,
+    "group": "Department"
+   }
+  },
+  "width": 1000,
+  "height": 640,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__basket.model;return M.nb===6000 && window.__basket.liftOf('Pasta','Pasta sauce')>4 && window.__basket.liftOf('Nappies','Baby wipes')>8 && Math.abs(window.__basket.liftOf('Milk','Bread')-1)<0.3 && M.groups.length===7})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var o=window.__basket.model.order;var a=o.indexOf(window.__basket.model.items.find(function(I){return I.name==='Pasta'}).k),b=o.indexOf(window.__basket.model.items.find(function(I){return I.name==='Pasta sauce'}).k);return Math.abs(a-b)<=2})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__basket.selectPair('Pasta','Pasta sauce')"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "pair"
+   },
+   {
+    "hover": "rect.cell",
+    "nth": 40
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "click": "text.lab",
+    "nth": 2
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "window.__basket.focus!==null && document.querySelectorAll('.rule').length>0",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "focus"
+   },
+   {
+    "clickAt": [
+     20,
+     620
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Store",
+     "operator": "=",
+     "value": "Station"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__basket.model.nb<1600",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     460
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Basket ID",
+    "type": "TEXT"
+   },
+   {
+    "name": "Product",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "basket": "Basket ID",
+    "item": "Product",
+    "rank": "LIFT",
+    "order": "CLUSTER",
+    "topItems": 25,
+    "minSupport": 0.5,
+    "maxLines": 300000
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/baskets.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Baskets"
+  }
+ },
+ {
+  "name": "wrongfields",
+  "data": "sample-data/baskets.csv",
+  "options": {
+   "items": {
+    "basket": "Product",
+    "item": "Department",
+    "rank": "LIFT",
+    "order": "CLUSTER",
+    "topItems": 25,
+    "minSupport": 0.5,
+    "maxLines": 300000
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "single item"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "basket": "Txn",
+    "item": "SKU",
+    "topItems": 40,
+    "maxLines": 500000
+   }
+  },
+  "width": 1100,
+  "height": 720,
+  "wait": 6000,
+  "expect": {
+   "selector": "rect.cell",
+   "min": 1500
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/baskets.csv",
+  "options": {
+   "items": {
+    "basket": "Basket ID",
+    "item": "Product",
+    "rank": "LIFT",
+    "order": "CLUSTER",
+    "topItems": 14,
+    "minSupport": 0.5,
+    "maxLines": 300000,
+    "group": "Department"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "wait": 1500,
+  "scale": 0.5
+ }
+]

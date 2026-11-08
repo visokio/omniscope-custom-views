@@ -1,0 +1,203 @@
+{
+  "name": "Market Basket",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "market basket",
+    "association rules",
+    "affinity",
+    "cross-sell",
+    "basket analysis",
+    "lift",
+    "retail",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "basket": {
+        "displayName": "Baskets",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Identifier of each basket, e.g. Transaction ID, Order ID, Invoice number"
+      },
+      "item": {
+        "displayName": "Items",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "What was bought, e.g. Product, SKU, Category"
+      },
+      "group": {
+        "displayName": "Item colour",
+        "type": "FIELD",
+        "detail": "Optional: colour items by a category, e.g. Department"
+      },
+      "rank": {
+        "displayName": "Rank rules by",
+        "type": "CHOICE",
+        "values": [
+          "LIFT",
+          "CONFIDENCE",
+          "SUPPORT"
+        ],
+        "displayValues": [
+          "Lift",
+          "Confidence",
+          "Support"
+        ],
+        "detail": "Order of the rules list"
+      },
+      "order": {
+        "displayName": "Order items",
+        "type": "CHOICE",
+        "values": [
+          "CLUSTER",
+          "FREQUENCY"
+        ],
+        "displayValues": [
+          "Clustered by affinity",
+          "Most frequent first"
+        ],
+        "detail": "Clustering places items bought together next to each other"
+      },
+      "topItems": {
+        "displayName": "Items shown",
+        "type": "NUMBER",
+        "minValue": 4,
+        "maxValue": 60,
+        "detail": "Number of most frequent items in the matrix (default 25)"
+      },
+      "minSupport": {
+        "displayName": "Minimum support %",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 100,
+        "detail": "Pairs must appear in at least this percentage of baskets to count as a rule (default 0.5)"
+      },
+      "maxLines": {
+        "displayName": "Lines used",
+        "type": "NUMBER",
+        "minValue": 1000,
+        "maxValue": 1000000,
+        "detail": "Maximum number of basket lines fetched (default 300,000)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "basket",
+        "item",
+        "group",
+        "rank"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Baskets",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "basket",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "item",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "group",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Rules",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "rank",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "order",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "topItems",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "minSupport",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxLines",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "rank": "LIFT",
+      "order": "CLUSTER",
+      "topItems": 25,
+      "minSupport": 0.5,
+      "maxLines": 300000
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "name": "Event Funnel",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "funnel",
+    "conversion",
+    "event log",
+    "product analytics",
+    "drop-off",
+    "journey",
+    "ecommerce",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "user": {
+        "displayName": "Users",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Who did it: visitor, customer, account or session ID"
+      },
+      "event": {
+        "displayName": "Events",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "What happened, e.g. Viewed product, Added to basket, Purchased"
+      },
+      "time": {
+        "displayName": "Ordered by",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE",
+          "NUMBER"
+        ],
+        "detail": "When it happened"
+      },
+      "steps": {
+        "displayName": "Funnel steps",
+        "type": "TEXT",
+        "detail": "The events of the funnel in order, separated by commas (blank: the most common events)"
+      },
+      "window": {
+        "displayName": "Within days",
+        "type": "NUMBER",
+        "minValue": 0,
+        "detail": "Optional: count a step only if it happens within this many days of the first step"
+      },
+      "group": {
+        "displayName": "Compare by",
+        "type": "FIELD",
+        "detail": "Optional: one funnel per group, e.g. Channel or Device (the value on each user's first event)"
+      },
+      "combine": {
+        "displayName": "Show one funnel",
+        "type": "TOGGLE",
+        "detail": "With Compare by set, show the combined funnel and keep the groups in the panel"
+      },
+      "maxEvents": {
+        "displayName": "Events used",
+        "type": "NUMBER",
+        "minValue": 1000,
+        "maxValue": 1000000,
+        "detail": "Maximum events fetched (default 500,000)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "user",
+        "event",
+        "time",
+        "group"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Event log",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "user",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "event",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "time",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Funnel",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "steps",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "window",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "group",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "combine",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxEvents",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "steps": "",
+      "maxEvents": 500000
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

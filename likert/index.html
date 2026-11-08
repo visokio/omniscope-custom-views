@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; overflow-y: auto; overflow-x: hidden; }
+        svg { display: block; }
+        .seg { cursor: pointer; } .seg:hover { stroke: #0b0b0b; stroke-width: 1.2; }
+        .qlab { cursor: pointer; } .qlab:hover { fill: #2a78d6; }
+        #tooltip { position: fixed; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><svg id="svg"></svg></div><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    // Diverging: reds for negative answers, a neutral grey in the middle, blues for positive answers.
+    var NEG = ["#a32a2a", "#e34948", "#f4a6a5"], POS = ["#9ec5f4", "#3987e5", "#184f95"], MID = "#d9d8d3", SELECT = "#2161D9";
+    var SCALES = [
+        ["strongly disagree", "disagree", "somewhat disagree", "slightly disagree", "neither agree nor disagree", "neutral", "neither", "slightly agree", "somewhat agree", "agree", "strongly agree"],
+        ["very dissatisfied", "dissatisfied", "somewhat dissatisfied", "neither satisfied nor dissatisfied", "neutral", "somewhat satisfied", "satisfied", "very satisfied"],
+        ["never", "rarely", "sometimes", "often", "very often", "always"],
+        ["very poor", "poor", "fair", "average", "good", "very good", "excellent"],
+        ["very unlikely", "unlikely", "neither likely nor unlikely", "neutral", "likely", "very likely"],
+        ["not at all important", "slightly important", "moderately important", "important", "very important", "extremely important"],
+        ["very difficult", "difficult", "neither easy nor difficult", "neutral", "easy", "very easy"],
+        ["no", "yes"]
+    ];
+    var NEUTRAL = /^(neither|neutral|average|fair|sometimes|moderately)/i, EXCLUDE = /^(n\/?a|not applicable|prefer not to say|don'?t know|do not know|no answer|no opinion|skip|skipped|\(blank\))$/i;
+    var S = { gen: 0, sel: null };
+    window.__lik = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var pct = function (v) { return Math.round(100 * v) + "%"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { q: fld(o.question), a: fld(o.answer), g: fld(o.group) };
+        if (!F.a) { message("Choose the Answers field (one row per answer). Add a Questions field when one column holds the answers to several questions."); return; }
+        if (F.q === F.a) F.q = null; if (F.g === F.a || F.g === F.q) F.g = null;
+        var gs = []; if (F.q) gs.push({ inputField: F.q, type: "UNIQUE_VALUES" }); if (F.g) gs.push({ inputField: F.g, type: "UNIQUE_VALUES" }); gs.push({ inputField: F.a, type: "UNIQUE_VALUES" });
+        var q = { groupings: gs, measures: [{ function: "RECORD_COUNT", name: "n" }], range: { start: 0, length: 20000 } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    // Work out the order of the answer categories: a custom list, a numeric scale, or a known wording.
+    function scaleOf(answers) {
+        var o = it(), custom = o.order ? String(o.order).split(",").map(function (s) { return s.trim(); }).filter(Boolean) : null;
+        var keep = answers.filter(function (a) { return !EXCLUDE.test(a); }), excluded = answers.filter(function (a) { return EXCLUDE.test(a); });
+        if (custom && custom.length > 1) { var lc = custom.map(function (s) { return s.toLowerCase(); }); return { order: custom.filter(function (c) { return keep.some(function (a) { return a.toLowerCase() === c.toLowerCase(); }); }).map(function (c) { return keep.find(function (a) { return a.toLowerCase() === c.toLowerCase(); }); }), excluded: excluded.concat(keep.filter(function (a) { return lc.indexOf(a.toLowerCase()) < 0; })), kind: "custom", full: custom }; }
+        if (keep.length && keep.every(function (a) { return /^-?\d+(\.\d+)?$/.test(a); })) {
+            var nums = keep.map(Number), lo = d3.min(nums), hi = d3.max(nums);
+            var full = d3.range(Math.min(lo, hi >= 6 && lo >= 0 ? 0 : 1), hi + 1).map(String);
+            if (o.scale === "NPS" || (o.scale !== "LIKERT" && lo >= 0 && hi <= 10 && hi >= 7 && Number.isInteger(hi))) full = d3.range(0, 11).map(String);
+            return { order: full, excluded: excluded, kind: full.length === 11 && full[0] === "0" ? "nps" : "numeric", full: full };
+        }
+        for (var s = 0; s < SCALES.length; s++) {
+            var sc = SCALES[s];
+            if (keep.length && keep.every(function (a) { return sc.indexOf(a.toLowerCase()) >= 0; })) return { order: keep.slice().sort(function (a, b) { return sc.indexOf(a.toLowerCase()) - sc.indexOf(b.toLowerCase()); }), excluded: excluded, kind: "known" };
+        }
+        return { order: keep.slice().sort(), excluded: excluded, kind: "unknown" };
+    }
+    function colours(order, sc) {
+        var n = order.length, out = {};
+        if (sc.kind === "nps") { order.forEach(function (a) { var v = +a; out[a] = v <= 6 ? (v <= 3 ? NEG[0] : v <= 5 ? NEG[1] : NEG[2]) : v <= 8 ? MID : (v === 9 ? POS[1] : POS[2]); }); return out; }
+        var mid = n % 2 === 1 ? (n - 1) / 2 : -1;
+        if (mid < 0) { var nn = sc.kind === "known" ? order.findIndex(function (a) { return NEUTRAL.test(a); }) : -1; if (nn >= 0) mid = nn; }
+        var negN = mid >= 0 ? mid : n / 2, posN = n - negN - (mid >= 0 ? 1 : 0);
+        var pick = function (arr, k, i) { if (k <= 1) return arr[1]; return arr[Math.round(i * (arr.length - 1) / (k - 1))]; };
+        order.forEach(function (a, i) { out[a] = i === mid ? MID : i < negN ? pick(NEG, negN, i) : pick(POS, posN, i - negN - (mid >= 0 ? 1 : 0)); });
+        return { map: out, mid: mid, negN: negN };
+    }
+
+    function build(F, recs) {
+        var o = it(), qi = F.q ? 0 : -1, gi = F.g ? (F.q ? 1 : 0) : -1, ai = (F.q ? 1 : 0) + (F.g ? 1 : 0), ni = ai + 1;
+        if (!recs.length) { S.model = null; message("No data to show. Check the filters."); return; }
+        var answers = Array.from(new Set(recs.map(function (r) { return r[ai] === null ? "(blank)" : String(r[ai]); })));
+        if (answers.length > 15) { S.model = null; message("Answers has " + answers.length + " different values. A Likert chart needs a rating scale (for example Strongly disagree to Strongly agree, or 1 to 5)."); return; }
+        message(null);
+        var sc = scaleOf(answers), col = colours(sc.order, sc), cmap = sc.kind === "nps" ? col : col.map;
+        var rows = new Map();
+        recs.forEach(function (r) {
+            var q = qi >= 0 ? (r[qi] === null ? "(blank)" : String(r[qi])) : F.a, g = gi >= 0 ? (r[gi] === null ? "(blank)" : String(r[gi])) : null, a = r[ai] === null ? "(blank)" : String(r[ai]), n = +r[ni];
+            var k = q + "\u0001" + (g || ""); if (!rows.has(k)) rows.set(k, { q: q, g: g, qraw: qi >= 0 ? r[qi] : null, graw: gi >= 0 ? r[gi] : null, c: {}, n: 0, ex: 0 });
+            var R = rows.get(k); if (sc.order.indexOf(a) >= 0) { R.c[a] = (R.c[a] || 0) + n; R.n += n; } else R.ex += n;
+        });
+        var list = Array.from(rows.values()).filter(function (R) { return R.n > 0; });
+        list.forEach(function (R) {
+            R.share = sc.order.map(function (a) { return (R.c[a] || 0) / R.n; });
+            if (sc.kind === "nps") { R.neg = d3.sum(sc.order.filter(function (a) { return +a <= 6; }), function (a) { return (R.c[a] || 0); }) / R.n; R.pos = d3.sum(sc.order.filter(function (a) { return +a >= 9; }), function (a) { return (R.c[a] || 0); }) / R.n; R.mid = 1 - R.neg - R.pos; R.net = R.pos - R.neg; }
+            else { R.neg = d3.sum(sc.order.slice(0, col.negN), function (a) { return R.c[a] || 0; }) / R.n; R.mid = col.mid >= 0 ? (R.c[sc.order[col.mid]] || 0) / R.n : 0; R.pos = 1 - R.neg - R.mid; R.net = R.pos - R.neg; }
+            if (sc.kind === "numeric" || sc.kind === "nps") R.mean = d3.sum(sc.order, function (a) { return +a * (R.c[a] || 0); }) / R.n;
+        });
+        // order questions by net score (or keep data order), groups inside each question by name
+        var qs = Array.from(new Set(list.map(function (R) { return R.q; }))), qnet = {};
+        qs.forEach(function (q) { var rs = list.filter(function (R) { return R.q === q; }), n = d3.sum(rs, function (R) { return R.n; }); qnet[q] = d3.sum(rs, function (R) { return R.net * R.n; }) / n; });
+        if (o.sort !== "DATA") qs.sort(function (a, b) { return qnet[b] - qnet[a]; }); else qs.sort();
+        var ordered = []; qs.forEach(function (q) { list.filter(function (R) { return R.q === q; }).sort(function (a, b) { return a.g === null ? -1 : String(a.g).localeCompare(String(b.g)); }).forEach(function (R) { ordered.push(R); }); });
+        if (!F.q && o.sort !== "DATA") ordered.sort(function (a, b) { return b.net - a.net; }); // one question split by group: rank the groups
+        S.model = { F: F, sc: sc, cmap: cmap, mid: sc.kind === "nps" ? null : col.mid, negN: sc.kind === "nps" ? null : col.negN, rows: ordered, qs: qs, qnet: qnet, excluded: d3.sum(list, function (R) { return R.ex; }), total: d3.sum(list, function (R) { return R.n; }) };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); return; } var intro = introDone();
+        var W = window.innerWidth - 2, nps = M.sc.kind === "nps", grouped = !!M.F.g && !!M.F.q, rowH = grouped ? 22 : 28, gapQ = grouped ? 14 : 4;
+        var maxLab = d3.max(M.rows, function (R) { return (grouped ? R.g : (R.g || R.q)).length; }) || 4, wrapQ = grouped || (M.F.q && maxLab > 34);
+        var L = Math.min(W * 0.38, Math.max(110, (grouped ? Math.min(maxLab, 22) : Math.min(maxLab, 44)) * 6.2 + 12)), R2 = 96, plotW = Math.max(120, W - L - R2 - 12);
+        var top = 64, y = top, layout = [];
+        M.qs.forEach(function (q) { var rs = M.rows.filter(function (R) { return R.q === q; }); if (grouped) { layout.push({ head: q, y: y }); y += 18; } rs.forEach(function (R) { layout.push({ row: R, y: y }); y += rowH; }); y += gapQ; });
+        var H = y + 36; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        // the axis: negatives to the left of zero, positives to the right; the neutral share straddles zero
+        var maxL = d3.max(M.rows, function (R) { return R.neg + R.mid / 2; }), maxR = d3.max(M.rows, function (R) { return R.pos + R.mid / 2; }), ext = Math.max(maxL, maxR, 0.5);
+        var x = d3.scaleLinear().domain([-ext, ext]).range([L, L + plotW]);
+        var g = svg.append("g");
+        [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1].filter(function (t) { return Math.abs(t) <= ext + 1e-9; }).forEach(function (t) { g.append("line").attr("x1", x(t)).attr("x2", x(t)).attr("y1", top - 6).attr("y2", y - gapQ).attr("stroke", t === 0 ? "#9a988f" : "#ebeae5"); g.append("text").attr("x", x(t)).attr("y", y - gapQ + 14).attr("text-anchor", "middle").style("font-size", "10.5px").attr("fill", "#52514e").text(Math.round(Math.abs(t) * 100) + "%"); });
+        var sel = S.sel, selKey = sel ? JSON.stringify(sel) : null;
+        layout.forEach(function (Lo) {
+            if (Lo.head) { g.append("text").attr("class", "qlab").attr("x", 8).attr("y", Lo.y + 12).style("font-weight", "bold").style("font-size", "11.5px").attr("fill", "#2b2a28").text(Lo.head).on("click", function (ev) { ev.stopPropagation(); select({ q: Lo.head }); }); return; }
+            var R = Lo.row, cy = Lo.y + rowH / 2, bh = rowH - (grouped ? 6 : 8);
+            var start = -(R.neg + R.mid / 2), acc = start;
+            M.sc.order.forEach(function (a, i) {
+                var s = R.share[i]; if (!s) return;
+                var x0 = x(acc), x1 = x(acc + s), isSel = sel && sel.a === a && sel.q === R.q && (sel.g === undefined || sel.g === R.g), dim = sel && !(sel.q === R.q && (sel.g === undefined || sel.g === R.g) && (sel.a === undefined || sel.a === a));
+                g.append("rect").attr("class", "seg").attr("x", x0).attr("width", Math.max(0.5, x1 - x0)).attr("y", cy - bh / 2).attr("height", bh).attr("fill", M.cmap[a]).attr("opacity", dim ? 0.3 : 1).attr("stroke", isSel ? SELECT : "none").attr("stroke-width", 2)
+                    .on("mouseenter", function (ev) { tipSeg(R, a, i, ev); }).on("mousemove", function (ev) { tipSeg(R, a, i, ev); }).on("mouseleave", tip)
+                    .on("click", function (ev) { ev.stopPropagation(); select({ q: R.q, g: R.g === null ? undefined : R.g, a: a }); });
+                if (x1 - x0 > 26) g.append("text").attr("x", (x0 + x1) / 2).attr("y", cy).attr("dy", "0.35em").attr("text-anchor", "middle").style("font-size", "10px").attr("pointer-events", "none").attr("fill", d3.lab(M.cmap[a]).l > 62 ? "#0b0b0b" : "#ffffff").text(pct(s));
+                acc += s;
+            });
+            var lab = grouped ? R.g : (R.g !== null ? R.g : R.q), t = g.append("text").attr("class", "qlab").attr("x", L - 8).attr("y", cy).attr("dy", "0.35em").attr("text-anchor", "end").style("font-size", "11.5px").attr("fill", "#2b2a28").text(lab.length > 60 ? lab.slice(0, 58) + "\u2026" : lab)
+                .on("click", function (ev) { ev.stopPropagation(); select(grouped || R.g === null ? { q: R.q, g: R.g === null ? undefined : R.g } : { q: R.q, g: R.g }); });
+            while (t.node().getComputedTextLength() > L - 14 && t.text().length > 4) t.text(t.text().slice(0, -2) + "\u2026");
+            var nx = L + plotW + 10;
+            g.append("text").attr("x", nx).attr("y", cy).attr("dy", "0.35em").style("font-size", "11.5px").style("font-weight", "bold").attr("fill", R.net > 0.005 ? "#184f95" : R.net < -0.005 ? "#a32a2a" : "#52514e").text((nps ? "NPS " : "") + (R.net > 0 ? "+" : R.net < 0 ? "\u2212" : "") + Math.round(Math.abs(R.net) * 100));
+            g.append("text").attr("x", nx + (nps ? 52 : 34)).attr("y", cy).attr("dy", "0.35em").style("font-size", "10px").attr("fill", "#898781").text("n " + R.n.toLocaleString());
+        });
+        // legend and heading
+        var head = svg.append("text").attr("x", 8).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.F.q ? M.qs.length + " questions" + (M.F.g ? " by " + M.F.g : "") : (M.F.a + (M.F.g ? " by " + M.F.g : "")));
+        head.append("tspan").attr("fill", "#52514e").text("  " + M.total.toLocaleString() + " answers" + (M.excluded ? ", " + M.excluded.toLocaleString() + " not on the scale (" + M.sc.excluded.slice(0, 3).join(", ") + ") left out" : "") + (o().sort !== "DATA" ? "; sorted by net score" : ""));
+        var lg = svg.append("g").attr("transform", "translate(8,38)").style("font-size", "11px").attr("fill", "#52514e"), lx = 0, items = nps ? [["Detractors (0 to 6)", NEG[1]], ["Passives (7, 8)", MID], ["Promoters (9, 10)", POS[1]]] : M.sc.order.map(function (a) { return [a, M.cmap[a]]; });
+        items.forEach(function (L2) { var e = lg.append("g").attr("transform", "translate(" + lx + ",0)"); e.append("rect").attr("y", -8).attr("width", 11).attr("height", 10).attr("fill", L2[1]); var t = e.append("text").attr("x", 15).text(L2[0]); lx += 15 + t.node().getComputedTextLength() + 12; if (lx > W - 120) { lx = 0; lg.attr("transform", "translate(8,34)"); } });
+        lg.append("text").attr("x", W - 110 > lx ? W - 16 - 8 : lx).attr("text-anchor", "end").attr("y", 0).text(nps ? "Net Promoter Score" : "Net = positive \u2212 negative");
+        if (intro) { var ss = svg.selectAll("rect.seg"); fadeIn(ss, 380, stag(ss.size(), 800)); }
+    }
+    function o() { return it(); }
+
+    function tipSeg(R, a, i, ev) {
+        var M = S.model; show('<b>' + esc(R.q) + '</b>' + (R.g !== null ? ' <span class="k">(' + esc(R.g) + ')</span>' : '') + '<br><span class="k">' + esc(a) + ':</span> <b>' + pct(R.share[i]) + '</b> (' + (R.c[a] || 0).toLocaleString() + ' of ' + R.n.toLocaleString() + ')<br><span class="k">' + (M.sc.kind === "nps" ? "Promoters" : "Positive") + ':</span> ' + pct(R.pos) + ' <span class="k">' + (M.sc.kind === "nps" ? "Detractors" : "Negative") + ':</span> ' + pct(R.neg) + (R.mean !== undefined ? '<br><span class="k">Average:</span> ' + R.mean.toFixed(2) : '') + (R.ex ? '<br><span class="k">Not on the scale:</span> ' + R.ex.toLocaleString() : ''), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function select(meta) {
+        var M = S.model, F = M.F; Object.keys(meta).forEach(function (k) { if (meta[k] === undefined) delete meta[k]; });
+        if (S.sel && JSON.stringify(S.sel) === JSON.stringify(meta)) return publish(null, null);
+        var fs = [], R = M.rows.find(function (x) { return x.q === meta.q && (meta.g === undefined || x.g === meta.g); });
+        if (F.q) fs.push({ type: "FIELD_VALUE", inputField: F.q, operator: "=", value: R ? R.qraw : meta.q });
+        if (F.g && meta.g !== undefined) fs.push({ type: "FIELD_VALUE", inputField: F.g, operator: "=", value: R ? R.graw : meta.g });
+        if (meta.a !== undefined) fs.push({ type: "FIELD_VALUE", inputField: F.a, operator: "=", value: M.sc.kind === "numeric" || M.sc.kind === "nps" ? +meta.a : meta.a });
+        if (!fs.length) return;
+        publish(fs.length === 1 ? fs[0] : { type: "AND", filters: fs }, meta);
+    }
+    window.__lik.select = select;
+
+    document.body.addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

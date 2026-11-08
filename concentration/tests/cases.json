@@ -1,0 +1,230 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Customer",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 1000,
+  "height": 560,
+  "wait": 1500,
+  "showcaseHeight": 560,
+  "caption": "Live: revenue across 2,400 illustrative customers. Hover the curve to read off any share; use the buttons to select the largest customers.",
+  "expect": {
+   "selector": "path",
+   "min": 3
+  }
+ },
+ {
+  "name": "segments",
+  "showcase": true,
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Customer",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "compare": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 1000,
+  "height": 560,
+  "wait": 1500,
+  "showcaseHeight": 560,
+  "caption": "Live: one curve per segment: enterprise revenue is far more concentrated than small business revenue.",
+  "expect": {
+   "selector": "tr.s",
+   "min": 4
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Customer",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 1000,
+  "height": 540,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "Math.abs(window.__conc.model.all.gini-0.8080888955099312)<1e-9 && Math.abs(window.__conc.model.all.top10-0.751426600639474)<1e-9",
+    "expectTruthy": true
+   },
+   {
+    "hoverEval": "(function(){var r=document.querySelector('svg g rect').getBoundingClientRect();return [r.left+r.width*0.8, r.top+r.height*0.5]})()"
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": ".btn",
+    "nth": 2
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.filters.length===240",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     5,
+     535
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "North"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__conc.model.all.n<800",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     440
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Customer",
+    "type": "TEXT"
+   },
+   {
+    "name": "Revenue",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Customer",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Items"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Id",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Amount",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 1000,
+  "height": 560,
+  "wait": 8000,
+  "actions": [
+   {
+    "eval": "window.__conc.model.all.n===150000 && window.__conc.model.all.gini>0.3",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Customer",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "compare": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

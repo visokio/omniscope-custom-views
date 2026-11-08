@@ -1,0 +1,192 @@
+{
+  "name": "Density Scatter",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "density",
+    "heatmap",
+    "scatter",
+    "hexbin",
+    "2d histogram",
+    "big data",
+    "distribution",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "x": {
+        "displayName": "X axis",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Numeric field across, e.g. Distance (km)"
+      },
+      "y": {
+        "displayName": "Y axis",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Numeric field up, e.g. Delivery time (minutes)"
+      },
+      "value": {
+        "displayName": "Colour by mean of",
+        "type": "FIELD",
+        "mandatory": false,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional numeric field: each cell is coloured by its average, e.g. a 1/0 Late flag gives the late rate"
+      },
+      "bins": {
+        "displayName": "Grid size",
+        "type": "NUMBER",
+        "minValue": 10,
+        "maxValue": 300,
+        "detail": "Number of cells across each axis before rounding to tidy widths (default 80)"
+      },
+      "logScale": {
+        "displayName": "Log colour scale for counts",
+        "type": "TOGGLE",
+        "detail": "Show sparse areas as well as dense ones"
+      },
+      "trim": {
+        "displayName": "Trim extreme values",
+        "type": "TOGGLE",
+        "detail": "Set the axis ranges from the quartiles so outliers do not squash the chart"
+      },
+      "marginals": {
+        "displayName": "Show marginal histograms",
+        "type": "TOGGLE",
+        "detail": "Histograms of X and Y along the axes"
+      },
+      "minCount": {
+        "displayName": "Minimum records per cell",
+        "type": "NUMBER",
+        "minValue": 1,
+        "maxValue": 1000,
+        "detail": "Hide cells with fewer records (useful when colouring by a mean; default 1)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "x",
+        "y",
+        "value"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Axes",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "x",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "y",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "bins",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "logScale",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "trim",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "marginals",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "minCount",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "bins": 80,
+      "logScale": true,
+      "trim": true,
+      "marginals": true,
+      "minCount": 1
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 200
+  }
+}
