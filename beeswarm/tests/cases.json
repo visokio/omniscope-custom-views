@@ -1,0 +1,359 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Sales growth (%)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 900,
+  "height": 420,
+  "showcaseHeight": 420,
+  "wait": 1500,
+  "caption": "Live: sales growth for 160 invented stores, one dot each, coloured by region. Hover a dot for its figures; click it to select the store.",
+  "expect": {
+   "selector": ".cells circle",
+   "min": 160,
+   "max": 160
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.key text').length===5 && document.querySelector('.axis-title').textContent==='Sales growth (%)'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "two-measures",
+  "showcase": true,
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Sales growth (%)",
+     "function": "SUM"
+    },
+    "y": {
+     "inputField": "Customer score",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Format",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 900,
+  "height": 520,
+  "showcaseHeight": 520,
+  "wait": 1500,
+  "caption": "Live: sales growth against customer score, coloured by store format. Dots near the same point are pushed apart instead of hiding each other.",
+  "expect": {
+   "selector": ".cells circle",
+   "min": 160
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.axis--y').length===1 && document.querySelectorAll('.key text').length===3",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Sales growth (%)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 900,
+  "height": 420,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){window.__c0={};document.querySelectorAll('.cells circle').forEach(function(c){var d=c.__data__.data;window.__c0[d.colour]=c.getAttribute('fill')});return Object.keys(window.__c0).length===5})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": ".cells circle",
+    "nth": 10
+   },
+   {
+    "eval": "(function(){var t=document.querySelectorAll('.cells title')[10].textContent;return t.indexOf('Sales growth (%): ')>0&&t.indexOf('Region: ')>0})()",
+    "expectTruthy": true
+   },
+   {
+    "click": ".cells circle",
+    "nth": 10
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.inputField==='Store'&&f.operator==='='&&document.querySelectorAll('.cells circle.selected').length===1})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "click": ".cells circle.selected"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "click": ".cells circle",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     450,
+     8
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "eval": "document.querySelectorAll('.cells circle.selected').length===0",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "North"
+    }
+   },
+   {
+    "eval": "(function(){var c=document.querySelectorAll('.cells circle');var ok=c.length===31;c.forEach(function(e){if(e.getAttribute('fill')!==window.__c0['North'])ok=false});return ok})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "filtered"
+   }
+  ]
+ },
+ {
+  "name": "histogram-split",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Sales growth (%)",
+     "type": "HISTOGRAM",
+     "histogramInterval": 1
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 700,
+  "height": 400,
+  "wait": 1500,
+  "expect": {
+   "selector": ".cells circle",
+   "min": 22,
+   "max": 22
+  },
+  "actions": [
+   {
+    "click": ".cells circle",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.type==='AND'&&f.filters[0].operator==='>='&&f.filters[1].operator==='<'})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Sales growth (%)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 900,
+  "height": 420,
+  "wait": 1500,
+  "actions": [
+   {
+    "resize": [
+     260,
+     170
+    ]
+   },
+   {
+    "eval": "(function(){var b=document.querySelector('.cells').getBBox();return document.querySelectorAll('.cells circle').length===160&&window.__beeswarm.model.r<4})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "260x170"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Store",
+    "type": "TEXT"
+   },
+   {
+    "name": "Region",
+    "type": "TEXT"
+   },
+   {
+    "name": "Sales growth (%)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Sales growth (%)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "Choose a Split grouping"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Sales growth (%)",
+     "function": "SUM"
+    },
+    "y": {
+     "inputField": "Customer score",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 3000,
+  "expect": {
+   "selector": ".cells circle",
+   "min": 1000
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Sales growth (%)",
+     "function": "SUM"
+    },
+    "y": {
+     "inputField": "Customer score",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Format",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

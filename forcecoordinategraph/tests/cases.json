@@ -1,0 +1,471 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/routes.csv",
+  "options": {
+   "items": {
+    "nodeId": {
+     "inputField": "Depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkedNodeId": {
+     "inputField": "Linked depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "East (km)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "North (km)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    },
+    "markerSize": {
+     "inputField": "Capacity",
+     "function": "MEAN"
+    },
+    "edgeWeight": {
+     "inputField": "Shipments",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "showcaseHeight": 560,
+  "wait": 5000,
+  "caption": "Live: 100 depots of an invented parcel carrier, placed by their map coordinates, sized by capacity and coloured by region. Routes are bundled, and thicker for more shipments. Hover a depot to see its routes; click it to select it.",
+  "expect": {
+   "selector": ".nodes circle",
+   "min": 100,
+   "max": 100
+  },
+  "actions": [
+   {
+    "eval": "window.__fcg.bundled && document.querySelectorAll('.edges path').length===209 && document.querySelectorAll('.key text').length===5 && document.querySelector('.edges path').getAttribute('d').split(/[CL]/).length>5",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "straight",
+  "showcase": true,
+  "data": "sample-data/routes.csv",
+  "options": {
+   "items": {
+    "nodeId": {
+     "inputField": "Depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkedNodeId": {
+     "inputField": "Linked depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "East (km)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "North (km)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Capacity",
+     "function": "MEAN"
+    },
+    "edgeWeight": {
+     "inputField": "Shipments",
+     "function": "SUM"
+    },
+    "bundleEdges": false
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "showcaseHeight": 560,
+  "wait": 2500,
+  "caption": "Live: the same network with Bundle links off and colour from a number (capacity), which gives a colour scale instead of categories.",
+  "expect": {
+   "selector": ".edges path",
+   "min": 209,
+   "max": 209
+  },
+  "actions": [
+   {
+    "eval": "window.__fcg.bundled && document.querySelectorAll('.key').length===0 && new Set(Array.from(document.querySelectorAll('.nodes circle')).map(function(c){return c.getAttribute('fill')})).size>20",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/routes.csv",
+  "options": {
+   "items": {
+    "nodeId": {
+     "inputField": "Depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkedNodeId": {
+     "inputField": "Linked depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "East (km)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "North (km)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    },
+    "markerSize": {
+     "inputField": "Capacity",
+     "function": "MEAN"
+    },
+    "edgeWeight": {
+     "inputField": "Shipments",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 5000,
+  "actions": [
+   {
+    "eval": "(function(){window.__c0={};window.__fcg.model.nodes.forEach(function(n){window.__c0[n.colour]=document.querySelectorAll('.nodes circle')[n.index].getAttribute('fill')});return Object.keys(window.__c0).length===5})()",
+    "expectTruthy": true
+   },
+   {
+    "hoverEval": "(function(){var n=window.__fcg.model.nodes.filter(function(n){return n.id==='Penley Hub'})[0];return [n.x,n.y]})()"
+   },
+   {
+    "eval": "(function(){var shown=Array.from(document.querySelectorAll('.edges path')).filter(function(p){return p.getAttribute('display')!=='none'}).length;return shown>10&&shown<209})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var n=window.__fcg.model.nodes.filter(function(n){return n.id==='Penley Hub'})[0];var t=document.querySelectorAll('.nodes circle title')[n.index].textContent;return t.indexOf('Penley Hub')===0&&t.indexOf('Region: North')>0&&t.indexOf('Capacity: ')>0&&/Links: \\d+/.test(t)})()",
+    "expectTruthy": true
+   },
+   {
+    "clickEval": "(function(){var n=window.__fcg.model.nodes.filter(function(n){return n.id==='Penley Hub'})[0];return [n.x,n.y]})()"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.inputField==='Depot'&&f.operator==='='&&f.value==='Penley Hub'&&document.querySelectorAll('.nodes circle.selected').length===1})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "clickEval": "(function(){var n=window.__fcg.model.nodes.filter(function(n){return n.id==='Penley Hub'})[0];return [n.x,n.y]})()"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "clickEval": "(function(){var n=window.__fcg.model.nodes.filter(function(n){return n.id==='Stanmouth'})[0];return [n.x,n.y]})()"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     890,
+     550
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "North"
+    },
+    "waitAfter": 4000
+   },
+   {
+    "eval": "(function(){var ok=true;window.__fcg.model.nodes.forEach(function(n){if(window.__c0[n.colour]!==document.querySelectorAll('.nodes circle')[n.index].getAttribute('fill'))ok=false});return ok&&window.__fcg.model.nodes.length===20&&document.querySelectorAll('.key text').length===1})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "filtered"
+   },
+   {
+    "update": {
+     "nodeId": {
+      "inputField": "Depot",
+      "type": "UNIQUE_VALUES"
+     },
+     "linkedNodeId": {
+      "inputField": "Linked depot",
+      "type": "UNIQUE_VALUES"
+     },
+     "x": {
+      "inputField": "East (km)",
+      "function": "MEAN"
+     },
+     "y": {
+      "inputField": "North (km)",
+      "function": "MEAN"
+     },
+     "colour": {
+      "inputField": "Region",
+      "function": "SINGLETON"
+     },
+     "markerSize": {
+      "inputField": "Capacity",
+      "function": "MEAN"
+     },
+     "edgeWeight": {
+      "inputField": "Shipments",
+      "function": "SUM"
+     },
+     "maxEdges": 10
+    },
+    "waitAfter": 4000
+   },
+   {
+    "eval": "document.querySelectorAll('.edges path').length===10 && /heaviest/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/routes.csv",
+  "options": {
+   "items": {
+    "nodeId": {
+     "inputField": "Depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkedNodeId": {
+     "inputField": "Linked depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "East (km)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "North (km)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    },
+    "markerSize": {
+     "inputField": "Capacity",
+     "function": "MEAN"
+    },
+    "edgeWeight": {
+     "inputField": "Shipments",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 260,
+  "height": 180,
+  "wait": 5000,
+  "expect": {
+   "selector": ".nodes circle",
+   "min": 100
+  },
+  "actions": [
+   {
+    "eval": "(function(){var ok=true;document.querySelectorAll('.nodes circle').forEach(function(c){var b=c.getBoundingClientRect();if(b.left<0||b.top<0||b.right>window.innerWidth||b.bottom>window.innerHeight)ok=false});return ok&&document.querySelectorAll('.key').length===0})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Depot",
+    "type": "TEXT"
+   },
+   {
+    "name": "Linked depot",
+    "type": "TEXT"
+   },
+   {
+    "name": "East (km)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "North (km)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "nodeId": {
+     "inputField": "Depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkedNodeId": {
+     "inputField": "Linked depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "East (km)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "North (km)",
+     "function": "MEAN"
+    }
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 1000,
+  "expect": {
+   "text": "No data to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/routes.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 1000,
+  "expect": {
+   "text": "Choose From node and To node"
+  }
+ },
+ {
+  "name": "no-coordinates",
+  "data": "sample-data/routes.csv",
+  "options": {
+   "items": {
+    "nodeId": {
+     "inputField": "Depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkedNodeId": {
+     "inputField": "Linked depot",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 1000,
+  "expect": {
+   "text": "Choose X position and Y position"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "nodeId": {
+     "inputField": "Node",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkedNodeId": {
+     "inputField": "Linked",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Y",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Cluster",
+     "function": "SINGLETON"
+    },
+    "edgeWeight": {
+     "inputField": "Weight",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 15000,
+  "expect": {
+   "selector": ".nodes circle",
+   "min": 3000,
+   "max": 3000
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.edges path').length===1000 && /1,000 heaviest of 5,9/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__fcg.bundled",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/routes.csv",
+  "options": {
+   "items": {
+    "nodeId": {
+     "inputField": "Depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "linkedNodeId": {
+     "inputField": "Linked depot",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "East (km)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "North (km)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Region",
+     "function": "SINGLETON"
+    },
+    "markerSize": {
+     "inputField": "Capacity",
+     "function": "MEAN"
+    },
+    "edgeWeight": {
+     "inputField": "Shipments",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 5000
+ }
+]

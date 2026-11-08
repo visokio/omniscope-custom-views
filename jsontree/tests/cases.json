@@ -1,0 +1,100 @@
+[
+ {
+  "name": "showcase", "showcase": true,
+  "data": "sample-data/orders_api.csv",
+  "options": { "items": { "json": "Body", "label": "Endpoint" } },
+  "width": 640, "height": 460, "showcaseHeight": 460, "wait": 2500,
+  "caption": "Live: 60 invented responses from an order service, one node per response, named by Endpoint. The first is open; click a triangle to open the others.",
+  "expect": { "selector": ".jstree-node", "min": 60, "text": "GET /orders/ORD-20250" },
+  "actions": [
+   { "eval": "__jsontree.shown === 60 && $('#tree').jstree(true).get_node('#').children.length === 60", "expectTruthy": true },
+   { "eval": "document.body.innerText.indexOf('customer {3}') >= 0 && document.body.innerText.indexOf('lines [3]') >= 0", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "single", "showcase": true,
+  "data": "sample-data/orders_api.csv",
+  "filter": { "type": "FIELD_VALUE", "inputField": "Status", "operator": "=", "value": 409 },
+  "options": { "items": { "json": "Body" } },
+  "width": 640, "height": 260, "showcaseHeight": 260, "wait": 2500,
+  "caption": "Live: the same log filtered to the failed requests (status 409), without a Record label.",
+  "expect": { "text": "error {3}" },
+  "actions": [
+   { "eval": "__jsontree.shown === 6", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/orders_api.csv",
+  "options": { "items": { "json": "Body", "label": "Endpoint" } },
+  "width": 640, "height": 460, "wait": 2500,
+  "actions": [
+   { "click": "#tree > ul > li:nth-child(2) > a" },
+   { "expectSelection": true },
+   { "eval": "omniscope.view.context().viewSelection.filter.filters[0].value === 'GET /orders/ORD-20251' && __jsontree.selected !== null", "expectTruthy": true },
+   { "screenshot": "selected" },
+   { "click": "#tree > ul > li:nth-child(2) > a" },
+   { "expectSelection": false },
+   { "click": "#tree > ul > li:nth-child(1) > ul > li:nth-child(3) > i" },
+   { "eval": "document.body.innerText.indexOf('address {3}') >= 0", "expectTruthy": true },
+   { "clickAt": [600, 440] },
+   { "expectSelection": false }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/orders_api.csv",
+  "options": { "items": { "json": "Body", "label": "Endpoint" } },
+  "width": 640, "height": 460, "wait": 2500,
+  "actions": [
+   { "filter": { "type": "FIELD_VALUE", "inputField": "Endpoint", "operator": "=", "value": "GET /orders/ORD-20260" } },
+   { "wait": 1000 },
+   { "eval": "__jsontree.shown === 1 && document.body.innerText.indexOf('ORD-20260') >= 0", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "odd-values",
+  "data": "tests/odd.csv",
+  "options": { "items": { "json": "Body", "label": "Name" } },
+  "width": 640, "height": 300, "wait": 2500,
+  "actions": [
+   { "eval": "!window.__xss && document.body.innerText.indexOf('<img src=x') >= 0", "expectTruthy": true },
+   { "eval": "document.body.innerText.indexOf('invalid JSON') >= 0 && document.body.innerText.indexOf('(empty)') >= 0", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/orders_api.csv",
+  "options": { "items": { "json": "Body", "label": "Endpoint" } },
+  "width": 640, "height": 460, "wait": 2500,
+  "actions": [
+   { "resize": [160, 120] },
+   { "eval": "document.getElementById('main').scrollHeight > 120 && getComputedStyle(document.getElementById('main')).overflow === 'auto'", "expectTruthy": true },
+   { "screenshot": "160x120" }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [ { "name": "Body", "type": "TEXT" } ],
+  "options": { "items": { "json": "Body" } },
+  "width": 400, "height": 300, "wait": 1500,
+  "expect": { "text": "No data to show" }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders_api.csv",
+  "options": { "items": {} },
+  "width": 400, "height": 300, "wait": 1500,
+  "expect": { "text": "Choose a JSON field" }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": { "items": { "json": "Payload", "label": "Id" } },
+  "width": 640, "height": 460, "wait": 4000,
+  "expect": { "text": "Showing the first 500 records" },
+  "actions": [
+   { "eval": "__jsontree.shown === 500", "expectTruthy": true }
+  ]
+ }
+]

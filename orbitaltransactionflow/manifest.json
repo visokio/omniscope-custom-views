@@ -13,14 +13,13 @@
   ],
   "sandbox": false,
   "autoPane": true,
-  "autoQuery": true,
-  "dataLimit": 1000,
+  "autoQuery": false,
   "supportsSelection": true,
   "options": {
     "items": {
       "animationDuration": {
-        "displayName": "Duration",
-        "detail": "In seconds, tells for how long the whole animation should run. N.B. for high number of transactions the total animation duration may increase to avoid browser performance issues.",
+        "displayName": "Duration (seconds)",
+        "detail": "How long one replay of all the transactions takes, from 1 to 100 seconds. Default 10.",
         "type": "NUMBER",
         "mandatory": true,
         "isDecimal": false,
@@ -28,24 +27,23 @@
         "maxValue": 100
       },
       "animationRestartOnData": {
-        "displayName": "Restart on data change",
-        "detail": "If true restarts the whole animation when data changes, e.g. when filters are applied or new records are added to the dataset. Default false.",
+        "displayName": "Replay on every refresh",
+        "detail": "Off (default): when the data is refreshed, only transactions later than the last one shown fly in, and a change of filter or settings shows the new totals at once. On: every refresh, filter or settings change replays all the transactions.",
         "type": "TOGGLE"
       },
       "txLabels": {
-        "displayName": "Show transactions labels",
-        "detail": "If true show transations information information as the animation goes.",
+        "displayName": "Show transaction details",
+        "detail": "Shows the sender, receiver, time and size of each transaction in a box at the top left as it flies.",
         "type": "TOGGLE"
       },
       "centreNodeId": {
-        "displayName": "Centre Node ID",
-        "detail": "ID of the node shown at the centre of the view",
-        "type": "TEXT",
-        "mandatory": true
+        "displayName": "Centre node",
+        "detail": "The sender or receiver to place at the centre, typed exactly as it appears in the data, for example Group treasury. If empty, the busiest one (largest total sent and received) is placed at the centre.",
+        "type": "TEXT"
       },
       "date": {
-        "displayName": "Date",
-        "detail": "Date of the transaction. Can be used to group transactions per date interval, so transactions with the same source and target that happen in the same interval will be shown as one with a cumulative size.",
+        "displayName": "Transaction time",
+        "detail": "When each transaction happened; transactions fly in this order. Use Unique values to show every transaction, or a histogram (for example per hour) to combine transactions between the same sender and receiver in each interval into one.",
         "type": "GROUPING",
         "mandatory": true,
         "validFieldTypes": [
@@ -53,46 +51,58 @@
         ]
       },
       "link": {
-        "displayName": "ID",
-        "detail": "Unique Identifier of the transaction",
+        "displayName": "Transaction identifier",
+        "detail": "Optional field that identifies each transaction, so that two transactions with the same time, sender and receiver stay separate. Not used when Transaction time is a histogram.",
         "type": "FIELD",
-        "mandatory": true,
         "validFieldTypes": [
-          "TEXT"
+          "TEXT",
+          "NUMBER"
         ]
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "One orbit per value, side by side"
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "One orbit per value, one above the other"
       },
       "size": {
-        "displayName": "Value",
+        "displayName": "Transaction size",
+        "detail": "Sizes the flying dots and adds up into each node's Sent and Received totals, for example the sum of Amount. Record count counts transactions.",
         "iconName": "visokio-option-icon:size-measure",
         "type": "MEASURE",
         "mandatory": true
       },
       "source": {
-        "displayName": "Source",
-        "detail": "Identifier of the source sending the transaction",
-        "type": "MEASURE",
-        "mandatory": true
+        "displayName": "Sender",
+        "detail": "Field naming who sends each transaction, for example From account",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "TEXT",
+          "NUMBER"
+        ]
       },
       "target": {
-        "displayName": "Target",
-        "detail": "Identifier of the target where the transaction is sent to",
-        "type": "MEASURE",
-        "mandatory": true
+        "displayName": "Receiver",
+        "detail": "Field naming who receives each transaction, for example To account",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "TEXT",
+          "NUMBER"
+        ]
       }
     },
     "structure": {
       "toolbar": [
-        "link",
+        "source",
+        "target",
         "date",
         "size"
       ],
@@ -103,62 +113,116 @@
         "paneY"
       ]
     },
-    "optionGroups": [{
-      "displayName": "Chart",
-      "rows": [{
-        "cells": [{
-          "option": "centreNodeId",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Transaction",
-      "rows": [{
-        "cells": [{
-          "option": "link",
-          "usePrefixTitle": false
-        }, {
-          "option": "date",
-          "usePrefixTitle": false
-        }, {
-          "option": "source",
-          "usePrefixTitle": false
-        }, {
-          "option": "target",
-          "usePrefixTitle": false
-        }, {
-          "option": "size",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Animation",
-      "rows": [{
-        "cells": [{
-          "option": "animationDuration",
-          "usePrefixTitle": false
-        }, {
-          "option": "animationRestartOnData",
-          "usePrefixTitle": false
-        }, {
-          "option": "txLabels",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Pane/tile",
-      "rows": [{
-        "cells": [{
-          "option": "paneX",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "paneY",
-          "usePrefixTitle": false
-        }]
-      }]
-    }]
+    "optionGroups": [
+      {
+        "displayName": "Transactions",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "source",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "target",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "date",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "size",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "link",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Layout",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "centreNodeId",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Animation",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "animationDuration",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "animationRestartOnData",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "txLabels",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {

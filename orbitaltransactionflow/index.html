@@ -3,164 +3,95 @@
 <head>
     <meta charset="utf-8"/>
     <style>
-        html, body, main {
+        html, body {
             /* Ensure the body fills the view, so clicks are handled everywhere: */
             width: 100%;
             height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
-      	#main {
-            width: 100%;
-            height: 100%;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 10px;
-            color: #ceff00;
-            white-space: pre;
+        #main {
             position: absolute;
-            background-color: black;
+            inset: 0;
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 11px;
+            color: #e6e9ef;
+            background: radial-gradient(circle at 50% 50%, #2b3242 0%, #1c212c 70%);
         }
-        svg {
-            top: 0px;
-            left: 0px;
-            position: absolute;
-          	background-color: #4A4A4A;
+        svg { position: absolute; top: 0; left: 0; }
+        .orbit { fill: none; stroke: #59637a; stroke-width: 1.5; stroke-dasharray: 6 6; }
+        .node { cursor: pointer; }
+        .node .ring { fill: none; stroke: #fff; stroke-width: 2; display: none; }
+        .node.selected .ring { display: block; }
+        .node:hover .out { stroke: #fff; stroke-width: 1.5; }
+        .faded { opacity: 0.25; }
+        .label .name { font-weight: bold; fill: #f2f4f8; font-size: 11px; }
+        .label .figures { font-size: 10px; fill: #c3cad6; }
+        .label text { paint-order: stroke; stroke: #1c212c; stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+        #info {
+            position: absolute; top: 6px; left: 6px; max-width: 60%;
+            padding: 6px 8px; border-radius: 4px; line-height: 1.4;
+            background: rgba(255, 255, 255, 0.08); display: none; white-space: pre-line; pointer-events: none;
         }
-      	.restart-animation {
-          	position: absolute;
-            font-size: 22px;
-            padding: 2px 6px;
-    		bottom: 0px;
-    		left: 0;
-            background-color: rgba(	211, 211, 211, 0.4 );
+        #clock { position: absolute; right: 8px; bottom: 6px; color: #aab2c2; font-size: 11px; pointer-events: none; }
+        #replay {
+            position: absolute; left: 6px; bottom: 6px; padding: 3px 9px; border-radius: 4px; cursor: pointer;
+            border: 1px solid #59637a; background: rgba(255, 255, 255, 0.06); color: #e6e9ef; font: inherit;
         }
-        #queryInfoDiv {
-          	position: absolute;
-            font-size: 9px;
-            padding: 5px;
-    		top: 0;
-    		left: 0;
-            background-color: rgba(	211, 211, 211, 0.2 );
-            display: none;
-        }
-        #txInfoDiv {
-          	position: absolute;
-            font-size: 9px;
-            padding: 5px;
-    		top: 24px;
-    		left: 0;
-            background-color: rgba( 211, 211, 211, 0.2 );
-            display: none;
-        }
-        .annotation-note-title {
-          	fill:#fff;
-        }
-        .tooltip-sent {
-          	padding: 10px;
-        }
-        .tooltip-received {
-          	padding: 10px;
+        #replay:hover { background: rgba(255, 255, 255, 0.16); }
+        #message {
+            position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+            text-align: center; padding: 20px; font-size: 14px; color: #555; background: #fff;
         }
     </style>
 
     <!-- Put SCRIPT tags to load 3rd party libraries here -->
-  	<script src="https://d3js.org/d3.v5.min.js"></script>
-	<script src="https://unpkg.com/d3-svg-annotation@2.5.1/d3-annotation.min.js"></script>
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-  	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">	
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 </head>
 
 <body>
 
-<main id="main">
-  <svg width="100%" height="100%"></svg>
-</main>
-  <div class="restart-animation" onclick="window.location.reload()">
-       <i class="fa fa-play-circle" title="Reload animation / frame"></i>
-  </div>
-  <div id="queryInfoDiv">
-      <span id="queryInfo"></span>
-  </div>
-  <div id="txInfoDiv">
-      <span id="transactionInfo"></span>
-  </div>
+<div id="main">
+    <svg width="100%" height="100%"></svg>
+    <div id="info"></div>
+    <div id="clock"></div>
+    <button id="replay" title="Replay all the transactions">&#9654; Replay</button>
+    <div id="message"></div>
+</div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
 <script>
- 
-    var lastDate = null;
-    var SUN_COLOUR_OUT = "#FAA901";
-  	var colourScale = d3.scaleOrdinal(d3.schemeSet3);
-  
-    var groupByDate = false;
-    var showTxLabels = false;
 
-  	var nodeIds, nodes, simulation, svg, orbit, g, planetsGroup, linksGroup, flyNodesGroup;
-  
-    function initSvg() {
-      
-      if (typeof svg !== 'undefined') {
-          svg.selectAll("*").remove();
-      }
-      
-      nodeIds = new Map();
-      nodes = [];
-      
-      simulation = d3.forceSimulation();
-  
-      svg = d3.select("svg");
+    // Senders and receivers sit on an orbit around a centre node. Each transaction flies from its sender to its
+    // receiver in time order; a node's outer ring grows with what it has sent, its inner disc with what it has
+    // received.
 
-      orbit = svg.append("circle").attr("id", "orbit");
+    var MAX_TRANSACTIONS = 3000, MAX_NODES = 60;
+    var PALETTE = ["#4e9bf5", "#f5874f", "#2ec795", "#f2b33d", "#ef86b3", "#57c25a", "#9b8cf0", "#f06866", "#a7b3bd", "#33c3db"];
+    var CENTRE_COLOUR = "#f7b500";
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
-      //////////////////////////////////////////////////////////////
-      /////////////////////// Visual Effects ///////////////////////
-      //////////////////////////////////////////////////////////////
+    var svg = d3.select("svg");
+    var defs = svg.append("defs");
+    var goo = defs.append("filter").attr("id", "gooey").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
+    var gooBlur = goo.append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", 6).attr("result", "blur");
+    goo.append("feColorMatrix").attr("in", "blur").attr("mode", "matrix")
+        .attr("values", "1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7").attr("result", "goo");
+    goo.append("feComposite").attr("in", "SourceGraphic").attr("in2", "goo").attr("operator", "atop");
+    var orbitCircle = svg.append("circle").attr("class", "orbit");
+    var gooGroup = svg.append("g").style("filter", "url(#gooey)");
+    // The flying dots melt into a blurred copy of the nodes (the gooey effect); the crisp nodes sit on top, so
+    // small nodes stay visible and clickable.
+    var shadowGroup = gooGroup.append("g").attr("class", "shadows");
+    var beesGroup = gooGroup.append("g").attr("class", "bees");
+    var nodesGroup = svg.append("g").attr("class", "nodes");
+    var labelsGroup = svg.append("g").attr("class", "labels");
 
-      // --- GOOEY FILTER --- //
-      g = svg.append("g")
-       .style("filter", "url(#gooey)"); //Set the filter on the container svg
-
-      //Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
-      var defs = svg.append('defs');
-      var filter = defs.append('filter').attr('id','gooey');
-      filter.append('feGaussianBlur')
-        .attr('in','SourceGraphic')
-        .attr('stdDeviation','10')
-        .attr('result','blur');
-      filter.append('feColorMatrix')
-        .attr('in','blur')
-        .attr('mode','matrix')
-        .attr('values','1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
-        .attr('result','gooey');
-      filter.append('feComposite')
-        .attr('in','SourceGraphic')
-        .attr('in2','gooey')
-        .attr('operator','atop');
-
-      // --- ORBIT GLOW FILTER --- //
-      var glowFilter = defs.append("filter")
-          .attr("id","glow");
-      glowFilter.append("feGaussianBlur")
-          .attr("stdDeviation","3.5")
-          .attr("result","coloredBlur");
-      var feMerge = glowFilter.append("feMerge");
-      feMerge.append("feMergeNode")
-          .attr("in","coloredBlur");
-      feMerge.append("feMergeNode")
-          .attr("in","SourceGraphic");
-
-      planetsGroup = g.append("g")
-          .attr("class", "planets");
-      linksGroup = g.append("g")
-          .attr("class", "links");
-      flyNodesGroup = g.append("g")
-          .attr("class", "flyNodes");
-      
-    }
-  
-    initSvg();
+    // model: what the data says; play: how far the replay has got.
+    var state = { model: null, sig: null, lastTime: null, play: null, timer: null, selected: null,
+                  colours: {}, colourKey: null, geom: null, loads: 0 };
+    window.__orbital = state;
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
@@ -169,531 +100,458 @@
         }
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
-    document.body.addEventListener("click", function() {
-        omniscope.view.whitespaceClick();
+    // Ensure clicks on unoccupied space clear the selection in Omniscope:
+    document.body.addEventListener("click", function() { clearSelection(); });
+    document.getElementById("replay").addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (state.model) start(state.model, null, true);
     });
 
-  	var update = function () {
-        omniscope.view.busy(true);
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+        if (text) stopTimer();
+    }
 
-        var options = omniscope.view.context().options;
+    function viewFilter() {
+        var f = omniscope.view.context().dataConfig.filter;
+        return f && (f.filters ? f.filters.length : true) ? f : null;
+    }
 
-        groupByDate = false;    
-        var query_ = {
-            "@visokiotype": "QueryApi.AggregateOperation",
-            "groupings": [
-                {
-                    "inputField": options.items.link,
-                    "type": "UNIQUE_VALUES",
-                    "fitToScreen": true,
-                    "name": "link"
-                }
-            ],
-            "measures": [
-                {
-                    "name": "date",
-                    "inputField": options.items.date.inputField,
-                    "function": "SINGLETON"
-                },
-                {
-                    "name": "source",
-                    "inputField": options.items.source.inputField,
-                    "function": "SINGLETON"
-                },
-              	{
-                    "name": "target",
-                    "inputField": options.items.target.inputField,
-                    "function": "SINGLETON"
-                },
-              	{
-                    "name": "size",
-                    "inputField": options.items.size.inputField,
-                    "function": "SUM"
-                }
-            ],
-            "input": {
-                "@visokiotype": "QueryApi.RecordFilterOperation",
-                "filter": omniscope.view.context().dataConfig.filter,
-                "input": {
-                    "@visokiotype": "QueryApi.DefaultSource"
-                }
-            }
-        };
-        
-        if (options.items.date.type === "HISTOGRAM") {
-      		//if date is specified we get all transactions grouped by the date histogram specified
-            groupByDate = true;
-          
-            var query_ = {
-                "@visokiotype": "QueryApi.AggregateOperation",
-                "groupings": [
-                    options.items.date,
-                    {
-                        "inputField": options.items.source.inputField,
-                        "type": "UNIQUE_VALUES",
-                        "fitToScreen": true,
-                        "name": "source"
-                    }
-                  ,
-                    {
-                        "inputField": options.items.target.inputField,
-                        "type": "UNIQUE_VALUES",
-                        "fitToScreen": true,
-                        "name": "target"
-                    }
-                ],
-                "measures": [
-                    {
-                        "name": "size",
-                        "inputField": options.items.size.inputField,
-                        "function": "SUM"
-                    }
-                ],
-                "input": {
-                    "@visokiotype": "QueryApi.RecordFilterOperation",
-                    "filter": omniscope.view.context().dataConfig.filter,
-                    "input": {
-                        "@visokiotype": "QueryApi.DefaultSource"
-                    }
-                }
-            };
-          
-        }
-        
-        showTxLabels = false;
-        if (options.items.txLabels) {
-            showTxLabels = true;
-            let infoText = "Transactions " + (groupByDate ? "grouped by date histogram ("+ options.items.date.histogramInterval + " " + options.items.date.dateUnit.toLowerCase()+")" : "by unique values (ID)"); 
-            document.getElementById("queryInfo").innerHTML = infoText;
-        	document.getElementById("queryInfoDiv").style.display = "block";
-        	document.getElementById("txInfoDiv").style.display = "block";
-        }
+    function measureName(m) {
+        if (!m) return "";
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField;
+    }
 
-        omniscope.view.queryBuilder()
-            .table(query_)
-            .on("load", function(event) {
-                // On success, pass the TableQueryOutput object to render():
-                renderView(event.data);
-            }).on("error", function(err) {
-              // On error, report to the enclosing application:
-              omniscope.view.error(err.error);
-        }).execute(); // Submit the query for execution
-        omniscope.view.busy(false);
-    };
-  
-    var reloadOrUpdate = function() {
-      var opts = omniscope.view.context().options;
-      var restartAnimation = opts.items.animationRestartOnData;
-        if (restartAnimation == true) {
-            window.location.reload();
-        } else {
-            update();
+    function fmt(v) {
+        if (v === null || v === undefined || !isFinite(v)) return "";
+        var a = Math.abs(v);
+        if (a >= 1e4) return d3.format(".3~s")(v).replace("G", "B");
+        if (a >= 100) return d3.format(",.0f")(v);
+        return d3.format(",.4~r")(v);
+    }
+
+    function timeOf(v) {
+        if (v && typeof v === "object" && "lower" in v) v = v.lower;
+        if (v === null || v === undefined) return null;
+        var d = new Date(v);
+        return isNaN(d) ? null : d;
+    }
+
+    function timeLabel(d) {
+        if (!d) return "";
+        var iso = d.toISOString();
+        return iso.slice(0, 10) + (iso.slice(11, 19) === "00:00:00" ? "" : " " + iso.slice(11, 16));
+    }
+
+    function clearSelection() {
+        state.selected = null;
+        highlight();
+        omniscope.view.whitespaceClick();
+    }
+
+    // Colours follow the node's name, taken from an unfiltered list of senders and receivers, so filtering the
+    // report does not recolour the nodes.
+    function loadColours(it, done) {
+        var key = JSON.stringify([it.source, it.target]);
+        if (state.colourKey === key) { done(); return; }
+        var names = {}, pending = 2;
+        [it.source, it.target].forEach(function(field) {
+            omniscope.view.queryBuilder()
+                .table({ groupings: [{ inputField: field, type: "UNIQUE_VALUES", name: "v" }],
+                         measures: [{ function: "RECORD_COUNT" }], range: { start: 0, length: 500 } })
+                .on("load", function(e) {
+                    e.data.records.forEach(function(r) { if (r[0] !== null) names[String(r[0])] = true; });
+                    if (--pending === 0) finish();
+                })
+                .on("error", function() { if (--pending === 0) finish(); })
+                .execute();
+        });
+        function finish() {
+            state.colours = {};
+            Object.keys(names).sort().forEach(function(n, i) { state.colours[n] = PALETTE[i % PALETTE.length]; });
+            state.colourKey = key;
+            done();
         }
     }
 
-    // Naively redraw on any of these events
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "resize"], update);
-  
-    omniscope.view.on(["update"], reloadOrUpdate);
-    
+    function colourOf(id, isCentre) {
+        if (isCentre) return CENTRE_COLOUR;
+        return state.colours[id] || PALETTE[Math.abs(hash(id)) % PALETTE.length];
+    }
+    function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h; }
 
-    function renderView(result) {
+    omniscope.view.on(["load", "update"], update);
+    omniscope.view.on("resize", function() { if (state.model) { layout(); draw(); } });
 
-        //////////////////////////////////////////////////////////////
-        //////////////////////////// Data ////////////////////////////
-        //////////////////////////////////////////////////////////////
-
-		// On update, depending on option we rebuild the view or ignore it          		
-      
-      	// Map records to field options
-        var records = result.records;
-
-        var options = omniscope.view.context().options;
-      
-        var sun_id = options.items.centreNodeId;
-
-        var mappings = result.mappings;
-        var bees = new Map();
-        var maxDate = lastDate;
-      
-        var maxBeeSize = 1;
-
-        if (!getNode(nodes, sun_id)) {
-          nodes.push({id: sun_id, sizeIn: 0, sizeOut: 0, colourIn: SUN_COLOUR_OUT, colourOut: d3.color(SUN_COLOUR_OUT).darker(1).hex()});
+    function update() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!ctx.viewSelection) state.selected = null;
+        var missing = [];
+        if (!it.source) missing.push("Sender");
+        if (!it.target) missing.push("Receiver");
+        if (!it.date || !it.date.inputField) missing.push("Transaction time");
+        if (!it.size) missing.push("Transaction size");
+        if (missing.length) {
+            message("Choose " + missing.join(", ").replace(/, ([^,]*)$/, " and $1") +
+                ": the view draws transactions flying from a sender to a receiver.");
+            return;
         }
+        var load = ++state.loads;
+        loadColours(it, function() { if (load === state.loads) query(it, load); });
+    }
 
-        records.forEach(function(record, i) {
-            var bee;
-            if (groupByDate) {
-                 bee = {
-                    id: i,
-                    source: record[1],
-                    target: record[2],
-                    size: record[3],
-                    date: new Date(record[0].lower)
-           		 };
-            } else {
-                 bee = {
-                    id: record[0],
-                    source: record[2],
-                    target: record[3],
-                    size: record[4],
-                    date: new Date(record[1])
-                 };
-            }
-          
-            var beeDate = new Date(bee.date);
-           	if (bee.size > 0 && (lastDate == null || lastDate.getTime() < beeDate)) {
-                var sourceColourOut = (bee.source === sun_id) ? SUN_COLOUR_OUT : colourScale(bee.source);
-              	if (bee.source != null && bee.target != null) {
-                  bee.colour = sourceColourOut;
-                  bees.set(bee.id, bee);
-                }
-                if (bee.source != null && !getNode(nodes, bee.source)) {
-                  var sourceColourIn = d3.color(sourceColourOut).darker(1).hex();
-                  nodes.push({id: bee.source, sizeIn: 0, sizeOut: 0, colourIn: sourceColourIn, colourOut: sourceColourOut});
-                }
-                if (bee.target != null && !getNode(nodes, bee.target)) {
-                  var targetColourOut = (bee.target === sun_id) ? SUN_COLOUR_OUT : colourScale(bee.target);
-                  var targetColourIn = d3.color(targetColourOut).darker(1).hex();
-                  nodes.push({id: bee.target, sizeIn: 0, sizeOut: 0, colourIn: targetColourIn, colourOut: targetColourOut});
-                }
-            }
-          	if (maxDate == null || maxDate.getTime() < beeDate) maxDate = beeDate;
-            if (maxBeeSize == null || maxBeeSize < bee.size) maxBeeSize = bee.size;
-        });
-      	if (maxDate != null && (lastDate == null || lastDate.getTime() < maxDate.getTime())) {
-          lastDate = maxDate;
-        }
-
-        var links = [];
-        nodes.forEach(function(node, i) {
-          	if (node.id !== sun_id) links.push({source: getNode(nodes, node.id), target: getNode(nodes, sun_id)});
-        });
-
-        var beesArray = Array.from(bees.values());
-
-        //////////////////////////////////////////////////////////////
-        ///////////////////// Dimension & Scales /////////////////////
-        //////////////////////////////////////////////////////////////
-
-      	var margin = {top: 30, right: 30, bottom: 30, left: 30};
-        var width = +parseInt(svg.style("width"), 10);
-        var height = +parseInt(svg.style("height"), 10);
-      	var maxSize = Math.min(width, height);
-        var orbit_radius = maxSize/3;
-
-        var marginNodes = maxSize/25;
-        var _sizeScale = d3.scaleSqrt().range([Math.max(5, maxSize/100), Math.max(25, maxSize/40)]).domain([0, maxBeeSize]);
-
-        //////////////////////////////////////////////////////////////
-        /////////////////////////// Orbit ////////////////////////////
-        //////////////////////////////////////////////////////////////
-
-        orbit.attr("cx", width/2)
-        	.attr("cy", height/2)
-        	.attr("r", orbit_radius)
-        	.attr("stroke", "rgb(99, 99, 99)")
-        	.attr("stroke-width", "2px")
-        	.attr("stroke-dasharray", "7")
-        	.style("filter", "url(#glow)")
-      		.attr("fill", "none");
-
-        //////////////////////////////////////////////////////////////
-        /////////////////////////// Force ////////////////////////////
-        //////////////////////////////////////////////////////////////
-
-        simulation
-        	.nodes(nodes)
-            .force("link", d3.forceLink(links)
-                .id(function(d, i) { return d.id; })
-        		.distance(orbit_radius)
-        		.strength(1))
-        	.force("charge", d3.forceManyBody())
-        	.force("collide", d3.forceCollide().radius(function(d) { return _sizeScale(d.sizeIn) + _sizeScale(d.sizeOut) + marginNodes;} ))
-        	.force("center", d3.forceCenter(width / 2, height / 2))
-        	.alphaDecay(0.07)
-        	.on("tick", tick);
-
-        // --- TICK --- //
-        function tick() {
-          g.selectAll("circle")
-            .attr("cx", function(d) {
-              if (d.id === sun_id) return d.x = width/2;
-              return d.x;
+    function query(it, load) {
+        var histogram = it.date.type === "HISTOGRAM";
+        var groupings = [];
+        if (it.link && !histogram) groupings.push({ inputField: it.link, type: "UNIQUE_VALUES", name: "link" });
+        groupings.push(Object.assign({}, it.date, { name: "date" }));
+        groupings.push({ inputField: it.source, type: "UNIQUE_VALUES", name: "source" });
+        groupings.push({ inputField: it.target, type: "UNIQUE_VALUES", name: "target" });
+        var size = { name: "size", function: it.size.function || "RECORD_COUNT" };
+        if (size.function !== "RECORD_COUNT") size.inputField = it.size.inputField;
+        if (it.size.percentileValue !== undefined) size.percentileValue = it.size.percentileValue;
+        var q = { groupings: groupings, measures: [size], range: { start: 0, length: MAX_TRANSACTIONS + 1 } };
+        var f = viewFilter();
+        if (f) q.filter = f;
+        omniscope.view.busy(true);
+        omniscope.view.queryBuilder()
+            .table(q)
+            .on("load", function(e) {
+                omniscope.view.busy(false);
+                if (load !== state.loads) return;
+                build(e.data, it, histogram);
             })
-            .attr("cy", function(d) {
-              if (d.id === sun_id) return d.y = height/2;
-              return d.y;
+            .on("error", function(e) {
+                omniscope.view.busy(false);
+                omniscope.view.error((e && e.data && e.data.message) || "The transaction query failed");
             })
-          ;
+            .execute();
+    }
+
+    function build(data, it, histogram) {
+        var records = data.records || [];
+        if (!records.length) { state.model = null; clearDrawing(); message("No transactions to show. Check the report's filters."); return; }
+        if (records.length > MAX_TRANSACTIONS) {
+            state.model = null; clearDrawing();
+            message("More than " + MAX_TRANSACTIONS.toLocaleString() + " transactions. Set Transaction time to a histogram " +
+                "(for example per hour) to combine them, or filter the report.");
+            return;
         }
-
-      	simulation.alpha(1);
-      	simulation.restart();
-
-        //////////////////////////////////////////////////////////////
-        ////////////////////////// Planets ///////////////////////////
-        //////////////////////////////////////////////////////////////
-
-        var planets = planetsGroup.selectAll(".node")
-          .data(nodes);
-        planets.exit().remove();
-
-        var planetsEnter = planets
-          .enter()
-          .append("g")
-          .attr("class", "node");
-
-        planetsEnter.append("circle")
-            .attr("class", function(d) { return "circle node-out node-out-"+d.id; })
-        	.style("fill", function(d) { return d.colourOut; })
-            .attr("r", function(d){  return _sizeScale(d.sizeOut) + _sizeScale(d.sizeIn); })
-            .append("title")
-            .text(function(d) { return d.id +"\n" + "Received: "+ d.sizeIn + " Sent: "+ d.sizeOut})
-
-        planetsEnter.append("circle")
-          .attr("class", function(d) { return "circle node-in node-in-"+d.id; })
-          .style("fill", function(d) { return d.colourIn; })
-          .attr("r", function(d){  return _sizeScale(d.sizeIn); })
-          .append("title")
-          .text(function(d) { return d.id +"\n" + "Received: "+ d.sizeIn + " Sent: "+ d.sizeOut})
-
-        //////////////////////////////////////////////////////////////
-        //////////////////// Flying transactions /////////////////////
-        //////////////////////////////////////////////////////////////
-
-        beesArray.map(function(flyNode) {
-          flyNode.sourceNode = getNode(nodes, flyNode.source);
-          flyNode.targetNode = getNode(nodes, flyNode.target);
+        var off = (it.link && !histogram) ? 1 : 0;
+        var types = ((data.schema || {}).fields || []).map(function(f) { return f.type; });
+        state.numericFields = {};
+        state.numericFields[it.source] = types[off + 1] === "NUMBER";
+        state.numericFields[it.target] = types[off + 2] === "NUMBER";
+        var txs = [];
+        records.forEach(function(r, i) {
+            var s = r[off + 1], t = r[off + 2], v = r[off + 3];
+            if (s === null || s === undefined || t === null || t === undefined) return;
+            if (typeof v !== "number" || !isFinite(v) || v <= 0) return;
+            txs.push({ id: off ? r[0] : null, time: timeOf(r[off]), source: String(s), target: String(t), size: v, n: i });
         });
+        // Fly in time order; undated transactions go first.
+        txs.sort(function(a, b) { return ((a.time ? +a.time : -Infinity) - (b.time ? +b.time : -Infinity)) || a.n - b.n; });
 
-      	simulation.on("end", function() {
-          // --- ANNOTATIONS --- //
-          updateAnnotations();
-
-          // --- FLYING NODES --- //
-          flyNodesGroup.selectAll(".flyNode").remove();
-          flyNodesGroup
-              .selectAll(".flyNode")
-              .data(beesArray)
-              .enter()
-              .append("circle")
-              .attr("class", "flyNode")
-              .attr("cy", function(d) { return d.sourceNode.cx; })
-              .attr("cx", function(d) { return d.sourceNode.cy; })
-              .attr("r", 0)
-              .style("fill", "none")
-              .call(update);
+        var byId = new Map();
+        function node(id) {
+            if (!byId.has(id)) byId.set(id, { id: id, sent: 0, received: 0, sentCount: 0, receivedCount: 0 });
+            return byId.get(id);
+        }
+        txs.forEach(function(t) {
+            var s = node(t.source), r = node(t.target);
+            s.sent += t.size; s.sentCount++; r.received += t.size; r.receivedCount++;
         });
+        if (byId.size > MAX_NODES + 1) {
+            state.model = null; clearDrawing();
+            message(byId.size.toLocaleString() + " different senders and receivers: the view shows up to " + MAX_NODES +
+                " around the centre. Choose Sender and Receiver fields with fewer values, or filter the report.");
+            return;
+        }
+        if (!txs.length) { state.model = null; clearDrawing(); message("No transactions with a positive Transaction size to show."); return; }
+        message(null);
 
-        //////////////////////////////////////////////////////////////
-        ///////////////////////// Animation //////////////////////////
-        //////////////////////////////////////////////////////////////
+        var centreId = (it.centreNodeId || "").trim();
+        if (!centreId) {
+            byId.forEach(function(n) { if (!centreId || n.sent + n.received > byId.get(centreId).sent + byId.get(centreId).received) centreId = n.id; });
+        }
+        var centre = node(centreId);
+        var orbiters = Array.from(byId.values()).filter(function(n) { return n !== centre; })
+            .sort(function(a, b) { return d3.ascending(a.id, b.id); });
+        centre.centre = true;
+        var nodes = [centre].concat(orbiters);
+        nodes.forEach(function(n) { n.colour = colourOf(n.id, n.centre); });
+        txs.forEach(function(t) { t.from = byId.get(t.source); t.to = byId.get(t.target); });
 
-        function update(that, d) {
-          
-          var options = omniscope.view.context().options;
-          var duration = options.items.animationDuration;
-          //Default duration 10 seconds
-          var dur = (duration === undefined || duration == null || duration <= 0) ? 10000 : duration * 1000;
-          
-          var del = dur/beesArray.length+1;
-          //Minimum delay 25ms, too hard for the browser otherwise
-          del = (del < 25) ? 25 : del;
+        var model = { nodes: nodes, byId: byId, txs: txs, centre: centre, histogram: histogram,
+                      sizeName: measureName(it.size), maxTx: d3.max(txs, function(t) { return t.size; }),
+                      maxNode: d3.max(orbiters.length ? orbiters : nodes, function(n) { return n.sent + n.received; }) || 1,
+                      last: txs[txs.length - 1].time };
 
-          var flyNode = flyNodesGroup.selectAll(".flyNode");
+        // Replay everything on first load, after the Replay button, or with "Replay on every refresh".
+        // Otherwise a change of settings or filter shows the totals at once, and a refresh of the same data flies
+        // in only the transactions later than the last one shown (a live feed).
+        var sig = JSON.stringify([it.source, it.target, it.date, it.size, it.link || null, centreId, viewFilter()]);
+        var first = state.sig === null;
+        var landedBefore = null;
+        if (!first && !it.animationRestartOnData) {
+            if (sig !== state.sig) landedBefore = Infinity;
+            else if (state.lastTime !== null) landedBefore = state.lastTime;
+        }
+        state.sig = sig;
+        state.model = model;
+        start(model, landedBefore, false);
+    }
 
-          // --- CREATE ARC PATHS --- //
-          var sun = planetsGroup.select(".node-out-"+sun_id);
-          var x_c = width/2;
-          var y_c = height/2;
-          flyNode.each(function(d, i) {
-             var points;
-             var radius = orbit_radius/2;
-             if (d.source === sun_id && d.target === sun_id) {
-               points = [[[d.sourceNode.x, d.sourceNode.y], [width/2 + radius/2, height/2+radius], [width/2 + radius, height/2 + radius/2], [d.targetNode.x, d.targetNode.y]]];
-             } else if (d.source === sun_id || d.target === sun_id) {
-               points = [[[d.sourceNode.x, d.sourceNode.y], [d.targetNode.x, d.targetNode.y]]];
-             } else {
-               var x_int_source = x_c + ( (radius*(d.sourceNode.x-x_c)) / Math.sqrt( Math.pow(Math.abs(d.sourceNode.x - x_c), 2) + Math.pow(Math.abs(d.sourceNode.y - y_c), 2) ) );
-               var y_int_source = y_c + ( (radius*(d.sourceNode.y-y_c)) / Math.sqrt( Math.pow(Math.abs(d.sourceNode.x - x_c), 2) + Math.pow(Math.abs(d.sourceNode.y - y_c), 2) ) );
+    function clearDrawing() {
+        stopTimer();
+        nodesGroup.selectAll("*").remove();
+        shadowGroup.selectAll("*").remove();
+        beesGroup.selectAll("*").remove();
+        labelsGroup.selectAll("*").remove();
+        orbitCircle.attr("r", 0);
+        document.getElementById("info").style.display = "none";
+        document.getElementById("clock").textContent = "";
+    }
 
-               var x_int_target = x_c + ( (radius*(d.targetNode.x-x_c)) / Math.sqrt( Math.pow(Math.abs(d.targetNode.x - x_c), 2) + Math.pow(Math.abs(d.targetNode.y - y_c), 2) ) );
-               var y_int_target = y_c + ( (radius*(d.targetNode.y-y_c)) / Math.sqrt( Math.pow(Math.abs(d.targetNode.x - x_c), 2) + Math.pow(Math.abs(d.targetNode.y - y_c), 2) ) );
+    function stopTimer() { if (state.timer) { state.timer.stop(); state.timer = null; } }
 
-               var x_mid = (x_int_source + x_int_target)/2;
-               var y_mid = (y_int_source + y_int_target)/2;
-
-               var x_int = x_c + ( (radius*(x_mid-x_c)) / Math.sqrt( Math.pow(Math.abs(x_mid - x_c), 2) + Math.pow(Math.abs(y_mid - y_c), 2) ) );
-               var y_int = y_c + ( (radius*(y_mid-y_c)) / Math.sqrt( Math.pow(Math.abs(x_mid - x_c), 2) + Math.pow(Math.abs(y_mid - y_c), 2) ) );
-               points = [[[d.sourceNode.x, d.sourceNode.y], [x_int, y_int], [d.targetNode.x, d.targetNode.y]]];
-             }
-              d.path = svg.append("path")
-                .data(points)
-                .attr("d", d3.line().curve(d3.curveCardinal.tension(0)))
-                .attr("fill", "none");
-          });
-
-          (function animate() {
-            var lastNode = flyNode._groups[0].length - 1;
-            flyNode.each(function(d, i) {
-                d3.select(this)
-                  .transition("start").duration(0)
-                    .attr("cx", function(d) { return d.sourceNode.cx; })
-                    .attr("cy", function(d) { return d.sourceNode.cy; })
-                  .transition("resize").duration(1500).delay(i*del)
-                    .attr("r", function(d) { return 5 + _sizeScale(d.size); })
-                  .transition("initial").duration(0)
-                	.attr("cx", "0px")
-                    .attr("cy", "0px")
-                  .transition("outward").duration(dur).delay(i*del)
-                	.style("fill", function(d) { return d.colour; })
-                	.attrTween("transform", (function() {return translateAlong(d.path.node());})())
-                    .on("start", function(d) {
-                      // Resize output of source
-                      updateTransactionInfo(d);
-                      var node = d.sourceNode;
-                      node.sizeOut += d.size;
-                  	  updateSizeScale(node.sizeOut);
-                      d3.select(".node-out-"+node.id)
-                        .transition("resize").duration(3500)
-                        .attr("r", _sizeScale(node.sizeIn) + _sizeScale(node.sizeOut));
-                  	  updateAnnotation(node);
-                    })
-                  .transition("outward").duration(500)//.delay(i*del)
-                	.attr("r", 0)
-                    .on("end", function(d) {
-                      	// Resize input and output of target
-                        var node = d.targetNode;
-                        node.sizeIn += d.size;
-                        updateSizeScale(node.sizeIn);
-                        d3.select(".node-in-"+node.id)
-                          .transition("resize").duration(1500)
-                          .attr("r", _sizeScale(node.sizeIn));
-                        d3.select(".node-out-"+node.id)
-                          .transition("resize").duration(1500)
-                          .attr("r", _sizeScale(node.sizeIn) + _sizeScale(node.sizeOut));
-                        updateAnnotation(node);
-                        // Delete flying node
-                        this.remove();
-                        if (lastNode == i) {
-                            resetTransactionInfo();
-                        }
-                    })
-                ;
+    // landedBefore: transactions at or before this time (ms) count as already landed; null replays them all.
+    function start(model, landedBefore, replay) {
+        stopTimer();
+        var it = omniscope.view.context().options.items || {};
+        var dur = Math.max(1, Math.min(100, +it.animationDuration || 10)) * 1000;
+        model.nodes.forEach(function(n) { n.shownSent = 0; n.shownReceived = 0; });
+        var flying = [];
+        model.txs.forEach(function(t) {
+            var landed = !MOTION || (landedBefore !== null && (landedBefore === Infinity || (t.time && +t.time <= landedBefore)));
+            if (landed) { t.from.shownSent += t.size; t.to.shownReceived += t.size; }
+            else flying.push(t);
+        });
+        state.lastTime = model.last ? +model.last : null;
+        // Each transaction flies for a quarter of the duration (0.6 to 2.5 s); departures are spread over the rest.
+        var flight = Math.max(600, Math.min(2500, dur / 4)), spread = Math.max(0, dur - flight);
+        flying.forEach(function(t, i) {
+            t.depart = flying.length > 1 ? spread * i / (flying.length - 1) : 0;
+            t.state = 0; // 0 waiting, 1 flying, 2 landed
+        });
+        state.play = { flying: flying, flight: flight, dur: dur, t0: null, done: !flying.length, current: null, landed: 0 };
+        layout();
+        draw();
+        if (flying.length) {
+            state.timer = d3.timer(function() {
+                var p = state.play;
+                if (p.t0 === null) p.t0 = performance.now();
+                tick(performance.now() - p.t0);
             });
-          })();
         }
+        info();
+    }
 
-        //////////////////////////////////////////////////////////////
-        ////////////////////// Extra functions ///////////////////////
-        //////////////////////////////////////////////////////////////
-        function updateTransactionInfo(node) {
-          if (showTxLabels) {
-            let infoText = "<b>TX </b>" + (groupByDate ? "" : "ID: " + node.id) + "<br>Date: " + node.date.toUTCString() + "<br>From: " +node.source + "<br>To: "+node.target+ "<br>Size: "+d3.format(",.2f")(node.size); 
-            document.getElementById("transactionInfo").innerHTML = infoText;
-          }
-        }
-      
-        function resetTransactionInfo() {
-          document.getElementById("transactionInfo").innerHTML = "";
-          document.getElementById("txInfoDiv").style.display = "none";
-          document.getElementById("queryInfoDiv").style.display = "none";
-        }
+    // Jump to the end of the replay (also used by the tests).
+    state.finish = function() { if (state.play && !state.play.done) tick(Infinity); };
 
-        function getNode(nodes, id) {
-          return nodes.find(function(node) { return node.id === id; });
-        }
+    function layout() {
+        var m = state.model; if (!m) return;
+        var w = window.innerWidth, h = window.innerHeight;
+        var small = Math.min(w, h) < 220;
+        var labelW = small ? 6 : 84, labelH = small ? 4 : 34;
+        var cx = w / 2, cy = h / 2, k = m.nodes.length - 1;
+        var nodeMax = function(R) { return k ? Math.max(3, Math.min(R * Math.sin(Math.PI / Math.max(k, 2)) * 0.85, R * 0.24)) : R * 0.3; };
+        // Leave room outside the orbit for the largest node and its label.
+        var R = Math.min(w / 2 - labelW, h / 2 - labelH);
+        R = Math.max(18, Math.min(w / 2 - labelW - nodeMax(R), h / 2 - labelH - nodeMax(R)));
+        var maxR = nodeMax(R);
+        var centreMax = Math.max(4, R * 0.32);
+        m.nodes.forEach(function(n, i) {
+            if (n.centre) { n.x = cx; n.y = cy; n.angle = Math.PI / 2; return; }
+            n.angle = -Math.PI / 2 + 2 * Math.PI * (i - 1) / k;
+            n.x = cx + R * Math.cos(n.angle);
+            n.y = cy + R * Math.sin(n.angle);
+        });
+        // One scale for every node (the largest node on the orbit gets the largest orbit size); the centre node
+        // follows the same scale but is capped, as it is often far larger than the rest.
+        var nodeScale = d3.scaleSqrt().domain([0, m.maxNode]).range([0, maxR]);
+        var beeScale = d3.scaleSqrt().domain([0, m.maxTx]).range([0, Math.max(4, Math.min(maxR * 0.7, 14))]);
+        var blur = Math.max(1.5, Math.min(4, maxR / 5));
+        state.geom = { w: w, h: h, cx: cx, cy: cy, R: R, small: small,
+                       radius: function(n, v) { return Math.max(2.5, n.centre ? Math.min(centreMax, nodeScale(v)) : nodeScale(v)); },
+                       bee: function(v) { return Math.max(blur * 1.4, beeScale(v)); } };
+        gooBlur.attr("stdDeviation", blur);
+        orbitCircle.attr("cx", cx).attr("cy", cy).attr("r", R);
+    }
 
-        function updateAnnotations() {
-          svg.selectAll(".annotation-tooltip").remove();
-          var labels = nodes.map(function(d) {
-            let radius = _sizeScale(d.sizeOut);
-            let margin = 15;
-            let _x = (d.x >= width/2) ? d.x + radius + margin : d.x - radius - margin;
-            let _y = (d.y >= height/2) ? d.y + radius + margin : d.y - radius - margin;
-            let distFromCenter = Math.min(5, Math.max(1, Math.pow (Math.abs(d.y - height/2) / height * 3.7, 7)));
-            let aligment = sun_id == d.id ? "right" : "";
-            return {
-              className: "annotation-tooltip-"+d.id,
-              x: sun_id == d.id ? _x - 20 : _x,
-              y: _y,
-              dx:  sun_id == d.id ? 0 : (_x < width/2) ? - 50 : 50,
-              dy:  sun_id == d.id ? 40 : (_y < height/2 ) ? -10 * distFromCenter : 10 * distFromCenter,
-              note: {title: d.id, label: "_", wrap: 100, align: aligment},
-              subject: { radius: 4 },
-              data: {
-                sizeIn: d.sizeIn,
-              	sizeOut: d.sizeOut,
-                inColour: d.colourIn,
-                outColour: d.colourOut
-              }
+    function draw() {
+        var m = state.model, g = state.geom; if (!m || !g) return;
+        var shadows = shadowGroup.selectAll("circle").data(m.nodes, function(d) { return d.id; });
+        shadows.exit().remove();
+        shadows.enter().append("circle").merge(shadows)
+            .attr("cx", function(d) { return d.x; }).attr("cy", function(d) { return d.y; })
+            .attr("fill", function(d) { return d.colour; });
+        var sel = nodesGroup.selectAll("g.node").data(m.nodes, function(d) { return d.id; });
+        sel.exit().remove();
+        var enter = sel.enter().append("g").attr("class", "node");
+        enter.append("circle").attr("class", "out");
+        enter.append("circle").attr("class", "in");
+        enter.append("circle").attr("class", "ring");
+        enter.append("title");
+        enter.on("click", function(event, d) {
+            event.stopPropagation();
+            if (state.selected === d.id) { clearSelection(); return; }
+            select(d);
+        });
+        var all = enter.merge(sel).attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        all.select(".out").attr("fill", function(d) { return d.colour; });
+        all.select(".in").attr("fill", function(d) { return d3.color(d.colour).darker(1.2).formatHex(); });
+        all.select("title").text(function(d) {
+            return d.id + "\nReceived: " + fmt(d.received) + " (" + d.receivedCount.toLocaleString() + " transactions)" +
+                "\nSent: " + fmt(d.sent) + " (" + d.sentCount.toLocaleString() + " transactions)";
+        });
+
+        var labels = labelsGroup.selectAll("g.label").data(m.nodes, function(d) { return d.id; });
+        labels.exit().remove();
+        var lEnter = labels.enter().append("g").attr("class", "label");
+        lEnter.append("text").attr("class", "name");
+        lEnter.append("text").attr("class", "figures");
+        labels = lEnter.merge(labels);
+        var crowded = m.nodes.length > 24;
+        labels.style("display", g.small && m.nodes.length > 8 ? "none" : null);
+        labels.select(".name").text(function(d) { return d.id; });
+        labels.select(".figures").style("display", g.small || crowded ? "none" : null);
+        sizes();
+        highlight();
+    }
+
+    // Node radii and labels for the totals shown so far.
+    function sizes() {
+        var m = state.model, g = state.geom; if (!m || !g) return;
+        var all = nodesGroup.selectAll("g.node");
+        all.select(".out").attr("r", function(d) { return g.radius(d, d.shownSent + d.shownReceived); });
+        shadowGroup.selectAll("circle").attr("r", function(d) { return g.radius(d, d.shownSent + d.shownReceived); });
+        all.select(".in").attr("r", function(d) { return d.shownReceived > 0 ? g.radius(d, d.shownReceived) : 0; });
+        all.select(".ring").attr("r", function(d) { return g.radius(d, d.shownSent + d.shownReceived) + 4; });
+        labelsGroup.selectAll("g.label").each(function(d) {
+            var r = g.radius(d, d.sent + d.received) + 6, c = Math.cos(d.angle), s = Math.sin(d.angle);
+            var x = d.x + c * r, y = d.y + s * r, anchor = d.centre ? "middle" : c > 0.3 ? "start" : c < -0.3 ? "end" : "middle";
+            var dy = d.centre || s > 0.3 ? 10 : s < -0.3 ? -14 : -2;
+            var lab = d3.select(this);
+            lab.select(".name").attr("x", x).attr("y", y + dy).attr("text-anchor", anchor);
+            lab.select(".figures").attr("x", x).attr("y", y + dy + 12).attr("text-anchor", anchor)
+                .text("In " + fmt(d.shownReceived) + "  Out " + fmt(d.shownSent));
+        });
+    }
+
+    function tick(elapsed) {
+        var p = state.play, g = state.geom, m = state.model; if (!p || !g || !m) return;
+        var active = [], changed = false;
+        p.flying.forEach(function(t) {
+            if (t.state === 2) return;
+            var f = (elapsed - t.depart) / p.flight;
+            if (f < 0) return;
+            if (t.state === 0) { t.state = 1; p.current = t; }
+            if (f >= 1) {
+                t.state = 2; p.landed++; changed = true;
+                t.from.shownSent += t.size; t.to.shownReceived += t.size;
+                return;
             }
-          });
-          window.makeAnnotations = d3.annotation().annotations(labels).type(d3.annotationCalloutElbow );
-          var tooltips = svg.append("g")
-            .attr("class", "annotation-tooltip");
-            
-          tooltips.call(makeAnnotations);
-          tooltips.selectAll(".annotation-note-title")
-          	.attr("text-anchor", (d) => d.x >= width/2 ? "Start" : "middle");
-          
-          tooltips.selectAll(".annotation-note-label")
-            .html(function(d) {
-                let alignment = d.x >= width/2  ? "Start" : "middle";
-            	return "</tspan><tspan class=\"tooltip-sent\" dy=\"0.8em\" text-anchor=\""+alignment+"\" fill=\""+d.data.inColour+"\">Received: "
-                  +d3.format(",.3r")(d.data.sizeIn)+"</tspan>"
-                  +"<tspan class=\"tooltip-sent\" dx=\"0.8em\" fill=\""+d.data.outColour+"\">Sent: "
-                  +d3.format(",.3r")(d.data.sizeOut);
-          	});
-          
-          tooltips.selectAll(".connector")
-          	.style("stroke-dasharray", ("3, 3"));
-          tooltips.selectAll(".note-line")
-          	.style("stroke-dasharray", ("3, 3"));
+            t.f = f;
+            active.push(t);
+        });
+        var bees = beesGroup.selectAll("circle").data(active, function(t) { return t.n; });
+        bees.exit().remove();
+        bees.enter().append("circle").attr("fill", function(t) { return t.from.colour; })
+            .merge(bees)
+            .each(function(t) {
+                var pt = along(t, t.f), e = Math.min(1, t.f * 5, (1 - t.f) * 5);
+                d3.select(this).attr("cx", pt[0]).attr("cy", pt[1]).attr("r", g.bee(t.size) * Math.max(0.35, e))
+                    .classed("faded", !!state.selected && t.source !== state.selected && t.target !== state.selected);
+            });
+        if (changed) sizes();
+        if (p.current) clock(p.current.time);
+        if (p.landed === p.flying.length) {
+            p.done = true;
+            stopTimer();
+            beesGroup.selectAll("circle").remove();
+            sizes();
         }
+        info();
+    }
 
-        function updateAnnotation(node) {
-          svg.select(".annotation-tooltip-"+node.id)
-              .selectAll(".annotation-note-label")
-              .html(function() {
-            	  let alignment = node.x >= width/2  ? "Start" : "middle";
-                  return "</tspan><tspan class=\"tooltip-sent\" dy=\"0.8em\" text-anchor=\""+alignment+"\" fill=\""+node.colourIn+"\">Received: "
-                    +d3.format(",.3r")(node.sizeIn)+"</tspan>"
-                    +"<tspan class=\"tooltip-sent\" dx=\"0.8em\" fill=\""+node.colourOut+"\">Sent: "
-                    +d3.format(",.3r")(node.sizeOut);
-              });
+    // Path of a transaction: senders and receivers on the orbit are joined by a curve that dips towards the
+    // centre; flows to and from the centre bend to one side, so the two directions use different lanes.
+    function along(t, f) {
+        var g = state.geom, a = t.from, b = t.to, c1, c2;
+        if (a === b) {
+            var out = a.centre ? -Math.PI / 2 : a.angle, L = a.centre ? g.R * 0.45 : g.R * 0.35;
+            c1 = [a.x + L * Math.cos(out - 0.6), a.y + L * Math.sin(out - 0.6)];
+            c2 = [a.x + L * Math.cos(out + 0.6), a.y + L * Math.sin(out + 0.6)];
+        } else if (a.centre || b.centre) {
+            var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2, dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1;
+            var off = len * 0.18;
+            c1 = c2 = [mx - dy / len * off, my + dx / len * off];
+        } else {
+            var mx2 = (a.x + b.x) / 2 - g.cx, my2 = (a.y + b.y) / 2 - g.cy, l2 = Math.hypot(mx2, my2) || 1;
+            var depth = g.R * 0.35;
+            c1 = c2 = [g.cx + mx2 / l2 * depth, g.cy + my2 / l2 * depth];
         }
+        var u = 1 - f;
+        return [u * u * u * a.x + 3 * u * u * f * c1[0] + 3 * u * f * f * c2[0] + f * f * f * b.x,
+                u * u * u * a.y + 3 * u * u * f * c1[1] + 3 * u * f * f * c2[1] + f * f * f * b.y];
+    }
 
-        function updateSizeScale(size) {
-          _sizeScale.domain([0, Math.max(size, _sizeScale.domain()[1])]);
-          updatePlanetSizes();
-        }
+    function clock(time) {
+        document.getElementById("clock").textContent = time ? timeLabel(time) : "";
+    }
 
-        function updatePlanetSizes() {
-          planetsGroup.selectAll(".node-out").transition("resize").duration(500)
-            .attr("r", function(d){  return _sizeScale(d.sizeOut) + _sizeScale(d.sizeIn); });
-          
-          planetsGroup.selectAll(".node-in").transition("resize").duration(500)
-            .attr("r", function(d){  return _sizeScale(d.sizeIn); });
-          
-          planetsGroup.selectAll("title")
-            .text(function(d) { return d.id +"\n" + "Received: "+ d3.format(",.3s")(d.sizeIn) + "  Sent: "+ d3.format(",.3s")(d.sizeOut)})
+    function info() {
+        var it = omniscope.view.context().options.items || {}, box = document.getElementById("info"), p = state.play, m = state.model;
+        if (!p || !m) return;
+        if (p.done) clock(m.last);
+        if (!it.txLabels) { box.style.display = "none"; return; }
+        box.style.display = "block";
+        var t = p.done ? null : p.current;
+        if (!t) {
+            box.textContent = m.txs.length.toLocaleString() + (m.histogram ? " combined transactions" : " transactions") +
+                "\nTotal " + m.sizeName + ": " + fmt(d3.sum(m.txs, function(x) { return x.size; }));
+            return;
         }
+        box.textContent = (t.id !== null ? "Transaction " + t.id + "\n" : "") + (t.time ? timeLabel(t.time) + "\n" : "") +
+            t.source + " \u2192 " + t.target + "\n" + m.sizeName + ": " + fmt(t.size);
+    }
 
-        function translateAlong(path) {
-          var l = path.getTotalLength();
-          return function(d, i, a) {
-            return function(t) {
-              var p = path.getPointAtLength(t * l);
-              return "translate(" + p.x + "," + p.y + ")";
-            };
-          };
-        }
-    };
+    function select(d) {
+        var it = omniscope.view.context().options.items || {};
+        state.selected = d.id;
+        // Every transaction the node sent or received.
+        omniscope.view.context().viewSelection = { filter: { type: "OR", filters: [
+            { type: "FIELD_VALUE", inputField: it.source, operator: "=", value: valueOf(it.source, d.id) },
+            { type: "FIELD_VALUE", inputField: it.target, operator: "=", value: valueOf(it.target, d.id) } ] } };
+        omniscope.view.updated();
+        highlight();
+    }
+
+    // Node ids are kept as text; a numeric Sender or Receiver field is filtered with a number.
+    function valueOf(field, id) {
+        var n = +id;
+        return state.numericFields && state.numericFields[field] && id !== "" && isFinite(n) ? n : id;
+    }
+
+    function highlight() {
+        var sel = state.selected;
+        nodesGroup.selectAll("g.node")
+            .classed("selected", function(d) { return d.id === sel; })
+            .classed("faded", function(d) {
+                if (!sel || d.id === sel) return false;
+                var m = state.model;
+                return !m.txs.some(function(t) { return (t.source === sel && t.target === d.id) || (t.target === sel && t.source === d.id); });
+            });
+        labelsGroup.selectAll("g.label").classed("faded", function(d) {
+            return !!sel && d.id !== sel && nodesGroup.selectAll("g.node").filter(function(n) { return n.id === d.id; }).classed("faded");
+        });
+    }
 
 </script>
 

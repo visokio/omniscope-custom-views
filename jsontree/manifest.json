@@ -2,7 +2,11 @@
   "name": "JSON Tree",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["custom", "tree", "json"],
+  "tags": [
+    "custom",
+    "tree",
+    "json"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": false,
@@ -11,21 +15,50 @@
   "options": {
     "items": {
       "json": {
-        "displayName": "JSON Field",
-        "detail": "Field containing the JSON data",
+        "displayName": "JSON field",
+        "detail": "A text field whose values are JSON. Each record is one node of the tree",
         "type": "FIELD",
         "validFieldTypes": [
           "TEXT"
         ]
+      },
+      "label": {
+        "displayName": "Record label",
+        "detail": "Optional: a field that names each record's node, for example an ID. Clicking a record's node then selects the records with that label",
+        "type": "FIELD"
       }
     },
     "structure": {
       "toolbar": [
-        "json"
+        "json",
+        "label"
       ],
       "x": [],
       "y": []
-    }
+    },
+    "optionGroups": [
+      {
+        "displayName": "Data",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "json",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "label",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {},

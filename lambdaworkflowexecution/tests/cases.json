@@ -1,0 +1,905 @@
+[
+ {
+  "name": "showcase",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Export summary",
+    "paramNames": "Region, Minimum sales"
+   }
+  },
+  "width": 420,
+  "height": 190,
+  "wait": 800,
+  "showcase": true,
+  "showcaseHeight": 190,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Minimum sales",
+     "type": "NUMBER",
+     "value": 100
+    },
+    {
+     "name": "Report title",
+     "type": "TEXT",
+     "value": "Orders"
+    }
+   ]
+  },
+  "caption": "Live: change the values and press Execute. Each press would run in a new copy of the project; here the Workflow REST API is simulated.",
+  "expect": {
+   "selector": ".param",
+   "min": 2,
+   "max": 2
+  },
+  "actions": [
+   {
+    "eval": "(function () { document.getElementById('param-Region').value = 'South'; document.getElementById('param-Minimum_sales').value = '250'; return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/lambdaexecute",
+     "body": {
+      "blocks": [
+       "Export summary"
+      ],
+      "deleteExecutionOnFinish": false,
+      "params": {
+       "updates": [
+        {
+         "name": "Region",
+         "value": "South"
+        },
+        {
+         "name": "Minimum sales",
+         "value": 250
+        }
+       ]
+      }
+     },
+     "count": 1
+    }
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "expectRequest": {
+     "method": "GET",
+     "url": "Orders%20demo.iox/w/job/JOB_1/state"
+    }
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished at') === 0 && document.querySelector('#status a').textContent === 'Open the copy of the project'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.querySelector('#status a').href.indexOf('https://omniscope.example.com/Demos/') === 0",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 0
+    }
+   },
+   {
+    "eval": "window.parent.__omniEvents.every(function (e) { return e.type !== 'whitespaceClick'; })",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "finished"
+   }
+  ]
+ },
+ {
+  "name": "variables",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Export summary",
+    "setParametersUsingVariables": true
+   }
+  },
+  "width": 420,
+  "height": 220,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Minimum sales",
+     "type": "NUMBER",
+     "value": 100
+    },
+    {
+     "name": "Report title",
+     "type": "TEXT",
+     "value": "Orders"
+    }
+   ]
+  },
+  "variables": {
+   "Region": "East",
+   "Report title": "East orders"
+  },
+  "actions": [
+   {
+    "eval": "document.getElementById('param-Region').readOnly && document.getElementById('param-Region').value === 'East'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "/No report variable/.test(document.querySelector('.note').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/lambdaexecute",
+     "body": {
+      "params": {
+       "updates": [
+        {
+         "name": "Region",
+         "value": "East"
+        },
+        {
+         "name": "Report title",
+         "value": "East orders"
+        }
+       ]
+      }
+     },
+     "count": 1
+    }
+   }
+  ]
+ },
+ {
+  "name": "refresh-report",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Export summary",
+    "paramNames": "Region",
+    "deleteExecutionOnFinish": true,
+    "refreshThisReportOnFinish": true
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Minimum sales",
+     "type": "NUMBER",
+     "value": 100
+    },
+    {
+     "name": "Report title",
+     "type": "TEXT",
+     "value": "Orders"
+    }
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/lambdaexecute",
+     "body": {
+      "deleteExecutionOnFinish": true
+     },
+     "count": 1
+    }
+   },
+   {
+    "wait": 3400
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Report"
+      ],
+      "refreshFromSource": true,
+      "cancelExisting": false
+     },
+     "count": 1
+    }
+   },
+   {
+    "eval": "/copy of the project was deleted/.test(document.getElementById('status').textContent) && !document.querySelector('#status a')",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     400,
+     160
+    ]
+   },
+   {
+    "expectSelection": false
+   }
+  ]
+ },
+ {
+  "name": "reload-mid-job",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Export summary",
+    "paramNames": "Region",
+    "deleteExecutionOnFinish": true,
+    "refreshThisReportOnFinish": true
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Minimum sales",
+     "type": "NUMBER",
+     "value": 100
+    },
+    {
+     "name": "Report title",
+     "type": "TEXT",
+     "value": "Orders"
+    }
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run",
+    "waitAfter": 200
+   },
+   {
+    "reload": true
+   },
+   {
+    "wait": 3400
+   },
+   {
+    "eval": "/^Finished at .*copy of the project was deleted/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/lambdaexecute",
+     "count": 1
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Report"
+      ]
+     },
+     "count": 1
+    }
+   },
+   {
+    "reload": true
+   },
+   {
+    "eval": "/^Finished at/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 1
+    }
+   }
+  ]
+ },
+ {
+  "name": "failed-job",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Export summary",
+    "paramNames": "Region",
+    "refreshThisReportOnFinish": true
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Minimum sales",
+     "type": "NUMBER",
+     "value": 100
+    },
+    {
+     "name": "Report title",
+     "type": "TEXT",
+     "value": "Orders"
+    }
+   ],
+   "failBlocks": [
+    "Export summary"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 3400
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Failed at') === 0",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 0
+    }
+   }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Export summary",
+    "paramNames": "Region"
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Minimum sales",
+     "type": "NUMBER",
+     "value": 100
+    },
+    {
+     "name": "Report title",
+     "type": "TEXT",
+     "value": "Orders"
+    }
+   ]
+  },
+  "actions": [
+   {
+    "eval": "(function () { document.getElementById('param-Region').value = 'East'; return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "West"
+    }
+   },
+   {
+    "eval": "document.getElementById('param-Region').value === 'East'",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/lambdaexecute",
+     "count": 0
+    }
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Export summary"
+   }
+  },
+  "width": 150,
+  "height": 120,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Minimum sales",
+     "type": "NUMBER",
+     "value": 100
+    },
+    {
+     "name": "Report title",
+     "type": "TEXT",
+     "value": "Orders"
+    }
+   ]
+  },
+  "actions": [
+   {
+    "eval": "document.getElementById('run').getBoundingClientRect().right <= window.innerWidth + 1",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "150x120"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Region",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "block": "Export summary"
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": []
+  },
+  "expect": {
+   "selector": "#run",
+   "min": 1
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 420,
+  "height": 220,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Minimum sales",
+     "type": "NUMBER",
+     "value": 100
+    },
+    {
+     "name": "Report title",
+     "type": "TEXT",
+     "value": "Orders"
+    }
+   ]
+  },
+  "expect": {
+   "selector": ".param",
+   "min": 3,
+   "max": 3
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/lambdaexecute",
+     "body": {
+      "blocks": [],
+      "deleteExecutionOnFinish": false
+     },
+     "count": 1
+    }
+   }
+  ]
+ },
+ {
+  "name": "large",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Export summary"
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Lambda+Workflow+Execution/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Parameter 1",
+     "type": "TEXT",
+     "value": "v1"
+    },
+    {
+     "name": "Parameter 2",
+     "type": "TEXT",
+     "value": "v2"
+    },
+    {
+     "name": "Parameter 3",
+     "type": "TEXT",
+     "value": "v3"
+    },
+    {
+     "name": "Parameter 4",
+     "type": "TEXT",
+     "value": "v4"
+    },
+    {
+     "name": "Parameter 5",
+     "type": "TEXT",
+     "value": "v5"
+    },
+    {
+     "name": "Parameter 6",
+     "type": "TEXT",
+     "value": "v6"
+    },
+    {
+     "name": "Parameter 7",
+     "type": "TEXT",
+     "value": "v7"
+    },
+    {
+     "name": "Parameter 8",
+     "type": "TEXT",
+     "value": "v8"
+    },
+    {
+     "name": "Parameter 9",
+     "type": "TEXT",
+     "value": "v9"
+    },
+    {
+     "name": "Parameter 10",
+     "type": "TEXT",
+     "value": "v10"
+    },
+    {
+     "name": "Parameter 11",
+     "type": "TEXT",
+     "value": "v11"
+    },
+    {
+     "name": "Parameter 12",
+     "type": "TEXT",
+     "value": "v12"
+    },
+    {
+     "name": "Parameter 13",
+     "type": "TEXT",
+     "value": "v13"
+    },
+    {
+     "name": "Parameter 14",
+     "type": "TEXT",
+     "value": "v14"
+    },
+    {
+     "name": "Parameter 15",
+     "type": "TEXT",
+     "value": "v15"
+    },
+    {
+     "name": "Parameter 16",
+     "type": "TEXT",
+     "value": "v16"
+    },
+    {
+     "name": "Parameter 17",
+     "type": "TEXT",
+     "value": "v17"
+    },
+    {
+     "name": "Parameter 18",
+     "type": "TEXT",
+     "value": "v18"
+    },
+    {
+     "name": "Parameter 19",
+     "type": "TEXT",
+     "value": "v19"
+    },
+    {
+     "name": "Parameter 20",
+     "type": "TEXT",
+     "value": "v20"
+    },
+    {
+     "name": "Parameter 21",
+     "type": "TEXT",
+     "value": "v21"
+    },
+    {
+     "name": "Parameter 22",
+     "type": "TEXT",
+     "value": "v22"
+    },
+    {
+     "name": "Parameter 23",
+     "type": "TEXT",
+     "value": "v23"
+    },
+    {
+     "name": "Parameter 24",
+     "type": "TEXT",
+     "value": "v24"
+    },
+    {
+     "name": "Parameter 25",
+     "type": "TEXT",
+     "value": "v25"
+    },
+    {
+     "name": "Parameter 26",
+     "type": "TEXT",
+     "value": "v26"
+    },
+    {
+     "name": "Parameter 27",
+     "type": "TEXT",
+     "value": "v27"
+    },
+    {
+     "name": "Parameter 28",
+     "type": "TEXT",
+     "value": "v28"
+    },
+    {
+     "name": "Parameter 29",
+     "type": "TEXT",
+     "value": "v29"
+    },
+    {
+     "name": "Parameter 30",
+     "type": "TEXT",
+     "value": "v30"
+    },
+    {
+     "name": "Parameter 31",
+     "type": "TEXT",
+     "value": "v31"
+    },
+    {
+     "name": "Parameter 32",
+     "type": "TEXT",
+     "value": "v32"
+    },
+    {
+     "name": "Parameter 33",
+     "type": "TEXT",
+     "value": "v33"
+    },
+    {
+     "name": "Parameter 34",
+     "type": "TEXT",
+     "value": "v34"
+    },
+    {
+     "name": "Parameter 35",
+     "type": "TEXT",
+     "value": "v35"
+    },
+    {
+     "name": "Parameter 36",
+     "type": "TEXT",
+     "value": "v36"
+    },
+    {
+     "name": "Parameter 37",
+     "type": "TEXT",
+     "value": "v37"
+    },
+    {
+     "name": "Parameter 38",
+     "type": "TEXT",
+     "value": "v38"
+    },
+    {
+     "name": "Parameter 39",
+     "type": "TEXT",
+     "value": "v39"
+    },
+    {
+     "name": "Parameter 40",
+     "type": "TEXT",
+     "value": "v40"
+    },
+    {
+     "name": "Parameter 41",
+     "type": "TEXT",
+     "value": "v41"
+    },
+    {
+     "name": "Parameter 42",
+     "type": "TEXT",
+     "value": "v42"
+    },
+    {
+     "name": "Parameter 43",
+     "type": "TEXT",
+     "value": "v43"
+    },
+    {
+     "name": "Parameter 44",
+     "type": "TEXT",
+     "value": "v44"
+    },
+    {
+     "name": "Parameter 45",
+     "type": "TEXT",
+     "value": "v45"
+    },
+    {
+     "name": "Parameter 46",
+     "type": "TEXT",
+     "value": "v46"
+    },
+    {
+     "name": "Parameter 47",
+     "type": "TEXT",
+     "value": "v47"
+    },
+    {
+     "name": "Parameter 48",
+     "type": "TEXT",
+     "value": "v48"
+    },
+    {
+     "name": "Parameter 49",
+     "type": "TEXT",
+     "value": "v49"
+    },
+    {
+     "name": "Parameter 50",
+     "type": "TEXT",
+     "value": "v50"
+    },
+    {
+     "name": "Parameter 51",
+     "type": "TEXT",
+     "value": "v51"
+    },
+    {
+     "name": "Parameter 52",
+     "type": "TEXT",
+     "value": "v52"
+    },
+    {
+     "name": "Parameter 53",
+     "type": "TEXT",
+     "value": "v53"
+    },
+    {
+     "name": "Parameter 54",
+     "type": "TEXT",
+     "value": "v54"
+    },
+    {
+     "name": "Parameter 55",
+     "type": "TEXT",
+     "value": "v55"
+    },
+    {
+     "name": "Parameter 56",
+     "type": "TEXT",
+     "value": "v56"
+    },
+    {
+     "name": "Parameter 57",
+     "type": "TEXT",
+     "value": "v57"
+    },
+    {
+     "name": "Parameter 58",
+     "type": "TEXT",
+     "value": "v58"
+    },
+    {
+     "name": "Parameter 59",
+     "type": "TEXT",
+     "value": "v59"
+    },
+    {
+     "name": "Parameter 60",
+     "type": "TEXT",
+     "value": "v60"
+    }
+   ]
+  },
+  "expect": {
+   "selector": ".param",
+   "min": 60,
+   "max": 60
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "eval": "window.__omniMock.workflow.requests[1].body.params.updates.length === 60",
+    "expectTruthy": true
+   }
+  ]
+ }
+]

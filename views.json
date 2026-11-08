@@ -24,7 +24,7 @@
 				"content"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "tradingview",
@@ -70,7 +70,7 @@
 				"bubble"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "francechoropleth",
@@ -81,10 +81,9 @@
 				"france"
 			],
 			"files": [
-				"regions_fr.json",
-				"d3.v4.min.js"
+				"regions_fr.json"
 			],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "venndiagram",
@@ -108,7 +107,7 @@
 				"jitter"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "spainforcedotdensitymap",
@@ -144,12 +143,8 @@
 				"network",
 				"structure"
 			],
-			"files": [
-				"d3-ForceEdgeBundling.js",
-				"bundler.js",
-				"forcesimulation.js"
-			],
-			"version": 0
+			"files": [],
+			"version": 1
 		},
 		{
 			"name": "orbitaltransactionflow",
@@ -163,7 +158,7 @@
 				"orbit"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "switchparam",
@@ -258,7 +253,7 @@
 				"api"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "uploadandexecute",
@@ -285,7 +280,7 @@
 				"key"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "customviewdemo",
@@ -296,7 +291,7 @@
 				"highcharts"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "threeforcegraph",
@@ -320,7 +315,7 @@
 				"json"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "mixpanel",
@@ -330,7 +325,7 @@
 				"tracker"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "strata",
@@ -361,7 +356,7 @@
 				"time"
 			],
 			"files": [],
-			"version": 0
+			"version": 1
 		},
 		{
 			"name": "abcxyz",

@@ -1,5 +1,5 @@
 {
-  "name": "KPI",
+  "name": "KPI (custom view demo)",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "tags": ["custom", "key"],
@@ -15,12 +15,12 @@
         "displayName": "Measure",
         "type": "MEASURE",
         "mandatory": true,
-        "detail": "Measure value to show under the text"
+        "detail": "The value to show, worked out over all the records in the view, for example the sum of Sales"
       },
       "text": {
-        "displayName": "Text",
+        "displayName": "Title text",
         "type": "TEXT",
-        "detail": "Static text to show as title"
+        "detail": "Title shown above the value. If empty, the measure's name is shown"
       }
     },
     "structure": {
@@ -56,7 +56,8 @@
       "tileHeaderAlignment": "CENTER",
       "xHeaderPlacement": "TOP",
       "yHeaderPlacement": "LEFT",
-      "showColourKeyInEveryPane": false
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
     }
   },
   "pane": {

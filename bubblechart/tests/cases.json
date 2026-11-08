@@ -1,0 +1,381 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/sales.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 900,
+  "height": 520,
+  "showcaseHeight": 520,
+  "wait": 1800,
+  "caption": "Live: revenue by product for an invented outdoor equipment shop, one bubble per product with its area in proportion to revenue. Hover a bubble for its figures; click it to select the product.",
+  "expect": {
+   "selector": ".bubble circle",
+   "min": 28,
+   "max": 28
+  },
+  "actions": [
+   {
+    "eval": "(function(){var b=(function(){var t=null;document.querySelectorAll('.bubble').forEach(function(b){if(b.__data__.data.name==='Tunnel 6 tent')t=b});return t})();return b.querySelector('title').textContent.indexOf('Revenue (sum): 21,086')>0 && b.__data__.r===Math.max.apply(null,[].map.call(document.querySelectorAll('.bubble'),function(x){return x.__data__.r}))})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.querySelectorAll('.bubble text.value').length>=10 && document.getElementById('note').textContent===''",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "grouped",
+  "showcase": true,
+  "data": "sample-data/sales.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "showcaseHeight": 560,
+  "wait": 1800,
+  "caption": "Live: the same products packed by category with Group and colour by. Tents bring in the most revenue from the fewest products.",
+  "expect": {
+   "selector": ".bubble circle",
+   "min": 28,
+   "max": 28
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.group').length===6 && [].some.call(document.querySelectorAll('.group-labels text'),function(t){return t.textContent==='Tents'})",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var g=null;document.querySelectorAll('.group').forEach(function(x){if(x.__data__.data.group==='Tents')g=x});return g.querySelector('title').textContent.indexOf('40,026')>0})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var f={};document.querySelectorAll('.bubble').forEach(function(b){var d=b.__data__.data;(f[d.group]=f[d.group]||{})[b.querySelector('circle').getAttribute('fill')]=1});return Object.keys(f).every(function(k){return Object.keys(f[k]).length===1})})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/sales.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 900,
+  "height": 520,
+  "wait": 1800,
+  "actions": [
+   {
+    "eval": "(function(){window.__fill=(function(){var t=null;document.querySelectorAll('.bubble').forEach(function(b){if(b.__data__.data.name==='Tunnel 6 tent')t=b});return t})().querySelector('circle').getAttribute('fill');return !!window.__fill})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": ".bubble",
+    "nth": 0
+   },
+   {
+    "click": ".bubble",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.type==='AND'&&f.filters[0].inputField==='Product'&&f.filters[1].inputField==='Category'&&document.querySelectorAll('.bubble.selected').length===1})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "click": ".bubble.selected"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "eval": "(function(){var g=d3.select('.group');g.dispatch('click');return document.querySelectorAll('.group.selected').length===1})()",
+    "expectTruthy": true
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.inputField==='Category'",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     4,
+     4
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Category",
+     "operator": "=",
+     "value": "Tents"
+    }
+   },
+   {
+    "eval": "document.querySelectorAll('.bubble').length===4 && (function(){var t=null;document.querySelectorAll('.bubble').forEach(function(b){if(b.__data__.data.name==='Tunnel 6 tent')t=b});return t})().querySelector('circle').getAttribute('fill')===window.__fill",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "filtered"
+   },
+   {
+    "update": {
+     "split": {
+      "inputField": "Product",
+      "type": "UNIQUE_VALUES"
+     },
+     "measures": {
+      "inputField": "Units",
+      "function": "SUM"
+     },
+     "colour": null,
+     "labels": "NAME"
+    }
+   },
+   {
+    "eval": "document.querySelectorAll('.group').length===0 && document.querySelectorAll('.bubble text.value').length===0 && document.querySelectorAll('.bubble text.name').length>0 && document.querySelector('.bubble title').textContent.indexOf('Units (sum): ')>0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "no-labels",
+  "data": "sample-data/sales.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "function": "RECORD_COUNT"
+    },
+    "labels": "NONE"
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 1500,
+  "expect": {
+   "selector": ".bubble circle",
+   "min": 28,
+   "max": 28
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.bubble text').length===0 && document.querySelector('.bubble title').textContent.indexOf('Record count: ')>0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/sales.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 200,
+  "height": 140,
+  "wait": 1500,
+  "expect": {
+   "selector": ".bubble circle",
+   "min": 28,
+   "max": 28
+  },
+  "actions": [
+   {
+    "eval": "[].every.call(document.querySelectorAll('.bubble circle, .group circle'),function(c){var r=c.getBoundingClientRect();return r.left>=-0.5&&r.top>=-0.5&&r.right<=window.innerWidth+0.5&&r.bottom<=window.innerHeight+0.5})",
+    "expectTruthy": true
+   },
+   {
+    "eval": "[].every.call(document.querySelectorAll('.bubble text'),function(t){var r=t.getBoundingClientRect(),c=t.parentNode.querySelector('circle').getBoundingClientRect();return r.width<=c.width+1})",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Product",
+    "type": "TEXT"
+   },
+   {
+    "name": "Revenue",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 1000,
+  "expect": {
+   "text": "No data to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/sales.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 1000,
+  "expect": {
+   "text": "Choose a field for One bubble per"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 900,
+  "height": 700,
+  "wait": 3000,
+  "expect": {
+   "selector": ".bubble circle",
+   "min": 1485,
+   "max": 1485,
+   "text": "15 values with no size, zero or below not shown"
+  }
+ },
+ {
+  "name": "too-many",
+  "generate": "tests/large.js",
+  "generateArgs": {
+   "n": 2500
+  },
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 2000,
+  "expect": {
+   "text": "Too many bubbles (2,475)"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/sales.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "measures": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    }
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1800
+ }
+]

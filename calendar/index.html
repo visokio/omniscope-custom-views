@@ -2,179 +2,302 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <style>
-        #main {
-            margin: 0;
-            height: 100%;
+        html, body {
             width: 100%;
-            left: 0;
-            top: 0;
-            position: absolute;
-            overflow-x: auto;
-            overflow-y: auto;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
-        svg {
-            width: 920px;
+        body {
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 11px;
+            color: #333;
         }
+        #main { position: absolute; inset: 0; overflow-x: hidden; overflow-y: auto; }
+        #legend { display: flex; align-items: center; gap: 6px; padding: 6px 8px 0; color: #444; white-space: nowrap; }
+        #legend .bar { width: 110px; height: 9px; border-radius: 2px; }
+        #legend .sw { display: inline-block; width: 9px; height: 9px; border-radius: 2px; background: #eceae6; margin-left: 8px; }
+        svg { display: block; }
+        .day { stroke: #fff; stroke-width: 1; cursor: pointer; }
+        .day.nodata { cursor: default; }
+        .day:hover { stroke: #1b1b1b; }
+        .day.faded { opacity: 0.35; }
+        .day.selected { stroke: #1b1b1b; stroke-width: 2; }
+        .year { font-size: 13px; font-weight: bold; fill: #444; }
+        .lbl { fill: #777; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+                   text-align: center; padding: 12px; color: #666; font-size: 13px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(255,255,255,.97);
+                   border: 1px solid rgba(0,0,0,.12); box-shadow: 0 3px 10px rgba(0,0,0,.15); border-radius: 5px;
+                   padding: 5px 8px; line-height: 1.45; white-space: nowrap; z-index: 5; font-size: 12px; }
+        #tooltip .k { color: #666; }
     </style>
 </head>
 
 <body>
+<div id="main"><div id="legend"></div><svg id="cal"></svg></div>
+<div id="message"></div>
+<div id="tooltip"></div>
+
 <script src="/_global_/customview/v1/omniscope.js"></script>
 
-<div id="main"></div>
-
 <script>
-
-    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
-
-    google.load("visualization", "1.1", {packages:["calendar"]});
+    // Yearly calendars, one row of weeks (Monday to Sunday) per year, each day coloured by the Colour measure over
+    // that day's records. Every year from the first to the last date is shown, including years without data.
+    var SVG_NS = "http://www.w3.org/2000/svg";
+    var RAMP = ["#e3eef9", "#a9cbea", "#5d9bd5", "#2a6db3", "#123f75"];
+    var NO_DATA = "#eceae6";
+    var MAX_YEARS = 20;
+    var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    var state = { days: null, selected: null, cell: 0 };
+    window.__calendar = state;
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
         window.onerror = function(msg) {
             omniscope.view.error(msg);
-        }
+        };
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    // A click on empty space clears the selection in Omniscope and closes menus
     document.body.addEventListener("click", function() {
+        state.selected = null;
+        paintSelection();
         omniscope.view.whitespaceClick();
     });
 
-    var update = function () {
-        omniscope.view.busy(true);
+    // The view queries its own data (autoQuery is off), so it applies the report's filter itself. A resize redraws
+    // the last result without a new query.
+    omniscope.view.on(["load", "update"], query);
+    omniscope.view.on("resize", function() { if (state.days) draw(); });
 
-        var options = omniscope.view.context().options;
-
-        var query_ = {
-            "@visokiotype": "QueryApi.AggregateOperation",
-            "groupings": [
-                {
-                    "inputField": options.items.date,
-                    "type": "HISTOGRAM",
-                    "dateUnit": "DAY",
-                    "histogramInterval": 1,
-                    "fitToScreen": true,
-                    "name": "date"
-                }
-            ],
-            "measures": [
-                {
-                    "name": "value",
-                    "inputField": options.items.value.inputField,
-                    "function": options.items.value.function,
-                }
-            ],
-            "input": {
-                "@visokiotype": "QueryApi.RecordFilterOperation",
-                "filter": omniscope.view.context().dataConfig.filter,
-                "input": {
-                    "@visokiotype": "QueryApi.DefaultSource"
-                }
-            }
-        };
-
-        omniscope.view.queryBuilder()
-            .table(query_)
-            .on("load", function(event) {
-                // On success, pass the TableQueryOutput object to render():
-
-                renderView(event.data);
-            }).on("error", function(err) {
-            // On error, report to the enclosing application:
-            omniscope.view.error(err.error);
-        }).execute(); // Submit the query for execution
-        omniscope.view.busy(false);
-    };
-
-    // Naively redraw on any of these events
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], update);
-
-    var renderView = function (result) {
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        var records = result.records;
-
-        // Map records to field options
-        var data = [];
-        records.forEach(function(record) {
-            data.push({
-                date: new Date(record[0].lower),
-                value: record[1]
-            });
-        });
-
-
-        var totalYears = [];
-
-        var dataTable = new google.visualization.DataTable();
-        dataTable.addColumn({ type: 'date', id: 'Date' });
-        dataTable.addColumn({ type: 'number', id: 'DataItem'});
-
-        for (var i=0; i < data.length; i++) {
-            var row = data[i];
-            var date = new Date(row.date);
-            var year = date.getYear();
-
-            if (totalYears.indexOf(year)<0) {
-                totalYears.push(year);
-            }
-            dataTable.addRows([
-                [ date, row.value ]
-            ]);
-        }
-        totalYears = addMissingNumbers(totalYears);
-
-        var chart = new google.visualization.Calendar(document.getElementById('main'));
-
-        var options = {
-            height:  1+ totalYears.length * 170
-        };
-
-        chart.draw(dataTable, options);
-
-        google.visualization.events.addListener(chart, 'select', function() {
-            var selectionArr = chart.getSelection();
-            if (!selectionArr) return;
-
-            var filter = {};
-            filter.type = "AND";
-            filter.filters = [];
-
-            if (selectionArr[0]) {
-                var options = omniscope.view.context().options;
-
-                var cellDate = new Date(selectionArr[0].date);
-                var date = new Date(cellDate.getYear(), cellDate.getMonth(), cellDate.getDate());
-                var nextDate = new Date(date.getTime());
-                nextDate.setDate(nextDate.getDate() + 1);
-                var dateField = options.items.date;
-                filter.filters = [
-                    {"type": "FIELD_VALUE", "inputField": dateField, "value": date.toISOString(), "operator": ">="},
-                    {"type": "FIELD_VALUE", "inputField": dateField, "value": nextDate.toISOString(), "operator": "<"}
-                ];
-            }
-
-            omniscope.view.context().viewSelection = filter;
-            omniscope.view.updated();
-        });
-
-    };
-
-    var addMissingNumbers = function(nums) {
-        var filledArray = [];
-        var sortedNums = nums.sort();
-        for (var i = 1; i < sortedNums.length; i++) {
-            for (var num = sortedNums[i-1]; num < sortedNums[i]; num++) {
-                filledArray.push(num);
-            }
-        }
-        if (sortedNums.length > 0) filledArray.push(sortedNums[sortedNums.length-1]);
-        return filledArray;
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+        document.getElementById("main").style.display = text ? "none" : "block";
+        if (text) state.days = null;
     }
 
+    function measureName(m) {
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField + " (" + m.function.toLowerCase().replace(/_/g, " ") + ")";
+    }
+
+    function query() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.date) { message("Choose a Date field."); return; }
+        if (!it.value) { message("Choose a Colour measure, for example Record count or the sum of Sales."); return; }
+        if (!ctx.viewSelection) state.selected = null;
+        omniscope.view.busy(true);
+        omniscope.query.builder(omniscope.view.endpoint()).table({
+            groupings: [{ inputField: it.date, type: "HISTOGRAM", dateUnit: "DAY", histogramInterval: 1 }],
+            measures: [it.value],
+            filter: ctx.dataConfig.filter,
+            range: { start: 0, length: MAX_YEARS * 366 + 1 }
+        }).on("load", function(event) {
+            omniscope.view.busy(false);
+            prepare(event.data.records || [], it);
+        }).on("error", function(event) {
+            omniscope.view.busy(false);
+            message("Query failed: " + (event.data && event.data.message ? event.data.message : "unknown error"));
+        }).execute();
+    }
+
+    // Day keys are "yyyy-MM-dd" strings, worked out in UTC so the viewer's time zone cannot shift a day
+    function dayKey(v) {
+        var s = v && typeof v === "object" ? v.lower : v;
+        var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(s));
+        return m ? m[0] : null;
+    }
+
+    function prepare(records, it) {
+        if (!records.length) { message("No data to show. Check the report's filters."); return; }
+        var days = {}, lo = Infinity, hi = -Infinity, y0 = Infinity, y1 = -Infinity;
+        records.forEach(function(r) {
+            var k = dayKey(r[0]);
+            if (!k) return;
+            var v = typeof r[1] === "number" && isFinite(r[1]) ? r[1] : null;
+            days[k] = { value: v, range: r[0] };
+            var y = +k.slice(0, 4);
+            y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+            if (v !== null) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+        });
+        if (y0 === Infinity) { message("No dates to show: the Date field is empty for these records."); return; }
+        if (y1 - y0 + 1 > MAX_YEARS) {
+            message("The dates span " + (y1 - y0 + 1) + " years, more than the " + MAX_YEARS + " this view shows. Filter the report to fewer years.");
+            return;
+        }
+        message(null);
+        state.days = days;
+        state.lo = lo === Infinity ? 0 : lo;
+        state.hi = hi === -Infinity ? 0 : hi;
+        state.years = [y0, y1];
+        state.field = it.date;
+        state.measure = measureName(it.value);
+        draw();
+    }
+
+    function hexToRgb(h) { return [1, 3, 5].map(function(i) { return parseInt(h.substr(i, 2), 16); }); }
+    function colour(t) {
+        t = Math.max(0, Math.min(1, t)) * (RAMP.length - 1);
+        var i = Math.min(RAMP.length - 2, Math.floor(t)), f = t - i;
+        var a = hexToRgb(RAMP[i]), b = hexToRgb(RAMP[i + 1]);
+        return "rgb(" + a.map(function(x, k) { return Math.round(x + (b[k] - x) * f); }).join(",") + ")";
+    }
+    function fill(v) {
+        if (v === null || v === undefined) return NO_DATA;
+        return colour(state.hi > state.lo ? (v - state.lo) / (state.hi - state.lo) : 0.5);
+    }
+    function format(v) {
+        if (typeof v !== "number" || !isFinite(v)) return "No data";
+        var a = Math.abs(v);
+        if (a >= 100) return Math.round(v).toLocaleString();
+        if (a >= 1 || a === 0) return (+v.toFixed(2)).toLocaleString();
+        return String(+v.toPrecision(3));
+    }
+
+    function draw() {
+        var t0 = performance.now();
+        var W = window.innerWidth, H = window.innerHeight;
+        var nYears = state.years[1] - state.years[0] + 1;
+        var legend = document.getElementById("legend");
+        legend.innerHTML = "";
+        var legendH = 0;
+        if (W >= 260 && H >= 120) {
+            var t = document.createElement("span");
+            t.textContent = state.measure;
+            var l = document.createElement("span"), bar = document.createElement("span"), h = document.createElement("span");
+            l.textContent = format(state.lo);
+            bar.className = "bar";
+            bar.style.background = "linear-gradient(to right," + [0, 0.25, 0.5, 0.75, 1].map(colour).join(",") + ")";
+            h.textContent = format(state.hi);
+            var nd = document.createElement("span");
+            nd.innerHTML = "<span class='sw'></span> No data";
+            [t, l, bar, h, nd].forEach(function(el) { legend.appendChild(el); });
+            legendH = 22;
+        }
+
+        // Cell size: fit 53 weeks across; also fit all years down when there is room, else scroll
+        var labelW = W >= 300 ? 34 : 4;
+        var cell = Math.floor(Math.min(18, (W - labelW - 8) / 53));
+        var fitDown = Math.floor((H - legendH - 4) / (nYears * 9.2));
+        if (fitDown >= 7) cell = Math.min(cell, fitDown);
+        cell = Math.max(3, cell);
+        state.cell = cell;
+        var showText = cell >= 9;
+        var monthH = showText ? 14 : 2, yearGap = Math.round(cell * 1.2) + 4;
+        var yearH = monthH + 7 * cell + yearGap;
+
+        var svg = document.getElementById("cal");
+        svg.innerHTML = "";
+        svg.setAttribute("width", W);
+        svg.setAttribute("height", nYears * yearH + 4);
+        var tip = document.getElementById("tooltip");
+
+        for (var year = state.years[0]; year <= state.years[1]; year++) {
+            var g = document.createElementNS(SVG_NS, "g");
+            var top = (year - state.years[0]) * yearH + monthH + 2;
+            g.setAttribute("transform", "translate(" + labelW + "," + top + ")");
+            svg.appendChild(g);
+            if (showText && labelW > 10) {
+                text(g, -labelW + 2, -4, String(year), "year");
+                [0, 2, 4].forEach(function(d) { text(g, -labelW + 2, d * cell + cell * 0.8, WEEKDAYS[d], "lbl"); });
+            }
+            var jan1 = Date.UTC(year, 0, 1), offset = (new Date(jan1).getUTCDay() + 6) % 7;  // Monday = 0
+            var nDays = (Date.UTC(year + 1, 0, 1) - jan1) / 86400000;
+            for (var i = 0; i < nDays; i++) {
+                var date = new Date(jan1 + i * 86400000), key = date.toISOString().slice(0, 10);
+                var week = Math.floor((i + offset) / 7), dow = (i + offset) % 7;
+                if (showText && date.getUTCDate() === 1) text(g, week * cell, -4, MONTHS[date.getUTCMonth()], "lbl");
+                var d = state.days[key];
+                var r = document.createElementNS(SVG_NS, "rect");
+                r.setAttribute("x", week * cell);
+                r.setAttribute("y", dow * cell);
+                r.setAttribute("width", cell);
+                r.setAttribute("height", cell);
+                r.setAttribute("rx", cell >= 8 ? 2 : 0);
+                r.setAttribute("fill", fill(d ? d.value : null));
+                r.setAttribute("class", "day" + (d ? "" : " nodata"));
+                r.setAttribute("data-day", key);
+                if (cell < 6) r.style.strokeWidth = "0.5";
+                g.appendChild(r);
+                hook(r, key, tip, W, H);
+            }
+        }
+        paintSelection();
+        state.drawMs = Math.round(performance.now() - t0);
+    }
+
+    function text(parent, x, y, s, cls) {
+        var t = document.createElementNS(SVG_NS, "text");
+        t.setAttribute("x", x);
+        t.setAttribute("y", y);
+        t.setAttribute("class", cls);
+        t.textContent = s;
+        parent.appendChild(t);
+        return t;
+    }
+
+    function hook(r, key, tip, W, H) {
+        r.addEventListener("mousemove", function(e) {
+            var d = state.days[key], date = new Date(key + "T00:00:00Z");
+            tip.innerHTML = "";
+            var head = document.createElement("div");
+            head.style.fontWeight = "bold";
+            head.textContent = WEEKDAYS[(date.getUTCDay() + 6) % 7] + " " + date.getUTCDate() + " " + MONTHS[date.getUTCMonth()] + " " + date.getUTCFullYear();
+            var line = document.createElement("div"), k = document.createElement("span");
+            k.className = "k";
+            k.textContent = state.measure + ": ";
+            line.appendChild(k);
+            line.appendChild(document.createTextNode(d ? format(d.value) : "no records"));
+            tip.appendChild(head);
+            tip.appendChild(line);
+            tip.style.display = "block";
+            var x = e.clientX + 12, y = e.clientY + 12;
+            if (x + tip.offsetWidth > W) x = Math.max(0, e.clientX - tip.offsetWidth - 8);
+            if (y + tip.offsetHeight > H) y = Math.max(0, e.clientY - tip.offsetHeight - 8);
+            tip.style.left = x + "px";
+            tip.style.top = y + "px";
+        });
+        r.addEventListener("mouseleave", function() { tip.style.display = "none"; });
+        r.addEventListener("click", function(e) {
+            e.stopPropagation();
+            if (!state.days[key]) { document.body.click(); return; }
+            select(state.selected === key ? null : key);
+        });
+    }
+
+    // Selecting a day selects its records: the Date field from the start of the day to the start of the next
+    function select(key) {
+        state.selected = key;
+        var ctx = omniscope.view.context();
+        if (key === null) {
+            ctx.viewSelection = null;
+        } else {
+            var range = state.days[key].range, lower = range && typeof range === "object" ? range.lower : key;
+            var upper = range && typeof range === "object" ? range.upper
+                : new Date(Date.parse(key + "T00:00:00Z") + 86400000).toISOString().slice(0, 10);
+            ctx.viewSelection = { filter: { type: "AND", filters: [
+                { type: "FIELD_VALUE", inputField: state.field, operator: ">=", value: lower },
+                { type: "FIELD_VALUE", inputField: state.field, operator: "<", value: upper } ] } };
+        }
+        omniscope.view.updated();
+        paintSelection();
+    }
+
+    function paintSelection() {
+        var sel = state.selected;
+        Array.prototype.forEach.call(document.querySelectorAll(".day"), function(r) {
+            var on = r.getAttribute("data-day") === sel;
+            r.classList.toggle("selected", on);
+            r.classList.toggle("faded", sel !== null && !on);
+            if (on) r.parentNode.appendChild(r);
+        });
+    }
 </script>
 </body>
 </html>

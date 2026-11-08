@@ -1,0 +1,518 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/transfers.csv",
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount (£)",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Group treasury",
+    "animationDuration": 12
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "showcaseHeight": 560,
+  "wait": 5000,
+  "caption": "Live: 240 invented transfers over one working day between a group treasury and eight subsidiaries. Press Replay to watch again; hover a node for its totals, click it to select its transfers.",
+  "expect": {
+   "selector": "g.node",
+   "min": 9,
+   "max": 9,
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "__orbital.model.txs.length===240 && __orbital.model.centre.id==='Group treasury' && __orbital.play.flying.length===240",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "hourly",
+  "showcase": true,
+  "data": "sample-data/transfers.csv",
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "HISTOGRAM",
+     "dateUnit": "HOUR",
+     "histogramInterval": 1
+    },
+    "size": {
+     "inputField": "Amount (£)",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Group treasury",
+    "animationDuration": 8,
+    "txLabels": true
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "showcaseHeight": 560,
+  "wait": 3000,
+  "caption": "Live: the same day with Transaction time grouped per hour, so transfers between the same two companies in each hour fly as one, and Show transaction details on.",
+  "expect": {
+   "selector": "g.node",
+   "min": 9,
+   "max": 9
+  },
+  "actions": [
+   {
+    "eval": "__orbital.model.txs.length===151 && __orbital.model.histogram && document.getElementById('info').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "__orbital.finish(), /151 combined transactions/.test(document.getElementById('info').textContent) && /8\\.88M/.test(document.getElementById('info').textContent)",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/transfers.csv",
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount (£)",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Group treasury",
+    "animationDuration": 1
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 3500,
+  "actions": [
+   {
+    "eval": "(function(){var t=__orbital.model.byId.get('Group treasury');window.__c0={};__orbital.model.nodes.forEach(function(n){__c0[n.id]=n.colour});return __orbital.play.done && Math.abs(t.shownReceived-6466078.84)<0.01 && Math.abs(t.shownSent-1711904.51)<0.01})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "[].some.call(document.querySelectorAll('.label .figures'),function(e){return e.textContent==='In 6.47M  Out 1.71M'})",
+    "expectTruthy": true
+   },
+   {
+    "eval": "/Sent: 1.2M \\(25 transactions\\)/.test(document.querySelectorAll('g.node title')[3].textContent)",
+    "expectTruthy": true
+   },
+   {
+    "click": "g.node",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.type==='OR'&&f.filters[0].inputField==='From'&&f.filters[0].value==='Germany'&&f.filters[1].inputField==='To'&&document.querySelectorAll('g.node.selected').length===1})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "click": "g.node.selected"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "click": "g.node",
+    "nth": 5
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     30,
+     200
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "eval": "document.querySelectorAll('g.node.selected').length===0 && document.querySelectorAll('g.node.faded').length===0",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "From",
+     "operator": "=",
+     "value": "Germany"
+    }
+   },
+   {
+    "eval": "(function(){var m=__orbital.model,ok=m.txs.length===25&&__orbital.play.flying.length===0&&Math.abs(m.byId.get('Germany').shownSent-1195861.36)<0.01;m.nodes.forEach(function(n){if(n.colour!==__c0[n.id])ok=false});return ok})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "filtered"
+   },
+   {
+    "click": "#replay"
+   },
+   {
+    "eval": "__orbital.play.flying.length===25 && !__orbital.play.done",
+    "expectTruthy": true
+   },
+   {
+    "expectSelection": false
+   }
+  ]
+ },
+ {
+  "name": "refresh",
+  "data": "sample-data/transfers.csv",
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount (£)",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Group treasury",
+    "animationDuration": 1
+   }
+  },
+  "width": 700,
+  "height": 460,
+  "wait": 3000,
+  "actions": [
+   {
+    "update": {
+     "source": "From",
+     "target": "To",
+     "date": {
+      "inputField": "Time",
+      "type": "UNIQUE_VALUES"
+     },
+     "size": {
+      "inputField": "Amount (£)",
+      "function": "SUM"
+     },
+     "link": "Transfer ID",
+     "centreNodeId": "Group treasury",
+     "animationDuration": 1,
+     "txLabels": true
+    }
+   },
+   {
+    "eval": "__orbital.play.flying.length===0 && __orbital.play.done",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var c=__omniMock.config,ds=JSON.parse(JSON.stringify(c.dataset));ds.rows.push(['TR-9001','2026-03-02T18:30:00.000Z','France','Group treasury',1000],['TR-9002','2026-03-02T18:31:00.000Z','Group treasury','Spain',2000]);__omniMock.update({options:c.options,dataset:ds});return true})()",
+    "waitAfter": 1500
+   },
+   {
+    "wait": 300
+   },
+   {
+    "eval": "__orbital.play.flying.length===2 && __orbital.model.txs.length===242",
+    "expectTruthy": true
+   },
+   {
+    "update": {
+     "source": "From",
+     "target": "To",
+     "date": {
+      "inputField": "Time",
+      "type": "UNIQUE_VALUES"
+     },
+     "size": {
+      "inputField": "Amount (£)",
+      "function": "SUM"
+     },
+     "link": "Transfer ID",
+     "centreNodeId": "Group treasury",
+     "animationDuration": 1,
+     "txLabels": true,
+     "animationRestartOnData": true
+    }
+   },
+   {
+    "eval": "__orbital.play.flying.length===242",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "auto-centre",
+  "data": "sample-data/transfers.csv",
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "function": "RECORD_COUNT"
+    },
+    "animationDuration": 1
+   }
+  },
+  "width": 700,
+  "height": 460,
+  "wait": 3000,
+  "expect": {
+   "selector": "g.node",
+   "min": 9,
+   "max": 9
+  },
+  "actions": [
+   {
+    "eval": "__orbital.model.centre.id==='Group treasury' && __orbital.model.txs.length===240 && __orbital.model.sizeName==='Record count'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/transfers.csv",
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount (£)",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Group treasury",
+    "animationDuration": 1
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 3000,
+  "actions": [
+   {
+    "resize": [
+     220,
+     160
+    ]
+   },
+   {
+    "eval": "(function(){var ok=true;document.querySelectorAll('g.node').forEach(function(n){var b=n.getBoundingClientRect();if(b.left<0||b.top<0||b.right>innerWidth||b.bottom>innerHeight)ok=false});return ok&&document.querySelectorAll('g.node').length===9})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "220x160"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Transfer ID",
+    "type": "TEXT"
+   },
+   {
+    "name": "Time",
+    "type": "DATE"
+   },
+   {
+    "name": "From",
+    "type": "TEXT"
+   },
+   {
+    "name": "To",
+    "type": "TEXT"
+   },
+   {
+    "name": "Amount (£)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount (£)",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Group treasury"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No transactions to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/transfers.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "Choose Sender, Receiver, Transaction time and Transaction size"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Treasury",
+    "animationDuration": 5
+   }
+  },
+  "width": 1000,
+  "height": 700,
+  "wait": 3500,
+  "expect": {
+   "selector": "g.node",
+   "min": 40,
+   "max": 40,
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "(function(){__orbital.finish();var m=__orbital.model,a=0,b=0;m.nodes.forEach(function(n){a+=n.shownSent;b+=n.shownReceived});var t=0;m.txs.forEach(function(x){t+=x.size});return m.txs.length===2500&&__orbital.play.done&&a===t&&b===t})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "too-many-nodes",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "source": "Transfer ID",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Treasury",
+    "animationDuration": 5
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 2000,
+  "expect": {
+   "text": "different senders and receivers"
+  }
+ },
+ {
+  "name": "too-many",
+  "generate": "tests/large.js",
+  "generateArgs": {
+   "n": 3500
+  },
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "More than 3,000 transactions"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/transfers.csv",
+  "options": {
+   "items": {
+    "source": "From",
+    "target": "To",
+    "date": {
+     "inputField": "Time",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Amount (£)",
+     "function": "SUM"
+    },
+    "link": "Transfer ID",
+    "centreNodeId": "Group treasury",
+    "animationDuration": 10
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 4500
+ }
+]

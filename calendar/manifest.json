@@ -10,7 +10,7 @@
   ],
   "sandbox": false,
   "autoPane": true,
-  "autoQuery": true,
+  "autoQuery": false,
   "dataLimit": 1000,
   "supportsSelection": true,
   "options": {
@@ -18,7 +18,7 @@
       "date": {
         "displayName": "Date",
         "type": "FIELD",
-        "detail": "Date field to split/group the rows by",
+        "detail": "The date of each record. The view groups the records by day",
         "mandatory": true,
         "validFieldTypes": [
           "DATE"
@@ -29,7 +29,7 @@
         "iconName": "visokio-option-icon:colour-measure",
         "type": "MEASURE",
         "mandatory": true,
-        "detail": "Numerical measure value to colour the dates by",
+        "detail": "The value that colours each day, for example Record count or the sum of Sales. Lighter is lower, darker is higher",
         "validMeasureResultTypes": [
           "NUMBER"
         ]

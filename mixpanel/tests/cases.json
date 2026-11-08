@@ -1,0 +1,261 @@
+[
+ {
+  "name": "tracking",
+  "data": "sample-data/report_usage.csv",
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "tests/stub-mixpanel.js"
+  },
+  "variables": {
+   "!userIdentity": "alex@example.com"
+  },
+  "options": {
+   "items": {
+    "token": "0123456789abcdef0123456789abcdef"
+   }
+  },
+  "width": 420,
+  "height": 60,
+  "wait": 1500,
+  "expect": {
+   "text": "recorded with Mixpanel"
+  },
+  "actions": [
+   {
+    "eval": "var i=window.__mp.inits[0]; window.__mp.inits.length===1 && i.token==='0123456789abcdef0123456789abcdef' && i.config.api_host==='https://api-eu.mixpanel.com' && i.config.autocapture===false && i.config.record_sessions_percent===0 && i.config.track_pageview===false",
+    "expectTruthy": true
+   },
+   {
+    "eval": "var e=window.__mp.events[0]; e.name==='omniscope_custom_view_loaded' && e.props.user_identity==='alex@example.com' && e.props.parent_url.indexOf('host.html')>0",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var d=window.parent.document;var a=d.createElement('div');a.setAttribute('data-aut-name','Filters');var b=d.createElement('span');b.setAttribute('data-aut-name','North');b.id='mpTestTarget';b.textContent='North';a.appendChild(b);d.body.appendChild(a);b.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:12,clientY:34}));return true})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "var e=window.__mp.events[1]; e && e.name==='omniscope_component_click' && e.props.aut_name_path==='Filters > North' && e.props.data_attrs['data-aut-name']==='North' && e.props.id==='mpTestTarget' && e.props.user_identity==='alex@example.com' && e.props.click_x===12",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     5,
+     5
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "update": {
+     "token": "0123456789abcdef0123456789abcdef",
+     "trackClicks": false
+    }
+   },
+   {
+    "eval": "window.parent.document.getElementById('mpTestTarget').click(); window.__mp.events.length===2",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.body.innerText.indexOf('Opening this report is recorded')>=0",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "notice"
+   }
+  ]
+ },
+ {
+  "name": "anonymous",
+  "data": "sample-data/report_usage.csv",
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "tests/stub-mixpanel.js"
+  },
+  "variables": {
+   "!userIdentity": "alex@example.com"
+  },
+  "options": {
+   "items": {
+    "token": "0123456789abcdef0123456789abcdef",
+    "sendUser": false,
+    "showNotice": false,
+    "api_host": "https://api.mixpanel.com/"
+   }
+  },
+  "width": 420,
+  "height": 60,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__mp.events[0].props.user_identity===null && window.__mp.inits[0].config.api_host==='https://api.mixpanel.com'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.body.innerText.trim()===''",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/report_usage.csv",
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "tests/stub-mixpanel.js"
+  },
+  "variables": {
+   "!userIdentity": "alex@example.com"
+  },
+  "options": {
+   "items": {}
+  },
+  "width": 420,
+  "height": 120,
+  "wait": 1000,
+  "expect": {
+   "text": "Set the Mixpanel project token"
+  },
+  "actions": [
+   {
+    "eval": "!window.mixpanel && !document.querySelector('script[src*=\"mixpanel\"]')",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "bad-host",
+  "data": "sample-data/report_usage.csv",
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "tests/stub-mixpanel.js"
+  },
+  "options": {
+   "items": {
+    "token": "0123456789abcdef0123456789abcdef",
+    "api_host": "http://api.mixpanel.com"
+   }
+  },
+  "width": 420,
+  "height": 120,
+  "wait": 1000,
+  "expect": {
+   "text": "API host must be an https:// address"
+  },
+  "actions": [
+   {
+    "eval": "!window.mixpanel",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "token-change",
+  "data": "sample-data/report_usage.csv",
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "tests/stub-mixpanel.js"
+  },
+  "options": {
+   "items": {
+    "token": "0123456789abcdef0123456789abcdef"
+   }
+  },
+  "width": 420,
+  "height": 120,
+  "wait": 1500,
+  "actions": [
+   {
+    "update": {
+     "token": "fedcba9876543210fedcba9876543210"
+    }
+   },
+   {
+    "eval": "document.body.innerText.indexOf('Reload the report')>=0 && window.__mp.inits.length===1",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "unreachable",
+  "data": "sample-data/report_usage.csv",
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "abort"
+  },
+  "options": {
+   "items": {
+    "token": "0123456789abcdef0123456789abcdef"
+   }
+  },
+  "width": 420,
+  "height": 120,
+  "wait": 2000,
+  "expect": {
+   "text": "could not be loaded",
+   "noErrors": false
+  }
+ },
+ {
+  "name": "small",
+  "data": "sample-data/report_usage.csv",
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "tests/stub-mixpanel.js"
+  },
+  "options": {
+   "items": {
+    "token": "0123456789abcdef0123456789abcdef"
+   }
+  },
+  "width": 120,
+  "height": 30,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__mp.events.length===1 && document.documentElement.scrollWidth<=120",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Team",
+    "type": "TEXT"
+   }
+  ],
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "tests/stub-mixpanel.js"
+  },
+  "options": {
+   "items": {
+    "token": "0123456789abcdef0123456789abcdef"
+   }
+  },
+  "width": 420,
+  "height": 60,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__mp.events.length===1",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "routes": {
+   "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js": "tests/stub-mixpanel.js"
+  },
+  "options": {
+   "items": {
+    "token": "0123456789abcdef0123456789abcdef"
+   }
+  },
+  "width": 420,
+  "height": 60,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__mp.events.length===1 && window.__mp.events[0].name==='omniscope_custom_view_loaded'",
+    "expectTruthy": true
+   }
+  ]
+ }
+]

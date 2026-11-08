@@ -25,29 +25,29 @@
   "options": {
     "items": {
       "preventNodeOverlap": {
-        "displayName": "Prevent node overlapping",
+        "displayName": "Keep nodes apart",
         "type": "TOGGLE",
-        "detail": "Add jittering between nodes so they don't appear on top of each other when they share the same coordinates"
+        "detail": "Push nodes that would overlap a little away from their coordinates, so none hides another"
       },
       "colour": {
         "displayName": "Colour",
         "iconName": "visokio-option-icon:colour-measure",
         "type": "MEASURE",
-        "detail": "Measure value to colour the nodes and edges by"
+        "detail": "Colours the nodes and their outgoing links: a text field with the Singleton function (for example Region) gives category colours with a key; a number gives a colour scale"
       },
       "edgeWeight": {
-        "displayName": "Weight",
-        "detail": "Measure value used to sort the edges and show the most important ones",
+        "displayName": "Link weight",
+        "detail": "Thicker lines for heavier links, for example the sum of Shipments. When there are more links than Links shown, the heaviest are kept",
         "type": "MEASURE"
       },
       "imageURL": {
         "displayName": "Image URL",
         "type": "MEASURE",
-        "detail": "URL of the image shown in the nodes"
+        "detail": "Address of a picture drawn inside the node (a text field with the Singleton function). The browser showing the report must be able to load it"
       },
       "linkedNodeId": {
-        "displayName": "Linked node Id",
-        "detail": "Id of the target node of the edge",
+        "displayName": "To node",
+        "detail": "The node at the other end of the record's link, a value of the From node field. Leave it empty for a record that only places a node",
         "type": "GROUPING",
         "mandatory": true
       },
@@ -55,40 +55,52 @@
         "displayName": "Size",
         "iconName": "visokio-option-icon:size-measure",
         "type": "MEASURE",
-        "detail": "Measure value to size the nodes by"
+        "detail": "Sizes the nodes by area, for example the mean of Capacity. Empty: all nodes the same size"
       },
       "nodeId": {
-        "displayName": "Node Id",
-        "detail": "Id of the origin node of the edge",
+        "displayName": "From node",
+        "detail": "One node per value. Each record is a link from this node to To node; give every node at least one record, with To node empty if it has no links",
         "type": "GROUPING",
         "mandatory": true
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "One graph per value, side by side"
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "One graph per value, one above the other"
       },
       "title": {
         "displayName": "Tooltip",
         "type": "MEASURE",
-        "detail": "Tooltip text to show on the nodes when hovering"
+        "detail": "First line of a node's tooltip, for example a name field with the Singleton function. Empty: the From node value"
       },
       "x": {
-        "displayName": "X",
+        "displayName": "X position",
         "type": "MEASURE",
         "mandatory": true,
-        "detail": "X coordinate of the node"
+        "detail": "The node's horizontal coordinate, for example the mean of East (km). Worked out in advance: the view keeps nodes near these coordinates"
       },
       "y": {
-        "displayName": "Y",
+        "displayName": "Y position",
         "type": "MEASURE",
         "mandatory": true,
-        "detail": "Y coordinate of the node"
+        "detail": "The node's vertical coordinate, for example the mean of North (km)"
+      },
+      "bundleEdges": {
+        "displayName": "Bundle links",
+        "type": "TOGGLE",
+        "detail": "Curve links that run in the same direction into shared bundles, so the main flows stand out. Off: straight lines"
+      },
+      "maxEdges": {
+        "displayName": "Links shown",
+        "type": "NUMBER",
+        "detail": "The most links drawn (default 1000, at most 5000). Bundling many links takes a few seconds"
       }
     },
     "structure": {
@@ -105,83 +117,146 @@
         "paneY"
       ]
     },
-    "optionGroups": [{
-      "displayName": "Chart",
-      "rows": [{
-        "cells": [{
-          "option": "nodeId",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "linkedNodeId",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "x",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "y",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "preventNodeOverlap",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Marker",
-      "rows": [{
-        "cells": [{
-          "option": "colour",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "markerSize",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "title",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "imageURL",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Edge",
-      "rows": [{
-        "cells": [{
-          "option": "edgeWeight",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Pane/tile",
-      "rows": [{
-        "cells": [{
-          "option": "paneX",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "paneY",
-          "usePrefixTitle": false
-        }]
-      }]
-    }]
+    "optionGroups": [
+      {
+        "displayName": "Chart",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "nodeId",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "linkedNodeId",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "x",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "y",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "preventNodeOverlap",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Marker",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "markerSize",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "title",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "imageURL",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Links",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "edgeWeight",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "bundleEdges",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxEdges",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {
-      "preventNodeOverlap": true
+      "preventNodeOverlap": true,
+      "bundleEdges": true,
+      "maxEdges": 1000
     },
     "pane": {
       "yAxisHeaderWidth": 75,

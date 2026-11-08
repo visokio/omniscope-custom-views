@@ -1,0 +1,161 @@
+Store,Region,Format,Sales growth (%),Customer score
+Ashford 1,Scotland,High street,-2.6,8.0
+Barton 1,Scotland,High street,-7.0,7.2
+Calder 1,North,Outlet,3.2,8.2
+Dunmore 1,Midlands,High street,1.9,7.9
+Eastwick 1,Midlands,High street,2.7,8.9
+Fenley 1,Wales,High street,-0.5,7.0
+Glenroy 1,Scotland,High street,6.3,9.3
+Hartwell 1,North,High street,0.5,9.4
+Ivybridge 1,Midlands,High street,3.9,7.5
+Kirkby 1,Midlands,High street,2.1,7.5
+Langley 1,Wales,High street,-2.2,7.5
+Merton 1,Midlands,High street,-2.9,8.3
+Newbold 1,Scotland,High street,-0.8,6.8
+Oakham 1,South,High street,0.3,8.4
+Penrith 1,Midlands,High street,-0.3,7.1
+Quarry Bank 1,North,Outlet,-1.5,7.8
+Redhill 1,Scotland,Retail park,1.7,8.2
+Stanton 1,North,High street,-2.7,6.2
+Thornbury 1,Midlands,High street,0.1,8.7
+Upton 1,Wales,High street,-3.4,7.8
+Ashford 2,Wales,High street,-1.1,6.1
+Barton 2,South,High street,3.3,7.6
+Calder 2,South,Retail park,4.8,8.1
+Dunmore 2,South,Outlet,1.3,7.3
+Eastwick 2,South,High street,3.4,6.7
+Fenley 2,South,Outlet,4.5,8.0
+Glenroy 2,Scotland,Retail park,2.5,7.9
+Hartwell 2,Scotland,High street,0.5,8.5
+Ivybridge 2,Midlands,High street,0.7,7.4
+Kirkby 2,Wales,High street,1.4,9.4
+Langley 2,Scotland,Outlet,-1.3,6.4
+Merton 2,North,High street,-2.3,7.4
+Newbold 2,Wales,High street,-12.7,7.1
+Oakham 2,Midlands,Outlet,-1.5,7.5
+Penrith 2,South,High street,1.2,8.2
+Quarry Bank 2,Midlands,High street,1.7,6.8
+Redhill 2,Midlands,Retail park,1.1,7.5
+Stanton 2,North,High street,-5.5,6.9
+Thornbury 2,Scotland,High street,1.7,6.4
+Upton 2,Scotland,Retail park,4.7,7.1
+Ashford 3,South,Outlet,3.2,9.6
+Barton 3,South,Outlet,2.9,8.0
+Calder 3,North,High street,-1.1,6.7
+Dunmore 3,South,High street,3.9,6.8
+Eastwick 3,South,High street,-1.2,6.4
+Fenley 3,Wales,High street,2.6,6.4
+Glenroy 3,Wales,Outlet,4.7,7.6
+Hartwell 3,Scotland,Outlet,3.5,8.3
+Ivybridge 3,Wales,High street,3.2,8.2
+Kirkby 3,Wales,High street,-0.2,6.5
+Langley 3,Wales,High street,-7.1,6.3
+Merton 3,South,Retail park,7.9,8.1
+Newbold 3,Wales,Retail park,5.3,8.9
+Oakham 3,Midlands,Retail park,7.5,8.2
+Penrith 3,Midlands,High street,1.2,7.3
+Quarry Bank 3,Midlands,High street,-3.2,6.9
+Redhill 3,South,High street,-1.3,6.7
+Stanton 3,Midlands,Retail park,1.9,8.0
+Thornbury 3,South,Outlet,7.3,7.2
+Upton 3,Scotland,High street,4.8,8.0
+Ashford 4,North,High street,-9.3,6.5
+Barton 4,South,Outlet,5.4,7.2
+Calder 4,Scotland,Retail park,3.3,8.0
+Dunmore 4,Scotland,High street,-1.6,7.3
+Eastwick 4,Midlands,Retail park,-0.0,8.6
+Fenley 4,North,High street,-4.8,8.4
+Glenroy 4,Scotland,High street,-4.1,6.0
+Hartwell 4,Wales,High street,2.7,7.5
+Ivybridge 4,Wales,Outlet,-4.9,8.2
+Kirkby 4,Midlands,Retail park,3.4,9.7
+Langley 4,Wales,High street,6.7,8.2
+Merton 4,South,High street,1.2,8.3
+Newbold 4,North,Retail park,4.8,7.7
+Oakham 4,North,Retail park,2.7,7.5
+Penrith 4,Scotland,Retail park,4.6,8.6
+Quarry Bank 4,North,High street,-1.7,7.7
+Redhill 4,South,High street,-0.8,6.8
+Stanton 4,Scotland,Outlet,3.0,7.6
+Thornbury 4,Midlands,High street,-2.8,7.0
+Upton 4,South,Retail park,8.9,8.2
+Ashford 5,Scotland,High street,4.6,7.8
+Barton 5,North,Outlet,-0.0,7.4
+Calder 5,Wales,Retail park,0.0,5.8
+Dunmore 5,Wales,Outlet,3.0,7.0
+Eastwick 5,Midlands,Outlet,-3.3,7.4
+Fenley 5,South,Outlet,2.8,6.9
+Glenroy 5,South,Retail park,3.3,7.8
+Hartwell 5,Midlands,High street,-3.6,6.9
+Ivybridge 5,South,Retail park,2.4,8.0
+Kirkby 5,North,High street,-0.8,8.6
+Langley 5,North,Retail park,7.6,8.2
+Merton 5,North,Outlet,0.2,7.2
+Newbold 5,North,High street,-6.3,5.5
+Oakham 5,Midlands,Outlet,1.1,6.8
+Penrith 5,Midlands,Retail park,2.4,7.8
+Quarry Bank 5,Scotland,High street,-3.9,6.7
+Redhill 5,North,High street,-2.9,7.0
+Stanton 5,Wales,Outlet,3.3,8.2
+Thornbury 5,South,Retail park,3.0,7.7
+Upton 5,South,Outlet,5.7,8.3
+Ashford 6,Scotland,Retail park,-2.5,7.1
+Barton 6,Scotland,Retail park,4.7,8.0
+Calder 6,Midlands,High street,0.0,6.6
+Dunmore 6,Midlands,Outlet,4.3,7.2
+Eastwick 6,Wales,High street,-2.1,6.2
+Fenley 6,North,Retail park,8.7,8.4
+Glenroy 6,Scotland,Retail park,5.0,9.2
+Hartwell 6,Wales,Outlet,4.1,8.3
+Ivybridge 6,Scotland,Retail park,6.2,8.0
+Kirkby 6,Wales,Retail park,3.3,8.0
+Langley 6,Wales,Outlet,3.9,8.5
+Merton 6,South,Outlet,2.2,9.1
+Newbold 6,South,Retail park,2.3,8.4
+Oakham 6,South,Retail park,7.1,7.3
+Penrith 6,South,Retail park,2.5,7.1
+Quarry Bank 6,Midlands,High street,0.7,7.6
+Redhill 6,Midlands,High street,-7.5,6.9
+Stanton 6,South,High street,-4.6,7.3
+Thornbury 6,Scotland,Outlet,0.9,8.2
+Upton 6,Midlands,High street,1.7,8.1
+Ashford 7,Wales,Outlet,-3.0,7.3
+Barton 7,North,High street,-0.1,7.9
+Calder 7,Midlands,High street,2.3,7.2
+Dunmore 7,South,High street,2.6,7.7
+Eastwick 7,Wales,High street,0.5,7.3
+Fenley 7,South,High street,-0.4,6.4
+Glenroy 7,Midlands,High street,-0.9,6.4
+Hartwell 7,North,Retail park,6.8,7.4
+Ivybridge 7,South,High street,1.2,7.7
+Kirkby 7,Wales,High street,-0.7,8.4
+Langley 7,North,Retail park,-5.4,7.8
+Merton 7,North,High street,-6.1,7.2
+Newbold 7,Midlands,High street,-9.2,6.0
+Oakham 7,Scotland,Retail park,9.2,7.8
+Penrith 7,Midlands,Outlet,-5.5,7.0
+Quarry Bank 7,North,Retail park,0.2,6.8
+Redhill 7,North,High street,0.2,6.8
+Stanton 7,North,Outlet,2.5,7.5
+Thornbury 7,Scotland,Retail park,5.4,8.3
+Upton 7,South,Retail park,13.9,9.6
+Ashford 8,Midlands,Retail park,5.4,7.5
+Barton 8,North,High street,-3.6,7.7
+Calder 8,Wales,Retail park,3.3,7.8
+Dunmore 8,South,Retail park,16.0,7.0
+Eastwick 8,Scotland,High street,-0.0,7.7
+Fenley 8,South,Outlet,3.4,8.0
+Glenroy 8,North,High street,-3.4,5.9
+Hartwell 8,Scotland,Retail park,3.9,8.5
+Ivybridge 8,Midlands,High street,0.8,8.0
+Kirkby 8,South,Outlet,8.9,8.7
+Langley 8,Wales,Retail park,-3.4,6.6
+Merton 8,Midlands,Retail park,-1.5,7.7
+Newbold 8,North,Retail park,1.7,7.0
+Oakham 8,Wales,Retail park,1.8,8.1
+Penrith 8,Midlands,High street,-1.2,6.8
+Quarry Bank 8,North,Retail park,2.4,7.4
+Redhill 8,North,High street,0.6,7.9
+Stanton 8,South,Outlet,2.2,7.3
+Thornbury 8,Wales,High street,-0.1,8.0
+Upton 8,Midlands,Retail park,6.4,6.9

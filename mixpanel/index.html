@@ -9,14 +9,45 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* invisible tracker */
+            overflow: hidden;
+            font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #8a8f9c;
         }
+        #notice {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4px 8px;
+            box-sizing: border-box;
+        }
+        #notice.setup { color: #41475e; font-size: 13px; }
+        #notice .title { font-weight: 600; }
     </style>
+</head>
 
-<!-- ====================================================== -->
-<!--                OFFICIAL MIXPANEL SNIPPET               -->
-<!-- ====================================================== -->
-<script type="text/javascript">
+<body>
+<div id="notice"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+/* Mixpanel tracker: sends usage events for the report this view sits in to the Mixpanel project whose token is set
+   in the view's settings. What is sent is listed in the README. Nothing is loaded or sent until a token is set. */
+
+if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+
+// Mixpanel's JavaScript library, pinned (Apache-2.0): https://github.com/mixpanel/mixpanel-js
+var MIXPANEL_LIB = "https://cdn.jsdelivr.net/npm/mixpanel-browser@2.84.0/dist/mixpanel.min.js";
+
+/* Mixpanel's loader snippet (https://docs.mixpanel.com/docs/quickstart/install-mixpanel), unchanged except that it
+   runs only once a token is set and loads the pinned library above. Calls made before the library arrives are
+   queued and sent once it has loaded. */
+function installMixpanel(src, onerror) {
 (function(e,c){
   if(!c.__SV){
     var l,h;window.mixpanel=c;c._i=[];
@@ -65,59 +96,44 @@
     var k=e.createElement("script");
     k.type="text/javascript";
     k.async=true;
-    k.src="//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
+    k.src=src;
+    k.onerror=onerror;
     var s=e.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(k, s);
   }
 })(document, window.mixpanel || []);
-</script>
+}
 
-</head>
-
-<body>
-
-<script src="/_global_/customview/v1/omniscope.js"></script>
-
-<script>
 /* ============================================================
-   Utility functions
+   Report, tab and element details for the events
    ============================================================ */
 
 function extractReportName(url) {
     try {
-        const u = new URL(url);
-        const segments = u.pathname.split("/").filter(Boolean); // remove empty
-
+        var u = new URL(url);
+        var segments = u.pathname.split("/").filter(Boolean);
         if (!segments.length) return null;
-
-        // Case 1: standalone .ior report
-        // /folderpath/reportname.ior[/...]
-        const last = segments[segments.length - 1];
-        if (/\.ior$/i.test(last)) {
-            return decodeURIComponent(last.replace(/\.ior$/i, ""));
+        // A standalone report: /folder/name.ior[/...]
+        var last = segments[segments.length - 1];
+        if (/\.ior$/i.test(last)) return decodeURIComponent(last.replace(/\.ior$/i, ""));
+        // A report in a project: .../Project.iox/er/ReportName/... or .../Project.iox/r/ReportName/...
+        var iox = segments.findIndex(function(seg) { return /\.iox$/i.test(seg); });
+        if (iox !== -1) {
+            var mode = segments[iox + 1], report = segments[iox + 2];
+            if (mode && /^(er|r)$/i.test(mode) && report) return decodeURIComponent(report);
         }
-
-        // Case 2: project .iox with /er/ or /r/
-        // .../Something.iox/er/ReportName/...
-        // .../Something.iox/r/ReportName/...
-        const ioxIndex = segments.findIndex(seg => /\.iox$/i.test(seg));
-        if (ioxIndex !== -1) {
-            const modeSeg   = segments[ioxIndex + 1]; // "er" or "r"
-            const reportSeg = segments[ioxIndex + 2]; // "Dashboard", "My+Report", etc.
-
-            if (modeSeg && /^(er|r)$/i.test(modeSeg) && reportSeg) {
-                return decodeURIComponent(reportSeg);
-            }
-        }
-
-        // Fallback: use last segment (e.g. if Omniscope adds new patterns later)
-        return decodeURIComponent(last.replace(/\/$/, ""));
+        return decodeURIComponent(last);
     } catch (e) {
-        console.warn("[OmniMP] extractReportName failed for URL:", url, e);
         return null;
     }
 }
-  
+
+function extractTabName(url) {
+    var hash = url.split("#")[1];
+    if (!hash) return null;
+    try { return decodeURIComponent(hash.replace(/\+/g, " ")); } catch (e) { return hash; }
+}
+
 function getClassString(el) {
     if (!el || !el.className) return "";
     if (typeof el.className === "string") return el.className;
@@ -125,244 +141,165 @@ function getClassString(el) {
     return String(el.className || "");
 }
 
+// Omniscope's names for the clicked element and its parents (data-aut-name), outermost first: "Tab > View > Item".
 function getAutNamePath(target) {
-    const names = [];
-    let el = target;
-
-    while (el) {
-        if (el.nodeType === 1) {
-            // 1) normal data-aut-name attribute
-            if (el.hasAttribute("data-aut-name")) {
-                names.push(el.getAttribute("data-aut-name"));
-            }
-
-            // 2) any class token like data-aut-name-Whatever
-            const cls = getClassString(el);
-            if (cls) {
-                const tokens = cls.split(/\s+/);
-                tokens.forEach(tok => {
-                    if (tok.startsWith("data-aut-name-")) {
-                        const val = tok.slice("data-aut-name-".length);
-                        if (val) names.push(val);
-                    }
-                });
-            }
-        }
-        el = el.parentElement;
+    var names = [];
+    for (var el = target; el; el = el.parentElement) {
+        if (el.nodeType !== 1) continue;
+        if (el.hasAttribute("data-aut-name")) names.push(el.getAttribute("data-aut-name"));
+        getClassString(el).split(/\s+/).forEach(function(tok) {
+            if (tok.indexOf("data-aut-name-") === 0 && tok.length > 14) names.push(tok.slice(14));
+        });
     }
-
-    names.reverse(); // outer → inner
+    names.reverse();
     return names.length ? names.join(" > ") : null;
 }
-  
+
+// The data-* attributes of the innermost element (from the clicked one up) that has any.
 function getInnermostDataAttrs(target) {
-    let el = target;
-
-    while (el) {
-        if (el.nodeType === 1) {
-            const dataAttrs = {};
-            let found = false;
-
-            // real data-* attributes
-            if (el.attributes) {
-                for (let i = 0; i < el.attributes.length; i++) {
-                    const a = el.attributes[i];
-                    if (a.name.startsWith("data-")) {
-                        dataAttrs[a.name] = a.value;
-                        found = true;
-                    }
-                }
-            }
-
-            // ALSO support class "data-aut-name-Whatever"
-            const cls = getClassString(el);
-            if (cls) {
-                const tokens = cls.split(/\s+/);
-                tokens.forEach(tok => {
-                    if (tok.startsWith("data-aut-name-")) {
-                        const val = tok.slice("data-aut-name-".length);
-                        if (val) {
-                            // only set if not already a real attribute
-                            if (!dataAttrs["data-aut-name"]) {
-                                dataAttrs["data-aut-name"] = val;
-                            }
-                            found = true;
-                        }
-                    }
-                });
-            }
-
-            if (found) {
-                return { dataEl: el, dataAttrs };
-            }
+    for (var el = target; el; el = el.parentElement) {
+        if (el.nodeType !== 1) continue;
+        var attrs = {}, found = false;
+        for (var i = 0; el.attributes && i < el.attributes.length; i++) {
+            var a = el.attributes[i];
+            if (a.name.indexOf("data-") === 0) { attrs[a.name] = a.value; found = true; }
         }
-
-        el = el.parentElement;
+        getClassString(el).split(/\s+/).forEach(function(tok) {
+            if (tok.indexOf("data-aut-name-") === 0 && tok.length > 14) {
+                if (!attrs["data-aut-name"]) attrs["data-aut-name"] = tok.slice(14);
+                found = true;
+            }
+        });
+        if (found) return { dataEl: el, dataAttrs: attrs };
     }
-
-    // nothing found – fallback
     return { dataEl: target, dataAttrs: {} };
 }
 
-function extractTabName(url) {
-    const hash = url.split("#")[1];
-    if (!hash) return null;
-    return decodeURIComponent(hash.replace(/\+/g, " "));
+function domPath(el) {
+    var parts = [];
+    for (var depth = 6; el && depth > 0; depth--, el = el.parentElement) {
+        var p = (el.tagName || "node").toLowerCase();
+        if (el.id) p += "#" + el.id;
+        var cls = getClassString(el).trim();
+        if (cls) p += "." + cls.replace(/\s+/g, ".");
+        parts.push(p);
+    }
+    return parts.reverse().join(" > ");
 }
 
-function extractComponentMetadata(target) {
-    const el = target.closest?.("[data-aut-name], [title], [aria-label]") || target;
+function parentUrl() {
+    try { return window.parent.location.href || null; } catch (e) { return null; }
+}
 
-    const dataAttrs = {};
-    if (el.attributes) {
-        for (let i = 0; i < el.attributes.length; i++) {
-            const a = el.attributes[i];
-            if (a.name.startsWith("data-")) dataAttrs[a.name] = a.value;
-        }
-    }
+/* ============================================================
+   Tracker
+   ============================================================ */
 
-    // DOM path
-    const parts = [];
-    let cur = el, depth = 6;
-    while (cur && depth-- > 0) {
-        let p = cur.tagName.toLowerCase();
-        if (cur.id) p += "#" + cur.id;
-        if (cur.className)
-            p += "." + cur.className.trim().replace(/\s+/g, ".");
-        parts.push(p);
-        cur = cur.parentElement;
-    }
+var state = { started: null, failed: false, clickListener: false, settings: {} };
 
-    return {
-        el,
-        autName: el.getAttribute?.("data-aut-name") || null,
-        title: el.getAttribute?.("title") || null,
-        aria: el.getAttribute?.("aria-label") || null,
-        dataAttrs,
-        domPath: parts.reverse().join(" > ")
+function notice(html, setup) {
+    var el = document.getElementById("notice");
+    el.className = setup ? "setup" : "";
+    el.innerHTML = html ? "<div>" + html + "</div>" : "";
+}
+
+function esc(s) {
+    return String(s).replace(/[&<>"]/g, function(c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]; });
+}
+
+function attachParentClickTracking() {
+    if (state.clickListener || !window.parent || window.parent === window) return;
+    var parentDoc;
+    try { parentDoc = window.parent.document; } catch (e) { return; }  // the report is on another origin
+    parentDoc.addEventListener("click", function(e) {
+        var s = state.settings;
+        if (!s.trackClicks || !window.mixpanel) return;
+        var target = e.target;
+        var found = getInnermostDataAttrs(target);
+        var url = parentUrl();
+        window.mixpanel.track("omniscope_component_click", {
+            user_identity: s.user,
+            aut_name_path: getAutNamePath(target),
+            data_attrs: found.dataAttrs,
+            dom_path: domPath(found.dataEl),
+            tag: found.dataEl.tagName,
+            id: found.dataEl.id || null,
+            classes: getClassString(found.dataEl) || null,
+            click_x: e.clientX,
+            click_y: e.clientY,
+            parent_url: url,
+            report_name: url ? extractReportName(url) : null,
+            tab_name: url ? extractTabName(url) : null
+        });
+    }, true);
+    state.clickListener = true;
+}
+
+function update() {
+    var ctx = omniscope.view.context();
+    var opts = ctx.options.items || {};
+    var vars = ctx.variables || {};
+    var token = String(opts.token || "").trim();
+    var host = String(opts.api_host || "https://api-eu.mixpanel.com").trim().replace(/\/+$/, "");
+    state.settings = {
+        trackClicks: opts.trackClicks !== false,
+        user: opts.sendUser === false ? null : (vars["!userIdentity"] || null)
     };
-}
 
-/* ============================================================
-   Tracker state
-   ============================================================ */
-
-let mixpanelInitialized = false;
-let clickTrackingAttached = false;
-
-/* ============================================================
-   Click tracking on PARENT report
-   ============================================================ */
-function attachParentClickTracking(userIdentity) {
-    if (clickTrackingAttached) return;
-    if (!window.parent || window.parent === window) return;
-
-    let parentDoc;
-    try {
-        parentDoc = window.parent.document;
-    } catch {
-        console.warn("[OmniMP] Cannot access parent document.");
-        return;
+    if (!token) {
+        return notice("<div class='title'>Mixpanel tracker</div>Set the Mixpanel project token in the view's settings. " +
+            "Nothing is loaded or sent until it is set.", true);
+    }
+    if (!/^https:\/\/[A-Za-z0-9.\-]+(:\d+)?(\/[^\s]*)?$/.test(host)) {
+        return notice("<div class='title'>Mixpanel tracker</div>API host must be an https:// address, " +
+            "for example https://api-eu.mixpanel.com. Nothing is sent.", true);
+    }
+    if (state.failed) {
+        return notice("<div class='title'>Mixpanel tracker</div>Mixpanel's library could not be loaded " +
+            "(a firewall or content blocker may be blocking cdn.jsdelivr.net). Nothing is sent.", true);
+    }
+    var key = token + " " + host;
+    if (state.started && state.started !== key) {
+        return notice("<div class='title'>Mixpanel tracker</div>Reload the report to send to the new project or host.", true);
     }
 
-parentDoc.addEventListener("click", function (e) {
-    const target = e.target || e.srcElement;
-
-    const autNamePath = getAutNamePath(target);
-    const { dataEl, dataAttrs } = getInnermostDataAttrs(target);
-
-    const parentUrl  = window.parent.location?.href || null;
-    const reportName = parentUrl ? extractReportName(parentUrl) : null;
-    const tabName    = parentUrl ? extractTabName(parentUrl) : null;
-
-    const parts = [];
-    let cur = dataEl, depth = 6;
-    while (cur && depth-- > 0) {
-        let p = (cur.tagName || "node").toLowerCase();
-        if (cur.id) p += "#" + cur.id;
-
-        const cls = getClassString(cur);
-        if (cls) {
-            p += "." + cls.trim().replace(/\s+/g, ".");
-        }
-
-        parts.push(p);
-        cur = cur.parentElement;
-    }
-    const domPath = parts.reverse().join(" > ");
-
-    mixpanel.track("omniscope_component_click", {
-        user_identity: userIdentity,
-
-        aut_name_path: autNamePath,  
-        data_attrs: dataAttrs,       
-
-        dom_path: domPath,
-        tag: dataEl.tagName,
-        id: dataEl.id || null,
-        classes: getClassString(dataEl) || null,
-        click_x: e.clientX,
-        click_y: e.clientY,
-
-        parent_url: parentUrl,
-        report_name: reportName,
-        tab_name: tabName
-    });
-}, true);
-
-    clickTrackingAttached = true;
-}
-
-/* ============================================================
-   Omniscope lifecycle
-   ============================================================ */
-omniscope.view.on(["load", "update"], function () {
-
-    const ctx = omniscope.view.context();
-    const opts = ctx.options.items || {};
-    const vars = ctx.variables || {};
-
-    const MIXPANEL_TOKEN = opts.token;
-    const MIXPANEL_API_HOST = opts.api_host || "https://api.mixpanel.com";
-    const USER_IDENTITY = vars["!userIdentity"] || null;
-
-    if (!MIXPANEL_TOKEN) {
-        console.warn("[OmniMP] No token configured in view settings.");
-        return;
-    }
-
-    // Init mixpanel once
-    if (!mixpanelInitialized) {
-        mixpanel.init(MIXPANEL_TOKEN, {
-            api_host: MIXPANEL_API_HOST,
-            autocapture: true,
-            record_sessions_percent: 100
+    if (!state.started) {
+        state.started = key;
+        installMixpanel(MIXPANEL_LIB, function() { state.failed = true; update(); });
+        window.mixpanel.init(token, {
+            api_host: host,
+            autocapture: false,
+            track_pageview: false,
+            record_sessions_percent: 0
         });
-
-        mixpanelInitialized = true;
-
-        const parentUrl = window.parent.location?.href || null;
-        const reportName = parentUrl ? extractReportName(parentUrl) : null;
-        const tabName = parentUrl ? extractTabName(parentUrl) : null;
-
-        mixpanel.track("omniscope_custom_view_loaded", {
-            user_identity: USER_IDENTITY,
-            api_host: MIXPANEL_API_HOST,
-            parent_url: parentUrl,
-            report_name: reportName,
-            tab_name: tabName
+        var url = parentUrl();
+        window.mixpanel.track("omniscope_custom_view_loaded", {
+            user_identity: state.settings.user,
+            api_host: host,
+            parent_url: url,
+            report_name: url ? extractReportName(url) : null,
+            tab_name: url ? extractTabName(url) : null
         });
     }
+    attachParentClickTracking();
 
-    attachParentClickTracking(USER_IDENTITY);
+    if (opts.showNotice === false) return notice("", false);
+    notice(esc(state.settings.trackClicks
+        ? "Use of this report, including clicks, is recorded with Mixpanel."
+        : "Opening this report is recorded with Mixpanel."), false);
+}
+
+omniscope.view.on("load", function() {
+    window.onerror = function(msg) {
+        omniscope.view.error(msg);
+    };
 });
+omniscope.view.on(["load", "update"], update);
 
-
-// Keep Omniscope behaviour
-document.body.addEventListener("click", function () {
+// A click on the view clears the selection in the report, as a click on empty space in any view does.
+document.body.addEventListener("click", function() {
     omniscope.view.whitespaceClick();
 });
-
 </script>
 
 </body>

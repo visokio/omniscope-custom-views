@@ -1,0 +1,2001 @@
+Order date,Department,Department code,Region,Channel,Sales,Satisfaction
+2025-01-01,Gironde,33,Nouvelle-Aquitaine,Phone,112.92,3
+2025-01-01,Haute-Saône,70,Bourgogne-Franche-Comté,Online,133.25,3
+2025-01-01,Landes,40,Nouvelle-Aquitaine,Store,48.81,5
+2025-01-01,Meurthe-et-Moselle,54,Grand Est,Online,91.75,4
+2025-01-01,Paris,75,Île-de-France,Online,58.29,5
+2025-01-01,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,36.29,5
+2025-01-02,Bas-Rhin,67,Grand Est,Store,119.13,4
+2025-01-02,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,168.61,5
+2025-01-02,Haute-Marne,52,Grand Est,Store,58.05,4
+2025-01-02,Nord,59,Hauts-de-France,Store,27.56,4
+2025-01-02,Vienne,86,Nouvelle-Aquitaine,Online,104.76,5
+2025-01-03,Ardennes,08,Grand Est,Online,168.96,3
+2025-01-03,Haute-Garonne,31,Occitanie,Store,73.32,4
+2025-01-03,Hauts-de-Seine,92,Île-de-France,Online,101.24,4
+2025-01-03,Hérault,34,Occitanie,Online,51.89,4
+2025-01-03,Nièvre,58,Bourgogne-Franche-Comté,Store,31.53,4
+2025-01-03,Territoire de Belfort,90,Bourgogne-Franche-Comté,Online,66.02,5
+2025-01-04,Aisne,02,Hauts-de-France,Store,182.44,3
+2025-01-04,Aube,10,Grand Est,Store,81.1,3
+2025-01-04,Calvados,14,Normandie,Store,60.09,4
+2025-01-04,Hauts-de-Seine,92,Île-de-France,Online,11.96,4
+2025-01-04,Morbihan,56,Bretagne,Online,84.31,5
+2025-01-04,Nièvre,58,Bourgogne-Franche-Comté,Phone,85.19,3
+2025-01-04,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,49.65,4
+2025-01-04,Val-de-Marne,94,Île-de-France,Store,130.03,3
+2025-01-04,Vienne,86,Nouvelle-Aquitaine,Store,170.69,5
+2025-01-04,Vosges,88,Grand Est,Online,84.56,3
+2025-01-05,Aveyron,12,Occitanie,Store,99.99,4
+2025-01-05,Loir-et-Cher,41,Centre-Val de Loire,Online,67.47,5
+2025-01-05,Paris,75,Île-de-France,Online,56.65,3
+2025-01-05,Savoie,73,Auvergne-Rhône-Alpes,Online,68.11,5
+2025-01-06,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,48.85,5
+2025-01-06,Gironde,33,Nouvelle-Aquitaine,Online,125.75,3
+2025-01-06,Loire-Atlantique,44,Pays de la Loire,Store,51.73,3
+2025-01-06,Orne,61,Normandie,Store,38.91,3
+2025-01-06,Paris,75,Île-de-France,Online,33.95,3
+2025-01-06,Pas-de-Calais,62,Hauts-de-France,Online,74.13,4
+2025-01-07,Cher,18,Centre-Val de Loire,Online,87.29,4
+2025-01-07,Loire-Atlantique,44,Pays de la Loire,Store,43.95,5
+2025-01-07,Lot,46,Occitanie,Online,122.39,3
+2025-01-07,Paris,75,Île-de-France,Online,5.0,2
+2025-01-07,Paris,75,Île-de-France,Store,74.98,5
+2025-01-08,Cher,18,Centre-Val de Loire,Store,87.49,3
+2025-01-08,Corse-du-Sud,2A,Corse,Online,110.77,4
+2025-01-08,Gironde,33,Nouvelle-Aquitaine,Store,72.04,4
+2025-01-08,Haute-Garonne,31,Occitanie,Store,59.97,5
+2025-01-09,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,71.07,3
+2025-01-09,Calvados,14,Normandie,Phone,93.09,4
+2025-01-09,Charente-Maritime,17,Nouvelle-Aquitaine,Store,137.78,4
+2025-01-09,Lot-et-Garonne,47,Nouvelle-Aquitaine,Online,77.45,4
+2025-01-09,Lozère,48,Occitanie,Online,64.97,4
+2025-01-09,Lozère,48,Occitanie,Store,69.0,5
+2025-01-09,Nord,59,Hauts-de-France,Store,65.37,4
+2025-01-09,Pas-de-Calais,62,Hauts-de-France,Store,99.58,5
+2025-01-09,Savoie,73,Auvergne-Rhône-Alpes,Store,81.0,3
+2025-01-09,Var,83,Provence-Alpes-Côte d'Azur,Store,53.05,5
+2025-01-10,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,36.83,4
+2025-01-10,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,45.82,4
+2025-01-10,Cher,18,Centre-Val de Loire,Online,122.73,4
+2025-01-10,Indre-et-Loire,37,Centre-Val de Loire,Store,32.95,5
+2025-01-10,Nord,59,Hauts-de-France,Phone,96.26,3
+2025-01-10,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Store,73.66,3
+2025-01-10,Rhône,69,Auvergne-Rhône-Alpes,Phone,59.05,5
+2025-01-11,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Online,114.4,4
+2025-01-11,Charente-Maritime,17,Nouvelle-Aquitaine,Store,109.46,3
+2025-01-11,Corse-du-Sud,2A,Corse,Store,95.62,4
+2025-01-11,Gironde,33,Nouvelle-Aquitaine,Store,65.73,3
+2025-01-11,Haute-Saône,70,Bourgogne-Franche-Comté,Store,102.96,4
+2025-01-11,Meurthe-et-Moselle,54,Grand Est,Store,90.87,5
+2025-01-11,Nièvre,58,Bourgogne-Franche-Comté,Online,72.42,5
+2025-01-11,Val-d'Oise,95,Île-de-France,Store,5.0,4
+2025-01-11,Val-de-Marne,94,Île-de-France,Online,90.76,3
+2025-01-12,Aisne,02,Hauts-de-France,Store,110.22,4
+2025-01-12,Aube,10,Grand Est,Online,77.81,3
+2025-01-12,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,98.8,4
+2025-01-12,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,82.02,4
+2025-01-12,Calvados,14,Normandie,Phone,24.65,4
+2025-01-12,Maine-et-Loire,49,Pays de la Loire,Online,148.35,3
+2025-01-12,Orne,61,Normandie,Online,96.88,4
+2025-01-12,Paris,75,Île-de-France,Store,41.88,2
+2025-01-13,Ardennes,08,Grand Est,Online,93.35,5
+2025-01-13,Aude,11,Occitanie,Online,44.78,5
+2025-01-13,Gironde,33,Nouvelle-Aquitaine,Online,93.59,5
+2025-01-13,Guyane,973,Outre-mer,Store,82.87,4
+2025-01-13,La Réunion,974,Outre-mer,Online,78.81,5
+2025-01-13,Somme,80,Hauts-de-France,Online,36.1,3
+2025-01-13,Var,83,Provence-Alpes-Côte d'Azur,Online,51.64,4
+2025-01-14,Calvados,14,Normandie,Store,56.34,3
+2025-01-14,Calvados,14,Normandie,Store,78.48,4
+2025-01-14,Eure-et-Loir,28,Centre-Val de Loire,Store,68.62,5
+2025-01-14,Morbihan,56,Bretagne,Phone,147.91,3
+2025-01-14,Tarn-et-Garonne,82,Occitanie,Online,108.05,3
+2025-01-15,Gironde,33,Nouvelle-Aquitaine,Phone,52.86,4
+2025-01-15,Lot-et-Garonne,47,Nouvelle-Aquitaine,Online,157.61,3
+2025-01-15,Tarn-et-Garonne,82,Occitanie,Online,90.81,4
+2025-01-15,Tarn-et-Garonne,82,Occitanie,Online,93.34,4
+2025-01-16,Dordogne,24,Nouvelle-Aquitaine,Store,72.13,5
+2025-01-16,Haute-Garonne,31,Occitanie,Online,108.95,4
+2025-01-16,Hauts-de-Seine,92,Île-de-France,Store,87.81,3
+2025-01-16,Indre,36,Centre-Val de Loire,Online,65.8,4
+2025-01-16,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,34.23,4
+2025-01-16,Rhône,69,Auvergne-Rhône-Alpes,Online,120.82,5
+2025-01-16,Yonne,89,Bourgogne-Franche-Comté,Online,122.53,4
+2025-01-17,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,60.1,4
+2025-01-17,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,72.6,3
+2025-01-17,Haute-Saône,70,Bourgogne-Franche-Comté,Store,132.03,3
+2025-01-17,Loiret,45,Centre-Val de Loire,Online,51.15,4
+2025-01-17,Nord,59,Hauts-de-France,Phone,108.79,2
+2025-01-18,Calvados,14,Normandie,Store,72.57,4
+2025-01-18,Cantal,15,Auvergne-Rhône-Alpes,Online,80.03,4
+2025-01-18,Côte-d'Or,21,Bourgogne-Franche-Comté,Store,48.89,5
+2025-01-18,Isère,38,Auvergne-Rhône-Alpes,Store,36.8,5
+2025-01-18,Rhône,69,Auvergne-Rhône-Alpes,Online,110.87,4
+2025-01-18,Tarn,81,Occitanie,Online,42.58,5
+2025-01-19,Haute-Saône,70,Bourgogne-Franche-Comté,Online,110.0,3
+2025-01-19,Jura,39,Bourgogne-Franche-Comté,Store,54.79,3
+2025-01-19,La Réunion,974,Outre-mer,Store,57.0,3
+2025-01-19,Moselle,57,Grand Est,Store,39.35,4
+2025-01-19,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Store,51.5,3
+2025-01-19,Vendée,85,Pays de la Loire,Online,52.42,3
+2025-01-20,Cher,18,Centre-Val de Loire,Store,65.3,4
+2025-01-20,Haute-Garonne,31,Occitanie,Store,105.0,5
+2025-01-20,Haute-Marne,52,Grand Est,Phone,58.92,3
+2025-01-20,Indre-et-Loire,37,Centre-Val de Loire,Store,24.29,4
+2025-01-20,Rhône,69,Auvergne-Rhône-Alpes,Store,101.0,4
+2025-01-20,Seine-Saint-Denis,93,Île-de-France,Phone,76.48,2
+2025-01-21,Loire,42,Auvergne-Rhône-Alpes,Online,74.88,4
+2025-01-21,Lozère,48,Occitanie,Store,136.92,4
+2025-01-21,Marne,51,Grand Est,Online,68.99,3
+2025-01-21,Rhône,69,Auvergne-Rhône-Alpes,Store,106.95,5
+2025-01-21,Sarthe,72,Pays de la Loire,Online,104.37,3
+2025-01-21,Yonne,89,Bourgogne-Franche-Comté,Phone,99.5,3
+2025-01-22,Deux-Sèvres,79,Nouvelle-Aquitaine,Online,128.55,3
+2025-01-22,Gard,30,Occitanie,Store,53.78,4
+2025-01-22,Haute-Savoie,74,Auvergne-Rhône-Alpes,Store,59.36,5
+2025-01-22,Hauts-de-Seine,92,Île-de-France,Phone,119.14,3
+2025-01-22,Isère,38,Auvergne-Rhône-Alpes,Store,50.81,4
+2025-01-22,Jura,39,Bourgogne-Franche-Comté,Online,64.79,4
+2025-01-22,Savoie,73,Auvergne-Rhône-Alpes,Online,74.37,5
+2025-01-22,Seine-et-Marne,77,Île-de-France,Online,70.28,4
+2025-01-23,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,49.5,4
+2025-01-23,Aude,11,Occitanie,Online,56.41,4
+2025-01-23,Dordogne,24,Nouvelle-Aquitaine,Store,125.07,4
+2025-01-23,Hauts-de-Seine,92,Île-de-France,Online,120.97,4
+2025-01-23,Rhône,69,Auvergne-Rhône-Alpes,Store,106.28,3
+2025-01-23,Savoie,73,Auvergne-Rhône-Alpes,Store,123.62,3
+2025-01-24,Calvados,14,Normandie,Store,63.15,4
+2025-01-24,Haute-Garonne,31,Occitanie,Store,49.14,4
+2025-01-24,Hauts-de-Seine,92,Île-de-France,Store,112.1,5
+2025-01-25,Allier,03,Auvergne-Rhône-Alpes,Store,77.39,3
+2025-01-25,Ardèche,07,Auvergne-Rhône-Alpes,Online,42.37,5
+2025-01-25,Gironde,33,Nouvelle-Aquitaine,Online,65.28,4
+2025-01-25,Paris,75,Île-de-France,Online,103.83,5
+2025-01-25,Seine-et-Marne,77,Île-de-France,Online,126.75,5
+2025-01-26,Ain,01,Auvergne-Rhône-Alpes,Store,59.46,4
+2025-01-26,Ariège,09,Occitanie,Store,29.96,4
+2025-01-26,Ariège,09,Occitanie,Store,58.87,4
+2025-01-26,Calvados,14,Normandie,Store,57.36,3
+2025-01-26,Haute-Garonne,31,Occitanie,Store,101.75,4
+2025-01-26,Meurthe-et-Moselle,54,Grand Est,Online,106.58,5
+2025-01-26,Rhône,69,Auvergne-Rhône-Alpes,Phone,106.61,4
+2025-01-26,Yvelines,78,Île-de-France,Store,59.56,4
+2025-01-27,Cher,18,Centre-Val de Loire,Online,21.71,5
+2025-01-27,Creuse,23,Nouvelle-Aquitaine,Online,46.84,5
+2025-01-27,Isère,38,Auvergne-Rhône-Alpes,Online,77.25,4
+2025-01-27,Lot,46,Occitanie,Online,40.88,3
+2025-01-27,Moselle,57,Grand Est,Store,50.36,2
+2025-01-27,Tarn-et-Garonne,82,Occitanie,Online,51.16,3
+2025-01-28,Charente,16,Nouvelle-Aquitaine,Online,153.24,5
+2025-01-28,Cher,18,Centre-Val de Loire,Online,57.36,3
+2025-01-28,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,50.91,4
+2025-01-28,Haute-Garonne,31,Occitanie,Phone,69.85,3
+2025-01-28,Hérault,34,Occitanie,Store,54.44,4
+2025-01-28,Indre,36,Centre-Val de Loire,Store,65.77,5
+2025-01-28,Loire-Atlantique,44,Pays de la Loire,Online,48.37,3
+2025-01-28,Paris,75,Île-de-France,Online,76.57,4
+2025-01-28,Sarthe,72,Pays de la Loire,Online,57.62,4
+2025-02-01,Corrèze,19,Nouvelle-Aquitaine,Online,17.47,4
+2025-02-01,Gironde,33,Nouvelle-Aquitaine,Phone,63.89,3
+2025-02-01,Gironde,33,Nouvelle-Aquitaine,Store,70.95,4
+2025-02-01,Haute-Marne,52,Grand Est,Phone,34.15,4
+2025-02-01,Hauts-de-Seine,92,Île-de-France,Online,56.83,4
+2025-02-01,Indre,36,Centre-Val de Loire,Online,65.47,5
+2025-02-01,Loir-et-Cher,41,Centre-Val de Loire,Store,67.34,4
+2025-02-01,Maine-et-Loire,49,Pays de la Loire,Store,75.86,4
+2025-02-01,Mayenne,53,Pays de la Loire,Store,30.99,5
+2025-02-01,Vendée,85,Pays de la Loire,Store,124.74,4
+2025-02-02,Hauts-de-Seine,92,Île-de-France,Store,108.23,4
+2025-02-02,Lot,46,Occitanie,Phone,55.4,3
+2025-02-02,Moselle,57,Grand Est,Store,55.2,4
+2025-02-02,Rhône,69,Auvergne-Rhône-Alpes,Store,105.91,5
+2025-02-02,Sarthe,72,Pays de la Loire,Online,26.95,5
+2025-02-02,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,11.5,4
+2025-02-02,Seine-Saint-Denis,93,Île-de-France,Store,61.13,3
+2025-02-03,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,29.43,3
+2025-02-03,Corse-du-Sud,2A,Corse,Store,91.63,4
+2025-02-03,Dordogne,24,Nouvelle-Aquitaine,Online,107.38,5
+2025-02-03,Haute-Garonne,31,Occitanie,Phone,127.17,4
+2025-02-03,Hautes-Pyrénées,65,Occitanie,Store,91.18,5
+2025-02-03,Indre,36,Centre-Val de Loire,Store,87.22,3
+2025-02-03,Mayotte,976,Outre-mer,Online,60.7,4
+2025-02-04,Cantal,15,Auvergne-Rhône-Alpes,Phone,139.38,3
+2025-02-04,Dordogne,24,Nouvelle-Aquitaine,Phone,108.26,2
+2025-02-04,Haute-Garonne,31,Occitanie,Online,73.02,3
+2025-02-04,Haute-Vienne,87,Nouvelle-Aquitaine,Phone,145.56,3
+2025-02-05,Bas-Rhin,67,Grand Est,Online,109.16,4
+2025-02-05,Côte-d'Or,21,Bourgogne-Franche-Comté,Store,70.25,5
+2025-02-05,Doubs,25,Bourgogne-Franche-Comté,Store,72.35,4
+2025-02-05,Haut-Rhin,68,Grand Est,Online,121.55,4
+2025-02-05,Haute-Vienne,87,Nouvelle-Aquitaine,Phone,114.31,3
+2025-02-05,Paris,75,Île-de-France,Phone,86.03,3
+2025-02-06,Allier,03,Auvergne-Rhône-Alpes,Online,92.05,4
+2025-02-06,Allier,03,Auvergne-Rhône-Alpes,Store,56.75,4
+2025-02-06,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,43.34,5
+2025-02-06,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,98.0,5
+2025-02-06,Cantal,15,Auvergne-Rhône-Alpes,Phone,122.25,5
+2025-02-06,Indre-et-Loire,37,Centre-Val de Loire,Store,54.13,4
+2025-02-06,Nord,59,Hauts-de-France,Store,65.47,4
+2025-02-06,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,69.61,3
+2025-02-07,Allier,03,Auvergne-Rhône-Alpes,Online,53.14,4
+2025-02-07,Hauts-de-Seine,92,Île-de-France,Online,122.86,3
+2025-02-07,Loiret,45,Centre-Val de Loire,Store,74.04,4
+2025-02-07,Paris,75,Île-de-France,Online,64.85,3
+2025-02-07,Var,83,Provence-Alpes-Côte d'Azur,Online,24.56,3
+2025-02-08,Allier,03,Auvergne-Rhône-Alpes,Online,66.16,3
+2025-02-08,Aude,11,Occitanie,Store,62.68,4
+2025-02-08,Corse-du-Sud,2A,Corse,Online,135.01,4
+2025-02-08,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,22.26,4
+2025-02-09,Aisne,02,Hauts-de-France,Online,81.12,5
+2025-02-10,Aisne,02,Hauts-de-France,Store,119.29,4
+2025-02-10,Eure,27,Normandie,Online,67.38,4
+2025-02-10,Ille-et-Vilaine,35,Bretagne,Store,87.24,4
+2025-02-10,Loire,42,Auvergne-Rhône-Alpes,Phone,44.25,4
+2025-02-10,Lot,46,Occitanie,Store,101.04,3
+2025-02-10,Rhône,69,Auvergne-Rhône-Alpes,Phone,90.57,3
+2025-02-11,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,31.51,4
+2025-02-11,Deux-Sèvres,79,Nouvelle-Aquitaine,Online,35.1,3
+2025-02-11,Gard,30,Occitanie,Store,44.08,3
+2025-02-11,Gers,32,Occitanie,Online,85.55,4
+2025-02-11,Loir-et-Cher,41,Centre-Val de Loire,Store,73.87,3
+2025-02-11,Loire-Atlantique,44,Pays de la Loire,Online,32.84,3
+2025-02-11,Paris,75,Île-de-France,Store,8.17,5
+2025-02-12,Allier,03,Auvergne-Rhône-Alpes,Store,70.51,4
+2025-02-12,Cher,18,Centre-Val de Loire,Store,46.4,3
+2025-02-12,Côtes-d'Armor,22,Bretagne,Online,66.46,3
+2025-02-12,Deux-Sèvres,79,Nouvelle-Aquitaine,Store,88.86,3
+2025-02-12,Vaucluse,84,Provence-Alpes-Côte d'Azur,Online,142.74,3
+2025-02-13,Isère,38,Auvergne-Rhône-Alpes,Online,44.28,5
+2025-02-13,Nièvre,58,Bourgogne-Franche-Comté,Online,48.64,4
+2025-02-13,Vienne,86,Nouvelle-Aquitaine,Online,74.6,5
+2025-02-14,Bas-Rhin,67,Grand Est,Store,66.44,4
+2025-02-14,Calvados,14,Normandie,Online,55.48,3
+2025-02-14,Dordogne,24,Nouvelle-Aquitaine,Online,104.87,4
+2025-02-14,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,96.05,4
+2025-02-14,Loire,42,Auvergne-Rhône-Alpes,Phone,32.03,3
+2025-02-14,Mayenne,53,Pays de la Loire,Online,21.59,3
+2025-02-14,Meuse,55,Grand Est,Online,49.23,5
+2025-02-14,Meuse,55,Grand Est,Store,82.98,4
+2025-02-14,Nord,59,Hauts-de-France,Online,53.05,3
+2025-02-14,Sarthe,72,Pays de la Loire,Online,105.02,3
+2025-02-14,Seine-Saint-Denis,93,Île-de-France,Online,58.56,5
+2025-02-14,Territoire de Belfort,90,Bourgogne-Franche-Comté,Online,61.09,4
+2025-02-15,Ariège,09,Occitanie,Store,129.22,4
+2025-02-15,Dordogne,24,Nouvelle-Aquitaine,Online,89.74,4
+2025-02-15,Dordogne,24,Nouvelle-Aquitaine,Online,121.66,3
+2025-02-15,Lot,46,Occitanie,Online,75.45,3
+2025-02-15,Lot,46,Occitanie,Phone,84.25,3
+2025-02-15,Nord,59,Hauts-de-France,Store,65.95,4
+2025-02-15,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Phone,54.54,3
+2025-02-15,Rhône,69,Auvergne-Rhône-Alpes,Online,98.77,3
+2025-02-15,Tarn,81,Occitanie,Store,52.34,1
+2025-02-16,Gers,32,Occitanie,Store,68.5,3
+2025-02-16,Haute-Corse,2B,Corse,Online,30.48,4
+2025-02-16,Mayotte,976,Outre-mer,Online,104.93,4
+2025-02-16,Paris,75,Île-de-France,Online,123.43,3
+2025-02-16,Rhône,69,Auvergne-Rhône-Alpes,Store,122.49,4
+2025-02-16,Saône-et-Loire,71,Bourgogne-Franche-Comté,Store,34.52,4
+2025-02-16,Seine-Saint-Denis,93,Île-de-France,Store,43.27,2
+2025-02-16,Var,83,Provence-Alpes-Côte d'Azur,Online,29.63,3
+2025-02-17,Aube,10,Grand Est,Phone,87.31,3
+2025-02-17,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,113.21,5
+2025-02-17,Haute-Vienne,87,Nouvelle-Aquitaine,Store,110.63,3
+2025-02-17,Indre,36,Centre-Val de Loire,Online,37.69,4
+2025-02-17,Mayenne,53,Pays de la Loire,Online,58.48,2
+2025-02-17,Mayotte,976,Outre-mer,Phone,75.35,3
+2025-02-17,Somme,80,Hauts-de-France,Online,57.91,5
+2025-02-17,Yonne,89,Bourgogne-Franche-Comté,Online,140.78,4
+2025-02-18,Essonne,91,Île-de-France,Phone,91.62,4
+2025-02-18,Guadeloupe,971,Outre-mer,Online,72.75,3
+2025-02-18,Haute-Garonne,31,Occitanie,Phone,52.85,3
+2025-02-18,Hauts-de-Seine,92,Île-de-France,Store,84.26,3
+2025-02-18,Isère,38,Auvergne-Rhône-Alpes,Store,51.36,4
+2025-02-18,Loire-Atlantique,44,Pays de la Loire,Online,66.99,4
+2025-02-18,Meuse,55,Grand Est,Store,102.43,4
+2025-02-18,Nièvre,58,Bourgogne-Franche-Comté,Phone,129.99,4
+2025-02-18,Nord,59,Hauts-de-France,Phone,111.87,4
+2025-02-18,Paris,75,Île-de-France,Online,88.27,5
+2025-02-18,Rhône,69,Auvergne-Rhône-Alpes,Online,56.93,5
+2025-02-19,Eure,27,Normandie,Online,87.01,4
+2025-02-19,Haut-Rhin,68,Grand Est,Phone,148.06,2
+2025-02-19,Haut-Rhin,68,Grand Est,Store,58.18,5
+2025-02-19,Nord,59,Hauts-de-France,Online,83.6,4
+2025-02-20,Aveyron,12,Occitanie,Phone,98.63,3
+2025-02-20,Indre,36,Centre-Val de Loire,Store,50.3,3
+2025-02-20,Lozère,48,Occitanie,Phone,132.81,3
+2025-02-20,Meurthe-et-Moselle,54,Grand Est,Online,180.38,5
+2025-02-20,Orne,61,Normandie,Store,62.94,4
+2025-02-20,Paris,75,Île-de-France,Online,125.87,4
+2025-02-20,Paris,75,Île-de-France,Store,36.09,3
+2025-02-21,Allier,03,Auvergne-Rhône-Alpes,Store,37.93,5
+2025-02-21,Ariège,09,Occitanie,Store,67.45,3
+2025-02-21,Aube,10,Grand Est,Phone,65.2,4
+2025-02-21,Cantal,15,Auvergne-Rhône-Alpes,Online,124.19,4
+2025-02-21,Finistère,29,Bretagne,Online,39.0,4
+2025-02-21,Hauts-de-Seine,92,Île-de-France,Store,116.91,4
+2025-02-21,Isère,38,Auvergne-Rhône-Alpes,Store,68.96,5
+2025-02-21,Loire-Atlantique,44,Pays de la Loire,Store,27.85,4
+2025-02-21,Maine-et-Loire,49,Pays de la Loire,Online,40.64,3
+2025-02-21,Paris,75,Île-de-France,Online,103.27,4
+2025-02-22,Hauts-de-Seine,92,Île-de-France,Online,111.7,3
+2025-02-22,Loire-Atlantique,44,Pays de la Loire,Store,34.44,3
+2025-02-22,Moselle,57,Grand Est,Store,16.27,3
+2025-02-22,Nord,59,Hauts-de-France,Store,61.33,3
+2025-02-22,Rhône,69,Auvergne-Rhône-Alpes,Online,72.03,4
+2025-02-23,Aisne,02,Hauts-de-France,Online,88.15,5
+2025-02-23,Gard,30,Occitanie,Store,62.12,3
+2025-02-23,Haut-Rhin,68,Grand Est,Online,131.28,3
+2025-02-23,Loir-et-Cher,41,Centre-Val de Loire,Online,68.02,3
+2025-02-23,Maine-et-Loire,49,Pays de la Loire,Store,66.51,5
+2025-02-23,Paris,75,Île-de-France,Online,64.86,3
+2025-02-23,Seine-Saint-Denis,93,Île-de-France,Online,51.5,3
+2025-02-23,Territoire de Belfort,90,Bourgogne-Franche-Comté,Online,77.58,5
+2025-02-24,Charente-Maritime,17,Nouvelle-Aquitaine,Store,102.28,2
+2025-02-24,Côtes-d'Armor,22,Bretagne,Online,110.98,3
+2025-02-24,Haute-Marne,52,Grand Est,Online,58.6,4
+2025-02-24,Sarthe,72,Pays de la Loire,Online,60.53,4
+2025-02-24,Somme,80,Hauts-de-France,Online,37.75,5
+2025-02-24,Vaucluse,84,Provence-Alpes-Côte d'Azur,Phone,81.46,2
+2025-02-25,Ariège,09,Occitanie,Online,56.65,3
+2025-02-25,Aube,10,Grand Est,Store,81.67,5
+2025-02-25,Calvados,14,Normandie,Store,88.92,4
+2025-02-25,Cantal,15,Auvergne-Rhône-Alpes,Store,144.87,4
+2025-02-25,Corse-du-Sud,2A,Corse,Store,79.4,4
+2025-02-25,Gironde,33,Nouvelle-Aquitaine,Online,98.13,5
+2025-02-25,Haute-Garonne,31,Occitanie,Online,59.75,5
+2025-02-25,Lozère,48,Occitanie,Online,117.11,5
+2025-02-25,Somme,80,Hauts-de-France,Store,44.15,5
+2025-02-25,Tarn,81,Occitanie,Store,97.86,5
+2025-02-25,Tarn,81,Occitanie,Store,130.79,4
+2025-02-26,Eure-et-Loir,28,Centre-Val de Loire,Store,32.81,2
+2025-02-26,Indre-et-Loire,37,Centre-Val de Loire,Store,19.6,2
+2025-02-26,Savoie,73,Auvergne-Rhône-Alpes,Online,103.94,4
+2025-02-26,Seine-Saint-Denis,93,Île-de-France,Phone,46.04,3
+2025-02-27,Aveyron,12,Occitanie,Store,101.67,3
+2025-02-27,Bas-Rhin,67,Grand Est,Store,124.26,4
+2025-02-27,Essonne,91,Île-de-France,Phone,88.02,2
+2025-02-27,Eure-et-Loir,28,Centre-Val de Loire,Store,60.37,5
+2025-02-27,Gers,32,Occitanie,Online,129.82,4
+2025-02-27,Gironde,33,Nouvelle-Aquitaine,Online,82.62,3
+2025-02-27,Haute-Garonne,31,Occitanie,Online,78.15,4
+2025-02-27,Nord,59,Hauts-de-France,Online,61.21,4
+2025-02-27,Nord,59,Hauts-de-France,Phone,53.01,4
+2025-02-27,Paris,75,Île-de-France,Online,56.74,5
+2025-02-27,Paris,75,Île-de-France,Phone,122.63,3
+2025-02-27,Rhône,69,Auvergne-Rhône-Alpes,Phone,73.8,2
+2025-02-28,Aveyron,12,Occitanie,Online,105.07,4
+2025-02-28,Cantal,15,Auvergne-Rhône-Alpes,Online,79.72,3
+2025-02-28,Maine-et-Loire,49,Pays de la Loire,Store,82.19,5
+2025-02-28,Paris,75,Île-de-France,Store,55.1,3
+2025-03-01,Corse-du-Sud,2A,Corse,Store,71.83,4
+2025-03-01,Gironde,33,Nouvelle-Aquitaine,Store,105.53,4
+2025-03-01,Hauts-de-Seine,92,Île-de-France,Online,80.13,4
+2025-03-01,Paris,75,Île-de-France,Online,120.18,4
+2025-03-02,Allier,03,Auvergne-Rhône-Alpes,Store,69.36,4
+2025-03-02,Cher,18,Centre-Val de Loire,Store,51.79,2
+2025-03-02,Corrèze,19,Nouvelle-Aquitaine,Online,55.47,3
+2025-03-02,Drôme,26,Auvergne-Rhône-Alpes,Store,43.05,3
+2025-03-02,Haut-Rhin,68,Grand Est,Store,85.76,3
+2025-03-02,Loir-et-Cher,41,Centre-Val de Loire,Online,49.67,3
+2025-03-02,Mayenne,53,Pays de la Loire,Online,43.79,3
+2025-03-02,Vaucluse,84,Provence-Alpes-Côte d'Azur,Online,68.22,3
+2025-03-03,Ardennes,08,Grand Est,Online,59.87,4
+2025-03-03,Indre,36,Centre-Val de Loire,Online,54.16,5
+2025-03-03,Maine-et-Loire,49,Pays de la Loire,Online,153.98,5
+2025-03-03,Paris,75,Île-de-France,Online,54.36,5
+2025-03-03,Paris,75,Île-de-France,Online,75.24,5
+2025-03-03,Paris,75,Île-de-France,Online,93.3,3
+2025-03-03,Tarn-et-Garonne,82,Occitanie,Online,87.12,4
+2025-03-03,Var,83,Provence-Alpes-Côte d'Azur,Store,11.21,5
+2025-03-04,Indre,36,Centre-Val de Loire,Phone,50.41,3
+2025-03-04,Loiret,45,Centre-Val de Loire,Store,55.45,4
+2025-03-04,Paris,75,Île-de-France,Phone,66.45,4
+2025-03-05,Cher,18,Centre-Val de Loire,Store,99.05,3
+2025-03-06,Aube,10,Grand Est,Store,81.71,5
+2025-03-06,Haute-Vienne,87,Nouvelle-Aquitaine,Store,147.01,4
+2025-03-06,Rhône,69,Auvergne-Rhône-Alpes,Online,63.34,3
+2025-03-07,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Phone,94.53,4
+2025-03-07,Lozère,48,Occitanie,Online,86.14,4
+2025-03-07,Martinique,972,Outre-mer,Store,71.54,3
+2025-03-07,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Online,45.64,4
+2025-03-07,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,77.6,5
+2025-03-07,Somme,80,Hauts-de-France,Online,97.13,4
+2025-03-08,Indre,36,Centre-Val de Loire,Online,40.3,5
+2025-03-08,Marne,51,Grand Est,Store,35.73,3
+2025-03-08,Paris,75,Île-de-France,Online,60.28,4
+2025-03-08,Pas-de-Calais,62,Hauts-de-France,Online,114.37,4
+2025-03-09,Calvados,14,Normandie,Online,37.7,4
+2025-03-09,Gard,30,Occitanie,Store,61.37,4
+2025-03-09,Haute-Savoie,74,Auvergne-Rhône-Alpes,Store,100.36,4
+2025-03-09,Loiret,45,Centre-Val de Loire,Store,93.34,3
+2025-03-09,Meurthe-et-Moselle,54,Grand Est,Online,94.2,5
+2025-03-09,Vaucluse,84,Provence-Alpes-Côte d'Azur,Online,102.17,5
+2025-03-10,Cantal,15,Auvergne-Rhône-Alpes,Online,58.26,5
+2025-03-10,Corse-du-Sud,2A,Corse,Store,88.79,4
+2025-03-10,Gard,30,Occitanie,Online,50.33,4
+2025-03-10,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Store,71.56,3
+2025-03-10,Lozère,48,Occitanie,Online,101.87,4
+2025-03-10,Maine-et-Loire,49,Pays de la Loire,Store,102.9,3
+2025-03-11,Eure,27,Normandie,Store,42.47,5
+2025-03-11,Indre,36,Centre-Val de Loire,Store,86.66,4
+2025-03-11,Loire-Atlantique,44,Pays de la Loire,Phone,78.04,3
+2025-03-11,Pas-de-Calais,62,Hauts-de-France,Online,70.4,4
+2025-03-11,Pas-de-Calais,62,Hauts-de-France,Online,116.18,3
+2025-03-11,Somme,80,Hauts-de-France,Phone,66.03,4
+2025-03-11,Yvelines,78,Île-de-France,Online,63.77,3
+2025-03-12,Cher,18,Centre-Val de Loire,Online,42.76,4
+2025-03-12,Cher,18,Centre-Val de Loire,Online,72.94,4
+2025-03-12,Dordogne,24,Nouvelle-Aquitaine,Store,44.82,4
+2025-03-12,Oise,60,Hauts-de-France,Store,81.24,4
+2025-03-12,Paris,75,Île-de-France,Online,84.62,4
+2025-03-13,Haute-Vienne,87,Nouvelle-Aquitaine,Store,57.88,4
+2025-03-13,Isère,38,Auvergne-Rhône-Alpes,Online,44.78,4
+2025-03-13,Moselle,57,Grand Est,Store,31.58,3
+2025-03-13,Tarn,81,Occitanie,Phone,81.93,4
+2025-03-14,Ardennes,08,Grand Est,Phone,80.62,5
+2025-03-14,Aube,10,Grand Est,Online,69.26,5
+2025-03-14,Nord,59,Hauts-de-France,Online,60.74,2
+2025-03-14,Var,83,Provence-Alpes-Côte d'Azur,Online,50.53,4
+2025-03-15,Calvados,14,Normandie,Online,60.37,4
+2025-03-15,Haut-Rhin,68,Grand Est,Store,79.45,4
+2025-03-15,Loire-Atlantique,44,Pays de la Loire,Online,45.99,4
+2025-03-16,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,37.53,5
+2025-03-16,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Store,80.5,5
+2025-03-16,Gard,30,Occitanie,Online,100.22,4
+2025-03-16,Haute-Savoie,74,Auvergne-Rhône-Alpes,Phone,102.46,3
+2025-03-16,Hauts-de-Seine,92,Île-de-France,Online,97.11,4
+2025-03-16,Ille-et-Vilaine,35,Bretagne,Store,92.5,3
+2025-03-16,Paris,75,Île-de-France,Store,30.91,3
+2025-03-16,Savoie,73,Auvergne-Rhône-Alpes,Online,80.35,4
+2025-03-16,Var,83,Provence-Alpes-Côte d'Azur,Online,50.69,4
+2025-03-16,Yvelines,78,Île-de-France,Online,56.43,5
+2025-03-17,Aisne,02,Hauts-de-France,Online,129.01,3
+2025-03-17,Haut-Rhin,68,Grand Est,Online,85.74,4
+2025-03-17,Landes,40,Nouvelle-Aquitaine,Online,64.13,4
+2025-03-17,Rhône,69,Auvergne-Rhône-Alpes,Store,146.23,4
+2025-03-18,Calvados,14,Normandie,Online,41.65,5
+2025-03-18,Cher,18,Centre-Val de Loire,Store,104.92,3
+2025-03-18,Drôme,26,Auvergne-Rhône-Alpes,Online,101.31,2
+2025-03-18,Essonne,91,Île-de-France,Store,27.73,4
+2025-03-18,Maine-et-Loire,49,Pays de la Loire,Online,119.22,4
+2025-03-18,Pas-de-Calais,62,Hauts-de-France,Online,148.77,4
+2025-03-18,Tarn,81,Occitanie,Phone,103.87,4
+2025-03-19,Calvados,14,Normandie,Store,37.74,5
+2025-03-19,Calvados,14,Normandie,Store,66.55,3
+2025-03-19,Gironde,33,Nouvelle-Aquitaine,Phone,132.52,4
+2025-03-19,Indre,36,Centre-Val de Loire,Online,39.09,3
+2025-03-19,Loire-Atlantique,44,Pays de la Loire,Online,55.74,4
+2025-03-19,Manche,50,Normandie,Store,61.18,5
+2025-03-19,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Phone,76.89,4
+2025-03-19,Vosges,88,Grand Est,Online,59.68,5
+2025-03-19,Yonne,89,Bourgogne-Franche-Comté,Online,134.36,4
+2025-03-20,Aude,11,Occitanie,Phone,71.18,2
+2025-03-20,Isère,38,Auvergne-Rhône-Alpes,Store,29.81,4
+2025-03-20,Moselle,57,Grand Est,Online,69.5,4
+2025-03-20,Paris,75,Île-de-France,Online,85.97,5
+2025-03-21,Meurthe-et-Moselle,54,Grand Est,Store,70.76,3
+2025-03-21,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,93.94,4
+2025-03-21,Yonne,89,Bourgogne-Franche-Comté,Store,89.18,5
+2025-03-22,Drôme,26,Auvergne-Rhône-Alpes,Online,52.66,5
+2025-03-22,Haute-Garonne,31,Occitanie,Online,115.61,4
+2025-03-22,Haute-Vienne,87,Nouvelle-Aquitaine,Online,112.19,4
+2025-03-22,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Phone,131.45,4
+2025-03-22,Isère,38,Auvergne-Rhône-Alpes,Phone,50.03,2
+2025-03-22,Lozère,48,Occitanie,Online,57.85,4
+2025-03-23,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,88.36,4
+2025-03-23,Gironde,33,Nouvelle-Aquitaine,Online,34.97,3
+2025-03-23,Gironde,33,Nouvelle-Aquitaine,Online,46.89,4
+2025-03-23,Paris,75,Île-de-France,Phone,39.3,3
+2025-03-23,Somme,80,Hauts-de-France,Store,83.88,4
+2025-03-23,Vienne,86,Nouvelle-Aquitaine,Store,131.25,4
+2025-03-24,Haute-Saône,70,Bourgogne-Franche-Comté,Online,103.39,4
+2025-03-24,Hauts-de-Seine,92,Île-de-France,Online,182.92,3
+2025-03-24,Hérault,34,Occitanie,Online,59.13,5
+2025-03-24,Indre-et-Loire,37,Centre-Val de Loire,Store,46.5,5
+2025-03-24,Oise,60,Hauts-de-France,Store,52.4,5
+2025-03-24,Vendée,85,Pays de la Loire,Online,86.93,4
+2025-03-25,Haute-Garonne,31,Occitanie,Store,105.13,4
+2025-03-25,Haute-Marne,52,Grand Est,Store,16.97,3
+2025-03-25,Paris,75,Île-de-France,Online,71.35,4
+2025-03-25,Paris,75,Île-de-France,Online,119.45,5
+2025-03-25,Yvelines,78,Île-de-France,Store,46.12,4
+2025-03-26,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,64.12,4
+2025-03-26,Meurthe-et-Moselle,54,Grand Est,Online,66.55,5
+2025-03-27,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,63.05,4
+2025-03-27,Charente-Maritime,17,Nouvelle-Aquitaine,Store,52.18,2
+2025-03-27,Deux-Sèvres,79,Nouvelle-Aquitaine,Online,127.63,3
+2025-03-27,Hérault,34,Occitanie,Online,70.55,4
+2025-03-27,Lot,46,Occitanie,Store,96.59,5
+2025-03-27,Lot-et-Garonne,47,Nouvelle-Aquitaine,Phone,42.47,3
+2025-03-28,Ardennes,08,Grand Est,Online,127.67,2
+2025-03-28,Charente-Maritime,17,Nouvelle-Aquitaine,Store,64.98,4
+2025-03-28,Deux-Sèvres,79,Nouvelle-Aquitaine,Online,40.61,3
+2025-03-28,Guyane,973,Outre-mer,Store,63.51,5
+2025-03-28,Haute-Vienne,87,Nouvelle-Aquitaine,Online,131.08,5
+2025-03-28,Marne,51,Grand Est,Online,61.65,4
+2025-03-28,Rhône,69,Auvergne-Rhône-Alpes,Online,138.99,3
+2025-03-28,Tarn,81,Occitanie,Store,113.2,5
+2025-03-28,Territoire de Belfort,90,Bourgogne-Franche-Comté,Store,93.19,5
+2025-03-28,Vienne,86,Nouvelle-Aquitaine,Store,102.99,4
+2025-03-28,Yonne,89,Bourgogne-Franche-Comté,Store,72.67,4
+2025-04-01,Maine-et-Loire,49,Pays de la Loire,Online,72.96,5
+2025-04-01,Moselle,57,Grand Est,Phone,63.45,3
+2025-04-01,Pas-de-Calais,62,Hauts-de-France,Store,113.43,3
+2025-04-01,Val-de-Marne,94,Île-de-France,Online,77.14,3
+2025-04-01,Vosges,88,Grand Est,Online,73.37,3
+2025-04-02,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,64.79,3
+2025-04-02,Ardennes,08,Grand Est,Online,134.52,3
+2025-04-02,Maine-et-Loire,49,Pays de la Loire,Store,103.4,3
+2025-04-02,Val-de-Marne,94,Île-de-France,Phone,119.12,4
+2025-04-02,Var,83,Provence-Alpes-Côte d'Azur,Online,47.48,5
+2025-04-03,Allier,03,Auvergne-Rhône-Alpes,Online,79.01,4
+2025-04-03,Loire-Atlantique,44,Pays de la Loire,Store,42.34,3
+2025-04-03,Pas-de-Calais,62,Hauts-de-France,Online,90.85,4
+2025-04-03,Sarthe,72,Pays de la Loire,Online,124.72,3
+2025-04-04,Gironde,33,Nouvelle-Aquitaine,Online,103.38,4
+2025-04-04,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Store,49.96,5
+2025-04-04,Hauts-de-Seine,92,Île-de-France,Online,91.0,4
+2025-04-04,Nord,59,Hauts-de-France,Phone,65.1,4
+2025-04-04,Orne,61,Normandie,Online,59.45,5
+2025-04-04,Var,83,Provence-Alpes-Côte d'Azur,Online,55.08,3
+2025-04-05,Haute-Loire,43,Auvergne-Rhône-Alpes,Online,108.58,3
+2025-04-05,Lot,46,Occitanie,Phone,52.29,2
+2025-04-05,Rhône,69,Auvergne-Rhône-Alpes,Online,114.61,2
+2025-04-05,Savoie,73,Auvergne-Rhône-Alpes,Store,105.68,5
+2025-04-06,Calvados,14,Normandie,Store,50.06,4
+2025-04-06,Deux-Sèvres,79,Nouvelle-Aquitaine,Online,74.6,5
+2025-04-06,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,75.63,5
+2025-04-06,Loire,42,Auvergne-Rhône-Alpes,Phone,47.4,3
+2025-04-06,Paris,75,Île-de-France,Online,91.38,4
+2025-04-07,Côte-d'Or,21,Bourgogne-Franche-Comté,Store,34.89,3
+2025-04-07,Gironde,33,Nouvelle-Aquitaine,Online,93.51,3
+2025-04-07,Meurthe-et-Moselle,54,Grand Est,Online,113.11,5
+2025-04-07,Rhône,69,Auvergne-Rhône-Alpes,Online,57.48,5
+2025-04-07,Rhône,69,Auvergne-Rhône-Alpes,Store,56.43,3
+2025-04-07,Vienne,86,Nouvelle-Aquitaine,Store,92.07,4
+2025-04-08,Hauts-de-Seine,92,Île-de-France,Online,80.92,2
+2025-04-08,Vienne,86,Nouvelle-Aquitaine,Online,77.0,3
+2025-04-09,Bas-Rhin,67,Grand Est,Phone,74.23,4
+2025-04-09,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,65.16,5
+2025-04-09,Calvados,14,Normandie,Online,66.67,4
+2025-04-09,Eure,27,Normandie,Online,89.37,5
+2025-04-09,Eure,27,Normandie,Phone,40.91,3
+2025-04-09,Gard,30,Occitanie,Online,76.49,4
+2025-04-09,Haute-Marne,52,Grand Est,Phone,55.55,3
+2025-04-09,Jura,39,Bourgogne-Franche-Comté,Store,89.8,4
+2025-04-09,Loire-Atlantique,44,Pays de la Loire,Online,77.7,4
+2025-04-09,Nord,59,Hauts-de-France,Online,101.67,3
+2025-04-09,Pas-de-Calais,62,Hauts-de-France,Online,52.67,4
+2025-04-09,Rhône,69,Auvergne-Rhône-Alpes,Store,54.7,4
+2025-04-10,Loiret,45,Centre-Val de Loire,Online,55.78,4
+2025-04-10,Mayenne,53,Pays de la Loire,Store,54.36,2
+2025-04-11,Meuse,55,Grand Est,Store,60.91,3
+2025-04-11,Nord,59,Hauts-de-France,Online,29.56,3
+2025-04-11,Pas-de-Calais,62,Hauts-de-France,Store,118.09,4
+2025-04-12,Ardennes,08,Grand Est,Online,135.83,2
+2025-04-12,Haute-Corse,2B,Corse,Store,65.91,3
+2025-04-12,Paris,75,Île-de-France,Store,86.08,4
+2025-04-12,Savoie,73,Auvergne-Rhône-Alpes,Online,124.8,3
+2025-04-12,Vosges,88,Grand Est,Store,49.57,3
+2025-04-13,Ain,01,Auvergne-Rhône-Alpes,Store,85.82,4
+2025-04-13,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Online,123.65,4
+2025-04-13,Vienne,86,Nouvelle-Aquitaine,Store,118.51,4
+2025-04-14,Cher,18,Centre-Val de Loire,Store,73.6,4
+2025-04-14,Haute-Saône,70,Bourgogne-Franche-Comté,Phone,81.07,3
+2025-04-14,Hauts-de-Seine,92,Île-de-France,Store,98.71,4
+2025-04-14,Jura,39,Bourgogne-Franche-Comté,Store,70.15,3
+2025-04-15,Calvados,14,Normandie,Store,54.89,5
+2025-04-15,Cantal,15,Auvergne-Rhône-Alpes,Online,53.19,5
+2025-04-15,Finistère,29,Bretagne,Store,87.9,3
+2025-04-15,Haut-Rhin,68,Grand Est,Store,102.42,4
+2025-04-15,Hauts-de-Seine,92,Île-de-France,Online,113.52,4
+2025-04-15,Loire-Atlantique,44,Pays de la Loire,Store,45.28,3
+2025-04-15,Lot,46,Occitanie,Online,145.27,4
+2025-04-15,Nièvre,58,Bourgogne-Franche-Comté,Online,72.85,5
+2025-04-15,Val-d'Oise,95,Île-de-France,Store,27.8,2
+2025-04-16,Calvados,14,Normandie,Online,82.44,4
+2025-04-16,Cantal,15,Auvergne-Rhône-Alpes,Store,90.13,3
+2025-04-16,Haute-Garonne,31,Occitanie,Store,101.11,4
+2025-04-16,Hauts-de-Seine,92,Île-de-France,Online,106.02,4
+2025-04-16,Landes,40,Nouvelle-Aquitaine,Store,42.11,3
+2025-04-16,Rhône,69,Auvergne-Rhône-Alpes,Store,110.21,4
+2025-04-16,Sarthe,72,Pays de la Loire,Online,136.61,3
+2025-04-17,Gers,32,Occitanie,Store,107.74,4
+2025-04-17,Guyane,973,Outre-mer,Online,69.87,4
+2025-04-17,Haute-Marne,52,Grand Est,Online,67.47,3
+2025-04-17,Isère,38,Auvergne-Rhône-Alpes,Online,84.85,4
+2025-04-17,Nièvre,58,Bourgogne-Franche-Comté,Store,96.36,4
+2025-04-18,Corse-du-Sud,2A,Corse,Online,161.78,4
+2025-04-18,Eure-et-Loir,28,Centre-Val de Loire,Online,42.48,4
+2025-04-18,Guadeloupe,971,Outre-mer,Online,67.54,4
+2025-04-18,Haut-Rhin,68,Grand Est,Online,141.99,3
+2025-04-18,Haute-Corse,2B,Corse,Phone,46.82,3
+2025-04-18,Maine-et-Loire,49,Pays de la Loire,Store,97.06,4
+2025-04-18,Marne,51,Grand Est,Store,23.54,5
+2025-04-18,Nord,59,Hauts-de-France,Online,113.06,3
+2025-04-18,Paris,75,Île-de-France,Store,67.1,4
+2025-04-18,Pas-de-Calais,62,Hauts-de-France,Store,144.29,3
+2025-04-19,Deux-Sèvres,79,Nouvelle-Aquitaine,Store,92.02,4
+2025-04-19,Gironde,33,Nouvelle-Aquitaine,Online,127.06,4
+2025-04-20,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Online,87.88,5
+2025-04-20,Var,83,Provence-Alpes-Côte d'Azur,Online,52.45,4
+2025-04-21,Allier,03,Auvergne-Rhône-Alpes,Online,53.48,4
+2025-04-21,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,25.12,3
+2025-04-21,Charente-Maritime,17,Nouvelle-Aquitaine,Online,102.33,4
+2025-04-21,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,55.81,5
+2025-04-21,Haute-Garonne,31,Occitanie,Online,65.91,5
+2025-04-21,Haute-Garonne,31,Occitanie,Store,51.87,4
+2025-04-21,Hauts-de-Seine,92,Île-de-France,Store,103.28,5
+2025-04-21,Meurthe-et-Moselle,54,Grand Est,Online,91.06,3
+2025-04-21,Nièvre,58,Bourgogne-Franche-Comté,Store,84.27,3
+2025-04-21,Paris,75,Île-de-France,Online,65.5,4
+2025-04-21,Tarn,81,Occitanie,Store,89.1,3
+2025-04-22,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Store,104.0,5
+2025-04-22,Doubs,25,Bourgogne-Franche-Comté,Online,42.44,4
+2025-04-22,Gironde,33,Nouvelle-Aquitaine,Online,36.27,4
+2025-04-23,Hauts-de-Seine,92,Île-de-France,Phone,154.16,3
+2025-04-23,Marne,51,Grand Est,Online,56.96,2
+2025-04-24,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Store,135.84,4
+2025-04-24,Calvados,14,Normandie,Online,44.38,4
+2025-04-24,Cher,18,Centre-Val de Loire,Online,73.49,4
+2025-04-24,Finistère,29,Bretagne,Online,34.95,4
+2025-04-24,Ille-et-Vilaine,35,Bretagne,Online,206.24,2
+2025-04-24,Indre,36,Centre-Val de Loire,Online,42.26,4
+2025-04-24,Indre,36,Centre-Val de Loire,Online,76.01,4
+2025-04-24,La Réunion,974,Outre-mer,Online,104.09,4
+2025-04-24,Meurthe-et-Moselle,54,Grand Est,Online,102.25,5
+2025-04-24,Paris,75,Île-de-France,Online,74.34,4
+2025-04-24,Var,83,Provence-Alpes-Côte d'Azur,Online,64.86,4
+2025-04-25,Landes,40,Nouvelle-Aquitaine,Online,66.2,3
+2025-04-25,Marne,51,Grand Est,Online,54.18,4
+2025-04-25,Moselle,57,Grand Est,Online,24.37,3
+2025-04-25,Pas-de-Calais,62,Hauts-de-France,Online,157.85,3
+2025-04-25,Tarn-et-Garonne,82,Occitanie,Online,123.69,4
+2025-04-26,Allier,03,Auvergne-Rhône-Alpes,Store,109.28,3
+2025-04-26,La Réunion,974,Outre-mer,Store,136.43,4
+2025-04-26,Loire-Atlantique,44,Pays de la Loire,Online,48.72,4
+2025-04-26,Rhône,69,Auvergne-Rhône-Alpes,Store,161.94,3
+2025-04-26,Saône-et-Loire,71,Bourgogne-Franche-Comté,Store,20.17,5
+2025-04-26,Tarn,81,Occitanie,Online,91.92,5
+2025-04-27,Ariège,09,Occitanie,Store,126.44,4
+2025-04-27,Deux-Sèvres,79,Nouvelle-Aquitaine,Online,71.73,4
+2025-04-27,Haute-Corse,2B,Corse,Store,47.29,5
+2025-04-27,Indre,36,Centre-Val de Loire,Online,76.54,4
+2025-04-27,Indre,36,Centre-Val de Loire,Store,66.19,5
+2025-04-27,Jura,39,Bourgogne-Franche-Comté,Store,80.5,5
+2025-04-27,Loire-Atlantique,44,Pays de la Loire,Store,75.86,4
+2025-04-27,Morbihan,56,Bretagne,Phone,88.71,4
+2025-04-27,Nièvre,58,Bourgogne-Franche-Comté,Store,9.48,4
+2025-04-27,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,45.34,3
+2025-04-27,Somme,80,Hauts-de-France,Phone,55.05,3
+2025-04-27,Tarn,81,Occitanie,Online,119.09,5
+2025-04-27,Tarn,81,Occitanie,Store,130.36,5
+2025-04-27,Var,83,Provence-Alpes-Côte d'Azur,Online,56.41,3
+2025-04-28,Cantal,15,Auvergne-Rhône-Alpes,Online,87.23,5
+2025-04-28,Cantal,15,Auvergne-Rhône-Alpes,Store,82.73,4
+2025-04-28,Haute-Corse,2B,Corse,Phone,30.57,3
+2025-04-28,Haute-Saône,70,Bourgogne-Franche-Comté,Phone,90.51,4
+2025-04-28,Mayenne,53,Pays de la Loire,Online,71.55,4
+2025-04-28,Meurthe-et-Moselle,54,Grand Est,Online,103.26,5
+2025-04-28,Pas-de-Calais,62,Hauts-de-France,Online,79.38,5
+2025-04-28,Val-de-Marne,94,Île-de-France,Online,116.94,4
+2025-05-01,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,122.77,3
+2025-05-01,Haut-Rhin,68,Grand Est,Online,115.44,4
+2025-05-01,Var,83,Provence-Alpes-Côte d'Azur,Phone,48.42,4
+2025-05-01,Vienne,86,Nouvelle-Aquitaine,Store,147.37,3
+2025-05-02,Corrèze,19,Nouvelle-Aquitaine,Online,55.25,3
+2025-05-02,Corse-du-Sud,2A,Corse,Phone,54.61,3
+2025-05-03,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,30.07,4
+2025-05-03,Cher,18,Centre-Val de Loire,Store,87.11,5
+2025-05-03,Orne,61,Normandie,Store,106.47,4
+2025-05-03,Somme,80,Hauts-de-France,Online,55.07,3
+2025-05-03,Yvelines,78,Île-de-France,Store,72.75,4
+2025-05-04,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,211.02,4
+2025-05-04,Gironde,33,Nouvelle-Aquitaine,Store,100.09,3
+2025-05-04,Haute-Corse,2B,Corse,Online,73.81,3
+2025-05-04,Mayotte,976,Outre-mer,Store,75.37,3
+2025-05-04,Somme,80,Hauts-de-France,Store,110.23,2
+2025-05-04,Yvelines,78,Île-de-France,Online,130.55,4
+2025-05-05,Haute-Marne,52,Grand Est,Online,9.88,3
+2025-05-05,Indre,36,Centre-Val de Loire,Store,70.85,5
+2025-05-05,Meuse,55,Grand Est,Online,109.86,4
+2025-05-05,Pas-de-Calais,62,Hauts-de-France,Phone,109.75,4
+2025-05-06,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Online,77.44,3
+2025-05-06,Finistère,29,Bretagne,Store,49.55,4
+2025-05-06,Haute-Corse,2B,Corse,Online,40.88,5
+2025-05-06,Indre-et-Loire,37,Centre-Val de Loire,Online,58.9,4
+2025-05-07,Drôme,26,Auvergne-Rhône-Alpes,Store,117.2,4
+2025-05-07,Indre,36,Centre-Val de Loire,Online,55.41,5
+2025-05-07,Oise,60,Hauts-de-France,Store,91.59,3
+2025-05-07,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,69.07,3
+2025-05-08,Ardèche,07,Auvergne-Rhône-Alpes,Store,69.27,4
+2025-05-08,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,96.22,4
+2025-05-08,Loire,42,Auvergne-Rhône-Alpes,Store,76.8,3
+2025-05-08,Loire-Atlantique,44,Pays de la Loire,Store,18.97,5
+2025-05-08,Manche,50,Normandie,Online,14.88,3
+2025-05-08,Nord,59,Hauts-de-France,Online,83.38,3
+2025-05-08,Nord,59,Hauts-de-France,Store,27.57,3
+2025-05-09,Haut-Rhin,68,Grand Est,Online,135.63,5
+2025-05-09,Haute-Corse,2B,Corse,Store,36.51,4
+2025-05-09,Meuse,55,Grand Est,Store,151.34,4
+2025-05-09,Paris,75,Île-de-France,Online,49.06,5
+2025-05-10,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,65.87,5
+2025-05-10,Guadeloupe,971,Outre-mer,Online,66.31,4
+2025-05-10,Indre-et-Loire,37,Centre-Val de Loire,Store,48.85,5
+2025-05-10,Isère,38,Auvergne-Rhône-Alpes,Store,66.84,5
+2025-05-10,Moselle,57,Grand Est,Online,38.55,4
+2025-05-10,Paris,75,Île-de-France,Phone,67.72,4
+2025-05-10,Var,83,Provence-Alpes-Côte d'Azur,Online,46.88,5
+2025-05-11,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,15.54,4
+2025-05-12,Ardennes,08,Grand Est,Online,117.6,4
+2025-05-12,Aveyron,12,Occitanie,Online,76.47,4
+2025-05-12,Charente-Maritime,17,Nouvelle-Aquitaine,Online,64.38,3
+2025-05-12,Guyane,973,Outre-mer,Phone,62.1,3
+2025-05-12,Hauts-de-Seine,92,Île-de-France,Store,107.38,4
+2025-05-12,Indre-et-Loire,37,Centre-Val de Loire,Store,36.71,3
+2025-05-12,La Réunion,974,Outre-mer,Phone,95.55,5
+2025-05-12,Meurthe-et-Moselle,54,Grand Est,Store,112.1,4
+2025-05-12,Nord,59,Hauts-de-France,Store,70.37,5
+2025-05-12,Var,83,Provence-Alpes-Côte d'Azur,Store,64.89,5
+2025-05-13,Ardèche,07,Auvergne-Rhône-Alpes,Online,83.62,4
+2025-05-14,Charente-Maritime,17,Nouvelle-Aquitaine,Online,39.21,3
+2025-05-14,Côte-d'Or,21,Bourgogne-Franche-Comté,Store,47.93,4
+2025-05-14,Haute-Corse,2B,Corse,Store,38.0,5
+2025-05-14,Loire-Atlantique,44,Pays de la Loire,Online,44.16,4
+2025-05-14,Loire-Atlantique,44,Pays de la Loire,Online,109.56,5
+2025-05-14,Loire-Atlantique,44,Pays de la Loire,Store,57.7,4
+2025-05-14,Mayenne,53,Pays de la Loire,Online,35.45,4
+2025-05-14,Paris,75,Île-de-France,Store,21.13,4
+2025-05-14,Savoie,73,Auvergne-Rhône-Alpes,Store,139.3,4
+2025-05-15,Indre,36,Centre-Val de Loire,Online,59.75,4
+2025-05-15,Maine-et-Loire,49,Pays de la Loire,Online,98.11,3
+2025-05-15,Meurthe-et-Moselle,54,Grand Est,Online,42.35,4
+2025-05-15,Moselle,57,Grand Est,Store,34.64,5
+2025-05-15,Pas-de-Calais,62,Hauts-de-France,Phone,167.77,3
+2025-05-15,Pyrénées-Orientales,66,Occitanie,Online,95.32,4
+2025-05-15,Val-de-Marne,94,Île-de-France,Store,105.59,4
+2025-05-16,Ain,01,Auvergne-Rhône-Alpes,Online,97.7,4
+2025-05-16,Haute-Garonne,31,Occitanie,Online,88.74,5
+2025-05-16,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,67.73,3
+2025-05-16,Mayotte,976,Outre-mer,Phone,50.92,2
+2025-05-16,Seine-Maritime,76,Normandie,Online,47.0,4
+2025-05-16,Vosges,88,Grand Est,Store,63.08,5
+2025-05-17,Corrèze,19,Nouvelle-Aquitaine,Online,38.3,4
+2025-05-17,Eure,27,Normandie,Online,90.64,4
+2025-05-17,Lozère,48,Occitanie,Online,65.34,5
+2025-05-17,Nièvre,58,Bourgogne-Franche-Comté,Store,14.5,4
+2025-05-17,Nord,59,Hauts-de-France,Online,41.63,5
+2025-05-17,Rhône,69,Auvergne-Rhône-Alpes,Store,26.58,4
+2025-05-17,Tarn-et-Garonne,82,Occitanie,Store,108.55,4
+2025-05-18,Aveyron,12,Occitanie,Store,54.79,4
+2025-05-18,Aveyron,12,Occitanie,Store,109.28,4
+2025-05-18,Maine-et-Loire,49,Pays de la Loire,Online,37.29,2
+2025-05-18,Rhône,69,Auvergne-Rhône-Alpes,Online,119.55,4
+2025-05-19,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,32.69,5
+2025-05-19,Aube,10,Grand Est,Store,89.97,4
+2025-05-19,Pas-de-Calais,62,Hauts-de-France,Online,85.75,4
+2025-05-19,Yonne,89,Bourgogne-Franche-Comté,Online,46.33,3
+2025-05-20,Deux-Sèvres,79,Nouvelle-Aquitaine,Store,80.59,3
+2025-05-20,Eure-et-Loir,28,Centre-Val de Loire,Online,48.56,5
+2025-05-20,Hauts-de-Seine,92,Île-de-France,Online,63.85,5
+2025-05-20,Isère,38,Auvergne-Rhône-Alpes,Online,75.04,5
+2025-05-20,Jura,39,Bourgogne-Franche-Comté,Online,8.48,3
+2025-05-20,Paris,75,Île-de-France,Store,106.72,3
+2025-05-20,Yonne,89,Bourgogne-Franche-Comté,Store,71.11,3
+2025-05-21,Corse-du-Sud,2A,Corse,Online,102.88,4
+2025-05-21,Drôme,26,Auvergne-Rhône-Alpes,Online,94.43,4
+2025-05-21,Eure-et-Loir,28,Centre-Val de Loire,Store,93.93,5
+2025-05-21,La Réunion,974,Outre-mer,Store,102.15,5
+2025-05-21,Vienne,86,Nouvelle-Aquitaine,Online,90.23,3
+2025-05-21,Yvelines,78,Île-de-France,Online,104.23,4
+2025-05-22,Aisne,02,Hauts-de-France,Online,86.21,5
+2025-05-22,Allier,03,Auvergne-Rhône-Alpes,Online,62.51,4
+2025-05-22,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Online,76.05,5
+2025-05-22,Charente-Maritime,17,Nouvelle-Aquitaine,Store,49.49,3
+2025-05-22,Cher,18,Centre-Val de Loire,Online,99.59,3
+2025-05-22,Haute-Loire,43,Auvergne-Rhône-Alpes,Store,96.39,3
+2025-05-22,Tarn,81,Occitanie,Store,119.81,4
+2025-05-23,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Online,96.95,3
+2025-05-23,Ardennes,08,Grand Est,Store,66.35,4
+2025-05-23,Creuse,23,Nouvelle-Aquitaine,Online,49.57,4
+2025-05-23,Dordogne,24,Nouvelle-Aquitaine,Online,54.14,5
+2025-05-23,Drôme,26,Auvergne-Rhône-Alpes,Online,117.84,5
+2025-05-23,Haute-Garonne,31,Occitanie,Online,66.31,3
+2025-05-23,Haute-Marne,52,Grand Est,Online,30.22,4
+2025-05-23,Hérault,34,Occitanie,Online,60.96,3
+2025-05-23,Maine-et-Loire,49,Pays de la Loire,Online,118.37,4
+2025-05-23,Paris,75,Île-de-France,Online,61.81,3
+2025-05-23,Paris,75,Île-de-France,Phone,81.73,3
+2025-05-23,Var,83,Provence-Alpes-Côte d'Azur,Online,17.02,4
+2025-05-23,Yonne,89,Bourgogne-Franche-Comté,Online,53.32,4
+2025-05-24,Charente-Maritime,17,Nouvelle-Aquitaine,Online,57.57,3
+2025-05-24,Corrèze,19,Nouvelle-Aquitaine,Online,33.56,4
+2025-05-24,Corse-du-Sud,2A,Corse,Store,137.14,3
+2025-05-24,Doubs,25,Bourgogne-Franche-Comté,Online,51.62,4
+2025-05-24,Eure-et-Loir,28,Centre-Val de Loire,Phone,96.21,3
+2025-05-24,Guyane,973,Outre-mer,Phone,84.07,4
+2025-05-24,Haute-Marne,52,Grand Est,Online,82.95,4
+2025-05-24,Hauts-de-Seine,92,Île-de-France,Store,157.0,3
+2025-05-24,Paris,75,Île-de-France,Store,99.66,5
+2025-05-24,Paris,75,Île-de-France,Store,107.97,3
+2025-05-24,Pas-de-Calais,62,Hauts-de-France,Store,116.35,4
+2025-05-25,Cher,18,Centre-Val de Loire,Store,96.44,3
+2025-05-25,Haute-Savoie,74,Auvergne-Rhône-Alpes,Phone,166.77,5
+2025-05-25,Haute-Savoie,74,Auvergne-Rhône-Alpes,Store,108.65,5
+2025-05-25,Haute-Vienne,87,Nouvelle-Aquitaine,Store,64.99,4
+2025-05-25,Hauts-de-Seine,92,Île-de-France,Online,101.85,4
+2025-05-25,Loire-Atlantique,44,Pays de la Loire,Online,60.31,4
+2025-05-25,Loire-Atlantique,44,Pays de la Loire,Store,66.56,3
+2025-05-25,Lozère,48,Occitanie,Store,142.26,4
+2025-05-25,Paris,75,Île-de-France,Online,81.87,3
+2025-05-25,Vendée,85,Pays de la Loire,Online,173.5,4
+2025-05-26,Ardennes,08,Grand Est,Online,119.55,5
+2025-05-26,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,111.41,3
+2025-05-26,Loiret,45,Centre-Val de Loire,Online,26.6,4
+2025-05-26,Moselle,57,Grand Est,Store,33.87,4
+2025-05-26,Vaucluse,84,Provence-Alpes-Côte d'Azur,Online,93.69,4
+2025-05-26,Vienne,86,Nouvelle-Aquitaine,Store,130.05,4
+2025-05-26,Yonne,89,Bourgogne-Franche-Comté,Online,133.91,4
+2025-05-27,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,40.13,5
+2025-05-27,Drôme,26,Auvergne-Rhône-Alpes,Store,115.69,3
+2025-05-27,Haute-Marne,52,Grand Est,Store,49.23,5
+2025-05-27,Hauts-de-Seine,92,Île-de-France,Online,109.7,5
+2025-05-27,Nord,59,Hauts-de-France,Online,23.72,3
+2025-05-27,Paris,75,Île-de-France,Store,27.46,2
+2025-05-27,Rhône,69,Auvergne-Rhône-Alpes,Store,88.71,4
+2025-05-28,Hauts-de-Seine,92,Île-de-France,Store,110.75,5
+2025-05-28,Indre-et-Loire,37,Centre-Val de Loire,Online,38.63,3
+2025-05-28,Paris,75,Île-de-France,Online,58.46,4
+2025-05-28,Paris,75,Île-de-France,Store,62.08,4
+2025-05-28,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Phone,69.48,3
+2025-05-28,Seine-Saint-Denis,93,Île-de-France,Store,68.67,4
+2025-06-01,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,62.35,4
+2025-06-01,Aube,10,Grand Est,Store,78.53,4
+2025-06-01,Gironde,33,Nouvelle-Aquitaine,Phone,74.49,5
+2025-06-01,Hauts-de-Seine,92,Île-de-France,Online,81.91,4
+2025-06-01,Jura,39,Bourgogne-Franche-Comté,Online,99.33,5
+2025-06-01,Loire-Atlantique,44,Pays de la Loire,Store,55.49,3
+2025-06-01,Lot-et-Garonne,47,Nouvelle-Aquitaine,Online,90.02,4
+2025-06-01,Vienne,86,Nouvelle-Aquitaine,Online,69.47,4
+2025-06-02,Cher,18,Centre-Val de Loire,Store,69.58,5
+2025-06-02,Haute-Garonne,31,Occitanie,Online,77.9,3
+2025-06-02,Haute-Saône,70,Bourgogne-Franche-Comté,Online,62.61,4
+2025-06-02,Hauts-de-Seine,92,Île-de-France,Online,67.36,4
+2025-06-02,Hauts-de-Seine,92,Île-de-France,Store,81.83,4
+2025-06-02,La Réunion,974,Outre-mer,Phone,123.27,3
+2025-06-02,Nord,59,Hauts-de-France,Store,101.26,4
+2025-06-02,Nord,59,Hauts-de-France,Store,101.88,4
+2025-06-02,Paris,75,Île-de-France,Online,75.05,2
+2025-06-02,Rhône,69,Auvergne-Rhône-Alpes,Online,155.59,3
+2025-06-03,Ariège,09,Occitanie,Online,51.07,3
+2025-06-03,Gironde,33,Nouvelle-Aquitaine,Online,52.0,4
+2025-06-03,La Réunion,974,Outre-mer,Store,111.68,4
+2025-06-03,Loire-Atlantique,44,Pays de la Loire,Store,69.55,3
+2025-06-03,Moselle,57,Grand Est,Store,36.42,5
+2025-06-03,Pyrénées-Orientales,66,Occitanie,Phone,165.88,3
+2025-06-04,Ardèche,07,Auvergne-Rhône-Alpes,Online,57.38,4
+2025-06-04,Cher,18,Centre-Val de Loire,Store,31.91,4
+2025-06-04,Landes,40,Nouvelle-Aquitaine,Online,78.03,5
+2025-06-04,Mayenne,53,Pays de la Loire,Online,22.18,3
+2025-06-04,Oise,60,Hauts-de-France,Phone,61.77,3
+2025-06-04,Rhône,69,Auvergne-Rhône-Alpes,Online,112.09,5
+2025-06-05,Cantal,15,Auvergne-Rhône-Alpes,Online,165.31,5
+2025-06-05,Charente,16,Nouvelle-Aquitaine,Store,79.99,5
+2025-06-05,Côtes-d'Armor,22,Bretagne,Store,192.08,3
+2025-06-05,Eure,27,Normandie,Store,94.7,4
+2025-06-05,Indre-et-Loire,37,Centre-Val de Loire,Online,36.05,3
+2025-06-05,Loire-Atlantique,44,Pays de la Loire,Online,59.57,4
+2025-06-05,Nord,59,Hauts-de-France,Online,42.31,4
+2025-06-06,Nord,59,Hauts-de-France,Online,108.66,3
+2025-06-06,Paris,75,Île-de-France,Online,90.42,5
+2025-06-06,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,26.3,3
+2025-06-06,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,66.05,3
+2025-06-06,Savoie,73,Auvergne-Rhône-Alpes,Store,166.98,4
+2025-06-07,Cher,18,Centre-Val de Loire,Online,63.57,3
+2025-06-07,Corse-du-Sud,2A,Corse,Online,59.6,3
+2025-06-07,Lot,46,Occitanie,Online,92.78,2
+2025-06-07,Lozère,48,Occitanie,Store,143.56,4
+2025-06-07,Nord,59,Hauts-de-France,Online,55.51,5
+2025-06-08,Dordogne,24,Nouvelle-Aquitaine,Store,130.98,4
+2025-06-08,Essonne,91,Île-de-France,Online,80.82,3
+2025-06-08,Gard,30,Occitanie,Store,56.69,5
+2025-06-08,Rhône,69,Auvergne-Rhône-Alpes,Phone,99.4,5
+2025-06-08,Tarn-et-Garonne,82,Occitanie,Online,92.25,5
+2025-06-09,Finistère,29,Bretagne,Online,47.69,3
+2025-06-09,Guyane,973,Outre-mer,Phone,23.84,3
+2025-06-09,Loire-Atlantique,44,Pays de la Loire,Online,64.59,4
+2025-06-09,Martinique,972,Outre-mer,Online,33.99,3
+2025-06-09,Meuse,55,Grand Est,Phone,69.11,3
+2025-06-09,Morbihan,56,Bretagne,Phone,152.99,4
+2025-06-09,Tarn,81,Occitanie,Store,153.37,3
+2025-06-09,Tarn-et-Garonne,82,Occitanie,Store,51.1,5
+2025-06-09,Val-d'Oise,95,Île-de-France,Online,55.44,4
+2025-06-10,Allier,03,Auvergne-Rhône-Alpes,Online,147.26,4
+2025-06-10,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,71.86,4
+2025-06-10,Charente-Maritime,17,Nouvelle-Aquitaine,Store,122.62,4
+2025-06-10,Haut-Rhin,68,Grand Est,Online,106.67,5
+2025-06-10,Haute-Garonne,31,Occitanie,Store,46.72,4
+2025-06-10,Haute-Saône,70,Bourgogne-Franche-Comté,Online,90.54,5
+2025-06-10,Indre-et-Loire,37,Centre-Val de Loire,Phone,46.85,4
+2025-06-10,Loire-Atlantique,44,Pays de la Loire,Online,56.76,4
+2025-06-10,Meuse,55,Grand Est,Online,19.11,4
+2025-06-11,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,80.48,4
+2025-06-11,Doubs,25,Bourgogne-Franche-Comté,Online,77.37,4
+2025-06-11,Eure-et-Loir,28,Centre-Val de Loire,Phone,43.21,3
+2025-06-11,Gers,32,Occitanie,Online,77.77,4
+2025-06-11,La Réunion,974,Outre-mer,Store,70.76,3
+2025-06-11,Lot,46,Occitanie,Online,102.74,4
+2025-06-12,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Phone,64.09,4
+2025-06-12,Aube,10,Grand Est,Online,59.64,5
+2025-06-12,Hauts-de-Seine,92,Île-de-France,Online,105.03,5
+2025-06-12,Hauts-de-Seine,92,Île-de-France,Store,99.15,4
+2025-06-12,Nièvre,58,Bourgogne-Franche-Comté,Store,88.04,5
+2025-06-12,Rhône,69,Auvergne-Rhône-Alpes,Online,86.32,4
+2025-06-12,Var,83,Provence-Alpes-Côte d'Azur,Store,25.28,4
+2025-06-13,Aveyron,12,Occitanie,Online,126.09,5
+2025-06-13,Haute-Garonne,31,Occitanie,Store,93.82,4
+2025-06-13,Nord,59,Hauts-de-France,Online,67.25,4
+2025-06-13,Nord,59,Hauts-de-France,Store,45.5,5
+2025-06-13,Nord,59,Hauts-de-France,Store,112.53,4
+2025-06-14,Aveyron,12,Occitanie,Phone,65.3,3
+2025-06-14,Corse-du-Sud,2A,Corse,Store,114.08,4
+2025-06-14,Drôme,26,Auvergne-Rhône-Alpes,Store,98.46,4
+2025-06-14,Gironde,33,Nouvelle-Aquitaine,Store,147.27,5
+2025-06-14,Haute-Vienne,87,Nouvelle-Aquitaine,Online,92.74,4
+2025-06-14,Val-d'Oise,95,Île-de-France,Phone,50.27,4
+2025-06-15,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,52.79,3
+2025-06-15,Cantal,15,Auvergne-Rhône-Alpes,Online,86.01,3
+2025-06-15,Corrèze,19,Nouvelle-Aquitaine,Online,36.87,5
+2025-06-15,Var,83,Provence-Alpes-Côte d'Azur,Online,59.24,4
+2025-06-15,Yvelines,78,Île-de-France,Online,65.66,5
+2025-06-16,Ain,01,Auvergne-Rhône-Alpes,Store,73.34,4
+2025-06-16,Aude,11,Occitanie,Online,38.79,3
+2025-06-16,Gers,32,Occitanie,Online,122.92,5
+2025-06-16,Haute-Garonne,31,Occitanie,Phone,96.33,3
+2025-06-16,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,70.89,4
+2025-06-16,Lot,46,Occitanie,Store,110.89,4
+2025-06-16,Morbihan,56,Bretagne,Online,137.81,5
+2025-06-16,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,37.28,5
+2025-06-16,Seine-et-Marne,77,Île-de-France,Store,25.04,4
+2025-06-16,Yonne,89,Bourgogne-Franche-Comté,Store,118.6,3
+2025-06-17,Hauts-de-Seine,92,Île-de-France,Store,95.59,3
+2025-06-17,Maine-et-Loire,49,Pays de la Loire,Store,66.49,4
+2025-06-17,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Phone,52.84,4
+2025-06-17,Seine-et-Marne,77,Île-de-France,Online,89.57,4
+2025-06-17,Somme,80,Hauts-de-France,Store,110.59,4
+2025-06-17,Tarn,81,Occitanie,Online,134.43,5
+2025-06-18,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Phone,49.63,3
+2025-06-18,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,90.29,4
+2025-06-18,Hauts-de-Seine,92,Île-de-France,Online,78.96,4
+2025-06-18,Hauts-de-Seine,92,Île-de-France,Store,84.34,4
+2025-06-18,Hérault,34,Occitanie,Store,82.34,4
+2025-06-18,Moselle,57,Grand Est,Online,16.09,5
+2025-06-18,Saône-et-Loire,71,Bourgogne-Franche-Comté,Store,71.21,3
+2025-06-19,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,90.32,4
+2025-06-19,Calvados,14,Normandie,Online,52.2,4
+2025-06-19,Charente,16,Nouvelle-Aquitaine,Online,94.03,4
+2025-06-19,Gironde,33,Nouvelle-Aquitaine,Online,151.7,4
+2025-06-19,Haute-Saône,70,Bourgogne-Franche-Comté,Store,83.14,4
+2025-06-19,Lot,46,Occitanie,Online,83.66,4
+2025-06-19,Manche,50,Normandie,Online,64.81,3
+2025-06-20,Ardennes,08,Grand Est,Store,121.85,5
+2025-06-20,Aude,11,Occitanie,Online,78.54,3
+2025-06-20,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Phone,91.98,4
+2025-06-20,Finistère,29,Bretagne,Store,25.84,5
+2025-06-20,Gers,32,Occitanie,Online,97.99,5
+2025-06-20,Haut-Rhin,68,Grand Est,Store,158.13,4
+2025-06-20,Hauts-de-Seine,92,Île-de-France,Online,117.37,3
+2025-06-20,La Réunion,974,Outre-mer,Store,118.27,4
+2025-06-20,Savoie,73,Auvergne-Rhône-Alpes,Online,97.16,3
+2025-06-20,Savoie,73,Auvergne-Rhône-Alpes,Store,136.36,4
+2025-06-20,Tarn,81,Occitanie,Phone,75.0,3
+2025-06-21,Hauts-de-Seine,92,Île-de-France,Online,102.67,4
+2025-06-21,Seine-Saint-Denis,93,Île-de-France,Store,27.02,4
+2025-06-22,Aube,10,Grand Est,Online,7.95,3
+2025-06-22,Aube,10,Grand Est,Store,94.83,5
+2025-06-22,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,113.43,5
+2025-06-22,Dordogne,24,Nouvelle-Aquitaine,Store,107.03,3
+2025-06-22,Finistère,29,Bretagne,Online,39.66,3
+2025-06-22,Finistère,29,Bretagne,Phone,31.81,3
+2025-06-22,Gironde,33,Nouvelle-Aquitaine,Store,98.22,4
+2025-06-22,Haute-Corse,2B,Corse,Online,56.83,3
+2025-06-22,Haute-Garonne,31,Occitanie,Online,118.88,4
+2025-06-22,Hauts-de-Seine,92,Île-de-France,Store,99.42,4
+2025-06-23,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,52.03,5
+2025-06-23,Côtes-d'Armor,22,Bretagne,Online,132.26,4
+2025-06-23,Guyane,973,Outre-mer,Online,30.09,5
+2025-06-23,Hauts-de-Seine,92,Île-de-France,Store,80.87,4
+2025-06-23,Isère,38,Auvergne-Rhône-Alpes,Online,119.11,5
+2025-06-23,Orne,61,Normandie,Online,68.57,3
+2025-06-24,Corrèze,19,Nouvelle-Aquitaine,Store,59.07,5
+2025-06-24,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,122.53,3
+2025-06-24,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,133.62,4
+2025-06-24,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,47.59,4
+2025-06-25,Gironde,33,Nouvelle-Aquitaine,Store,54.57,3
+2025-06-25,Haute-Garonne,31,Occitanie,Store,124.39,4
+2025-06-25,Hauts-de-Seine,92,Île-de-France,Online,78.64,5
+2025-06-25,Hauts-de-Seine,92,Île-de-France,Store,36.85,4
+2025-06-25,Loire-Atlantique,44,Pays de la Loire,Online,33.25,4
+2025-06-25,Paris,75,Île-de-France,Store,37.09,3
+2025-06-26,Eure-et-Loir,28,Centre-Val de Loire,Store,10.69,5
+2025-06-26,Hauts-de-Seine,92,Île-de-France,Store,86.78,3
+2025-06-26,Loire-Atlantique,44,Pays de la Loire,Online,38.6,3
+2025-06-26,Lot,46,Occitanie,Phone,19.99,4
+2025-06-26,Lozère,48,Occitanie,Online,10.62,5
+2025-06-26,Paris,75,Île-de-France,Online,44.8,4
+2025-06-26,Paris,75,Île-de-France,Store,74.45,3
+2025-06-26,Savoie,73,Auvergne-Rhône-Alpes,Online,101.22,4
+2025-06-26,Tarn,81,Occitanie,Store,59.72,4
+2025-06-27,Ain,01,Auvergne-Rhône-Alpes,Store,45.7,5
+2025-06-27,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,64.12,4
+2025-06-27,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Phone,37.06,4
+2025-06-27,Cher,18,Centre-Val de Loire,Phone,89.99,3
+2025-06-27,Deux-Sèvres,79,Nouvelle-Aquitaine,Online,29.33,4
+2025-06-27,Gironde,33,Nouvelle-Aquitaine,Phone,64.61,5
+2025-06-27,Hauts-de-Seine,92,Île-de-France,Online,46.67,5
+2025-06-27,Hauts-de-Seine,92,Île-de-France,Store,111.24,4
+2025-06-27,Indre-et-Loire,37,Centre-Val de Loire,Online,24.48,5
+2025-06-27,Jura,39,Bourgogne-Franche-Comté,Phone,89.41,3
+2025-06-27,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Store,81.61,3
+2025-06-28,Aude,11,Occitanie,Phone,65.29,3
+2025-06-28,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,175.59,5
+2025-06-28,Hauts-de-Seine,92,Île-de-France,Phone,110.72,4
+2025-06-28,Jura,39,Bourgogne-Franche-Comté,Phone,103.66,3
+2025-07-01,Corrèze,19,Nouvelle-Aquitaine,Store,48.87,4
+2025-07-01,Guyane,973,Outre-mer,Store,82.92,4
+2025-07-01,Indre-et-Loire,37,Centre-Val de Loire,Online,28.6,4
+2025-07-02,Haut-Rhin,68,Grand Est,Store,143.64,5
+2025-07-02,Haute-Vienne,87,Nouvelle-Aquitaine,Online,105.79,3
+2025-07-02,Loire,42,Auvergne-Rhône-Alpes,Store,107.02,3
+2025-07-02,Nièvre,58,Bourgogne-Franche-Comté,Phone,111.96,4
+2025-07-03,Aude,11,Occitanie,Online,36.95,4
+2025-07-03,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,149.12,4
+2025-07-03,Hauts-de-Seine,92,Île-de-France,Store,94.37,3
+2025-07-03,Meurthe-et-Moselle,54,Grand Est,Store,144.37,3
+2025-07-03,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Phone,65.32,3
+2025-07-04,Charente-Maritime,17,Nouvelle-Aquitaine,Online,87.22,3
+2025-07-04,Eure,27,Normandie,Store,89.94,4
+2025-07-04,Gironde,33,Nouvelle-Aquitaine,Phone,81.01,4
+2025-07-05,Allier,03,Auvergne-Rhône-Alpes,Online,89.33,4
+2025-07-05,Haute-Marne,52,Grand Est,Store,40.19,5
+2025-07-06,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,93.75,2
+2025-07-06,Cantal,15,Auvergne-Rhône-Alpes,Phone,84.93,4
+2025-07-06,Charente-Maritime,17,Nouvelle-Aquitaine,Store,96.41,3
+2025-07-06,Haute-Corse,2B,Corse,Online,51.37,4
+2025-07-06,Hauts-de-Seine,92,Île-de-France,Online,87.52,5
+2025-07-06,Mayenne,53,Pays de la Loire,Online,65.34,4
+2025-07-06,Meurthe-et-Moselle,54,Grand Est,Online,50.66,4
+2025-07-07,Charente-Maritime,17,Nouvelle-Aquitaine,Store,120.8,3
+2025-07-07,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,73.07,5
+2025-07-07,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Store,71.82,4
+2025-07-07,Indre,36,Centre-Val de Loire,Phone,15.93,3
+2025-07-07,Loire-Atlantique,44,Pays de la Loire,Store,65.43,4
+2025-07-07,Paris,75,Île-de-France,Online,42.39,4
+2025-07-07,Yvelines,78,Île-de-France,Store,78.07,3
+2025-07-08,Allier,03,Auvergne-Rhône-Alpes,Phone,99.01,3
+2025-07-08,Ardennes,08,Grand Est,Online,33.45,3
+2025-07-08,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,70.33,3
+2025-07-08,Cher,18,Centre-Val de Loire,Store,99.03,2
+2025-07-09,Haute-Saône,70,Bourgogne-Franche-Comté,Online,67.8,4
+2025-07-09,Loir-et-Cher,41,Centre-Val de Loire,Online,68.37,4
+2025-07-09,Lozère,48,Occitanie,Store,132.32,2
+2025-07-09,Oise,60,Hauts-de-France,Store,55.94,4
+2025-07-10,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,100.56,5
+2025-07-10,Aveyron,12,Occitanie,Online,147.33,3
+2025-07-10,Calvados,14,Normandie,Store,56.37,4
+2025-07-10,Loiret,45,Centre-Val de Loire,Online,89.06,5
+2025-07-10,Lot-et-Garonne,47,Nouvelle-Aquitaine,Phone,99.34,3
+2025-07-10,Nièvre,58,Bourgogne-Franche-Comté,Store,93.94,4
+2025-07-10,Nord,59,Hauts-de-France,Store,113.69,3
+2025-07-10,Paris,75,Île-de-France,Online,58.63,4
+2025-07-10,Vendée,85,Pays de la Loire,Store,216.09,5
+2025-07-11,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,35.49,4
+2025-07-11,Corrèze,19,Nouvelle-Aquitaine,Store,48.38,5
+2025-07-11,Gard,30,Occitanie,Online,52.45,3
+2025-07-11,Haute-Garonne,31,Occitanie,Online,40.8,4
+2025-07-11,Meuse,55,Grand Est,Store,66.14,4
+2025-07-11,Paris,75,Île-de-France,Store,74.18,3
+2025-07-12,Aube,10,Grand Est,Online,64.76,3
+2025-07-12,Eure,27,Normandie,Online,67.66,5
+2025-07-12,Guyane,973,Outre-mer,Online,59.04,4
+2025-07-12,Nièvre,58,Bourgogne-Franche-Comté,Store,95.25,5
+2025-07-12,Nord,59,Hauts-de-France,Online,117.17,5
+2025-07-12,Oise,60,Hauts-de-France,Online,130.15,5
+2025-07-12,Paris,75,Île-de-France,Phone,114.15,4
+2025-07-12,Rhône,69,Auvergne-Rhône-Alpes,Store,121.81,4
+2025-07-13,Gironde,33,Nouvelle-Aquitaine,Phone,122.35,3
+2025-07-13,Loire,42,Auvergne-Rhône-Alpes,Online,92.8,2
+2025-07-13,Nièvre,58,Bourgogne-Franche-Comté,Online,94.13,4
+2025-07-13,Orne,61,Normandie,Store,5.0,5
+2025-07-13,Orne,61,Normandie,Store,66.46,3
+2025-07-14,Drôme,26,Auvergne-Rhône-Alpes,Online,152.97,4
+2025-07-14,Essonne,91,Île-de-France,Store,77.13,3
+2025-07-14,Haute-Loire,43,Auvergne-Rhône-Alpes,Online,89.91,4
+2025-07-14,Haute-Marne,52,Grand Est,Online,26.14,4
+2025-07-14,Hauts-de-Seine,92,Île-de-France,Store,82.55,4
+2025-07-14,Nord,59,Hauts-de-France,Store,128.75,5
+2025-07-14,Rhône,69,Auvergne-Rhône-Alpes,Store,187.51,3
+2025-07-15,Côtes-d'Armor,22,Bretagne,Online,91.07,4
+2025-07-15,Loire-Atlantique,44,Pays de la Loire,Online,65.34,5
+2025-07-15,Paris,75,Île-de-France,Online,54.72,5
+2025-07-16,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,58.65,4
+2025-07-16,Paris,75,Île-de-France,Store,109.73,3
+2025-07-16,Tarn-et-Garonne,82,Occitanie,Store,100.56,4
+2025-07-17,Allier,03,Auvergne-Rhône-Alpes,Online,101.47,5
+2025-07-17,Gironde,33,Nouvelle-Aquitaine,Online,90.59,4
+2025-07-17,Haute-Loire,43,Auvergne-Rhône-Alpes,Online,40.76,3
+2025-07-17,Haute-Vienne,87,Nouvelle-Aquitaine,Online,57.93,3
+2025-07-17,Hauts-de-Seine,92,Île-de-France,Online,135.93,5
+2025-07-17,Pas-de-Calais,62,Hauts-de-France,Store,85.61,5
+2025-07-17,Sarthe,72,Pays de la Loire,Store,139.72,4
+2025-07-18,Gard,30,Occitanie,Online,43.18,5
+2025-07-18,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Phone,140.87,3
+2025-07-18,Indre-et-Loire,37,Centre-Val de Loire,Store,41.71,5
+2025-07-18,Meurthe-et-Moselle,54,Grand Est,Store,135.86,3
+2025-07-18,Paris,75,Île-de-France,Online,61.56,4
+2025-07-18,Seine-Saint-Denis,93,Île-de-France,Online,38.99,4
+2025-07-19,Calvados,14,Normandie,Phone,52.1,3
+2025-07-19,Gironde,33,Nouvelle-Aquitaine,Phone,78.44,3
+2025-07-19,Haute-Corse,2B,Corse,Store,61.03,5
+2025-07-19,Nord,59,Hauts-de-France,Online,61.31,5
+2025-07-19,Paris,75,Île-de-France,Online,101.09,4
+2025-07-19,Somme,80,Hauts-de-France,Store,70.48,4
+2025-07-19,Val-de-Marne,94,Île-de-France,Online,120.52,3
+2025-07-20,Ardennes,08,Grand Est,Store,164.57,3
+2025-07-20,Ardèche,07,Auvergne-Rhône-Alpes,Store,59.43,5
+2025-07-20,Hauts-de-Seine,92,Île-de-France,Store,65.71,3
+2025-07-20,Jura,39,Bourgogne-Franche-Comté,Online,76.42,3
+2025-07-20,Nièvre,58,Bourgogne-Franche-Comté,Online,103.29,3
+2025-07-20,Val-d'Oise,95,Île-de-France,Online,38.2,4
+2025-07-21,Aude,11,Occitanie,Online,91.15,3
+2025-07-21,Indre,36,Centre-Val de Loire,Phone,75.54,4
+2025-07-21,Mayotte,976,Outre-mer,Online,60.25,4
+2025-07-21,Tarn,81,Occitanie,Online,86.61,3
+2025-07-21,Val-d'Oise,95,Île-de-France,Store,37.24,4
+2025-07-21,Vendée,85,Pays de la Loire,Store,154.67,3
+2025-07-23,Guadeloupe,971,Outre-mer,Store,81.45,4
+2025-07-23,Hauts-de-Seine,92,Île-de-France,Online,87.63,3
+2025-07-23,Indre-et-Loire,37,Centre-Val de Loire,Store,52.91,2
+2025-07-23,Pas-de-Calais,62,Hauts-de-France,Phone,93.73,4
+2025-07-23,Rhône,69,Auvergne-Rhône-Alpes,Store,93.69,5
+2025-07-23,Sarthe,72,Pays de la Loire,Online,105.87,4
+2025-07-23,Vienne,86,Nouvelle-Aquitaine,Online,140.06,3
+2025-07-24,Gers,32,Occitanie,Store,115.59,3
+2025-07-24,Gironde,33,Nouvelle-Aquitaine,Online,69.23,3
+2025-07-24,Haute-Garonne,31,Occitanie,Store,50.46,4
+2025-07-24,Haute-Saône,70,Bourgogne-Franche-Comté,Online,95.71,4
+2025-07-24,Hauts-de-Seine,92,Île-de-France,Online,75.76,4
+2025-07-24,Loire-Atlantique,44,Pays de la Loire,Store,33.21,4
+2025-07-25,Ille-et-Vilaine,35,Bretagne,Store,122.5,3
+2025-07-25,Lot,46,Occitanie,Online,56.42,4
+2025-07-25,Pyrénées-Orientales,66,Occitanie,Store,84.64,3
+2025-07-26,Ain,01,Auvergne-Rhône-Alpes,Store,88.65,5
+2025-07-26,Ardèche,07,Auvergne-Rhône-Alpes,Online,100.53,1
+2025-07-26,Calvados,14,Normandie,Online,75.67,5
+2025-07-26,Eure,27,Normandie,Online,90.52,4
+2025-07-26,Eure,27,Normandie,Store,99.26,5
+2025-07-26,Loire-Atlantique,44,Pays de la Loire,Online,57.78,3
+2025-07-26,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Online,61.39,4
+2025-07-27,Ariège,09,Occitanie,Online,121.31,4
+2025-07-27,Calvados,14,Normandie,Online,30.76,4
+2025-07-27,Loire-Atlantique,44,Pays de la Loire,Online,59.47,3
+2025-07-27,Paris,75,Île-de-France,Store,45.12,3
+2025-07-27,Tarn-et-Garonne,82,Occitanie,Online,81.9,4
+2025-07-28,Nord,59,Hauts-de-France,Online,109.08,4
+2025-08-01,Essonne,91,Île-de-France,Online,81.46,4
+2025-08-01,Guadeloupe,971,Outre-mer,Online,48.75,4
+2025-08-01,Nord,59,Hauts-de-France,Online,76.45,2
+2025-08-01,Nord,59,Hauts-de-France,Store,42.77,4
+2025-08-01,Paris,75,Île-de-France,Phone,52.84,4
+2025-08-01,Var,83,Provence-Alpes-Côte d'Azur,Store,46.69,2
+2025-08-02,Aube,10,Grand Est,Online,98.27,4
+2025-08-02,Corrèze,19,Nouvelle-Aquitaine,Online,52.02,3
+2025-08-02,Lot,46,Occitanie,Store,40.82,5
+2025-08-02,Morbihan,56,Bretagne,Online,73.61,4
+2025-08-02,Paris,75,Île-de-France,Online,48.44,4
+2025-08-02,Rhône,69,Auvergne-Rhône-Alpes,Online,71.38,3
+2025-08-03,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Online,101.61,4
+2025-08-03,Bas-Rhin,67,Grand Est,Online,72.21,4
+2025-08-03,Haute-Marne,52,Grand Est,Online,53.99,3
+2025-08-03,Haute-Marne,52,Grand Est,Store,39.25,3
+2025-08-03,Hauts-de-Seine,92,Île-de-France,Online,178.76,5
+2025-08-03,Jura,39,Bourgogne-Franche-Comté,Online,57.11,3
+2025-08-03,Jura,39,Bourgogne-Franche-Comté,Online,73.42,5
+2025-08-03,Tarn-et-Garonne,82,Occitanie,Online,141.13,4
+2025-08-04,Aveyron,12,Occitanie,Online,122.71,3
+2025-08-04,Charente-Maritime,17,Nouvelle-Aquitaine,Store,114.65,5
+2025-08-04,Haute-Loire,43,Auvergne-Rhône-Alpes,Online,88.46,4
+2025-08-04,Haute-Marne,52,Grand Est,Online,42.88,5
+2025-08-04,Lot,46,Occitanie,Store,192.38,5
+2025-08-04,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Store,33.15,4
+2025-08-04,Somme,80,Hauts-de-France,Online,84.81,4
+2025-08-05,Cantal,15,Auvergne-Rhône-Alpes,Online,82.35,5
+2025-08-05,Haute-Garonne,31,Occitanie,Online,80.36,3
+2025-08-05,Moselle,57,Grand Est,Online,49.36,4
+2025-08-05,Saône-et-Loire,71,Bourgogne-Franche-Comté,Store,124.99,3
+2025-08-05,Seine-et-Marne,77,Île-de-France,Phone,105.09,3
+2025-08-05,Somme,80,Hauts-de-France,Store,71.86,4
+2025-08-06,Ariège,09,Occitanie,Online,108.57,3
+2025-08-06,Aube,10,Grand Est,Store,71.55,4
+2025-08-06,Bas-Rhin,67,Grand Est,Store,45.67,4
+2025-08-06,Lozère,48,Occitanie,Online,82.96,4
+2025-08-06,Var,83,Provence-Alpes-Côte d'Azur,Store,28.82,3
+2025-08-07,Ariège,09,Occitanie,Phone,95.03,3
+2025-08-07,Corrèze,19,Nouvelle-Aquitaine,Online,38.7,3
+2025-08-07,Gers,32,Occitanie,Online,73.45,4
+2025-08-07,Haut-Rhin,68,Grand Est,Online,118.68,5
+2025-08-07,Haute-Savoie,74,Auvergne-Rhône-Alpes,Phone,39.15,5
+2025-08-07,Loire,42,Auvergne-Rhône-Alpes,Online,80.68,3
+2025-08-07,Lozère,48,Occitanie,Online,39.41,3
+2025-08-07,Maine-et-Loire,49,Pays de la Loire,Online,80.81,3
+2025-08-07,Sarthe,72,Pays de la Loire,Online,88.74,3
+2025-08-07,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,57.59,4
+2025-08-07,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,62.77,5
+2025-08-08,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,184.22,3
+2025-08-08,Landes,40,Nouvelle-Aquitaine,Phone,36.86,4
+2025-08-08,Lozère,48,Occitanie,Online,99.71,4
+2025-08-08,Paris,75,Île-de-France,Store,92.39,5
+2025-08-09,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Phone,61.13,3
+2025-08-09,Finistère,29,Bretagne,Online,58.22,3
+2025-08-09,Finistère,29,Bretagne,Online,68.1,5
+2025-08-09,Haute-Vienne,87,Nouvelle-Aquitaine,Store,57.41,4
+2025-08-09,Territoire de Belfort,90,Bourgogne-Franche-Comté,Online,93.64,5
+2025-08-10,Ariège,09,Occitanie,Phone,85.97,4
+2025-08-10,Cher,18,Centre-Val de Loire,Online,45.6,5
+2025-08-10,Indre-et-Loire,37,Centre-Val de Loire,Online,34.0,3
+2025-08-10,Isère,38,Auvergne-Rhône-Alpes,Store,55.64,5
+2025-08-10,Mayenne,53,Pays de la Loire,Phone,69.96,2
+2025-08-10,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Online,94.12,5
+2025-08-10,Vaucluse,84,Provence-Alpes-Côte d'Azur,Online,106.05,4
+2025-08-11,Ardèche,07,Auvergne-Rhône-Alpes,Phone,56.55,3
+2025-08-11,Charente-Maritime,17,Nouvelle-Aquitaine,Online,114.28,4
+2025-08-11,Drôme,26,Auvergne-Rhône-Alpes,Store,72.32,3
+2025-08-11,Essonne,91,Île-de-France,Store,67.42,4
+2025-08-11,Manche,50,Normandie,Online,115.4,5
+2025-08-11,Seine-Saint-Denis,93,Île-de-France,Store,16.89,4
+2025-08-12,Drôme,26,Auvergne-Rhône-Alpes,Store,79.67,3
+2025-08-12,Haute-Garonne,31,Occitanie,Online,52.1,4
+2025-08-12,Haute-Marne,52,Grand Est,Online,41.05,4
+2025-08-12,Lot,46,Occitanie,Online,96.22,3
+2025-08-12,Nord,59,Hauts-de-France,Store,49.64,5
+2025-08-13,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,61.5,4
+2025-08-13,Charente-Maritime,17,Nouvelle-Aquitaine,Online,52.96,4
+2025-08-13,Guyane,973,Outre-mer,Online,64.41,4
+2025-08-13,Hauts-de-Seine,92,Île-de-France,Store,98.05,4
+2025-08-13,Indre,36,Centre-Val de Loire,Online,56.66,4
+2025-08-13,Paris,75,Île-de-France,Online,73.9,5
+2025-08-14,Ain,01,Auvergne-Rhône-Alpes,Online,123.59,2
+2025-08-14,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,30.39,4
+2025-08-14,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,64.42,4
+2025-08-14,Ariège,09,Occitanie,Online,111.17,4
+2025-08-14,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Phone,113.44,3
+2025-08-14,Gironde,33,Nouvelle-Aquitaine,Store,44.96,3
+2025-08-14,Hauts-de-Seine,92,Île-de-France,Online,26.65,4
+2025-08-14,Paris,75,Île-de-France,Phone,71.25,3
+2025-08-15,Haute-Saône,70,Bourgogne-Franche-Comté,Store,63.34,4
+2025-08-15,Lot-et-Garonne,47,Nouvelle-Aquitaine,Online,119.95,4
+2025-08-15,Maine-et-Loire,49,Pays de la Loire,Online,61.2,5
+2025-08-15,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,49.69,4
+2025-08-15,Yonne,89,Bourgogne-Franche-Comté,Online,94.3,4
+2025-08-16,Aube,10,Grand Est,Phone,30.68,4
+2025-08-16,Loire-Atlantique,44,Pays de la Loire,Online,62.13,5
+2025-08-16,Nord,59,Hauts-de-France,Store,67.17,5
+2025-08-16,Paris,75,Île-de-France,Online,88.79,3
+2025-08-16,Savoie,73,Auvergne-Rhône-Alpes,Store,77.7,3
+2025-08-17,Ariège,09,Occitanie,Store,59.85,3
+2025-08-17,Charente-Maritime,17,Nouvelle-Aquitaine,Store,87.9,4
+2025-08-17,Corse-du-Sud,2A,Corse,Online,54.91,5
+2025-08-17,Indre,36,Centre-Val de Loire,Phone,28.44,5
+2025-08-17,Loire,42,Auvergne-Rhône-Alpes,Store,65.82,2
+2025-08-17,Lozère,48,Occitanie,Store,104.79,4
+2025-08-17,Pas-de-Calais,62,Hauts-de-France,Store,177.25,4
+2025-08-18,Aisne,02,Hauts-de-France,Online,130.79,4
+2025-08-18,Ariège,09,Occitanie,Store,53.72,4
+2025-08-18,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,69.85,4
+2025-08-18,Côte-d'Or,21,Bourgogne-Franche-Comté,Store,46.52,5
+2025-08-18,Gironde,33,Nouvelle-Aquitaine,Online,66.15,5
+2025-08-18,Hauts-de-Seine,92,Île-de-France,Online,78.63,4
+2025-08-18,Loire-Atlantique,44,Pays de la Loire,Online,65.56,3
+2025-08-18,Vienne,86,Nouvelle-Aquitaine,Store,89.13,3
+2025-08-19,Bas-Rhin,67,Grand Est,Online,95.09,2
+2025-08-19,Gironde,33,Nouvelle-Aquitaine,Online,56.4,5
+2025-08-19,La Réunion,974,Outre-mer,Store,96.99,4
+2025-08-19,Nièvre,58,Bourgogne-Franche-Comté,Online,84.66,5
+2025-08-20,Aube,10,Grand Est,Store,81.28,5
+2025-08-20,Gard,30,Occitanie,Online,31.68,5
+2025-08-20,Hautes-Pyrénées,65,Occitanie,Online,84.25,4
+2025-08-20,Hauts-de-Seine,92,Île-de-France,Online,78.88,5
+2025-08-20,Indre,36,Centre-Val de Loire,Store,54.07,4
+2025-08-20,Lozère,48,Occitanie,Store,62.32,3
+2025-08-20,Mayenne,53,Pays de la Loire,Online,23.7,4
+2025-08-20,Meurthe-et-Moselle,54,Grand Est,Online,130.84,3
+2025-08-20,Paris,75,Île-de-France,Phone,59.21,4
+2025-08-20,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,61.42,2
+2025-08-21,Haute-Loire,43,Auvergne-Rhône-Alpes,Store,77.08,5
+2025-08-21,Jura,39,Bourgogne-Franche-Comté,Store,75.74,3
+2025-08-21,Jura,39,Bourgogne-Franche-Comté,Store,94.26,4
+2025-08-21,Mayotte,976,Outre-mer,Phone,86.33,4
+2025-08-21,Nièvre,58,Bourgogne-Franche-Comté,Online,86.9,4
+2025-08-22,Haute-Garonne,31,Occitanie,Online,66.82,4
+2025-08-22,Loire-Atlantique,44,Pays de la Loire,Online,40.24,4
+2025-08-22,Loire-Atlantique,44,Pays de la Loire,Online,52.54,4
+2025-08-22,Martinique,972,Outre-mer,Online,72.21,5
+2025-08-22,Mayotte,976,Outre-mer,Online,92.15,4
+2025-08-22,Savoie,73,Auvergne-Rhône-Alpes,Online,122.91,4
+2025-08-22,Seine-Saint-Denis,93,Île-de-France,Online,78.15,3
+2025-08-22,Somme,80,Hauts-de-France,Online,125.47,5
+2025-08-23,Côte-d'Or,21,Bourgogne-Franche-Comté,Store,32.49,3
+2025-08-23,Eure,27,Normandie,Online,34.19,2
+2025-08-23,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Store,42.61,4
+2025-08-23,Pyrénées-Orientales,66,Occitanie,Store,54.73,3
+2025-08-24,Aube,10,Grand Est,Store,45.5,5
+2025-08-24,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,139.8,4
+2025-08-24,Doubs,25,Bourgogne-Franche-Comté,Online,87.5,3
+2025-08-24,Gironde,33,Nouvelle-Aquitaine,Phone,48.5,3
+2025-08-24,Indre,36,Centre-Val de Loire,Store,46.41,5
+2025-08-24,Indre,36,Centre-Val de Loire,Store,74.33,4
+2025-08-24,Indre-et-Loire,37,Centre-Val de Loire,Phone,28.57,4
+2025-08-24,Territoire de Belfort,90,Bourgogne-Franche-Comté,Store,93.16,5
+2025-08-25,Ardennes,08,Grand Est,Online,173.48,3
+2025-08-25,Ariège,09,Occitanie,Phone,108.5,4
+2025-08-25,Creuse,23,Nouvelle-Aquitaine,Online,43.24,4
+2025-08-25,Finistère,29,Bretagne,Online,39.38,4
+2025-08-25,Guyane,973,Outre-mer,Phone,72.98,4
+2025-08-25,Mayotte,976,Outre-mer,Store,62.92,4
+2025-08-25,Nord,59,Hauts-de-France,Online,87.15,5
+2025-08-26,Haute-Garonne,31,Occitanie,Online,69.58,3
+2025-08-26,Haute-Saône,70,Bourgogne-Franche-Comté,Online,142.94,4
+2025-08-26,Loire,42,Auvergne-Rhône-Alpes,Online,65.31,3
+2025-08-26,Maine-et-Loire,49,Pays de la Loire,Online,128.62,3
+2025-08-27,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,82.41,4
+2025-08-27,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,129.35,3
+2025-08-27,Guadeloupe,971,Outre-mer,Online,86.03,4
+2025-08-28,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,66.24,4
+2025-08-28,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,82.99,4
+2025-08-28,Cantal,15,Auvergne-Rhône-Alpes,Online,174.25,5
+2025-08-28,Haute-Corse,2B,Corse,Online,55.06,4
+2025-08-28,Loire-Atlantique,44,Pays de la Loire,Store,58.74,4
+2025-08-28,Nièvre,58,Bourgogne-Franche-Comté,Phone,45.43,3
+2025-09-01,Aisne,02,Hauts-de-France,Online,161.53,5
+2025-09-01,Gironde,33,Nouvelle-Aquitaine,Store,87.62,5
+2025-09-01,Hauts-de-Seine,92,Île-de-France,Store,48.88,4
+2025-09-01,Nord,59,Hauts-de-France,Store,67.42,4
+2025-09-01,Paris,75,Île-de-France,Store,69.0,5
+2025-09-01,Vienne,86,Nouvelle-Aquitaine,Online,63.01,4
+2025-09-02,Hérault,34,Occitanie,Phone,74.96,4
+2025-09-02,Loir-et-Cher,41,Centre-Val de Loire,Online,75.67,4
+2025-09-02,Loire-Atlantique,44,Pays de la Loire,Store,65.12,3
+2025-09-02,Pyrénées-Orientales,66,Occitanie,Online,126.74,4
+2025-09-02,Vienne,86,Nouvelle-Aquitaine,Online,98.9,3
+2025-09-03,Ardennes,08,Grand Est,Online,12.72,3
+2025-09-03,Calvados,14,Normandie,Store,49.94,4
+2025-09-03,Côtes-d'Armor,22,Bretagne,Store,72.42,5
+2025-09-03,Drôme,26,Auvergne-Rhône-Alpes,Online,70.69,4
+2025-09-03,La Réunion,974,Outre-mer,Phone,80.03,4
+2025-09-03,Nord,59,Hauts-de-France,Store,51.48,4
+2025-09-03,Nord,59,Hauts-de-France,Store,79.7,4
+2025-09-03,Oise,60,Hauts-de-France,Store,130.01,4
+2025-09-03,Paris,75,Île-de-France,Online,91.49,4
+2025-09-03,Yonne,89,Bourgogne-Franche-Comté,Online,5.0,3
+2025-09-04,Creuse,23,Nouvelle-Aquitaine,Store,56.75,4
+2025-09-04,Essonne,91,Île-de-France,Store,74.73,5
+2025-09-04,Gers,32,Occitanie,Online,78.48,4
+2025-09-04,Indre,36,Centre-Val de Loire,Online,53.67,4
+2025-09-04,Loire-Atlantique,44,Pays de la Loire,Store,36.14,4
+2025-09-04,Maine-et-Loire,49,Pays de la Loire,Online,59.02,4
+2025-09-04,Manche,50,Normandie,Online,93.25,4
+2025-09-04,Manche,50,Normandie,Store,70.71,4
+2025-09-05,Allier,03,Auvergne-Rhône-Alpes,Online,92.61,4
+2025-09-05,Charente-Maritime,17,Nouvelle-Aquitaine,Online,74.27,4
+2025-09-05,Gironde,33,Nouvelle-Aquitaine,Store,122.01,4
+2025-09-05,Mayenne,53,Pays de la Loire,Store,64.11,5
+2025-09-05,Moselle,57,Grand Est,Phone,50.44,4
+2025-09-06,Haute-Garonne,31,Occitanie,Online,81.91,4
+2025-09-06,Haute-Garonne,31,Occitanie,Online,113.49,3
+2025-09-06,Hauts-de-Seine,92,Île-de-France,Online,161.1,2
+2025-09-07,Allier,03,Auvergne-Rhône-Alpes,Store,93.28,3
+2025-09-07,Dordogne,24,Nouvelle-Aquitaine,Store,86.32,4
+2025-09-07,Paris,75,Île-de-France,Online,77.6,5
+2025-09-07,Seine-Maritime,76,Normandie,Store,107.78,4
+2025-09-07,Vienne,86,Nouvelle-Aquitaine,Store,134.26,3
+2025-09-08,Aisne,02,Hauts-de-France,Store,104.31,4
+2025-09-08,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Online,118.94,5
+2025-09-08,Calvados,14,Normandie,Online,81.43,5
+2025-09-08,Eure-et-Loir,28,Centre-Val de Loire,Store,54.23,4
+2025-09-08,Gironde,33,Nouvelle-Aquitaine,Store,53.81,3
+2025-09-08,Haute-Garonne,31,Occitanie,Online,77.44,3
+2025-09-08,Haute-Saône,70,Bourgogne-Franche-Comté,Store,69.16,4
+2025-09-08,Ille-et-Vilaine,35,Bretagne,Online,121.19,4
+2025-09-08,Paris,75,Île-de-France,Online,25.08,4
+2025-09-09,Corrèze,19,Nouvelle-Aquitaine,Store,61.43,4
+2025-09-09,Haute-Garonne,31,Occitanie,Store,93.78,3
+2025-09-09,Loiret,45,Centre-Val de Loire,Phone,74.35,4
+2025-09-09,Manche,50,Normandie,Online,102.61,4
+2025-09-09,Oise,60,Hauts-de-France,Store,46.67,4
+2025-09-09,Paris,75,Île-de-France,Online,70.83,3
+2025-09-09,Pas-de-Calais,62,Hauts-de-France,Online,132.59,5
+2025-09-09,Pas-de-Calais,62,Hauts-de-France,Store,177.13,5
+2025-09-09,Saône-et-Loire,71,Bourgogne-Franche-Comté,Phone,35.02,3
+2025-09-09,Seine-et-Marne,77,Île-de-France,Online,142.21,3
+2025-09-09,Tarn,81,Occitanie,Online,124.94,5
+2025-09-10,Meurthe-et-Moselle,54,Grand Est,Store,103.11,4
+2025-09-10,Nord,59,Hauts-de-France,Online,67.66,5
+2025-09-10,Tarn,81,Occitanie,Store,71.15,4
+2025-09-11,Guadeloupe,971,Outre-mer,Store,82.9,4
+2025-09-11,Landes,40,Nouvelle-Aquitaine,Phone,34.38,3
+2025-09-11,Meuse,55,Grand Est,Online,113.31,5
+2025-09-11,Paris,75,Île-de-France,Store,102.24,4
+2025-09-12,Ardennes,08,Grand Est,Phone,122.06,2
+2025-09-12,Isère,38,Auvergne-Rhône-Alpes,Online,40.63,3
+2025-09-12,Paris,75,Île-de-France,Online,89.35,5
+2025-09-12,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Store,62.81,3
+2025-09-13,Guadeloupe,971,Outre-mer,Online,81.73,4
+2025-09-13,Haute-Corse,2B,Corse,Online,42.95,5
+2025-09-13,Loiret,45,Centre-Val de Loire,Store,72.92,4
+2025-09-13,Meurthe-et-Moselle,54,Grand Est,Online,68.18,3
+2025-09-13,Nord,59,Hauts-de-France,Online,68.17,5
+2025-09-13,Orne,61,Normandie,Online,88.36,4
+2025-09-14,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Store,106.04,4
+2025-09-14,Finistère,29,Bretagne,Online,39.16,4
+2025-09-14,Haute-Garonne,31,Occitanie,Online,78.98,4
+2025-09-14,Indre,36,Centre-Val de Loire,Online,55.57,4
+2025-09-14,Mayotte,976,Outre-mer,Store,68.98,5
+2025-09-14,Nord,59,Hauts-de-France,Store,99.64,4
+2025-09-14,Val-de-Marne,94,Île-de-France,Online,134.96,3
+2025-09-15,Calvados,14,Normandie,Online,23.81,4
+2025-09-15,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,38.85,4
+2025-09-15,Eure,27,Normandie,Online,76.46,3
+2025-09-15,Gers,32,Occitanie,Online,112.76,3
+2025-09-15,Territoire de Belfort,90,Bourgogne-Franche-Comté,Online,95.56,5
+2025-09-15,Yonne,89,Bourgogne-Franche-Comté,Online,116.32,5
+2025-09-17,Eure,27,Normandie,Online,121.25,3
+2025-09-17,Mayenne,53,Pays de la Loire,Online,43.11,3
+2025-09-17,Paris,75,Île-de-France,Online,47.27,5
+2025-09-17,Rhône,69,Auvergne-Rhône-Alpes,Online,145.12,4
+2025-09-17,Tarn-et-Garonne,82,Occitanie,Store,131.88,4
+2025-09-18,Cantal,15,Auvergne-Rhône-Alpes,Phone,206.73,3
+2025-09-18,Haute-Vienne,87,Nouvelle-Aquitaine,Online,44.8,3
+2025-09-18,Haute-Vienne,87,Nouvelle-Aquitaine,Store,46.68,4
+2025-09-18,Indre,36,Centre-Val de Loire,Store,30.63,4
+2025-09-18,Indre-et-Loire,37,Centre-Val de Loire,Online,45.88,5
+2025-09-18,Maine-et-Loire,49,Pays de la Loire,Store,122.89,4
+2025-09-18,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,68.54,4
+2025-09-19,Ardèche,07,Auvergne-Rhône-Alpes,Online,78.74,4
+2025-09-19,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,119.64,5
+2025-09-19,Haute-Marne,52,Grand Est,Online,60.04,5
+2025-09-19,Loire-Atlantique,44,Pays de la Loire,Store,58.38,5
+2025-09-19,Loire-Atlantique,44,Pays de la Loire,Store,78.52,5
+2025-09-19,Lot,46,Occitanie,Store,95.81,4
+2025-09-19,Manche,50,Normandie,Store,76.09,5
+2025-09-20,Gers,32,Occitanie,Store,77.8,4
+2025-09-20,Isère,38,Auvergne-Rhône-Alpes,Online,19.59,4
+2025-09-20,Isère,38,Auvergne-Rhône-Alpes,Phone,96.97,3
+2025-09-20,La Réunion,974,Outre-mer,Phone,119.9,2
+2025-09-20,Paris,75,Île-de-France,Online,95.02,5
+2025-09-20,Pas-de-Calais,62,Hauts-de-France,Online,67.71,2
+2025-09-20,Pyrénées-Orientales,66,Occitanie,Online,96.26,5
+2025-09-20,Seine-et-Marne,77,Île-de-France,Online,141.45,4
+2025-09-20,Vendée,85,Pays de la Loire,Store,114.85,4
+2025-09-21,Aisne,02,Hauts-de-France,Store,91.87,3
+2025-09-21,Allier,03,Auvergne-Rhône-Alpes,Phone,52.01,4
+2025-09-21,Drôme,26,Auvergne-Rhône-Alpes,Online,78.38,2
+2025-09-21,Indre-et-Loire,37,Centre-Val de Loire,Store,81.03,4
+2025-09-21,Lot,46,Occitanie,Online,147.21,5
+2025-09-21,Maine-et-Loire,49,Pays de la Loire,Phone,77.44,4
+2025-09-21,Var,83,Provence-Alpes-Côte d'Azur,Online,47.83,5
+2025-09-21,Vaucluse,84,Provence-Alpes-Côte d'Azur,Store,118.47,2
+2025-09-21,Yonne,89,Bourgogne-Franche-Comté,Store,52.0,5
+2025-09-22,Hérault,34,Occitanie,Store,80.64,3
+2025-09-22,Lot-et-Garonne,47,Nouvelle-Aquitaine,Store,175.3,4
+2025-09-22,Pas-de-Calais,62,Hauts-de-France,Online,73.15,3
+2025-09-23,Essonne,91,Île-de-France,Online,88.42,2
+2025-09-23,Haute-Savoie,74,Auvergne-Rhône-Alpes,Online,5.0,4
+2025-09-23,Loire,42,Auvergne-Rhône-Alpes,Online,42.32,4
+2025-09-23,Seine-et-Marne,77,Île-de-France,Store,108.95,5
+2025-09-24,Allier,03,Auvergne-Rhône-Alpes,Store,26.92,3
+2025-09-24,Finistère,29,Bretagne,Online,35.58,4
+2025-09-24,Gers,32,Occitanie,Online,157.51,5
+2025-09-24,Savoie,73,Auvergne-Rhône-Alpes,Online,46.99,5
+2025-09-25,Ain,01,Auvergne-Rhône-Alpes,Store,104.44,4
+2025-09-25,Aube,10,Grand Est,Phone,54.25,4
+2025-09-25,Côtes-d'Armor,22,Bretagne,Online,140.15,4
+2025-09-25,Dordogne,24,Nouvelle-Aquitaine,Online,116.73,2
+2025-09-25,Nord,59,Hauts-de-France,Store,82.64,3
+2025-09-25,Paris,75,Île-de-France,Store,56.67,4
+2025-09-25,Paris,75,Île-de-France,Store,106.61,4
+2025-09-25,Pas-de-Calais,62,Hauts-de-France,Store,181.34,3
+2025-09-25,Somme,80,Hauts-de-France,Store,52.3,5
+2025-09-26,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,60.21,4
+2025-09-26,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,48.01,4
+2025-09-26,Côte-d'Or,21,Bourgogne-Franche-Comté,Store,52.49,4
+2025-09-26,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Phone,33.7,4
+2025-09-27,Cantal,15,Auvergne-Rhône-Alpes,Online,63.11,3
+2025-09-27,Haute-Corse,2B,Corse,Store,23.19,5
+2025-09-27,Haute-Garonne,31,Occitanie,Phone,124.65,2
+2025-09-27,Maine-et-Loire,49,Pays de la Loire,Store,47.88,4
+2025-09-28,Corse-du-Sud,2A,Corse,Store,76.08,5
+2025-09-28,Hauts-de-Seine,92,Île-de-France,Store,65.63,3
+2025-09-28,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,44.75,4
+2025-10-01,Indre,36,Centre-Val de Loire,Store,32.87,5
+2025-10-01,Jura,39,Bourgogne-Franche-Comté,Online,41.73,5
+2025-10-01,Mayotte,976,Outre-mer,Store,119.36,4
+2025-10-01,Paris,75,Île-de-France,Store,85.7,4
+2025-10-02,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,61.76,5
+2025-10-02,Gironde,33,Nouvelle-Aquitaine,Online,92.19,3
+2025-10-02,Haut-Rhin,68,Grand Est,Store,144.61,4
+2025-10-02,Jura,39,Bourgogne-Franche-Comté,Store,76.94,4
+2025-10-02,Lot,46,Occitanie,Online,71.25,5
+2025-10-02,Mayotte,976,Outre-mer,Online,85.43,4
+2025-10-02,Meurthe-et-Moselle,54,Grand Est,Store,54.26,5
+2025-10-02,Pas-de-Calais,62,Hauts-de-France,Online,146.93,5
+2025-10-02,Yvelines,78,Île-de-France,Online,82.62,5
+2025-10-03,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,80.19,3
+2025-10-03,Côtes-d'Armor,22,Bretagne,Online,93.54,3
+2025-10-03,Nord,59,Hauts-de-France,Online,68.15,3
+2025-10-03,Rhône,69,Auvergne-Rhône-Alpes,Phone,85.44,4
+2025-10-04,Ardèche,07,Auvergne-Rhône-Alpes,Store,80.45,4
+2025-10-04,Aube,10,Grand Est,Store,32.24,4
+2025-10-04,Haute-Garonne,31,Occitanie,Store,108.31,4
+2025-10-04,Haute-Savoie,74,Auvergne-Rhône-Alpes,Store,124.02,4
+2025-10-04,Hauts-de-Seine,92,Île-de-France,Online,92.17,3
+2025-10-04,Indre,36,Centre-Val de Loire,Online,77.6,3
+2025-10-04,Loiret,45,Centre-Val de Loire,Phone,65.62,3
+2025-10-04,Saône-et-Loire,71,Bourgogne-Franche-Comté,Store,72.93,4
+2025-10-05,Aisne,02,Hauts-de-France,Online,135.88,4
+2025-10-05,Dordogne,24,Nouvelle-Aquitaine,Store,77.82,5
+2025-10-05,Haut-Rhin,68,Grand Est,Store,68.69,4
+2025-10-05,Haute-Garonne,31,Occitanie,Online,75.47,5
+2025-10-05,Ille-et-Vilaine,35,Bretagne,Online,93.43,5
+2025-10-05,La Réunion,974,Outre-mer,Online,88.19,3
+2025-10-05,Manche,50,Normandie,Store,26.0,5
+2025-10-06,Lozère,48,Occitanie,Store,93.63,5
+2025-10-06,Maine-et-Loire,49,Pays de la Loire,Store,103.89,5
+2025-10-06,Moselle,57,Grand Est,Store,16.49,4
+2025-10-06,Paris,75,Île-de-France,Online,94.46,5
+2025-10-06,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Phone,38.31,2
+2025-10-06,Pyrénées-Orientales,66,Occitanie,Online,72.67,5
+2025-10-07,Aude,11,Occitanie,Phone,62.45,4
+2025-10-07,Bas-Rhin,67,Grand Est,Store,128.67,3
+2025-10-07,Gironde,33,Nouvelle-Aquitaine,Online,69.96,4
+2025-10-07,Haute-Marne,52,Grand Est,Online,60.0,4
+2025-10-07,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,57.67,4
+2025-10-07,Landes,40,Nouvelle-Aquitaine,Online,20.24,4
+2025-10-07,Mayenne,53,Pays de la Loire,Online,57.67,4
+2025-10-07,Seine-et-Marne,77,Île-de-France,Online,134.3,4
+2025-10-07,Territoire de Belfort,90,Bourgogne-Franche-Comté,Store,116.81,3
+2025-10-07,Var,83,Provence-Alpes-Côte d'Azur,Store,43.7,5
+2025-10-08,Indre,36,Centre-Val de Loire,Online,60.5,4
+2025-10-08,Loiret,45,Centre-Val de Loire,Phone,38.44,4
+2025-10-08,Paris,75,Île-de-France,Online,73.09,4
+2025-10-08,Pyrénées-Orientales,66,Occitanie,Online,111.32,4
+2025-10-09,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,35.72,4
+2025-10-09,Aube,10,Grand Est,Store,73.69,3
+2025-10-09,Charente-Maritime,17,Nouvelle-Aquitaine,Online,73.98,3
+2025-10-09,Lozère,48,Occitanie,Phone,101.17,4
+2025-10-09,Nord,59,Hauts-de-France,Store,91.89,4
+2025-10-09,Pyrénées-Orientales,66,Occitanie,Online,98.06,4
+2025-10-10,Ardennes,08,Grand Est,Online,92.84,3
+2025-10-10,Calvados,14,Normandie,Store,54.77,5
+2025-10-10,Essonne,91,Île-de-France,Phone,70.18,4
+2025-10-10,Gironde,33,Nouvelle-Aquitaine,Online,53.62,4
+2025-10-10,Haute-Garonne,31,Occitanie,Online,38.65,4
+2025-10-10,Loiret,45,Centre-Val de Loire,Online,44.6,3
+2025-10-10,Lot-et-Garonne,47,Nouvelle-Aquitaine,Online,43.71,4
+2025-10-10,Lozère,48,Occitanie,Online,99.87,4
+2025-10-10,Rhône,69,Auvergne-Rhône-Alpes,Online,151.13,4
+2025-10-11,Deux-Sèvres,79,Nouvelle-Aquitaine,Store,88.62,4
+2025-10-11,Essonne,91,Île-de-France,Phone,58.44,3
+2025-10-11,Isère,38,Auvergne-Rhône-Alpes,Online,86.22,5
+2025-10-11,Loire-Atlantique,44,Pays de la Loire,Online,39.6,4
+2025-10-11,Lozère,48,Occitanie,Store,71.08,3
+2025-10-11,Mayenne,53,Pays de la Loire,Online,31.31,4
+2025-10-11,Moselle,57,Grand Est,Store,55.15,4
+2025-10-11,Orne,61,Normandie,Phone,68.45,4
+2025-10-12,Corse-du-Sud,2A,Corse,Online,134.49,5
+2025-10-12,Essonne,91,Île-de-France,Online,71.72,3
+2025-10-12,Orne,61,Normandie,Online,54.99,5
+2025-10-13,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,57.75,5
+2025-10-13,Haute-Marne,52,Grand Est,Online,81.41,3
+2025-10-13,Jura,39,Bourgogne-Franche-Comté,Online,100.9,4
+2025-10-14,Cher,18,Centre-Val de Loire,Store,36.24,3
+2025-10-14,Marne,51,Grand Est,Online,45.56,4
+2025-10-14,Paris,75,Île-de-France,Online,49.61,3
+2025-10-15,Allier,03,Auvergne-Rhône-Alpes,Online,123.22,4
+2025-10-15,Ardennes,08,Grand Est,Online,76.91,3
+2025-10-15,Cher,18,Centre-Val de Loire,Store,55.04,4
+2025-10-15,Indre,36,Centre-Val de Loire,Phone,58.25,3
+2025-10-15,Rhône,69,Auvergne-Rhône-Alpes,Online,121.39,3
+2025-10-15,Var,83,Provence-Alpes-Côte d'Azur,Phone,66.65,3
+2025-10-16,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Online,40.47,3
+2025-10-16,Maine-et-Loire,49,Pays de la Loire,Store,91.08,3
+2025-10-16,Pyrénées-Orientales,66,Occitanie,Phone,83.51,3
+2025-10-16,Savoie,73,Auvergne-Rhône-Alpes,Online,35.34,3
+2025-10-17,Corrèze,19,Nouvelle-Aquitaine,Online,54.39,5
+2025-10-17,Haute-Corse,2B,Corse,Store,45.68,4
+2025-10-17,Lot,46,Occitanie,Online,121.69,4
+2025-10-17,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,37.08,5
+2025-10-17,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Phone,68.91,4
+2025-10-17,Yonne,89,Bourgogne-Franche-Comté,Online,51.84,5
+2025-10-18,Aisne,02,Hauts-de-France,Online,135.55,4
+2025-10-18,Allier,03,Auvergne-Rhône-Alpes,Online,23.66,3
+2025-10-18,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,37.61,4
+2025-10-18,Haute-Vienne,87,Nouvelle-Aquitaine,Online,68.39,4
+2025-10-18,Mayotte,976,Outre-mer,Phone,67.68,4
+2025-10-18,Paris,75,Île-de-France,Store,82.61,4
+2025-10-18,Pyrénées-Orientales,66,Occitanie,Phone,147.24,4
+2025-10-19,Nord,59,Hauts-de-France,Online,111.58,3
+2025-10-20,Aisne,02,Hauts-de-France,Online,115.94,4
+2025-10-20,Lot,46,Occitanie,Online,166.83,5
+2025-10-20,Paris,75,Île-de-France,Store,26.83,4
+2025-10-21,Indre,36,Centre-Val de Loire,Store,39.32,4
+2025-10-21,Mayotte,976,Outre-mer,Store,75.16,3
+2025-10-21,Rhône,69,Auvergne-Rhône-Alpes,Store,99.43,5
+2025-10-21,Tarn,81,Occitanie,Online,89.41,3
+2025-10-22,Ariège,09,Occitanie,Store,91.62,4
+2025-10-22,Aube,10,Grand Est,Online,59.89,3
+2025-10-22,Gironde,33,Nouvelle-Aquitaine,Online,78.88,4
+2025-10-22,Gironde,33,Nouvelle-Aquitaine,Phone,70.84,4
+2025-10-22,Haute-Saône,70,Bourgogne-Franche-Comté,Online,136.72,5
+2025-10-22,Ille-et-Vilaine,35,Bretagne,Store,80.79,4
+2025-10-22,Lot-et-Garonne,47,Nouvelle-Aquitaine,Phone,118.2,3
+2025-10-22,Paris,75,Île-de-France,Online,81.1,4
+2025-10-22,Saône-et-Loire,71,Bourgogne-Franche-Comté,Online,39.94,5
+2025-10-22,Seine-et-Marne,77,Île-de-France,Store,61.96,5
+2025-10-23,Côte-d'Or,21,Bourgogne-Franche-Comté,Store,42.88,4
+2025-10-23,Haute-Savoie,74,Auvergne-Rhône-Alpes,Online,166.56,4
+2025-10-23,Loiret,45,Centre-Val de Loire,Store,63.4,3
+2025-10-23,Lot,46,Occitanie,Store,135.72,4
+2025-10-23,Lozère,48,Occitanie,Phone,52.3,2
+2025-10-24,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,169.66,4
+2025-10-24,Deux-Sèvres,79,Nouvelle-Aquitaine,Online,9.93,4
+2025-10-24,Indre,36,Centre-Val de Loire,Store,65.89,4
+2025-10-25,Aube,10,Grand Est,Online,98.94,3
+2025-10-25,Orne,61,Normandie,Online,56.63,3
+2025-10-25,Pas-de-Calais,62,Hauts-de-France,Online,116.11,4
+2025-10-25,Vienne,86,Nouvelle-Aquitaine,Online,151.64,3
+2025-10-25,Yvelines,78,Île-de-France,Online,82.34,3
+2025-10-26,Allier,03,Auvergne-Rhône-Alpes,Online,100.23,3
+2025-10-26,Ardèche,07,Auvergne-Rhône-Alpes,Store,29.55,4
+2025-10-26,Haute-Saône,70,Bourgogne-Franche-Comté,Online,131.21,5
+2025-10-26,Isère,38,Auvergne-Rhône-Alpes,Online,103.03,4
+2025-10-26,Paris,75,Île-de-France,Phone,126.29,2
+2025-10-27,Allier,03,Auvergne-Rhône-Alpes,Online,38.38,4
+2025-10-27,Ardennes,08,Grand Est,Store,182.33,4
+2025-10-27,Hauts-de-Seine,92,Île-de-France,Store,39.68,5
+2025-10-27,Isère,38,Auvergne-Rhône-Alpes,Store,67.34,2
+2025-10-27,Nièvre,58,Bourgogne-Franche-Comté,Store,77.97,2
+2025-10-27,Pas-de-Calais,62,Hauts-de-France,Online,139.73,3
+2025-10-28,Aube,10,Grand Est,Online,71.07,4
+2025-10-28,Corrèze,19,Nouvelle-Aquitaine,Online,35.22,4
+2025-10-28,Essonne,91,Île-de-France,Store,36.83,3
+2025-10-28,Essonne,91,Île-de-France,Store,47.19,3
+2025-10-28,Gironde,33,Nouvelle-Aquitaine,Online,97.54,2
+2025-10-28,Lot-et-Garonne,47,Nouvelle-Aquitaine,Online,126.16,3
+2025-10-28,Nord,59,Hauts-de-France,Online,69.02,4
+2025-10-28,Var,83,Provence-Alpes-Côte d'Azur,Online,35.86,4
+2025-11-01,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Store,127.54,3
+2025-11-01,Hérault,34,Occitanie,Store,54.82,3
+2025-11-02,Eure,27,Normandie,Online,47.98,5
+2025-11-02,Gers,32,Occitanie,Online,66.08,3
+2025-11-02,Landes,40,Nouvelle-Aquitaine,Store,40.05,3
+2025-11-02,Lot,46,Occitanie,Phone,111.34,3
+2025-11-02,Paris,75,Île-de-France,Online,74.31,4
+2025-11-02,Seine-Maritime,76,Normandie,Store,120.84,4
+2025-11-02,Seine-Saint-Denis,93,Île-de-France,Store,43.77,3
+2025-11-02,Var,83,Provence-Alpes-Côte d'Azur,Online,57.0,4
+2025-11-02,Vaucluse,84,Provence-Alpes-Côte d'Azur,Online,84.11,5
+2025-11-03,Gard,30,Occitanie,Store,40.12,3
+2025-11-03,Hérault,34,Occitanie,Store,94.8,4
+2025-11-03,Mayotte,976,Outre-mer,Store,95.49,4
+2025-11-03,Seine-Saint-Denis,93,Île-de-France,Phone,70.65,4
+2025-11-04,Allier,03,Auvergne-Rhône-Alpes,Online,63.39,4
+2025-11-04,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,90.24,4
+2025-11-04,Charente-Maritime,17,Nouvelle-Aquitaine,Online,60.2,5
+2025-11-04,Gironde,33,Nouvelle-Aquitaine,Store,52.25,3
+2025-11-04,Loiret,45,Centre-Val de Loire,Store,72.98,4
+2025-11-04,Martinique,972,Outre-mer,Online,106.56,3
+2025-11-04,Paris,75,Île-de-France,Store,92.5,3
+2025-11-04,Saône-et-Loire,71,Bourgogne-Franche-Comté,Store,36.35,4
+2025-11-04,Somme,80,Hauts-de-France,Online,77.63,4
+2025-11-04,Tarn,81,Occitanie,Online,88.57,4
+2025-11-05,Guyane,973,Outre-mer,Online,55.36,3
+2025-11-05,Indre-et-Loire,37,Centre-Val de Loire,Online,51.54,3
+2025-11-05,Isère,38,Auvergne-Rhône-Alpes,Online,45.88,5
+2025-11-05,La Réunion,974,Outre-mer,Online,35.26,5
+2025-11-06,Aube,10,Grand Est,Phone,89.75,4
+2025-11-06,Charente-Maritime,17,Nouvelle-Aquitaine,Online,91.74,3
+2025-11-06,Gironde,33,Nouvelle-Aquitaine,Online,83.36,5
+2025-11-06,Gironde,33,Nouvelle-Aquitaine,Phone,92.21,5
+2025-11-07,Indre,36,Centre-Val de Loire,Store,60.86,4
+2025-11-07,La Réunion,974,Outre-mer,Store,70.18,5
+2025-11-07,Nièvre,58,Bourgogne-Franche-Comté,Store,5.0,5
+2025-11-07,Orne,61,Normandie,Online,66.8,3
+2025-11-08,Gard,30,Occitanie,Store,64.19,4
+2025-11-08,Indre,36,Centre-Val de Loire,Store,54.31,5
+2025-11-08,Loire,42,Auvergne-Rhône-Alpes,Online,55.0,3
+2025-11-08,Loire-Atlantique,44,Pays de la Loire,Online,62.47,3
+2025-11-08,Martinique,972,Outre-mer,Online,83.06,4
+2025-11-09,Aube,10,Grand Est,Online,22.54,4
+2025-11-09,Calvados,14,Normandie,Online,48.93,3
+2025-11-09,Gironde,33,Nouvelle-Aquitaine,Online,77.55,3
+2025-11-09,Haute-Marne,52,Grand Est,Online,45.75,4
+2025-11-09,Indre,36,Centre-Val de Loire,Online,48.64,4
+2025-11-09,Morbihan,56,Bretagne,Store,167.27,5
+2025-11-09,Nièvre,58,Bourgogne-Franche-Comté,Online,64.18,4
+2025-11-10,Ain,01,Auvergne-Rhône-Alpes,Online,113.25,3
+2025-11-10,Cantal,15,Auvergne-Rhône-Alpes,Store,84.51,3
+2025-11-10,Cantal,15,Auvergne-Rhône-Alpes,Store,116.8,5
+2025-11-10,Cher,18,Centre-Val de Loire,Store,139.52,4
+2025-11-10,Corrèze,19,Nouvelle-Aquitaine,Store,50.33,5
+2025-11-10,Isère,38,Auvergne-Rhône-Alpes,Online,52.24,4
+2025-11-10,Isère,38,Auvergne-Rhône-Alpes,Online,74.37,5
+2025-11-10,La Réunion,974,Outre-mer,Online,81.6,5
+2025-11-10,Martinique,972,Outre-mer,Online,48.14,4
+2025-11-10,Nièvre,58,Bourgogne-Franche-Comté,Online,88.47,4
+2025-11-10,Paris,75,Île-de-France,Online,78.35,4
+2025-11-11,Finistère,29,Bretagne,Store,50.78,3
+2025-11-11,Hauts-de-Seine,92,Île-de-France,Store,68.28,5
+2025-11-11,Yonne,89,Bourgogne-Franche-Comté,Phone,46.74,4
+2025-11-12,Allier,03,Auvergne-Rhône-Alpes,Online,90.67,5
+2025-11-12,Corse-du-Sud,2A,Corse,Store,115.98,4
+2025-11-12,Haute-Garonne,31,Occitanie,Store,89.72,3
+2025-11-12,Hauts-de-Seine,92,Île-de-France,Store,155.91,4
+2025-11-12,Loire-Atlantique,44,Pays de la Loire,Online,43.99,4
+2025-11-12,Martinique,972,Outre-mer,Store,105.27,1
+2025-11-12,Moselle,57,Grand Est,Store,44.16,3
+2025-11-12,Nord,59,Hauts-de-France,Online,73.86,3
+2025-11-12,Sarthe,72,Pays de la Loire,Phone,39.92,4
+2025-11-13,Corse-du-Sud,2A,Corse,Phone,93.72,3
+2025-11-13,Eure,27,Normandie,Phone,70.38,3
+2025-11-13,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,107.58,4
+2025-11-13,Hauts-de-Seine,92,Île-de-France,Online,133.79,3
+2025-11-13,Lot-et-Garonne,47,Nouvelle-Aquitaine,Online,149.05,3
+2025-11-13,Paris,75,Île-de-France,Store,40.6,4
+2025-11-13,Yonne,89,Bourgogne-Franche-Comté,Store,88.77,5
+2025-11-14,Deux-Sèvres,79,Nouvelle-Aquitaine,Store,38.51,3
+2025-11-14,Maine-et-Loire,49,Pays de la Loire,Online,70.18,4
+2025-11-14,Maine-et-Loire,49,Pays de la Loire,Store,126.43,3
+2025-11-15,Calvados,14,Normandie,Store,81.87,3
+2025-11-15,Deux-Sèvres,79,Nouvelle-Aquitaine,Store,103.75,5
+2025-11-15,Gironde,33,Nouvelle-Aquitaine,Store,103.51,4
+2025-11-15,Haute-Garonne,31,Occitanie,Online,118.09,3
+2025-11-15,Haute-Garonne,31,Occitanie,Store,120.89,4
+2025-11-15,Jura,39,Bourgogne-Franche-Comté,Store,89.51,4
+2025-11-15,Marne,51,Grand Est,Phone,5.0,2
+2025-11-15,Paris,75,Île-de-France,Online,86.1,3
+2025-11-15,Rhône,69,Auvergne-Rhône-Alpes,Online,132.11,5
+2025-11-15,Seine-Saint-Denis,93,Île-de-France,Online,28.25,5
+2025-11-16,Ariège,09,Occitanie,Store,38.21,4
+2025-11-16,Cher,18,Centre-Val de Loire,Store,57.73,3
+2025-11-16,Haute-Vienne,87,Nouvelle-Aquitaine,Online,135.56,3
+2025-11-16,Loiret,45,Centre-Val de Loire,Store,76.54,3
+2025-11-16,Meurthe-et-Moselle,54,Grand Est,Online,120.27,4
+2025-11-16,Meurthe-et-Moselle,54,Grand Est,Store,75.82,5
+2025-11-16,Nièvre,58,Bourgogne-Franche-Comté,Online,92.16,3
+2025-11-17,Cher,18,Centre-Val de Loire,Store,17.98,3
+2025-11-17,Haute-Vienne,87,Nouvelle-Aquitaine,Online,69.5,5
+2025-11-17,Loire-Atlantique,44,Pays de la Loire,Online,30.75,4
+2025-11-17,Paris,75,Île-de-France,Online,37.94,3
+2025-11-17,Paris,75,Île-de-France,Store,23.37,4
+2025-11-17,Paris,75,Île-de-France,Store,36.92,4
+2025-11-18,Aube,10,Grand Est,Online,39.53,4
+2025-11-18,Corrèze,19,Nouvelle-Aquitaine,Online,57.41,3
+2025-11-18,Indre,36,Centre-Val de Loire,Online,52.73,4
+2025-11-18,Orne,61,Normandie,Phone,55.4,3
+2025-11-18,Paris,75,Île-de-France,Phone,97.24,5
+2025-11-18,Paris,75,Île-de-France,Store,101.71,3
+2025-11-18,Seine-Saint-Denis,93,Île-de-France,Online,11.52,4
+2025-11-19,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,109.25,3
+2025-11-19,Gard,30,Occitanie,Phone,55.51,4
+2025-11-19,Haute-Corse,2B,Corse,Online,47.45,4
+2025-11-19,Hauts-de-Seine,92,Île-de-France,Online,58.51,4
+2025-11-19,Hauts-de-Seine,92,Île-de-France,Store,134.83,5
+2025-11-19,Indre-et-Loire,37,Centre-Val de Loire,Store,34.34,5
+2025-11-19,Loire-Atlantique,44,Pays de la Loire,Online,71.06,5
+2025-11-19,Moselle,57,Grand Est,Online,47.5,4
+2025-11-19,Rhône,69,Auvergne-Rhône-Alpes,Store,136.96,3
+2025-11-19,Territoire de Belfort,90,Bourgogne-Franche-Comté,Online,58.58,5
+2025-11-20,Essonne,91,Île-de-France,Store,103.5,5
+2025-11-20,Haute-Garonne,31,Occitanie,Online,75.97,4
+2025-11-20,Hauts-de-Seine,92,Île-de-France,Store,139.75,2
+2025-11-20,Mayenne,53,Pays de la Loire,Store,58.22,4
+2025-11-21,Ardennes,08,Grand Est,Store,116.39,4
+2025-11-21,Corse-du-Sud,2A,Corse,Online,108.03,5
+2025-11-21,Haute-Garonne,31,Occitanie,Store,68.65,5
+2025-11-21,Hérault,34,Occitanie,Online,55.55,4
+2025-11-21,Ille-et-Vilaine,35,Bretagne,Online,185.32,4
+2025-11-21,Loire-Atlantique,44,Pays de la Loire,Online,64.01,4
+2025-11-21,Meurthe-et-Moselle,54,Grand Est,Store,94.44,4
+2025-11-21,Meuse,55,Grand Est,Store,79.79,4
+2025-11-21,Vendée,85,Pays de la Loire,Store,153.64,4
+2025-11-21,Yonne,89,Bourgogne-Franche-Comté,Online,104.83,5
+2025-11-22,Isère,38,Auvergne-Rhône-Alpes,Phone,56.89,3
+2025-11-22,Martinique,972,Outre-mer,Online,65.63,3
+2025-11-22,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Store,51.5,3
+2025-11-23,Ille-et-Vilaine,35,Bretagne,Online,82.4,4
+2025-11-23,Loiret,45,Centre-Val de Loire,Store,100.93,4
+2025-11-23,Tarn-et-Garonne,82,Occitanie,Store,114.6,3
+2025-11-24,Ariège,09,Occitanie,Store,45.48,2
+2025-11-24,Corse-du-Sud,2A,Corse,Store,107.33,5
+2025-11-24,Paris,75,Île-de-France,Online,85.17,4
+2025-11-24,Tarn-et-Garonne,82,Occitanie,Online,81.4,3
+2025-11-25,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,51.01,3
+2025-11-25,Calvados,14,Normandie,Online,52.13,3
+2025-11-25,Côte-d'Or,21,Bourgogne-Franche-Comté,Online,52.73,4
+2025-11-25,Doubs,25,Bourgogne-Franche-Comté,Online,99.88,5
+2025-11-25,Haute-Vienne,87,Nouvelle-Aquitaine,Online,63.43,3
+2025-11-25,Mayenne,53,Pays de la Loire,Online,52.35,3
+2025-11-26,Loire-Atlantique,44,Pays de la Loire,Phone,49.69,3
+2025-11-26,Paris,75,Île-de-France,Online,77.21,5
+2025-11-26,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Online,36.52,5
+2025-11-26,Savoie,73,Auvergne-Rhône-Alpes,Online,133.12,4
+2025-11-26,Tarn,81,Occitanie,Store,44.96,4
+2025-11-27,Cher,18,Centre-Val de Loire,Store,66.34,4
+2025-11-27,Doubs,25,Bourgogne-Franche-Comté,Store,85.99,3
+2025-11-27,Haute-Marne,52,Grand Est,Store,7.98,3
+2025-11-27,Lot,46,Occitanie,Store,95.46,3
+2025-11-28,Calvados,14,Normandie,Store,62.36,4
+2025-11-28,Gers,32,Occitanie,Online,73.34,3
+2025-11-28,Gironde,33,Nouvelle-Aquitaine,Store,39.38,4
+2025-11-28,Haute-Garonne,31,Occitanie,Online,51.12,2
+2025-11-28,Hérault,34,Occitanie,Store,25.81,3
+2025-11-28,Isère,38,Auvergne-Rhône-Alpes,Phone,91.78,3
+2025-11-28,Nord,59,Hauts-de-France,Online,50.12,4
+2025-11-28,Paris,75,Île-de-France,Phone,85.88,3
+2025-11-28,Paris,75,Île-de-France,Store,50.15,4
+2025-11-28,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,62.43,5
+2025-12-01,Bas-Rhin,67,Grand Est,Store,59.69,4
+2025-12-01,Haut-Rhin,68,Grand Est,Online,44.97,4
+2025-12-01,Haut-Rhin,68,Grand Est,Online,87.13,4
+2025-12-01,Loire-Atlantique,44,Pays de la Loire,Online,72.41,3
+2025-12-01,Nord,59,Hauts-de-France,Online,107.03,3
+2025-12-01,Rhône,69,Auvergne-Rhône-Alpes,Online,92.06,5
+2025-12-01,Savoie,73,Auvergne-Rhône-Alpes,Online,132.81,5
+2025-12-02,Eure,27,Normandie,Online,65.95,4
+2025-12-02,Loire-Atlantique,44,Pays de la Loire,Store,45.54,3
+2025-12-02,Lot,46,Occitanie,Store,26.49,5
+2025-12-02,Nièvre,58,Bourgogne-Franche-Comté,Online,91.08,3
+2025-12-02,Paris,75,Île-de-France,Online,48.53,4
+2025-12-03,Gironde,33,Nouvelle-Aquitaine,Online,73.49,5
+2025-12-03,Guadeloupe,971,Outre-mer,Store,47.57,4
+2025-12-03,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Online,137.14,3
+2025-12-03,Ille-et-Vilaine,35,Bretagne,Store,137.49,4
+2025-12-03,Lot,46,Occitanie,Store,144.98,4
+2025-12-04,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,27.66,3
+2025-12-04,Calvados,14,Normandie,Online,52.7,3
+2025-12-04,Haut-Rhin,68,Grand Est,Online,56.95,4
+2025-12-04,Jura,39,Bourgogne-Franche-Comté,Phone,82.13,3
+2025-12-04,Loire-Atlantique,44,Pays de la Loire,Online,63.54,4
+2025-12-04,Lot,46,Occitanie,Phone,123.24,3
+2025-12-04,Marne,51,Grand Est,Phone,41.75,4
+2025-12-04,Mayenne,53,Pays de la Loire,Store,47.24,2
+2025-12-04,Savoie,73,Auvergne-Rhône-Alpes,Store,69.07,4
+2025-12-04,Yonne,89,Bourgogne-Franche-Comté,Store,100.51,4
+2025-12-05,Alpes-de-Haute-Provence,04,Provence-Alpes-Côte d'Azur,Online,154.34,5
+2025-12-05,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,70.24,4
+2025-12-05,Hauts-de-Seine,92,Île-de-France,Online,82.05,4
+2025-12-05,Nord,59,Hauts-de-France,Store,44.51,4
+2025-12-05,Puy-de-Dôme,63,Auvergne-Rhône-Alpes,Online,55.65,5
+2025-12-05,Seine-et-Marne,77,Île-de-France,Online,66.31,3
+2025-12-05,Tarn-et-Garonne,82,Occitanie,Store,46.51,3
+2025-12-06,Aube,10,Grand Est,Store,31.21,5
+2025-12-06,Bas-Rhin,67,Grand Est,Online,89.82,4
+2025-12-06,Corrèze,19,Nouvelle-Aquitaine,Store,77.22,4
+2025-12-06,Côtes-d'Armor,22,Bretagne,Online,102.85,4
+2025-12-06,Ille-et-Vilaine,35,Bretagne,Store,132.18,4
+2025-12-06,Territoire de Belfort,90,Bourgogne-Franche-Comté,Online,104.47,4
+2025-12-07,Gironde,33,Nouvelle-Aquitaine,Store,117.7,4
+2025-12-07,Haute-Marne,52,Grand Est,Online,57.55,4
+2025-12-07,Paris,75,Île-de-France,Online,46.38,3
+2025-12-07,Pas-de-Calais,62,Hauts-de-France,Store,147.91,4
+2025-12-08,Gard,30,Occitanie,Online,73.68,4
+2025-12-08,Hauts-de-Seine,92,Île-de-France,Online,74.58,4
+2025-12-08,Hauts-de-Seine,92,Île-de-France,Online,145.61,4
+2025-12-08,Maine-et-Loire,49,Pays de la Loire,Phone,122.97,5
+2025-12-08,Martinique,972,Outre-mer,Store,43.85,5
+2025-12-09,Tarn,81,Occitanie,Store,58.84,3
+2025-12-09,Tarn,81,Occitanie,Store,86.61,3
+2025-12-09,Val-de-Marne,94,Île-de-France,Store,91.32,4
+2025-12-10,Paris,75,Île-de-France,Phone,58.72,3
+2025-12-10,Paris,75,Île-de-France,Store,61.95,4
+2025-12-11,Ain,01,Auvergne-Rhône-Alpes,Store,75.13,5
+2025-12-11,Lot,46,Occitanie,Store,156.54,3
+2025-12-11,Pyrénées-Atlantiques,64,Nouvelle-Aquitaine,Store,75.06,3
+2025-12-12,Marne,51,Grand Est,Online,65.74,2
+2025-12-12,Rhône,69,Auvergne-Rhône-Alpes,Online,98.58,5
+2025-12-13,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Online,51.95,5
+2025-12-13,Hautes-Alpes,05,Provence-Alpes-Côte d'Azur,Store,80.11,4
+2025-12-13,Loire-Atlantique,44,Pays de la Loire,Store,34.31,3
+2025-12-13,Loire-Atlantique,44,Pays de la Loire,Store,78.54,5
+2025-12-13,Meurthe-et-Moselle,54,Grand Est,Store,57.21,3
+2025-12-13,Vienne,86,Nouvelle-Aquitaine,Online,107.75,4
+2025-12-14,Gironde,33,Nouvelle-Aquitaine,Store,77.83,5
+2025-12-14,Landes,40,Nouvelle-Aquitaine,Online,63.59,3
+2025-12-14,Vienne,86,Nouvelle-Aquitaine,Online,110.8,3
+2025-12-15,Cantal,15,Auvergne-Rhône-Alpes,Online,131.34,5
+2025-12-15,Cantal,15,Auvergne-Rhône-Alpes,Store,94.93,2
+2025-12-15,Hauts-de-Seine,92,Île-de-France,Phone,133.36,5
+2025-12-15,Ille-et-Vilaine,35,Bretagne,Store,28.92,4
+2025-12-15,La Réunion,974,Outre-mer,Phone,146.09,4
+2025-12-15,Paris,75,Île-de-France,Store,77.85,4
+2025-12-16,Ariège,09,Occitanie,Store,87.74,3
+2025-12-16,Essonne,91,Île-de-France,Online,73.72,5
+2025-12-16,Morbihan,56,Bretagne,Store,87.5,2
+2025-12-16,Paris,75,Île-de-France,Online,79.93,4
+2025-12-16,Paris,75,Île-de-France,Store,108.42,4
+2025-12-16,Savoie,73,Auvergne-Rhône-Alpes,Online,177.17,4
+2025-12-16,Savoie,73,Auvergne-Rhône-Alpes,Store,111.5,3
+2025-12-16,Seine-et-Marne,77,Île-de-France,Online,64.57,4
+2025-12-16,Somme,80,Hauts-de-France,Store,102.9,3
+2025-12-17,Aisne,02,Hauts-de-France,Store,87.41,4
+2025-12-17,Charente-Maritime,17,Nouvelle-Aquitaine,Online,124.65,4
+2025-12-17,Loire-Atlantique,44,Pays de la Loire,Online,66.34,4
+2025-12-17,Savoie,73,Auvergne-Rhône-Alpes,Online,98.88,5
+2025-12-18,Haute-Vienne,87,Nouvelle-Aquitaine,Phone,118.44,2
+2025-12-18,Indre-et-Loire,37,Centre-Val de Loire,Online,47.63,4
+2025-12-18,Seine-Maritime,76,Normandie,Online,87.93,5
+2025-12-18,Var,83,Provence-Alpes-Côte d'Azur,Phone,62.32,4
+2025-12-19,Gironde,33,Nouvelle-Aquitaine,Online,74.71,4
+2025-12-19,Gironde,33,Nouvelle-Aquitaine,Store,101.65,4
+2025-12-19,Haute-Corse,2B,Corse,Online,32.52,4
+2025-12-19,Isère,38,Auvergne-Rhône-Alpes,Store,72.73,3
+2025-12-19,Oise,60,Hauts-de-France,Store,99.63,4
+2025-12-19,Paris,75,Île-de-France,Online,80.68,4
+2025-12-19,Pyrénées-Orientales,66,Occitanie,Online,88.79,3
+2025-12-19,Saône-et-Loire,71,Bourgogne-Franche-Comté,Store,58.14,4
+2025-12-19,Var,83,Provence-Alpes-Côte d'Azur,Online,60.18,4
+2025-12-20,Ardennes,08,Grand Est,Store,180.05,3
+2025-12-20,Corrèze,19,Nouvelle-Aquitaine,Store,49.34,3
+2025-12-20,Haute-Corse,2B,Corse,Store,51.57,3
+2025-12-20,Loire-Atlantique,44,Pays de la Loire,Store,66.69,4
+2025-12-20,Lot,46,Occitanie,Online,86.83,4
+2025-12-20,Meurthe-et-Moselle,54,Grand Est,Online,86.72,4
+2025-12-20,Somme,80,Hauts-de-France,Online,106.73,3
+2025-12-20,Vendée,85,Pays de la Loire,Phone,106.68,4
+2025-12-21,Allier,03,Auvergne-Rhône-Alpes,Store,83.18,3
+2025-12-21,Alpes-Maritimes,06,Provence-Alpes-Côte d'Azur,Store,44.89,5
+2025-12-21,Hauts-de-Seine,92,Île-de-France,Online,133.07,4
+2025-12-21,Meurthe-et-Moselle,54,Grand Est,Online,74.58,4
+2025-12-21,Tarn,81,Occitanie,Store,74.38,3
+2025-12-22,Ariège,09,Occitanie,Store,87.79,4
+2025-12-22,Gard,30,Occitanie,Store,44.09,5
+2025-12-22,Haute-Garonne,31,Occitanie,Store,99.51,4
+2025-12-22,Indre-et-Loire,37,Centre-Val de Loire,Store,79.49,3
+2025-12-22,Paris,75,Île-de-France,Store,55.21,4
+2025-12-22,Rhône,69,Auvergne-Rhône-Alpes,Store,103.66,5
+2025-12-23,Bouches-du-Rhône,13,Provence-Alpes-Côte d'Azur,Online,93.49,4
+2025-12-23,Gard,30,Occitanie,Online,49.81,3
+2025-12-23,Haute-Loire,43,Auvergne-Rhône-Alpes,Phone,95.23,3
+2025-12-23,Haute-Marne,52,Grand Est,Store,59.61,5
+2025-12-23,Indre,36,Centre-Val de Loire,Online,89.52,4
+2025-12-23,Somme,80,Hauts-de-France,Store,44.52,5
+2025-12-23,Tarn,81,Occitanie,Online,86.95,4
+2025-12-23,Vosges,88,Grand Est,Store,44.36,3
+2025-12-24,Ariège,09,Occitanie,Online,75.83,5
+2025-12-24,Essonne,91,Île-de-France,Online,67.66,5
+2025-12-24,Indre,36,Centre-Val de Loire,Online,57.02,4
+2025-12-24,Lozère,48,Occitanie,Online,130.07,5
+2025-12-24,Paris,75,Île-de-France,Online,53.42,5
+2025-12-24,Paris,75,Île-de-France,Online,91.07,4
+2025-12-24,Sarthe,72,Pays de la Loire,Online,57.11,3
+2025-12-25,Aisne,02,Hauts-de-France,Online,195.23,4
+2025-12-25,Haute-Garonne,31,Occitanie,Store,85.4,3
+2025-12-25,Mayotte,976,Outre-mer,Online,89.82,5
+2025-12-26,Finistère,29,Bretagne,Store,64.34,2
+2025-12-26,Haute-Garonne,31,Occitanie,Store,113.1,4
+2025-12-26,Loire-Atlantique,44,Pays de la Loire,Store,39.78,4
+2025-12-26,Var,83,Provence-Alpes-Côte d'Azur,Store,35.79,2
+2025-12-27,Ariège,09,Occitanie,Online,169.68,5
+2025-12-27,Cher,18,Centre-Val de Loire,Store,77.62,4
+2025-12-27,Corrèze,19,Nouvelle-Aquitaine,Online,56.45,4
+2025-12-27,Haut-Rhin,68,Grand Est,Store,131.73,3
+2025-12-27,Loir-et-Cher,41,Centre-Val de Loire,Store,41.38,5
+2025-12-27,Paris,75,Île-de-France,Online,119.04,5
+2025-12-27,Saône-et-Loire,71,Bourgogne-Franche-Comté,Store,47.21,4
+2025-12-28,Corse-du-Sud,2A,Corse,Store,78.25,5
+2025-12-28,Haute-Marne,52,Grand Est,Online,70.59,3
+2025-12-28,Hauts-de-Seine,92,Île-de-France,Online,63.68,4
+2025-12-28,Indre-et-Loire,37,Centre-Val de Loire,Online,25.33,2
+2025-12-28,Tarn,81,Occitanie,Online,67.18,3
+2025-12-28,Territoire de Belfort,90,Bourgogne-Franche-Comté,Store,109.72,4
