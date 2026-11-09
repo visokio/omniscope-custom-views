@@ -20,22 +20,22 @@
   "options": {
     "items": {
       "lat": {
-        "displayName": "Latitude",
+        "displayName": "Dot latitude",
         "type": "MEASURE",
         "mandatory": true,
         "validFieldTypes": [
           "NUMBER"
         ],
-        "detail": "Latitude value of the marker"
+        "detail": "Latitude of each dot in decimal degrees, for example the mean of a Latitude field"
       },
       "lon": {
-        "displayName": "Longitude",
+        "displayName": "Dot longitude",
         "type": "MEASURE",
         "mandatory": true,
         "validFieldTypes": [
           "NUMBER"
         ],
-        "detail": "Longitude value of the marker"
+        "detail": "Longitude of each dot in decimal degrees (west is negative), for example the mean of a Longitude field"
       },
       "paneX": {
         "displayName": "Pane X",
@@ -51,17 +51,27 @@
         "displayName": "Split",
         "type": "GROUPING",
         "mandatory": true,
-        "detail": "Field to split/group markers by"
+        "detail": "One dot per value of this grouping, for example per site or per customer. Click a dot to select its value"
+      },
+      "colour": {
+        "displayName": "Colour",
+        "type": "MEASURE",
+        "detail": "Colours the dots by category. Use a text field with the Singleton function (for example Region), which gives each dot its one value"
+      },
+      "dotsize": {
+        "displayName": "Dot radius (pixels)",
+        "type": "NUMBER",
+        "detail": "Radius of each dot in pixels. If empty, the dots get smaller as their number grows (1.2 to 4 pixels)"
       },
       "tooltiptitle": {
-        "displayName": "Tooltip title",
-        "detail": "Static text to show as title of the tooltip when hovering. If not specified, the field name of the tooltip value will be used",
+        "displayName": "Tooltip label",
+        "detail": "Label for the Tooltip value in a dot's tooltip. If empty, the measure's name is used",
         "type": "TEXT"
       },
       "tooltipvalue": {
         "displayName": "Tooltip value",
         "type": "MEASURE",
-        "detail": "Measure value to show in the tooltip when hovering"
+        "detail": "A figure shown in a dot's tooltip, for example the sum of Sales"
       }
     },
     "structure": {
@@ -75,55 +85,88 @@
         "paneY"
       ]
     },
-    "optionGroups": [{
-      "displayName": "Chart",
-      "rows": [{
-        "cells": [{
-          "option": "split",
-          "usePrefixTitle": false
-        }, {
-          "option": "lat",
-          "usePrefixTitle": false
-        }, {
-          "option": "lon",
-          "usePrefixTitle": false
-        }]
-      }]
-    },
+    "optionGroups": [
       {
-        "displayName": "Marker",
+        "displayName": "Chart",
         "rows": [
           {
-            "title": "Tooltip",
-            "cells": []
+            "cells": [
+              {
+                "option": "split",
+                "usePrefixTitle": false
+              }
+            ]
           },
           {
             "cells": [
               {
-                "option": "tooltiptitle",
+                "option": "lat",
                 "usePrefixTitle": false
               },
               {
-                "option": "tooltipvalue",
+                "option": "lon",
                 "usePrefixTitle": false
               }
             ]
           }
         ]
-      }, {
-      "displayName": "Pane/tile",
-      "rows": [{
-        "cells": [{
-          "option": "paneX",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "paneY",
-          "usePrefixTitle": false
-        }]
-      }]
-    }]
+      },
+      {
+        "displayName": "Dots",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "dotsize",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "title": "Tooltip",
+            "cells": [
+              {
+                "option": "tooltipvalue",
+                "usePrefixTitle": false
+              },
+              {
+                "option": "tooltiptitle",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {},

@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; overflow: auto; }
+        #main { padding: 12px 14px; box-sizing: border-box; }
+        #verdict { font-size: 14px; line-height: 1.45; margin-bottom: 10px; } #verdict .sub { font-size: 12px; color: #52514e; margin-top: 3px; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 14px 0 6px; font-weight: normal; }
+        table { border-collapse: collapse; width: 100%; } th { color: #52514e; font-weight: normal; font-size: 11px; text-align: right; padding: 3px 6px; border-bottom: 1px solid #e1e0d9; white-space: nowrap; }
+        td { padding: 5px 6px; text-align: right; white-space: nowrap; border-bottom: 1px solid #efeee9; vertical-align: middle; } td.l, th.l { text-align: left; } td.ci { padding: 0 4px; width: 32%; }
+        tr.v { cursor: pointer; } tr.v:hover { background: rgba(127,127,127,.07); } tr.sel td.l { font-weight: bold; color: #2161D9; } tr.dim { opacity: .45; }
+        .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 6px; }
+        .tag { display: inline-block; font-size: 11px; border-radius: 10px; padding: 1px 8px; white-space: nowrap; }
+        .good { color: #0b6b0b; background: rgba(12,163,12,.12); } .bad { color: #a32a2a; background: rgba(208,59,59,.12); } .flat { color: #52514e; background: rgba(127,127,127,.12); } .ctl { color: #52514e; background: transparent; border: 1px solid #c9c8c1; }
+        .note { color: #898781; font-size: 11px; margin-top: 8px; line-height: 1.45; }
+        svg { display: block; overflow: visible; } .seg { cursor: pointer; } .seg:hover rect.bg { fill: rgba(42,120,214,.06); }
+        #tooltip { position: fixed; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+        body.narrow .wide { display: none; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render --></div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], GOOD = "#0ca30c", BAD = "#d03b3b", GREY = "#9a988f", SELECT = "#2161D9";
+    var S = { gen: 0, sel: null };
+    window.__ab = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? v.toFixed(0) : a >= 1 ? v.toFixed(2) : (+v.toPrecision(3)).toString(); };
+    var pctv = function (v, d) { return (100 * v).toFixed(d === undefined ? 1 : d) + "%"; };
+    var spct = function (v) { return v === null || !isFinite(v) ? "n/a" : (v > 0 ? "+" : v < 0 ? "\u2212" : "") + (100 * Math.abs(v)).toFixed(1) + "%"; };
+    var chance = function (q) { return q > 0.99 ? "> 99%" : q < 0.01 ? "< 1%" : (100 * q).toFixed(0) + "%"; };
+    var pfmt = function (p) { return p === null || !isFinite(p) ? "n/a" : p < 0.001 ? "< 0.001" : p.toFixed(3); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    // standard normal CDF and quantile
+    function phi(x) { var t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989423 * Math.exp(-x * x / 2), p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
+    function zq(p) { // Acklam's approximation
+        var a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239], b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572], c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783], d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+        var q, r; if (p < 0.02425) { q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+        if (p > 1 - 0.02425) return -zq(1 - p);
+        q = p - 0.5; r = q * q; return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+    }
+
+    function measures(F) { return [{ function: "RECORD_COUNT", name: "n" }, { inputField: F.o, function: "SUM", name: "s" }, { inputField: F.o, function: "MEAN", name: "m" }, { inputField: F.o, function: "STANDARD_DEVIATION", name: "sd" }, { inputField: F.o, function: "MIN", name: "lo" }, { inputField: F.o, function: "MAX", name: "hi" }]; }
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { v: fld(o.variant), o: fld(o.outcome), g: fld(o.segment) };
+        if (!F.v || !F.o) { message("Choose the Variants field (which version each visitor or customer saw) and the Outcome (1 or 0 for a conversion, or a value such as order value)."); return; }
+        if (F.g === F.v) F.g = null;
+        var filt = omniscope.view.context().dataConfig.filter, withF = function (q) { if (filt && (!filt.filters || filt.filters.length)) q.filter = filt; return q; };
+        var qb = function (q) { return new Promise(function (res, rej) { omniscope.view.queryBuilder().table(withF(q)).on("load", function (e) { res(e.data.records); }).on("error", function (e) { rej(e); }).execute(); }); };
+        var gen = ++S.gen; omniscope.view.busy(true);
+        var qs = [qb({ groupings: [{ inputField: F.v, type: "UNIQUE_VALUES" }], measures: measures(F), range: { start: 0, length: 50 } })];
+        if (F.g) qs.push(qb({ groupings: [{ inputField: F.g, type: "UNIQUE_VALUES" }, { inputField: F.v, type: "UNIQUE_VALUES" }], measures: measures(F), range: { start: 0, length: 2000 } }));
+        Promise.all(qs).then(function (r) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, r[0], r[1] || null); draw(); })
+            .catch(function (e) { omniscope.view.busy(false); omniscope.view.error((e && e.data && e.data.message) || "Query failed", e && e.data); });
+    }
+
+    function stat(r, off, binary) { var n = +r[off], s = +r[off + 1], m = +r[off + 2], sd = r[off + 3] === null ? 0 : +r[off + 3]; var x = binary ? s / n : m, se = binary ? Math.sqrt(Math.max(x * (1 - x), 0) / n) : sd / Math.sqrt(n); return { n: n, s: s, x: x, se: se, sd: sd }; }
+    function compare(T, C, binary, z) {
+        if (!C || !T || T === C || !T.n || !C.n) return null;
+        var d = T.x - C.x, se = Math.sqrt(T.se * T.se + C.se * C.se), sp = se;
+        if (binary) { var pp = (T.s + C.s) / (T.n + C.n); sp = Math.sqrt(pp * (1 - pp) * (1 / T.n + 1 / C.n)); }
+        var p = sp > 0 ? 2 * (1 - phi(Math.abs(d / sp))) : null;
+        return { d: d, lo: d - z * se, hi: d + z * se, rel: C.x ? d / C.x : null, rlo: C.x ? (d - z * se) / C.x : null, rhi: C.x ? (d + z * se) / C.x : null, p: p, beat: se > 0 ? phi(d / se) : null, se: se, mde: C.x ? (z + 0.8416) * se / Math.abs(C.x) : null };
+    }
+
+    function build(F, recs, segRecs) {
+        var o = it();
+        recs = (recs || []).filter(function (r) { return r[0] !== null && +r[1] > 0; });
+        if (!recs.length) { S.model = null; message("No data to show. Check the filters."); return; }
+        if (recs.length > 12) { S.model = null; message("Variants has " + (recs.length >= 50 ? "50 or more" : recs.length) + " values. An A/B test compares a few versions: choose the field that says which version each record was given."); return; }
+        if (recs.length < 2) { S.model = null; message("Only one variant (" + recs[0][0] + ") in the data. An A/B test needs at least two."); return; }
+        if (recs.some(function (r) { return r[3] === null || !isFinite(+r[3]); })) { S.model = null; message("The Outcome field has no numeric values. Choose a 1 or 0 conversion flag, or a value such as order value."); return; }
+        message(null);
+        // binary when every variant's outcome lies in [0,1] with a spread consistent with 0/1 values
+        var isBin = recs.every(function (r) { var n = +r[1], m = +r[3], sd = +r[4]; if (+r[5] < 0 || +r[6] > 1) return false; var exp = Math.sqrt(m * (1 - m) * n / Math.max(1, n - 1)); return Math.abs(sd - exp) <= 0.02 * Math.max(exp, 1e-9) + 1e-9; });
+        var binary = o.kind === "CONVERSION" ? true : o.kind === "AVERAGE" ? false : isBin;
+        var conf = +(o.confidence || 95) / 100; if (!(conf > 0.5 && conf < 1)) conf = 0.95;
+        var names = recs.map(function (r) { return String(r[0]); }).sort();
+        var vs = names.map(function (nm, i) { var r = recs.find(function (x) { return String(x[0]) === nm; }); var st = stat(r, 1, binary); st.name = nm; st.raw = r[0]; st.colour = CAT[i % CAT.length]; return st; });
+        var ctlName = o.control && vs.some(function (v) { return v.name === o.control; }) ? o.control : (vs.find(function (v) { return /control|current|baseline|^a\b|^a[:\s-]|original/i.test(v.name); }) || vs[0]).name;
+        var C = vs.find(function (v) { return v.name === ctlName; }), k = vs.length - 1;
+        var alpha = 1 - conf, adj = o.adjust === false ? alpha : alpha / k, z = zq(1 - alpha / 2);
+        vs.forEach(function (v) { v.cmp = compare(v, C, binary, z); if (v.cmp) v.cmp.verdict = v.cmp.p !== null && v.cmp.p < adj ? (v.cmp.d > 0) === (o.better !== "LOWER") ? "better" : "worse" : "unclear"; v.ci = [v.x - z * v.se, v.x + z * v.se]; });
+        var segs = null;
+        if (segRecs) {
+            var bySeg = new Map(); segRecs.forEach(function (r) { if (+r[2] <= 0) return; var g = r[0] === null ? "(blank)" : String(r[0]); if (!bySeg.has(g)) bySeg.set(g, { name: g, raw: r[0], v: {} }); var st = stat(r, 2, binary); bySeg.get(g).v[String(r[1])] = st; });
+            segs = Array.from(bySeg.values()).sort(function (a, b) { var na = d3.sum(Object.values(a.v), function (x) { return x.n; }), nb = d3.sum(Object.values(b.v), function (x) { return x.n; }); return nb - na; }).slice(0, 12);
+            segs.forEach(function (sg) { sg.n = d3.sum(Object.values(sg.v), function (x) { return x.n; }); sg.cmp = {}; vs.forEach(function (v) { if (v !== C) sg.cmp[v.name] = compare(sg.v[v.name], sg.v[ctlName], binary, z); }); });
+        }
+        S.model = { F: F, vs: vs, C: C, binary: binary, conf: conf, adj: adj, k: k, z: z, segs: segs, higherGood: o.better !== "LOWER" };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    function ciSvg(lo, hi, x, sc, colour, w, zero) {
+        if (![lo, hi, x].every(isFinite)) return '<svg width="' + w + '" height="18"></svg>';
+        var X = function (v) { return Math.max(0, Math.min(w, sc(v))); };
+        var h = '<svg width="' + w + '" height="18">';
+        if (zero !== undefined) h += '<line x1="' + X(zero) + '" x2="' + X(zero) + '" y1="0" y2="18" stroke="#9a988f" stroke-dasharray="2 2"/>';
+        h += '<line x1="' + X(lo) + '" x2="' + X(hi) + '" y1="9" y2="9" stroke="' + colour + '" stroke-width="3" stroke-linecap="round" opacity=".55"/><circle cx="' + X(x) + '" cy="9" r="4.5" fill="' + colour + '"/></svg>';
+        return h;
+    }
+    function draw() {
+        var M = S.model, el = document.getElementById("main"); tip();
+        if (!M) { el.innerHTML = ""; return; } var intro = introDone();
+        var narrow = window.innerWidth < 640; document.body.classList.toggle("narrow", narrow);
+        var C = M.C, T = M.vs.filter(function (v) { return v !== C; }), what = M.binary ? "conversion rate" : "average " + M.F.o, xf = function (v) { return M.binary ? pctv(v, 2) : fmt(v); };
+        // headline: the best treatment
+        var best = T.slice().sort(function (a, b) { return (b.cmp.d - a.cmp.d) * (M.higherGood ? 1 : -1); })[0], win = T.filter(function (v) { return v.cmp.verdict === "better"; });
+        var head;
+        if (win.length) { var wv = win.sort(function (a, b) { return (b.cmp.d - a.cmp.d) * (M.higherGood ? 1 : -1); })[0]; head = '<span style="color:' + GOOD + '">\u25b2</span> <b>' + esc(wv.name) + '</b> beats ' + esc(C.name) + ': ' + what + ' ' + xf(wv.x) + ' against ' + xf(C.x) + ', <b>' + spct(wv.cmp.rel) + '</b> (' + Math.round(M.conf * 100) + '% interval ' + spct(wv.cmp.rlo) + ' to ' + spct(wv.cmp.rhi) + ').'; }
+        else if (T.some(function (v) { return v.cmp.verdict === "worse"; })) head = '<span style="color:' + BAD + '">\u25bc</span> No variant beats ' + esc(C.name) + ', and at least one is worse.';
+        else head = '<span style="color:' + GREY + '">\u25cf</span> No clear winner yet: the differences from ' + esc(C.name) + ' could be due to chance.';
+        var sub = M.vs.reduce(function (a, v) { return a + v.n; }, 0).toLocaleString() + ' in the test. ' + (M.k > 1 && it().adjust !== false ? 'With ' + M.k + ' variants compared against ' + esc(C.name) + ', a difference counts as clear when p < ' + (+M.adj.toPrecision(2)) + ' (Bonferroni), keeping the overall false-positive rate at ' + Math.round((1 - M.conf) * 100) + '%.' : 'A difference counts as clear when p < ' + (+M.adj.toPrecision(2)) + '.');
+        var h = '<div id="verdict">' + head + '<div class="sub">' + sub + '</div></div>';
+        // results table
+        var W = Math.max(110, Math.min(230, (window.innerWidth - 40) * (narrow ? 0.4 : 0.16)));
+        var lo = d3.min(M.vs, function (v) { return v.ci[0]; }), hi = d3.max(M.vs, function (v) { return v.ci[1]; }), pad = (hi - lo) * 0.08 || 0.01, sc = d3.scaleLinear().domain([lo - pad, hi + pad]).range([6, W - 6]);
+        var rl = d3.min(T, function (v) { return v.cmp.rlo; }), rh = d3.max(T, function (v) { return v.cmp.rhi; }), ext = Math.max(Math.abs(rl), Math.abs(rh), 0.01) * 1.1, sr = d3.scaleLinear().domain([-ext, ext]).range([6, W - 6]);
+        h += '<h3>Results by variant</h3><table><tr><th class="l">Variant</th><th>' + (M.binary ? "Visitors" : "Records") + '</th>' + (M.binary ? '<th class="wide">Conversions</th>' : '') + '<th>' + (M.binary ? "Rate" : "Average") + '</th><th class="ci wide">' + Math.round(M.conf * 100) + '% interval</th><th>vs ' + esc(C.name.length > 14 ? "control" : C.name) + '</th><th class="ci wide">Uplift interval</th><th class="wide">p-value</th><th class="wide">Chance better</th><th class="l">Result</th></tr>';
+        M.vs.forEach(function (v) {
+            var c = v.cmp, isSel = S.sel && S.sel.variant === v.name, dim = S.sel && S.sel.variant !== undefined && !isSel;
+            var tag = !c ? '<span class="tag ctl">Control</span>' : c.verdict === "better" ? '<span class="tag good">\u25b2 Better</span>' : c.verdict === "worse" ? '<span class="tag bad">\u25bc Worse</span>' : '<span class="tag flat">\u25cf No clear difference</span>';
+            var good = c && ((c.d > 0) === M.higherGood);
+            h += '<tr class="v' + (isSel ? ' sel' : '') + (dim ? ' dim' : '') + '" data-v="' + esc(v.name) + '"><td class="l"><span class="sw" style="background:' + v.colour + '"></span>' + esc(v.name) + '</td><td>' + v.n.toLocaleString() + '</td>' + (M.binary ? '<td class="wide">' + Math.round(v.s).toLocaleString() + '</td>' : '') + '<td><b>' + xf(v.x) + '</b></td>' +
+                '<td class="ci wide" data-tip="ci">' + ciSvg(v.ci[0], v.ci[1], v.x, sc, v.colour, W) + '</td>' +
+                '<td>' + (c ? '<b style="color:' + (c.verdict === "unclear" ? "#52514e" : good ? "#0b6b0b" : "#a32a2a") + '">' + spct(c.rel) + '</b>' : '') + '</td>' +
+                '<td class="ci wide" data-tip="up">' + (c ? ciSvg(c.rlo, c.rhi, c.rel, sr, c.verdict === "unclear" ? GREY : good ? GOOD : BAD, W, 0) : '') + '</td>' +
+                '<td class="wide">' + (c ? pfmt(c.p) : '') + '</td><td class="wide">' + (c && c.beat !== null ? chance(M.higherGood ? c.beat : 1 - c.beat) : '') + '</td><td class="l">' + tag + '</td></tr>';
+        });
+        h += '</table>';
+        // segments forest plot
+        if (M.segs && M.segs.length) {
+            var rowsPer = T.length, rh2 = 15, gap = 10, FW = Math.max(200, Math.min(560, window.innerWidth - 220)), LW = 150;
+            var all = []; M.segs.forEach(function (sg) { T.forEach(function (v) { var c = sg.cmp[v.name]; if (c && isFinite(c.rlo) && isFinite(c.rhi)) all.push(c.rlo, c.rhi); }); });
+            var e2 = Math.min(1.5, Math.max(0.02, d3.max(all.map(Math.abs)) || 0.1) * 1.05), fs = d3.scaleLinear().domain([-e2, e2]).range([LW + 8, LW + FW]);
+            var H2 = M.segs.length * (rowsPer * rh2 + gap) + 26, sv = '<svg width="' + (LW + FW + 70) + '" height="' + H2 + '">';
+            sv += '<line x1="' + fs(0) + '" x2="' + fs(0) + '" y1="0" y2="' + (H2 - 18) + '" stroke="#9a988f" stroke-dasharray="2 2"/>';
+            fs.ticks(5).forEach(function (t) { sv += '<text x="' + fs(t) + '" y="' + (H2 - 4) + '" text-anchor="middle" font-size="10.5" fill="#52514e">' + spct(t) + '</text>'; });
+            var y = 4;
+            M.segs.forEach(function (sg) {
+                var hh = rowsPer * rh2, isSel = S.sel && S.sel.segment === sg.name;
+                sv += '<g class="seg" data-s="' + esc(sg.name) + '"><rect class="bg" x="0" y="' + (y - 3) + '" width="' + (LW + FW + 70) + '" height="' + (hh + 6) + '" fill="' + (isSel ? 'rgba(33,97,217,.08)' : 'transparent') + '"/>';
+                sv += '<text x="0" y="' + (y + hh / 2) + '" dy="0.35em" font-size="11.5" fill="#2b2a28"' + (isSel ? ' font-weight="bold"' : '') + '>' + esc(sg.name.length > 22 ? sg.name.slice(0, 21) + "\u2026" : sg.name) + ' <tspan fill="#898781" font-size="10.5">' + sg.n.toLocaleString() + '</tspan></text>';
+                T.forEach(function (v, j) {
+                    var c = sg.cmp[v.name], yy = y + j * rh2 + rh2 / 2; if (!c || ![c.rlo, c.rhi, c.rel].every(isFinite)) return;
+                    var X = function (q) { return Math.max(LW + 8, Math.min(LW + FW, fs(q))); };
+                    sv += '<line x1="' + X(c.rlo) + '" x2="' + X(c.rhi) + '" y1="' + yy + '" y2="' + yy + '" stroke="' + v.colour + '" stroke-width="2.5" opacity=".55"/><rect x="' + (X(c.rel) - 4) + '" y="' + (yy - 4) + '" width="8" height="8" fill="' + v.colour + '"/>';
+                    sv += '<text x="' + (LW + FW + 8) + '" y="' + yy + '" dy="0.35em" font-size="10.5" fill="#52514e">' + spct(c.rel) + '</text>';
+                });
+                sv += '</g>'; y += hh + gap;
+            });
+            sv += '</svg>';
+            h += '<h3>Uplift against ' + esc(C.name) + ' by ' + esc(M.F.g) + '</h3>' + (T.length > 1 ? '<div style="margin-bottom:4px">' + T.map(function (v) { return '<span style="margin-right:12px"><span class="sw" style="background:' + v.colour + '"></span>' + esc(v.name) + '</span>'; }).join("") + '</div>' : '') + sv;
+            h += '<div class="note">Each line is the ' + Math.round(M.conf * 100) + '% interval of the uplift in that group; groups are smaller than the whole test, so their intervals are wider. Look for groups whose interval sits clearly away from zero, and treat differences between groups as ideas to test, not results.</div>';
+        }
+        var mde = T.map(function (v) { return v.cmp.mde; }).filter(isFinite);
+        h += '<div class="note">' + (M.binary ? 'Outcome treated as a conversion (1 or 0): rates compared with a two-proportion z-test.' : 'Outcome treated as a value: averages compared with a z-test on the means (Welch standard errors).') + (mde.length ? ' With this many records the test can reliably detect (80% power) a change of about ' + pctv(d3.max(mde), 1) + ' or more.' : '') + ' Intervals for the uplift are approximate. Click a variant or a group to select its records.</div>';
+        el.innerHTML = h;
+        if (intro) { fadeCss(d3.selectAll("#verdict, #main h3, #main tr, #main .note"), 450, 70); popIn(d3.selectAll("#main svg circle"), 500, 60); }
+        Array.prototype.forEach.call(el.querySelectorAll("tr.v"), function (r) {
+            var v = M.vs.find(function (x) { return x.name === r.getAttribute("data-v"); });
+            r.addEventListener("click", function (e) { e.stopPropagation(); selectVariant(v); });
+            r.addEventListener("mousemove", function (e) { tipVariant(v, e); }); r.addEventListener("mouseleave", tip);
+        });
+        Array.prototype.forEach.call(el.querySelectorAll("g.seg"), function (g) {
+            var sg = M.segs.find(function (x) { return x.name === g.getAttribute("data-s"); });
+            g.addEventListener("click", function (e) { e.stopPropagation(); selectSegment(sg); });
+            g.addEventListener("mousemove", function (e) { tipSeg(sg, e); }); g.addEventListener("mouseleave", tip);
+        });
+    }
+
+    function tipVariant(v, ev) {
+        var M = S.model, c = v.cmp, xf = function (q) { return M.binary ? pctv(q, 2) : fmt(q); };
+        var h = '<b>' + esc(v.name) + '</b><br><span class="k">' + (M.binary ? "Conversion rate" : "Average") + ':</span> ' + xf(v.x) + ' <span class="k">(' + Math.round(M.conf * 100) + '% interval ' + xf(v.ci[0]) + ' to ' + xf(v.ci[1]) + ')</span><br><span class="k">Records:</span> ' + v.n.toLocaleString();
+        if (c) h += '<br><span class="k">Difference:</span> ' + (M.binary ? (c.d > 0 ? "+" : c.d < 0 ? "\u2212" : "") + (100 * Math.abs(c.d)).toFixed(2) + " percentage points" : (c.d > 0 ? "+" : "") + fmt(c.d)) + ' <span class="k">(' + spct(c.rel) + ' relative)</span><br><span class="k">p-value:</span> ' + pfmt(c.p) + '<br><span class="k">Chance it is better than control:</span> ' + chance(M.higherGood ? c.beat : 1 - c.beat);
+        show(h, ev);
+    }
+    function tipSeg(sg, ev) {
+        var M = S.model, h = '<b>' + esc(sg.name) + '</b> <span class="k">(' + sg.n.toLocaleString() + ')</span>';
+        M.vs.forEach(function (v) { var st = sg.v[v.name]; if (!st) return; var c = sg.cmp[v.name]; h += '<br><span class="sw" style="background:' + v.colour + '"></span>' + esc(v.name) + ': ' + (M.binary ? pctv(st.x, 2) : fmt(st.x)) + (c ? ' <span class="k">(' + spct(c.rel) + ', p ' + pfmt(c.p) + ')</span>' : ' <span class="k">(control)</span>'); });
+        show(h, ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectVariant(v) { if (S.sel && S.sel.variant === v.name) return publish(null, null); publish({ type: "FIELD_VALUE", inputField: S.model.F.v, operator: "=", value: v.raw }, { variant: v.name }); }
+    function selectSegment(sg) { if (S.sel && S.sel.segment === sg.name) return publish(null, null); publish({ type: "FIELD_VALUE", inputField: S.model.F.g, operator: "=", value: sg.raw }, { segment: sg.name }); }
+    window.__ab.selectVariant = function (n) { selectVariant(S.model.vs.find(function (v) { return v.name === n; })); };
+
+    document.body.addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

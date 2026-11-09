@@ -1,0 +1,172 @@
+{
+  "name": "Price Volume Mix",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "price volume mix",
+    "pvm",
+    "bridge",
+    "waterfall",
+    "variance",
+    "revenue",
+    "finance",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "item": {
+        "displayName": "Products",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "The level at which price and mix are measured, e.g. Product or SKU"
+      },
+      "period": {
+        "displayName": "Period",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Field holding the periods to compare, e.g. Year or Quarter (text or numbers work best)"
+      },
+      "base": {
+        "displayName": "Base period",
+        "type": "TEXT",
+        "detail": "Value of Period to compare from, e.g. 2024 (default: the second latest)"
+      },
+      "current": {
+        "displayName": "Current period",
+        "type": "TEXT",
+        "detail": "Value of Period to compare to, e.g. 2025 (default: the latest)"
+      },
+      "volume": {
+        "displayName": "Volume",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Units sold (summed)"
+      },
+      "revenue": {
+        "displayName": "Revenue",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Revenue (summed); price is revenue divided by volume per product"
+      },
+      "topN": {
+        "displayName": "Products in table",
+        "type": "NUMBER",
+        "minValue": 3,
+        "maxValue": 100,
+        "detail": "Number of products listed in the breakdown (largest changes first, default 12)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "item",
+        "period",
+        "volume",
+        "revenue"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Comparison",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "item",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "period",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "base",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "current",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Measures",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "volume",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "revenue",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "topN",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "topN": 12
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

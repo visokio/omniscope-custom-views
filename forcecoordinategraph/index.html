@@ -8,47 +8,66 @@
             /* Ensure the body fills the view, so clicks are handled everywhere: */
             width: 100%;
             height: 100%;
-            margin: 0px;
+            margin: 0;
+            overflow: hidden;
         }
         #main {
             width: 100%;
             height: 100%;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 20px;
-            white-space: pre;
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
             position: absolute;
         }
         svg {
-            top: 0px;
-            left: 0px;
+            top: 0;
+            left: 0;
             position: absolute;
         }
-        .axis path, .axis line {
+        .edges path {
             fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
+            stroke-width: 1;
         }
-
-        .axis text {
-            font: 10px sans-serif;
+        .nodes circle.node {
+            stroke: #fff;
+            stroke-width: 0.75;
+            cursor: pointer;
         }
-
-        .cells path {
-            fill: none;
-            pointer-events: all;
+        .nodes circle.node:hover, .nodes circle.node.selected {
+            stroke: #1b1b1b;
+            stroke-width: 2;
         }
-
-        .cells :hover circle {
-            stroke: #7DA9DA;
-            stroke-width: 4px;
+        .key text {
+            font-size: 11px;
+            fill: #444;
         }
-
+        #status {
+            position: absolute;
+            right: 8px;
+            bottom: 6px;
+            font-size: 11px;
+            color: #777;
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 1px 4px;
+        }
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #555;
+            background: #fff;
+        }
     </style>
 
     <!-- Put SCRIPT tags to load 3rd party libraries here -->
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script type="text/javascript" src="d3-ForceEdgeBundling.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/upphiminn/d3.ForceBundle@467c068f237ca1436c0b4841d2b5d2a81c1c7f94/d3-ForceEdgeBundling.js"></script>
 
 </head>
 
@@ -56,22 +75,26 @@
 
 <div id="main">
     <svg width="100%" height="100%"></svg>
+    <div id="status"></div>
+    <div id="message"></div>
 </div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
 <script>
 
-    var NODE_RADIUS = 8;
-    var NODE_MARGIN = 2;
-    var MAX_EDGES = 2000;
+    var D3_URL = "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js";
+    var NODE_RADIUS = 6, NODE_MARGIN = 1.5;
+    var MAX_NODES = 5000;
+    // Colours follow the category's name (from an unfiltered list of the colour field's values), not its rank in
+    // the current data, so a filter does not recolour the nodes.
+    var PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948", "#7f8c8d", "#00a3bf"];
+    var NONE = "#b9b8b2", PLAIN = "#2a78d6";
 
     var svg = d3.select("svg");
-
-    var d3line = d3.line()
-        .x(function(d){ return d.x; })
-        .y(function(d){ return d.y; })
-        .curve(d3.curveCardinal);
+    // Test hook: the current model, selection and whether edge bundling has finished.
+    var state = { selected: null, colourDomain: {}, model: null, generation: 0, worker: null, bundled: false };
+    window.__fcg = state;
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
@@ -80,222 +103,353 @@
         }
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    // Clicks on unoccupied space clear the selection in Omniscope, and close menus:
     document.body.addEventListener("click", function() {
-        omniscope.view.whitespaceClick();
+        clearSelection();
     });
 
-    // Naively redraw on any of these events
+    function clearSelection() {
+        state.selected = null;
+        highlight(null);
+        omniscope.view.whitespaceClick();
+    }
+
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+    }
+    function status(text) { document.getElementById("status").textContent = text || ""; }
+
+    function isRange(v) { return v !== null && typeof v === "object" && ("lower" in v || "upper" in v); }
+    function label(v) {
+        if (v === null || v === undefined || v === "") return "(blank)";
+        if (isRange(v)) return label(v.lower) + " to " + label(v.upper);
+        if (typeof v === "number") return (+v.toPrecision(6)).toLocaleString();
+        return String(v);
+    }
+    function num(v) { return typeof v === "number" && isFinite(v) ? v : null; }
+    function measureName(m) {
+        if (!m) return "";
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField;
+    }
+    function natural(a, b) { return a.localeCompare(b, undefined, { numeric: true }); }
+    function present(v) { return v !== null && v !== undefined && v !== ""; }
+
+    // The filter that selects one node: an equality, or a range for a histogram grouping.
+    function nodeFilter(field, v) {
+        if (isRange(v)) {
+            return { type: "AND", filters: [
+                { type: "FIELD_VALUE", inputField: field, operator: ">=", value: v.lower },
+                { type: "FIELD_VALUE", inputField: field, operator: "<", value: v.upper } ] };
+        }
+        return { type: "FIELD_VALUE", inputField: field, operator: "=", value: v === undefined ? null : v };
+    }
+
+    // Unfiltered list of the colour field's values, fetched once per field.
+    function colourDomain(m, done) {
+        if (!m || !m.inputField || m.function === "RECORD_COUNT") return null;
+        var key = m.inputField, cached = state.colourDomain[key];
+        if (cached) return cached.values;
+        state.colourDomain[key] = { values: null };
+        omniscope.view.queryBuilder().table({ groupings: [{ inputField: key, type: "UNIQUE_VALUES" }],
+            measures: [{ function: "RECORD_COUNT" }], range: { start: 0, length: 51 } })
+            .on("load", function(e) {
+                var vals = e.data.records.map(function(r) { return r[0]; }).filter(present);
+                state.colourDomain[key] = { values: vals.length <= 50 ? vals.map(String).sort(natural) : null };
+                done();
+            })
+            .on("error", function() { done(); })
+            .execute();
+        return null;
+    }
+
+    // Edge bundling runs in a worker so a large network does not block the report. The worker is built from the
+    // page's own copy of the bundling code (no extra file to fetch); if workers are not allowed, it runs here.
+    function bundle(nodes, edges, done) {
+        if (state.worker) { state.worker.terminate(); state.worker = null; }
+        var run = function() {
+            done(d3.ForceEdgeBundling().nodes(nodes).edges(edges)());
+        };
+        try {
+            var src = "importScripts('" + D3_URL + "');\nd3.ForceEdgeBundling = " + d3.ForceEdgeBundling.toString() +
+                ";\nonmessage = function(e) { postMessage(d3.ForceEdgeBundling().nodes(e.data.nodes).edges(e.data.edges)()); };";
+            var url = URL.createObjectURL(new Blob([src], { type: "text/javascript" }));
+            var w = new Worker(url);
+            state.worker = w;
+            w.onmessage = function(e) { w.terminate(); if (state.worker === w) state.worker = null; URL.revokeObjectURL(url); done(e.data); };
+            w.onerror = function(e) { e.preventDefault(); w.terminate(); if (state.worker === w) state.worker = null; setTimeout(run, 0); };
+            w.postMessage({ nodes: nodes, edges: edges });
+        } catch (err) {
+            setTimeout(run, 0);
+        }
+    }
+
+    // Redraw on any of these events
     // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    omniscope.view.on(["load", "update", "resize"], render);
 
-        svg.select("g").remove();
-        svg.selectAll("path").remove();
+    function render() {
+        var gen = ++state.generation;
+        if (state.worker) { state.worker.terminate(); state.worker = null; }
+        omniscope.view.busy(false);
+        status(null);
+        svg.selectAll("*").remove();
+        state.model = null;
+        state.bundled = false;
 
-        var margin = {top: 80, right: 80, bottom: 80, left: 80};
-        var width = +parseInt(svg.style("width"), 10);
-        var height = +parseInt(svg.style("height"), 10);
-
-        var x = d3.scaleLinear().range([0 + margin.left, width - margin.right]);
-        var y = d3.scaleLinear().range([height - margin.bottom, 0 + margin.top]);
-        var size = d3.scaleSqrt().range([4, 50]);
-        var colour = d3.scaleOrdinal(d3.schemeSet3);
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.nodeId || !it.linkedNodeId) {
+            message("Choose From node and To node: each record is a link from one node to another (leave To node empty for a node with no links).");
+            return;
+        }
+        if (!it.x || !it.y) { message("Choose X position and Y position: the coordinates of each node."); return; }
+        var result = ctx.result;
+        if (!result || !result.data) { message("Waiting for data"); return; }
 
         // Retrieve the auto-query results, a 2d array ([row][column]):
-        var records = omniscope.view.context().result.data.records;
-        var mappings = omniscope.view.context().result.mappings;
-        var options = omniscope.view.context().options;
+        var records = result.data.records || [];
+        var mappings = result.mappings || {};
+        if (!records.length) { message("No data to show. Check the report's filters."); return; }
+        if (!ctx.viewSelection) state.selected = null;
+        var col = function(record, k) { return mappings[k] !== undefined ? record[mappings[k]] : null; };
 
-        var beeLinksMap = new Map();
-
-        // Map records to field options
-        var bees = new Map();
-        records.forEach(function(record, i) {
-            var bee = {
-                id: (mappings.nodeId !== undefined) ? record[mappings.nodeId] : null,
-                xValue: (mappings.x !== undefined) ? record[mappings.x] : null,
-                yValue: (mappings.y !== undefined) ? record[mappings.y] : null,
-                colour: (mappings.colour !== undefined) ? record[mappings.colour] : null,
-                imageURL: (mappings.imageURL !== undefined) ? record[mappings.imageURL] : null,
-                sizeValue: (mappings.markerSize !== undefined) ? record[mappings.markerSize] : null,
-                title: (mappings.title !== undefined) ? record[mappings.title] : null
-            };
-            bees.set(bee.id, bee);
-
-            // Links
-            var linkedId = (mappings.linkedNodeId !== undefined) ? record[mappings.linkedNodeId] : null;
-            var linkWeight = (mappings.linkWeight !== undefined) ? record[mappings.linkWeight] : null;
-
-            var hasLinkedId = linkedId !== undefined && linkedId !== null;
-            var link = {targetId: linkedId, colour: bee.colour, weight: linkWeight};
-            if (!beeLinksMap.has(bee.id)) {
-                beeLinksMap.set(bee.id, (hasLinkedId) ? [link] : []);
-            } else if (hasLinkedId) {
-                beeLinksMap.get(bee.id).push(link);
+        // One node per From node value. A node's attributes are taken from its first record that has them.
+        var nodes = new Map(), links = [];
+        records.forEach(function(record) {
+            var id = col(record, "nodeId"), key = JSON.stringify(id === undefined ? null : id);
+            var n = nodes.get(key);
+            if (!n) {
+                n = { key: key, id: id, xValue: null, yValue: null, colour: null, sizeValue: null, title: null, imageURL: null, degree: 0 };
+                nodes.set(key, n);
             }
+            if (n.xValue === null) n.xValue = num(col(record, "x"));
+            if (n.yValue === null) n.yValue = num(col(record, "y"));
+            if (!present(n.colour)) n.colour = col(record, "colour");
+            if (n.sizeValue === null) n.sizeValue = num(col(record, "markerSize"));
+            if (!present(n.title)) n.title = col(record, "title");
+            if (!present(n.imageURL)) n.imageURL = col(record, "imageURL");
+            var target = col(record, "linkedNodeId");
+            if (present(target)) links.push({ sourceKey: key, targetKey: JSON.stringify(target), weight: num(col(record, "edgeWeight")) });
         });
+        if (nodes.size > MAX_NODES) {
+            message("Too many nodes to draw (" + nodes.size.toLocaleString() + "; the limit is " + MAX_NODES.toLocaleString() +
+                "). Choose a From node field with fewer values, or filter the data.");
+            return;
+        }
+        message(null);
+        var list = Array.from(nodes.values());
+        list.forEach(function(n, i) { n.index = i; });
 
-        var beesArray = Array.from(bees.values());
-
-        // --- SCALES --- //
-        if (mappings.x) x.domain([d3.min(beesArray, function(d) { return d.xValue; }),
-            d3.max(beesArray, function(d) {return d.xValue;})]);
-        if (mappings.y) y.domain([d3.min(beesArray, function(d) { return d.yValue; }),
-            d3.max(beesArray, function(d) {return d.yValue;})]);
-        if (mappings.markerSize) size.domain(d3.extent(beesArray, function(d) { return d.sizeValue;}));
-
-        // --- LINKS --- //
-        var beeKeys = Array.from(bees.keys());
-        var linkIds = [];
-        beeLinksMap.forEach(function(beeLinks, sourceId) {
-            var source = bees.get(sourceId);
-            beeLinks.forEach(function(link) {
-                var target = bees.get(link.targetId);
-                if (target) {
-                    linkIds.push({
-                        source: beeKeys.indexOf(source.id),
-                        target: beeKeys.indexOf(target.id),
-                        data: {
-                            colour: (mappings.colour) ? colour(source.colour) : "rgb(123, 168, 220)",
-                            opacity: 0.15,
-                            weight: link.weight
-                        }
-                    });
-                }
-            });
+        // Links between two drawn nodes, the heaviest first, at most "Edges shown".
+        var maxEdges = Math.max(0, Math.min(5000, it.maxEdges === undefined || it.maxEdges === null || it.maxEdges === "" ? 1000 : +it.maxEdges || 0));
+        var edges = [];
+        links.forEach(function(l) {
+            var s = nodes.get(l.sourceKey), t = nodes.get(l.targetKey);
+            if (s && t && s !== t) { edges.push({ source: s.index, target: t.index, weight: l.weight }); s.degree++; t.degree++; }
         });
-
-        beesArray.forEach(function(d) {
-            d.x = x(d.xValue);
-            d.y = y(d.yValue);
-            d.size = size(d.sizeValue);
+        var totalEdges = edges.length;
+        edges.sort(function(a, b) {
+            if (a.weight === b.weight) return 0;
+            if (a.weight === null) return 1;
+            if (b.weight === null) return -1;
+            return b.weight - a.weight;
         });
+        edges = edges.slice(0, maxEdges);
 
-        // Keep only the most important edges
-        linkIds.sort(function(a, b) {
-            return a.data.weight > b.data.weight;
+        var W = +parseInt(svg.style("width"), 10), H = +parseInt(svg.style("height"), 10);
+
+        // Colour: categories get palette slots in a fixed order; numbers get a sequential scale.
+        var useColour = mappings.colour !== undefined;
+        var numericColour = useColour && list.some(function(n) { return typeof n.colour === "number"; });
+        var domain = null, cats = [], seq = null;
+        if (useColour && numericColour) {
+            var ce = d3.extent(list, function(n) { return num(n.colour); });
+            seq = d3.scaleSequential(d3.interpolateViridis).domain(ce[0] === ce[1] ? [ce[0] - 1, ce[1] + 1] : ce);
+        } else if (useColour) {
+            domain = colourDomain(it.colour, render);
+            var seen = {};
+            list.forEach(function(n) { if (present(n.colour)) seen[String(n.colour)] = true; });
+            if (!domain) domain = Object.keys(seen).sort(natural);
+            cats = domain.filter(function(c) { return seen[c]; });
+        }
+        var colourOf = function(n) {
+            if (!useColour) return PLAIN;
+            if (seq) return num(n.colour) === null ? NONE : seq(n.colour);
+            if (!present(n.colour)) return NONE;
+            var i = domain.indexOf(String(n.colour));
+            return i < 0 ? NONE : PALETTE[i % PALETTE.length];
+        };
+        var showKey = cats.length > 0 && cats.length <= 10 && W > 240 && H > 160;
+
+        // Node sizes: area follows the Size value, the largest node up to a twelfth of the pane.
+        var useSize = mappings.markerSize !== undefined && list.some(function(n) { return n.sizeValue !== null; });
+        var maxR = Math.max(4, Math.min(28, Math.min(W, H) / 12));
+        var baseR = Math.max(2, Math.min(NODE_RADIUS, Math.sqrt(W * H / list.length) * 0.15));
+        var size = d3.scaleSqrt().range([0, maxR])
+            .domain([0, Math.max(1e-9, d3.max(list, function(n) { return n.sizeValue > 0 ? n.sizeValue : 0; }) || 1)]);
+        list.forEach(function(n) { n.r = useSize ? Math.max(2, size(Math.max(0, n.sizeValue || 0))) : baseR; });
+        var rMax = d3.max(list, function(n) { return n.r; });
+
+        var pad = rMax + NODE_MARGIN + 4;
+        var top = (showKey ? 22 : 0) + pad;
+        var x = d3.scaleLinear().range([pad, Math.max(pad + 1, W - pad)]);
+        var y = d3.scaleLinear().range([Math.max(top + 1, H - pad), top]);
+        var extent = function(k) {
+            var e = d3.extent(list, function(n) { return n[k]; });
+            if (e[0] === undefined) return [0, 1];
+            return e[0] === e[1] ? [e[0] - 1, e[1] + 1] : e;
+        };
+        x.domain(extent("xValue"));
+        y.domain(extent("yValue"));
+
+        // Pull each node towards its coordinates and, with "Keep nodes apart", push overlapping nodes aside.
+        list.forEach(function(n) {
+            n.tx = n.xValue !== null ? x(n.xValue) : W / 2;
+            n.ty = n.yValue !== null ? y(n.yValue) : (H + top) / 2;
+            n.x = n.tx; n.y = n.ty;
         });
-        linkIds = linkIds.slice(0, MAX_EDGES);
-
-        omniscope.view.busy(true);
-        if (window.Worker) {
-            var forceSimulation = new Worker("forcesimulation.js");
-            forceSimulation.onmessage = function(e) {
-                var nodes = e.data.nodes;
-                omniscope.view.busy(false);
-                drawNodes(nodes);
-                var bundler = new Worker("bundler.js");
-                bundler.onmessage = function(e) {
-                    drawEdges(e.data.edges);
-                    drawNodes(nodes);
-                };
-                bundler.postMessage({nodes: nodes, edges: linkIds});
-            };
-            forceSimulation.postMessage({
-                nodes: beesArray,
-                mappings: mappings,
-                nodeMargin: NODE_MARGIN,
-                nodeRadius: NODE_RADIUS,
-                width: width,
-                height: height,
-                preventNodeOverlap: options.items.preventNodeOverlap
-            });
-        } else {
-            // --- FORCE SIMULATION --- //
-            var simulation = d3.forceSimulation(beesArray)
-                .force("x", d3.forceX(function(d) { return (d.xValue !== null) ? d.x : width / 2; }).strength(1))
-                .force("y", d3.forceY(function(d) { return (d.yValue !== null) ? d.y : height / 2; }).strength(1))
+        if (it.preventNodeOverlap !== false) {
+            var simulation = d3.forceSimulation(list)
+                .force("x", d3.forceX(function(n) { return n.tx; }).strength(1))
+                .force("y", d3.forceY(function(n) { return n.ty; }).strength(1))
+                .force("collide", d3.forceCollide(function(n) { return n.r + NODE_MARGIN; }))
                 .stop();
+            var ticks = list.length > 2000 ? 120 : 300;
+            for (var i = 0; i < ticks; ++i) simulation.tick();
+        }
+        list.forEach(function(n) {
+            n.x = Math.max(n.r + 1, Math.min(W - n.r - 1, n.x));
+            n.y = Math.max(top - pad + n.r + 1, Math.min(H - n.r - 1, n.y));
+        });
 
-            if (options.items.preventNodeOverlap) {
-                simulation.force("collide", d3.forceCollide(function(d) {
-                    return (mappings.markerSize) ? NODE_MARGIN + d.size : NODE_MARGIN + NODE_RADIUS;
-                }));
-            }
-
-            for (var i = 0; i < 500; ++i) {
-                simulation.tick();
-                tick();
-            }
-            omniscope.view.busy(false);
-            drawNodes(beesArray);
-
-            var fbundling = d3.ForceEdgeBundling()
-                .nodes(beesArray)
-                .edges(linkIds);
-            var results = fbundling();
-            drawEdges(results);
+        // --- DRAW --- //
+        var defs = svg.append("defs");
+        var edgeLayer = svg.append("g").attr("class", "edges");
+        var nodeLayer = svg.append("g").attr("class", "nodes");
+        var line = d3.line().x(function(p) { return p.x; }).y(function(p) { return p.y; }).curve(d3.curveBasis);
+        var edgeOpacity = Math.max(0.12, Math.min(0.5, 4 / Math.sqrt(Math.max(1, edges.length))));
+        var widthOf = function() { return 1; };
+        var we = d3.extent(edges, function(e) { return e.weight; });
+        if (mappings.edgeWeight !== undefined && we[0] !== undefined && we[1] > 0) {
+            var ws = d3.scaleSqrt().domain([0, we[1]]).range([0.6, 3.5]);
+            widthOf = function(e) { return e.weight > 0 ? ws(e.weight) : 0.6; };
         }
 
         function drawEdges(paths) {
-            svg.selectAll("path").remove();
-            svg.selectAll("path")
-                .data(paths)
+            edgeLayer.selectAll("path").remove();
+            edgeLayer.selectAll("path")
+                .data(edges)
                 .enter()
                 .append("path")
-                .attr("d", d3line)
-                .style("stroke-width", 1)
-                .style("stroke", function(d, i) { return linkIds[i].data.colour;})
-                .style("fill", "none")
-                .attr("stroke-opacity", function(d, i) { return linkIds[i].data.opacity; });
+                .attr("d", function(e, i) { return line(paths[i]); })
+                .attr("stroke", function(e) { return colourOf(list[e.source]); })
+                .attr("stroke-width", widthOf)
+                .attr("stroke-opacity", edgeOpacity);
+            highlight(state.selected);
         }
+        drawEdges(edges.map(function(e) { return [list[e.source], list[e.target]]; }));
 
-        function drawNodes(_beesArray) {
-            svg.selectAll("defs").remove();
-            svg.selectAll(".cells").remove();
-            // --- IMAGES --- //
-            var defs = svg.append("defs").attr("id", "imgdefs");
-
-            _beesArray.forEach(function(bee) {
-                var pattern = defs.append("pattern")
-                    .attr("id", "img-"+bee.id)
-                    .attr("class", "img-pattern")
-                    .attr("height", 1)
-                    .attr("width", 1)
-                    .attr("x", 0)
-                    .attr("y", 0);
-
-                pattern.append("image")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("height", (mappings.markerSize) ? bee.size*2 : NODE_RADIUS*2)
-                    .attr("width", (mappings.markerSize) ? bee.size*2 : NODE_RADIUS*2)
-                    .attr("xlink:href", bee.imageURL);
+        var hasImages = mappings.imageURL !== undefined;
+        if (hasImages) {
+            list.forEach(function(n) {
+                if (!present(n.imageURL)) return;
+                var p = defs.append("pattern").attr("id", "img-" + n.index).attr("patternContentUnits", "objectBoundingBox")
+                    .attr("width", 1).attr("height", 1);
+                p.append("rect").attr("width", 1).attr("height", 1).attr("fill", colourOf(n));
+                p.append("image").attr("width", 1).attr("height", 1).attr("preserveAspectRatio", "xMidYMid slice")
+                    .attr("href", String(n.imageURL));
             });
-
-            // --- NODES --- //
-            var g = svg.append("g");
-
-            var cell = g.append("g")
-                .attr("class", "cells")
-                .selectAll("g")
-                .data(_beesArray)
-                .enter().append("g");
-
-            cell.append("circle")
-                .attr("r", function(d) { return (mappings.markerSize && d) ? d.size : NODE_RADIUS; })
-                .attr("cx", function(d) { return (d) ? d.x : null; })
-                .attr("cy", function(d) { return (d) ? d.y : null; })
-                .attr("fill", function(d) { return (d) ? "url(#img-"+d.id+")" : null;});
-
-            cell.append("circle")
-                .attr("class", "cluster-circle")
-                .attr("r", function(d) {
-                    return (mappings.markerSize && d) ? d.size : NODE_RADIUS;
-                })
-                .attr("cx", function(d) { return (d) ? d.x : null; })
-                .attr("cy", function(d) { return (d) ? d.y : null; })
-                .attr("fill-opacity", function(d) { return (d.imageURL) ? 0.4 : 1; })
-                .attr("fill", function(d) {
-                    if (mappings.colour && d) return colour(d.colour);
-                    return (mappings.imageURL) ? "none" : "#7DA9DA";
-                });
-
-            cell.append("title")
-                .text(function(d) { return (d) ? d.title : null; });
         }
 
-    });
+        var tip = function(n) {
+            var lines = [present(n.title) ? label(n.title) : label(n.id)];
+            if (present(n.title)) lines.push(it.nodeId.inputField + ": " + label(n.id));
+            lines.push(measureName(it.x) + ": " + label(n.xValue) + ", " + measureName(it.y) + ": " + label(n.yValue));
+            if (useColour) lines.push(measureName(it.colour) + ": " + label(n.colour));
+            if (useSize) lines.push(measureName(it.markerSize) + ": " + label(n.sizeValue));
+            lines.push("Links: " + n.degree);
+            return lines.filter(Boolean).join("\n");
+        };
+
+        nodeLayer.selectAll("circle")
+            .data(list)
+            .enter()
+            .append("circle")
+            .attr("class", "node")
+            .attr("r", function(n) { return n.r; })
+            .attr("cx", function(n) { return n.x; })
+            .attr("cy", function(n) { return n.y; })
+            .attr("fill", function(n) { return hasImages && present(n.imageURL) ? "url(#img-" + n.index + ")" : colourOf(n); })
+            .on("mouseenter", function(event, n) { if (state.selected === null) highlight(n.key, true); })
+            .on("mouseleave", function() { if (state.selected === null) highlight(null); })
+            .on("click", function(event, n) {
+                event.stopPropagation();
+                if (state.selected === n.key) { clearSelection(); return; }
+                state.selected = n.key;
+                omniscope.view.context().viewSelection = { filter: nodeFilter(it.nodeId.inputField, n.id) };
+                omniscope.view.updated();
+                highlight(n.key);
+            })
+            .append("title")
+            .text(tip);
+
+        if (showKey) {
+            var key = svg.append("g").attr("class", "key").attr("transform", "translate(8,6)");
+            var kx = 0;
+            cats.forEach(function(c) {
+                var item = key.append("g").attr("transform", "translate(" + kx + ",0)");
+                item.append("circle").attr("r", 5).attr("cx", 5).attr("cy", 6).attr("fill", PALETTE[domain.indexOf(c) % PALETTE.length]);
+                var t = item.append("text").attr("x", 14).attr("y", 10).text(c);
+                kx += 14 + t.node().getComputedTextLength() + 14;
+            });
+            if (kx > W - 8) key.remove();
+        }
+
+        if (totalEdges > edges.length) status("Showing the " + edges.length.toLocaleString() + " heaviest of " + totalEdges.toLocaleString() + " links");
+
+        state.model = { nodes: list, edges: edges, totalEdges: totalEdges, cats: cats, edgeOpacity: edgeOpacity };
+        highlight(state.selected);
+
+        // Bundle the edges unless switched off; the straight edges stay until the bundled ones arrive.
+        if (it.bundleEdges === false || edges.length < 2) { state.bundled = true; return; }
+        // The bundler drops edges whose two ends are at the same point, so send only the others and map back.
+        var straight = edges.map(function(e) { return [list[e.source], list[e.target]]; });
+        var idx = [];
+        edges.forEach(function(e, i) { var s = list[e.source], t = list[e.target]; if (s.x !== t.x || s.y !== t.y) idx.push(i); });
+        omniscope.view.busy(true);
+        bundle(list.map(function(n) { return { x: n.x, y: n.y }; }), idx.map(function(i) { return { source: edges[i].source, target: edges[i].target }; }), function(paths) {
+            if (gen !== state.generation) return;
+            omniscope.view.busy(false);
+            idx.forEach(function(e, j) { if (paths[j]) straight[e] = paths[j]; });
+            drawEdges(straight);
+            state.bundled = true;
+        });
+    }
+
+    // Emphasise one node and its links; with no node, show everything.
+    function highlight(key, hover) {
+        var m = state.model;
+        if (!m) return;
+        var linked = {};
+        if (key !== null) {
+            linked[key] = true;
+            m.edges.forEach(function(e) {
+                if (m.nodes[e.source].key === key) linked[m.nodes[e.target].key] = true;
+                if (m.nodes[e.target].key === key) linked[m.nodes[e.source].key] = true;
+            });
+        }
+        svg.selectAll(".nodes circle")
+            .classed("selected", function(n) { return !hover && key !== null && n.key === key; })
+            .attr("opacity", function(n) { return key === null || linked[n.key] ? 1 : 0.25; });
+        svg.selectAll(".edges path")
+            .attr("stroke-opacity", key === null ? m.edgeOpacity : Math.max(0.6, m.edgeOpacity))
+            .attr("display", function(e) {
+                return key === null || m.nodes[e.source].key === key || m.nodes[e.target].key === key ? null : "none";
+            });
+    }
 
 </script>
 

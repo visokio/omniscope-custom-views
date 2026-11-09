@@ -4,34 +4,54 @@
     <meta charset="utf-8"/>
 
     <style>
-        html, body, main {
-
-            /* Ensure the body fills the view, so clicks are handled everywhere: */
+        html, body {
             width: 100%;
             height: 100%;
             margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #41475e;
+            background: #fff;
         }
-        #main {
-            width: 100%;
-            height: 100%;
+        body.dark { background: #131722; color: #d1d4dc; }
+        #chart { position: absolute; inset: 0; }
+        .tradingview-widget-container { width: 100%; height: 100%; }
+        .tradingview-widget-container__widget { width: 100%; height: calc(100% - 24px); }
+        .tradingview-widget-copyright {
+            height: 24px;
+            line-height: 24px;
+            font-size: 12px;
+            text-align: center;
+            color: #8a8f9c;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+        .tradingview-widget-copyright a { color: #2962ff; text-decoration: none; }
+        body.dark .tradingview-widget-copyright a { color: #5b8cff; }
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px;
+            box-sizing: border-box;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+        #message .box { max-width: 360px; }
+        #message .title { font-weight: 600; margin-bottom: 4px; }
+        #message .detail { color: #8a8f9c; }
     </style>
-
 </head>
 
 <body>
+<div id="chart"></div>
+<div id="message"><div class="box"><div class="title" id="msgTitle"></div><div class="detail" id="msgDetail"></div></div></div>
 
-<div id="main">
-
-  
-  
-<!-- TradingView Widget BEGIN -->
-<div id="tvWidgetContainer" class="tradingview-widget-container" style="height:100%;width:100%">
-  <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-</div>
-<!-- TradingView Widget END -->  
-</div><!-- This element is where the view will render -->
-<div id="error"/>
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
 <script>
@@ -39,117 +59,117 @@
     omniscope.view.on("load", function() {
         window.onerror = function(msg) {
             omniscope.view.error(msg);
-        }
+        };
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    // A click on the view clears the selection in the report, as a click on empty space in any view does.
     document.body.addEventListener("click", function() {
         omniscope.view.whitespaceClick();
     });
 
-    // Naively redraw on any of these events 
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    // TradingView's Advanced Real-Time Chart widget (https://www.tradingview.com/widget-docs/): a script that reads
+    // its JSON settings from its own text and draws the chart in an iframe inside its container.
+    var WIDGET_URL = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+    var MIN_W = 200, MIN_H = 160;
+    var INTERVALS = ["1", "5", "15", "60", "240", "D", "W", "M"];
+    var shown = null;   // signature of the chart on screen: a resize does not reload it (the widget sizes itself)
 
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        var data = omniscope.view.context().result.data.records;
-        var error = "";
-        var _symbol = data[0];
-        if (_symbol == null || _symbol[0] == null) {
-      		error = "No single value is selected. Filter or select a single record in another view to navigate.";
-        }
-      
-        var _theme = "light";
-        if (omniscope.view.context().options.items.o_darkMode) {
-            _theme = "dark";
-        }
-      
-        var _details = false;
-        if (omniscope.view.context().options.items.details) {
-            _details = true;
-        }
-   
-      
-    if (error) {
-         document.getElementById("error").textContent = error;
-         document.getElementById("error").style.display = "block";
-         document.getElementById("main").style.display = "none";
-     } else {
-		 
-
-    // Find the container div for the TradingView widget
-    var widgetContainer = document.getElementById('tvWidgetContainer');
-    
-    // If the container exists, remove all of its children
-    if (widgetContainer) {
-        // Clear the entire content of the container by setting innerHTML to an empty string
-        widgetContainer.innerHTML = '';
-    } else {
-        console.error('tvWidgetContainer element not found');
-    }
-       
-       // Get the existing script element if it exists
-    var existingScript = document.getElementById('tvscript');
-    
-    // If the script exists, remove it
-    if (existingScript) {
-        existingScript.remove();
+    function message(title, detail) {
+        shown = null;
+        document.getElementById("chart").innerHTML = "";
+        document.getElementById("msgTitle").textContent = title;
+        document.getElementById("msgDetail").textContent = detail || "";
+        document.getElementById("message").style.display = "flex";
     }
 
-    // Create a new script element
-    var script = document.createElement('script');
-    
-    // Set the type, async attributes, and an ID
-    script.type = 'text/javascript';
-    script.async = true;
-    script.id = 'tvscript';
-    
-    // Set the src attribute to the TradingView widget URL
-    script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-    
-    // Set the inner content of the script element as a JSON string
-    script.innerHTML = JSON.stringify({
-        "autosize": true, 
-        "symbol": ""+_symbol,
-        "interval": "D",
-        "timezone": "exchange",
-        "theme": "light",
-        "style": "1",
-        "locale": "en",
-        "allow_symbol_change": false,
-        "details": true,
-        "calendar": false,
-        "theme": ""+_theme,
-        "toolbar_bg": "#f1f3f6",
- "withdateranges": true,
-  "hide_side_toolbar": false,
-  "save_image": false,
-  "show_popup_button": false,
-  "popup_width": "1000",
-  "popup_height": "650",
-  "details": ""+_details
-    });
-    
-    // Append the script element to the container
-    if (widgetContainer) {
-        widgetContainer.appendChild(script);
-    } else {
-        console.error('Container element not found');
+    // The "by TradingView" attribution link that the widget's embed code carries.
+    function attribution(symbol) {
+        var div = document.createElement("div");
+        div.className = "tradingview-widget-copyright";
+        var a = document.createElement("a");
+        a.href = "https://www.tradingview.com/symbols/" + encodeURIComponent(symbol.replace(":", "-")) + "/";
+        a.target = "_blank";
+        a.rel = "noopener nofollow";
+        a.textContent = symbol + " chart";
+        div.appendChild(a);
+        div.appendChild(document.createTextNode(" by TradingView"));
+        return div;
     }
-       
-       
-       
-       
 
-          
-         document.getElementById("error").textContent = "";
-         document.getElementById("error").style.display = "none";
-         document.getElementById("main").style.display = "block";
-     }
-  
+    var NOT_A_SYMBOL = ["RECORD_COUNT", "UNIQUE_VALUE_COUNT", "NON_EMPTY_COUNT", "EMPTY_COUNT", "SUM", "MEAN"];
 
-    });
+    function draw() {
+        var ctx = omniscope.view.context();
+        var items = (ctx.options && ctx.options.items) || {};
+        var dark = items.o_darkMode === true;
+        document.body.className = dark ? "dark" : "";
+        var measure = items.aticker;
+        if (!measure) return message("Choose the field with the symbols", "Set Symbol in the view's settings.");
+        if (NOT_A_SYMBOL.indexOf(measure["function"]) >= 0) {
+            return message("Symbol needs a field value, not a count",
+                "Pick the field with the symbols and use the Singleton function (or Min or Max).");
+        }
+        var result = ctx.result;
+        var records = result && result.data && result.data.records;
+        if (!records || !records.length) return message("No data", "No records match the current filter.");
+        var col = result.mappings && result.mappings.aticker !== undefined ? result.mappings.aticker : 0;
+        var value = records[0][col];
+        if (value === null || value === undefined || value === "") {
+            return message("No single symbol to show",
+                "Several records match, or none. Filter or select a single record in another view to show its chart.");
+        }
+        var symbol = String(value).trim();
+        if (!/^[A-Za-z0-9_.:!&\/\- ]{1,40}$/.test(symbol)) return message("Not a symbol", symbol.slice(0, 80));
+        if (window.innerWidth < MIN_W || window.innerHeight < MIN_H) {
+            return message("Too small for a chart", "Make the view at least " + MIN_W + " by " + MIN_H + " pixels.");
+        }
 
+        var interval = INTERVALS.indexOf(items.interval) >= 0 ? items.interval : "D";
+        var config = {
+            autosize: true,
+            symbol: symbol,
+            interval: interval,
+            timezone: "exchange",
+            theme: dark ? "dark" : "light",
+            style: "1",
+            locale: "en",
+            withdateranges: true,
+            hide_side_toolbar: false,
+            allow_symbol_change: false,
+            save_image: false,
+            calendar: false,
+            details: items.details === true,
+            support_host: "https://www.tradingview.com"
+        };
+        var sig = JSON.stringify(config);
+        document.getElementById("message").style.display = "none";
+        if (sig === shown) return;
+        shown = sig;
+
+        var host = document.getElementById("chart");
+        host.innerHTML = "";
+        var container = document.createElement("div");
+        container.className = "tradingview-widget-container";
+        var widget = document.createElement("div");
+        widget.className = "tradingview-widget-container__widget";
+        container.appendChild(widget);
+        container.appendChild(attribution(symbol));
+        // The widget needs a script element created in code; HTML inserted with innerHTML would not run.
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.async = true;
+        script.src = WIDGET_URL;
+        script.text = JSON.stringify(config);
+        script.onerror = function() {
+            if (shown !== sig) return;
+            message("The chart can't be shown here",
+                "The browser could not load TradingView's widget script (s3.tradingview.com). A firewall, content blocker or browser privacy setting may be blocking it.");
+        };
+        container.appendChild(script);
+        host.appendChild(container);
+    }
+
+    omniscope.view.on(["load", "update", "resize"], draw);
 </script>
 
 </body>

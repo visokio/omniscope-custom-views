@@ -21,17 +21,20 @@
         "mandatory": true,
         "validMeasureResultTypes": [
           "NUMBER"
-        ]
+        ],
+        "detail": "The height of each bar, for example the sum of Sales"
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "Optional: one chart per value, side by side (Omniscope draws the panes)"
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "Optional: one chart per value, one above the other (Omniscope draws the panes)"
       },
       "split": {
         "displayName": "Split",
@@ -39,7 +42,8 @@
         "mandatory": true,
         "validFieldTypes": [
           "TEXT"
-        ]
+        ],
+        "detail": "One bar per value of this text field, for example Product"
       }
     },
     "structure": {

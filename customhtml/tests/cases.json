@@ -1,0 +1,73 @@
+[
+ {
+  "name": "showcase", "showcase": true,
+  "data": "sample-data/products.csv",
+  "options": { "items": { "dynamicHTML": true, "measures": { "inputField": "Card", "function": "SINGLETON" }, "msplit": { "inputField": "Product", "type": "UNIQUE_VALUES" } } },
+  "filter": { "type": "FIELD_VALUE", "inputField": "Category", "operator": "=", "value": "Tech" },
+  "width": 420, "height": 420, "showcaseHeight": 420, "wait": 1200,
+  "caption": "Live: product cards held as HTML in the data (invented catalogue), one block per product, filtered to the Tech category.",
+  "expect": { "selector": ".block", "min": 5, "max": 5, "text": "Monitor arm" }
+ },
+ {
+  "name": "static", "showcase": true,
+  "data": "sample-data/products.csv",
+  "options": { "items": { "aStaticHTML": "<h3 style='margin:4px 0'>Office supplies dashboard</h3><p>Prices include VAT. Stock is counted each night.</p><ul><li><a href='#'>Ordering guide</a></li><li><a href='#'>Returns</a></li></ul>" } },
+  "width": 420, "height": 200, "showcaseHeight": 200, "wait": 1000,
+  "caption": "Live: Static HTML typed into the view's settings, here a heading, a note and links.",
+  "expect": { "text": "Office supplies dashboard", "selector": "li", "min": 2 }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/products.csv",
+  "options": { "items": { "dynamicHTML": true, "measures": { "inputField": "Card", "function": "SINGLETON" } } },
+  "width": 420, "height": 300, "wait": 1200,
+  "actions": [
+   { "eval": "document.body.innerText.indexOf('filter or select one record') >= 0", "expectTruthy": true },
+   { "filter": { "type": "FIELD_VALUE", "inputField": "Product", "operator": "=", "value": "Desk lamp" } },
+   { "eval": "__customhtml.blocks === 1 && document.body.innerText.indexOf('Desk lamp') >= 0", "expectTruthy": true },
+   { "eval": "(window.__marker = document.querySelector('.block')) !== null", "expectTruthy": true },
+   { "resize": [300, 200] },
+   { "eval": "document.querySelector('.block') === window.__marker", "expectTruthy": true },
+   { "clickAt": [150, 150] },
+   { "expectSelection": false },
+   { "update": { "dynamicHTML": false, "aStaticHTML": "<b>Hello</b>" } },
+   { "eval": "document.getElementById('main').innerHTML === '<b>Hello</b>'", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/products.csv",
+  "options": { "items": { "dynamicHTML": true, "measures": { "inputField": "Card", "function": "SINGLETON" }, "msplit": { "inputField": "Product", "type": "UNIQUE_VALUES" } } },
+  "width": 420, "height": 420, "wait": 1200,
+  "actions": [
+   { "resize": [160, 100] },
+   { "eval": "document.getElementById('main').scrollHeight > 100 && document.getElementById('main').getBoundingClientRect().width <= 160", "expectTruthy": true },
+   { "screenshot": "160x100" }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [ { "name": "Card", "type": "TEXT" } ],
+  "options": { "items": { "dynamicHTML": true, "measures": { "inputField": "Card", "function": "SINGLETON" } } },
+  "width": 400, "height": 300, "wait": 1000,
+  "expect": { "text": "No HTML to show" }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/products.csv",
+  "options": { "items": {} },
+  "width": 400, "height": 300, "wait": 1000,
+  "actions": [
+   { "eval": "document.body.innerText.indexOf('Type HTML into Static HTML') >= 0", "expectTruthy": true },
+   { "update": { "dynamicHTML": true } },
+   { "eval": "document.body.innerText.indexOf('Choose an HTML value') >= 0", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": { "items": { "dynamicHTML": true, "measures": { "inputField": "Html", "function": "SINGLETON" }, "msplit": { "inputField": "Group", "type": "UNIQUE_VALUES" } } },
+  "width": 420, "height": 420, "wait": 2000,
+  "expect": { "text": "Showing the first 200 of 250 blocks", "selector": "p.g", "min": 200, "max": 200 }
+ }
+]

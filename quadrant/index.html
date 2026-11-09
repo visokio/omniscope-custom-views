@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .axis text { fill: #52514e; font-size: 10.5px; } .axis path, .axis line { stroke: #c9c8c1; }
+        .dot { cursor: pointer; } .dot:hover { stroke: #0b0b0b; stroke-width: 1.5; }
+        .quad { cursor: pointer; } .quad:hover { fill-opacity: 1; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<svg id="svg"></svg><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], ONE = "#2a78d6", SELECT = "#2161D9";
+    var QFILL = ["#eef4fc", "#f6f6f3", "#f6f6f3", "#fbf1ea"]; // top right, top left, bottom right, bottom left
+    var PRESETS = { NONE: ["", "", "", ""], BCG: ["Stars", "Question marks", "Cash cows", "Dogs"], EFFORT: ["Major projects", "Quick wins", "Thankless tasks", "Fill-ins"], IPA: ["Keep up the good work", "Concentrate here", "Possible overkill", "Low priority"], SWOT: ["High, high", "Low x, high y", "High x, low y", "Low, low"] };
+    var S = { sel: null };
+    window.__quad = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(1) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(1) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function name(o) { return !o ? "" : o.function === "RECORD_COUNT" ? "Record count" : (o.name && o.function ? o.name : o.inputField || ""); }
+    function num(v) { return v === null || v === undefined || v === "" || isNaN(+v) ? null : +v; }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.item || !it.x || !it.y) { message("Choose the Items (for example Product), and the two measures for Across and Up."); clear(); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = res.data.records || [];
+        var pts = recs.map(function (r) { return { raw: r[mp.item], name: r[mp.item] === null ? "(blank)" : String(r[mp.item]), x: r[mp.x], y: r[mp.y], s: mp.size !== undefined ? r[mp.size] : null, c: mp.colour !== undefined ? r[mp.colour] : null }; }).filter(function (p) { return typeof p.x === "number" && typeof p.y === "number" && isFinite(p.x) && isFinite(p.y); });
+        if (!pts.length) { message("No data to show. Check the filters."); clear(); return; }
+        if (pts.length > 3000) { message("Items has " + pts.length.toLocaleString() + " values. A quadrant matrix works best with up to a few hundred items: choose a coarser Items grouping or filter first."); clear(); return; }
+        message(null);
+        var split = function (mode, target, vals) { return mode === "MEAN" ? d3.mean(vals) : mode === "TARGET" && num(target) !== null ? num(target) : d3.median(vals); };
+        var xs = pts.map(function (p) { return p.x; }), ys = pts.map(function (p) { return p.y; }), cx = split(it.xSplit, it.xTarget, xs), cy = split(it.ySplit, it.yTarget, ys);
+        var labels = it.preset === "CUSTOM" ? [it.qTR, it.qTL, it.qBR, it.qBL].map(function (v) { return v || ""; }) : PRESETS[it.preset] || PRESETS.NONE;
+        pts.forEach(function (p) { p.q = (p.y >= cy ? 0 : 2) + (p.x >= cx ? 0 : 1); });
+        var cats = Array.from(new Set(pts.map(function (p) { return p.c; }).filter(function (c) { return c !== null && c !== undefined; }).map(String))).sort();
+        S.model = { it: it, pts: pts, cx: cx, cy: cy, labels: labels, cats: cats, names: { i: name(it.item), x: name(it.x), y: name(it.y), s: name(it.size), c: name(it.colour) }, F: it.item.inputField, logX: it.logX === true && d3.min(xs) > 0 };
+        introIf(recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null));
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        draw();
+    }
+    function clear() { d3.select("#svg").selectAll("*").remove(); }
+
+    function draw() {
+        var M = S.model; if (!M) return; tip(); var intro = introDone();
+        var W = window.innerWidth, H = window.innerHeight, svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var m = { l: 58, r: M.cats.length ? 130 : 18, t: 34, b: 42 }; if (W < 560) m.r = 14;
+        var w = Math.max(60, W - m.l - m.r), h = Math.max(60, H - m.t - m.b);
+        var xe = d3.extent(M.pts, function (p) { return p.x; }).concat([M.cx]), ye = d3.extent(M.pts, function (p) { return p.y; }).concat([M.cy]);
+        var smax = d3.max(M.pts, function (p) { return p.s; }), rmax = Math.max(8, Math.min(34, Math.sqrt(w * h / M.pts.length) * 0.45)), r = d3.scaleSqrt().domain([0, smax || 1]).range([3, rmax]), pad = M.names.s ? rmax : 8;
+        // keep the largest bubble inside the plot by padding the ranges
+        var x = (M.logX ? d3.scaleLog() : d3.scaleLinear()).domain(d3.extent(xe)).nice().range([pad, w - pad]), y = d3.scaleLinear().domain(d3.extent(ye)).nice().range([h - pad, pad]);
+        var g = svg.append("g").attr("transform", "translate(" + m.l + "," + m.t + ")"), sel = S.sel;
+        // quadrants
+        var qx = x(M.cx), qy = y(M.cy), rects = [[qx, 0, w - qx, qy], [0, 0, qx, qy], [qx, qy, w - qx, h - qy], [0, qy, qx, h - qy]];
+        rects.forEach(function (q, k) {
+            g.append("rect").attr("class", "quad").attr("x", q[0]).attr("y", q[1]).attr("width", Math.max(0, q[2])).attr("height", Math.max(0, q[3])).attr("fill", QFILL[k]).attr("fill-opacity", sel && sel.q === k ? 1 : 0.7).attr("stroke", sel && sel.q === k ? SELECT : "none").attr("stroke-width", 2)
+                .on("mousemove", function (ev) { var n = M.pts.filter(function (p) { return p.q === k; }); show('<b>' + esc(M.labels[k] || ["Top right", "Top left", "Bottom right", "Bottom left"][k]) + '</b><br><span class="k">Items:</span> ' + n.length + (M.names.s ? '<br><span class="k">' + esc(M.names.s) + ':</span> ' + fmt(d3.sum(n, function (p) { return p.s || 0; })) : ''), ev); }).on("mouseleave", tip)
+                .on("click", function (ev) { ev.stopPropagation(); selectQuad(k); });
+            var lab = M.labels[k]; if (lab) { var right = k === 0 || k === 2, topq = k < 2, n = M.pts.filter(function (p) { return p.q === k; }).length; g.append("text").attr("x", right ? w - 8 : 8).attr("y", topq ? 16 : h - 8).attr("text-anchor", right ? "end" : "start").style("font-size", "12px").style("font-weight", "bold").attr("fill", "#52514e").attr("pointer-events", "none").text(lab + " (" + n + ")"); }
+        });
+        g.append("line").attr("x1", qx).attr("x2", qx).attr("y1", 0).attr("y2", h).attr("stroke", "#9a988f").attr("stroke-dasharray", "4 3");
+        g.append("line").attr("x1", 0).attr("x2", w).attr("y1", qy).attr("y2", qy).attr("stroke", "#9a988f").attr("stroke-dasharray", "4 3");
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + h + ")").call(d3.axisBottom(x).ticks(Math.max(3, Math.floor(w / 90)), M.logX ? "~g" : undefined).tickFormat(M.logX ? d3.format("~g") : fmt));
+        g.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(5).tickFormat(fmt));
+        g.append("text").attr("x", w).attr("y", h + 34).attr("text-anchor", "end").style("font-size", "11px").attr("fill", "#52514e").text(M.names.x + (M.logX ? " (log scale)" : "") + " \u2192");
+        g.append("text").attr("transform", "rotate(-90)").attr("x", 0).attr("y", -44).attr("text-anchor", "end").style("font-size", "11px").attr("fill", "#52514e").text(M.names.y + " \u2192");
+        var cs = function (p) { return M.cats.length ? CAT[M.cats.indexOf(String(p.c)) % CAT.length] : ONE; };
+        var order = M.pts.slice().sort(function (a, b) { return (b.s || 0) - (a.s || 0); });
+        order.forEach(function (p) {
+            var isSel = sel && (sel.name === p.name || sel.q === p.q), dim = sel && !isSel;
+            g.append("circle").attr("class", "dot").attr("cx", x(p.x)).attr("cy", y(p.y)).attr("r", M.names.s ? r(Math.max(0, p.s || 0)) : 6).attr("fill", cs(p)).attr("fill-opacity", dim ? 0.2 : 0.75).attr("stroke", sel && sel.name === p.name ? SELECT : "#fcfcfb").attr("stroke-width", sel && sel.name === p.name ? 3 : 1)
+                .on("mousemove", function (ev) { tipDot(p, ev); }).on("mouseleave", tip).on("click", function (ev) { ev.stopPropagation(); selectItem(p); });
+        });
+        // labels for the largest or most extreme items, without overlaps
+        if (M.it.labels !== false) {
+            var placed = [], cand = M.pts.slice().sort(function (a, b) { return (b.s || 0) - (a.s || 0) || Math.abs(b.y - M.cy) - Math.abs(a.y - M.cy); }).slice(0, 40);
+            cand.forEach(function (p) { var tx = x(p.x) + (M.names.s ? r(Math.max(0, p.s || 0)) : 6) + 3, ty = y(p.y), wlab = p.name.length * 6 + 4, box = [tx, ty - 7, tx + wlab, ty + 7]; if (box[2] > w) return; if (placed.some(function (b) { return !(box[2] < b[0] || box[0] > b[2] || box[3] < b[1] || box[1] > b[3]); })) return; placed.push(box); g.append("text").attr("x", tx).attr("y", ty).attr("dy", "0.35em").style("font-size", "10.5px").attr("fill", "#2b2a28").attr("pointer-events", "none").text(p.name); });
+        }
+        var head = svg.append("text").attr("x", 10).attr("y", 18).style("font-size", "12px").attr("fill", "#52514e");
+        head.append("tspan").style("font-weight", "bold").attr("fill", "#0b0b0b").text(M.names.y + " against " + M.names.x);
+        head.append("tspan").text("  " + M.pts.length + " " + M.names.i.toLowerCase() + "s; split at " + fmt(M.cx) + " (" + splitName(M.it.xSplit) + ") and " + fmt(M.cy) + " (" + splitName(M.it.ySplit) + ")");
+        if (M.cats.length && W >= 560) { var lg = svg.append("g").attr("transform", "translate(" + (W - m.r + 12) + "," + (m.t + 8) + ")").style("font-size", "11px"); lg.append("text").attr("y", 0).style("font-weight", "bold").attr("fill", "#52514e").text(M.names.c); M.cats.slice(0, 12).forEach(function (c, i) { lg.append("circle").attr("cx", 5).attr("cy", 16 + i * 17).attr("r", 5).attr("fill", CAT[i % CAT.length]).attr("fill-opacity", 0.75); lg.append("text").attr("x", 15).attr("y", 16 + i * 17).attr("dy", "0.35em").attr("fill", "#2b2a28").text(c.length > 16 ? c.slice(0, 15) + "\u2026" : c); }); }
+        if (intro) { var ds = svg.selectAll("circle.dot"); popIn(ds, 600, stag(ds.size(), 600)); }
+    }
+    function splitName(m) { return m === "MEAN" ? "average" : m === "TARGET" ? "target" : "median"; }
+
+    function tipDot(p, ev) {
+        var M = S.model;
+        show('<b>' + esc(p.name) + '</b>' + (M.labels[p.q] ? ' <span class="k">(' + esc(M.labels[p.q]) + ')</span>' : '') + '<br><span class="k">' + esc(M.names.x) + ':</span> ' + fmt(p.x) + '<br><span class="k">' + esc(M.names.y) + ':</span> ' + fmt(p.y) + (M.names.s ? '<br><span class="k">' + esc(M.names.s) + ':</span> ' + fmt(p.s) : '') + (M.cats.length ? '<br><span class="k">' + esc(M.names.c) + ':</span> ' + esc(p.c) : ''), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    var eq = function (v) { return { type: "FIELD_VALUE", inputField: S.model.F, operator: "=", value: v }; };
+    function selectItem(p) { if (S.sel && S.sel.name === p.name) return publish(null, null); publish(eq(p.raw), { name: p.name }); }
+    function selectQuad(k) {
+        if (S.sel && S.sel.q === k) return publish(null, null);
+        var ps = S.model.pts.filter(function (p) { return p.q === k; }); if (!ps.length) return;
+        publish(ps.length === 1 ? eq(ps[0].raw) : { type: "OR", filters: ps.map(function (p) { return eq(p.raw); }) }, { q: k });
+    }
+    window.__quad.selectQuad = selectQuad;
+
+    document.body.addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1201 @@
+Order date,Region,Channel,Units,Sales
+2025-01-01,South,Online,9,89.3
+2025-01-02,North,Garden centre,2,21.8
+2025-01-02,North,Online,12,97.27
+2025-01-04,Midlands,Garden centre,6,179.85
+2025-01-04,Wales,Online,2,17.18
+2025-01-05,South,Online,2,37.91
+2025-01-05,South,Online,6,84.36
+2025-01-05,South,Online,11,170.78
+2025-01-05,Wales,Garden centre,5,44.94
+2025-01-06,Midlands,Online,6,140.89
+2025-01-06,North,Online,10,261.45
+2025-01-06,Wales,Garden centre,2,41.33
+2025-01-07,Midlands,Online,5,123.39
+2025-01-07,South,Online,5,58.13
+2025-01-07,South,Online,8,216.32
+2025-01-08,North,Online,5,52.77
+2025-01-08,South,Online,12,169.67
+2025-01-10,Midlands,Garden centre,12,105.23
+2025-01-10,North,Garden centre,1,25.0
+2025-01-11,Midlands,Online,7,65.2
+2025-01-11,North,Garden centre,12,343.75
+2025-01-11,Wales,Garden centre,9,77.08
+2025-01-12,Midlands,Online,8,239.96
+2025-01-14,Midlands,Online,3,25.91
+2025-01-14,North,Garden centre,7,193.95
+2025-01-14,North,Garden centre,8,239.94
+2025-01-15,South,Garden centre,6,93.46
+2025-01-16,Midlands,Garden centre,2,24.81
+2025-01-16,Midlands,Online,6,142.68
+2025-01-16,North,Online,9,165.09
+2025-01-18,North,Online,9,127.74
+2025-01-18,North,Online,12,258.3
+2025-01-18,South,Garden centre,5,42.25
+2025-01-19,South,Garden centre,5,115.22
+2025-01-21,North,Online,11,217.09
+2025-01-22,Midlands,Garden centre,4,116.98
+2025-01-22,Wales,Garden centre,12,130.79
+2025-01-24,Midlands,Online,10,252.4
+2025-01-24,North,Garden centre,6,177.86
+2025-01-24,South,Online,11,255.74
+2025-01-25,North,Garden centre,3,89.06
+2025-01-25,South,Online,3,41.8
+2025-01-25,South,Online,11,115.29
+2025-01-26,South,Online,4,83.51
+2025-01-28,Midlands,Online,10,160.14
+2025-01-28,Wales,Garden centre,9,151.82
+2025-02-02,Midlands,Garden centre,2,42.98
+2025-02-02,Midlands,Garden centre,10,219.21
+2025-02-04,Midlands,Online,3,70.84
+2025-02-04,Midlands,Online,5,113.57
+2025-02-04,Midlands,Online,8,88.81
+2025-02-04,North,Online,9,111.84
+2025-02-04,North,Online,11,116.88
+2025-02-04,South,Garden centre,2,43.83
+2025-02-05,South,Online,3,60.37
+2025-02-05,South,Online,10,272.16
+2025-02-06,Midlands,Garden centre,12,117.64
+2025-02-06,North,Online,7,122.86
+2025-02-06,North,Online,12,263.37
+2025-02-06,South,Online,5,51.98
+2025-02-07,Midlands,Garden centre,8,238.59
+2025-02-07,Midlands,Online,2,18.78
+2025-02-08,Midlands,Online,9,134.96
+2025-02-09,North,Garden centre,4,112.46
+2025-02-10,North,Garden centre,3,83.53
+2025-02-10,North,Online,2,41.31
+2025-02-12,South,Online,10,245.15
+2025-02-12,Wales,Garden centre,7,149.32
+2025-02-13,Midlands,Garden centre,4,63.12
+2025-02-13,North,Garden centre,9,225.89
+2025-02-14,South,Online,5,56.56
+2025-02-14,Wales,Garden centre,1,10.38
+2025-02-15,Midlands,Online,12,141.15
+2025-02-15,South,Online,1,10.55
+2025-02-15,Wales,Garden centre,9,72.37
+2025-02-15,Wales,Online,4,37.66
+2025-02-16,Midlands,Garden centre,2,22.23
+2025-02-16,Midlands,Online,2,56.37
+2025-02-16,North,Garden centre,7,156.46
+2025-02-16,South,Online,5,136.26
+2025-02-16,Wales,Garden centre,3,53.44
+2025-02-16,Wales,Online,3,41.73
+2025-02-17,Midlands,Online,1,21.77
+2025-02-17,Midlands,Online,10,241.85
+2025-02-17,North,Garden centre,5,98.81
+2025-02-19,South,Online,7,208.73
+2025-02-20,Midlands,Garden centre,8,145.36
+2025-02-21,North,Garden centre,10,230.89
+2025-02-21,South,Garden centre,8,167.44
+2025-02-21,South,Online,10,236.49
+2025-02-22,Midlands,Online,1,11.9
+2025-02-22,South,Garden centre,1,23.67
+2025-02-22,South,Online,10,280.71
+2025-02-23,North,Garden centre,9,75.05
+2025-02-23,North,Online,3,57.88
+2025-02-23,South,Garden centre,5,50.28
+2025-02-23,South,Online,2,23.89
+2025-02-23,South,Online,9,128.01
+2025-02-23,Wales,Online,11,129.7
+2025-02-25,Midlands,Garden centre,1,14.2
+2025-02-25,South,Garden centre,1,9.79
+2025-02-25,South,Garden centre,3,58.29
+2025-02-26,Wales,Online,10,247.92
+2025-02-27,Midlands,Online,2,55.29
+2025-02-27,South,Online,4,102.33
+2025-02-27,Wales,Garden centre,12,229.01
+2025-02-28,Midlands,Online,2,34.99
+2025-02-28,Midlands,Online,5,92.87
+2025-02-28,Midlands,Online,9,239.52
+2025-02-28,North,Garden centre,2,32.1
+2025-02-28,North,Online,4,75.31
+2025-02-28,South,Garden centre,6,112.85
+2025-02-28,South,Online,9,122.88
+2025-03-01,Midlands,Online,6,106.93
+2025-03-02,Midlands,Online,9,135.36
+2025-03-02,North,Garden centre,2,44.09
+2025-03-02,North,Garden centre,3,83.99
+2025-03-03,Midlands,Online,1,10.32
+2025-03-03,Midlands,Online,4,74.58
+2025-03-03,Wales,Online,1,25.74
+2025-03-03,Wales,Online,8,233.56
+2025-03-04,Midlands,Online,4,109.79
+2025-03-04,North,Garden centre,7,137.89
+2025-03-04,North,Garden centre,10,297.93
+2025-03-04,North,Online,2,58.46
+2025-03-04,South,Online,3,27.04
+2025-03-04,South,Online,12,352.73
+2025-03-05,Midlands,Online,9,130.14
+2025-03-05,South,Garden centre,7,71.52
+2025-03-05,South,Garden centre,8,185.03
+2025-03-05,Wales,Garden centre,1,12.14
+2025-03-06,Midlands,Online,1,16.75
+2025-03-06,North,Online,4,68.19
+2025-03-06,North,Online,9,109.95
+2025-03-06,South,Online,11,308.43
+2025-03-07,South,Online,2,42.17
+2025-03-07,South,Online,9,179.72
+2025-03-09,Midlands,Online,9,73.25
+2025-03-09,South,Garden centre,8,75.61
+2025-03-09,South,Online,10,187.08
+2025-03-10,South,Garden centre,6,120.82
+2025-03-11,Midlands,Online,7,117.81
+2025-03-11,North,Garden centre,5,148.63
+2025-03-11,South,Online,11,120.25
+2025-03-12,Midlands,Online,4,62.26
+2025-03-12,South,Online,6,135.5
+2025-03-13,Midlands,Online,8,170.17
+2025-03-14,Midlands,Online,4,48.14
+2025-03-14,North,Garden centre,2,59.83
+2025-03-14,South,Garden centre,8,139.63
+2025-03-14,Wales,Online,12,231.4
+2025-03-15,Midlands,Garden centre,1,19.1
+2025-03-15,Midlands,Garden centre,10,127.07
+2025-03-15,North,Online,1,16.51
+2025-03-16,Midlands,Online,2,23.1
+2025-03-16,South,Garden centre,8,209.85
+2025-03-16,South,Garden centre,10,165.59
+2025-03-16,South,Online,12,296.46
+2025-03-16,Wales,Garden centre,1,9.99
+2025-03-16,Wales,Garden centre,3,33.62
+2025-03-17,North,Garden centre,6,92.8
+2025-03-17,North,Online,7,65.36
+2025-03-17,South,Online,2,20.83
+2025-03-17,South,Online,2,35.2
+2025-03-17,South,Online,10,164.57
+2025-03-17,Wales,Online,7,77.22
+2025-03-18,Midlands,Garden centre,3,38.03
+2025-03-18,Midlands,Online,11,251.77
+2025-03-18,North,Garden centre,7,90.11
+2025-03-19,Midlands,Online,12,337.77
+2025-03-19,North,Online,3,83.24
+2025-03-20,Midlands,Online,8,200.91
+2025-03-20,Midlands,Online,10,257.9
+2025-03-20,North,Garden centre,3,30.69
+2025-03-20,South,Online,8,93.47
+2025-03-21,Midlands,Garden centre,4,80.0
+2025-03-21,North,Garden centre,10,291.69
+2025-03-21,South,Garden centre,2,16.27
+2025-03-21,South,Garden centre,5,133.79
+2025-03-21,South,Garden centre,6,83.11
+2025-03-21,South,Garden centre,11,257.23
+2025-03-21,South,Online,1,27.92
+2025-03-21,South,Online,5,148.93
+2025-03-22,South,Online,8,151.52
+2025-03-23,North,Garden centre,12,206.46
+2025-03-23,North,Online,8,139.65
+2025-03-23,South,Online,5,140.19
+2025-03-23,Wales,Garden centre,3,84.22
+2025-03-23,Wales,Online,11,148.81
+2025-03-24,Midlands,Online,9,172.1
+2025-03-24,Midlands,Online,12,117.47
+2025-03-24,Midlands,Online,12,286.6
+2025-03-24,South,Online,9,149.73
+2025-03-25,North,Online,1,18.46
+2025-03-25,North,Online,2,56.8
+2025-03-25,South,Garden centre,9,200.04
+2025-03-25,South,Online,4,98.94
+2025-03-25,South,Online,5,108.89
+2025-03-25,Wales,Online,3,78.87
+2025-03-26,Midlands,Online,2,52.51
+2025-03-26,South,Garden centre,12,208.57
+2025-03-26,South,Online,2,42.91
+2025-03-26,South,Online,11,285.95
+2025-03-27,Midlands,Garden centre,1,11.3
+2025-03-27,Midlands,Online,11,303.27
+2025-03-27,South,Online,10,215.81
+2025-03-28,Midlands,Garden centre,4,109.88
+2025-03-28,South,Garden centre,12,123.69
+2025-03-28,South,Online,6,171.92
+2025-03-28,Wales,Garden centre,1,11.68
+2025-04-01,Midlands,Garden centre,9,85.14
+2025-04-01,Midlands,Online,3,56.44
+2025-04-01,South,Garden centre,2,32.26
+2025-04-01,South,Online,4,74.12
+2025-04-02,North,Garden centre,9,124.09
+2025-04-02,Wales,Online,12,231.54
+2025-04-03,Midlands,Garden centre,1,28.17
+2025-04-03,Midlands,Online,12,332.52
+2025-04-03,North,Online,3,28.39
+2025-04-03,South,Online,6,64.07
+2025-04-04,North,Garden centre,5,83.54
+2025-04-04,North,Online,4,36.79
+2025-04-04,South,Garden centre,4,61.13
+2025-04-04,Wales,Online,6,139.0
+2025-04-05,Midlands,Online,10,299.91
+2025-04-05,North,Online,2,53.58
+2025-04-05,North,Online,5,43.48
+2025-04-05,North,Online,7,163.64
+2025-04-05,South,Garden centre,2,56.57
+2025-04-05,South,Online,1,26.95
+2025-04-05,South,Online,5,127.51
+2025-04-05,South,Online,6,163.62
+2025-04-05,Wales,Online,5,79.27
+2025-04-06,Midlands,Online,7,81.17
+2025-04-06,Midlands,Online,7,163.25
+2025-04-06,Midlands,Online,8,223.05
+2025-04-06,North,Garden centre,9,247.32
+2025-04-06,South,Online,8,68.6
+2025-04-06,South,Online,9,260.97
+2025-04-06,Wales,Online,3,37.99
+2025-04-07,Midlands,Garden centre,5,72.84
+2025-04-07,South,Online,2,34.75
+2025-04-07,Wales,Garden centre,8,69.57
+2025-04-08,North,Garden centre,9,160.56
+2025-04-08,North,Online,2,36.52
+2025-04-08,North,Online,3,70.79
+2025-04-08,North,Online,10,183.07
+2025-04-08,South,Garden centre,8,235.52
+2025-04-08,Wales,Online,2,29.74
+2025-04-09,North,Online,6,119.53
+2025-04-09,South,Garden centre,6,153.79
+2025-04-09,South,Online,8,223.39
+2025-04-09,South,Online,10,161.3
+2025-04-09,Wales,Online,3,77.4
+2025-04-10,South,Garden centre,2,43.5
+2025-04-10,South,Garden centre,9,104.87
+2025-04-10,South,Online,4,97.24
+2025-04-10,South,Online,10,180.08
+2025-04-11,South,Garden centre,1,28.33
+2025-04-11,South,Garden centre,10,146.05
+2025-04-11,South,Online,1,23.45
+2025-04-11,South,Online,8,109.21
+2025-04-12,North,Online,9,254.9
+2025-04-13,Midlands,Garden centre,5,42.66
+2025-04-13,Midlands,Garden centre,5,56.77
+2025-04-13,Midlands,Online,9,255.46
+2025-04-13,North,Garden centre,3,44.41
+2025-04-13,North,Garden centre,12,262.74
+2025-04-13,North,Online,12,281.54
+2025-04-13,South,Garden centre,10,108.53
+2025-04-13,South,Online,1,26.42
+2025-04-13,Wales,Online,11,181.52
+2025-04-14,Midlands,Online,4,108.53
+2025-04-14,South,Online,6,146.6
+2025-04-14,Wales,Garden centre,3,83.21
+2025-04-15,South,Garden centre,1,10.44
+2025-04-15,South,Garden centre,4,76.56
+2025-04-15,South,Garden centre,9,227.79
+2025-04-16,Midlands,Online,10,152.15
+2025-04-16,South,Garden centre,3,63.94
+2025-04-16,South,Garden centre,9,73.26
+2025-04-17,Midlands,Garden centre,10,223.91
+2025-04-17,Midlands,Online,10,178.53
+2025-04-17,North,Online,5,107.13
+2025-04-17,South,Garden centre,11,241.0
+2025-04-17,South,Online,8,204.92
+2025-04-18,Midlands,Garden centre,7,81.86
+2025-04-18,South,Online,7,191.46
+2025-04-19,Midlands,Online,3,77.71
+2025-04-19,South,Garden centre,1,13.69
+2025-04-19,Wales,Garden centre,4,55.18
+2025-04-19,Wales,Online,3,60.83
+2025-04-20,South,Garden centre,8,91.98
+2025-04-20,South,Online,10,112.1
+2025-04-20,Wales,Garden centre,12,307.31
+2025-04-21,Midlands,Online,2,41.19
+2025-04-21,South,Garden centre,5,107.31
+2025-04-21,South,Garden centre,10,277.66
+2025-04-21,South,Garden centre,12,169.42
+2025-04-21,South,Online,8,166.11
+2025-04-21,South,Online,12,167.86
+2025-04-22,Midlands,Online,5,63.14
+2025-04-22,North,Garden centre,5,42.09
+2025-04-22,North,Online,1,19.62
+2025-04-22,South,Garden centre,2,16.73
+2025-04-22,South,Online,5,45.43
+2025-04-22,South,Online,7,89.29
+2025-04-23,South,Online,7,173.43
+2025-04-24,Midlands,Online,1,14.37
+2025-04-24,Midlands,Online,3,76.42
+2025-04-24,Midlands,Online,7,121.96
+2025-04-24,North,Online,11,325.87
+2025-04-24,Wales,Online,3,64.42
+2025-04-24,Wales,Online,6,128.24
+2025-04-25,Midlands,Garden centre,2,33.74
+2025-04-25,Midlands,Garden centre,5,135.89
+2025-04-25,Midlands,Online,4,98.6
+2025-04-25,Midlands,Online,5,149.65
+2025-04-25,North,Garden centre,10,299.3
+2025-04-25,North,Garden centre,12,251.35
+2025-04-25,South,Online,5,50.94
+2025-04-25,South,Online,7,175.41
+2025-04-26,Midlands,Garden centre,4,85.81
+2025-04-26,North,Garden centre,9,109.71
+2025-04-26,South,Garden centre,3,63.68
+2025-04-26,South,Online,6,71.5
+2025-04-27,Midlands,Garden centre,6,177.7
+2025-04-27,South,Online,7,116.82
+2025-04-27,Wales,Online,7,204.67
+2025-04-28,North,Online,8,180.68
+2025-04-28,North,Online,12,351.54
+2025-04-28,South,Online,3,61.39
+2025-04-28,Wales,Online,7,112.79
+2025-05-01,Midlands,Online,1,20.47
+2025-05-01,North,Garden centre,3,43.3
+2025-05-01,South,Online,8,202.8
+2025-05-02,Midlands,Garden centre,12,298.28
+2025-05-02,Midlands,Online,12,185.31
+2025-05-02,North,Online,12,260.44
+2025-05-02,Wales,Garden centre,6,115.64
+2025-05-03,North,Online,7,166.39
+2025-05-03,South,Online,10,96.95
+2025-05-03,Wales,Garden centre,6,159.51
+2025-05-03,Wales,Garden centre,10,234.22
+2025-05-03,Wales,Online,12,240.99
+2025-05-04,Midlands,Garden centre,6,161.97
+2025-05-04,North,Online,5,95.94
+2025-05-04,South,Garden centre,5,82.89
+2025-05-04,South,Garden centre,10,212.42
+2025-05-04,South,Garden centre,12,306.71
+2025-05-04,Wales,Garden centre,5,104.54
+2025-05-05,South,Garden centre,11,236.33
+2025-05-05,South,Online,6,112.66
+2025-05-06,Midlands,Garden centre,10,154.05
+2025-05-06,Midlands,Online,6,143.36
+2025-05-06,Midlands,Online,9,239.62
+2025-05-06,South,Online,1,19.71
+2025-05-06,South,Online,1,21.87
+2025-05-06,South,Online,2,26.09
+2025-05-06,South,Online,2,57.44
+2025-05-07,North,Online,4,60.45
+2025-05-07,South,Garden centre,5,143.73
+2025-05-07,South,Online,9,186.09
+2025-05-08,Midlands,Online,11,179.15
+2025-05-08,North,Garden centre,9,146.8
+2025-05-08,North,Online,11,181.18
+2025-05-08,South,Online,3,77.49
+2025-05-08,South,Online,8,93.03
+2025-05-08,South,Online,9,222.13
+2025-05-08,Wales,Garden centre,1,19.45
+2025-05-08,Wales,Garden centre,10,198.99
+2025-05-08,Wales,Online,10,276.15
+2025-05-09,Midlands,Online,8,222.92
+2025-05-09,North,Online,3,49.19
+2025-05-09,North,Online,6,54.1
+2025-05-09,South,Garden centre,6,57.73
+2025-05-09,South,Online,9,260.76
+2025-05-09,South,Online,12,329.85
+2025-05-09,Wales,Online,2,33.38
+2025-05-10,North,Garden centre,3,88.95
+2025-05-10,North,Online,11,286.56
+2025-05-10,Wales,Online,1,23.89
+2025-05-11,North,Garden centre,5,112.32
+2025-05-11,North,Online,6,119.8
+2025-05-11,South,Online,12,357.17
+2025-05-12,Midlands,Garden centre,9,178.2
+2025-05-12,Midlands,Garden centre,9,269.59
+2025-05-12,South,Garden centre,1,23.1
+2025-05-12,South,Garden centre,4,102.11
+2025-05-12,South,Online,1,10.31
+2025-05-12,South,Online,6,60.61
+2025-05-12,Wales,Online,2,26.13
+2025-05-13,North,Garden centre,7,177.93
+2025-05-13,North,Garden centre,8,100.14
+2025-05-13,North,Garden centre,9,193.91
+2025-05-13,South,Garden centre,9,86.83
+2025-05-13,South,Garden centre,12,245.6
+2025-05-13,South,Online,2,22.94
+2025-05-13,South,Online,6,130.32
+2025-05-13,South,Online,10,221.91
+2025-05-14,South,Online,3,40.96
+2025-05-15,Midlands,Garden centre,5,85.27
+2025-05-15,North,Garden centre,11,314.99
+2025-05-15,South,Garden centre,6,87.45
+2025-05-15,South,Online,1,9.62
+2025-05-15,South,Online,2,27.94
+2025-05-15,South,Online,9,250.01
+2025-05-16,Midlands,Garden centre,6,142.11
+2025-05-16,Midlands,Garden centre,8,176.14
+2025-05-16,Midlands,Online,4,56.64
+2025-05-16,Midlands,Online,6,177.33
+2025-05-16,North,Online,5,79.92
+2025-05-16,South,Online,1,17.67
+2025-05-16,South,Online,10,89.86
+2025-05-16,Wales,Garden centre,9,113.58
+2025-05-16,Wales,Online,4,39.38
+2025-05-16,Wales,Online,10,233.78
+2025-05-17,North,Garden centre,3,51.19
+2025-05-17,North,Garden centre,5,81.08
+2025-05-17,North,Online,12,318.68
+2025-05-17,South,Online,5,49.53
+2025-05-17,South,Online,8,128.6
+2025-05-17,South,Online,11,132.62
+2025-05-17,Wales,Garden centre,3,28.47
+2025-05-17,Wales,Online,3,72.96
+2025-05-18,Midlands,Online,3,64.8
+2025-05-18,Midlands,Online,4,74.59
+2025-05-18,North,Garden centre,3,66.2
+2025-05-18,South,Garden centre,8,146.44
+2025-05-18,Wales,Online,2,53.48
+2025-05-19,Midlands,Garden centre,2,45.88
+2025-05-19,Midlands,Online,4,116.31
+2025-05-19,North,Garden centre,3,24.02
+2025-05-19,Wales,Online,6,56.79
+2025-05-20,Midlands,Garden centre,2,38.43
+2025-05-20,Midlands,Online,10,204.63
+2025-05-20,North,Online,2,46.05
+2025-05-20,South,Garden centre,6,97.92
+2025-05-20,South,Online,8,219.63
+2025-05-20,South,Online,11,105.04
+2025-05-20,Wales,Garden centre,10,177.25
+2025-05-20,Wales,Online,6,176.95
+2025-05-21,Midlands,Garden centre,11,226.21
+2025-05-21,North,Online,9,148.99
+2025-05-21,South,Garden centre,7,137.29
+2025-05-21,South,Garden centre,7,159.13
+2025-05-22,North,Online,3,49.34
+2025-05-22,South,Online,9,165.18
+2025-05-22,Wales,Online,1,16.47
+2025-05-23,Midlands,Online,2,37.45
+2025-05-23,North,Online,11,279.36
+2025-05-23,South,Garden centre,4,74.18
+2025-05-24,Midlands,Online,1,16.28
+2025-05-24,Midlands,Online,2,26.61
+2025-05-24,Midlands,Online,3,86.96
+2025-05-24,Midlands,Online,10,101.84
+2025-05-24,North,Garden centre,8,200.65
+2025-05-24,North,Online,2,20.0
+2025-05-24,North,Online,5,98.74
+2025-05-24,Wales,Garden centre,3,43.95
+2025-05-24,Wales,Garden centre,12,106.69
+2025-05-25,Midlands,Online,11,323.09
+2025-05-25,North,Online,5,58.59
+2025-05-25,North,Online,7,119.09
+2025-05-25,South,Online,8,134.35
+2025-05-26,Midlands,Online,1,19.55
+2025-05-26,North,Online,2,26.13
+2025-05-26,South,Online,6,72.09
+2025-05-26,South,Online,7,187.02
+2025-05-26,Wales,Garden centre,1,15.4
+2025-05-26,Wales,Garden centre,5,122.78
+2025-05-27,Midlands,Garden centre,4,46.97
+2025-05-27,Midlands,Online,4,65.03
+2025-05-27,Midlands,Online,4,74.78
+2025-05-27,Midlands,Online,11,250.81
+2025-05-27,North,Online,9,189.04
+2025-05-27,South,Garden centre,2,18.71
+2025-05-28,Midlands,Online,2,47.2
+2025-05-28,Midlands,Online,12,317.74
+2025-05-28,North,Garden centre,5,138.91
+2025-05-28,Wales,Garden centre,12,118.42
+2025-06-01,South,Garden centre,9,99.62
+2025-06-01,South,Online,8,102.23
+2025-06-01,South,Online,8,160.8
+2025-06-01,South,Online,10,138.81
+2025-06-01,South,Online,11,135.9
+2025-06-01,Wales,Online,1,9.82
+2025-06-02,Midlands,Garden centre,6,78.82
+2025-06-02,Midlands,Online,10,110.55
+2025-06-02,North,Online,6,150.78
+2025-06-02,South,Online,4,104.55
+2025-06-02,South,Online,11,113.31
+2025-06-03,Midlands,Garden centre,4,68.33
+2025-06-03,Midlands,Garden centre,6,104.39
+2025-06-03,North,Online,4,34.61
+2025-06-03,North,Online,6,74.43
+2025-06-03,North,Online,6,95.27
+2025-06-03,Wales,Online,6,130.11
+2025-06-03,Wales,Online,10,294.56
+2025-06-04,Midlands,Online,3,55.54
+2025-06-04,Midlands,Online,5,57.13
+2025-06-04,Midlands,Online,9,155.02
+2025-06-04,North,Garden centre,2,38.27
+2025-06-04,North,Garden centre,8,186.91
+2025-06-04,North,Online,8,143.1
+2025-06-04,South,Online,9,176.29
+2025-06-04,South,Online,11,278.34
+2025-06-04,Wales,Online,1,22.34
+2025-06-04,Wales,Online,2,24.27
+2025-06-05,North,Garden centre,2,47.61
+2025-06-05,North,Online,1,17.2
+2025-06-05,South,Garden centre,2,35.19
+2025-06-05,South,Online,3,68.85
+2025-06-05,South,Online,11,301.59
+2025-06-05,Wales,Garden centre,5,142.59
+2025-06-06,Midlands,Garden centre,10,228.17
+2025-06-06,North,Garden centre,11,240.54
+2025-06-06,North,Online,6,88.11
+2025-06-06,South,Online,9,91.11
+2025-06-06,South,Online,11,255.9
+2025-06-06,Wales,Online,7,205.93
+2025-06-07,Midlands,Garden centre,2,24.46
+2025-06-07,Midlands,Garden centre,7,66.84
+2025-06-07,North,Garden centre,8,174.8
+2025-06-07,Wales,Online,9,103.07
+2025-06-08,Midlands,Online,1,17.27
+2025-06-08,North,Online,2,30.84
+2025-06-08,North,Online,6,105.56
+2025-06-08,South,Garden centre,2,52.12
+2025-06-08,South,Garden centre,10,163.83
+2025-06-08,South,Online,1,17.09
+2025-06-08,Wales,Online,5,135.01
+2025-06-09,Midlands,Online,7,203.47
+2025-06-09,North,Online,5,98.3
+2025-06-09,North,Online,5,122.52
+2025-06-09,South,Garden centre,10,259.51
+2025-06-10,North,Garden centre,2,52.08
+2025-06-10,North,Garden centre,4,67.56
+2025-06-10,North,Garden centre,6,162.74
+2025-06-10,North,Online,9,158.06
+2025-06-10,South,Garden centre,2,20.42
+2025-06-10,South,Online,1,11.5
+2025-06-10,South,Online,1,19.49
+2025-06-10,South,Online,1,26.18
+2025-06-10,South,Online,7,177.73
+2025-06-10,Wales,Online,6,71.4
+2025-06-11,Midlands,Online,11,111.89
+2025-06-11,North,Garden centre,6,116.61
+2025-06-11,North,Garden centre,9,266.44
+2025-06-11,South,Online,5,87.98
+2025-06-11,Wales,Online,5,118.28
+2025-06-12,Midlands,Garden centre,2,56.72
+2025-06-12,North,Garden centre,7,80.21
+2025-06-12,South,Online,8,187.78
+2025-06-12,South,Online,11,323.78
+2025-06-12,Wales,Online,8,230.55
+2025-06-13,Midlands,Online,6,124.1
+2025-06-13,North,Online,1,15.62
+2025-06-13,North,Online,3,26.02
+2025-06-13,South,Garden centre,7,127.76
+2025-06-13,Wales,Garden centre,1,22.05
+2025-06-14,Midlands,Garden centre,2,55.77
+2025-06-14,Midlands,Garden centre,4,58.31
+2025-06-14,Midlands,Online,7,161.59
+2025-06-14,South,Online,8,230.79
+2025-06-14,South,Online,9,240.84
+2025-06-15,North,Garden centre,3,38.18
+2025-06-15,South,Garden centre,11,207.72
+2025-06-16,Midlands,Online,11,172.03
+2025-06-16,Midlands,Online,11,251.62
+2025-06-16,North,Garden centre,7,136.39
+2025-06-16,North,Online,5,106.45
+2025-06-16,South,Garden centre,7,148.61
+2025-06-16,South,Garden centre,8,209.21
+2025-06-16,South,Garden centre,12,237.47
+2025-06-16,South,Online,9,79.42
+2025-06-16,South,Online,10,218.28
+2025-06-16,South,Online,11,323.24
+2025-06-16,South,Online,12,319.13
+2025-06-17,Midlands,Garden centre,3,67.75
+2025-06-17,Midlands,Online,2,34.84
+2025-06-17,North,Online,2,36.28
+2025-06-17,South,Online,2,26.8
+2025-06-18,Midlands,Garden centre,2,58.15
+2025-06-18,South,Garden centre,11,130.6
+2025-06-18,South,Online,1,29.25
+2025-06-18,Wales,Online,6,79.53
+2025-06-19,Midlands,Garden centre,2,45.52
+2025-06-19,Midlands,Online,2,57.91
+2025-06-19,South,Garden centre,2,33.25
+2025-06-19,South,Garden centre,11,316.41
+2025-06-19,South,Garden centre,12,344.11
+2025-06-19,South,Online,2,36.59
+2025-06-19,Wales,Garden centre,4,60.51
+2025-06-20,Midlands,Garden centre,1,19.85
+2025-06-20,Midlands,Garden centre,12,170.6
+2025-06-20,Midlands,Online,12,354.14
+2025-06-20,North,Garden centre,3,58.8
+2025-06-20,North,Garden centre,9,125.87
+2025-06-20,North,Garden centre,11,223.71
+2025-06-20,North,Online,4,40.08
+2025-06-20,North,Online,8,64.44
+2025-06-20,North,Online,8,182.21
+2025-06-21,Midlands,Online,7,163.7
+2025-06-21,South,Garden centre,11,279.64
+2025-06-21,South,Online,1,19.76
+2025-06-21,Wales,Online,7,198.86
+2025-06-22,Midlands,Garden centre,1,8.11
+2025-06-22,Midlands,Online,4,88.14
+2025-06-22,Midlands,Online,5,94.53
+2025-06-22,Midlands,Online,6,165.95
+2025-06-22,North,Garden centre,5,109.58
+2025-06-22,North,Online,10,293.9
+2025-06-22,South,Online,4,38.28
+2025-06-22,South,Online,5,71.33
+2025-06-22,South,Online,11,228.29
+2025-06-23,North,Garden centre,3,75.16
+2025-06-23,North,Online,1,8.36
+2025-06-23,North,Online,10,286.32
+2025-06-23,North,Online,12,270.52
+2025-06-23,South,Garden centre,7,120.34
+2025-06-23,South,Garden centre,8,222.29
+2025-06-23,South,Garden centre,9,109.9
+2025-06-23,South,Garden centre,11,179.83
+2025-06-23,South,Online,1,21.74
+2025-06-23,South,Online,6,148.31
+2025-06-24,Midlands,Online,4,116.46
+2025-06-24,North,Online,1,11.71
+2025-06-24,South,Garden centre,1,18.6
+2025-06-25,South,Online,6,125.62
+2025-06-25,Wales,Online,5,76.88
+2025-06-26,Midlands,Online,3,73.62
+2025-06-26,Midlands,Online,10,284.76
+2025-06-26,Midlands,Online,11,229.9
+2025-06-26,North,Online,3,82.77
+2025-06-26,North,Online,5,121.53
+2025-06-26,North,Online,9,189.15
+2025-06-26,North,Online,12,199.71
+2025-06-26,South,Online,4,44.72
+2025-06-27,Midlands,Garden centre,11,219.73
+2025-06-27,Midlands,Online,7,61.58
+2025-06-27,North,Garden centre,1,24.88
+2025-06-27,North,Online,3,35.44
+2025-06-27,South,Garden centre,5,147.41
+2025-06-27,South,Online,3,48.1
+2025-06-27,Wales,Garden centre,12,264.68
+2025-06-28,Midlands,Online,2,28.07
+2025-06-28,Midlands,Online,4,38.43
+2025-06-28,Midlands,Online,12,108.23
+2025-06-28,Midlands,Online,12,210.4
+2025-06-28,North,Garden centre,1,23.34
+2025-06-28,North,Garden centre,7,187.33
+2025-06-28,North,Online,1,20.08
+2025-06-28,South,Garden centre,8,229.81
+2025-06-28,South,Online,2,55.36
+2025-06-28,South,Online,8,239.71
+2025-06-28,Wales,Garden centre,8,127.32
+2025-06-28,Wales,Online,8,221.62
+2025-07-01,Midlands,Online,7,78.05
+2025-07-01,South,Online,5,65.01
+2025-07-01,South,Online,9,109.17
+2025-07-01,South,Online,10,112.69
+2025-07-01,Wales,Garden centre,6,53.98
+2025-07-01,Wales,Online,12,314.43
+2025-07-02,Midlands,Online,7,151.53
+2025-07-02,North,Online,5,48.04
+2025-07-02,North,Online,11,213.81
+2025-07-02,South,Online,4,89.72
+2025-07-03,Midlands,Online,7,160.36
+2025-07-03,Midlands,Online,9,164.7
+2025-07-03,Midlands,Online,11,126.9
+2025-07-03,South,Garden centre,8,136.37
+2025-07-03,South,Online,5,87.04
+2025-07-03,Wales,Garden centre,8,185.44
+2025-07-03,Wales,Online,9,140.05
+2025-07-04,Midlands,Garden centre,8,164.11
+2025-07-04,Midlands,Garden centre,9,136.6
+2025-07-04,South,Garden centre,10,91.66
+2025-07-04,South,Online,7,182.71
+2025-07-04,Wales,Online,7,130.83
+2025-07-05,Midlands,Online,3,78.12
+2025-07-05,Midlands,Online,5,47.04
+2025-07-05,North,Garden centre,11,204.85
+2025-07-05,North,Online,3,81.34
+2025-07-05,North,Online,11,145.59
+2025-07-05,South,Online,10,211.62
+2025-07-05,Wales,Online,7,124.97
+2025-07-05,Wales,Online,8,91.08
+2025-07-06,Midlands,Online,1,10.42
+2025-07-06,North,Online,4,40.23
+2025-07-06,South,Garden centre,5,118.18
+2025-07-06,South,Online,2,38.68
+2025-07-07,Midlands,Garden centre,5,110.69
+2025-07-07,Midlands,Garden centre,12,221.34
+2025-07-07,South,Garden centre,7,178.89
+2025-07-07,Wales,Garden centre,9,153.96
+2025-07-08,Midlands,Garden centre,9,201.01
+2025-07-08,Midlands,Online,2,41.26
+2025-07-08,South,Garden centre,2,40.47
+2025-07-08,South,Online,9,112.12
+2025-07-09,Midlands,Online,5,129.39
+2025-07-09,Midlands,Online,9,158.14
+2025-07-09,North,Garden centre,1,15.74
+2025-07-09,South,Garden centre,5,67.7
+2025-07-09,South,Garden centre,9,75.67
+2025-07-10,Midlands,Garden centre,3,25.97
+2025-07-10,Midlands,Online,10,293.28
+2025-07-10,North,Garden centre,9,254.17
+2025-07-10,North,Garden centre,12,186.24
+2025-07-10,South,Online,2,22.48
+2025-07-10,South,Online,10,105.98
+2025-07-10,Wales,Online,8,90.12
+2025-07-10,Wales,Online,12,268.35
+2025-07-11,Midlands,Garden centre,1,16.34
+2025-07-11,Midlands,Online,10,260.41
+2025-07-11,Midlands,Online,12,120.04
+2025-07-11,Midlands,Online,12,136.03
+2025-07-11,Midlands,Online,12,163.9
+2025-07-11,Wales,Online,6,71.05
+2025-07-12,South,Online,12,342.18
+2025-07-13,Midlands,Garden centre,1,15.83
+2025-07-13,Midlands,Garden centre,8,159.72
+2025-07-13,Midlands,Online,5,83.57
+2025-07-13,South,Garden centre,4,38.12
+2025-07-13,South,Garden centre,7,62.5
+2025-07-13,South,Garden centre,7,129.88
+2025-07-13,Wales,Garden centre,5,92.69
+2025-07-14,North,Garden centre,1,14.26
+2025-07-14,North,Garden centre,4,97.12
+2025-07-14,North,Garden centre,7,97.61
+2025-07-14,South,Online,7,192.85
+2025-07-14,South,Online,10,296.47
+2025-07-15,North,Online,5,52.31
+2025-07-15,South,Online,2,53.68
+2025-07-15,Wales,Online,9,258.08
+2025-07-16,Midlands,Online,7,190.93
+2025-07-16,North,Online,6,111.67
+2025-07-16,South,Garden centre,9,141.01
+2025-07-16,South,Online,3,83.09
+2025-07-17,South,Garden centre,7,89.15
+2025-07-17,South,Online,8,141.38
+2025-07-17,South,Online,8,171.23
+2025-07-17,Wales,Garden centre,1,8.1
+2025-07-17,Wales,Online,11,328.17
+2025-07-18,North,Online,8,116.03
+2025-07-18,South,Garden centre,2,35.4
+2025-07-18,South,Online,8,107.46
+2025-07-19,Midlands,Online,4,63.79
+2025-07-19,North,Garden centre,7,193.94
+2025-07-19,South,Online,11,260.33
+2025-07-20,Midlands,Garden centre,1,21.84
+2025-07-20,Midlands,Online,5,84.09
+2025-07-20,South,Online,5,86.33
+2025-07-20,South,Online,12,352.44
+2025-07-21,Midlands,Garden centre,6,118.88
+2025-07-21,Midlands,Online,11,258.24
+2025-07-21,South,Online,6,67.65
+2025-07-22,Midlands,Garden centre,1,29.13
+2025-07-22,Midlands,Online,10,200.67
+2025-07-22,Midlands,Online,10,244.51
+2025-07-22,North,Online,6,85.24
+2025-07-22,South,Garden centre,1,18.9
+2025-07-22,South,Garden centre,3,24.46
+2025-07-22,South,Online,1,25.87
+2025-07-22,South,Online,5,145.09
+2025-07-23,Midlands,Garden centre,1,23.23
+2025-07-23,Midlands,Online,3,88.49
+2025-07-23,Midlands,Online,6,55.47
+2025-07-23,North,Garden centre,3,82.57
+2025-07-24,North,Online,1,27.09
+2025-07-24,North,Online,8,78.9
+2025-07-24,South,Garden centre,4,119.62
+2025-07-24,South,Online,12,241.63
+2025-07-24,Wales,Online,1,25.54
+2025-07-25,Midlands,Garden centre,2,21.94
+2025-07-25,Midlands,Online,4,110.67
+2025-07-25,North,Online,10,84.15
+2025-07-25,South,Online,9,203.01
+2025-07-26,Midlands,Garden centre,8,224.41
+2025-07-26,North,Online,9,164.05
+2025-07-26,South,Garden centre,1,22.66
+2025-07-26,Wales,Garden centre,7,81.49
+2025-07-27,North,Garden centre,4,94.93
+2025-07-27,South,Garden centre,12,291.57
+2025-07-27,South,Online,11,164.11
+2025-07-27,South,Online,12,286.55
+2025-07-28,North,Garden centre,11,123.99
+2025-07-28,North,Garden centre,11,328.44
+2025-07-28,North,Online,3,77.89
+2025-07-28,North,Online,10,150.56
+2025-07-28,South,Garden centre,7,89.51
+2025-07-28,South,Garden centre,9,265.87
+2025-07-28,South,Online,2,25.71
+2025-07-28,South,Online,7,144.52
+2025-08-01,Midlands,Garden centre,7,81.52
+2025-08-01,Midlands,Online,11,121.65
+2025-08-01,Wales,Online,7,159.95
+2025-08-03,Midlands,Online,9,128.44
+2025-08-03,Midlands,Online,9,179.79
+2025-08-03,North,Garden centre,7,65.75
+2025-08-03,North,Garden centre,9,161.45
+2025-08-03,North,Online,1,15.01
+2025-08-03,Wales,Online,1,14.57
+2025-08-04,South,Garden centre,6,133.72
+2025-08-04,South,Online,8,71.25
+2025-08-05,Midlands,Garden centre,12,243.07
+2025-08-05,North,Online,7,207.32
+2025-08-05,North,Online,12,271.49
+2025-08-05,South,Online,11,152.85
+2025-08-06,Midlands,Garden centre,3,47.54
+2025-08-06,North,Garden centre,1,20.05
+2025-08-06,South,Online,1,12.89
+2025-08-06,South,Online,6,63.87
+2025-08-06,Wales,Online,6,88.13
+2025-08-07,South,Garden centre,2,35.71
+2025-08-07,Wales,Online,4,74.15
+2025-08-08,South,Online,5,125.83
+2025-08-09,North,Online,3,60.66
+2025-08-09,North,Online,5,62.17
+2025-08-10,Midlands,Garden centre,6,169.03
+2025-08-10,Midlands,Garden centre,11,155.06
+2025-08-10,South,Garden centre,1,12.37
+2025-08-10,South,Garden centre,11,294.37
+2025-08-11,Midlands,Online,10,113.11
+2025-08-11,North,Garden centre,5,81.89
+2025-08-11,North,Online,4,33.81
+2025-08-12,Midlands,Online,9,169.56
+2025-08-12,North,Online,1,17.74
+2025-08-13,Midlands,Online,6,118.77
+2025-08-13,South,Garden centre,12,184.3
+2025-08-14,Midlands,Online,5,61.65
+2025-08-14,North,Garden centre,11,105.12
+2025-08-14,South,Online,9,268.27
+2025-08-15,Midlands,Garden centre,2,58.33
+2025-08-15,South,Online,6,105.5
+2025-08-15,South,Online,9,135.92
+2025-08-15,South,Online,11,140.63
+2025-08-15,South,Online,12,307.78
+2025-08-15,Wales,Online,12,282.52
+2025-08-16,North,Online,7,118.9
+2025-08-16,South,Garden centre,7,107.92
+2025-08-16,South,Online,3,26.44
+2025-08-16,South,Online,9,76.06
+2025-08-16,Wales,Online,11,265.47
+2025-08-17,Midlands,Garden centre,1,11.1
+2025-08-17,Midlands,Garden centre,7,145.73
+2025-08-17,Midlands,Online,3,52.19
+2025-08-17,Midlands,Online,6,107.11
+2025-08-17,North,Online,2,56.6
+2025-08-17,South,Garden centre,6,94.13
+2025-08-17,South,Online,8,85.18
+2025-08-18,Midlands,Online,12,122.25
+2025-08-18,North,Garden centre,3,35.62
+2025-08-18,North,Online,4,109.85
+2025-08-18,South,Garden centre,11,255.96
+2025-08-18,South,Online,3,25.09
+2025-08-18,South,Online,8,125.98
+2025-08-19,North,Garden centre,4,75.79
+2025-08-19,North,Online,7,89.02
+2025-08-19,North,Online,8,107.83
+2025-08-19,South,Online,4,116.32
+2025-08-19,South,Online,10,199.81
+2025-08-20,North,Garden centre,4,61.27
+2025-08-20,North,Garden centre,11,134.78
+2025-08-21,Midlands,Garden centre,6,172.54
+2025-08-21,Midlands,Online,7,202.65
+2025-08-21,Midlands,Online,9,107.17
+2025-08-21,North,Online,7,66.72
+2025-08-21,South,Garden centre,6,163.74
+2025-08-22,Midlands,Online,1,29.05
+2025-08-22,North,Garden centre,3,84.6
+2025-08-22,Wales,Garden centre,3,46.95
+2025-08-22,Wales,Online,5,90.9
+2025-08-23,Midlands,Garden centre,9,97.46
+2025-08-23,Midlands,Online,10,241.18
+2025-08-23,South,Garden centre,9,155.9
+2025-08-23,South,Online,1,27.18
+2025-08-23,Wales,Online,8,102.92
+2025-08-24,Midlands,Online,1,25.54
+2025-08-24,Midlands,Online,11,200.52
+2025-08-24,North,Garden centre,4,81.48
+2025-08-24,North,Online,12,339.63
+2025-08-24,Wales,Garden centre,10,183.15
+2025-08-25,Midlands,Online,11,293.03
+2025-08-25,North,Garden centre,1,27.58
+2025-08-26,Midlands,Garden centre,12,127.48
+2025-08-26,Midlands,Garden centre,12,153.49
+2025-08-26,South,Online,9,105.4
+2025-08-26,Wales,Garden centre,5,119.12
+2025-08-26,Wales,Online,6,122.4
+2025-08-28,North,Garden centre,11,176.38
+2025-09-01,North,Online,9,130.79
+2025-09-02,Midlands,Online,11,180.15
+2025-09-02,North,Online,2,19.91
+2025-09-02,Wales,Online,4,37.68
+2025-09-03,Midlands,Online,12,319.85
+2025-09-03,Wales,Garden centre,3,89.68
+2025-09-04,Midlands,Online,11,278.07
+2025-09-05,Midlands,Online,4,59.12
+2025-09-05,North,Garden centre,12,292.66
+2025-09-05,South,Garden centre,1,14.33
+2025-09-05,South,Online,3,45.19
+2025-09-06,North,Garden centre,2,28.62
+2025-09-06,North,Online,9,252.53
+2025-09-07,Midlands,Online,1,11.56
+2025-09-07,Midlands,Online,4,96.14
+2025-09-07,South,Online,4,64.91
+2025-09-07,South,Online,7,178.09
+2025-09-07,Wales,Online,3,30.33
+2025-09-08,Midlands,Garden centre,9,167.43
+2025-09-08,South,Garden centre,3,66.08
+2025-09-08,South,Garden centre,4,77.68
+2025-09-08,South,Garden centre,9,178.91
+2025-09-09,North,Garden centre,12,292.46
+2025-09-09,South,Garden centre,4,53.74
+2025-09-09,South,Online,4,101.32
+2025-09-10,North,Online,6,132.81
+2025-09-10,South,Garden centre,5,143.06
+2025-09-10,South,Online,6,54.83
+2025-09-10,South,Online,8,229.73
+2025-09-11,Midlands,Garden centre,1,29.8
+2025-09-11,Midlands,Online,11,309.02
+2025-09-11,South,Garden centre,1,24.87
+2025-09-12,Midlands,Garden centre,9,77.4
+2025-09-12,Wales,Garden centre,6,48.16
+2025-09-13,North,Online,3,61.63
+2025-09-13,South,Garden centre,9,227.94
+2025-09-13,South,Online,12,161.23
+2025-09-13,Wales,Online,8,146.4
+2025-09-14,Midlands,Online,6,130.3
+2025-09-14,North,Garden centre,5,94.77
+2025-09-14,South,Garden centre,2,33.28
+2025-09-15,Midlands,Garden centre,3,30.32
+2025-09-15,Midlands,Online,2,37.09
+2025-09-15,Midlands,Online,2,59.2
+2025-09-15,Midlands,Online,10,162.18
+2025-09-15,South,Garden centre,7,93.67
+2025-09-15,South,Online,1,11.4
+2025-09-15,Wales,Garden centre,2,20.06
+2025-09-16,Midlands,Garden centre,5,75.05
+2025-09-16,North,Garden centre,1,24.13
+2025-09-16,South,Garden centre,10,274.46
+2025-09-16,South,Online,7,67.45
+2025-09-17,Midlands,Online,4,67.36
+2025-09-17,Midlands,Online,12,355.31
+2025-09-17,North,Garden centre,7,102.76
+2025-09-17,South,Garden centre,7,107.35
+2025-09-17,Wales,Garden centre,2,59.05
+2025-09-17,Wales,Online,7,116.38
+2025-09-18,North,Online,1,11.45
+2025-09-18,Wales,Online,6,169.25
+2025-09-19,North,Garden centre,7,119.94
+2025-09-19,North,Online,11,162.39
+2025-09-19,South,Online,11,94.53
+2025-09-20,Midlands,Online,7,117.47
+2025-09-20,South,Garden centre,8,73.62
+2025-09-20,South,Online,1,26.51
+2025-09-20,South,Online,9,157.13
+2025-09-21,Midlands,Garden centre,2,39.36
+2025-09-21,North,Garden centre,4,58.6
+2025-09-21,North,Garden centre,11,240.28
+2025-09-21,South,Garden centre,2,24.64
+2025-09-21,Wales,Online,10,104.45
+2025-09-22,Midlands,Garden centre,8,188.72
+2025-09-22,Midlands,Online,4,91.72
+2025-09-22,North,Online,8,165.0
+2025-09-22,North,Online,9,224.83
+2025-09-22,North,Online,12,279.99
+2025-09-23,Midlands,Garden centre,8,118.0
+2025-09-23,Midlands,Online,6,109.17
+2025-09-23,South,Garden centre,2,36.7
+2025-09-23,South,Online,1,24.07
+2025-09-23,South,Online,7,121.22
+2025-09-24,Midlands,Garden centre,4,71.51
+2025-09-25,North,Online,5,108.88
+2025-09-25,South,Garden centre,10,99.27
+2025-09-26,South,Garden centre,1,8.91
+2025-09-27,South,Garden centre,5,82.62
+2025-09-27,South,Online,6,107.31
+2025-09-27,Wales,Online,5,53.75
+2025-09-28,South,Garden centre,12,253.14
+2025-10-01,Midlands,Garden centre,11,251.77
+2025-10-01,South,Online,2,21.9
+2025-10-01,South,Online,2,37.46
+2025-10-02,North,Online,10,185.44
+2025-10-02,Wales,Garden centre,9,205.26
+2025-10-04,Midlands,Garden centre,9,254.76
+2025-10-04,Midlands,Online,4,68.71
+2025-10-04,South,Online,6,172.59
+2025-10-05,Midlands,Online,12,288.53
+2025-10-05,North,Online,11,133.48
+2025-10-05,South,Online,6,82.09
+2025-10-05,South,Online,6,172.55
+2025-10-05,South,Online,12,339.42
+2025-10-06,North,Online,6,168.16
+2025-10-06,North,Online,6,171.25
+2025-10-06,Wales,Online,12,228.15
+2025-10-07,North,Garden centre,9,140.08
+2025-10-07,South,Garden centre,5,130.4
+2025-10-07,Wales,Online,10,249.04
+2025-10-08,Midlands,Online,12,171.27
+2025-10-10,North,Garden centre,1,11.41
+2025-10-10,North,Garden centre,1,15.03
+2025-10-11,North,Garden centre,6,132.65
+2025-10-11,South,Online,4,38.45
+2025-10-11,South,Online,7,85.5
+2025-10-12,Midlands,Garden centre,3,81.7
+2025-10-12,Midlands,Garden centre,11,297.46
+2025-10-12,Midlands,Online,10,211.64
+2025-10-12,South,Online,3,37.2
+2025-10-12,South,Online,5,92.87
+2025-10-12,Wales,Garden centre,7,138.48
+2025-10-13,Wales,Garden centre,7,169.56
+2025-10-14,Midlands,Garden centre,10,189.07
+2025-10-14,South,Online,3,56.58
+2025-10-15,Midlands,Online,11,113.37
+2025-10-15,Wales,Garden centre,7,158.32
+2025-10-15,Wales,Garden centre,11,239.93
+2025-10-16,South,Online,2,43.25
+2025-10-16,South,Online,4,58.96
+2025-10-17,South,Online,5,65.01
+2025-10-17,South,Online,5,132.79
+2025-10-18,South,Garden centre,1,11.63
+2025-10-19,Midlands,Online,10,250.26
+2025-10-20,South,Online,4,56.13
+2025-10-20,South,Online,11,197.42
+2025-10-21,Wales,Garden centre,5,120.38
+2025-10-21,Wales,Online,9,85.93
+2025-10-22,Midlands,Garden centre,1,10.75
+2025-10-22,Midlands,Online,1,11.54
+2025-10-22,South,Online,4,46.04
+2025-10-23,North,Online,7,173.96
+2025-10-24,Midlands,Garden centre,8,204.98
+2025-10-24,Midlands,Online,12,170.05
+2025-10-24,Wales,Garden centre,4,42.57
+2025-10-25,Midlands,Online,9,167.25
+2025-10-25,South,Garden centre,8,229.82
+2025-10-25,South,Online,11,254.76
+2025-10-27,South,Garden centre,1,10.63
+2025-10-27,Wales,Online,9,266.84
+2025-11-02,Midlands,Garden centre,9,236.21
+2025-11-02,South,Garden centre,2,31.15
+2025-11-04,South,Online,5,99.94
+2025-11-05,Midlands,Online,6,82.19
+2025-11-05,South,Garden centre,1,9.11
+2025-11-05,South,Garden centre,3,69.16
+2025-11-05,Wales,Garden centre,10,156.76
+2025-11-06,South,Online,12,208.18
+2025-11-07,Midlands,Garden centre,3,80.31
+2025-11-07,Wales,Online,2,24.56
+2025-11-08,Midlands,Online,11,192.58
+2025-11-08,North,Online,5,80.01
+2025-11-08,North,Online,9,101.22
+2025-11-08,South,Online,2,55.3
+2025-11-08,South,Online,10,159.39
+2025-11-11,Midlands,Online,1,26.19
+2025-11-11,North,Garden centre,8,168.55
+2025-11-11,North,Online,7,200.76
+2025-11-11,South,Garden centre,5,124.13
+2025-11-11,South,Garden centre,10,195.96
+2025-11-12,South,Online,2,46.96
+2025-11-13,Midlands,Garden centre,11,192.45
+2025-11-13,South,Garden centre,4,54.14
+2025-11-13,Wales,Online,8,193.99
+2025-11-14,North,Online,1,8.47
+2025-11-14,South,Online,7,188.11
+2025-11-15,South,Online,2,49.45
+2025-11-15,South,Online,12,267.3
+2025-11-15,Wales,Online,5,105.61
+2025-11-15,Wales,Online,12,189.71
+2025-11-16,South,Garden centre,3,67.09
+2025-11-17,South,Garden centre,6,104.29
+2025-11-17,Wales,Online,4,34.96
+2025-11-18,North,Garden centre,6,85.84
+2025-11-18,North,Garden centre,9,107.32
+2025-11-18,Wales,Online,3,29.43
+2025-11-19,South,Online,4,97.41
+2025-11-20,Midlands,Garden centre,7,169.66
+2025-11-20,South,Online,12,205.4
+2025-11-21,Midlands,Online,11,256.63
+2025-11-21,North,Online,7,184.03
+2025-11-21,North,Online,12,279.76
+2025-11-22,Midlands,Online,6,138.22
+2025-11-22,South,Garden centre,3,37.61
+2025-11-23,Midlands,Online,2,22.4
+2025-11-23,North,Online,8,229.82
+2025-11-23,North,Online,10,140.31
+2025-11-24,Midlands,Garden centre,9,96.21
+2025-11-24,South,Online,6,159.73
+2025-11-25,South,Online,6,60.97
+2025-11-26,North,Online,9,76.02
+2025-11-26,South,Online,2,31.8
+2025-11-26,South,Online,5,139.05
+2025-11-27,Midlands,Garden centre,9,196.84
+2025-11-27,North,Online,11,145.18
+2025-11-28,South,Online,5,84.07
+2025-12-01,Midlands,Online,12,312.45
+2025-12-01,South,Garden centre,5,139.98
+2025-12-01,South,Online,10,198.59
+2025-12-01,South,Online,10,218.09
+2025-12-01,Wales,Garden centre,7,97.08
+2025-12-02,Midlands,Online,7,77.23
+2025-12-02,Midlands,Online,12,227.49
+2025-12-02,North,Garden centre,9,87.91
+2025-12-02,Wales,Garden centre,7,123.56
+2025-12-03,Midlands,Garden centre,1,18.12
+2025-12-03,South,Garden centre,4,100.25
+2025-12-03,Wales,Garden centre,9,122.05
+2025-12-04,Midlands,Garden centre,1,24.81
+2025-12-04,Midlands,Garden centre,7,67.89
+2025-12-04,Midlands,Online,1,27.85
+2025-12-04,Midlands,Online,11,99.94
+2025-12-04,North,Online,5,78.44
+2025-12-05,North,Garden centre,11,306.48
+2025-12-06,Midlands,Online,10,283.35
+2025-12-06,North,Garden centre,12,337.48
+2025-12-06,North,Online,1,23.05
+2025-12-06,North,Online,7,154.03
+2025-12-06,South,Garden centre,2,44.67
+2025-12-06,South,Garden centre,8,199.84
+2025-12-06,Wales,Online,8,199.82
+2025-12-07,Midlands,Garden centre,6,130.58
+2025-12-07,North,Online,10,121.31
+2025-12-07,South,Online,5,78.83
+2025-12-08,Midlands,Garden centre,11,307.59
+2025-12-08,Wales,Online,9,191.6
+2025-12-09,North,Online,10,166.98
+2025-12-09,South,Garden centre,6,88.21
+2025-12-09,South,Online,7,137.96
+2025-12-09,South,Online,7,184.68
+2025-12-09,South,Online,9,216.62
+2025-12-10,Wales,Online,8,178.71
+2025-12-11,Midlands,Online,5,88.43
+2025-12-11,North,Online,9,109.65
+2025-12-11,South,Garden centre,1,14.36
+2025-12-11,South,Online,11,127.96
+2025-12-12,Midlands,Online,4,81.59
+2025-12-12,South,Garden centre,9,85.13
+2025-12-12,South,Online,6,135.85
+2025-12-13,North,Garden centre,5,67.5
+2025-12-13,Wales,Garden centre,1,27.78
+2025-12-14,South,Online,3,48.02
+2025-12-15,Midlands,Garden centre,6,92.79
+2025-12-15,Midlands,Online,1,11.73
+2025-12-15,Midlands,Online,10,244.6
+2025-12-15,Midlands,Online,12,115.67
+2025-12-15,Wales,Garden centre,3,42.07
+2025-12-16,Midlands,Garden centre,1,22.83
+2025-12-16,Midlands,Online,2,43.96
+2025-12-16,Midlands,Online,3,85.3
+2025-12-16,Midlands,Online,11,272.97
+2025-12-16,North,Online,8,110.3
+2025-12-16,South,Garden centre,3,57.99
+2025-12-16,South,Garden centre,11,98.09
+2025-12-16,Wales,Garden centre,1,23.35
+2025-12-17,North,Online,5,96.94
+2025-12-17,North,Online,7,120.83
+2025-12-17,South,Online,4,66.27
+2025-12-18,South,Garden centre,5,79.38
+2025-12-18,South,Garden centre,9,269.64
+2025-12-18,Wales,Online,6,52.24
+2025-12-19,North,Online,7,151.81
+2025-12-19,South,Online,5,84.64
+2025-12-20,South,Garden centre,6,97.49
+2025-12-20,South,Online,3,47.19
+2025-12-21,Midlands,Garden centre,2,35.5
+2025-12-21,North,Garden centre,9,156.14
+2025-12-21,North,Online,1,23.04
+2025-12-21,North,Online,7,208.1
+2025-12-21,South,Online,8,182.86
+2025-12-21,South,Online,10,117.48
+2025-12-21,Wales,Online,11,283.43
+2025-12-22,Midlands,Online,4,40.9
+2025-12-22,Midlands,Online,6,116.87
+2025-12-22,North,Garden centre,12,272.98
+2025-12-22,South,Online,10,259.94
+2025-12-23,Midlands,Online,2,31.83
+2025-12-23,North,Online,8,167.57
+2025-12-23,Wales,Garden centre,6,165.74
+2025-12-24,Midlands,Online,3,55.1
+2025-12-24,North,Garden centre,2,52.41
+2025-12-24,North,Online,5,129.75
+2025-12-24,South,Online,2,17.24
+2025-12-24,South,Online,9,187.19
+2025-12-24,South,Online,12,133.35
+2025-12-24,Wales,Garden centre,12,248.73
+2025-12-25,South,Online,3,76.6
+2025-12-25,South,Online,5,118.64
+2025-12-25,South,Online,5,138.79
+2025-12-25,Wales,Garden centre,6,146.37
+2025-12-26,Midlands,Garden centre,7,100.13
+2025-12-26,Wales,Garden centre,10,148.69
+2025-12-27,North,Online,10,83.38
+2025-12-27,South,Garden centre,12,153.98
+2025-12-27,South,Online,8,200.47
+2025-12-28,South,Garden centre,10,112.41
+2025-12-28,South,Online,2,29.6
+2025-12-28,South,Online,2,47.37
+2025-12-28,South,Online,9,130.35
+2025-12-28,Wales,Online,11,213.85

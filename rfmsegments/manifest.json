@@ -1,0 +1,144 @@
+{
+  "name": "RFM Segments",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "rfm",
+    "segmentation",
+    "customers",
+    "crm",
+    "retention",
+    "recency",
+    "marketing",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "customer": {
+        "displayName": "Customers",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Customer identifier, e.g. Customer ID or Account number"
+      },
+      "date": {
+        "displayName": "Dated by",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "Date of each purchase or transaction"
+      },
+      "value": {
+        "displayName": "Spend",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Value of each purchase, e.g. Order value or Revenue"
+      },
+      "orders": {
+        "displayName": "Count purchases by",
+        "type": "FIELD",
+        "detail": "Optional: an order ID, so several lines of one order count as one purchase"
+      },
+      "maxCustomers": {
+        "displayName": "Customers used",
+        "type": "NUMBER",
+        "minValue": 1000,
+        "maxValue": 500000,
+        "detail": "Maximum number of customers fetched (default 200,000)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "customer",
+        "date",
+        "value"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Transactions",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "customer",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "date",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "orders",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Limits",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "maxCustomers",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "maxCustomers": 200000
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

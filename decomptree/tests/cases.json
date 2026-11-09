@@ -1,0 +1,394 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "measure": {
+     "inputField": "Revenue (GBP)",
+     "function": "SUM"
+    },
+    "dimensions": [
+     "Region",
+     "Channel",
+     "Category",
+     "Customer type",
+     "Carrier",
+     "Warehouse"
+    ],
+    "maxBars": 8,
+    "sortOrder": "DESCENDING",
+    "autoSplits": true,
+    "showPercent": true
+   }
+  },
+  "width": 1040,
+  "height": 520,
+  "wait": 1500,
+  "showcaseHeight": 520,
+  "caption": "Live: 12,000 illustrative orders. Press + on any bar to split it by another field, or let the view pick the split with the highest value. Click a bar to select those orders.",
+  "actions": [
+   {
+    "eval": "window.__decomp.expand(0,undefined,'Region')"
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__decomp.expand(1,'London','Channel')"
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__decomp.expand(2,'Online','Category')"
+   },
+   {
+    "wait": 1200
+   },
+   {
+    "eval": "document.querySelectorAll('.col').length===4",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "text": "Electronics"
+  }
+ },
+ {
+  "name": "root-cause",
+  "showcase": true,
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "measure": {
+     "inputField": "Delivery days",
+     "function": "MEAN"
+    },
+    "dimensions": [
+     "Region",
+     "Channel",
+     "Category",
+     "Customer type",
+     "Carrier",
+     "Warehouse"
+    ],
+    "maxBars": 8,
+    "sortOrder": "DESCENDING",
+    "autoSplits": true,
+    "showPercent": true
+   }
+  },
+  "width": 1040,
+  "height": 420,
+  "wait": 1500,
+  "showcaseHeight": 420,
+  "caption": "Live: average delivery days. Two automatic 'highest value' splits find the slow warehouse and then the carrier responsible.",
+  "actions": [
+   {
+    "eval": "window.__decomp.auto(0,undefined,true)"
+   },
+   {
+    "wait": 1500
+   },
+   {
+    "eval": "(function(){var L=window.__decomp.levels[1];return L.dim+':'+L.rows[0].value})()"
+   },
+   {
+    "eval": "window.__decomp.auto(1,window.__decomp.levels[1].rows[0].value,true)"
+   },
+   {
+    "wait": 1500
+   },
+   {
+    "eval": "(function(){var a=window.__decomp.levels.map(function(l){return l.dim}).join('>');return a})()"
+   },
+   {
+    "eval": "window.__decomp.levels.length===3 && ['Warehouse','Carrier'].indexOf(window.__decomp.levels[1].dim)>=0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "measure": {
+     "inputField": "Revenue (GBP)",
+     "function": "SUM"
+    },
+    "dimensions": [
+     "Region",
+     "Channel",
+     "Category",
+     "Customer type",
+     "Carrier",
+     "Warehouse"
+    ],
+    "maxBars": 8,
+    "sortOrder": "DESCENDING",
+    "autoSplits": true,
+    "showPercent": true
+   }
+  },
+  "width": 1000,
+  "height": 520,
+  "wait": 1500,
+  "actions": [
+   {
+    "click": ".root .plus"
+   },
+   {
+    "click": "#menu .mi[data-dim='Region']",
+    "waitAfter": 1200
+   },
+   {
+    "click": ".col:nth-of-type(2) .node[data-k='1']",
+    "waitAfter": 800
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "hover": ".col:nth-of-type(2) .node[data-k='0']"
+   },
+   {
+    "click": ".col:nth-of-type(2) .node[data-k='0'] .plus"
+   },
+   {
+    "click": "#menu .mi[data-dim='Category']",
+    "waitAfter": 1200
+   },
+   {
+    "eval": "window.__decomp.levels.length===3",
+    "expectTruthy": true
+   },
+   {
+    "click": ".col:nth-of-type(2) .node[data-k='2']",
+    "waitAfter": 1500
+   },
+   {
+    "eval": "window.__decomp.levels[2].rows.length>0",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     990,
+     510
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Channel",
+     "operator": "=",
+     "value": "Store"
+    }
+   },
+   {
+    "eval": "/filtered/.test(document.body.innerText)",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     400
+    ]
+   },
+   {
+    "screenshot": "resized"
+   }
+  ],
+  "expect": {
+   "text": "Region"
+  }
+ },
+ {
+  "name": "reload-persists",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "measure": {
+     "inputField": "Revenue (GBP)",
+     "function": "SUM"
+    },
+    "dimensions": [
+     "Region",
+     "Channel",
+     "Category",
+     "Customer type",
+     "Carrier",
+     "Warehouse"
+    ],
+    "maxBars": 8,
+    "sortOrder": "DESCENDING",
+    "autoSplits": true,
+    "showPercent": true
+   }
+  },
+  "width": 900,
+  "height": 400,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__decomp.expand(0,undefined,'Channel')"
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "location.reload()"
+   },
+   {
+    "wait": 2500
+   },
+   {
+    "eval": "window.__decomp.levels.length===2",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Region",
+    "type": "TEXT"
+   },
+   {
+    "name": "Revenue (GBP)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "measure": {
+     "inputField": "Revenue (GBP)",
+     "function": "SUM"
+    },
+    "dimensions": [
+     "Region"
+    ]
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__decomp.expand(0,undefined,'Region')"
+   },
+   {
+    "wait": 800
+   }
+  ],
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose a measure"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "generateArgs": {
+   "rows": 120000
+  },
+  "options": {
+   "items": {
+    "measure": {
+     "inputField": "Revenue (GBP)",
+     "function": "SUM"
+    },
+    "dimensions": [
+     "Region",
+     "Channel",
+     "Category",
+     "Customer type",
+     "Carrier",
+     "Warehouse"
+    ],
+    "maxBars": 12,
+    "sortOrder": "DESCENDING",
+    "autoSplits": true,
+    "showPercent": true
+   }
+  },
+  "width": 1000,
+  "height": 520,
+  "wait": 3000,
+  "actions": [
+   {
+    "eval": "window.__decomp.expand(0,undefined,'Region')"
+   },
+   {
+    "wait": 2500
+   },
+   {
+    "eval": "window.__decomp.levels[1].rows.length>0 && window.__decomp.levels[1].other",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "measure": {
+     "inputField": "Revenue (GBP)",
+     "function": "SUM"
+    },
+    "dimensions": [
+     "Region",
+     "Channel",
+     "Category",
+     "Customer type",
+     "Carrier",
+     "Warehouse"
+    ],
+    "maxBars": 5,
+    "sortOrder": "DESCENDING",
+    "autoSplits": true,
+    "showPercent": false
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__decomp.expand(0,undefined,'Region')"
+   },
+   {
+    "wait": 700
+   },
+   {
+    "eval": "window.__decomp.expand(1,'London','Channel')"
+   },
+   {
+    "wait": 900
+   }
+  ],
+  "scale": 0.5
+ }
+]

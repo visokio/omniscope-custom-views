@@ -1,0 +1,262 @@
+{
+  "name": "Sparkline Scorecard",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "scorecard",
+    "sparkline",
+    "kpi",
+    "target",
+    "status",
+    "table",
+    "dashboard",
+    "rag",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 50000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "rows": {
+        "displayName": "Rows",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "One scorecard row per value, e.g. Store, Product, Region or Account manager"
+      },
+      "time": {
+        "displayName": "Time",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "Periods for the trend, e.g. Week or Month (a date grouped by week or month)"
+      },
+      "value": {
+        "displayName": "Value",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "The measure tracked, e.g. sum of Sales"
+      },
+      "target": {
+        "displayName": "Target",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional target for the same periods, e.g. sum of Target. Enables attainment and status."
+      },
+      "direction": {
+        "displayName": "Good direction",
+        "type": "CHOICE",
+        "values": [
+          "HIGHER",
+          "LOWER"
+        ],
+        "displayValues": [
+          "Higher is better",
+          "Lower is better"
+        ],
+        "detail": "Used for the colour of changes and for status against target"
+      },
+      "headline": {
+        "displayName": "Headline value",
+        "type": "CHOICE",
+        "values": [
+          "LAST",
+          "SUM",
+          "MEAN"
+        ],
+        "displayValues": [
+          "Latest period",
+          "Total over the range",
+          "Average per period"
+        ],
+        "detail": "Which number each row leads with"
+      },
+      "compare": {
+        "displayName": "Change compared with",
+        "type": "CHOICE",
+        "values": [
+          "PREVIOUS",
+          "FIRST"
+        ],
+        "displayValues": [
+          "Previous period",
+          "First period shown"
+        ],
+        "detail": "Basis for the change column"
+      },
+      "periods": {
+        "displayName": "Periods in trend",
+        "type": "NUMBER",
+        "minValue": 3,
+        "maxValue": 104,
+        "detail": "Show the most recent N periods (default 13)"
+      },
+      "tolerance": {
+        "displayName": "At-risk band (%)",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 50,
+        "detail": "Within this percentage short of target a row is At risk rather than Off track (default 5)"
+      },
+      "sortBy": {
+        "displayName": "Sort rows by",
+        "type": "CHOICE",
+        "values": [
+          "HEADLINE_DESC",
+          "CHANGE_DESC",
+          "CHANGE_ASC",
+          "ATTAINMENT_ASC",
+          "NAME"
+        ],
+        "displayValues": [
+          "Headline, highest first",
+          "Change, best first",
+          "Change, worst first",
+          "Attainment, worst first",
+          "Name"
+        ],
+        "detail": "Row order"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "rows",
+        "time",
+        "value",
+        "target"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Scorecard",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "rows",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "time",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "target",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "direction",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "headline",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "compare",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "periods",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "tolerance",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "sortBy",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "direction": "HIGHER",
+      "headline": "LAST",
+      "compare": "PREVIOUS",
+      "periods": 13,
+      "tolerance": 5,
+      "sortBy": "HEADLINE_DESC"
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 120
+  }
+}

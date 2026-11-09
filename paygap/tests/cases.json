@@ -1,0 +1,245 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/employees.csv",
+  "options": {
+   "items": {
+    "group": "Gender",
+    "pay": "Hourly pay",
+    "bonus": "Bonus paid",
+    "breakdown": "Department"
+   }
+  },
+  "width": 1060,
+  "height": 620,
+  "wait": 1500,
+  "showcaseHeight": 620,
+  "caption": "Live: an illustrative company of 1,800 employees. The gap comes mainly from who is in the senior grades, which the quartiles show. Hover a quartile for counts; click it, or a department, to select those people.",
+  "expect": {
+   "selector": ".tile",
+   "min": 5
+  }
+ },
+ {
+  "name": "bygrade",
+  "showcase": true,
+  "data": "sample-data/employees.csv",
+  "options": {
+   "items": {
+    "group": "Gender",
+    "pay": "Hourly pay",
+    "breakdown": "Grade"
+   }
+  },
+  "width": 1060,
+  "height": 560,
+  "wait": 1500,
+  "showcaseHeight": 560,
+  "caption": "Live: the same company broken down by grade, where the gap within each grade is small.",
+  "expect": {
+   "selector": "tr.g",
+   "min": 6
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/employees.csv",
+  "options": {
+   "items": {
+    "group": "Gender",
+    "pay": "Hourly pay",
+    "bonus": "Bonus paid",
+    "breakdown": "Department"
+   }
+  },
+  "width": 1000,
+  "height": 620,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__gap.model;return M.ref==='Male' && M.cmp==='Female' && Math.abs(M.G.mean-0.15133563663609903)<1e-9 && Math.abs(M.G.median-0.15534254299407946)<1e-9 && Math.abs(M.G.bmedian-0.3432890270596072)<1e-9 && Math.abs(M.C.bshare-0.6265356265356266)<1e-9 && Math.abs(M.qs[3].cmp/M.qs[3].n-0.3691275167785235)<1e-9 && M.excluded===12})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": ".seg",
+    "nth": 1
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": ".seg",
+    "nth": 1
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "click": "tr.g",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     990,
+     8
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Working pattern",
+     "operator": "=",
+     "value": "Full-time"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__gap.model.rows.length<1600",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     620
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "swap",
+  "data": "sample-data/employees.csv",
+  "options": {
+   "items": {
+    "group": "Gender",
+    "pay": "Hourly pay",
+    "bonus": "Bonus paid",
+    "breakdown": "Department",
+    "reference": "Female",
+    "comparison": "Male"
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__gap.model.ref==='Female' && window.__gap.model.G.median<0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "onegroup",
+  "data": "sample-data/employees.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Gender",
+   "operator": "=",
+   "value": "Male"
+  },
+  "options": {
+   "items": {
+    "group": "Gender",
+    "pay": "Hourly pay",
+    "bonus": "Bonus paid",
+    "breakdown": "Department"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "Only one group"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Gender",
+    "type": "TEXT"
+   },
+   {
+    "name": "Hourly pay",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "group": "Gender",
+    "pay": "Hourly pay"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/employees.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Groups"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "group": "Sex",
+    "pay": "Rate",
+    "bonus": "Bonus",
+    "breakdown": "Site"
+   }
+  },
+  "width": 1100,
+  "height": 700,
+  "wait": 8000,
+  "actions": [
+   {
+    "eval": "window.__gap.model.ref==='M' && window.__gap.model.cmp==='F' && window.__gap.model.rows.length===200000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/employees.csv",
+  "options": {
+   "items": {
+    "group": "Gender",
+    "pay": "Hourly pay",
+    "bonus": "Bonus paid"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

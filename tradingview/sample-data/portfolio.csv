@@ -1,0 +1,10 @@
+Symbol,Company,Sector,Region,Holding
+NASDAQ:AAPL,Apple,Technology,North America,29900
+NYSE:KO,Coca-Cola,Consumer staples,North America,35800
+NYSE:JNJ,Johnson & Johnson,Health care,North America,55800
+NYSE:NKE,Nike,Consumer discretionary,North America,30600
+NYSE:DIS,Walt Disney,Communication services,North America,32900
+EURONEXT:MC,LVMH,Consumer discretionary,Europe,37300
+EURONEXT:AIR,Airbus,Industrials,Europe,15200
+NYSE:TM,Toyota (US listing),Consumer discretionary,Asia,33200
+BINANCE:BTCUSDT,Bitcoin (in US tether),Crypto,Global,39600

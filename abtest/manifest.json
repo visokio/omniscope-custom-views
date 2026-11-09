@@ -1,0 +1,208 @@
+{
+  "name": "A/B Test",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "a/b test",
+    "experiment",
+    "conversion",
+    "significance",
+    "uplift",
+    "statistics",
+    "marketing",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "variant": {
+        "displayName": "Variants",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Which version each visitor, customer or unit was given, e.g. Variant, Arm, Test group"
+      },
+      "outcome": {
+        "displayName": "Outcome",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "1 or 0 for a conversion, or a value such as Order value or Time on site"
+      },
+      "segment": {
+        "displayName": "Break down by",
+        "type": "FIELD",
+        "detail": "Optional: show the uplift within each group, e.g. Device or Customer type"
+      },
+      "control": {
+        "displayName": "Control",
+        "type": "TEXT",
+        "detail": "Name of the control variant (default: one named like control, current or A, otherwise the first)"
+      },
+      "kind": {
+        "displayName": "Outcome is",
+        "type": "CHOICE",
+        "values": [
+          "AUTO",
+          "CONVERSION",
+          "AVERAGE"
+        ],
+        "displayValues": [
+          "Automatic",
+          "A conversion (1 or 0)",
+          "A value (compare averages)"
+        ],
+        "detail": "Automatic treats outcomes that are all 0 or 1 as conversions"
+      },
+      "better": {
+        "displayName": "Better is",
+        "type": "CHOICE",
+        "values": [
+          "HIGHER",
+          "LOWER"
+        ],
+        "displayValues": [
+          "Higher",
+          "Lower (e.g. bounce rate, cost)"
+        ],
+        "detail": "Direction of improvement"
+      },
+      "confidence": {
+        "displayName": "Confidence",
+        "type": "CHOICE",
+        "values": [
+          "90",
+          "95",
+          "99"
+        ],
+        "displayValues": [
+          "90%",
+          "95%",
+          "99%"
+        ],
+        "detail": "Confidence level for intervals and significance (default 95%)"
+      },
+      "adjust": {
+        "displayName": "Adjust for several variants",
+        "type": "TOGGLE",
+        "detail": "Bonferroni correction when more than one variant is compared with the control"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "variant",
+        "outcome",
+        "segment"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Experiment",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "variant",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "outcome",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "segment",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "control",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Statistics",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "kind",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "better",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "confidence",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "adjust",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "kind": "AUTO",
+      "better": "HIGHER",
+      "confidence": "95",
+      "adjust": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 200
+  }
+}

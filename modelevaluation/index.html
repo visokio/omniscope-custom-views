@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; overflow: hidden; }
+        #main { position: absolute; inset: 0; display: flex; flex-direction: column; overflow: auto; }
+        #top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 8px 12px; border-bottom: 1px solid #e1e0d9; }
+        #top label { color: #52514e; display: flex; align-items: center; gap: 8px; }
+        #thr { width: 180px; accent-color: #2a78d6; }
+        #thrv { font-weight: bold; font-variant-numeric: tabular-nums; min-width: 40px; }
+        .m { color: #52514e; margin-right: 6px; } .m b { color: #0b0b0b; font-size: 14px; margin-right: 3px; font-variant-numeric: tabular-nums; }
+        #grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; min-height: 420px; }
+        body.narrow #grid { grid-template-columns: 1fr; grid-template-rows: repeat(4, 300px); }
+        .panel { position: relative; border-right: 1px solid #eeede8; border-bottom: 1px solid #eeede8; min-height: 0; }
+        .panel h4 { position: absolute; left: 12px; top: 6px; margin: 0; font-size: 12px; }
+        .panel .sub { position: absolute; left: 12px; top: 22px; color: #898781; font-size: 10.5px; }
+        .panel svg { position: absolute; left: 0; top: 0; }
+        .axis text { fill: #898781; font-size: 10px; } .axis path, .axis line { stroke: #c3c2b7; } .grid line { stroke: #eeede8; } .grid path { display: none; }
+        #cm { position: absolute; left: 12px; right: 12px; top: 40px; bottom: 10px; display: grid; grid-template-columns: 90px 1fr 1fr; grid-template-rows: 26px 1fr 1fr 34px; gap: 4px; }
+        #cm .h { display: flex; align-items: flex-end; justify-content: center; color: #52514e; font-size: 11px; text-align: center; }
+        #cm .rh { display: flex; align-items: center; justify-content: flex-end; color: #52514e; font-size: 11px; text-align: right; padding-right: 6px; }
+        #cm .cell { border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; padding: 4px; }
+        #cm .cell:hover { outline: 2px solid #0b0b0b; outline-offset: -2px; }
+        #cm .cell.sel { outline: 2px dashed #2161D9; outline-offset: -2px; }
+        #cm .cell b { font-size: 20px; font-variant-numeric: tabular-nums; }
+        #cm .cell span { font-size: 11px; }
+        #cm .foot { grid-column: 2 / 4; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: center; color: #52514e; font-size: 11px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="top"><label>Threshold <input id="thr" type="range" min="0" max="1" step="0.001"><span id="thrv"></span></label><span id="metrics"></span></div>
+    <div id="grid">
+        <div class="panel" id="pRoc"><svg></svg><h4>ROC curve</h4><div class="sub" id="aucSub"></div></div>
+        <div class="panel" id="pCm"><h4>Confusion matrix at the threshold</h4><div class="sub">Click a cell to select those records</div><div id="cm"></div></div>
+        <div class="panel" id="pDist"><svg></svg><h4>Score distribution by actual outcome</h4><div class="sub">Drag the threshold line or use the slider</div></div>
+        <div class="panel" id="pGain"><svg></svg><h4>Cumulative gains</h4><div class="sub" id="gainSub"></div></div>
+    </div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var POS = "#2a78d6", NEG = "#898781", GOOD = ["#cde2fb", "#256abf"], BAD = ["#fbe0d4", "#d95926"], SELECT = "#2161D9";
+    var S = { gen: 0, sel: null, thr: null };
+    window.__model = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var pct = function (v) { return isFinite(v) ? (v * 100).toFixed(1) + "%" : "n/a"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function q(query) { return new Promise(function (res, rej) { omniscope.view.queryBuilder().table(query).on("load", function (e) { res(e.data); }).on("error", function (e) { rej(e.data); }).execute(); }); }
+    function withFilter(query, extra) { var f = omniscope.view.context().dataConfig.filter, fs = []; if (f && (!f.filters || f.filters.length)) fs.push(f); (extra || []).forEach(function (x) { fs.push(x); }); if (fs.length) query.filter = fs.length === 1 ? fs[0] : { type: "AND", filters: fs }; return query; }
+    function niceStep(raw) { var p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), act = fld(o.actual), sc = fld(o.score);
+        if (!act || !sc) { message("Choose the Actual outcome field and the Predicted score field."); return; }
+        var gen = ++S.gen; omniscope.view.busy(true);
+        var nn = { type: "FIELD_VALUE", inputField: sc, operator: "!=", value: null };
+        Promise.all([
+            q(withFilter({ measures: [{ inputField: sc, function: "MIN", name: "lo" }, { inputField: sc, function: "MAX", name: "hi" }, { function: "RECORD_COUNT", name: "n" }] }, [nn])),
+            q(withFilter({ groupings: [{ inputField: act, type: "UNIQUE_VALUES" }], measures: [{ function: "RECORD_COUNT", name: "n" }], range: { start: 0, length: 50 } }, [nn]))
+        ]).then(function (r) {
+            if (gen !== S.gen) return;
+            var lo = r[0].records[0][0], hi = r[0].records[0][1], classes = r[1].records.filter(function (x) { return x[0] !== null; });
+            if (!r[0].records[0][2] || typeof lo !== "number") { omniscope.view.busy(false); S.model = null; message("No data to show. Check the filters."); return; }
+            if (classes.length < 2) { omniscope.view.busy(false); S.model = null; message("Actual outcome needs two classes (it has " + classes.length + ")."); return; }
+            var posRaw = pickPositive(classes, o.positive);
+            var bins = Math.max(20, Math.min(1000, +o.bins || 100)), step = niceStep(((hi - lo) || 1) / bins), lo0 = Math.floor(lo / step) * step;
+            return q(withFilter({ groupings: [{ inputField: act, type: "UNIQUE_VALUES" }, { inputField: sc, type: "HISTOGRAM", histogramInterval: step }], measures: [{ function: "RECORD_COUNT", name: "n" }], range: { start: 0, length: 200000 } }, [nn])).then(function (h) {
+                if (gen !== S.gen) return; omniscope.view.busy(false);
+                build(h.records, posRaw, lo0, hi, step, classes); draw();
+            });
+        }).catch(function (e) { omniscope.view.busy(false); omniscope.view.error((e && e.message) || "Query failed", e); });
+    }
+    function pickPositive(classes, wanted) {
+        var vals = classes.map(function (c) { return c[0]; });
+        if (wanted !== undefined && wanted !== null && String(wanted).trim() !== "") { var w = String(wanted).trim().toLowerCase(), m = vals.find(function (v) { return String(v).toLowerCase() === w; }); if (m !== undefined) return m; }
+        var pref = ["1", "yes", "true", "y", "positive", "churned", "fraud", "default"], hit = vals.find(function (v) { return pref.indexOf(String(v).toLowerCase()) >= 0; });
+        if (hit !== undefined) return hit;
+        return classes.slice().sort(function (a, b) { return a[1] - b[1]; })[0][0];
+    }
+    function build(recs, posRaw, lo, hi, step, classes) {
+        var nb = Math.max(1, Math.round((hi - lo) / step) + 1), pos = new Float64Array(nb), neg = new Float64Array(nb);
+        recs.forEach(function (x) { var b = x[1], l = b && typeof b === "object" ? b.lower : b, i = Math.round((l - lo) / step); if (i < 0 || i >= nb) return; if (String(x[0]) === String(posRaw)) pos[i] += x[2]; else neg[i] += x[2]; });
+        var P = d3.sum(pos), N = d3.sum(neg);
+        // cumulative from the top: predicted positive if score >= edge
+        var tp = new Float64Array(nb + 1), fp = new Float64Array(nb + 1);
+        for (var i = nb - 1; i >= 0; i--) { tp[i] = tp[i + 1] + pos[i]; fp[i] = fp[i + 1] + neg[i]; }
+        var roc = [], gains = []; for (i = nb; i >= 0; i--) { roc.push([N ? fp[i] / N : 0, P ? tp[i] / P : 0]); gains.push([(tp[i] + fp[i]) / (P + N), P ? tp[i] / P : 0]); }
+        var auc = 0; for (i = 1; i < roc.length; i++) auc += (roc[i][0] - roc[i - 1][0]) * (roc[i][1] + roc[i - 1][1]) / 2;
+        var ks = d3.max(roc, function (p) { return p[1] - p[0]; });
+        var negRaw = classes.map(function (c) { return c[0]; }).filter(function (v) { return String(v) !== String(posRaw); });
+        S.model = { pos: pos, neg: neg, P: P, N: N, tp: tp, fp: fp, lo: lo, step: step, nb: nb, roc: roc, gains: gains, auc: auc, ks: ks, posRaw: posRaw, negRaw: negRaw, fields: { actual: fld(it().actual), score: fld(it().score) } };
+        var o = it(), t0 = o.threshold !== undefined && o.threshold !== null && o.threshold !== "" && !isNaN(+o.threshold) ? +o.threshold : (lo + hi >= 0.2 && hi <= 1.0001 && lo >= -0.0001 ? 0.5 : (lo + hi) / 2);
+        if (S.thr === null || S.thrSource !== JSON.stringify([o.threshold, S.model.fields])) { S.thr = t0; S.thrSource = JSON.stringify([o.threshold, S.model.fields]); }
+        var sl = document.getElementById("thr"); sl.min = String(lo); sl.max = String(lo + nb * step); sl.step = String(step); sl.value = String(S.thr);
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta.cell : null;
+    }
+    function edgeIndex(t) { var M = S.model; return Math.max(0, Math.min(M.nb, Math.round((t - M.lo) / M.step))); }
+    function counts() { var M = S.model, k = edgeIndex(S.thr), TP = M.tp[k], FP = M.fp[k]; return { TP: TP, FP: FP, FN: M.P - TP, TN: M.N - FP, k: k, t: M.lo + k * M.step }; }
+
+    function draw() {
+        var M = S.model; if (!M) return; message(null); var intro = introDone();
+        document.body.classList.toggle("narrow", window.innerWidth < 720);
+        var c = counts(), acc = (c.TP + c.TN) / (M.P + M.N), prec = c.TP / (c.TP + c.FP), rec = c.TP / (c.TP + c.FN), spec = c.TN / (c.TN + c.FP), f1 = 2 * prec * rec / (prec + rec);
+        document.getElementById("thrv").textContent = (+c.t.toPrecision(3)).toString();
+        document.getElementById("metrics").innerHTML = ['<span class="m"><b>' + M.auc.toFixed(3) + '</b>AUC</span>', '<span class="m"><b>' + pct(acc) + '</b>accuracy</span>', '<span class="m"><b>' + pct(prec) + '</b>precision</span>', '<span class="m"><b>' + pct(rec) + '</b>recall</span>', '<span class="m"><b>' + (isFinite(f1) ? f1.toFixed(3) : "n/a") + '</b>F1</span>'].join("");
+        document.getElementById("aucSub").textContent = "AUC " + M.auc.toFixed(3) + ", KS " + M.ks.toFixed(3) + ". Positive class: " + M.posRaw;
+        drawRoc(c); drawDist(c); drawGain(c); drawCm(c);
+        if (intro) { linesIn(d3.select("#grid"), 1300); fadeIn(d3.selectAll("#pDist rect"), 500, 3); fadeCss(d3.selectAll("#cm .cell"), 400, 90); }
+    }
+    function frame(id) { var el = document.getElementById(id), W = el.clientWidth, H = el.clientHeight, svg = d3.select(el).select("svg").attr("width", W).attr("height", H); svg.selectAll("*").remove(); return { svg: svg, W: W, H: H, m: { l: 44, r: 16, t: 56, b: 30 } }; }
+    function axes(f, x, y, xl, yl, fmtx, fmty) {
+        f.svg.append("g").attr("class", "grid").attr("transform", "translate(" + f.m.l + ",0)").call(d3.axisLeft(y).ticks(5).tickSize(-(f.W - f.m.l - f.m.r)).tickFormat(""));
+        f.svg.append("g").attr("class", "axis").attr("transform", "translate(" + f.m.l + ",0)").call(d3.axisLeft(y).ticks(5).tickFormat(fmty));
+        f.svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (f.H - f.m.b) + ")").call(d3.axisBottom(x).ticks(5).tickFormat(fmtx));
+        f.svg.append("text").attr("x", f.W - f.m.r).attr("y", f.H - 4).attr("text-anchor", "end").attr("fill", "#52514e").attr("font-size", 10).text(xl);
+        f.svg.append("text").attr("x", f.m.l + 4).attr("y", f.m.t + 10).attr("fill", "#52514e").attr("font-size", 10).text(yl);
+    }
+    function drawRoc(c) {
+        var M = S.model, f = frame("pRoc"), x = d3.scaleLinear().range([f.m.l, f.W - f.m.r]), y = d3.scaleLinear().range([f.H - f.m.b, f.m.t]);
+        axes(f, x, y, "False positive rate", "True positive rate", d3.format(".0%"), d3.format(".0%"));
+        f.svg.append("line").attr("x1", x(0)).attr("y1", y(0)).attr("x2", x(1)).attr("y2", y(1)).attr("stroke", "#c3c2b7").attr("stroke-dasharray", "4,3");
+        f.svg.append("path").datum(M.roc).attr("fill", POS).attr("fill-opacity", 0.08).attr("d", d3.area().x(function (p) { return x(p[0]); }).y0(y(0)).y1(function (p) { return y(p[1]); }));
+        f.svg.append("path").datum(M.roc).attr("fill", "none").attr("stroke", POS).attr("stroke-width", 2).attr("d", d3.line().x(function (p) { return x(p[0]); }).y(function (p) { return y(p[1]); }));
+        var fpr = M.N ? c.FP / M.N : 0, tpr = M.P ? c.TP / M.P : 0;
+        f.svg.append("circle").attr("cx", x(fpr)).attr("cy", y(tpr)).attr("r", 5.5).attr("fill", POS).attr("stroke", "#fcfcfb").attr("stroke-width", 2);
+        f.svg.append("text").attr("x", x(fpr) + 9).attr("y", y(tpr) + 4).attr("font-size", 10.5).attr("fill", "#0b0b0b").text("threshold " + (+c.t.toPrecision(3)));
+    }
+    function drawGain(c) {
+        var M = S.model, f = frame("pGain"), x = d3.scaleLinear().range([f.m.l, f.W - f.m.r]), y = d3.scaleLinear().range([f.H - f.m.b, f.m.t]);
+        axes(f, x, y, "Share of records targeted, highest scores first", "Share of positives found", d3.format(".0%"), d3.format(".0%"));
+        f.svg.append("line").attr("x1", x(0)).attr("y1", y(0)).attr("x2", x(1)).attr("y2", y(1)).attr("stroke", "#c3c2b7").attr("stroke-dasharray", "4,3");
+        var base = M.P / (M.P + M.N);
+        f.svg.append("path").datum([[0, 0], [base, 1], [1, 1]]).attr("fill", "none").attr("stroke", "#c3c2b7").attr("stroke-width", 1).attr("d", d3.line().x(function (p) { return x(p[0]); }).y(function (p) { return y(p[1]); }));
+        f.svg.append("path").datum(M.gains).attr("fill", "none").attr("stroke", POS).attr("stroke-width", 2).attr("d", d3.line().x(function (p) { return x(p[0]); }).y(function (p) { return y(p[1]); }));
+        var share = (c.TP + c.FP) / (M.P + M.N), found = M.P ? c.TP / M.P : 0;
+        f.svg.append("circle").attr("cx", x(share)).attr("cy", y(found)).attr("r", 5.5).attr("fill", POS).attr("stroke", "#fcfcfb").attr("stroke-width", 2);
+        var lift = share > 0 ? found / share : 0;
+        document.getElementById("gainSub").textContent = "Targeting " + pct(share) + " of records finds " + pct(found) + " of positives (lift " + lift.toFixed(2) + "). Grey: random and perfect models.";
+    }
+    function drawDist(c) {
+        var M = S.model, f = frame("pDist"); f.m.t = 58;
+        var x = d3.scaleLinear().domain([M.lo, M.lo + M.nb * M.step]).range([f.m.l, f.W - f.m.r]);
+        var mx = Math.max(d3.max(M.pos), d3.max(M.neg)) || 1, y = d3.scaleLinear().domain([0, mx]).nice().range([f.H - f.m.b, f.m.t]);
+        axes(f, x, y, "Predicted score", "Records", function (v) { return (+v.toPrecision(3)).toString(); }, d3.format("~s"));
+        var area = function (arr) { var pts = [[x(M.lo), y(0)]]; for (var i = 0; i < M.nb; i++) { pts.push([x(M.lo + i * M.step), y(arr[i])]); pts.push([x(M.lo + (i + 1) * M.step), y(arr[i])]); } pts.push([x(M.lo + M.nb * M.step), y(0)]); return pts; };
+        f.svg.append("path").attr("d", d3.line()(area(M.neg))).attr("fill", NEG).attr("fill-opacity", 0.35).attr("stroke", NEG).attr("stroke-width", 1);
+        f.svg.append("path").attr("d", d3.line()(area(M.pos))).attr("fill", POS).attr("fill-opacity", 0.4).attr("stroke", POS).attr("stroke-width", 1);
+        var lg = f.svg.append("g").attr("transform", "translate(" + (f.W - f.m.r - 170) + "," + (f.m.t - 2) + ")");
+        [[POS, "Actual: " + M.posRaw], [NEG, "Actual: " + (M.negRaw.length === 1 ? M.negRaw[0] : "other")]].forEach(function (e, i) { lg.append("rect").attr("x", i * 90).attr("y", -8).attr("width", 10).attr("height", 10).attr("rx", 2).attr("fill", e[0]).attr("opacity", 0.7); lg.append("text").attr("x", i * 90 + 14).attr("y", 1).attr("font-size", 10.5).attr("fill", "#52514e").text(String(e[1]).slice(0, 12)); });
+        var tx = x(c.t), line = f.svg.append("g").style("cursor", "ew-resize");
+        line.append("line").attr("x1", tx).attr("x2", tx).attr("y1", f.m.t - 4).attr("y2", f.H - f.m.b).attr("stroke", "#0b0b0b").attr("stroke-width", 2);
+        line.append("rect").attr("x", tx - 8).attr("y", f.m.t - 4).attr("width", 16).attr("height", f.H - f.m.b - f.m.t + 4).attr("fill", "transparent");
+        line.call(d3.drag().on("drag", function (ev) { S.thr = Math.max(M.lo, Math.min(M.lo + M.nb * M.step, x.invert(ev.x))); document.getElementById("thr").value = String(S.thr); draw(); }));
+    }
+    function drawCm(c) {
+        var M = S.model, el = document.getElementById("cm"), tot = M.P + M.N;
+        var cell = function (key, n, good, label) {
+            var share = tot ? n / tot : 0, col = d3.interpolateRgb((good ? GOOD : BAD)[0], (good ? GOOD : BAD)[1])(Math.min(1, Math.sqrt(share) * 1.4)), dark = d3.lab(col).l < 60;
+            return '<div class="cell' + (S.sel === key ? " sel" : "") + '" data-k="' + key + '" style="background:' + col + ';color:' + (dark ? "#fff" : "#0b0b0b") + '"><b>' + Math.round(n).toLocaleString() + '</b><span>' + label + ' &middot; ' + pct(share) + '</span></div>';
+        };
+        var pl = esc(M.posRaw), nl = esc(M.negRaw.length === 1 ? M.negRaw[0] : "other");
+        el.innerHTML = '<div></div><div class="h">Predicted ' + pl + '</div><div class="h">Predicted ' + nl + '</div>' +
+            '<div class="rh">Actual ' + pl + '</div>' + cell("TP", c.TP, true, "true positives") + cell("FN", c.FN, false, "false negatives") +
+            '<div class="rh">Actual ' + nl + '</div>' + cell("FP", c.FP, false, "false positives") + cell("TN", c.TN, true, "true negatives") +
+            '<div class="foot"><span>Specificity ' + pct(c.TN / (c.TN + c.FP)) + '</span><span>Positive rate ' + pct(M.P / tot) + '</span><span>Flagged ' + pct((c.TP + c.FP) / tot) + '</span></div>';
+        Array.prototype.forEach.call(el.querySelectorAll(".cell"), function (d) { d.addEventListener("click", function (e) { e.stopPropagation(); selectCell(d.getAttribute("data-k")); }); });
+    }
+    function selectCell(k) {
+        var M = S.model, F = M.fields, t = counts().t;
+        var actual = k === "TP" || k === "FN" ? { type: "FIELD_VALUE", inputField: F.actual, operator: "=", value: M.posRaw } : { type: "FIELD_VALUE", inputField: F.actual, operator: "!=", value: M.posRaw };
+        var pred = k === "TP" || k === "FP" ? { type: "FIELD_VALUE", inputField: F.score, operator: ">=", value: +t.toPrecision(8) } : { type: "FIELD_VALUE", inputField: F.score, operator: "<", value: +t.toPrecision(8) };
+        S.sel = k;
+        omniscope.view.context().viewSelection = { filter: { type: "AND", filters: [actual, pred] }, meta: { cell: k } };
+        omniscope.view.updated(); draw();
+    }
+    window.__model.selectCell = selectCell;
+    window.__model.setThreshold = function (t) { S.thr = t; draw(); };
+    window.__model.counts = counts;
+    document.getElementById("thr").addEventListener("input", function () { S.thr = +this.value; draw(); });
+    document.getElementById("top").addEventListener("click", function (e) { e.stopPropagation(); });
+    document.body.addEventListener("click", function () { if (S.sel) { S.sel = null; draw(); } omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/products.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth %",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Revenue (m)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Business unit",
+     "type": "UNIQUE_VALUES"
+    },
+    "xSplit": "TARGET",
+    "xTarget": 1,
+    "ySplit": "TARGET",
+    "yTarget": 5,
+    "preset": "BCG",
+    "logX": true,
+    "labels": true
+   }
+  },
+  "width": 1060,
+  "height": 560,
+  "wait": 1200,
+  "showcaseHeight": 560,
+  "caption": "Live: 40 illustrative product lines on a growth-share matrix, split at a relative share of 1 and 5% market growth, sized by revenue. Hover a bubble or a quadrant; click to select.",
+  "expect": {
+   "selector": "circle.dot",
+   "min": 40
+  }
+ },
+ {
+  "name": "ipa",
+  "showcase": true,
+  "data": "sample-data/customer_feedback.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Attribute",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Satisfaction",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Importance",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Responses",
+     "function": "SUM"
+    },
+    "xSplit": "MEAN",
+    "ySplit": "MEAN",
+    "preset": "IPA",
+    "labels": true
+   }
+  },
+  "width": 1060,
+  "height": 520,
+  "wait": 1200,
+  "showcaseHeight": 520,
+  "caption": "Live: an illustrative importance-performance analysis of 16 service attributes, split at the averages.",
+  "expect": {
+   "selector": "circle.dot",
+   "min": 16
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/products.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth %",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Revenue (m)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Business unit",
+     "type": "UNIQUE_VALUES"
+    },
+    "xSplit": "TARGET",
+    "xTarget": 1,
+    "ySplit": "TARGET",
+    "yTarget": 5,
+    "preset": "BCG",
+    "logX": true,
+    "labels": true
+   }
+  },
+  "width": 1000,
+  "height": 540,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "window.__quad.model.pts.filter(function(p){return p.q===0}).length===8 && window.__quad.model.cx===1",
+    "expectTruthy": true
+   },
+   {
+    "hover": "circle.dot",
+    "nth": 3
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "circle.dot",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "window.__quad.selectQuad(0)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.filters.length===8",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     500,
+     8
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Business unit",
+     "operator": "=",
+     "value": "Digital"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__quad.model.pts.length<20",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     520,
+     420
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "median",
+  "data": "sample-data/products.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth %",
+     "function": "MEAN"
+    },
+    "xSplit": "MEDIAN",
+    "xTarget": 1,
+    "ySplit": "MEDIAN",
+    "yTarget": 5,
+    "preset": "NONE",
+    "logX": false,
+    "labels": true
+   }
+  },
+  "width": 800,
+  "height": 460,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "Math.abs(window.__quad.model.cx-0.9650000000000001)<1e-9",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "custom",
+  "data": "sample-data/products.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth %",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Revenue (m)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Business unit",
+     "type": "UNIQUE_VALUES"
+    },
+    "xSplit": "TARGET",
+    "xTarget": 1,
+    "ySplit": "TARGET",
+    "yTarget": 5,
+    "preset": "CUSTOM",
+    "logX": true,
+    "labels": true,
+    "qTR": "Grow",
+    "qTL": "Fix",
+    "qBR": "Harvest",
+    "qBL": "Exit"
+   }
+  },
+  "width": 800,
+  "height": 460,
+  "wait": 1200,
+  "expect": {
+   "text": "Harvest"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Product line",
+    "type": "TEXT"
+   },
+   {
+    "name": "Market growth %",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Relative market share",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth %",
+     "function": "MEAN"
+    },
+    "xSplit": "TARGET",
+    "xTarget": 1,
+    "ySplit": "TARGET",
+    "yTarget": 5,
+    "preset": "BCG",
+    "logX": true,
+    "labels": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/products.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Items"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/products.csv",
+  "options": {
+   "items": {
+    "item": {
+     "inputField": "Product line",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth %",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Revenue (m)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Business unit",
+     "type": "UNIQUE_VALUES"
+    },
+    "xSplit": "TARGET",
+    "xTarget": 1,
+    "ySplit": "TARGET",
+    "yTarget": 5,
+    "preset": "BCG",
+    "logX": true,
+    "labels": false
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1200
+ }
+]

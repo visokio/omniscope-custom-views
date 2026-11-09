@@ -22,38 +22,40 @@
         "displayName": "Colour",
         "iconName": "visokio-option-icon:colour-measure",
         "type": "MEASURE",
-        "detail": "Categorical value to colour the markers by"
+        "detail": "Colours the dots by category: for example Region with the Singleton function, which gives each dot its one Region"
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
+        "detail": "One chart per value, side by side",
         "list": true
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
+        "detail": "One chart per value, one above the other",
         "list": true
       },
       "split": {
         "displayName": "Split",
         "type": "GROUPING",
         "mandatory": true,
-        "detail": "Field to split/group markers by"
+        "detail": "One dot per value of this grouping, for example per Store"
       },
       "title": {
         "displayName": "Tooltip",
         "type": "MEASURE",
-        "detail": "Tooltip text to show on the nodes when hovering"
+        "detail": "Text shown first in a dot's tooltip, for example a name field with the Singleton function. If empty, the Split value is shown"
       },
       "x": {
         "displayName": "X",
         "type": "MEASURE",
-        "detail": "X coordinate of the marker"
+        "detail": "Position along the horizontal axis, for example the sum of Sales growth. If empty, the dots are packed around the centre"
       },
       "y": {
         "displayName": "Y",
         "type": "MEASURE",
-        "detail": "Y coordinate of the marker"
+        "detail": "Position along the vertical axis. If empty, the dots are packed around the middle line"
       }
     },
     "structure": {

@@ -1,0 +1,1122 @@
+{
+  "title": "JSON Schema for QueryApi",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "Definitions:",
+  "properties": {
+    "QueryApi.SchemaFieldsQueryOutput": {
+      "$ref": "#/definitions/QueryApi.SchemaFieldsQueryOutput"
+    },
+    "QueryApi.SchemaField": {
+      "$ref": "#/definitions/QueryApi.SchemaField"
+    },
+    "QueryApi.SimpleQuery": {
+      "$ref": "#/definitions/QueryApi.SimpleQuery"
+    },
+    "QueryApi.TableQueryOutput": {
+      "$ref": "#/definitions/QueryApi.TableQueryOutput"
+    },
+    "QueryApi.AppendOperation": {
+      "$ref": "#/definitions/QueryApi.AppendOperation"
+    },
+    "QueryApi.IndexedSource": {
+      "$ref": "#/definitions/QueryApi.IndexedSource"
+    },
+    "QueryApi.AggregateOperation": {
+      "$ref": "#/definitions/QueryApi.AggregateOperation"
+    },
+    "QueryApi.RecordFilterOperation": {
+      "$ref": "#/definitions/QueryApi.RecordFilterOperation"
+    },
+    "QueryApi.DefaultSource": {
+      "$ref": "#/definitions/QueryApi.DefaultSource"
+    },
+    "QueryApi.NamedSource": {
+      "$ref": "#/definitions/QueryApi.NamedSource"
+    },
+    "QueryApi.FieldMappingOperation": {
+      "$ref": "#/definitions/QueryApi.FieldMappingOperation"
+    },
+    "QueryApi.JoinOperation": {
+      "$ref": "#/definitions/QueryApi.JoinOperation"
+    },
+    "QueryApi.RangeOperation": {
+      "$ref": "#/definitions/QueryApi.RangeOperation"
+    },
+    "QueryApi.SortOperation": {
+      "$ref": "#/definitions/QueryApi.SortOperation"
+    },
+    "QueryApi.FormulaQueryInput": {
+      "$ref": "#/definitions/QueryApi.FormulaQueryInput"
+    },
+    "QueryApi.FormulaQueryOutput": {
+      "$ref": "#/definitions/QueryApi.FormulaQueryOutput"
+    }
+  },
+  "definitions": {
+    "QueryApi.AggregateOperation": {
+      "title": "QueryApi.AggregateOperation",
+      "description": "Describes a single layer within a query for aggregating an input. Field order in output will be: (1) grouping fields; (2) measure fields\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.AggregateOperation'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "groupings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.Grouping"
+          },
+          "description": "The list of groupings to apply to the input, zero/missing meaning roll-up to a single record.\nAliases: grouping"
+        },
+        "measures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.Measure"
+          },
+          "description": "The list of functions to calculate for each group result, which aggregates data from all records in that group. Can be omitted if only group value combinations are required.\nAliases: measure"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.FormulaVariable"
+          },
+          "description": "The list of formula variable values that are available for use within formula measures."
+        },
+        "input": {
+          "type": "object",
+          "description": "The single input to this operation. Optional. For example, a SimpleQuery."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.AppendOperation": {
+      "title": "QueryApi.AppendOperation",
+      "description": "Describes a single layer within a query for appending multiple inputs. Field order in output will be: (1) source field, if relevant; (2) field names from first input; (3) field names from second input not already present; ...\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.AppendOperation'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "sourceFieldName": {
+          "type": "string",
+          "description": "Name of the optional source field. If populated the cells values will be populated 0, 1, 2, .... depending on which input table the record come from"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "The inputs into this operation. For example, each might be a SimpleQuery."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.DateFieldFormattingOptions": {
+      "title": "QueryApi.DateFieldFormattingOptions",
+      "description": "Describes how date values should be formatted\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.DateFieldFormattingOptions'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "description": "Specifies the pattern on how the date value should be formatted. e.g, yyyy-MM-dd'T'HH:mm:ss"
+        }
+      },
+      "required": [
+        "pattern"
+      ]
+    },
+    "QueryApi.DateRangeFieldFormattingOptions": {
+      "title": "QueryApi.DateRangeFieldFormattingOptions",
+      "description": "Describes a how field should be formatted when displayed\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.DateRangeFieldFormattingOptions'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "datePattern": {
+          "type": "string"
+        },
+        "justLower": {
+          "type": "boolean",
+          "description": "Example: true",
+          "default": false
+        },
+        "quarterFormattingPattern": {
+          "type": "string",
+          "enum": [
+            "Q",
+            "Q_YYYY"
+          ]
+        }
+      },
+      "required": [
+        "justLower"
+      ]
+    },
+    "QueryApi.DefaultSource": {
+      "title": "QueryApi.DefaultSource",
+      "description": "Describes the innermost layer within a query representing all data in the default source.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.DefaultSource'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.FormulaVariable"
+          },
+          "description": "The list of variable values used to customise the source."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.FieldMapping": {
+      "title": "QueryApi.FieldMapping",
+      "description": "Describes a mapping for an input field to its new name and other properties\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.FieldMapping'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the output field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace."
+        },
+        "inputField": {
+          "type": "string",
+          "description": "The name of the input field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace."
+        },
+        "customOrder": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number",
+                "description": "Example: 123.45"
+              },
+              {
+                "type": "string",
+                "format": "date-opt-time",
+                "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+              }
+            ]
+          },
+          "description": "Set a custom order to be applied when sorting by the field.\nValues not present in this list, but present in the data will be set after any of the specified value following the natural order.\nValues present in this list, but not present in the data will be ignored.\nIf a custom order is already defined for this field, This will take precedence.If null, the natural order will be applied when sorting by the output field (if no custom order already exists for the field).\nCustom order cannot be defined on range fields."
+        },
+        "formatting": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/QueryApi.NumericFieldFormattingOptions"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.DateFieldFormattingOptions"
+            }
+          ],
+          "description": "The formatting options for the output field.\nIf not null, this will override any any existing formatting options associated to the field.\nFormatting options will be propagated troughout the query dag, and they will instruct the client o how o format the field value.\n"
+        }
+      }
+    },
+    "QueryApi.FieldMappingOperation": {
+      "title": "QueryApi.FieldMappingOperation",
+      "description": "Describes a single layer within a query for mapping fields to include in the result. Field order in output will be: (1) mapping fields; (2) other input fields, if includeAllInputFields=true\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.FieldMappingOperation'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "mappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.FieldMapping"
+          },
+          "description": "The list of field mappings to include in the result. They are applied in order as defined."
+        },
+        "includeAllInputFields": {
+          "type": "boolean",
+          "description": "If false (default) it will only include the fields defined in the mappings. If true it will include all input fields not otherwise selected. The field order will be preserved and fields will be added after any mapping. If any input field omitted from mappings conflicts with a new field added with the same name, it will be invalid.\nExample: true"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.FormulaVariable"
+          },
+          "description": "The list of formula variable values that are available for use within formula fields."
+        },
+        "dependencyRules": {
+          "type": "string",
+          "enum": [
+            "DEPEND_UPON_INPUT",
+            "DEPEND_UPON_OUTPUT",
+            "AUTO"
+          ],
+          "default": "DEPEND_UPON_INPUT"
+        },
+        "input": {
+          "type": "object",
+          "description": "The single input to this operation. Optional. For example, a SimpleQuery."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.Filter": {
+      "title": "QueryApi.Filter",
+      "description": "Describes a single constraint (or a group of constraints with logical combination), equivalent to an SQL WHERE clause item.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.Filter'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "FIELD_VALUE",
+            "AND",
+            "OR",
+            "NOT",
+            "GEO_DISTANCE"
+          ],
+          "default": "FIELD_VALUE"
+        },
+        "inputField": {
+          "type": "string",
+          "description": "Relevant when #type is FIELD_VALUE only. The name of the input field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace.\nAliases: field"
+        },
+        "operator": {
+          "type": "string",
+          "enum": [
+            "=",
+            "EQUALS_IGNORE_CASE",
+            "!=",
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "IN",
+            "CONTAINS",
+            "CONTAINS_IGNORE_CASE"
+          ],
+          "description": "Relevant when #type is FIELD_VALUE only. Default EQUALS. Note that operators such as \">=\" implicitly exclude NULL values."
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.ValueRange"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number",
+                    "description": "Example: 123.45"
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-opt-time",
+                    "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+                  },
+                  {
+                    "$ref": "#/definitions/QueryApi.ValueRange"
+                  }
+                ]
+              }
+            }
+          ],
+          "description": "Relevant when #type is FIELD_VALUE only. The value to compare against, or for #operator IN, an array of values. Can be null for \"EQUALS null\" rule, or an array containing null for \"IN (..., null, ...)\" rule. Note that (e.g.) EQUALS(42) will match only 42 and will implicitly exclude all nulls; likewise NOT(EQUALS(42)) will match only 'not 42' so will implicitly include nulls and all other numbers. ValueRange objects can be used here to provide minumum and maximum bounds. Long values greater than 2^53 can be written as String to maintain precision.\nAliases: values"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.Filter"
+          },
+          "description": "Relevant when #type is AND, OR or NOT. The nested filters to combine in an AND or OR rule (can be empty for FULL or NONE selections respectively), or a single nested filter for a NOT rule.\nAliases: filter"
+        },
+        "geoDistance": {
+          "$ref": "#/definitions/QueryApi.GeoDistanceFilter",
+          "description": "Relevant when #type is GEO_DISTANCE only. The geographic-distance payload containing the coordinate field references, centre point, and maximum distance in kilometres."
+        }
+      }
+    },
+    "QueryApi.FormulaError": {
+      "title": "QueryApi.FormulaError",
+      "description": "Description of a single formula parse/prepare/eval error, for any endpoint that uses formulas. \n<a target='_blank' href='../schema-example.json?typeId=QueryApi.FormulaError'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "The user-displayable error message, with prefix+context+formula"
+        },
+        "formula": {
+          "type": "string",
+          "description": "The formula which was attempted, if knon"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "A prefix which classifies the type of error. Can be null."
+        },
+        "error": {
+          "type": "string",
+          "description": "The user-displayable error message, without context. If null, display #message."
+        },
+        "start": {
+          "type": "integer",
+          "description": "The offset into the formula string, of the end of the part where the error relates to, if known\nExample: 345"
+        },
+        "end": {
+          "type": "integer",
+          "description": "The offset into the formula string, of the start of the part where the error relates to, if known\nExample: 345"
+        }
+      },
+      "required": [
+        "message"
+      ]
+    },
+    "QueryApi.FormulaQueryInput": {
+      "title": "QueryApi.FormulaQueryInput",
+      "description": "Request body for the /formula endpoint. Defines the configuration of a formula expression evaluation request.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.FormulaQueryInput'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "input": {
+          "type": "object",
+          "description": "The single input to this operation. Optional. For example, a SimpleQuery."
+        },
+        "formulas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The formulas to evaluate. This should be in the Omniscope formula syntax, which is similar to Excel formulae, with field references in [square brackets], e.g. SUBSET_SUM([a]) / 3. See https://help.visokio.com/support/solutions/articles/42000111298-functions-and-formulae-in-omniscope for a list of Omniscope formula functions, however not all are supported here. Note, unlike classic, zero-arg function names must always be followed by brackets, e.g. RAND()."
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.FormulaVariable"
+          },
+          "description": "The list of formula variable values that are available for use within the formula."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      },
+      "required": [
+        "formulas"
+      ]
+    },
+    "QueryApi.FormulaQueryOutput": {
+      "title": "QueryApi.FormulaQueryOutput",
+      "description": "Response body for the /formula endpoint. Contains the formula result or parse/validate/evaluation error.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.FormulaQueryOutput'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number",
+                "description": "Example: 123.45"
+              },
+              {
+                "type": "string",
+                "format": "date-opt-time",
+                "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+              },
+              {
+                "type": "boolean",
+                "description": "Example: true"
+              },
+              {
+                "$ref": "#/definitions/QueryApi.FormulaError"
+              }
+            ]
+          },
+          "description": "The formula result. Can be a String, number, Date or boolean."
+        }
+      },
+      "required": [
+        "results"
+      ]
+    },
+    "QueryApi.FormulaVariable": {
+      "title": "QueryApi.FormulaVariable",
+      "description": "A formula variable's current value, for a FieldMappingOperation\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.FormulaVariable'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The unique name of the variable. Note this is case insensitive unique and must not conflict with any field names."
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "boolean",
+              "description": "Example: true"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            }
+          ],
+          "description": "The variable value, of any type corresponding to {@link VariableDataType}; can be null."
+        },
+        "dataType": {
+          "type": "string",
+          "enum": [
+            "BOOLEAN",
+            "TEXT",
+            "NUMBER",
+            "DATE"
+          ],
+          "description": "The explicit data type of this variable. This is mandatory if value is null, because it cannot be inferred."
+        },
+        "nullable": {
+          "type": "boolean",
+          "description": "Example: true",
+          "default": true
+        },
+        "enableLiveQueryInjection": {
+          "type": "boolean",
+          "description": "Example: true",
+          "default": false
+        }
+      },
+      "required": [
+        "name",
+        "nullable",
+        "enableLiveQueryInjection"
+      ]
+    },
+    "QueryApi.GeoDistanceFilter": {
+      "title": "QueryApi.GeoDistanceFilter",
+      "description": "Geographic distance payload for {@link FilterType#GEO_DISTANCE} filters. Records must have their coordinate value within {@link #maxDistanceKm} kilometres of ({@link #centreLatitude}, {@link #centreLongitude }) as measured by the Spherical Law of Cosines.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.GeoDistanceFilter'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "latField": {
+          "type": "string",
+          "description": "Schema field containing the record's latitude in decimal degrees."
+        },
+        "lonField": {
+          "type": "string",
+          "description": "Schema field containing the record's longitude in decimal degrees."
+        },
+        "centreLatitude": {
+          "type": "number",
+          "description": "Centre point latitude in decimal degrees (valid range [-90, 90]).\nExample: 123.45"
+        },
+        "centreLongitude": {
+          "type": "number",
+          "description": "Centre point longitude in decimal degrees (valid range [-180, 180]).\nExample: 123.45"
+        },
+        "maxDistanceKm": {
+          "type": "number",
+          "description": "Maximum distance in kilometres (inclusive, must be >= 0). A value of 0 matches only records at the exact centre point.\nExample: 123.45"
+        }
+      },
+      "required": [
+        "latField",
+        "lonField",
+        "centreLatitude",
+        "centreLongitude",
+        "maxDistanceKm"
+      ]
+    },
+    "QueryApi.Grouping": {
+      "title": "QueryApi.Grouping",
+      "description": "Describes a single level/tier of grouping, similar an SQL GROUP BY condition or Omniscope \"Bar\" view's 'Split' option.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.Grouping'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "inputField": {
+          "type": "string",
+          "description": "The name of the input field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace.\nAliases: field"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "UNIQUE_VALUES",
+            "HISTOGRAM"
+          ],
+          "description": "The method for bucketing/grouping the data. UNIQUE_VALUES is comparable to GROUP BY in SQL.",
+          "default": "UNIQUE_VALUES"
+        },
+        "dateUnit": {
+          "type": "string",
+          "enum": [
+            "YEAR",
+            "QUARTER",
+            "MONTH",
+            "WEEK",
+            "DAY",
+            "HOUR",
+            "MINUTE",
+            "SECOND"
+          ],
+          "description": "Relevant when #type is HISTOGRAM and #inputField is a date type.\nIf the input field has some formatting options, these will be amended to drop no longer significant sections.\nIf the input field does not have formatting options, a new date formatting will be introduced with pattern 'yyyy-MM-dd hh:mm:ss'\n dropped to the unit specified.\nFor example, if the input field does not have a formatting and we are grouping by hour, the \n output field will have a date formatting options with pattern  dd/MM/yyyy HH"
+        },
+        "histogramInterval": {
+          "type": "number",
+          "description": "Required when #type is HISTOGRAM. The width of each histogram interval. For DATE fields, must be integer and also factors of 60 (for minutes/seconds), 24 (hours), 12 (months), precisely 1 (days), or any integer (years).\nExample: 123.45"
+        },
+        "fitToScreen": {
+          "type": "boolean",
+          "description": "Example: true"
+        },
+        "maxValuesForOthering": {
+          "type": "integer",
+          "description": "Example: 345"
+        },
+        "includeOther": {
+          "type": "boolean",
+          "description": "Example: true"
+        },
+        "maxSplits": {
+          "type": "integer",
+          "description": "Example: 345"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the output field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace."
+        }
+      }
+    },
+    "QueryApi.IndexedSource": {
+      "title": "QueryApi.IndexedSource",
+      "description": "Describes the innermost layer within a query representing all data in an indexed source.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.IndexedSource'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "type": "integer",
+          "description": "Example: 345",
+          "default": 0
+        },
+        "expectedDataGuid": {
+          "type": "string"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.FormulaVariable"
+          },
+          "description": "The list of variable values used to customise the source."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      },
+      "required": [
+        "index"
+      ]
+    },
+    "QueryApi.JoinCriteria": {
+      "title": "QueryApi.JoinCriteria",
+      "description": "Describes a join criteria. Fields joined must be of the same type, and in case of ranges they must be associated with the same range type, and interval\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.JoinCriteria'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "leftField": {
+          "type": "string",
+          "description": "The left field of a join."
+        },
+        "rightField": {
+          "type": "string",
+          "description": "The right field of a join."
+        }
+      }
+    },
+    "QueryApi.JoinOperation": {
+      "title": "QueryApi.JoinOperation",
+      "description": "Describes a single layer within a query for joining two inputs into one. Field order in output will be: (1) source field (if any); (2) common fields in criteria; (3) left fields not in criteria; (4) right fields not in criteria.If right fields non in criteria have the same name as a left field non in criteria, right fields will be renamed with the original name followed by a space and integer number (e.g., 'A', 'A 2', 'A 3' (if 'A 2' is already a left field)).\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.JoinOperation'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "left": {
+          "type": "object",
+          "description": "The left input to the join. For example, a SimpleQuery."
+        },
+        "right": {
+          "type": "object",
+          "description": "The right input to the join. For example, a SimpleQuery."
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.JoinCriteria"
+          },
+          "description": "The list of criteria to apply."
+        },
+        "leftMismatches": {
+          "type": "boolean",
+          "description": "Include left input mismatches in the result. False by default\nExample: true",
+          "default": false
+        },
+        "matches": {
+          "type": "boolean",
+          "description": "Include matches in the result. True by default\nExample: true",
+          "default": true
+        },
+        "rightMismatches": {
+          "type": "boolean",
+          "description": "Include right input mismatches in the result. False by default\nExample: true",
+          "default": false
+        },
+        "sourceFieldName": {
+          "type": "string",
+          "description": "Name of the optional source field. If populated, this will be a new field whose values indicate the table where records come from.\nIf the values of the criteria fields are only present in the left input, this will be set to Left\nIf the values of the criteria fields are only present in the right input this will be set to Right\nIf the values of the criteria fields are present in both left and right input this will be set to Left, Right\nThe field must be named in a way that it does not collide with any of the output fields."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      },
+      "required": [
+        "leftMismatches",
+        "matches",
+        "rightMismatches"
+      ]
+    },
+    "QueryApi.Measure": {
+      "title": "QueryApi.Measure",
+      "description": "Describes how to roll up numeric/date data, thereby producing an additional aggregated column in the output.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.Measure'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the output field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace.\nIf left unspecified a default name will be assigned as the name of the input field followed by the name of the function between parenthesis. It is a good practice to not, rely on this automatic name generation but use an explicit name where necessary"
+        },
+        "inputField": {
+          "type": "string",
+          "description": "Relevant when #function is a field-specific function such as SUM, MIN, MEAN. The name of the input field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace.\nAliases: field"
+        },
+        "weightField": {
+          "type": "string",
+          "description": "Relevant when #function is {@link MeasureFunction#MEAN} to specify a weighted mean."
+        },
+        "function": {
+          "type": "string",
+          "enum": [
+            "RECORD_COUNT",
+            "MIN",
+            "MAX",
+            "MEAN",
+            "SUM",
+            "SINGLETON",
+            "UNIQUE_VALUE_COUNT",
+            "STANDARD_DEVIATION",
+            "MEDIAN",
+            "LOWER_QUARTILE",
+            "UPPER_QUARTILE",
+            "PERCENTILE",
+            "MODE",
+            "EMPTY_COUNT",
+            "NON_EMPTY_COUNT",
+            "FORMULA"
+          ],
+          "description": "The aggregation function to roll up a series of values."
+        },
+        "percentileValue": {
+          "type": "number",
+          "description": "Must be populated if and only if the function is PERCENTILE. If populated its value must be between 0 and 100 inclusive.\n+The result of the measure will be the value of the field below which a this percentage of values will fall.\nFor example, if set to 20, the result of the measure will be the value below which 20% of the field values are found\nExample: 123.45"
+        },
+        "formula": {
+          "type": "string",
+          "description": "Relevant when #function is FORMULA only. The formula itself, such as `SUBSET_SUM([a]) / SUBSET_MEAN([b])`."
+        }
+      },
+      "required": [
+        "function"
+      ]
+    },
+    "QueryApi.NamedSource": {
+      "title": "QueryApi.NamedSource",
+      "description": "Describes the innermost layer within a query representing all data in a named source.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.NamedSource'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.FormulaVariable"
+          },
+          "description": "The list of variable values used to customise the source."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.NumericFieldFormattingOptions": {
+      "title": "QueryApi.NumericFieldFormattingOptions",
+      "description": "Describes a numeric values should be formatted for a field\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.NumericFieldFormattingOptions'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "percent": {
+          "type": "boolean",
+          "description": "If true the numeric values should be rendered as a percentage.\nExample: true",
+          "default": false
+        },
+        "thousandSeparator": {
+          "type": "boolean",
+          "description": "If true, thousand separator should be visible, false it should not be visible\nExample: true",
+          "default": true
+        },
+        "decimalPlaces": {
+          "type": "integer",
+          "description": "If present specifies the number of decimal places to be shown\nExample: 345"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "If present a prefix to be displayed before the numeric value"
+        },
+        "suffix": {
+          "type": "string",
+          "description": "If present a suffix to be displayed after the numeric value (before the % sign, if relevant)"
+        },
+        "negativeNumberFormat": {
+          "type": "string",
+          "enum": [
+            "MINUS_SIGN",
+            "ACCOUNTING",
+            "LEDGER"
+          ]
+        }
+      },
+      "required": [
+        "percent",
+        "thousandSeparator"
+      ]
+    },
+    "QueryApi.Range": {
+      "title": "QueryApi.Range",
+      "description": "A range of indexes within a table or grid output. Used to limit data retrieved.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.Range'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "type": "integer",
+          "description": "The first row to retrieve, counting from zero. Defaults to zero if unspecified.\nExample: 345\nAliases: offset"
+        },
+        "length": {
+          "type": "integer",
+          "description": "The number of rows to retrieve. Unbounded if unspecified. It must be a positive integer, or null.\nExample: 345\nAliases: size"
+        }
+      }
+    },
+    "QueryApi.RangeOperation": {
+      "title": "QueryApi.RangeOperation",
+      "description": "Describes a single layer within a query for restricting the records in an input based upon their row index. Field order in output will be identical to the input.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.RangeOperation'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "range": {
+          "$ref": "#/definitions/QueryApi.Range",
+          "description": "Allows you to limit or page through the data."
+        },
+        "input": {
+          "type": "object",
+          "description": "The single input to this operation. Optional. For example, a SimpleQuery."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.RecordFilterOperation": {
+      "title": "QueryApi.RecordFilterOperation",
+      "description": "Describes a single layer within a query for filtering records in an input. Field order in output will be identical to the input.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.RecordFilterOperation'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "filter": {
+          "$ref": "#/definitions/QueryApi.Filter",
+          "description": "Filtering applied to the records.\nAliases: filters"
+        },
+        "input": {
+          "type": "object",
+          "description": "The single input to this operation. Optional. For example, a SimpleQuery."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.SchemaField": {
+      "title": "QueryApi.SchemaField",
+      "description": "Describes a single field in the source data.\nAn array of these objects forms the response body for the /schema/fields endpoint.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.SchemaField'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the output field. Field names are case insensitive but preserving, and cannot have leading or trailing whitespace."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "TEXT",
+            "NUMBER",
+            "DATE",
+            "RANGE_NUMBER",
+            "RANGE_DATE"
+          ],
+          "description": "The data type of the field."
+        },
+        "formatting": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/QueryApi.NumericFieldFormattingOptions"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.DateFieldFormattingOptions"
+            },
+            {
+              "$ref": "#/definitions/QueryApi.DateRangeFieldFormattingOptions"
+            }
+          ],
+          "description": "Formatting options for the field."
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ]
+    },
+    "QueryApi.SchemaFieldsQueryOutput": {
+      "title": "QueryApi.SchemaFieldsQueryOutput",
+      "description": "Describes the schema (field names and data types) of a table query source or result table.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.SchemaFieldsQueryOutput'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.SchemaField"
+          },
+          "description": "The fields in this table."
+        },
+        "isEditable": {
+          "type": "boolean",
+          "description": "If the QueryNode is editable in the implementation.\nThis refers to 'structural editability' and does not include editing permissions.\nIn other words this would true if the source of the query support editing, and each operation \nalso allows for editing. If this is true, and EditAgainst query could be submitted with the query as input\nExample: true",
+          "default": false
+        }
+      },
+      "required": [
+        "fields",
+        "isEditable"
+      ]
+    },
+    "QueryApi.SimpleQuery": {
+      "title": "QueryApi.SimpleQuery",
+      "description": "Request body for the /table endpoints. Field order in output will be identical to 'fields' if specified, otherwise respective to 'groupings' then 'measures'.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.SimpleQuery'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Relevant for a 'raw' table query. The list of fields to retrieve\nAliases: field"
+        },
+        "groupings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.Grouping"
+          },
+          "description": "Relevant for a 'grouped' table query. The list of groupings to apply to the data, zero/missing meaning roll-up to a single record.\nAliases: grouping"
+        },
+        "measures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.Measure"
+          },
+          "description": "Relevant for a 'grouped' table query. The list of functions to calculate for each group result, which aggregates data from all records in that group. Can be omitted if only group value combinations are required.\nAliases: measure"
+        },
+        "filter": {
+          "$ref": "#/definitions/QueryApi.Filter",
+          "description": "Optional filtering to apply to the source data before any other groupings or calculations.\nAliases: filters"
+        },
+        "sorts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.TableSort"
+          },
+          "description": "Optional sort that is applied to the resulting rows. Sort happens after fields, or groupings and measures, have been calculated, and will disrupt the natural order of groupings in a multi-grouping query. You can sort by any field(s) in the output.\nAliases: sort"
+        },
+        "range": {
+          "$ref": "#/definitions/QueryApi.Range",
+          "description": "Optional range restriction, applied after sorting the output. Allows you to limit or page through the data. Some implementations may perform poorly when using this over large results."
+        },
+        "input": {
+          "type": "object",
+          "description": "The single input to this operation. Optional. For example, a SimpleQuery."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.SortOperation": {
+      "title": "QueryApi.SortOperation",
+      "description": "Describes a single layer within a query for sorting records in an input. Field order in output will be identical to the input.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.SortOperation'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "sorts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QueryApi.TableSort"
+          },
+          "description": "Sorting applied to the records.\nAliases: sort"
+        },
+        "input": {
+          "type": "object",
+          "description": "The single input to this operation. Optional. For example, a SimpleQuery."
+        },
+        "comment": {
+          "type": "string",
+          "description": "A comment string associated to the query. A comment will have no effect on the query result and it is meant a human readable explanation of what the query purpose is."
+        }
+      }
+    },
+    "QueryApi.TableQueryOutput": {
+      "title": "QueryApi.TableQueryOutput",
+      "description": "Response body for the /table endpoints.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.TableQueryOutput'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "$ref": "#/definitions/QueryApi.SchemaFieldsQueryOutput",
+          "description": "Metadata about each output column."
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number",
+                  "description": "Example: 123.45"
+                },
+                {
+                  "type": "string",
+                  "format": "date-opt-time",
+                  "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+                },
+                {
+                  "$ref": "#/definitions/QueryApi.ValueRange"
+                }
+              ]
+            }
+          },
+          "description": "Output data table containing the resulting data rows and columns. A 2d array indexed [row][column]. Cells are data values (numbers, dates, strings) or ValueRanges (in group columns for histogram groupings)."
+        }
+      },
+      "required": [
+        "schema",
+        "records"
+      ]
+    },
+    "QueryApi.TableSort": {
+      "title": "QueryApi.TableSort",
+      "description": "Describes an output field to sort all rows by, irrespective of groupings. The field can contain raw, grouping or measure data.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.TableSort'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "inputField": {
+          "type": "string",
+          "description": "Specify your sort by providing the input field name. If there are duplicates, the first is chosen.\nAliases: sourceField"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "ASCENDING",
+            "DESCENDING"
+          ],
+          "description": "The direction to sort in. Default ASCENDING."
+        },
+        "order": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number",
+                "description": "Example: 123.45"
+              },
+              {
+                "type": "string",
+                "format": "date-opt-time",
+                "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "inputField"
+      ]
+    },
+    "QueryApi.ValueRange": {
+      "title": "QueryApi.ValueRange",
+      "description": "Stores lower and upper bound values of a range.\n<a target='_blank' href='../schema-example.json?typeId=QueryApi.ValueRange'>Auto-generated example JSON</a>",
+      "additionalProperties": false,
+      "properties": {
+        "lower": {
+          "oneOf": [
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            }
+          ],
+          "description": "Lower bound of range - inclusive"
+        },
+        "upper": {
+          "oneOf": [
+            {
+              "type": "number",
+              "description": "Example: 123.45"
+            },
+            {
+              "type": "string",
+              "format": "date-opt-time",
+              "description": "Example: \"1997-07-16\", \"1997-07-16T19:20:30Z\" or \"1997-07-16T19:20:30.452Z\", always in UTC"
+            }
+          ],
+          "description": "Upper bound of range - exclusive"
+        }
+      },
+      "required": [
+        "lower",
+        "upper"
+      ]
+    }
+  }
+}

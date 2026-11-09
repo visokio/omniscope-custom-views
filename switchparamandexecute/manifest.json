@@ -17,39 +17,48 @@
   "options": {
     "items": {
       "block": {
-        "displayName": "Blocks to execute (comma separated names)",
+        "displayName": "Blocks to execute",
         "type": "TEXT",
-        "mandatory": true
+        "detail": "Names of the workflow blocks to execute, separated by commas, e.g. Load orders, Report. Leave empty to execute the whole workflow."
       },
       "paramName": {
-        "displayName": "Param name",
+        "displayName": "Parameter name",
         "type": "TEXT",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "Name of the project parameter to set, exactly as in the workflow's parameters."
       },
       "refreshFromSource": {
         "displayName": "Refresh from source",
-        "type": "TOGGLE"
+        "type": "TOGGLE",
+        "detail": "On: the blocks reload their data from the sources. Off: data already loaded upstream is reused where possible.",
+        "documentation": "If ticked, Omniscope discards any previous execution data and reloads fresh data from the sources.\n\nIf unticked, Omniscope executes only the blocks that need it, based on their current configuration and previous execution data, and reuses data from upstream blocks where available."
       },
       "selectionLimit": {
-        "displayName": "Limit number of items shown",
-        "type": "NUMBER"
+        "displayName": "Most values shown",
+        "type": "NUMBER",
+        "detail": "Show at most this many values (default 10)."
       },
       "showJobState": {
         "displayName": "Show job state",
-        "type": "TOGGLE"
+        "type": "TOGGLE",
+        "detail": "Show the execution's progress (queued, running, finished) under the values. Errors are always shown."
       },
       "split": {
-        "displayName": "Field with param values",
+        "displayName": "Values from",
         "type": "GROUPING",
         "mandatory": true,
         "validGroupingTypes": [
           "UNIQUE_VALUES"
-        ]
+        ],
+        "detail": "Field whose distinct values become the choices. Use a data source with every value, so the choices do not depend on the parameter itself."
       }
     },
     "structure": {
       "toolbar": [
-        "paramName"
+        "paramName",
+        "block",
+        "refreshFromSource",
+        "showJobState"
       ],
       "x": [],
       "y": []
@@ -58,7 +67,8 @@
   "defaultOptions": {
     "items": {
       "refreshFromSource": true,
-      "selectionLimit": 10
+      "selectionLimit": 10,
+      "showJobState": true
     },
     "pane": {
       "yAxisHeaderWidth": 75,

@@ -1,0 +1,335 @@
+{
+  "name": "Quadrant Matrix",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "quadrant",
+    "matrix",
+    "bcg",
+    "priority",
+    "importance performance",
+    "portfolio",
+    "scatter",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 5000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "item": {
+        "displayName": "Items",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "One point per value, e.g. Product line, Customer, Project"
+      },
+      "x": {
+        "displayName": "Across",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Measure for the horizontal axis"
+      },
+      "y": {
+        "displayName": "Up",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Measure for the vertical axis"
+      },
+      "size": {
+        "displayName": "Bubble size",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional: e.g. Revenue"
+      },
+      "colour": {
+        "displayName": "Colour by",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Optional: e.g. Business unit"
+      },
+      "xSplit": {
+        "displayName": "Split across at",
+        "type": "CHOICE",
+        "values": [
+          "MEDIAN",
+          "MEAN",
+          "TARGET"
+        ],
+        "displayValues": [
+          "Median",
+          "Average",
+          "Target value"
+        ],
+        "detail": "Where to split this axis"
+      },
+      "xTarget": {
+        "displayName": "Across target",
+        "type": "NUMBER",
+        "detail": "With Split across at Target value"
+      },
+      "ySplit": {
+        "displayName": "Split up at",
+        "type": "CHOICE",
+        "values": [
+          "MEDIAN",
+          "MEAN",
+          "TARGET"
+        ],
+        "displayValues": [
+          "Median",
+          "Average",
+          "Target value"
+        ],
+        "detail": "Where to split this axis"
+      },
+      "yTarget": {
+        "displayName": "Up target",
+        "type": "NUMBER",
+        "detail": "With Split up at Target value"
+      },
+      "preset": {
+        "displayName": "Quadrant names",
+        "type": "CHOICE",
+        "values": [
+          "NONE",
+          "BCG",
+          "EFFORT",
+          "IPA",
+          "CUSTOM"
+        ],
+        "displayValues": [
+          "None",
+          "Growth-share (Stars, Question marks, Cash cows, Dogs)",
+          "Effort and impact (Quick wins, Major projects...)",
+          "Importance and performance",
+          "Custom"
+        ],
+        "detail": "Names written in the corners; Custom uses the four names below"
+      },
+      "qTR": {
+        "displayName": "Top right",
+        "type": "TEXT"
+      },
+      "qTL": {
+        "displayName": "Top left",
+        "type": "TEXT"
+      },
+      "qBR": {
+        "displayName": "Bottom right",
+        "type": "TEXT"
+      },
+      "qBL": {
+        "displayName": "Bottom left",
+        "type": "TEXT"
+      },
+      "logX": {
+        "displayName": "Log scale across",
+        "type": "TOGGLE",
+        "detail": "Useful for ratios such as relative market share"
+      },
+      "labels": {
+        "displayName": "Labels",
+        "type": "TOGGLE",
+        "detail": "Label the largest points where there is room"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "item",
+        "x",
+        "y",
+        "size"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Points",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "item",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "x",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "y",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "size",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Quadrants",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "xSplit",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "xTarget",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "ySplit",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "yTarget",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "preset",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "qTR",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "qTL",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "qBR",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "qBL",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "logX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "labels",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "xSplit": "MEDIAN",
+      "ySplit": "MEDIAN",
+      "preset": "NONE",
+      "logX": false,
+      "labels": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

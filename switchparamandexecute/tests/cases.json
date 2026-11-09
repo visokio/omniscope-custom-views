@@ -1,0 +1,677 @@
+[
+ {
+  "name": "showcase",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "paramName": "Region",
+    "split": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 260,
+  "height": 170,
+  "wait": 800,
+  "showcase": true,
+  "showcaseHeight": 170,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "caption": "Live: pick a region. The view sets the project parameter Region, then executes the Report block; here the Workflow REST API is simulated.",
+  "expect": {
+   "selector": ".choice",
+   "min": 4,
+   "max": 4,
+   "text": "Region"
+  },
+  "actions": [
+   {
+    "expectRequest": {
+     "method": "GET",
+     "url": "Orders%20demo.iox/w/param/Region",
+     "count": 1
+    }
+   },
+   {
+    "eval": "document.querySelector('input[value=\"North\"]').checked",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/updateparams",
+     "count": 0
+    }
+   },
+   {
+    "click": "input[value=\"South\"]"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/updateparams",
+     "body": {
+      "updates": [
+       {
+        "name": "Region",
+        "value": "South"
+       }
+      ]
+     },
+     "count": 1
+    }
+   },
+   {
+    "eval": "document.querySelector('input[value=\"South\"]').checked && !document.querySelector('input[value=\"North\"]').checked",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Report"
+      ],
+      "refreshFromSource": false,
+      "cancelExisting": false
+     },
+     "count": 1
+    }
+   },
+   {
+    "eval": "document.querySelector('input[value=\"East\"]').disabled",
+    "expectTruthy": true
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "eval": "/^Region set to South; finished at/.test(document.getElementById('status').textContent) && !document.querySelector('input[value=\"East\"]').disabled",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.parent.__omniEvents.every(function (e) { return e.type !== 'whitespaceClick'; })",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "south"
+   }
+  ]
+ },
+ {
+  "name": "number-param",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "paramName": "Year",
+    "split": {
+     "inputField": "Year",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 260,
+  "height": 170,
+  "wait": 1200,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "actions": [
+   {
+    "eval": "document.querySelector('input[value=\"2024\"]').checked",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/updateparams",
+     "count": 0
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 0
+    }
+   },
+   {
+    "click": "input[value=\"2025\"]"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/updateparams",
+     "body": {
+      "updates": [
+       {
+        "name": "Year",
+        "value": 2025
+       }
+      ]
+     },
+     "count": 1
+    }
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "click": "input[value=\"2025\"]"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/updateparams",
+     "count": 1
+    }
+   },
+   {
+    "clickAt": [
+     250,
+     160
+    ]
+   },
+   {
+    "expectSelection": false
+   }
+  ]
+ },
+ {
+  "name": "reload",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "paramName": "Region",
+    "split": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 260,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "actions": [
+   {
+    "click": "input[value=\"South\"]",
+    "waitAfter": 200
+   },
+   {
+    "reload": true
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "eval": "/^Region set to South; finished at/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 1
+    }
+   },
+   {
+    "eval": "document.querySelector('input[value=\"South\"]').checked",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/updateparams",
+     "count": 1
+    }
+   }
+  ]
+ },
+ {
+  "name": "update-fails",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "paramName": "Region",
+    "split": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 260,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ],
+   "respond": {
+    "POST w/updateparams": {
+     "status": 400,
+     "body": {
+      "status": "FAIL",
+      "errorType": "INVALID_VALUE",
+      "errorMessage": "Value not allowed"
+     }
+    }
+   }
+  },
+  "actions": [
+   {
+    "click": "input[value=\"East\"]"
+   },
+   {
+    "wait": 600
+   },
+   {
+    "eval": "document.getElementById('status').textContent === 'Value not allowed'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.querySelector('input[value=\"North\"]').checked",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 0
+    }
+   }
+  ]
+ },
+ {
+  "name": "unknown-param",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "paramName": "Area",
+    "split": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 260,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "actions": [
+   {
+    "eval": "/Parameter 'Area' not found/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "eval": "!document.querySelectorAll('input:checked').length",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "paramName": "Region",
+    "split": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 260,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "actions": [
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "West"
+    }
+   },
+   {
+    "eval": "document.querySelectorAll('.choice').length === 1",
+    "expectTruthy": true
+   },
+   {
+    "eval": "/Current value: North/.test(document.getElementById('message').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "GET",
+     "url": "Orders%20demo.iox/w/param/Region",
+     "count": 2
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/updateparams",
+     "count": 0
+    }
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "paramName": "Region",
+    "split": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 120,
+  "height": 70,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "actions": [
+   {
+    "eval": "document.querySelector('.choice').getBoundingClientRect().right <= window.innerWidth + 1",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "120x70"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Region",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "paramName": "Region",
+    "split": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 260,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "expect": {
+   "text": "No values to choose from."
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 260,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "actions": [
+   {
+    "eval": "/Enter the name of a project parameter in Parameter name/.test(document.body.innerText)",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "GET",
+     "url": "Orders%20demo.iox/w/param/",
+     "count": 0
+    }
+   },
+   {
+    "update": {
+     "paramName": "Region"
+    }
+   },
+   {
+    "eval": "/Choose the field whose values to offer in Values from/.test(document.body.innerText)",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "paramName": "Region",
+    "split": {
+     "inputField": "Customer",
+     "type": "UNIQUE_VALUES"
+    },
+    "block": "Report",
+    "refreshFromSource": false
+   }
+  },
+  "width": 260,
+  "height": 300,
+  "wait": 1500,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Switch+Param+and+Execute+Workflow/",
+  "workflow": {
+   "params": [
+    {
+     "name": "Region",
+     "type": "TEXT",
+     "value": "North"
+    },
+    {
+     "name": "Year",
+     "type": "NUMBER",
+     "value": 2024
+    }
+   ],
+   "blocks": [
+    "Report",
+    "Filter orders"
+   ]
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.choice').length === 10 && /Showing 10 of 3000 values/.test(document.body.innerText)",
+    "expectTruthy": true
+   },
+   {
+    "update": {
+     "paramName": "Region",
+     "split": {
+      "inputField": "Customer",
+      "type": "UNIQUE_VALUES"
+     },
+     "block": "Report",
+     "refreshFromSource": false,
+     "selectionLimit": 25
+    }
+   },
+   {
+    "eval": "document.querySelectorAll('.choice').length === 25",
+    "expectTruthy": true
+   }
+  ]
+ }
+]

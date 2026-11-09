@@ -4,6 +4,12 @@
     <meta charset="utf-8"/>
 
     <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
         #main {
             width: 100%;
             height: 100%;
@@ -11,14 +17,33 @@
             top: 0;
             left: 0;
             position: absolute;
-            font-family: Arial;
-            color: #666;
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: #444;
         }
-        .selected {
-            fill: #7DA9DA;
-            fill-opacity: 1 !important;
-            stroke: black;
-            stroke-width: 0.01px;
+        svg {
+            display: block;
+            height: calc(100% - 20px);
+        }
+        .region {
+            fill: #1b1b1b;
+            fill-opacity: 0;
+            cursor: pointer;
+        }
+        .region:hover {
+            fill-opacity: 0.12;
+        }
+        .region.selected {
+            fill: #2161d9;
+            fill-opacity: 0.55;
+            stroke: #1b1b1b;
+            stroke-width: 0.006;
+        }
+        .set-name {
+            font-weight: bold;
+            fill: #333;
+        }
+        .count {
+            fill: #222;
         }
         text {
             -webkit-touch-callout: none;
@@ -30,23 +55,44 @@
             user-select:none;
             pointer-events: none;
         }
+        #note {
+            position: absolute;
+            left: 8px;
+            bottom: 6px;
+            right: 8px;
+            font-size: 11px;
+            color: #666;
+            pointer-events: none;
+        }
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #555;
+            background: #fff;
+        }
     </style>
 
     <!-- Put SCRIPT tags to load 3rd party libraries here -->
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@4.13.0/build/d3.min.js"></script>
 
 </head>
 
 <body>
 
-<div id="main" width="100%" height="100%">
-    <svg width="100%" height="100%">
+<div id="main">
+    <svg id="venn" width="100%" viewBox="-0.02 0.04 2.04 1.96" preserveAspectRatio="xMidYMid meet">
 
         <circle
                 class="circle-a"
                 cx="0.62086117"
                 cy="0.69178772"
-                style="fill:#a52a2a;fill-opacity:0.5"
+                style="fill:#2a78d6;fill-opacity:0.35"
                 id="circle8136"
                 r="0.59291744" />
         <circle
@@ -54,62 +100,53 @@
                 cx="1.3874403"
                 cy="0.69178772"
                 r="0.59291744"
-                style="fill:#4682b4;fill-opacity:0.5"
+                style="fill:#eb6834;fill-opacity:0.35"
                 id="circle8139" />
         <circle
                 class="circle-c"
                 cx="1.0041505"
                 cy="1.371521"
                 r="0.59291744"
-                style="fill:#008000;fill-opacity:0.5"
+                style="fill:#1baf7a;fill-opacity:0.35"
                 id="circle8142" />
 
         <path
-                style="fill-opacity:0"
+                class="region"
                 d="m 1.0039068,0.77738375 a 0.59291744,0.59291744 0 0 0 -0.19531197,0.0351 0.59291744,0.59291744 0 0 0 0.19531197,0.33202995 0.59291744,0.59291744 0 0 0 0.1992181,-0.33202995 0.59291744,0.59291744 0 0 0 -0.1992181,-0.0351 z"
                 id="subset-abc"/>
         <path
-                style="fill-opacity:0"
+                class="region"
                 d="m 0.62109423,0.09769375 a 0.59291744,0.59291744 0 0 0 -0.59374989,0.59375 0.59291744,0.59291744 0 0 0 0.39453119,0.55858995 0.59291744,0.59291744 0 0 1 0.3828127,-0.43749995 0.59291744,0.59291744 0 0 1 -0.01172,-0.12109 0.59291744,0.59291744 0 0 1 0.21093737,-0.45313 0.59291744,0.59291744 0 0 0 -0.38281237,-0.14062 z"
                 id="subset-a"/>
         <path
-                style="fill-opacity:0"
+                class="region"
                 d="m 1.3867193,0.09769375 a 0.59291744,0.59291744 0 0 0 -0.3828127,0.14062 0.59291744,0.59291744 0 0 1 0.2109377,0.45313 0.59291744,0.59291744 0 0 1 -0.01172,0.12109 0.59291744,0.59291744 0 0 1 0.3828124,0.43749995 0.59291744,0.59291744 0 0 0 0.3945314,-0.55858995 0.59291744,0.59291744 0 0 0 -0.59375,-0.59375 z"
                 id="subset-b"/>
         <path
-                style="fill-opacity:0"
+                class="region"
                 d="m 1.0039068,1.1445638 a 0.59291744,0.59291744 0 0 1 -0.38281257,0.14063 0.59291744,0.59291744 0 0 1 -0.199218,-0.0352 0.59291744,0.59291744 0 0 0 -0.01172,0.1211 0.59291744,0.59291744 0 0 0 0.59375007,0.5937499 0.59291744,0.59291744 0 0 0 0.5937502,-0.59375 0.59291744,0.59291744 0 0 0 -0.01172,-0.1211 0.59291744,0.59291744 0 0 1 -0.1992182,0.0352 0.59291744,0.59291744 0 0 1 -0.3828127,-0.1406299 z"
                 id="subset-c"/>
         <path
-                style="fill-opacity:0"
+                class="region"
                 d="m 1.0039068,0.23831375 a 0.59291744,0.59291744 0 0 0 -0.21093737,0.45313 0.59291744,0.59291744 0 0 0 0.01172,0.12109 0.59291744,0.59291744 0 0 1 0.19921797,-0.0351 0.59291744,0.59291744 0 0 1 0.1992181,0.0351 0.59291744,0.59291744 0 0 0 0.01172,-0.12109 0.59291744,0.59291744 0 0 0 -0.2109375,-0.45313 z"
                 id="subset-ab"/>
         <path
-                style="fill-opacity:0"
+                class="region"
                 d="M 1.203125 0.8125 A 0.59291744 0.59291744 0 0 1 1.0058594 1.1445312 A 0.59291744 0.59291744 0 0 0 1.3867188 1.2851562 A 0.59291744 0.59291744 0 0 0 1.5859375 1.25 A 0.59291744 0.59291744 0 0 0 1.203125 0.8125 z "
                 id="subset-bc" />
         <path
-                style="fill-opacity:0"
+                class="region"
                 d="m 0.80859423,0.81253375 a 0.59291744,0.59291744 0 0 0 -0.3867187,0.43749995 0.59291744,0.59291744 0 0 0 0.199218,0.0352 0.59291744,0.59291744 0 0 0 0.38671897,-0.14062 0.59291744,0.59291744 0 0 1 -0.19921797,-0.33203995 z"
                 id="subset-ac"/>
 
-        <text
-                x="0.62086117"
-                y="0.69178772"
-                id="text-a"
-                style="font-size:0.03453888px;text-anchor:middle"></text>
-        <text
-                x="1.3874403"
-                y="0.69178772"
-                id="text-b"
-                style="font-size:0.03453888px;text-anchor:middle"></text>
-        <text
-                x="1.0041505"
-                y="1.371521"
-                id="text-c"
-                style="font-size:0.03453888px;text-anchor:middle"></text>
+        <text id="text-a" class="set-name" text-anchor="middle"></text>
+        <text id="text-b" class="set-name" text-anchor="middle"></text>
+        <text id="text-c" class="set-name" text-anchor="middle"></text>
 
+        <g id="counts"></g>
     </svg>
+    <div id="note"></div>
+    <div id="message"></div>
 </div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
@@ -117,8 +154,21 @@
 <script>
 
     var svg = d3.select("svg");
-    var ORIGINAL_WIDTH = 2;
-    var ORIGINAL_HEIGHT = 2;
+
+    // The three sets and the seven regions they make. A region is "in" some sets and outside the others, so the
+    // records it counts and selects are exactly the ones in that part of the diagram.
+    var SETS = ["a", "b", "c"];
+    var REGIONS = [
+        { id: "a", inside: ["a"] }, { id: "b", inside: ["b"] }, { id: "c", inside: ["c"] },
+        { id: "ab", inside: ["a", "b"] }, { id: "bc", inside: ["b", "c"] }, { id: "ac", inside: ["a", "c"] },
+        { id: "abc", inside: ["a", "b", "c"] }
+    ];
+    // Label points: the point of each region furthest from its edges (worked out once from the circles).
+    var LABEL_AT = { a: [0.425, 0.595], b: [1.585, 0.595], c: [1.005, 1.585], ab: [1.005, 0.585], bc: [1.295, 1.085],
+        ac: [0.715, 1.085], abc: [1.005, 0.925] };
+
+    var state = { selected: null, counts: null, total: null, outside: null, gen: 0, sig: null };
+    window.__venn = state;
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
@@ -129,79 +179,167 @@
 
     // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
     document.body.addEventListener("click", function() {
+        state.selected = null;
+        svg.selectAll(".region").classed("selected", false);
         omniscope.view.whitespaceClick();
     });
 
-    // Naively redraw on any of these events
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+    }
 
-        var width = +parseInt(svg.style("width"), 10);
-        var height = +parseInt(svg.style("height"), 10);
-        var maxSize = Math.min(width, height);
+    function bound(v) {
+        if (v === undefined || v === null || String(v).trim() === "") return null;
+        var n = parseFloat(String(v).replace(/,/g, ""));
+        return isFinite(n) ? n : null;
+    }
 
-        var scale = maxSize/ORIGINAL_WIDTH;
-
-        var widthMargin = width - (ORIGINAL_WIDTH * scale);
-        var heightMargin = height - (ORIGINAL_HEIGHT * scale);
-
-        svg.attr("transform", "translate("+widthMargin/2+", "+heightMargin/2+")");
-        svg.selectAll("*").classed("selected", false);
-        svg.selectAll("*").attr("transform", "scale("+scale+")");
-
-        var options = omniscope.view.context().options.items;
-        svg.select("#text-a").text((options.setAName !== undefined) ? options.setAName : options.filterAField);
-        svg.select("#text-b").text((options.setBName !== undefined) ? options.setBName : options.filterBField);
-        svg.select("#text-c").text((options.setCName !== undefined) ? options.setCName : options.filterCField);
-
-        // ------------- Selection ------------ //
-
-        var filterA = createFilter(options.filterAField, options.filterAMin, options.filterAMax);
-        var filterB = createFilter(options.filterBField, options.filterBMin, options.filterBMax);
-        var filterC = createFilter(options.filterCField, options.filterCMin, options.filterCMax);
-
-        svg.select("#subset-a").on("click", function() {selectSubset(this, [filterA]);});
-        svg.select("#subset-b").on("click", function() {selectSubset(this, [filterB]);});
-        svg.select("#subset-c").on("click", function() {selectSubset(this, [filterC]);});
-        svg.select("#subset-ab").on("click", function() {selectSubset(this, [filterA, filterB]);});
-        svg.select("#subset-bc").on("click", function() {selectSubset(this, [filterB, filterC]);});
-        svg.select("#subset-ac").on("click", function() {selectSubset(this, [filterA, filterC]);});
-        svg.select("#subset-abc").on("click", function() {selectSubset(this, [filterA, filterB, filterC]);});
-    });
-
-    var selectSubset = function(element, filters) {
-        var wasSelected = d3.select(element).classed("selected");
-        svg.selectAll("*").classed("selected", false);
-        if (!wasSelected) {
-            d3.select(element).classed("selected", true);
-            addFilter(filters);
-        } else {
-            omniscope.view.whitespaceClick();
-        }
-        event.stopPropagation();
-    };
-
+    // A set is the records whose field value is above Min and up to and including Max. Either bound can be left
+    // empty; with neither, the set holds every record (and its filter is null).
     var createFilter = function(filterField, filterMin, filterMax) {
-        var filter = {
-            type: "AND",
-            filters: []
-        };
-        if (filterMin !== undefined && filterMax !== undefined) {
-            filter.filters = [
-                {"type": "FIELD_VALUE", "inputField": filterField, "value": parseInt(filterMax), "operator": "<="},
-                {"type": "FIELD_VALUE", "inputField": filterField, "value": parseInt(filterMin), "operator": ">"}
-            ];
-        }
-        return filter;
+        var min = bound(filterMin), max = bound(filterMax), parts = [];
+        if (max !== null) parts.push({"type": "FIELD_VALUE", "inputField": filterField, "value": max, "operator": "<="});
+        if (min !== null) parts.push({"type": "FIELD_VALUE", "inputField": filterField, "value": min, "operator": ">"});
+        if (!parts.length) return null;
+        return parts.length === 1 ? parts[0] : { type: "AND", filters: parts };
     };
 
-    var addFilter = function(filters) {
-        var filter = {};
-        filter.type = "AND";
-        filter.filters = filters;
-        omniscope.view.context().viewSelection = filter;
+    // The filter for a region: in each of its sets and not in the others. Returns false when the region must be
+    // empty (it excludes a set that holds every record).
+    function regionFilter(region, setFilters) {
+        var parts = [];
+        for (var i = 0; i < SETS.length; i++) {
+            var k = SETS[i], f = setFilters[k], inside = region.inside.indexOf(k) >= 0;
+            if (inside) { if (f) parts.push(f); }
+            else if (f) parts.push({ type: "NOT", filters: [f] });
+            else return false;
+        }
+        return { type: "AND", filters: parts };
+    }
+
+    function withDataFilter(f) {
+        var df = omniscope.view.context().dataConfig.filter;
+        if (!df || (df.type === "AND" && (!df.filters || !df.filters.length))) return f;
+        return { type: "AND", filters: [df, f] };
+    }
+
+    function count(filter, done) {
+        omniscope.view.queryBuilder().table({ filter: withDataFilter(filter), measures: [{ function: "RECORD_COUNT" }] })
+            .on("load", function(e) { var r = e.data.records; done(r && r.length ? r[0][0] : 0); })
+            .on("error", function(e) { done(null, e); })
+            .execute();
+    }
+
+    function setName(options, k) {
+        var name = options["set" + k.toUpperCase() + "Name"];
+        if (name !== undefined && name !== null && name !== "") return name;
+        return options["filter" + k.toUpperCase() + "Field"] || ("Set " + k.toUpperCase());
+    }
+
+    function fmt(n) { return n === null || n === undefined ? "" : n.toLocaleString(); }
+
+    function draw() {
+        var box = svg.node().getBoundingClientRect(), width = box.width, height = box.height;
+        // Text sizes in pixels, converted to diagram units (the diagram is about 2 units across).
+        var unit = Math.min(width, height) / 2;
+        var px = Math.max(10, Math.min(16, Math.min(width, height) * 0.035));
+        svg.selectAll(".set-name").style("font-size", (px / unit) + "px");
+        var options = omniscope.view.context().options.items || {};
+        SETS.forEach(function(k) {
+            var at = LABEL_AT[k], t = svg.select("#text-" + k);
+            t.attr("x", at[0]).attr("y", at[1] - 0.6 * px / unit).text(setName(options, k));
+        });
+        var c = state.counts, total = state.total;
+        var labels = svg.select("#counts").selectAll("text").data(REGIONS);
+        labels = labels.enter().append("text").attr("class", "count").attr("text-anchor", "middle").merge(labels);
+        labels
+            .attr("x", function(r) { return LABEL_AT[r.id][0]; })
+            .attr("y", function(r) { return LABEL_AT[r.id][1] + (r.inside.length === 1 ? 0.9 : 0.35) * px / unit; })
+            .style("font-size", (px * 1.1 / unit) + "px")
+            .text(function(r) { return c && c[r.id] !== null && c[r.id] !== undefined ? fmt(c[r.id]) : ""; });
+        svg.selectAll(".region").each(function() {
+            var id = this.id.replace("subset-", ""), region = REGIONS.filter(function(r) { return r.id === id; })[0];
+            var el = d3.select(this);
+            el.classed("selected", state.selected === id);
+            el.select("title").remove();
+            if (c && c[id] !== null && c[id] !== undefined) {
+                var names = region.inside.map(function(k) { return setName(options, k); });
+                var others = SETS.filter(function(k) { return region.inside.indexOf(k) < 0; }).map(function(k) { return setName(options, k); });
+                var share = total ? " (" + (100 * c[id] / total).toFixed(1) + "%)" : "";
+                el.append("title").text(names.join(" and ") + (others.length ? ", not " + others.join(" or ") : "") +
+                    ": " + fmt(c[id]) + " records" + share);
+            }
+        });
+        var note = [];
+        if (state.outside !== null && total !== null) note.push("Outside all three: " + fmt(state.outside) + " of " + fmt(total) + " records");
+        var open = SETS.filter(function(k) { return !state.setFilters || !state.setFilters[k]; });
+        if (open.length) note.push(open.map(function(k) { return setName(options, k); }).join(", ") + ": no Min or Max set, so it holds every record");
+        document.getElementById("note").textContent = note.join(". ");
+    }
+
+    // Recount when the options or the report's filters change; otherwise just redraw.
+    function refresh() {
+        var ctx = omniscope.view.context(), options = ctx.options.items || {};
+        if (!options.filterAField || !options.filterBField || !options.filterCField) {
+            message("Choose a numeric field for each of the three sets (Set A field, Set B field, Set C field), then a Min and/or Max for each.");
+            return;
+        }
+        message(null);
+        if (!ctx.viewSelection) state.selected = null;
+        var setFilters = {
+            a: createFilter(options.filterAField, options.filterAMin, options.filterAMax),
+            b: createFilter(options.filterBField, options.filterBMin, options.filterBMax),
+            c: createFilter(options.filterCField, options.filterCMin, options.filterCMax)
+        };
+        state.setFilters = setFilters;
+        var sig = JSON.stringify([setFilters, ctx.dataConfig.filter]);
+        if (sig === state.sig) { draw(); return; }
+        state.sig = sig;
+        var gen = ++state.gen, pending = 9, counts = {}, failed = null;
+        state.counts = null; state.total = null; state.outside = null;
+        omniscope.view.busy(true);
+        var finish = function() {
+            if (--pending || gen !== state.gen) return;
+            omniscope.view.busy(false);
+            if (failed) { omniscope.view.error((failed.data && failed.data.message) || "Query failed", failed.data); return; }
+            state.counts = counts;
+            draw();
+        };
+        REGIONS.forEach(function(r) {
+            var f = regionFilter(r, setFilters);
+            if (f === false) { counts[r.id] = 0; finish(); return; }
+            count(f, function(n, err) { counts[r.id] = n; if (err) failed = err; finish(); });
+        });
+        var outside = regionFilter({ inside: [] }, setFilters);
+        if (outside === false) { state.outside = 0; finish(); }
+        else count(outside, function(n, err) { if (gen === state.gen) state.outside = n; if (err) failed = err; finish(); });
+        count({ type: "AND", filters: [] }, function(n, err) { if (gen === state.gen) state.total = n; if (err) failed = err; finish(); });
+        draw();
+    }
+
+    omniscope.view.on(["load", "update"], refresh);
+    omniscope.view.on("resize", draw);
+
+    // ------------- Selection ------------ //
+
+    svg.selectAll(".region").on("click", function() {
+        var id = this.id.replace("subset-", ""), region = REGIONS.filter(function(r) { return r.id === id; })[0];
+        d3.event.stopPropagation();
+        if (state.selected === id || !state.setFilters) {
+            state.selected = null;
+            draw();
+            omniscope.view.whitespaceClick();
+            return;
+        }
+        var f = regionFilter(region, state.setFilters);
+        // A region that excludes an unbounded set is empty: select nothing.
+        state.selected = id;
+        omniscope.view.context().viewSelection = { filter: f === false ? { type: "OR", filters: [] } : f };
         omniscope.view.updated();
-    };
+        draw();
+    });
 
 </script>
 

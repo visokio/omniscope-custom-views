@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #chart { flex: 1; position: relative; min-width: 0; }
+        #side { width: 250px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .axis text { fill: #52514e; font-size: 10.5px; } .axis path, .axis line { stroke: #c9c8c1; } .grid line { stroke: #ebeae5; } .grid path { display: none; } svg line, .grid, .axis, path.ln { pointer-events: none; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        .big { font-size: 22px; font-weight: bold; } .stat { color: #52514e; margin-bottom: 5px; line-height: 1.45; } .stat b { color: #0b0b0b; }
+        .tag { display: inline-block; font-size: 11px; border-radius: 10px; padding: 1px 8px; } .ok { color: #0b6b0b; background: rgba(12,163,12,.12); } .risk { color: #7a5600; background: rgba(250,178,25,.2); } .miss { color: #a32a2a; background: rgba(208,59,59,.12); }
+        .note { color: #898781; font-size: 11px; margin-top: 8px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    var ACT = "#2a78d6", TGT = "#52514e", AVG = "#eb6834", REC = "#2a78d6", OK = "#0ca30c", WARN = "#fab219", BAD = "#d03b3b", SELECT = "#2161D9", DAY = 864e5;
+    var S = { gen: 0, sel: null };
+    window.__tt = S;
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var pct = function (v) { return (100 * v).toFixed(0) + "%"; };
+    var iso = function (t) { return new Date(t).toISOString().slice(0, 10); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function tval(v) { if (v === null || v === undefined || v === "") return null; if (typeof v === "number") return v; var s = typeof v === "object" ? v.lower : v; var t = Date.parse(typeof s === "string" && s.length === 10 ? s + "T00:00:00Z" : s); return isNaN(t) ? null : t; }
+    function dayOf(t) { return Math.floor(t / DAY) * DAY; }
+    function measureOf(m) { if (!m) return { function: "RECORD_COUNT", name: "v" }; var fn = m.function || "RECORD_COUNT"; return fn === "RECORD_COUNT" || !m.inputField ? { function: "RECORD_COUNT", name: "v" } : { inputField: m.inputField, function: fn, name: "v" }; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { d: fld(o.date), m: o.value };
+        if (!F.d) { message("Choose the date field (Dated by), the measure to track and a Target."); return; }
+        if (!(+o.target > 0)) { message("Type the Target for the period (for example 10000000) in the view settings."); return; }
+        var filt = omniscope.view.context().dataConfig.filter, base = filt && (!filt.filters || filt.filters.length) ? filt : null;
+        var qb = function (q) { return new Promise(function (res, rej) { omniscope.view.queryBuilder().table(q).on("load", function (e) { res(e.data.records); }).on("error", function (e) { rej(e); }).execute(); }); };
+        var gen = ++S.gen; omniscope.view.busy(true);
+        var q1 = { measures: [{ inputField: F.d, function: "MAX", name: "last" }] }; if (base) q1.filter = base;
+        qb(q1).then(function (r) {
+            var last = r && r[0] ? tval(r[0][0]) : null; if (last === null) throw { data: { message: "No dates found" } };
+            var y = new Date(last).getUTCFullYear(), start = tval(o.start) || Date.UTC(y, 0, 1), end = tval(o.end) || Date.UTC(y, 11, 31);
+            if (!o.start && o.end && end < start) start = Date.UTC(new Date(end).getUTCFullYear() - 1, 0, 1);
+            var range = { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F.d, operator: ">=", value: iso(start) }, { type: "FIELD_VALUE", inputField: F.d, operator: "<", value: iso(end + DAY) }] };
+            var q2 = { groupings: [{ inputField: F.d, type: "HISTOGRAM", dateUnit: "DAY", histogramInterval: 1 }], measures: [measureOf(F.m)], range: { start: 0, length: 5000 }, filter: base ? { type: "AND", filters: [base, range] } : range };
+            return qb(q2).then(function (recs) { return { recs: recs, start: start, end: end, last: last }; });
+        }).then(function (R) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, R); draw(); })
+            .catch(function (e) { omniscope.view.busy(false); if (e && e.data && e.data.message === "No dates found") { S.model = null; message("No data to show. Check the filters."); draw(); return; } omniscope.view.error((e && e.data && e.data.message) || "Query failed", e && e.data); });
+    }
+
+    function build(F, R) {
+        var o = it(), target = +o.target, start = dayOf(R.start), end = dayOf(R.end), work = o.shape === "WORKDAYS", recentN = Math.max(7, Math.min(120, Math.round(+o.recent || 28)));
+        if (end <= start) { S.model = null; message("The period ends before it starts. Check Start and End."); return; }
+        var by = new Map(); R.recs.forEach(function (r) { var t = tval(r[0]); if (t !== null && typeof r[1] === "number") by.set(dayOf(t), (by.get(dayOf(t)) || 0) + r[1]); });
+        var lastDay = Math.min(end, dayOf(R.last)), days = [], acc = 0, weight = function (t) { var wd = new Date(t).getUTCDay(); return work ? (wd === 0 || wd === 6 ? 0 : 1) : 1; };
+        var totalW = 0; for (var t = start; t <= end; t += DAY) totalW += weight(t);
+        var accW = 0; for (t = start; t <= end; t += DAY) { accW += weight(t); var v = by.get(t) || 0; if (t <= lastDay) acc += v; days.push({ t: t, v: t <= lastDay ? v : null, cum: t <= lastDay ? acc : null, tgt: target * accW / totalW, w: weight(t) }); }
+        if (lastDay < start) { S.model = null; message("No data in the period " + iso(start) + " to " + iso(end) + "."); return; }
+        message(null);
+        var past = days.filter(function (d) { return d.t <= lastDay; }), elapsedW = d3.sum(past, function (d) { return d.w; }), leftW = totalW - elapsedW, actual = acc, pathNow = past[past.length - 1].tgt;
+        var avgRate = elapsedW ? actual / elapsedW : 0, recent = past.slice(-recentN), recentW = d3.sum(recent, function (d) { return d.w; }), recentRate = recentW ? d3.sum(recent, function (d) { return d.v; }) / recentW : 0;
+        var projAvg = actual + avgRate * leftW, projRec = actual + recentRate * leftW, needed = leftW ? Math.max(0, target - actual) / leftW : null;
+        var best = Math.max(projAvg, projRec), status = actual >= target ? "done" : projRec >= target && projAvg >= target ? "on" : best >= target * 0.95 ? "risk" : "off"; // at risk: one projection short, or the better one within 5%
+        S.model = { F: F, days: days, start: start, end: end, lastDay: lastDay, target: target, actual: actual, pathNow: pathNow, avgRate: avgRate, recentRate: recentRate, recentN: recentN, projAvg: projAvg, projRec: projRec, needed: needed, leftDays: Math.round((end - lastDay) / DAY), leftW: leftW, work: work, status: status, name: !F.m || F.m.function === "RECORD_COUNT" || !F.m.inputField ? "Records" : F.m.inputField };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var m = { l: 58, r: 70, t: 42, b: 28 }, w = Math.max(60, W - m.l - m.r), h = Math.max(60, H - m.t - m.b);
+        var x = d3.scaleUtc().domain([M.start, M.end]).range([0, w]), y = d3.scaleLinear().domain([0, Math.max(M.target, M.projAvg, M.projRec, M.actual) * 1.05]).nice().range([h, 0]);
+        var g = svg.append("g").attr("transform", "translate(" + m.l + "," + m.t + ")");
+        g.append("g").attr("class", "grid").call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(""));
+        g.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(5).tickFormat(fmt));
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + h + ")").call(d3.axisBottom(x).ticks(Math.max(3, Math.floor(w / 90))));
+        var line = d3.line().defined(function (d) { return d[1] !== null; }).x(function (d) { return x(d[0]); }).y(function (d) { return y(d[1]); });
+        var past = M.days.filter(function (d) { return d.cum !== null; }), lt = M.lastDay, la = M.actual;
+        // gap to the target path, shaded green when ahead and red when behind
+        g.append("path").attr("class", "ln").attr("d", d3.area().x(function (d) { return x(d.t); }).y0(function (d) { return y(d.tgt); }).y1(function (d) { return y(d.cum); })(past)).attr("fill", la >= M.pathNow ? OK : BAD).attr("opacity", 0.1);
+        g.append("path").attr("class", "ln").attr("d", line(M.days.map(function (d) { return [d.t, d.tgt]; }))).attr("fill", "none").attr("stroke", TGT).attr("stroke-width", 1.4).attr("stroke-dasharray", "5 4");
+        g.append("path").attr("class", "ln").attr("d", line([[lt, la], [M.end, M.projAvg]])).attr("fill", "none").attr("stroke", AVG).attr("stroke-width", 1.8).attr("stroke-dasharray", "6 3");
+        g.append("path").attr("class", "ln").attr("d", line([[lt, la], [M.end, M.projRec]])).attr("fill", "none").attr("stroke", REC).attr("stroke-width", 1.8).attr("stroke-dasharray", "2 3");
+        g.append("path").attr("class", "ln").attr("d", line(past.map(function (d) { return [d.t, d.cum]; }))).attr("fill", "none").attr("stroke", ACT).attr("stroke-width", 2.6);
+        g.append("circle").attr("cx", x(lt)).attr("cy", y(la)).attr("r", 4.5).attr("fill", ACT);
+        // end markers
+        [[M.target, "Target " + fmt(M.target), TGT, true], [M.projAvg, fmt(M.projAvg), AVG], [M.projRec, fmt(M.projRec), REC]].forEach(function (e, i, arr) {
+            var yy = y(e[0]); g.append("line").attr("x1", w - 6).attr("x2", w + 4).attr("y1", yy).attr("y2", yy).attr("stroke", e[2]).attr("stroke-width", e[3] ? 2.5 : 1.5);
+        });
+        var labs = [[M.target, "Target", TGT], [M.projAvg, fmt(M.projAvg), AVG], [M.projRec, fmt(M.projRec), REC]].sort(function (a, b) { return b[0] - a[0]; }), ly = labs.map(function (l) { return y(l[0]); });
+        for (var k = 1; k < ly.length; k++) if (ly[k] < ly[k - 1] + 13) ly[k] = ly[k - 1] + 13;
+        labs.forEach(function (l, i) { g.append("text").attr("x", w + 8).attr("y", ly[i]).attr("dy", "0.35em").style("font-size", "10.5px").style("font-weight", l[1] === "Target" ? "bold" : null).attr("fill", l[2]).text(l[1]); });
+        // legend and headline
+        var lg = svg.append("g").attr("transform", "translate(" + m.l + ",30)").style("font-size", "10.5px").attr("fill", "#52514e"), lx = 0;
+        [[ACT, "Actual, cumulative", null], [TGT, "Target path", "5 4"], [AVG, "At the average rate so far", "6 3"], [REC, "At the last " + M.recentN + " days' rate", "2 3"]].forEach(function (L) { var e = lg.append("g").attr("transform", "translate(" + lx + ",0)"); e.append("line").attr("x1", 0).attr("x2", 18).attr("y1", -3).attr("y2", -3).attr("stroke", L[0]).attr("stroke-width", 2).attr("stroke-dasharray", L[2]); var t = e.append("text").attr("x", 22).text(L[1]); lx += 22 + t.node().getComputedTextLength() + 14; });
+        var st = { done: ["\u25b2 Target reached", OK], on: ["\u25b2 On track", OK], risk: ["\u25cf At risk", "#7a5600"], off: ["\u25bc Off track", BAD] }[M.status];
+        var head = svg.append("text").attr("x", m.l).attr("y", 15).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").attr("fill", st[1]).text(st[0] + "  ");
+        head.append("tspan").style("font-weight", "bold").text(fmt(M.actual) + " of " + fmt(M.target) + " (" + pct(M.actual / M.target) + ")");
+        head.append("tspan").attr("fill", "#52514e").text(", " + M.leftDays + " days to go; " + (M.actual >= M.pathNow ? "ahead of" : "behind") + " the target path by " + fmt(Math.abs(M.actual - M.pathNow)));
+        // hover
+        var cross = g.append("line").attr("y1", 0).attr("y2", h).attr("stroke", "#52514e").attr("opacity", 0);
+        g.insert("rect", ":first-child").attr("width", w).attr("height", h).attr("fill", "transparent").style("cursor", "pointer")
+            .on("mousemove", function (ev) { var t = dayOf(x.invert(d3.pointer(ev, g.node())[0]).getTime() + DAY / 2), d = M.days.find(function (q) { return q.t === t; }); if (!d) return; cross.attr("x1", x(t)).attr("x2", x(t)).attr("opacity", 0.35); tipDay(d, ev); })
+            .on("mouseleave", function () { cross.attr("opacity", 0); tip(); })
+            .on("click", function (ev) { ev.stopPropagation(); var t = dayOf(x.invert(d3.pointer(ev, g.node())[0]).getTime() + DAY / 2); if (t <= M.lastDay) selectTo(t); });
+        if (intro) { linesIn(svg, 1200); }
+        side(st);
+    }
+    function tipDay(d, ev) {
+        var M = S.model, h = '<b>' + d3.utcFormat("%a %d %b %Y")(new Date(d.t)) + '</b>';
+        if (d.cum !== null) h += '<br><span class="k">On the day:</span> ' + fmt(d.v) + '<br><span class="k">Cumulative:</span> <b>' + fmt(d.cum) + '</b> (' + pct(d.cum / M.target) + ' of target)<br><span class="k">Target path:</span> ' + fmt(d.tgt) + ' <span class="k">(' + (d.cum >= d.tgt ? "ahead by " : "behind by ") + fmt(Math.abs(d.cum - d.tgt)) + ')</span>';
+        else h += '<br><span class="k">Target path:</span> ' + fmt(d.tgt);
+        show(h, ev);
+    }
+    function side(st) {
+        var M = S.model, unit = M.work ? "working day" : "day", cls = { done: "ok", on: "ok", risk: "risk", off: "miss" }[M.status];
+        var h = '<h3>' + (M.name.length > 24 ? "Progress" : M.name) + '</h3><div class="big">' + pct(M.actual / M.target) + '</div><div class="stat">of the ' + fmt(M.target) + ' target, ' + d3.utcFormat("%d %b")(new Date(M.start)) + ' to ' + d3.utcFormat("%d %b %Y")(new Date(M.end)) + '</div><div class="stat"><span class="tag ' + cls + '">' + st[0] + '</span></div>';
+        h += '<h3>Projection</h3><div class="stat">At the average rate so far (' + fmt(M.avgRate) + ' a ' + unit + '): <b>' + fmt(M.projAvg) + '</b> (' + pct(M.projAvg / M.target) + ')</div><div class="stat">At the last ' + M.recentN + ' days\u2019 rate (' + fmt(M.recentRate) + ' a ' + unit + '): <b>' + fmt(M.projRec) + '</b> (' + pct(M.projRec / M.target) + ')</div>';
+        if (M.needed !== null && M.actual < M.target) h += '<h3>Needed</h3><div class="stat"><b>' + fmt(M.needed) + '</b> a ' + unit + ' for the remaining ' + Math.round(M.leftW) + ' ' + unit + 's, ' + (M.avgRate ? pct(M.needed / M.avgRate) : '') + ' of the average rate so far</div>';
+        h += '<div class="note">The target path spreads the target evenly over ' + (M.work ? 'working days (Monday to Friday)' : 'the days') + ' of the period. Data runs to ' + iso(M.lastDay) + '. Click the chart to select everything from the start of the period to that day.</div>';
+        document.getElementById("side").innerHTML = h;
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectTo(t) {
+        if (S.sel && S.sel.to === t) return publish(null, null);
+        var M = S.model; publish({ type: "AND", filters: [{ type: "FIELD_VALUE", inputField: M.F.d, operator: ">=", value: iso(M.start) }, { type: "FIELD_VALUE", inputField: M.F.d, operator: "<", value: iso(t + DAY) }] }, { to: t });
+    }
+    window.__tt.selectTo = function (s) { selectTo(Date.parse(s + "T00:00:00Z")); };
+
+    document.getElementById("chart").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/contacts.csv",
+  "options": {
+   "items": {
+    "time": "Received",
+    "show": "AVERAGE",
+    "utcOffset": 0
+   }
+  },
+  "width": 1060,
+  "height": 420,
+  "wait": 1500,
+  "showcaseHeight": 420,
+  "caption": "Live: about 35,000 illustrative contact-centre contacts over 26 weeks, averaged per week. Hover a cell for the figures; click a cell, a day or an hour to select those contacts.",
+  "expect": {
+   "selector": "rect.cell",
+   "min": 168
+  }
+ },
+ {
+  "name": "chat",
+  "showcase": true,
+  "data": "sample-data/contacts.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Channel",
+   "operator": "=",
+   "value": "Chat"
+  },
+  "options": {
+   "items": {
+    "time": "Received",
+    "show": "AVERAGE",
+    "utcOffset": 0
+   }
+  },
+  "width": 1060,
+  "height": 420,
+  "wait": 1500,
+  "showcaseHeight": 420,
+  "caption": "Live: the same view filtered to chat, which runs into the evening and keeps going at weekends.",
+  "expect": {
+   "selector": "rect.cell",
+   "min": 168
+  }
+ },
+ {
+  "name": "handling",
+  "data": "sample-data/contacts.csv",
+  "options": {
+   "items": {
+    "time": "Received",
+    "show": "AVERAGE",
+    "utcOffset": 0,
+    "value": {
+     "inputField": "Handling minutes",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 1000,
+  "height": 400,
+  "wait": 1500,
+  "expect": {
+   "selector": "rect.cell",
+   "min": 168
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/contacts.csv",
+  "options": {
+   "items": {
+    "time": "Received",
+    "show": "AVERAGE",
+    "utcOffset": 0
+   }
+  },
+  "width": 1000,
+  "height": 420,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__week.model;var mon=M.cells.filter(function(c){return c.d===0});return Math.abs(M.cells[10].v-43.57692307692308)<1e-6 && d3.sum(mon,function(c){return c.sum})===8170 && M.total===35360})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "rect.cell",
+    "nth": 34
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "eval": "window.__week.selectDay(0)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.type==='OR' && f.filters.length>=26 && f.filters.length<400})()",
+    "expectTruthy": true
+   },
+   {
+    "click": "rect.cell",
+    "nth": 34
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "cell"
+   },
+   {
+    "clickAt": [
+     5,
+     415
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Channel",
+     "operator": "=",
+     "value": "Email"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__week.model.total<6000",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     520,
+     360
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "mean",
+  "data": "sample-data/contacts.csv",
+  "options": {
+   "items": {
+    "time": "Received",
+    "show": "AVERAGE",
+    "utcOffset": 0,
+    "value": {
+     "inputField": "Handling minutes",
+     "function": "MEAN"
+    }
+   }
+  },
+  "width": 1000,
+  "height": 400,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__week.model.additive===false && window.__week.model.cells[10].v>3",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "dates",
+  "data": "../forecast/sample-data/sales_history.csv",
+  "options": {
+   "items": {
+    "time": "Month"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "dates without times"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Received",
+    "type": "DATE"
+   }
+  ],
+  "options": {
+   "items": {
+    "time": "Received",
+    "show": "AVERAGE",
+    "utcOffset": 0
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/contacts.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Timestamps"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "time": "When"
+   }
+  },
+  "width": 1100,
+  "height": 460,
+  "wait": 10000,
+  "actions": [
+   {
+    "eval": "window.__week.model.total===400000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/contacts.csv",
+  "options": {
+   "items": {
+    "time": "Received",
+    "show": "AVERAGE",
+    "utcOffset": 0
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

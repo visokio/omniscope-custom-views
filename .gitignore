@@ -1,2 +1,10 @@
 .idea
 .DS_Store
+
+# Generated: the gallery, the demo server bundle, test output
+_site/
+_bundle/
+node_modules/
+showcase.html
+**/tests/screenshots/
+**/tests/results.json

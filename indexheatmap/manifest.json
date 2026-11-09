@@ -1,0 +1,181 @@
+{
+  "name": "Index Heatmap",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "index",
+    "cross-tab",
+    "heatmap",
+    "over-index",
+    "market research",
+    "residuals",
+    "profiling",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 5000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "rows": {
+        "displayName": "Rows",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "e.g. Category"
+      },
+      "cols": {
+        "displayName": "Columns",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "e.g. Age band"
+      },
+      "value": {
+        "displayName": "Measure",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Record count for a classic cross-tab (with significance), or a sum such as Spend"
+      },
+      "show": {
+        "displayName": "Show",
+        "type": "CHOICE",
+        "values": [
+          "INDEX",
+          "ROWPCT",
+          "COLPCT",
+          "VALUE"
+        ],
+        "displayValues": [
+          "Index (100 = average)",
+          "Share of row",
+          "Share of column",
+          "Value"
+        ],
+        "detail": "What each cell shows; colour is always the index"
+      },
+      "sort": {
+        "displayName": "Sort",
+        "type": "CHOICE",
+        "values": [
+          "NAME",
+          "TOTAL"
+        ],
+        "displayValues": [
+          "By name",
+          "By total"
+        ]
+      },
+      "marks": {
+        "displayName": "Mark significant",
+        "type": "TOGGLE",
+        "detail": "With counts, mark cells that differ from average by more than chance (adjusted residual beyond 1.96)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "rows",
+        "cols",
+        "value",
+        "show"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Cross-tab",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "rows",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "cols",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "show",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "sort",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "marks",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "show": "INDEX",
+      "sort": "NAME",
+      "marks": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 200
+  }
+}

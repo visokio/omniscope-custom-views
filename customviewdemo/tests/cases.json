@@ -1,0 +1,85 @@
+[
+ {
+  "name": "showcase", "showcase": true,
+  "data": "sample-data/sales.csv",
+  "options": { "items": { "split": { "inputField": "Product", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 640, "height": 380, "showcaseHeight": 380, "wait": 2000,
+  "caption": "Live: invented bakery sales, summed by product. Click a bar to select it.",
+  "expect": { "selector": ".highcharts-point", "min": 6, "max": 6, "text": "Sales (sum)" },
+  "actions": [
+   { "eval": "chart.series[0].points.map(p => Math.round(p.y * 100) / 100).join() === '1708.5,3078.6,2041,2691,1197.3,6253.8'", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/sales.csv",
+  "options": { "items": { "split": { "inputField": "Product", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 640, "height": 380, "wait": 2000,
+  "actions": [
+   { "click": ".highcharts-point", "nth": 5 },
+   { "expectSelection": true },
+   { "eval": "omniscope.view.context().viewSelection.filter.filters[0].value === 'Sourdough' && chart.series[0].points[5].selected", "expectTruthy": true },
+   { "screenshot": "selected" },
+   { "click": ".highcharts-point", "nth": 5 },
+   { "expectSelection": false },
+   { "click": ".highcharts-point", "nth": 1 },
+   { "expectSelection": true },
+   { "click": ".highcharts-plot-background", "at": [5, 5] },
+   { "expectSelection": false },
+   { "eval": "chart.series[0].points.every(p => !p.selected)", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/sales.csv",
+  "options": { "items": { "split": { "inputField": "Product", "type": "UNIQUE_VALUES" }, "measures": { "function": "RECORD_COUNT" } } },
+  "width": 640, "height": 380, "wait": 2000,
+  "expect": { "text": "Record count" },
+  "actions": [
+   { "eval": "chart.series[0].points.reduce((a, p) => a + p.y, 0) === 300", "expectTruthy": true },
+   { "filter": { "type": "FIELD_VALUE", "inputField": "Shop", "operator": "=", "value": "Mill Lane" } },
+   { "wait": 800 },
+   { "eval": "(() => { const n = chart.series[0].points.reduce((a, p) => a + p.y, 0); return n > 0 && n < 300; })()", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/sales.csv",
+  "options": { "items": { "split": { "inputField": "Product", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 640, "height": 380, "wait": 2000,
+  "actions": [
+   { "resize": [200, 140] },
+   { "eval": "chart.chartWidth === 200 && chart.chartHeight === 140", "expectTruthy": true },
+   { "screenshot": "200x140" }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [ { "name": "Product", "type": "TEXT" }, { "name": "Sales", "type": "NUMBER" } ],
+  "options": { "items": { "split": { "inputField": "Product", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 400, "height": 300, "wait": 1500,
+  "expect": { "text": "No data to show" }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/sales.csv",
+  "options": { "items": {} },
+  "width": 400, "height": 300, "wait": 1500,
+  "expect": { "text": "Choose a Split field and a Measure" }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": { "items": { "split": { "inputField": "Product", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 640, "height": 380, "wait": 2500,
+  "actions": [
+   { "eval": "chart.series[0].points.length === 12 && chart.series[0].points.reduce((a, p) => a + p.y, 0) === 1010000", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "thumb", "thumbnail": true,
+  "data": "sample-data/sales.csv",
+  "options": { "items": { "split": { "inputField": "Product", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 580, "height": 580, "scale": 0.5, "wait": 2000
+ }
+]

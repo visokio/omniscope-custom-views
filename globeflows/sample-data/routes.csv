@@ -1,0 +1,249 @@
+Origin port,Origin region,Origin latitude,Origin longitude,Destination port,Destination region,Destination latitude,Destination longitude,Containers (TEU)
+Shanghai,East Asia,31.23,121.47,Felixstowe,Europe,51.96,1.35,95102
+Shanghai,East Asia,31.23,121.47,Southampton,Europe,50.9,-1.4,213588
+Shanghai,East Asia,31.23,121.47,Piraeus,Europe,37.94,23.63,172467
+Ningbo,East Asia,29.87,121.55,Piraeus,Europe,37.94,23.63,215682
+Ningbo,East Asia,29.87,121.55,Algeciras,Europe,36.13,-5.44,188390
+Ningbo,East Asia,29.87,121.55,Valencia,Europe,39.44,-0.32,127228
+Shenzhen,East Asia,22.54,114.06,Southampton,Europe,50.9,-1.4,142054
+Shenzhen,East Asia,22.54,114.06,Algeciras,Europe,36.13,-5.44,143622
+Shenzhen,East Asia,22.54,114.06,Antwerp,Europe,51.26,4.4,74063
+Busan,East Asia,35.1,129.04,Valencia,Europe,39.44,-0.32,73070
+Busan,East Asia,35.1,129.04,Southampton,Europe,50.9,-1.4,73431
+Busan,East Asia,35.1,129.04,Algeciras,Europe,36.13,-5.44,55660
+Hong Kong,East Asia,22.3,114.17,Rotterdam,Europe,51.95,4.14,80426
+Hong Kong,East Asia,22.3,114.17,Southampton,Europe,50.9,-1.4,112676
+Hong Kong,East Asia,22.3,114.17,Antwerp,Europe,51.26,4.4,49502
+Kaohsiung,East Asia,22.61,120.27,Felixstowe,Europe,51.96,1.35,45740
+Kaohsiung,East Asia,22.61,120.27,Algeciras,Europe,36.13,-5.44,124968
+Kaohsiung,East Asia,22.61,120.27,Southampton,Europe,50.9,-1.4,84798
+Tokyo,East Asia,35.62,139.78,Rotterdam,Europe,51.95,4.14,50302
+Tokyo,East Asia,35.62,139.78,Piraeus,Europe,37.94,23.63,83656
+Tokyo,East Asia,35.62,139.78,Valencia,Europe,39.44,-0.32,90983
+Shanghai,East Asia,31.23,121.47,Vancouver,North America,49.29,-123.11,214827
+Shanghai,East Asia,31.23,121.47,Los Angeles,North America,33.74,-118.27,149805
+Shanghai,East Asia,31.23,121.47,Long Beach,North America,33.75,-118.19,130370
+Ningbo,East Asia,29.87,121.55,Long Beach,North America,33.75,-118.19,191472
+Ningbo,East Asia,29.87,121.55,Savannah,North America,32.08,-81.09,216783
+Ningbo,East Asia,29.87,121.55,New York,North America,40.67,-74.04,212127
+Shenzhen,East Asia,22.54,114.06,Savannah,North America,32.08,-81.09,84981
+Shenzhen,East Asia,22.54,114.06,Vancouver,North America,49.29,-123.11,166827
+Shenzhen,East Asia,22.54,114.06,Los Angeles,North America,33.74,-118.27,53827
+Busan,East Asia,35.1,129.04,Los Angeles,North America,33.74,-118.27,58507
+Busan,East Asia,35.1,129.04,Savannah,North America,32.08,-81.09,96707
+Busan,East Asia,35.1,129.04,New York,North America,40.67,-74.04,86954
+Hong Kong,East Asia,22.3,114.17,Savannah,North America,32.08,-81.09,127590
+Hong Kong,East Asia,22.3,114.17,Long Beach,North America,33.75,-118.19,99638
+Hong Kong,East Asia,22.3,114.17,Vancouver,North America,49.29,-123.11,104503
+Kaohsiung,East Asia,22.61,120.27,Los Angeles,North America,33.74,-118.27,136000
+Kaohsiung,East Asia,22.61,120.27,Savannah,North America,32.08,-81.09,96059
+Kaohsiung,East Asia,22.61,120.27,New York,North America,40.67,-74.04,121474
+Tokyo,East Asia,35.62,139.78,New York,North America,40.67,-74.04,77295
+Tokyo,East Asia,35.62,139.78,Los Angeles,North America,33.74,-118.27,87998
+Tokyo,East Asia,35.62,139.78,Vancouver,North America,49.29,-123.11,73166
+Singapore,South East Asia,1.26,103.84,Algeciras,Europe,36.13,-5.44,59054
+Singapore,South East Asia,1.26,103.84,Piraeus,Europe,37.94,23.63,56343
+Singapore,South East Asia,1.26,103.84,Valencia,Europe,39.44,-0.32,58074
+Port Klang,South East Asia,3.0,101.39,Antwerp,Europe,51.26,4.4,59764
+Port Klang,South East Asia,3.0,101.39,Southampton,Europe,50.9,-1.4,38737
+Port Klang,South East Asia,3.0,101.39,Rotterdam,Europe,51.95,4.14,35886
+Tanjung Pelepas,South East Asia,1.36,103.55,Piraeus,Europe,37.94,23.63,62416
+Tanjung Pelepas,South East Asia,1.36,103.55,Antwerp,Europe,51.26,4.4,64706
+Tanjung Pelepas,South East Asia,1.36,103.55,Valencia,Europe,39.44,-0.32,22080
+Shanghai,East Asia,31.23,121.47,Port Klang,South East Asia,3.0,101.39,71434
+Shanghai,East Asia,31.23,121.47,Singapore,South East Asia,1.26,103.84,128672
+Shanghai,East Asia,31.23,121.47,Tanjung Pelepas,South East Asia,1.36,103.55,76135
+Ningbo,East Asia,29.87,121.55,Singapore,South East Asia,1.26,103.84,96389
+Ningbo,East Asia,29.87,121.55,Tanjung Pelepas,South East Asia,1.36,103.55,166358
+Ningbo,East Asia,29.87,121.55,Port Klang,South East Asia,3.0,101.39,101746
+Shenzhen,East Asia,22.54,114.06,Tanjung Pelepas,South East Asia,1.36,103.55,60737
+Shenzhen,East Asia,22.54,114.06,Singapore,South East Asia,1.26,103.84,64275
+Shenzhen,East Asia,22.54,114.06,Port Klang,South East Asia,3.0,101.39,44505
+Busan,East Asia,35.1,129.04,Singapore,South East Asia,1.26,103.84,30581
+Busan,East Asia,35.1,129.04,Tanjung Pelepas,South East Asia,1.36,103.55,85384
+Busan,East Asia,35.1,129.04,Port Klang,South East Asia,3.0,101.39,93816
+Hong Kong,East Asia,22.3,114.17,Tanjung Pelepas,South East Asia,1.36,103.55,66570
+Hong Kong,East Asia,22.3,114.17,Port Klang,South East Asia,3.0,101.39,53164
+Hong Kong,East Asia,22.3,114.17,Singapore,South East Asia,1.26,103.84,97055
+Kaohsiung,East Asia,22.61,120.27,Port Klang,South East Asia,3.0,101.39,44544
+Kaohsiung,East Asia,22.61,120.27,Singapore,South East Asia,1.26,103.84,39887
+Kaohsiung,East Asia,22.61,120.27,Tanjung Pelepas,South East Asia,1.36,103.55,38933
+Tokyo,East Asia,35.62,139.78,Tanjung Pelepas,South East Asia,1.36,103.55,31390
+Tokyo,East Asia,35.62,139.78,Singapore,South East Asia,1.26,103.84,35097
+Tokyo,East Asia,35.62,139.78,Port Klang,South East Asia,3.0,101.39,85830
+Shanghai,East Asia,31.23,121.47,Jebel Ali,Middle East,25.01,55.06,39171
+Shanghai,East Asia,31.23,121.47,Jeddah,Middle East,21.48,39.17,65155
+Ningbo,East Asia,29.87,121.55,Jeddah,Middle East,21.48,39.17,40053
+Ningbo,East Asia,29.87,121.55,Jebel Ali,Middle East,25.01,55.06,76413
+Shenzhen,East Asia,22.54,114.06,Jeddah,Middle East,21.48,39.17,15839
+Shenzhen,East Asia,22.54,114.06,Jebel Ali,Middle East,25.01,55.06,29045
+Busan,East Asia,35.1,129.04,Jeddah,Middle East,21.48,39.17,29584
+Busan,East Asia,35.1,129.04,Jebel Ali,Middle East,25.01,55.06,26405
+Hong Kong,East Asia,22.3,114.17,Jebel Ali,Middle East,25.01,55.06,31135
+Hong Kong,East Asia,22.3,114.17,Jeddah,Middle East,21.48,39.17,21094
+Kaohsiung,East Asia,22.61,120.27,Jeddah,Middle East,21.48,39.17,51342
+Kaohsiung,East Asia,22.61,120.27,Jebel Ali,Middle East,25.01,55.06,40080
+Tokyo,East Asia,35.62,139.78,Jebel Ali,Middle East,25.01,55.06,20092
+Tokyo,East Asia,35.62,139.78,Jeddah,Middle East,21.48,39.17,25648
+Rotterdam,Europe,51.95,4.14,Savannah,North America,32.08,-81.09,19280
+Rotterdam,Europe,51.95,4.14,New York,North America,40.67,-74.04,30638
+Rotterdam,Europe,51.95,4.14,Vancouver,North America,49.29,-123.11,20502
+Antwerp,Europe,51.26,4.4,Vancouver,North America,49.29,-123.11,37841
+Antwerp,Europe,51.26,4.4,New York,North America,40.67,-74.04,21159
+Antwerp,Europe,51.26,4.4,Savannah,North America,32.08,-81.09,17273
+Hamburg,Europe,53.55,9.97,Vancouver,North America,49.29,-123.11,24704
+Hamburg,Europe,53.55,9.97,New York,North America,40.67,-74.04,42013
+Hamburg,Europe,53.55,9.97,Los Angeles,North America,33.74,-118.27,31901
+Felixstowe,Europe,51.96,1.35,Savannah,North America,32.08,-81.09,40743
+Felixstowe,Europe,51.96,1.35,Long Beach,North America,33.75,-118.19,32483
+Felixstowe,Europe,51.96,1.35,Vancouver,North America,49.29,-123.11,47423
+Southampton,Europe,50.9,-1.4,Long Beach,North America,33.75,-118.19,41392
+Southampton,Europe,50.9,-1.4,New York,North America,40.67,-74.04,32720
+Southampton,Europe,50.9,-1.4,Los Angeles,North America,33.74,-118.27,33024
+Valencia,Europe,39.44,-0.32,Long Beach,North America,33.75,-118.19,31202
+Valencia,Europe,39.44,-0.32,Savannah,North America,32.08,-81.09,15039
+Valencia,Europe,39.44,-0.32,New York,North America,40.67,-74.04,22768
+Piraeus,Europe,37.94,23.63,New York,North America,40.67,-74.04,38577
+Piraeus,Europe,37.94,23.63,Los Angeles,North America,33.74,-118.27,24263
+Piraeus,Europe,37.94,23.63,Long Beach,North America,33.75,-118.19,48224
+Algeciras,Europe,36.13,-5.44,Long Beach,North America,33.75,-118.19,41159
+Algeciras,Europe,36.13,-5.44,Savannah,North America,32.08,-81.09,19716
+Algeciras,Europe,36.13,-5.44,Los Angeles,North America,33.74,-118.27,33925
+Shanghai,East Asia,31.23,121.47,Melbourne,Oceania,-37.83,144.92,35589
+Shanghai,East Asia,31.23,121.47,Sydney,Oceania,-33.97,151.21,45524
+Ningbo,East Asia,29.87,121.55,Melbourne,Oceania,-37.83,144.92,49933
+Ningbo,East Asia,29.87,121.55,Sydney,Oceania,-33.97,151.21,39503
+Shenzhen,East Asia,22.54,114.06,Sydney,Oceania,-33.97,151.21,16798
+Shenzhen,East Asia,22.54,114.06,Melbourne,Oceania,-37.83,144.92,13518
+Busan,East Asia,35.1,129.04,Melbourne,Oceania,-37.83,144.92,21286
+Busan,East Asia,35.1,129.04,Sydney,Oceania,-33.97,151.21,32391
+Hong Kong,East Asia,22.3,114.17,Sydney,Oceania,-33.97,151.21,29186
+Hong Kong,East Asia,22.3,114.17,Melbourne,Oceania,-37.83,144.92,26870
+Kaohsiung,East Asia,22.61,120.27,Melbourne,Oceania,-37.83,144.92,25826
+Kaohsiung,East Asia,22.61,120.27,Sydney,Oceania,-33.97,151.21,17603
+Tokyo,East Asia,35.62,139.78,Sydney,Oceania,-33.97,151.21,10257
+Tokyo,East Asia,35.62,139.78,Melbourne,Oceania,-37.83,144.92,31971
+Shanghai,East Asia,31.23,121.47,Manzanillo,Latin America,19.05,-104.31,37697
+Shanghai,East Asia,31.23,121.47,Santos,Latin America,-23.96,-46.33,43962
+Ningbo,East Asia,29.87,121.55,Manzanillo,Latin America,19.05,-104.31,32624
+Ningbo,East Asia,29.87,121.55,Santos,Latin America,-23.96,-46.33,36387
+Shenzhen,East Asia,22.54,114.06,Manzanillo,Latin America,19.05,-104.31,19172
+Shenzhen,East Asia,22.54,114.06,Santos,Latin America,-23.96,-46.33,32116
+Busan,East Asia,35.1,129.04,Santos,Latin America,-23.96,-46.33,15989
+Busan,East Asia,35.1,129.04,Manzanillo,Latin America,19.05,-104.31,14347
+Hong Kong,East Asia,22.3,114.17,Santos,Latin America,-23.96,-46.33,25159
+Hong Kong,East Asia,22.3,114.17,Manzanillo,Latin America,19.05,-104.31,28964
+Kaohsiung,East Asia,22.61,120.27,Santos,Latin America,-23.96,-46.33,34363
+Kaohsiung,East Asia,22.61,120.27,Manzanillo,Latin America,19.05,-104.31,16422
+Tokyo,East Asia,35.62,139.78,Manzanillo,Latin America,19.05,-104.31,17243
+Tokyo,East Asia,35.62,139.78,Santos,Latin America,-23.96,-46.33,24011
+Rotterdam,Europe,51.95,4.14,Tangier Med,Africa,35.88,-5.5,10448
+Rotterdam,Europe,51.95,4.14,Lagos,Africa,6.44,3.36,16516
+Rotterdam,Europe,51.95,4.14,Durban,Africa,-29.87,31.03,22582
+Antwerp,Europe,51.26,4.4,Tangier Med,Africa,35.88,-5.5,19209
+Antwerp,Europe,51.26,4.4,Lagos,Africa,6.44,3.36,23500
+Antwerp,Europe,51.26,4.4,Durban,Africa,-29.87,31.03,9223
+Hamburg,Europe,53.55,9.97,Durban,Africa,-29.87,31.03,24201
+Hamburg,Europe,53.55,9.97,Tangier Med,Africa,35.88,-5.5,11260
+Hamburg,Europe,53.55,9.97,Lagos,Africa,6.44,3.36,20566
+Felixstowe,Europe,51.96,1.35,Lagos,Africa,6.44,3.36,10214
+Felixstowe,Europe,51.96,1.35,Durban,Africa,-29.87,31.03,14500
+Felixstowe,Europe,51.96,1.35,Tangier Med,Africa,35.88,-5.5,26029
+Southampton,Europe,50.9,-1.4,Lagos,Africa,6.44,3.36,9898
+Southampton,Europe,50.9,-1.4,Durban,Africa,-29.87,31.03,15899
+Southampton,Europe,50.9,-1.4,Tangier Med,Africa,35.88,-5.5,13493
+Valencia,Europe,39.44,-0.32,Durban,Africa,-29.87,31.03,15518
+Valencia,Europe,39.44,-0.32,Lagos,Africa,6.44,3.36,11090
+Valencia,Europe,39.44,-0.32,Tangier Med,Africa,35.88,-5.5,22427
+Piraeus,Europe,37.94,23.63,Durban,Africa,-29.87,31.03,16820
+Piraeus,Europe,37.94,23.63,Lagos,Africa,6.44,3.36,17685
+Piraeus,Europe,37.94,23.63,Tangier Med,Africa,35.88,-5.5,24817
+Algeciras,Europe,36.13,-5.44,Lagos,Africa,6.44,3.36,11117
+Algeciras,Europe,36.13,-5.44,Durban,Africa,-29.87,31.03,18381
+Algeciras,Europe,36.13,-5.44,Tangier Med,Africa,35.88,-5.5,23661
+Colombo,South Asia,6.95,79.85,Valencia,Europe,39.44,-0.32,11888
+Colombo,South Asia,6.95,79.85,Hamburg,Europe,53.55,9.97,18193
+Colombo,South Asia,6.95,79.85,Antwerp,Europe,51.26,4.4,11232
+Mumbai,South Asia,18.95,72.95,Felixstowe,Europe,51.96,1.35,22365
+Mumbai,South Asia,18.95,72.95,Southampton,Europe,50.9,-1.4,11207
+Mumbai,South Asia,18.95,72.95,Valencia,Europe,39.44,-0.32,12182
+Shanghai,East Asia,31.23,121.47,Durban,Africa,-29.87,31.03,14683
+Shanghai,East Asia,31.23,121.47,Lagos,Africa,6.44,3.36,18194
+Shanghai,East Asia,31.23,121.47,Tangier Med,Africa,35.88,-5.5,18747
+Ningbo,East Asia,29.87,121.55,Tangier Med,Africa,35.88,-5.5,17899
+Ningbo,East Asia,29.87,121.55,Durban,Africa,-29.87,31.03,22635
+Ningbo,East Asia,29.87,121.55,Lagos,Africa,6.44,3.36,15128
+Shenzhen,East Asia,22.54,114.06,Durban,Africa,-29.87,31.03,19854
+Shenzhen,East Asia,22.54,114.06,Lagos,Africa,6.44,3.36,9084
+Shenzhen,East Asia,22.54,114.06,Tangier Med,Africa,35.88,-5.5,9065
+Busan,East Asia,35.1,129.04,Tangier Med,Africa,35.88,-5.5,17149
+Busan,East Asia,35.1,129.04,Durban,Africa,-29.87,31.03,19102
+Busan,East Asia,35.1,129.04,Lagos,Africa,6.44,3.36,16180
+Hong Kong,East Asia,22.3,114.17,Tangier Med,Africa,35.88,-5.5,13409
+Hong Kong,East Asia,22.3,114.17,Durban,Africa,-29.87,31.03,18946
+Hong Kong,East Asia,22.3,114.17,Lagos,Africa,6.44,3.36,8114
+Kaohsiung,East Asia,22.61,120.27,Durban,Africa,-29.87,31.03,10964
+Kaohsiung,East Asia,22.61,120.27,Lagos,Africa,6.44,3.36,9998
+Kaohsiung,East Asia,22.61,120.27,Tangier Med,Africa,35.88,-5.5,12822
+Tokyo,East Asia,35.62,139.78,Tangier Med,Africa,35.88,-5.5,5827
+Tokyo,East Asia,35.62,139.78,Lagos,Africa,6.44,3.36,9500
+Tokyo,East Asia,35.62,139.78,Durban,Africa,-29.87,31.03,7320
+Jebel Ali,Middle East,25.01,55.06,Mumbai,South Asia,18.95,72.95,12081
+Jebel Ali,Middle East,25.01,55.06,Colombo,South Asia,6.95,79.85,14287
+Jeddah,Middle East,21.48,39.17,Mumbai,South Asia,18.95,72.95,16726
+Jeddah,Middle East,21.48,39.17,Colombo,South Asia,6.95,79.85,15573
+Rotterdam,Europe,51.95,4.14,Santos,Latin America,-23.96,-46.33,7361
+Rotterdam,Europe,51.95,4.14,Manzanillo,Latin America,19.05,-104.31,13523
+Antwerp,Europe,51.26,4.4,Manzanillo,Latin America,19.05,-104.31,6553
+Antwerp,Europe,51.26,4.4,Santos,Latin America,-23.96,-46.33,9990
+Hamburg,Europe,53.55,9.97,Manzanillo,Latin America,19.05,-104.31,7143
+Hamburg,Europe,53.55,9.97,Santos,Latin America,-23.96,-46.33,14806
+Felixstowe,Europe,51.96,1.35,Santos,Latin America,-23.96,-46.33,13805
+Felixstowe,Europe,51.96,1.35,Manzanillo,Latin America,19.05,-104.31,13986
+Southampton,Europe,50.9,-1.4,Santos,Latin America,-23.96,-46.33,9030
+Southampton,Europe,50.9,-1.4,Manzanillo,Latin America,19.05,-104.31,12946
+Valencia,Europe,39.44,-0.32,Santos,Latin America,-23.96,-46.33,16659
+Valencia,Europe,39.44,-0.32,Manzanillo,Latin America,19.05,-104.31,16768
+Piraeus,Europe,37.94,23.63,Manzanillo,Latin America,19.05,-104.31,16718
+Piraeus,Europe,37.94,23.63,Santos,Latin America,-23.96,-46.33,12761
+Algeciras,Europe,36.13,-5.44,Manzanillo,Latin America,19.05,-104.31,5910
+Algeciras,Europe,36.13,-5.44,Santos,Latin America,-23.96,-46.33,5631
+Los Angeles,North America,33.74,-118.27,Kaohsiung,East Asia,22.61,120.27,16753
+Los Angeles,North America,33.74,-118.27,Ningbo,East Asia,29.87,121.55,39203
+Los Angeles,North America,33.74,-118.27,Hong Kong,East Asia,22.3,114.17,24232
+Long Beach,North America,33.75,-118.19,Tokyo,East Asia,35.62,139.78,36183
+Long Beach,North America,33.75,-118.19,Busan,East Asia,35.1,129.04,40306
+Long Beach,North America,33.75,-118.19,Hong Kong,East Asia,22.3,114.17,38391
+Vancouver,North America,49.29,-123.11,Shenzhen,East Asia,22.54,114.06,13690
+Vancouver,North America,49.29,-123.11,Busan,East Asia,35.1,129.04,15007
+Vancouver,North America,49.29,-123.11,Kaohsiung,East Asia,22.61,120.27,25718
+New York,North America,40.67,-74.04,Shenzhen,East Asia,22.54,114.06,16893
+New York,North America,40.67,-74.04,Busan,East Asia,35.1,129.04,15493
+New York,North America,40.67,-74.04,Kaohsiung,East Asia,22.61,120.27,26027
+Savannah,North America,32.08,-81.09,Tokyo,East Asia,35.62,139.78,26042
+Savannah,North America,32.08,-81.09,Shanghai,East Asia,31.23,121.47,22424
+Savannah,North America,32.08,-81.09,Busan,East Asia,35.1,129.04,45574
+Rotterdam,Europe,51.95,4.14,Hong Kong,East Asia,22.3,114.17,29890
+Rotterdam,Europe,51.95,4.14,Kaohsiung,East Asia,22.61,120.27,30736
+Rotterdam,Europe,51.95,4.14,Shanghai,East Asia,31.23,121.47,53849
+Antwerp,Europe,51.26,4.4,Hong Kong,East Asia,22.3,114.17,28606
+Antwerp,Europe,51.26,4.4,Tokyo,East Asia,35.62,139.78,40776
+Antwerp,Europe,51.26,4.4,Ningbo,East Asia,29.87,121.55,34066
+Hamburg,Europe,53.55,9.97,Busan,East Asia,35.1,129.04,38508
+Hamburg,Europe,53.55,9.97,Ningbo,East Asia,29.87,121.55,40527
+Hamburg,Europe,53.55,9.97,Shanghai,East Asia,31.23,121.47,36059
+Felixstowe,Europe,51.96,1.35,Busan,East Asia,35.1,129.04,20884
+Felixstowe,Europe,51.96,1.35,Shanghai,East Asia,31.23,121.47,27974
+Felixstowe,Europe,51.96,1.35,Shenzhen,East Asia,22.54,114.06,45735
+Southampton,Europe,50.9,-1.4,Busan,East Asia,35.1,129.04,62019
+Southampton,Europe,50.9,-1.4,Tokyo,East Asia,35.62,139.78,44150
+Southampton,Europe,50.9,-1.4,Kaohsiung,East Asia,22.61,120.27,17596
+Valencia,Europe,39.44,-0.32,Shenzhen,East Asia,22.54,114.06,48991
+Valencia,Europe,39.44,-0.32,Hong Kong,East Asia,22.3,114.17,35065
+Valencia,Europe,39.44,-0.32,Shanghai,East Asia,31.23,121.47,52427
+Piraeus,Europe,37.94,23.63,Shanghai,East Asia,31.23,121.47,18617
+Piraeus,Europe,37.94,23.63,Shenzhen,East Asia,22.54,114.06,26207
+Piraeus,Europe,37.94,23.63,Ningbo,East Asia,29.87,121.55,17618
+Algeciras,Europe,36.13,-5.44,Shanghai,East Asia,31.23,121.47,32514
+Algeciras,Europe,36.13,-5.44,Shenzhen,East Asia,22.54,114.06,30543
+Algeciras,Europe,36.13,-5.44,Tokyo,East Asia,35.62,139.78,30607

@@ -1,0 +1,286 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/sku_demand.csv",
+  "options": {
+   "items": {
+    "item": "SKU",
+    "date": "Month",
+    "demand": "Units",
+    "value": "Revenue",
+    "period": "MONTH",
+    "aShare": 80,
+    "bShare": 95,
+    "xCV": 0.5,
+    "yCV": 1.0
+   }
+  },
+  "width": 1060,
+  "height": 520,
+  "wait": 1500,
+  "showcaseHeight": 520,
+  "caption": "Live: about 1,200 illustrative products classified by value (ABC) and demand variability (XYZ) over 24 months. Hover a cell for its figures; click it to select those products.",
+  "expect": {
+   "selector": "g.cell",
+   "min": 9
+  }
+ },
+ {
+  "name": "spares",
+  "showcase": true,
+  "data": "sample-data/sku_demand.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Category",
+   "operator": "=",
+   "value": "Spares"
+  },
+  "options": {
+   "items": {
+    "item": "SKU",
+    "date": "Month",
+    "demand": "Units",
+    "value": "Revenue",
+    "period": "MONTH",
+    "aShare": 80,
+    "bShare": 95,
+    "xCV": 0.5,
+    "yCV": 1.0
+   }
+  },
+  "width": 1060,
+  "height": 460,
+  "wait": 1500,
+  "showcaseHeight": 460,
+  "caption": "Live: the same analysis for spare parts only, where most demand is erratic.",
+  "expect": {
+   "selector": "g.cell",
+   "min": 9
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/sku_demand.csv",
+  "options": {
+   "items": {
+    "item": "SKU",
+    "date": "Month",
+    "demand": "Units",
+    "value": "Revenue",
+    "period": "MONTH",
+    "aShare": 80,
+    "bShare": 95,
+    "xCV": 0.5,
+    "yCV": 1.0
+   }
+  },
+  "width": 1000,
+  "height": 500,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var c=window.__abc.model.cells,ref={\"AX\": 103, \"AZ\": 105, \"AY\": 13, \"BX\": 231, \"BZ\": 121, \"BY\": 33, \"CZ\": 138, \"CY\": 26, \"CX\": 430};return Object.keys(ref).every(function(k){return c[k].n===ref[k]}) && window.__abc.model.np===24})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "g.cell",
+    "nth": 2
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "g.cell",
+    "nth": 2
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.filters.length===105",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     8,
+     495
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Category",
+     "operator": "=",
+     "value": "Fasteners"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__abc.model.list.length<400",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     440
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "units",
+  "data": "sample-data/sku_demand.csv",
+  "options": {
+   "items": {
+    "item": "SKU",
+    "date": "Month",
+    "demand": "Units",
+    "period": "QUARTER",
+    "aShare": 80,
+    "bShare": 95,
+    "xCV": 0.5,
+    "yCV": 1.0
+   }
+  },
+  "width": 900,
+  "height": 460,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__abc.model.np===9 && window.__abc.model.F.v===null",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "short",
+  "data": "sample-data/sku_demand.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Month",
+   "operator": ">=",
+   "value": "2026-09-01"
+  },
+  "options": {
+   "items": {
+    "item": "SKU",
+    "date": "Month",
+    "demand": "Units",
+    "value": "Revenue",
+    "period": "MONTH",
+    "aShare": 80,
+    "bShare": 95,
+    "xCV": 0.5,
+    "yCV": 1.0
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "at least 3 periods"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "SKU",
+    "type": "TEXT"
+   },
+   {
+    "name": "Month",
+    "type": "DATE"
+   },
+   {
+    "name": "Units",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "item": "SKU",
+    "date": "Month",
+    "demand": "Units",
+    "period": "MONTH",
+    "aShare": 80,
+    "bShare": 95,
+    "xCV": 0.5,
+    "yCV": 1.0
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/sku_demand.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Items"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "item": "Part",
+    "date": "Month",
+    "demand": "Qty"
+   }
+  },
+  "width": 1100,
+  "height": 560,
+  "wait": 10000,
+  "actions": [
+   {
+    "eval": "window.__abc.model.list.length>9000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/sku_demand.csv",
+  "options": {
+   "items": {
+    "item": "SKU",
+    "date": "Month",
+    "demand": "Units",
+    "value": "Revenue",
+    "period": "MONTH",
+    "aShare": 80,
+    "bShare": 95,
+    "xCV": 0.5,
+    "yCV": 1.0
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

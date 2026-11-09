@@ -1,0 +1,219 @@
+{
+  "name": "Marimekko",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "marimekko",
+    "mekko",
+    "market map",
+    "share",
+    "mosaic",
+    "variable width",
+    "competitor",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 20000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "columns": {
+        "displayName": "Columns",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Category for the columns, e.g. Market segment or Region. Column width is its share of the total."
+      },
+      "stack": {
+        "displayName": "Stack",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Category stacked within each column, e.g. Brand or Competitor. Height is its share of the column."
+      },
+      "value": {
+        "displayName": "Value",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Measure for sizes, e.g. sum of Sales"
+      },
+      "maxSeries": {
+        "displayName": "Stack categories",
+        "type": "NUMBER",
+        "minValue": 2,
+        "maxValue": 8,
+        "detail": "Show the largest N stack categories by total; the rest are combined into Other (default 6)"
+      },
+      "highlight": {
+        "displayName": "Highlight",
+        "type": "TEXT",
+        "detail": "Optional stack category to emphasise, e.g. your own brand; the others are shown in muted colours"
+      },
+      "sortColumns": {
+        "displayName": "Sort columns",
+        "type": "CHOICE",
+        "values": [
+          "SIZE",
+          "NAME"
+        ],
+        "displayValues": [
+          "Largest first",
+          "By name"
+        ],
+        "detail": "Column order"
+      },
+      "labels": {
+        "displayName": "Show segment labels",
+        "type": "TOGGLE",
+        "detail": "Write the share inside segments that are big enough"
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "columns",
+        "stack",
+        "value"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    },
+    "optionGroups": [
+      {
+        "displayName": "Chart",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "columns",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "stack",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "maxSeries",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "highlight",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "sortColumns",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "labels",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "maxSeries": 6,
+      "sortColumns": "SIZE",
+      "labels": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 200,
+    "minHeight": 150
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "name": "France Choropleth",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "tags": ["custom", "map", "france"],
+  "thumbnail": "thumbnail.png",
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "measures": {
+        "displayName": "Colour",
+        "type": "MEASURE",
+        "iconName": "visokio-option-icon:colour-measure",
+        "mandatory": true
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      },
+      "split": {
+        "displayName": "Split",
+        "type": "GROUPING"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "measures",
+        "split"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    },
+    "optionGroups": [{
+      "displayName": "Region",
+      "rows": [{
+        "cells": [{
+          "option": "split",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "measures",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Pane/tile",
+      "rows": [{
+        "cells": [{
+          "option": "paneX",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "paneY",
+          "usePrefixTitle": false
+        }]
+      }]
+    }]
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50,
+    "maxCells": 20
+  }
+}

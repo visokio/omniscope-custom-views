@@ -1,0 +1,310 @@
+Depot,Linked depot,Region,East (km),North (km),Capacity,Shipments
+Penley Hub,,North,330,690,10907,
+Stanmouth,,North,280,706,1162,
+Kelby,,North,381,724,771,
+Weybridge,,North,231,666,2255,
+Weyby,,North,280,617,461,
+Holstow,,North,351,653,523,
+Langmouth,,North,336,658,1200,
+Carnmouth,,North,253,681,1539,
+Thornton,,North,256,739,1440,
+Carnstow,,North,317,720,842,
+Kelbridge,,North,263,738,673,
+Glenford,,North,355,683,2325,
+Norbridge,,North,311,709,699,
+Langton,,North,277,666,1674,
+Oakton,,North,268,798,951,
+Redby,,North,331,735,1171,
+Glenby,,North,293,703,2117,
+Ivystow,,North,281,628,1645,
+Ashham,,North,404,689,1167,
+Dunford,,North,262,743,999,
+Glenmouth Hub,,East,560,410,10057,
+Weywick,,East,664,416,1613,
+Holford,,East,509,454,1910,
+Penby,,East,528,444,2381,
+Elmfield,,East,595,349,1335,
+Holham,,East,592,340,1049,
+Normouth,,East,555,342,721,
+Dunton,,East,523,430,558,
+Norfield,,East,531,408,2123,
+Weymouth,,East,622,285,1601,
+Elmham,,East,363,385,2363,
+Weystow,,East,460,371,703,
+Ashton,,East,548,475,1502,
+Bradby,,East,519,436,1554,
+Marby,,East,520,453,2244,
+Stanstow,,East,601,405,974,
+Marfield,,East,479,359,537,
+Carnfield,,East,621,418,1706,
+Marford,,East,621,481,930,
+Langwick,,East,576,353,747,
+Redton Hub,,South,300,90,10708,
+Ashstow,,South,399,54,1966,
+Carnton,,South,271,118,771,
+Langbridge,,South,192,-40,2274,
+Stanley,,South,271,101,522,
+Dunmouth,,South,286,125,2391,
+Ashwick,,South,299,123,1633,
+Redham,,South,356,160,1739,
+Ivyham,,South,234,135,2164,
+Glenbridge,,South,309,65,1299,
+Langham,,South,238,54,957,
+Bradton,,South,375,175,1533,
+Redfield,,South,363,-40,1276,
+Langstow,,South,343,13,2253,
+Bradfield,,South,265,164,569,
+Upford,,South,284,56,956,
+Elmford,,South,226,140,872,
+Marton,,South,210,121,1211,
+Fairford,,South,331,184,2334,
+Marley,,South,228,74,2449,
+Norham Hub,,West,90,380,9357,
+Norby,,West,59,399,2245,
+Norley,,West,-38,418,2458,
+Glenham,,West,129,252,1998,
+Langfield,,West,200,366,464,
+Carnford,,West,68,410,2205,
+Carnbridge,,West,49,442,543,
+Langby,,West,114,426,2327,
+Penmouth,,West,171,490,752,
+Thornfield,,West,92,343,1073,
+Weyham,,West,16,369,1647,
+Thornley,,West,149,300,1518,
+Stanford,,West,44,357,1944,
+Bradley,,West,196,399,2040,
+Carnby,,West,32,363,669,
+Penbridge,,West,115,368,2055,
+Oakmouth,,West,83,441,1699,
+Oakstow,,West,114,400,520,
+Ashford,,West,187,331,1195,
+Ashfield,,West,153,474,1719,
+Marham Hub,,Central,320,380,11538,
+Stanbridge,,Central,203,381,495,
+Oakley,,Central,302,398,1054,
+Glenley,,Central,241,361,1285,
+Dunby,,Central,374,307,1380,
+Oakbridge,,Central,377,442,916,
+Glenstow,,Central,339,439,1864,
+Stanwick,,Central,370,349,2459,
+Glenton,,Central,352,380,2374,
+Dunham,,Central,407,449,1106,
+Kelton,,Central,345,341,653,
+Dunwick,,Central,344,408,2001,
+Oakham,,Central,271,390,1928,
+Fairbridge,,Central,386,385,2259,
+Marbridge,,Central,222,499,1199,
+Norstow,,Central,219,302,1182,
+Ivyton,,Central,225,377,1055,
+Thornwick,,Central,379,243,2168,
+Fairton,,Central,330,272,1799,
+Weyford,,Central,274,516,1350,
+Ashfield,Kelby,West,153,474,1719,112
+Ashfield,Norham Hub,West,153,474,1719,328
+Ashford,Norham Hub,West,187,331,1195,297
+Ashham,Penley Hub,North,404,689,1167,185
+Ashstow,Redton Hub,South,399,54,1966,97
+Ashton,Glenmouth Hub,East,548,475,1502,306
+Ashwick,Redton Hub,South,299,123,1633,192
+Ashwick,Weywick,South,299,123,1633,150
+Bradby,Glenmouth Hub,East,519,436,1554,317
+Bradby,Glenton,East,519,436,1554,89
+Bradfield,Redton Hub,South,265,164,569,243
+Bradfield,Thornfield,South,265,164,569,25
+Bradley,Dunmouth,West,196,399,2040,96
+Bradley,Norham Hub,West,196,399,2040,239
+Bradton,Glenley,South,375,175,1533,48
+Bradton,Kelby,South,375,175,1533,19
+Bradton,Redton Hub,South,375,175,1533,281
+Carnbridge,Norham Hub,West,49,442,543,339
+Carnby,Glenstow,West,32,363,669,78
+Carnby,Kelbridge,West,32,363,669,100
+Carnby,Norham Hub,West,32,363,669,129
+Carnfield,Glenmouth Hub,East,621,418,1706,394
+Carnfield,Langmouth,East,621,418,1706,90
+Carnford,Carnstow,West,68,410,2205,84
+Carnford,Fairbridge,West,68,410,2205,49
+Carnford,Norham Hub,West,68,410,2205,71
+Carnmouth,Holford,North,253,681,1539,22
+Carnmouth,Penley Hub,North,253,681,1539,160
+Carnmouth,Upford,North,253,681,1539,42
+Carnstow,Bradby,North,317,720,842,91
+Carnstow,Kelton,North,317,720,842,82
+Carnstow,Penley Hub,North,317,720,842,320
+Carnton,Redton Hub,South,271,118,771,142
+Carnton,Weyham,South,271,118,771,71
+Dunby,Elmfield,Central,374,307,1380,17
+Dunby,Marham Hub,Central,374,307,1380,391
+Dunford,Penbridge,North,262,743,999,106
+Dunford,Penley Hub,North,262,743,999,384
+Dunham,Carnton,Central,407,449,1106,90
+Dunham,Elmfield,Central,407,449,1106,106
+Dunham,Marham Hub,Central,407,449,1106,203
+Dunmouth,Oakstow,South,286,125,2391,105
+Dunmouth,Redton Hub,South,286,125,2391,121
+Dunmouth,Weymouth,South,286,125,2391,66
+Dunton,Dunwick,East,523,430,558,29
+Dunton,Glenmouth Hub,East,523,430,558,86
+Dunwick,Marham Hub,Central,344,408,2001,398
+Elmfield,Glenmouth Hub,East,595,349,1335,299
+Elmfield,Langstow,East,595,349,1335,87
+Elmford,Oakley,South,226,140,872,50
+Elmford,Redton Hub,South,226,140,872,331
+Elmham,Dunwick,East,363,385,2363,114
+Elmham,Glenmouth Hub,East,363,385,2363,274
+Fairbridge,Marham Hub,Central,386,385,2259,171
+Fairbridge,Redfield,Central,386,385,2259,77
+Fairford,Redton Hub,South,331,184,2334,247
+Fairton,Marham Hub,Central,330,272,1799,224
+Fairton,Stanstow,Central,330,272,1799,113
+Glenbridge,Redton Hub,South,309,65,1299,225
+Glenby,Norstow,North,293,703,2117,46
+Glenby,Penley Hub,North,293,703,2117,307
+Glenford,Penley Hub,North,355,683,2325,341
+Glenham,Norham Hub,West,129,252,1998,324
+Glenley,Marham Hub,Central,241,361,1285,301
+Glenley,Redby,Central,241,361,1285,48
+Glenmouth Hub,Marham Hub,East,560,410,10057,902
+Glenmouth Hub,Norham Hub,East,560,410,10057,1614
+Glenmouth Hub,Penley Hub,East,560,410,10057,1598
+Glenmouth Hub,Redton Hub,East,560,410,10057,1445
+Glenstow,Holstow,Central,339,439,1864,50
+Glenstow,Marham Hub,Central,339,439,1864,359
+Glenstow,Oakton,Central,339,439,1864,35
+Glenton,Marham Hub,Central,352,380,2374,180
+Glenton,Marley,Central,352,380,2374,33
+Glenton,Thornfield,Central,352,380,2374,38
+Holford,Glenmouth Hub,East,509,454,1910,174
+Holford,Langstow,East,509,454,1910,15
+Holford,Oakbridge,East,509,454,1910,42
+Holham,Glenmouth Hub,East,592,340,1049,118
+Holstow,Ashfield,North,351,653,523,61
+Holstow,Penley Hub,North,351,653,523,181
+Ivyham,Langton,South,234,135,2164,69
+Ivyham,Redton Hub,South,234,135,2164,154
+Ivyham,Weyham,South,234,135,2164,84
+Ivystow,Elmfield,North,281,628,1645,11
+Ivystow,Penley Hub,North,281,628,1645,399
+Ivyton,Marham Hub,Central,225,377,1055,301
+Ivyton,Norby,Central,225,377,1055,111
+Kelbridge,Penley Hub,North,263,738,673,287
+Kelby,Glenbridge,North,381,724,771,99
+Kelby,Marfield,North,381,724,771,107
+Kelby,Penley Hub,North,381,724,771,259
+Kelton,Bradfield,Central,345,341,653,53
+Kelton,Marham Hub,Central,345,341,653,340
+Kelton,Stanstow,Central,345,341,653,72
+Langbridge,Norfield,South,192,-40,2274,53
+Langbridge,Redton Hub,South,192,-40,2274,305
+Langby,Norham Hub,West,114,426,2327,231
+Langfield,Ivyton,West,200,366,464,47
+Langfield,Norham Hub,West,200,366,464,338
+Langham,Redton Hub,South,238,54,957,338
+Langmouth,Penley Hub,North,336,658,1200,318
+Langstow,Dunford,South,343,13,2253,38
+Langstow,Langfield,South,343,13,2253,46
+Langstow,Redton Hub,South,343,13,2253,215
+Langton,Fairbridge,North,277,666,1674,88
+Langton,Norfield,North,277,666,1674,64
+Langton,Penley Hub,North,277,666,1674,146
+Langwick,Glenmouth Hub,East,576,353,747,198
+Langwick,Oakstow,East,576,353,747,13
+Marbridge,Marham Hub,Central,222,499,1199,324
+Marbridge,Thornton,Central,222,499,1199,94
+Marby,Elmford,East,520,453,2244,88
+Marby,Glenmouth Hub,East,520,453,2244,243
+Marfield,Glenmouth Hub,East,479,359,537,182
+Marfield,Langstow,East,479,359,537,74
+Marford,Glenmouth Hub,East,621,481,930,91
+Marham Hub,Glenmouth Hub,Central,320,380,11538,1663
+Marham Hub,Norham Hub,Central,320,380,11538,1099
+Marham Hub,Penley Hub,Central,320,380,11538,1025
+Marham Hub,Redton Hub,Central,320,380,11538,1661
+Marley,Fairton,South,228,74,2449,59
+Marley,Normouth,South,228,74,2449,104
+Marley,Redton Hub,South,228,74,2449,246
+Marton,Glenford,South,210,121,1211,56
+Marton,Kelton,South,210,121,1211,41
+Marton,Redton Hub,South,210,121,1211,173
+Norbridge,Penley Hub,North,311,709,699,257
+Norbridge,Stanford,North,311,709,699,70
+Norby,Elmfield,West,59,399,2245,21
+Norby,Norham Hub,West,59,399,2245,362
+Norfield,Ashfield,East,531,408,2123,27
+Norfield,Glenmouth Hub,East,531,408,2123,123
+Norham Hub,Glenmouth Hub,West,90,380,9357,1554
+Norham Hub,Marham Hub,West,90,380,9357,1117
+Norham Hub,Penley Hub,West,90,380,9357,1954
+Norham Hub,Redton Hub,West,90,380,9357,1599
+Norley,Norham Hub,West,-38,418,2458,292
+Norley,Weybridge,West,-38,418,2458,38
+Normouth,Glenmouth Hub,East,555,342,721,379
+Normouth,Ivyham,East,555,342,721,120
+Normouth,Oakley,East,555,342,721,25
+Norstow,Marham Hub,Central,219,302,1182,181
+Oakbridge,Marham Hub,Central,377,442,916,294
+Oakham,Bradfield,Central,271,390,1928,16
+Oakham,Marham Hub,Central,271,390,1928,307
+Oakley,Carnfield,Central,302,398,1054,17
+Oakley,Marham Hub,Central,302,398,1054,277
+Oakmouth,Norham Hub,West,83,441,1699,270
+Oakmouth,Stanmouth,West,83,441,1699,113
+Oakstow,Norham Hub,West,114,400,520,253
+Oakton,Carnby,North,268,798,951,86
+Oakton,Fairford,North,268,798,951,77
+Oakton,Penley Hub,North,268,798,951,313
+Penbridge,Norham Hub,West,115,368,2055,376
+Penby,Glenmouth Hub,East,528,444,2381,327
+Penley Hub,Glenmouth Hub,North,330,690,10907,1412
+Penley Hub,Marham Hub,North,330,690,10907,1631
+Penley Hub,Norham Hub,North,330,690,10907,1242
+Penley Hub,Redton Hub,North,330,690,10907,1491
+Penmouth,Norham Hub,West,171,490,752,200
+Redby,Dunwick,North,331,735,1171,46
+Redby,Penley Hub,North,331,735,1171,219
+Redfield,Glenford,South,363,-40,1276,98
+Redfield,Redton Hub,South,363,-40,1276,218
+Redham,Langwick,South,356,160,1739,80
+Redham,Redton Hub,South,356,160,1739,365
+Redton Hub,Glenmouth Hub,South,300,90,10708,1009
+Redton Hub,Marham Hub,South,300,90,10708,1369
+Redton Hub,Norham Hub,South,300,90,10708,1909
+Redton Hub,Penley Hub,South,300,90,10708,877
+Stanbridge,Marham Hub,Central,203,381,495,143
+Stanbridge,Norfield,Central,203,381,495,59
+Stanbridge,Penby,Central,203,381,495,51
+Stanford,Norham Hub,West,44,357,1944,327
+Stanford,Oakley,West,44,357,1944,60
+Stanley,Ashham,South,271,101,522,117
+Stanley,Kelbridge,South,271,101,522,112
+Stanley,Redton Hub,South,271,101,522,235
+Stanmouth,Oakham,North,280,706,1162,19
+Stanmouth,Penley Hub,North,280,706,1162,351
+Stanstow,Glenmouth Hub,East,601,405,974,349
+Stanstow,Marton,East,601,405,974,106
+Stanwick,Marham Hub,Central,370,349,2459,154
+Stanwick,Weymouth,Central,370,349,2459,85
+Thornfield,Norham Hub,West,92,343,1073,220
+Thornley,Bradby,West,149,300,1518,101
+Thornley,Elmham,West,149,300,1518,72
+Thornley,Norham Hub,West,149,300,1518,392
+Thornton,Marbridge,North,256,739,1440,79
+Thornton,Penley Hub,North,256,739,1440,201
+Thornwick,Holford,Central,379,243,2168,171
+Thornwick,Marham Hub,Central,379,243,2168,186
+Upford,Carnfield,South,284,56,956,66
+Upford,Ivyton,South,284,56,956,86
+Upford,Redton Hub,South,284,56,956,225
+Weybridge,Penley Hub,North,231,666,2255,262
+Weyby,Penley Hub,North,280,617,461,118
+Weyford,Marfield,Central,274,516,1350,76
+Weyford,Marham Hub,Central,274,516,1350,324
+Weyham,Langton,West,16,369,1647,105
+Weyham,Norham Hub,West,16,369,1647,73
+Weymouth,Fairton,East,622,285,1601,97
+Weymouth,Glenmouth Hub,East,622,285,1601,273
+Weymouth,Upford,East,622,285,1601,91
+Weystow,Glenmouth Hub,East,460,371,703,130
+Weystow,Ivystow,East,460,371,703,40
+Weywick,Glenmouth Hub,East,664,416,1613,357
+Weywick,Kelbridge,East,664,416,1613,112

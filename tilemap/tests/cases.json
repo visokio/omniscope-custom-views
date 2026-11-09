@@ -1,0 +1,267 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/us_sales.csv",
+  "options": {
+   "items": {
+    "region": {
+     "inputField": "State",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "layout": "AUTO",
+    "colour": "QUANTILE",
+    "showValues": true
+   }
+  },
+  "width": 1000,
+  "height": 560,
+  "wait": 1200,
+  "showcaseHeight": 560,
+  "caption": "Live: illustrative 2026 sales by US state, one equal tile per state, coloured in quantiles so that every colour holds the same number of states. Hover a state for its value and rank; click to select it.",
+  "expect": {
+   "selector": "g.tile",
+   "min": 51
+  }
+ },
+ {
+  "name": "uk",
+  "showcase": true,
+  "data": "sample-data/uk_regions.csv",
+  "options": {
+   "items": {
+    "region": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Satisfaction",
+     "function": "MEAN"
+    },
+    "layout": "AUTO",
+    "colour": "DIVERGING",
+    "showValues": true
+   }
+  },
+  "width": 600,
+  "height": 560,
+  "wait": 1200,
+  "showcaseHeight": 560,
+  "caption": "Live: an illustrative satisfaction score by UK region, coloured above and below the median.",
+  "expect": {
+   "selector": "g.tile",
+   "min": 12
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/us_sales.csv",
+  "options": {
+   "items": {
+    "region": {
+     "inputField": "State",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "layout": "AUTO",
+    "colour": "SEQUENTIAL",
+    "showValues": true
+   }
+  },
+  "width": 1000,
+  "height": 560,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__tile.model;return M.key==='US' && M.n===51 && Math.abs(M.byCode.get('TX').v-7072211.72)<0.01 && M.byCode.get('CA').rank===1 && M.unmatched.length===0})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "g.tile",
+    "nth": 4
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "g.tile",
+    "nth": 4
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.value==='Washington'",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     5,
+     555
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Month",
+     "operator": ">=",
+     "value": "2026-10-01"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__tile.model.byCode.get('TX').v<1414442.344",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     420,
+     320
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "custom",
+  "data": "sample-data/uk_regions.csv",
+  "options": {
+   "items": {
+    "region": {
+     "inputField": "Quarter",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Responses",
+     "function": "SUM"
+    },
+    "layout": "CUSTOM",
+    "colour": "SEQUENTIAL",
+    "showValues": true,
+    "custom": "2026 Q1:0,0:First quarter; 2026 Q2:1,0:Second quarter; 2026 Q3:2,0:Third quarter; 2026 Q4:3,0:Fourth quarter"
+   }
+  },
+  "width": 700,
+  "height": 300,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "window.__tile.model.key==='CUSTOM' && window.__tile.model.n===3 && window.__tile.model.layout.length===4",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "nomatch",
+  "data": "sample-data/uk_regions.csv",
+  "options": {
+   "items": {
+    "region": {
+     "inputField": "Quarter",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Responses",
+     "function": "SUM"
+    },
+    "layout": "AUTO",
+    "colour": "SEQUENTIAL",
+    "showValues": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "None of the"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "State",
+    "type": "TEXT"
+   },
+   {
+    "name": "Sales",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "region": {
+     "inputField": "State",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "layout": "AUTO",
+    "colour": "SEQUENTIAL",
+    "showValues": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/us_sales.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Regions"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/us_sales.csv",
+  "options": {
+   "items": {
+    "region": {
+     "inputField": "State",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "layout": "AUTO",
+    "colour": "QUANTILE",
+    "showValues": false
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1200
+ }
+]

@@ -1,0 +1,470 @@
+[
+ {
+  "name": "showcase",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Append upload"
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "showcase": true,
+  "showcaseHeight": 170,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "workflow": {
+   "params": [
+    {
+     "name": "uploadedFile",
+     "type": "TEXT",
+     "value": ""
+    }
+   ]
+  },
+  "caption": "Live: choose any file and press the button. Nothing is uploaded here: the Workflow REST API is simulated in your browser.",
+  "actions": [
+   {
+    "eval": "document.getElementById('run').disabled && /Choose a file/.test(document.body.innerText)",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function () { var dt = new DataTransfer(); dt.items.add(new File(['Order ID,Region\\nO0241,North\\n'], 'new-orders.csv', { type: 'text/csv' })); var i = document.getElementById('file'); i.files = dt.files; i.dispatchEvent(new Event('change')); return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "!document.getElementById('run').disabled",
+    "expectTruthy": true
+   },
+   {
+    "eval": "/new-orders.csv, \\d+ bytes/.test(document.getElementById('message').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/uploadandexecute",
+     "body": {
+      "uploadedFile_formdata_key": {
+       "file": "new-orders.csv"
+      },
+      "execution": {
+       "blocks": [
+        "Append upload"
+       ],
+       "deleteExecutionOnFinish": true,
+       "params": {
+        "updates": [
+         {
+          "name": "uploadedFile",
+          "formDataKey": "uploadedFile_formdata_key"
+         }
+        ]
+       }
+      }
+     },
+     "count": 1
+    }
+   },
+   {
+    "wait": 3400
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished at') === 0",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Report"
+      ],
+      "refreshFromSource": true
+     },
+     "count": 1
+    }
+   },
+   {
+    "eval": "window.parent.__omniEvents.every(function (e) { return e.type !== 'whitespaceClick'; })",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "finished"
+   }
+  ]
+ },
+ {
+  "name": "param-name",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Append upload",
+    "paramName": "dataFile",
+    "deleteExecutionOnFinish": false,
+    "refreshThisReportOnFinish": false
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "workflow": {
+   "params": [
+    {
+     "name": "uploadedFile",
+     "type": "TEXT",
+     "value": ""
+    }
+   ]
+  },
+  "actions": [
+   {
+    "eval": "(function () { var dt = new DataTransfer(); dt.items.add(new File(['Order ID,Region\\nO0241,North\\n'], 'new-orders.csv', { type: 'text/csv' })); var i = document.getElementById('file'); i.files = dt.files; i.dispatchEvent(new Event('change')); return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/uploadandexecute",
+     "body": {
+      "dataFile_formdata_key": {
+       "file": "new-orders.csv"
+      },
+      "execution": {
+       "deleteExecutionOnFinish": false,
+       "params": {
+        "updates": [
+         {
+          "name": "dataFile",
+          "formDataKey": "dataFile_formdata_key"
+         }
+        ]
+       }
+      }
+     },
+     "count": 1
+    }
+   },
+   {
+    "wait": 3400
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 0
+    }
+   },
+   {
+    "clickAt": [
+     400,
+     160
+    ]
+   },
+   {
+    "expectSelection": false
+   }
+  ]
+ },
+ {
+  "name": "reload-mid-job",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Append upload"
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "workflow": {
+   "params": [
+    {
+     "name": "uploadedFile",
+     "type": "TEXT",
+     "value": ""
+    }
+   ]
+  },
+  "actions": [
+   {
+    "eval": "(function () { var dt = new DataTransfer(); dt.items.add(new File(['Order ID,Region\\nO0241,North\\n'], 'new-orders.csv', { type: 'text/csv' })); var i = document.getElementById('file'); i.files = dt.files; i.dispatchEvent(new Event('change')); return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run",
+    "waitAfter": 200
+   },
+   {
+    "reload": true
+   },
+   {
+    "eval": "document.getElementById('run').disabled",
+    "expectTruthy": true
+   },
+   {
+    "wait": 3400
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished at') === 0",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/uploadandexecute",
+     "count": 1
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Report"
+      ]
+     },
+     "count": 1
+    }
+   }
+  ]
+ },
+ {
+  "name": "no-permission",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Append upload"
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "workflow": {
+   "permission": false
+  },
+  "actions": [
+   {
+    "eval": "(function () { var dt = new DataTransfer(); dt.items.add(new File(['Order ID,Region\\nO0241,North\\n'], 'new-orders.csv', { type: 'text/csv' })); var i = document.getElementById('file'); i.files = dt.files; i.dispatchEvent(new Event('change')); return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "eval": "/Workflow Execution via APIs/.test(document.getElementById('status').textContent) && !document.getElementById('run').disabled",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Append upload"
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "workflow": {
+   "params": [
+    {
+     "name": "uploadedFile",
+     "type": "TEXT",
+     "value": ""
+    }
+   ]
+  },
+  "actions": [
+   {
+    "eval": "(function () { var dt = new DataTransfer(); dt.items.add(new File(['Order ID,Region\\nO0241,North\\n'], 'new-orders.csv', { type: 'text/csv' })); var i = document.getElementById('file'); i.files = dt.files; i.dispatchEvent(new Event('change')); return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "West"
+    }
+   },
+   {
+    "eval": "!document.getElementById('run').disabled",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/uploadandexecute",
+     "count": 0
+    }
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Append upload"
+   }
+  },
+  "width": 150,
+  "height": 110,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "workflow": {
+   "params": [
+    {
+     "name": "uploadedFile",
+     "type": "TEXT",
+     "value": ""
+    }
+   ]
+  },
+  "actions": [
+   {
+    "eval": "document.getElementById('run').getBoundingClientRect().right <= window.innerWidth + 1",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "150x110"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Region",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "block": "Append upload"
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "expect": {
+   "selector": "#file",
+   "min": 1
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "workflow": {
+   "params": [
+    {
+     "name": "uploadedFile",
+     "type": "TEXT",
+     "value": ""
+    }
+   ]
+  },
+  "expect": {
+   "text": "Upload and execute"
+  },
+  "actions": [
+   {
+    "eval": "(function () { var dt = new DataTransfer(); dt.items.add(new File(['Order ID,Region\\nO0241,North\\n'], 'new-orders.csv', { type: 'text/csv' })); var i = document.getElementById('file'); i.files = dt.files; i.dispatchEvent(new Event('change')); return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/uploadandexecute",
+     "body": {
+      "execution": {
+       "blocks": [],
+       "params": {
+        "updates": [
+         {
+          "name": "uploadedFile"
+         }
+        ]
+       }
+      }
+     },
+     "count": 1
+    }
+   }
+  ]
+ },
+ {
+  "name": "large",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Append upload"
+   }
+  },
+  "width": 420,
+  "height": 170,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Upload+and+Execute/",
+  "workflow": {
+   "params": [
+    {
+     "name": "uploadedFile",
+     "type": "TEXT",
+     "value": ""
+    }
+   ]
+  },
+  "actions": [
+   {
+    "eval": "(function () { var dt = new DataTransfer(); dt.items.add(new File([new Uint8Array(3 * 1048576)], 'big.csv')); var i = document.getElementById('file'); i.files = dt.files; i.dispatchEvent(new Event('change')); return true; })()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.getElementById('message').textContent === 'big.csv, 3.0 MB'",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/uploadandexecute",
+     "body": {
+      "uploadedFile_formdata_key": {
+       "file": "big.csv",
+       "size": 3145728
+      }
+     },
+     "count": 1
+    }
+   }
+  ]
+ }
+]

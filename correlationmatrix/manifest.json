@@ -1,0 +1,175 @@
+{
+  "name": "Correlation Matrix",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "correlation",
+    "matrix",
+    "heatmap",
+    "pearson",
+    "spearman",
+    "statistics",
+    "drivers",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "fields": {
+        "displayName": "Numeric fields",
+        "type": "FIELD",
+        "list": true,
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Two or more numeric fields to correlate"
+      },
+      "method": {
+        "displayName": "Method",
+        "type": "CHOICE",
+        "values": [
+          "PEARSON",
+          "SPEARMAN"
+        ],
+        "displayValues": [
+          "Pearson (linear)",
+          "Spearman (rank)"
+        ],
+        "detail": "Pearson measures straight-line relationships; Spearman measures any steadily rising or falling relationship and resists outliers"
+      },
+      "order": {
+        "displayName": "Order",
+        "type": "CHOICE",
+        "values": [
+          "CLUSTERED",
+          "LISTED"
+        ],
+        "displayValues": [
+          "Group related fields",
+          "As listed"
+        ],
+        "detail": "Group related fields puts strongly correlated fields next to each other"
+      },
+      "triangle": {
+        "displayName": "Show",
+        "type": "CHOICE",
+        "values": [
+          "LOWER",
+          "FULL"
+        ],
+        "displayValues": [
+          "Lower triangle",
+          "Full matrix"
+        ],
+        "detail": "The matrix is symmetrical; the lower triangle avoids repetition"
+      },
+      "showValues": {
+        "displayName": "Show values",
+        "type": "TOGGLE",
+        "detail": "Write the coefficient in each cell"
+      },
+      "maxRows": {
+        "displayName": "Rows used",
+        "type": "NUMBER",
+        "minValue": 100,
+        "maxValue": 200000,
+        "detail": "Maximum number of records fetched for the calculation (default 20,000)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "fields",
+        "method"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Correlation",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "fields",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "method",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "order",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "triangle",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showValues",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxRows",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "method": "PEARSON",
+      "order": "CLUSTERED",
+      "triangle": "LOWER",
+      "showValues": true,
+      "maxRows": 20000
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 200
+  }
+}

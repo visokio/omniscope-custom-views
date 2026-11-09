@@ -1,0 +1,326 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #f0efec; background: #0b0f1a; }
+        #main { position: absolute; inset: 0; }
+        #main canvas { display: block; outline: none; }
+        #tooltip { position: absolute; display: none; pointer-events: none; z-index: 5; background: rgba(26,26,25,0.94); border: 1px solid rgba(255,255,255,.14); border-radius: 6px; padding: 7px 10px; line-height: 1.45; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+        #tooltip .k { color: #c3c2b7; }
+        #legend { position: absolute; top: 8px; right: 8px; z-index: 4; background: rgba(26,26,25,0.82); border: 1px solid rgba(255,255,255,.12); border-radius: 6px; padding: 6px 9px; max-height: calc(100% - 50px); overflow: auto; display: none; }
+        #legend .t { color: #c3c2b7; font-weight: bold; margin-bottom: 3px; }
+        #legend .it { display: flex; align-items: center; gap: 6px; padding: 1px 2px; cursor: pointer; border-radius: 3px; white-space: nowrap; }
+        #legend .it:hover { background: rgba(255,255,255,.08); }
+        #legend .sw { width: 10px; height: 3px; border-radius: 2px; }
+        #legend .v { margin-left: auto; padding-left: 10px; color: #898781; font-variant-numeric: tabular-nums; }
+        #stats { position: absolute; left: 10px; top: 8px; z-index: 4; color: #c3c2b7; font-size: 11px; pointer-events: none; }
+        #stats b { color: #f0efec; font-size: 15px; margin-right: 3px; }
+        #toolbar { position: absolute; left: 8px; bottom: 8px; z-index: 4; display: flex; gap: 6px; }
+        #toolbar button { font: inherit; font-size: 11px; color: #c3c2b7; background: rgba(26,26,25,0.82); border: 1px solid rgba(255,255,255,.14); border-radius: 4px; padding: 3px 8px; cursor: pointer; }
+        #toolbar button:hover { color: #fff; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #c3c2b7; font-size: 14px; padding: 20px; background: #0b0f1a; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+</head>
+
+<body>
+<div id="main"></div><!-- This element is where the view will render -->
+<div id="stats"></div>
+<div id="legend"></div>
+<div id="tooltip"></div>
+<div id="toolbar"><button id="resetBtn">Reset view</button><button id="spinBtn">Rotate</button></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Dark-mode categorical slots (validated palette); flows beyond the eighth colour group are grey.
+    var PAL = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#21a821", "#9085e9", "#e66767"], OTHER = "#8a8a84", SELECT = "#ffffff";
+    var LAND_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/land-110m.json";
+    var S = { flows: [], places: [], selected: null, hover: null, t0: performance.now() };
+    window.__globe = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? Math.round(v / 1e3) + "k" : Math.round(v).toLocaleString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function gf(g) { return g ? (typeof g === "string" ? g : g.inputField) : null; }
+    function webglOk() { try { var c = document.createElement("canvas"); return !!(c.getContext("webgl") || c.getContext("experimental-webgl")); } catch (e) { return false; } }
+
+    function vec(lat, lon, r) {
+        var phi = (90 - lat) * Math.PI / 180, th = (lon + 180) * Math.PI / 180;
+        return new THREE.Vector3(-r * Math.sin(phi) * Math.cos(th), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(th));
+    }
+
+    // ------------------------------------------------------------ scene (once)
+    function init() {
+        var main = document.getElementById("main");
+        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x0b0f1a, 1);
+        main.appendChild(renderer.domElement);
+        var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(40, window.innerWidth / Math.max(1, window.innerHeight), 0.01, 100);
+        camera.position.set(0, 0, 4.3);
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true; controls.dampingFactor = 0.07; controls.addEventListener("start", function () { S.userMoved = true; }); controls.enablePan = false; controls.minDistance = 1.25; controls.maxDistance = 8; controls.rotateSpeed = 0.6; controls.autoRotateSpeed = 0.5;
+        // globe with an equirectangular land texture drawn from world-atlas
+        var tex = document.createElement("canvas"); tex.width = 2048; tex.height = 1024;
+        var g = tex.getContext("2d"); g.fillStyle = "#0f2340"; g.fillRect(0, 0, 2048, 1024);
+        var texture = new THREE.CanvasTexture(tex);
+        var globe = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), new THREE.MeshBasicMaterial({ map: texture }));
+        scene.add(globe);
+        drawGraticule(g); texture.needsUpdate = true;
+        fetch(LAND_URL).then(function (r) { return r.json(); }).then(function (topo) {
+            var land = topojson.feature(topo, topo.objects.land);
+            var path = d3.geoPath(d3.geoEquirectangular().translate([1024, 512]).scale(1024 / Math.PI), g);
+            g.beginPath(); path(land); g.fillStyle = "#24446e"; g.fill(); g.lineWidth = 1.2; g.strokeStyle = "#4f74a6"; g.stroke();
+            texture.needsUpdate = true;
+        }).catch(function () { /* offline: keep the graticule-only globe */ });
+        // soft atmosphere
+        var atm = new THREE.Mesh(new THREE.SphereGeometry(1.06, 64, 48), new THREE.ShaderMaterial({
+            vertexShader: "varying vec3 vN; void main(){ vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }",
+            fragmentShader: "varying vec3 vN; void main(){ float i = pow(0.75 - dot(vN, vec3(0.0,0.0,1.0)), 3.0); gl_FragColor = vec4(0.35,0.6,1.0,1.0) * i; }",
+            side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true }));
+        scene.add(atm);
+        S.renderer = renderer; S.scene = scene; S.camera = camera; S.controls = controls; S.group = new THREE.Group(); scene.add(S.group);
+        bindPointer(renderer.domElement);
+        document.getElementById("resetBtn").addEventListener("click", function (e) { e.stopPropagation(); aim(); });
+        document.getElementById("spinBtn").addEventListener("click", function (e) { e.stopPropagation(); controls.autoRotate = !controls.autoRotate; });
+        (function loop(now) { requestAnimationFrame(loop); controls.update(); animate(now || 0); renderer.render(scene, camera); })();
+    }
+    function drawGraticule(g) {
+        g.strokeStyle = "rgba(120,160,220,0.12)"; g.lineWidth = 1;
+        for (var lon = -180; lon <= 180; lon += 30) { var x = (lon + 180) / 360 * 2048; g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 1024); g.stroke(); }
+        for (var lat = -60; lat <= 60; lat += 30) { var y = (90 - lat) / 180 * 1024; g.beginPath(); g.moveTo(0, y); g.lineTo(2048, y); g.stroke(); }
+    }
+    function aim() {
+        if (!S.centre) return;
+        var dir = vec(S.centre[0], S.centre[1], 1).normalize();
+        S.camera.position.copy(dir.multiplyScalar(4.3)); S.controls.target.set(0, 0, 0); S.camera.lookAt(0, 0, 0); S.controls.update();
+    }
+
+    function textSprite(text) {
+        var c = document.createElement("canvas"), g = c.getContext("2d"), f = "600 26px Lato, 'Segoe UI', Arial, sans-serif";
+        g.font = f; var w = Math.ceil(g.measureText(text).width) + 12; c.width = w; c.height = 36;
+        g.font = f; g.lineWidth = 5; g.strokeStyle = "rgba(11,15,26,0.9)"; g.strokeText(text, 6, 26); g.fillStyle = "#f0efec"; g.fillText(text, 6, 26);
+        var t = new THREE.CanvasTexture(c); t.minFilter = THREE.LinearFilter;
+        var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthTest: false })); s.scale.set(w * 0.0021, 36 * 0.0021, 1); s.center.set(0, 0.5);
+        return s;
+    }
+
+    // ------------------------------------------------------------ data -> flows
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!webglOk()) { message("Globe Flows needs WebGL, which this browser does not provide."); return; }
+        if (!it.origin || !it.destination || !it.originLat || !it.originLon || !it.destLat || !it.destLon) { message("Choose Origin and Destination fields and their latitude and longitude measures."); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        if (!S.renderer) init();
+        var mp = res.mappings, recs = res.data.records || [];
+        var flows = [], placeMap = {};
+        function place(name, lat, lon) {
+            var k = String(name); var p = placeMap[k];
+            if (!p) p = placeMap[k] = { name: name, key: k, lat: lat, lon: lon, out: 0, inn: 0 };
+            return p;
+        }
+        recs.forEach(function (r) {
+            var o = r[mp.origin], d = r[mp.destination], a = r[mp.originLat], b = r[mp.originLon], c = r[mp.destLat], e = r[mp.destLon];
+            if (o === null || d === null || [a, b, c, e].some(function (x) { return typeof x !== "number" || !isFinite(x); })) return;
+            if (Math.abs(a) > 90 || Math.abs(c) > 90 || Math.abs(b) > 360 || Math.abs(e) > 360) return;
+            var v = mp.value !== undefined ? r[mp.value] : 1; if (typeof v !== "number" || !isFinite(v)) v = 0;
+            var po = place(o, a, b), pd = place(d, c, e); po.out += v; pd.inn += v;
+            if (String(o) !== String(d)) flows.push({ o: po, d: pd, v: v, cat: mp.colour !== undefined ? r[mp.colour] : null });
+        });
+        S.group.children.slice().forEach(function (ch) { S.group.remove(ch); ch.traverse(function (x) { if (x.geometry) x.geometry.dispose(); if (x.material) { if (x.material.map) x.material.map.dispose(); x.material.dispose(); } }); });
+        if (!flows.length) { message(recs.length ? "No rows have valid coordinates for both ends." : "No data to show. Check the filters."); document.getElementById("legend").style.display = "none"; document.getElementById("stats").textContent = ""; return; }
+        message(null);
+        flows.sort(function (x, y) { return y.v - x.v; });
+        var total = d3.sum(flows, function (f) { return f.v; }), maxN = Math.max(10, +it.maxFlows || 400), shown = flows.slice(0, maxN), vmax = shown[0].v || 1;
+        // colour groups: top 8 origins (or destinations) by total flow; colour follows the place, not its rank in the current filter
+        var by = it.colour ? "FIELD" : (it.colourBy || "ORIGIN"), key = function (f) { return by === "FIELD" ? String(f.cat) : by === "DESTINATION" ? f.d.key : f.o.key; };
+        var totals = {}; flows.forEach(function (f) { totals[key(f)] = (totals[key(f)] || 0) + f.v; });
+        var orderKey = by + "|" + (it.colour ? gf(it.colour) : "") + "|" + JSON.stringify(it.value ? [it.value.inputField, it.value.function] : null);
+        if (!S.colourOrder || S.colourBy !== orderKey) { S.colourOrder = Object.keys(totals).sort(function (a, b) { return totals[b] - totals[a]; }); S.colourBy = orderKey; }
+        Object.keys(totals).forEach(function (k) { if (S.colourOrder.indexOf(k) < 0) S.colourOrder.push(k); });
+        var colourOf = function (f) { if (by === "SINGLE") return PAL[0]; var i = S.colourOrder.indexOf(key(f)); return i >= 0 && i < 8 ? PAL[i] : OTHER; };
+        shown.forEach(function (f, i) {
+            var a = vec(f.o.lat, f.o.lon, 1), b = vec(f.d.lat, f.d.lon, 1), ang = a.angleTo(b), h = 0.025 + 0.2 * ang / Math.PI, pts = [];
+            for (var s = 0; s <= 40; s++) { var t = s / 40, p = slerp(a, b, ang, t); pts.push(p.multiplyScalar(1.002 + h * Math.sin(Math.PI * t))); }
+            f.curve = new THREE.CatmullRomCurve3(pts);
+            f.colour = colourOf(f);
+            var r = 0.0011 + 0.0048 * Math.sqrt(Math.max(0, f.v) / vmax);
+            var mesh = new THREE.Mesh(new THREE.TubeGeometry(f.curve, 44, r, 5, false), new THREE.MeshBasicMaterial({ color: f.colour, transparent: true, opacity: 0.75, depthWrite: false }));
+            mesh.userData = { flow: f }; f.mesh = mesh; S.group.add(mesh);
+            f.pulse = i < 80 && it.animate !== false;
+            if (f.pulse) { var pm = new THREE.Mesh(new THREE.SphereGeometry(r * 1.5 + 0.0032, 10, 8), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 })); f.pm = pm; f.phase = (i * 0.137) % 1; S.group.add(pm); }
+        });
+        // places
+        var places = Object.keys(placeMap).map(function (k) { return placeMap[k]; }), pmax = d3.max(places, function (p) { return p.out + p.inn; }) || 1;
+        places.forEach(function (p) {
+            var r = 0.004 + 0.011 * Math.sqrt((p.out + p.inn) / pmax);
+            var m = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10), new THREE.MeshBasicMaterial({ color: 0xf0efec }));
+            m.position.copy(vec(p.lat, p.lon, 1.001)); m.userData = { place: p }; p.mesh = m; S.group.add(m);
+        });
+        places.sort(function (a, b) { return (b.out + b.inn) - (a.out + a.inn); });
+        var nl = it.labels === undefined || it.labels === null ? 12 : +it.labels;
+        places.slice(0, nl).forEach(function (p) { var s = textSprite(String(p.name)); s.position.copy(vec(p.lat, p.lon, 1.02)); p.label = s; S.group.add(s); });
+        var isig = recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null);
+        if (isig !== S.introSig && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) { S.intro = { t0: null, gap: Math.min(30, 1200 / Math.max(1, shown.length)) }; shown.forEach(function (f) { f.mesh.geometry.setDrawRange(0, 0); }); }
+        S.introSig = isig;
+        S.flows = shown; S.allFlows = flows; S.places = places; S.total = total;
+        S.fields = { origin: gf(it.origin), destination: gf(it.destination), value: it.value ? (it.value.inputField || "Value") : null };
+        // aim at the weighted centre of the flows the first time
+        // Aim at the weighted centre; re-aim while the user has not moved the camera (the first render
+        // may use Omniscope's auto-filled options), never after they have.
+        var cx = 0, cy = 0, cz = 0; places.forEach(function (p) { var v = vec(p.lat, p.lon, 1).multiplyScalar(p.out + p.inn); cx += v.x; cy += v.y; cz += v.z; });
+        var c = new THREE.Vector3(cx, cy, cz).normalize();
+        if (!S.userMoved && (!S.aimVec || S.aimVec.angleTo(c) > 0.35)) {
+            S.aimVec = c.clone(); S.centre = [90 - Math.acos(c.y) * 180 / Math.PI, (Math.atan2(c.z, -c.x) * 180 / Math.PI) - 180]; aim();
+        }
+        S.controls.autoRotate = !!it.autoRotate;
+        restoreSelection(ctx); highlight(); legend(by, totals);
+        document.getElementById("stats").innerHTML = '<b>' + fmt(total) + '</b>' + esc(S.fields.value || "flows") + ' across ' + flows.length.toLocaleString() + ' routes and ' + places.length + ' places' + (flows.length > shown.length ? ' (largest ' + shown.length + ' drawn)' : '');
+    }
+    function slerp(a, b, ang, t) {
+        if (ang < 1e-6) return a.clone();
+        var s = Math.sin(ang), wa = Math.sin((1 - t) * ang) / s, wb = Math.sin(t * ang) / s;
+        return new THREE.Vector3(a.x * wa + b.x * wb, a.y * wa + b.y * wb, a.z * wa + b.z * wb);
+    }
+    function legend(by, totals) {
+        var el = document.getElementById("legend");
+        if (by === "SINGLE") { el.style.display = "none"; return; }
+        var keys = S.colourOrder.filter(function (k) { return totals[k]; }).slice(0, 8);
+        var h = '<div class="t">' + esc(by === "FIELD" ? gf(omniscope.view.context().options.items.colour) : by === "DESTINATION" ? "Destination" : "Origin") + '</div>';
+        keys.forEach(function (k) { var i = S.colourOrder.indexOf(k); h += '<div class="it" data-k="' + esc(k) + '"><span class="sw" style="background:' + (i < 8 ? PAL[i] : OTHER) + '"></span>' + esc(k) + '<span class="v">' + fmt(totals[k]) + '</span></div>'; });
+        var rest = Object.keys(totals).filter(function (k) { return S.colourOrder.indexOf(k) >= 8; });
+        if (rest.length) h += '<div class="it" style="cursor:default"><span class="sw" style="background:' + OTHER + '"></span>' + rest.length + ' others<span class="v">' + fmt(d3.sum(rest, function (k) { return totals[k]; })) + '</span></div>';
+        el.innerHTML = h; el.style.display = "block";
+        Array.prototype.forEach.call(el.querySelectorAll(".it[data-k]"), function (d) {
+            d.addEventListener("click", function (e) { e.stopPropagation(); var k = d.getAttribute("data-k"); if (by === "FIELD") { selectCategory(k); return; } var p = S.places.find(function (x) { return x.key === k; }); if (p) selectPlace(p, by); });
+        });
+    }
+
+    // ------------------------------------------------------------ animation and label visibility
+    function animate(now) {
+        var t = (now - S.t0) / 1000, camDir = S.camera ? S.camera.position.clone().normalize() : null;
+        if (S.intro) { var I = S.intro, busy = false; if (I.t0 === null) I.t0 = now; // starts on the first frame drawn
+            S.flows.forEach(function (f, i) { var g = f.mesh.geometry, n = g.index ? g.index.count : 0, k = Math.max(0, Math.min(1, (now - I.t0 - i * I.gap) / 900)); k = 1 - Math.pow(1 - k, 2); g.setDrawRange(0, k >= 1 ? Infinity : Math.floor(k * n / 30) * 30); if (k < 1) busy = true; }); if (!busy) S.intro = null; }
+        S.flows.forEach(function (f) {
+            if (!f.pm) return;
+            var on = isOn(f) && !S.intro; f.pm.visible = on;
+            if (on) f.pm.position.copy(f.curve.getPointAt((t * 0.22 + f.phase) % 1));
+        });
+        if (camDir && (!S.lastLab || now - S.lastLab > 120)) {
+            // hide labels on the far side, and any that would overlap a bigger place's label on screen
+            S.lastLab = now; var taken = [], W = window.innerWidth, H = window.innerHeight;
+            S.places.forEach(function (p) {
+                if (!p.label) return;
+                var front = vec(p.lat, p.lon, 1).normalize().dot(camDir) > 0.15, q = vec(p.lat, p.lon, 1.02).project(S.camera), x = (q.x + 1) / 2 * W, y = (1 - q.y) / 2 * H;
+                var clash = taken.some(function (t) { return Math.abs(t[0] - x) < 70 && Math.abs(t[1] - y) < 16; });
+                p.label.visible = front && !clash; if (p.label.visible) taken.push([x, y]);
+            });
+        }
+    }
+
+    // ------------------------------------------------------------ selection and highlight
+    function isOn(f) {
+        var s = S.selected; if (!s) return true;
+        if (s.type === "flow") return s.keys.indexOf(f.o.key + "\u2192" + f.d.key) >= 0;
+        if (s.type === "cat") return String(f.cat) === s.key;
+        if (s.type === "place") return (s.side !== "DESTINATION" && f.o.key === s.key) || (s.side !== "ORIGIN" && f.d.key === s.key);
+        return true;
+    }
+    function highlight() {
+        S.flows.forEach(function (f) {
+            var on = isOn(f), hov = S.hover && S.hover.flow === f;
+            f.mesh.material.opacity = hov ? 1 : on ? 0.75 : 0.07;
+            f.mesh.material.color.set(hov ? SELECT : f.colour);
+        });
+        S.places.forEach(function (p) { p.mesh.material.color.set(S.hover && S.hover.place === p ? 0xffd166 : 0xf0efec); });
+    }
+    function publish(filter) { omniscope.view.context().viewSelection = filter ? { filter: filter, meta: S.selected } : null; omniscope.view.updated(); }
+    function eq(f, v) { return { type: "FIELD_VALUE", inputField: f, operator: "=", value: v }; }
+    function selectFlow(f, add) {
+        var k = f.o.key + "\u2192" + f.d.key;
+        var keys = add && S.selected && S.selected.type === "flow" ? S.selected.keys.slice() : [];
+        var i = keys.indexOf(k); if (i >= 0) keys.splice(i, 1); else keys.push(k);
+        S.selected = keys.length ? { type: "flow", keys: keys } : null; highlight();
+        if (!keys.length) return publish(null);
+        var F = S.fields, parts = keys.map(function (kk) { var fl = S.allFlows.find(function (x) { return x.o.key + "\u2192" + x.d.key === kk; }); return { type: "AND", filters: [eq(F.origin, fl.o.name), eq(F.destination, fl.d.name)] }; });
+        publish(parts.length === 1 ? parts[0] : { type: "OR", filters: parts });
+    }
+    function selectPlace(p, side) {
+        S.selected = { type: "place", key: p.key, side: side || "BOTH" }; highlight();
+        var F = S.fields;
+        publish(side === "ORIGIN" ? eq(F.origin, p.name) : side === "DESTINATION" ? eq(F.destination, p.name) : { type: "OR", filters: [eq(F.origin, p.name), eq(F.destination, p.name)] });
+    }
+    function selectCategory(k) {
+        S.selected = { type: "cat", key: k }; highlight();
+        var cf = gf(omniscope.view.context().options.items.colour), v = (S.allFlows.find(function (f) { return String(f.cat) === k; }) || {}).cat;
+        publish(eq(cf, v === undefined ? k : v));
+    }
+    function restoreSelection(ctx) { var s = ctx.viewSelection; S.selected = s && s.meta && s.meta.type ? s.meta : null; }
+
+    // ------------------------------------------------------------ pointer
+    function bindPointer(canvas) {
+        var ray = new THREE.Raycaster(), mouse = new THREE.Vector2(), down = null, pend = null;
+        ray.params.Mesh = {};
+        function pick(ev) {
+            var r = canvas.getBoundingClientRect(); mouse.x = ((ev.clientX - r.left) / r.width) * 2 - 1; mouse.y = -((ev.clientY - r.top) / r.height) * 2 + 1;
+            ray.setFromCamera(mouse, S.camera);
+            var objs = S.places.map(function (p) { return p.mesh; }).concat(S.flows.map(function (f) { return f.mesh; }));
+            var hits = ray.intersectObjects(objs, false), globeHit = ray.ray.intersectSphere(new THREE.Sphere(new THREE.Vector3(), 1), new THREE.Vector3());
+            var gd = globeHit ? globeHit.distanceTo(S.camera.position) : Infinity;
+            for (var i = 0; i < hits.length; i++) if (hits[i].distance <= gd + 0.01) return hits[i].object.userData;
+            return null;
+        }
+        canvas.addEventListener("pointermove", function (ev) {
+            pend = ev; requestAnimationFrame(function () {
+                if (!pend) return; var e = pend; pend = null;
+                var h = pick(e); if ((h && h.flow) !== (S.hover && S.hover.flow) || (h && h.place) !== (S.hover && S.hover.place)) { S.hover = h; highlight(); }
+                tip(h, e); canvas.style.cursor = h ? "pointer" : "grab";
+            });
+        });
+        canvas.addEventListener("pointerleave", function () { S.hover = null; highlight(); tip(null); });
+        canvas.addEventListener("pointerdown", function (ev) { down = { x: ev.clientX, y: ev.clientY }; });
+        canvas.addEventListener("pointerup", function (ev) {
+            if (!down || ev.button !== 0) return; var moved = Math.abs(ev.clientX - down.x) + Math.abs(ev.clientY - down.y) > 5; down = null; if (moved) return;
+            var h = pick(ev), add = ev.shiftKey || ev.ctrlKey || ev.metaKey;
+            if (h && h.flow) selectFlow(h.flow, add); else if (h && h.place) selectPlace(h.place, "BOTH");
+            else { S.selected = null; highlight(); omniscope.view.whitespaceClick(); }
+        });
+    }
+    function tip(h, ev) {
+        var el = document.getElementById("tooltip");
+        if (!h) { el.style.display = "none"; return; }
+        var lab = esc(S.fields.value || "Flows");
+        if (h.flow) { var f = h.flow; el.innerHTML = '<b>' + esc(f.o.name) + ' &rarr; ' + esc(f.d.name) + '</b><br><span class="k">' + lab + ':</span> ' + fmt(f.v) + ' (' + (100 * f.v / S.total).toFixed(1) + '% of total)'; }
+        else { var p = h.place; el.innerHTML = '<b>' + esc(p.name) + '</b><br><span class="k">Outbound:</span> ' + fmt(p.out) + '<br><span class="k">Inbound:</span> ' + fmt(p.inn); }
+        el.style.display = "block";
+        var x = ev.clientX + 14, y = ev.clientY + 14;
+        if (x + el.offsetWidth > window.innerWidth - 4) x = ev.clientX - el.offsetWidth - 14;
+        if (y + el.offsetHeight > window.innerHeight - 4) y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, x) + "px"; el.style.top = Math.max(4, y) + "px";
+    }
+    window.__globe.selectFlow = function (i) { selectFlow(S.flows[i], false); };
+    window.__globe.project = function (lat, lon) { var p = vec(lat, lon, 1).project(S.camera); var c = S.renderer.domElement.getBoundingClientRect(); return [(p.x + 1) / 2 * c.width, (1 - p.y) / 2 * c.height]; };
+
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () {
+        if (!S.renderer) return render();
+        S.renderer.setSize(window.innerWidth, window.innerHeight); S.camera.aspect = window.innerWidth / Math.max(1, window.innerHeight); S.camera.updateProjectionMatrix();
+    });
+    document.body.addEventListener("click", function (e) { if (e.target === document.body || e.target.id === "message") omniscope.view.whitespaceClick(); });
+})();
+</script>
+</body>
+</html>

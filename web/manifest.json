@@ -1,5 +1,5 @@
 {
-  "name": "Web",
+  "name": "Web View",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
@@ -7,7 +7,11 @@
     "custom",
     "web",
     "webpage",
-    "www"
+    "www",
+    "url",
+    "browser",
+    "embed",
+    "iframe"
   ],
   "sandbox": false,
   "autoPane": true,
@@ -17,29 +21,36 @@
   "options": {
     "items": {
       "measures": {
-        "displayName": "URL",
-        "detail": "The field which contain the web pages URL to navigate to. N.B. some pages might not load when loading content in a iframe is not permitted by their server.",
+        "displayName": "Page URL",
+        "detail": "The field with the web addresses to show. Some sites do not allow being shown inside another page and stay blank: use Open in a new tab.",
         "type": "MEASURE",
         "validMeasureResultTypes": [
           "TEXT"
         ],
-        "mandatory": true
+        "mandatory": true,
+        "documentation": "The field with the web address (https://...) of the page to show. With the Singleton function a page opens when one record is filtered or selected; Min or Max always shows one. Some sites do not allow being shown inside another page."
+      },
+      "showBar": {
+        "displayName": "Show address bar",
+        "type": "TOGGLE",
+        "documentation": "A bar above the page with its address and an Open in a new tab link. Hidden when the view is under 120 pixels high."
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "documentation": "Optional: one page per value of this field, side by side."
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "documentation": "Optional: one page per value of this field, one above the other."
       }
     },
     "structure": {
       "toolbar": [
-        "measures",
-        "split"
+        "measures"
       ],
       "x": [
         "paneX"
@@ -50,7 +61,9 @@
     }
   },
   "defaultOptions": {
-    "items": {},
+    "items": {
+      "showBar": true
+    },
     "pane": {
       "yAxisHeaderWidth": 75,
       "paneWidth": 200,

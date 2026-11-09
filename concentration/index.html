@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #chart { flex: 1; position: relative; min-width: 0; }
+        #side { width: 300px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .axis text { fill: #52514e; font-size: 10.5px; } .axis path, .axis line { stroke: #c9c8c1; } .grid line { stroke: #ebeae5; } .grid path { display: none; } svg line, .grid, .axis, path.ln { pointer-events: none; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        table { border-collapse: collapse; width: 100%; font-size: 11.5px; } td, th { padding: 3px 3px; text-align: right; white-space: nowrap; } th { color: #52514e; font-weight: normal; font-size: 10.5px; border-bottom: 1px solid #e1e0d9; } td:first-child, th:first-child { text-align: left; }
+        tr.s { cursor: pointer; } tr.s:hover { background: rgba(127,127,127,.08); } tr.sel td:first-child { font-weight: bold; color: #2161D9; }
+        .sw { display: inline-block; width: 10px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+        .btn { display: inline-block; font-size: 11px; border: 1px solid rgba(11,11,11,.15); background: #fff; border-radius: 4px; padding: 2px 8px; margin: 0 4px 4px 0; cursor: pointer; color: #52514e; } .btn:hover { color: #0b0b0b; } .btn.on { background: #2a78d6; color: #fff; border-color: #2a78d6; }
+        .stat { color: #52514e; margin-bottom: 4px; line-height: 1.45; } .stat b { color: #0b0b0b; }
+        .note { color: #898781; font-size: 11px; margin-top: 8px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], ONE = "#2a78d6", SELECT = "#2161D9";
+    var S = { sel: null };
+    window.__conc = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(1) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(1) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var pct = function (v) { return (100 * v).toFixed(v < 0.1 ? 1 : 0) + "%"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function name(o) { return !o ? "" : o.function === "RECORD_COUNT" ? "Record count" : (o.name && o.function ? o.name : o.inputField || ""); }
+
+    // Lorenz curve, Gini coefficient, top shares and Herfindahl-Hirschman index for a list of non-negative values.
+    function analyse(items) {
+        var a = items.slice().sort(function (x, y) { return x.v - y.v; }), n = a.length, tot = d3.sum(a, function (x) { return x.v; }), cum = 0, pts = [[0, 0]], gini = 1, prevY = 0;
+        a.forEach(function (x, i) { cum += x.v; var yy = tot ? cum / tot : 0; gini -= (1 / n) * (yy + prevY); prevY = yy; pts.push([(i + 1) / n, yy]); });
+        var desc = a.slice().reverse(), share = function (f) { var k = Math.max(1, Math.round(f * n)); return tot ? d3.sum(desc.slice(0, k), function (x) { return x.v; }) / tot : 0; };
+        var c80 = 0, acc = 0; for (var i = 0; i < n; i++) { acc += desc[i].v; c80 = i + 1; if (acc >= 0.8 * tot) break; }
+        var hhi = tot ? d3.sum(a, function (x) { return Math.pow(x.v / tot, 2); }) * 10000 : 0;
+        return { n: n, total: tot, pts: pts, gini: Math.max(0, gini), top1: share(0.01), top10: share(0.1), top20: share(0.2), n80: c80, hhi: hhi, desc: desc };
+    }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.item || !it.value) { message("Choose the Items (for example Customer or Product) and the measure (for example sum of Revenue)."); clear(); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = res.data.records || [], neg = 0;
+        var rows = recs.map(function (r) { return { raw: r[mp.item], name: r[mp.item] === null ? "(blank)" : String(r[mp.item]), v: r[mp.value], g: mp.compare !== undefined ? (r[mp.compare] === null ? "(blank)" : String(r[mp.compare])) : null, graw: mp.compare !== undefined ? r[mp.compare] : null }; }).filter(function (x) { if (typeof x.v !== "number" || !isFinite(x.v)) return false; if (x.v < 0) { neg++; return false; } return true; });
+        if (rows.length < 2) { message(rows.length ? "Concentration needs at least two items." : "No data to show. Check the filters."); clear(); return; }
+        message(null);
+        var all = analyse(rows), series = [];
+        if (mp.compare !== undefined) {
+            var by = d3.group(rows, function (x) { return x.g; }), names = Array.from(by.keys()).sort(function (a, b) { return d3.sum(by.get(b), function (x) { return x.v; }) - d3.sum(by.get(a), function (x) { return x.v; }); }).slice(0, 8), alpha = names.slice().sort();
+            names.forEach(function (g) { if (by.get(g).length < 2) return; var A = analyse(by.get(g)); A.name = g; A.raw = by.get(g)[0].graw; A.colour = CAT[alpha.indexOf(g) % CAT.length]; series.push(A); });
+        }
+        all.name = "All"; all.colour = series.length ? "#3a3936" : ONE;
+        S.model = { it: it, all: all, series: series, neg: neg, names: [name(it.item), name(it.value), it.compare ? name(it.compare) : null], F: { i: it.item.inputField, g: it.compare ? it.compare.inputField : null } };
+        introIf(recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null));
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        draw();
+    }
+    function clear() { d3.select("#svg").selectAll("*").remove(); document.getElementById("side").innerHTML = ""; }
+
+    function draw() {
+        var M = S.model; if (!M) return; tip(); var intro = introDone();
+        document.body.classList.toggle("narrow", window.innerWidth < 640);
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight, svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var m = { l: 52, r: 16, t: 40, b: 40 }, size = Math.max(80, Math.min(W - m.l - m.r, H - m.t - m.b)), x = d3.scaleLinear().domain([0, 1]).range([0, size]), y = d3.scaleLinear().domain([0, 1]).range([size, 0]);
+        var g = svg.append("g").attr("transform", "translate(" + (m.l + Math.max(0, (W - m.l - m.r - size) / 2)) + "," + m.t + ")");
+        g.append("g").attr("class", "grid").call(d3.axisLeft(y).ticks(5).tickSize(-size).tickFormat(""));
+        g.append("g").attr("class", "grid").attr("transform", "translate(0," + size + ")").call(d3.axisBottom(x).ticks(5).tickSize(-size).tickFormat(""));
+        g.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".0%")));
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + size + ")").call(d3.axisBottom(x).ticks(5).tickFormat(d3.format(".0%")));
+        g.append("text").attr("x", size).attr("y", size + 32).attr("text-anchor", "end").style("font-size", "11px").attr("fill", "#52514e").text("Share of " + M.names[0].toLowerCase() + "s, smallest first");
+        g.append("text").attr("transform", "rotate(-90)").attr("x", 0).attr("y", -40).attr("text-anchor", "end").style("font-size", "11px").attr("fill", "#52514e").text("Cumulative share of " + M.names[1]);
+        g.append("line").attr("x1", 0).attr("y1", size).attr("x2", size).attr("y2", 0).attr("stroke", "#9a988f").attr("stroke-dasharray", "4 3");
+        g.append("text").attr("x", size * 0.42).attr("y", size * 0.52).attr("transform", "rotate(-45," + size * 0.42 + "," + size * 0.52 + ")").attr("text-anchor", "middle").style("font-size", "10.5px").attr("fill", "#898781").text("perfect equality");
+        var line = d3.line().x(function (p) { return x(p[0]); }).y(function (p) { return y(p[1]); }), thin = function (pts) { var st = Math.max(1, Math.floor(pts.length / 500)); return pts.filter(function (p, i) { return i % st === 0 || i === pts.length - 1; }); };
+        var sel = S.sel, list = M.series.length ? M.series.concat([M.all]) : [M.all];
+        if (!M.series.length) g.append("path").attr("class", "ln").attr("d", line(thin(M.all.pts)) + "L" + x(1) + "," + y(1) + "L" + x(0) + "," + y(0) + "Z").attr("fill", ONE).attr("opacity", 0.1);
+        list.forEach(function (A) { var dim = sel && sel.series !== undefined && sel.series !== A.name; g.append("path").attr("class", "ln").attr("d", line(thin(A.pts))).attr("fill", "none").attr("stroke", A.colour).attr("stroke-width", A.name === "All" && M.series.length ? 1.6 : 2.4).attr("stroke-dasharray", A.name === "All" && M.series.length ? "5 3" : null).attr("opacity", dim ? 0.25 : 1); });
+        var cross = g.append("line").attr("y1", 0).attr("y2", size).attr("stroke", "#52514e").attr("opacity", 0);
+        g.insert("rect", ":first-child").attr("width", size).attr("height", size).attr("fill", "transparent")
+            .on("mousemove", function (ev) { var f = Math.max(0, Math.min(1, x.invert(d3.pointer(ev, g.node())[0]))); cross.attr("x1", x(f)).attr("x2", x(f)).attr("opacity", 0.35); tipAt(f, ev); })
+            .on("mouseleave", function () { cross.attr("opacity", 0); tip(); });
+        var A = M.all, head = svg.append("text").attr("x", 10).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text("The top 10% of " + M.names[0].toLowerCase() + "s make " + pct(A.top10) + " of " + M.names[1]);
+        head.append("tspan").attr("fill", "#52514e").text("  Gini " + A.gini.toFixed(2) + "; " + A.n80.toLocaleString() + " of " + A.n.toLocaleString() + " (" + pct(A.n80 / A.n) + ") make 80%");
+        if (intro) linesIn(svg, 1300);
+        side();
+    }
+    function at(A, f) { var p = A.pts, i = Math.min(p.length - 1, Math.round(f * (p.length - 1))); return p[i][1]; }
+    function tipAt(f, ev) {
+        var M = S.model, h = '<b>The smallest ' + pct(f) + ' of ' + esc(M.names[0].toLowerCase()) + 's</b>';
+        (M.series.length ? M.series.concat([M.all]) : [M.all]).forEach(function (A) { var v = at(A, f); h += '<br><span class="sw" style="background:' + A.colour + '"></span>' + esc(A.name) + ': ' + pct(v) + ' <span class="k">of the total; the largest ' + pct(1 - f) + ' make ' + pct(1 - v) + '</span>'; });
+        show(h, ev);
+    }
+    function side() {
+        var M = S.model, el = document.getElementById("side"), list = M.series.length ? M.series.concat([M.all]) : [M.all];
+        var h = '<h3>Concentration</h3><table><tr><th></th><th title="0 = equal, 1 = all in one">Gini</th><th>Top 10%</th><th>Items for 80%</th><th title="Herfindahl-Hirschman index">HHI</th></tr>';
+        list.forEach(function (A) { h += '<tr class="s' + (S.sel && S.sel.series === A.name ? ' sel' : '') + '" data-s="' + esc(A.name) + '"><td><span class="sw" style="background:' + A.colour + '"></span>' + esc(A.name.length > 16 ? A.name.slice(0, 15) + "\u2026" : A.name) + '</td><td><b>' + A.gini.toFixed(2) + '</b></td><td>' + pct(A.top10) + '</td><td>' + A.n80.toLocaleString() + ' <span style="color:#898781">(' + pct(A.n80 / A.n) + ')</span></td><td>' + Math.round(A.hhi).toLocaleString() + '</td></tr>'; });
+        h += '</table><h3>Select the largest</h3><div>';
+        [0.01, 0.05, 0.1, 0.2].forEach(function (f) { h += '<span class="btn' + (S.sel && S.sel.top === f ? ' on' : '') + '" data-f="' + f + '">Top ' + (f * 100) + '%</span>'; });
+        h += '<span class="btn' + (S.sel && S.sel.top === "80" ? ' on' : '') + '" data-f="80">The ' + M.all.n80.toLocaleString() + ' making 80%</span></div>';
+        var A = M.all; h += '<h3>' + esc(M.names[0]) + 's</h3><div class="stat"><b>' + A.n.toLocaleString() + '</b>, total ' + fmt(A.total) + '<br>Top 1%: ' + pct(A.top1) + ', top 20%: ' + pct(A.top20) + '</div>';
+        h += '<div class="note">The Lorenz curve ranks items from smallest to largest; the further it bows below the diagonal, the more concentrated the total. Gini runs from 0 (every item equal) to 1 (one item has everything). The HHI is the sum of squared percentage shares (10,000 when one item has everything; it is the measure competition authorities use for market concentration).' + (M.neg ? ' ' + M.neg + ' items with negative values were left out.' : '') + ' Click a row or a button to select those items.</div>';
+        el.innerHTML = h;
+        Array.prototype.forEach.call(el.querySelectorAll("tr.s"), function (r) { r.addEventListener("click", function (e) { e.stopPropagation(); selectSeries(r.getAttribute("data-s")); }); });
+        Array.prototype.forEach.call(el.querySelectorAll(".btn"), function (b) { b.addEventListener("click", function (e) { e.stopPropagation(); var f = b.getAttribute("data-f"); selectTop(f === "80" ? "80" : +f); }); });
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectSeries(n) {
+        var M = S.model; if (S.sel && S.sel.series === n) return publish(null, null);
+        if (n === "All" || !M.F.g) return publish(null, null);
+        var A = M.series.find(function (x) { return x.name === n; }); publish({ type: "FIELD_VALUE", inputField: M.F.g, operator: "=", value: A.raw }, { series: n });
+    }
+    function selectTop(f) {
+        var M = S.model; if (S.sel && S.sel.top === f) return publish(null, null);
+        var k = f === "80" ? M.all.n80 : Math.max(1, Math.round(f * M.all.n)), items = M.all.desc.slice(0, k);
+        if (k > 3000) { omniscope.view.error(k.toLocaleString() + " items; selection is limited to 3,000."); return; }
+        var eq = function (x) { return { type: "FIELD_VALUE", inputField: M.F.i, operator: "=", value: x.raw }; };
+        publish(k === 1 ? eq(items[0]) : { type: "OR", filters: items.map(eq) }, { top: f });
+    }
+    window.__conc.selectTop = selectTop;
+
+    document.getElementById("chart").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

@@ -3,7 +3,12 @@
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
-  "tags": ["HTML","web","widget","content"],
+  "tags": [
+    "HTML",
+    "web",
+    "widget",
+    "content"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
@@ -13,32 +18,35 @@
     "items": {
       "aStaticHTML": {
         "displayName": "Static HTML",
-        "documentation": "A HTML snippet to embed in the View. Takes effect when 'Dynamic content' is unticked.",
+        "documentation": "HTML shown in the view, for example an embedded widget. Used when Show HTML from the data is off. Script tags in it do not run",
         "type": "TEXT"
       },
       "dynamicHTML": {
-        "displayName": "Dynamic content",
-        "documentation": "If ticked, the view will display the HTML retrieved from the configure query (using the Measure + Split configuration)",
+        "displayName": "Show HTML from the data",
+        "documentation": "When on, the view shows the HTML value from the data instead of Static HTML, and follows the report's filters and selections",
         "type": "TOGGLE"
       },
       "measures": {
-        "displayName": "Measure",
+        "displayName": "HTML value",
         "type": "MEASURE",
-        "mandatory": true
+        "detail": "The field holding HTML, with a function that gives one value: Singleton (empty unless all records agree), Mode, Min or Max"
       },
       "msplit": {
-        "displayName": "Split",
-        "type": "GROUPING"
+        "displayName": "One block per",
+        "type": "GROUPING",
+        "detail": "Optional: one block of HTML per value of this field, one under the other"
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "Optional: one view per value, side by side"
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "Optional: one view per value, one above the other"
       }
     },
     "structure": {
@@ -52,7 +60,72 @@
       "y": [
         "paneY"
       ]
-    }
+    },
+    "optionGroups": [
+      {
+        "displayName": "Content",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "aStaticHTML",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "dynamicHTML",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "HTML from the data",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "measures",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "msplit",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Panes",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {},

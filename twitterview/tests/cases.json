@@ -1,0 +1,401 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/posts.csv",
+  "types": {
+   "Post ID": "TEXT"
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post URL",
+     "function": "MIN"
+    }
+   }
+  },
+  "width": 560,
+  "height": 620,
+  "showcaseHeight": 620,
+  "wait": 1500,
+  "caption": "Live: a post embedded from X, chosen by its URL. Post ID or URL uses the Min function here, so one post is always shown.",
+  "expect": {
+   "selector": ".stub-post",
+   "min": 1,
+   "max": 1
+  },
+  "actions": [
+   {
+    "eval": "window.__tw.calls.length===1 && window.__tw.calls[0].id==='463440424141459456' && window.__tw.calls[0].opts.dnt===true",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "dark",
+  "showcase": true,
+  "data": "sample-data/posts.csv",
+  "types": {
+   "Post ID": "TEXT"
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Account",
+   "operator": "=",
+   "value": "jack"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post ID",
+     "function": "SINGLETON"
+    },
+    "darkMode": true,
+    "hideConversation": true,
+    "hideMedia": true
+   }
+  },
+  "width": 560,
+  "height": 420,
+  "showcaseHeight": 420,
+  "wait": 1500,
+  "caption": "Live: dark mode, by post ID, with conversation and media hidden.",
+  "expect": {
+   "selector": ".stub-post",
+   "min": 1
+  },
+  "actions": [
+   {
+    "eval": "var o=window.__tw.calls[0].opts; window.__tw.calls[0].id==='20' && o.theme==='dark' && o.conversation==='none' && o.cards==='hidden' && document.body.className==='dark'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/posts.csv",
+  "types": {
+   "Post ID": "TEXT"
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Team",
+   "operator": "=",
+   "value": "Product"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post ID",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 560,
+  "height": 420,
+  "wait": 1500,
+  "actions": [
+   {
+    "clickAt": [
+     5,
+     400
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "resize": [
+     500,
+     380
+    ]
+   },
+   {
+    "eval": "window.__tw.calls.length===1",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Team",
+     "operator": "=",
+     "value": "Marketing"
+    }
+   },
+   {
+    "eval": "window.__tw.calls.length===2 && window.__tw.calls[1].id==='463440424141459456' && document.querySelectorAll('.stub-post').length===1",
+    "expectTruthy": true
+   },
+   {
+    "filter": null
+   },
+   {
+    "eval": "document.body.innerText.indexOf('No single post to show')>=0 && !document.querySelector('.stub-post')",
+    "expectTruthy": true
+   },
+   {
+    "update": {
+     "atweetID": {
+      "inputField": "Post ID",
+      "function": "SINGLETON"
+     },
+     "darkMode": true
+    }
+   },
+   {
+    "eval": "document.body.className==='dark'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "by-url-and-number",
+  "generate": "tests/ids.js",
+  "generateArgs": {
+   "ids": [
+    463440424141459456
+   ]
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post ID",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 560,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "This post ID has lost digits"
+  },
+  "actions": [
+   {
+    "eval": "!window.__tw || window.__tw.calls.length===0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "not-a-post",
+  "generate": "tests/ids.js",
+  "generateArgs": {
+   "ids": [
+    "hello world"
+   ]
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post ID",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 560,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "Not a post ID or URL"
+  }
+ },
+ {
+  "name": "not-available",
+  "generate": "tests/ids.js",
+  "generateArgs": {
+   "ids": [
+    "1"
+   ]
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post ID",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 560,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "Post 1 is not available"
+  }
+ },
+ {
+  "name": "unreachable",
+  "data": "sample-data/posts.csv",
+  "types": {
+   "Post ID": "TEXT"
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "abort"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post URL",
+     "function": "MIN"
+    }
+   }
+  },
+  "width": 560,
+  "height": 300,
+  "wait": 2000,
+  "expect": {
+   "text": "The post can't be shown here",
+   "noErrors": false
+  }
+ },
+ {
+  "name": "small",
+  "data": "sample-data/posts.csv",
+  "types": {
+   "Post ID": "TEXT"
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post URL",
+     "function": "MIN"
+    }
+   }
+  },
+  "width": 180,
+  "height": 140,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "document.body.innerText.indexOf('Too narrow for a post')>=0 && !window.__tw",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     520,
+     400
+    ]
+   },
+   {
+    "eval": "document.querySelectorAll('.stub-post').length===1",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Post ID",
+    "type": "TEXT"
+   }
+  ],
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post ID",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 560,
+  "height": 300,
+  "wait": 800,
+  "expect": {
+   "text": "No single post to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/posts.csv",
+  "types": {
+   "Post ID": "TEXT"
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {}
+  },
+  "width": 560,
+  "height": 300,
+  "wait": 800,
+  "expect": {
+   "text": "Choose the field with the post IDs"
+  }
+ },
+ {
+  "name": "record-count",
+  "data": "sample-data/posts.csv",
+  "types": {
+   "Post ID": "TEXT"
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "function": "RECORD_COUNT"
+    }
+   }
+  },
+  "width": 560,
+  "height": 300,
+  "wait": 800,
+  "expect": {
+   "text": "needs a field value, not a count"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/ids.js",
+  "generateArgs": {
+   "large": true
+  },
+  "routes": {
+   "https://platform.x.com/widgets.js": "tests/stub-widgets.js"
+  },
+  "options": {
+   "items": {
+    "atweetID": {
+     "inputField": "Post ID",
+     "function": "MAX"
+    }
+   }
+  },
+  "width": 560,
+  "height": 400,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "window.__tw.calls.length===1 && window.__tw.calls[0].id==='9999'",
+    "expectTruthy": true
+   }
+  ]
+ }
+]

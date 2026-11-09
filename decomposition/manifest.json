@@ -1,0 +1,179 @@
+{
+  "name": "Seasonal Decomposition",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "decomposition",
+    "seasonality",
+    "trend",
+    "anomaly",
+    "time series",
+    "residual",
+    "outliers",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "date": {
+        "displayName": "Dated by",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "The date of each record"
+      },
+      "value": {
+        "displayName": "Measure",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "What to decompose per period, e.g. sum of Sessions (default: number of records)"
+      },
+      "period": {
+        "displayName": "Period",
+        "type": "CHOICE",
+        "values": [
+          "WEEK",
+          "MONTH",
+          "DAY",
+          "QUARTER"
+        ],
+        "displayValues": [
+          "Week",
+          "Month",
+          "Day",
+          "Quarter"
+        ],
+        "detail": "Size of each period (default week)"
+      },
+      "seasonLength": {
+        "displayName": "Season length",
+        "type": "NUMBER",
+        "minValue": 2,
+        "maxValue": 400,
+        "detail": "Periods in one seasonal cycle (default 52 weeks, 12 months, 7 days or 4 quarters)"
+      },
+      "model": {
+        "displayName": "Season",
+        "type": "CHOICE",
+        "values": [
+          "ADDITIVE",
+          "MULTIPLICATIVE"
+        ],
+        "displayValues": [
+          "Additive (fixed size)",
+          "Multiplicative (grows with the level)"
+        ],
+        "detail": "How the seasonal pattern combines with the trend"
+      },
+      "threshold": {
+        "displayName": "Unusual beyond",
+        "type": "NUMBER",
+        "minValue": 1,
+        "maxValue": 10,
+        "detail": "Flag periods whose residual is more than this many robust standard deviations from typical (default 3)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "date",
+        "value",
+        "period"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Series",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "date",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "period",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Decomposition",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "seasonLength",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "model",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "threshold",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "period": "WEEK",
+      "model": "ADDITIVE",
+      "threshold": 3
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 300
+  }
+}

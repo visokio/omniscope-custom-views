@@ -1,0 +1,289 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "filterAField": "Orders (12 months)",
+    "filterAMin": "10",
+    "setAName": "Frequent buyers",
+    "filterBField": "Average basket",
+    "filterBMin": "80",
+    "setBName": "Big baskets",
+    "filterCField": "Days since last order",
+    "filterCMax": "30",
+    "setCName": "Recently active"
+   }
+  },
+  "width": 640,
+  "height": 520,
+  "showcaseHeight": 520,
+  "wait": 1200,
+  "caption": "Live: 600 invented customers in three sets: more than 10 orders, an average basket above 80, and an order in the last 30 days. Click a region to select exactly the customers in it; hover for its share.",
+  "actions": [
+   {
+    "eval": "(function(){var c=window.__venn.counts;return !!c&&c.a===55&&c.b===44&&c.c===106&&c.ab===20&&c.bc===32&&c.ac===84&&c.abc===16&&window.__venn.outside===243&&window.__venn.total===600})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.getElementById('text-a').textContent==='Frequent buyers'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "bound('1,000')===1000 && bound(' 0.5 ')===0.5 && bound('')===null && bound('abc')===null",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "filterAField": "Orders (12 months)",
+    "filterAMin": "10",
+    "setAName": "Frequent buyers",
+    "filterBField": "Average basket",
+    "filterBMin": "80",
+    "setBName": "Big baskets",
+    "filterCField": "Days since last order",
+    "filterCMax": "30",
+    "setCName": "Recently active"
+   }
+  },
+  "width": 640,
+  "height": 520,
+  "wait": 1200,
+  "actions": [
+   {
+    "click": "#subset-ac"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.type==='AND'&&f.filters.length===3&&f.filters.filter(function(x){return x.type==='NOT'}).length===1&&f.filters[1].type==='NOT'})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.querySelector('#subset-ac').classList.contains('selected')",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "click": "#subset-ac"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "click": "#subset-a"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     4,
+     4
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "eval": "document.querySelectorAll('.region.selected').length===0",
+    "expectTruthy": true
+   },
+   {
+    "hover": "#subset-b"
+   },
+   {
+    "eval": "document.querySelector('#subset-b title').textContent==='Big baskets, not Frequent buyers or Recently active: 44 records (7.3%)'",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "North"
+    }
+   },
+   {
+    "eval": "(function(){var c=window.__venn.counts;return !!c&&c.a===14&&c.b===12&&c.c===26&&c.ab===7&&c.bc===6&&c.ac===22&&c.abc===5&&window.__venn.outside===57})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "filtered"
+   }
+  ]
+ },
+ {
+  "name": "open-set",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "filterAField": "Orders (12 months)",
+    "filterAMin": "10",
+    "setAName": "Frequent buyers",
+    "filterBField": "Average basket",
+    "filterBMin": "80",
+    "setBName": "Big baskets",
+    "filterCField": "Days since last order",
+    "filterCMax": null,
+    "setCName": "Recently active"
+   }
+  },
+  "width": 640,
+  "height": 520,
+  "wait": 1200,
+  "expect": {
+   "text": "holds every record"
+  },
+  "actions": [
+   {
+    "eval": "(function(){var c=window.__venn.counts;return c.a===0&&c.b===0&&c.ab===0&&c.abc===36&&window.__venn.outside===0})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "filterAField": "Orders (12 months)",
+    "filterAMin": "10",
+    "setAName": "Frequent buyers",
+    "filterBField": "Average basket",
+    "filterBMin": "80",
+    "setBName": "Big baskets",
+    "filterCField": "Days since last order",
+    "filterCMax": "30",
+    "setCName": "Recently active"
+   }
+  },
+  "width": 640,
+  "height": 520,
+  "wait": 1200,
+  "actions": [
+   {
+    "resize": [
+     240,
+     170
+    ]
+   },
+   {
+    "eval": "(function(){var b=document.getElementById('venn').getBBox?document.querySelector('#counts').getBoundingClientRect():null;return b&&b.right<=window.innerWidth&&b.bottom<=window.innerHeight&&document.querySelectorAll('#counts text').length===7})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "240x170"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Orders (12 months)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Average basket",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Days since last order",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "filterAField": "Orders (12 months)",
+    "filterAMin": "10",
+    "setAName": "Frequent buyers",
+    "filterBField": "Average basket",
+    "filterBMin": "80",
+    "setBName": "Big baskets",
+    "filterCField": "Days since last order",
+    "filterCMax": "30",
+    "setCName": "Recently active"
+   }
+  },
+  "width": 500,
+  "height": 400,
+  "wait": 1000,
+  "expect": {
+   "text": "Outside all three: 0 of 0 records"
+  },
+  "actions": [
+   {
+    "eval": "(function(){var c=window.__venn.counts;return !!c&&c.a===0&&c.b===0&&c.c===0&&c.ab===0&&c.bc===0&&c.ac===0&&c.abc===0})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 500,
+  "height": 400,
+  "wait": 800,
+  "expect": {
+   "text": "Choose a numeric field"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "filterAField": "X",
+    "filterAMin": "49",
+    "filterBField": "Y",
+    "filterBMin": "49",
+    "filterCField": "Z",
+    "filterCMin": "49"
+   }
+  },
+  "width": 640,
+  "height": 520,
+  "wait": 2500,
+  "actions": [
+   {
+    "eval": "(function(){var s=window.__venn,c=s.counts,t=0;for(var k in c)t+=c[k];return t+s.outside===10000&&s.total===10000&&c.a+c.ab+c.ac+c.abc===5000})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "filterAField": "Orders (12 months)",
+    "filterAMin": "10",
+    "setAName": "Frequent buyers",
+    "filterBField": "Average basket",
+    "filterBMin": "80",
+    "setBName": "Big baskets",
+    "filterCField": "Days since last order",
+    "filterCMax": "30",
+    "setCName": "Recently active"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1200
+ }
+]

@@ -1,0 +1,218 @@
+{
+  "name": "Variance Chart",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "variance",
+    "budget",
+    "plan",
+    "actual",
+    "forecast",
+    "finance",
+    "management reporting",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 5000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "category": {
+        "displayName": "Breakdown",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "Rows or periods to compare, e.g. Region, Product line or Month (dates are drawn as columns)"
+      },
+      "actual": {
+        "displayName": "Actual",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "The actual figure, e.g. sum of Sales"
+      },
+      "plan": {
+        "displayName": "Plan",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "What to compare against, e.g. sum of Budget, Forecast or Prior year"
+      },
+      "good": {
+        "displayName": "Above plan is",
+        "type": "CHOICE",
+        "values": [
+          "HIGHER",
+          "LOWER"
+        ],
+        "displayValues": [
+          "Good (sales, profit)",
+          "Bad (costs, delays)"
+        ],
+        "detail": "Decides which variances are green and which red"
+      },
+      "sort": {
+        "displayName": "Sort",
+        "type": "CHOICE",
+        "values": [
+          "VARIANCE",
+          "PERCENT",
+          "ACTUAL",
+          "DATA"
+        ],
+        "displayValues": [
+          "By variance",
+          "By variance %",
+          "By actual",
+          "As in the data"
+        ],
+        "detail": "Row order for categories; periods always stay in time order"
+      },
+      "topN": {
+        "displayName": "Rows shown",
+        "type": "NUMBER",
+        "minValue": 3,
+        "maxValue": 60,
+        "detail": "Further rows are combined as Other (default 15)"
+      },
+      "layout": {
+        "displayName": "Layout",
+        "type": "CHOICE",
+        "values": [
+          "AUTO",
+          "ROWS",
+          "COLUMNS"
+        ],
+        "displayValues": [
+          "Automatic",
+          "Rows",
+          "Columns"
+        ],
+        "detail": "Automatic draws periods as columns and categories as rows"
+      },
+      "showTotal": {
+        "displayName": "Show total",
+        "type": "TOGGLE",
+        "detail": "Add a total row (only when both measures are sums or counts)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "category",
+        "actual",
+        "plan"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Comparison",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "category",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "actual",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "plan",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "good",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "sort",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "topN",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "layout",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showTotal",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "good": "HIGHER",
+      "sort": "VARIANCE",
+      "topN": 15,
+      "layout": "AUTO",
+      "showTotal": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 200
+  }
+}

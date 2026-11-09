@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #f6f6f3; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #map { flex: 1; position: relative; min-width: 0; }
+        #side { width: 270px; flex: none; background: #fcfcfb; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        #bar { position: absolute; left: 10px; top: 8px; z-index: 3; display: flex; align-items: center; gap: 8px; background: rgba(252,252,251,.94); border: 1px solid rgba(11,11,11,.1); border-radius: 6px; padding: 4px 8px; color: #52514e; }
+        #bar input { width: 120px; accent-color: #2a78d6; }
+        #bar button { font: inherit; font-size: 11px; border: 1px solid rgba(11,11,11,.15); background: #fff; border-radius: 4px; padding: 2px 8px; cursor: pointer; color: #52514e; }
+        #bar button.on { background: #2a78d6; color: #fff; border-color: #2a78d6; }
+        .node { cursor: pointer; } .node:hover rect { stroke: #2a78d6; }
+        .edge { cursor: pointer; } .edge:hover path.vis { stroke: #2a78d6; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        .stat b { font-size: 16px; } .stat { margin-bottom: 4px; color: #52514e; }
+        .var { padding: 5px 6px; border-radius: 5px; cursor: pointer; margin-bottom: 3px; } .var:hover { background: rgba(127,127,127,.1); } .var.sel { outline: 1px dashed #2161D9; }
+        .var .p { font-weight: bold; } .var .s { color: #52514e; font-size: 11px; line-height: 1.35; }
+        .var .bar { height: 3px; background: #2a78d6; border-radius: 2px; opacity: .6; margin-top: 3px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="map"><svg id="svg"><g id="zoom"></g></svg>
+        <div id="bar">Detail <input id="detail" type="range" min="0" max="50" step="1"><span id="detailv"></span><button id="mFreq">Cases</button><button id="mDur">Time</button></div></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    var NODE_RAMP = ["#e8f1fc", "#9ec5f4", "#3987e5", "#184f95"], EDGE = "#7d8696", REWORK = "#eb6834", SELECT = "#2161D9";
+    var S = { gen: 0, sel: null, metric: null, detail: null };
+    window.__proc = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function dur(ms) { if (!isFinite(ms)) return "n/a"; var a = Math.abs(ms), m = 6e4, h = 36e5, d = 864e5; return a >= 2 * d ? (ms / d).toFixed(1) + " days" : a >= 2 * h ? (ms / h).toFixed(1) + " hours" : a >= 2 * m ? Math.round(ms / m) + " min" : Math.round(ms / 1000) + " s"; }
+    function tval(v) { if (typeof v === "number") return v; var s = v && typeof v === "object" ? v.lower : v; var t = Date.parse(typeof s === "string" && s.length === 10 ? s + "T00:00:00Z" : s); return isNaN(t) ? null : t; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { c: fld(o.case), a: fld(o.activity), t: fld(o.time) };
+        if (!F.c || !F.a || !F.t) { message("Choose the Cases, Steps and Ordered by fields of an event log (case ID, activity and timestamp)."); return; }
+        var q = { fields: [F.c, F.a, F.t], sorts: [{ inputField: F.c, direction: "ASCENDING" }, { inputField: F.t, direction: "ASCENDING" }], range: { start: 0, length: Math.max(1000, Math.min(500000, +o.maxEvents || 200000)) } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, e.data.records); draw(true); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+    function build(F, recs) {
+        var cases = new Map();
+        recs.forEach(function (r) { if (r[0] === null || r[1] === null) return; var t = tval(r[2]); if (t === null) return; var k = String(r[0]); if (!cases.has(k)) cases.set(k, { raw: r[0], ev: [] }); cases.get(k).ev.push({ a: String(r[1]), t: t }); });
+        if (!cases.size) { S.model = null; message("No data to show. Check the filters."); return; }
+        message(null);
+        var acts = new Map(), edges = new Map(), variants = new Map(), ncase = cases.size, START = "\u25b6 Start", END = "\u25a0 End";
+        var addEdge = function (a, b, d, ck) { var k = a + "\u2192" + b; if (!edges.has(k)) edges.set(k, { k: k, a: a, b: b, n: 0, cases: new Set(), dsum: 0, dn: 0 }); var e = edges.get(k); e.n++; e.cases.add(ck); if (d !== null) { e.dsum += d; e.dn++; } };
+        var through = 0;
+        cases.forEach(function (c, ck) {
+            c.ev.sort(function (x, y) { return x.t - y.t; });
+            var seq = c.ev.map(function (e) { return e.a; });
+            var seen = {}; c.ev.forEach(function (e, i) { if (!acts.has(e.a)) acts.set(e.a, { name: e.a, n: 0, cases: new Set(), pos: 0, pn: 0 }); var A = acts.get(e.a); A.n++; A.cases.add(ck); if (!seen[e.a]) { seen[e.a] = 1; A.pos += c.ev.length > 1 ? i / (c.ev.length - 1) : 0.5; A.pn++; } }); // order by first occurrence, so rework repeats do not push a step later
+            addEdge(START, seq[0], null, ck);
+            for (var i = 1; i < c.ev.length; i++) addEdge(c.ev[i - 1].a, c.ev[i].a, c.ev[i].t - c.ev[i - 1].t, ck);
+            addEdge(seq[seq.length - 1], END, null, ck);
+            through += c.ev[c.ev.length - 1].t - c.ev[0].t;
+            var vk = seq.join("\u2192"); if (!variants.has(vk)) variants.set(vk, { seq: seq, n: 0, cases: [] }); var v = variants.get(vk); v.n++; v.cases.push(c.raw);
+        });
+        if (acts.size > 80) { S.model = null; message("Steps has " + acts.size.toLocaleString() + " distinct values. A process map needs an activity field with up to 80 steps; check that Steps holds the activity and Cases the case ID."); return; }
+        acts.forEach(function (A) { A.pos /= Math.max(1, A.pn); A.nc = A.cases.size; });
+        var list = Array.from(acts.values()).sort(function (a, b) { return a.pos - b.pos; });
+        // rows: activities in order of average position; alternatives that never share a case sit side by side
+        var rows = [];
+        list.forEach(function (A) {
+            var last = rows[rows.length - 1];
+            if (last && Math.abs(last.pos - A.pos) < 0.07 && last.items.every(function (B) { return !Array.from(B.cases).some(function (c) { return A.cases.has(c); }); })) last.items.push(A);
+            else rows.push({ pos: A.pos, items: [A] });
+        });
+        rows.unshift({ items: [{ name: START, nc: ncase, n: ncase, special: true }] }); rows.push({ items: [{ name: END, nc: ncase, n: ncase, special: true }] });
+        var nodes = new Map(); rows.forEach(function (r, ri) { r.items.forEach(function (A, j) { A.row = ri; A.col = j; A.ncols = r.items.length; nodes.set(A.name, A); }); });
+        var vlist = Array.from(variants.values()).sort(function (a, b) { return b.n - a.n; });
+        S.model = { F: F, cases: cases, ncase: ncase, nodes: nodes, rows: rows, edges: Array.from(edges.values()), variants: vlist, avgThrough: through / ncase, events: recs.length };
+        var o = it(); if (S.metric === null) S.metric = o.metric || "FREQUENCY"; if (S.detail === null) S.detail = o.detail === undefined || o.detail === null ? 2 : +o.detail;
+        document.getElementById("detail").value = String(S.detail);
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+    var svg = d3.select("#svg"), gz = d3.select("#zoom");
+    S.zoom = d3.zoom().scaleExtent([0.2, 3]).on("zoom", function (ev) { gz.attr("transform", ev.transform); });
+    svg.call(S.zoom).on("dblclick.zoom", null);
+    function draw(refit) {
+        var M = S.model; if (!M) { gz.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var box = document.getElementById("map"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H);
+        document.getElementById("detailv").textContent = S.detail + "%";
+        document.getElementById("mFreq").classList.toggle("on", S.metric !== "DURATION"); document.getElementById("mDur").classList.toggle("on", S.metric === "DURATION");
+        var NW = 168, NH = 40, RG = 66, CG = 40;
+        var xy = function (A) { var tot = A.ncols * NW + (A.ncols - 1) * CG; return [A.col * (NW + CG) - tot / 2 + NW / 2, A.row * RG]; };
+        var minCases = M.ncase * S.detail / 100;
+        var shown = M.edges.filter(function (e) { return e.cases.size >= minCases && M.nodes.has(e.a) && M.nodes.has(e.b); });
+        var maxE = d3.max(shown, function (e) { return e.cases.size; }) || 1, maxN = d3.max(Array.from(M.nodes.values()), function (A) { return A.special ? 0 : A.nc; }) || 1;
+        gz.selectAll("*").remove();
+        var defs = gz.append("defs");
+        [["arr", EDGE], ["arrR", REWORK], ["arrS", SELECT]].forEach(function (a) { defs.append("marker").attr("id", a[0]).attr("viewBox", "0 0 10 10").attr("refX", 9).attr("refY", 5).attr("markerUnits", "userSpaceOnUse").attr("markerWidth", 11).attr("markerHeight", 11).attr("orient", "auto-start-reverse").append("path").attr("d", "M0,0 L10,5 L0,10 z").attr("fill", a[1]); });
+        var eg = gz.append("g");
+        shown.forEach(function (e) {
+            var A = M.nodes.get(e.a), B = M.nodes.get(e.b), pa = xy(A), pb = xy(B), back = B.row <= A.row, self = e.a === e.b;
+            var w = 1 + 7 * Math.sqrt(e.cases.size / maxE), selE = S.sel && S.sel.edge === e.k, col = selE ? SELECT : back ? REWORK : EDGE, path;
+            if (self) path = "M" + (pa[0] + NW / 2) + "," + (pa[1] - 8) + " c 34,-18 34,34 0,16";
+            else if (!back && B.row - A.row > 1 && Math.abs(pa[0] - pb[0]) < NW) { // forward skip: route round the left so nodes in between do not hide it
+                var lx1 = pa[0] - NW / 2, lx2 = pb[0] - NW / 2 - 2, lb = -(36 + 16 * (B.row - A.row)); path = "M" + lx1 + "," + pa[1] + " C" + (lx1 + lb) + "," + pa[1] + " " + (lx2 + lb) + "," + pb[1] + " " + lx2 + "," + pb[1]; }
+            else if (!back) { var y1 = pa[1] + NH / 2, y2 = pb[1] - NH / 2 - 2, my = (y1 + y2) / 2; path = "M" + pa[0] + "," + y1 + " C" + pa[0] + "," + my + " " + pb[0] + "," + my + " " + pb[0] + "," + y2; }
+            else { var side = pa[0] >= 0 ? 1 : -1, x1 = pa[0] + side * NW / 2, x2 = pb[0] + side * NW / 2, bulge = side * (60 + 18 * (A.row - B.row)); path = "M" + x1 + "," + pa[1] + " C" + (x1 + bulge) + "," + pa[1] + " " + (x2 + bulge) + "," + pb[1] + " " + (x2 + 3 * side) + "," + pb[1]; }
+            var g = eg.append("g").attr("class", "edge");
+            g.append("path").attr("d", path).attr("fill", "none").attr("stroke", "transparent").attr("stroke-width", Math.max(12, w + 8));
+            g.append("path").attr("class", "vis").attr("d", path).attr("fill", "none").attr("stroke", col).attr("stroke-width", w).attr("stroke-opacity", back ? 0.85 : 0.7).attr("marker-end", "url(#" + (selE ? "arrS" : back ? "arrR" : "arr") + ")");
+            var node = g.select("path.vis").node(), L = node.getTotalLength(), mid = node.getPointAtLength(L * 0.5);
+            var lab = S.metric === "DURATION" ? (e.dn ? dur(e.dsum / e.dn) : "") : e.cases.size.toLocaleString();
+            if (lab) g.append("text").attr("x", mid.x + 6).attr("y", mid.y + 4).attr("font-size", 10.5).attr("fill", back ? "#b04a1a" : "#52514e").attr("stroke", "#f6f6f3").attr("stroke-width", 3).attr("paint-order", "stroke").text(lab);
+            g.on("mousemove", function (ev) { tipEdge(e, ev); }).on("mouseleave", function () { tip(null); }).on("click", function (ev) { ev.stopPropagation(); selectEdge(e); });
+        });
+        var ng = gz.append("g");
+        M.nodes.forEach(function (A) {
+            var p = xy(A), g = ng.append("g").attr("class", "node").attr("transform", "translate(" + (p[0] - NW / 2) + "," + (p[1] - NH / 2) + ")");
+            var t = A.special ? 0 : A.nc / maxN, fill = A.special ? "#52514e" : d3.interpolateRgbBasis(NODE_RAMP)(0.15 + 0.85 * t), dark = A.special || t > 0.45, selN = S.sel && S.sel.activity === A.name;
+            g.append("rect").attr("width", NW).attr("height", NH).attr("rx", A.special ? 20 : 7).attr("fill", fill).attr("stroke", selN ? SELECT : "rgba(11,11,11,.15)").attr("stroke-width", selN ? 2 : 1).attr("stroke-dasharray", selN ? "5,3" : null);
+            g.append("text").attr("x", NW / 2).attr("y", 17).attr("text-anchor", "middle").attr("font-weight", "bold").attr("font-size", 12).attr("fill", dark ? "#fff" : "#0b0b0b").text(A.name);
+            g.append("text").attr("x", NW / 2).attr("y", 32).attr("text-anchor", "middle").attr("font-size", 10.5).attr("fill", dark ? "#e8f1fc" : "#52514e").text(A.special ? M.ncase.toLocaleString() + " cases" : A.nc.toLocaleString() + " cases" + (A.n > A.nc ? " (" + A.n.toLocaleString() + " times)" : ""));
+            if (!A.special) g.on("click", function (ev) { ev.stopPropagation(); selectActivity(A); }).on("mousemove", function (ev) { tipNode(A, ev); }).on("mouseleave", function () { tip(null); });
+        });
+        if (intro) { fadeIn(svg.selectAll("g.node"), 420, stag(svg.selectAll("g.node").size(), 600)); drawIn(svg.selectAll("g.edge path"), 900, 350); }
+        side(shown.length);
+        if (refit) fit();
+    }
+    function fit() { var b = gz.node().getBBox(), box = document.getElementById("map"), W = box.clientWidth, H = box.clientHeight; if (!b.width) return; var k = Math.min(1.4, Math.max(0.2, Math.min((W - 30) / b.width, (H - 60) / b.height))); svg.call(S.zoom.transform, d3.zoomIdentity.translate(W / 2 - k * (b.x + b.width / 2), 40 + (H - 50) / 2 - k * (b.y + b.height / 2)).scale(k)); }
+    function side(nEdges) {
+        var M = S.model, el = document.getElementById("side"), top = M.variants.slice(0, 6);
+        var rework = M.edges.filter(function (e) { var A = M.nodes.get(e.a), B = M.nodes.get(e.b); return A && B && !A.special && !B.special && B.row <= A.row; });
+        var reworkCases = new Set(); rework.forEach(function (e) { e.cases.forEach(function (c) { reworkCases.add(c); }); });
+        var h = '<h3>Process</h3><div class="stat"><b>' + M.ncase.toLocaleString() + '</b> cases, <b>' + M.events.toLocaleString() + '</b> events</div><div class="stat"><b>' + (M.nodes.size - 2) + '</b> activities, <b>' + M.variants.length.toLocaleString() + '</b> variants</div>' +
+            '<div class="stat">Average throughput time <b>' + dur(M.avgThrough) + '</b></div><div class="stat"><b>' + (100 * reworkCases.size / M.ncase).toFixed(1) + '%</b> of cases include rework <span style="color:' + REWORK + '">(orange links)</span></div>';
+        h += '<h3>Top variants</h3>';
+        top.forEach(function (v, i) {
+            var share = v.n / M.ncase;
+            h += '<div class="var' + (S.sel && S.sel.variant === i ? " sel" : "") + '" data-i="' + i + '"><span class="p">' + (share * 100).toFixed(1) + '%</span> of cases (' + v.n.toLocaleString() + ')<div class="s">' + v.seq.map(esc).join(" \u2192 ") + '</div><div class="bar" style="width:' + Math.max(3, share * 240) + 'px"></div></div>';
+        });
+        h += '<div style="color:#898781;font-size:11px;margin-top:6px">' + nEdges + ' links shown at ' + S.detail + '% detail. Click an activity, a link or a variant to select its cases.</div>';
+        el.innerHTML = h;
+        Array.prototype.forEach.call(el.querySelectorAll(".var"), function (d) { d.addEventListener("click", function (e) { e.stopPropagation(); selectVariant(+d.getAttribute("data-i")); }); });
+    }
+    function tipNode(A, ev) { var M = S.model; show('<b>' + esc(A.name) + '</b><br><span class="k">Cases:</span> ' + A.nc.toLocaleString() + ' (' + (100 * A.nc / M.ncase).toFixed(1) + '%)<br><span class="k">Occurrences:</span> ' + A.n.toLocaleString() + (A.n > A.nc ? ' <span class="k">(repeats in some cases)</span>' : ''), ev); }
+    function tipEdge(e, ev) { var M = S.model; show('<b>' + esc(e.a) + ' &rarr; ' + esc(e.b) + '</b><br><span class="k">Cases:</span> ' + e.cases.size.toLocaleString() + ' (' + (100 * e.cases.size / M.ncase).toFixed(1) + '%)' + (e.n > e.cases.size ? '<br><span class="k">Times:</span> ' + e.n.toLocaleString() : '') + (e.dn ? '<br><span class="k">Average time:</span> ' + dur(e.dsum / e.dn) : ''), ev); }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+    function casesFilter(raws) { var F = S.model.F, eq = function (v) { return { type: "FIELD_VALUE", inputField: F.c, operator: "=", value: v }; }; return raws.length === 1 ? eq(raws[0]) : { type: "OR", filters: raws.map(eq) }; }
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(false); }
+    function capped(keys) { if (keys.length > 3000) { omniscope.view.error(keys.length.toLocaleString() + " cases; selection is limited to 3,000."); return null; } var M = S.model; return keys.map(function (k) { return M.cases.get(k).raw; }); }
+    function selectActivity(A) { if (S.sel && S.sel.activity === A.name) return publish(null, null); publish({ type: "FIELD_VALUE", inputField: S.model.F.a, operator: "=", value: A.name }, { activity: A.name }); }
+    function selectEdge(e) { if (S.sel && S.sel.edge === e.k) return publish(null, null); var r = capped(Array.from(e.cases)); if (r) publish(casesFilter(r), { edge: e.k }); }
+    function selectVariant(i) { if (S.sel && S.sel.variant === i) return publish(null, null); var v = S.model.variants[i]; if (v.cases.length > 3000) { omniscope.view.error("Selection is limited to 3,000 cases."); return; } publish(casesFilter(v.cases), { variant: i }); }
+    window.__proc.selectVariant = selectVariant; window.__proc.selectActivity = function (n) { selectActivity(S.model.nodes.get(n)); }; window.__proc.setDetail = function (d) { S.detail = d; draw(false); };
+    document.getElementById("detail").addEventListener("input", function () { S.detail = +this.value; draw(false); });
+    document.getElementById("mFreq").addEventListener("click", function (e) { e.stopPropagation(); S.metric = "FREQUENCY"; draw(false); });
+    document.getElementById("mDur").addEventListener("click", function (e) { e.stopPropagation(); S.metric = "DURATION"; draw(false); });
+    document.getElementById("bar").addEventListener("click", function (e) { e.stopPropagation(); });
+    document.getElementById("map").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(true); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .band { cursor: pointer; } .band:hover .bg { fill: rgba(42,120,214,.07); }
+        .lab { fill: #2b2a28; font-size: 11.5px; } .val { font-size: 10.5px; fill: #52514e; } .ttl { font-size: 11px; fill: #52514e; text-transform: uppercase; letter-spacing: .06em; }
+        .tot .lab { font-weight: bold; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<svg id="svg"></svg><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+
+    // Status colours, always shown with a sign, an arrow and a value. Actual in solid ink, plan as an outline.
+    var GOOD = "#0ca30c", BAD = "#d03b3b", INK = "#3a3936", PLAN = "#9a988f", SELECT = "#2161D9";
+    var S = { sel: null };
+    window.__var = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(a >= 1e10 ? 1 : 2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(a >= 1e7 ? 1 : 2) + "M" : a >= 1e3 ? (v / 1e3).toFixed(a >= 1e4 ? 0 : 1) + "k" : a >= 10 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var sgn = function (v, f) { return (v > 0 ? "+" : v < 0 ? "\u2212" : "") + f(Math.abs(v)); };
+    var pctf = function (v) { return v === null || !isFinite(v) ? "n/a" : sgn(v, function (a) { return (a * 100).toFixed(a >= 0.1 ? 0 : a >= 0.01 ? 1 : 2) + "%"; }); };
+    var DATE_RE = /^\d{4}-\d{2}-\d{2}/;
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function fname(m) { return !m ? "" : typeof m === "string" ? m : m.inputField || m.name || ""; }
+
+    function keyInfo(v) {
+        var s = v && typeof v === "object" && "lower" in v ? v.lower : v;
+        if (typeof s === "string" && DATE_RE.test(s)) { var d = new Date(s.length === 10 ? s + "T00:00:00Z" : s), u = v && typeof v === "object" && v.upper ? new Date(String(v.upper).length === 10 ? v.upper + "T00:00:00Z" : v.upper) : null; return { time: true, sort: d.getTime(), date: d, span: u ? u - d : null, raw: v }; }
+        if (typeof s === "number") return { time: false, num: true, sort: s, label: v && typeof v === "object" ? fmt(v.lower) + " to " + fmt(v.upper) : String(s), raw: v };
+        return { time: false, sort: null, label: s === null || s === undefined ? "(blank)" : String(s), raw: v };
+    }
+    function dateLabels(keys) {
+        var ds = keys.map(function (k) { return k.date; }), years = new Set(ds.map(function (d) { return d.getUTCFullYear(); }));
+        var span = keys[0].span, monthly = ds.every(function (d) { return d.getUTCDate() === 1; }), yearly = monthly && ds.every(function (d) { return d.getUTCMonth() === 0; }) && (span === null || span > 300 * 864e5);
+        var f = yearly ? d3.utcFormat("%Y") : monthly && (span === null || span > 27 * 864e5) ? d3.utcFormat(years.size > 1 ? "%b %y" : "%b") : d3.utcFormat(years.size > 1 ? "%d %b %y" : "%d %b");
+        keys.forEach(function (k) { k.label = f(k.date); });
+    }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.category || !it.actual || !it.plan) { message("Choose a Breakdown, the Actual measure and the Plan measure to compare it with."); clear(); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = res.data.records || [];
+        var rows = recs.map(function (r) { return { k: keyInfo(r[mp.category]), a: r[mp.actual], p: r[mp.plan] }; }).filter(function (x) { return (typeof x.a === "number" && isFinite(x.a)) || (typeof x.p === "number" && isFinite(x.p)); });
+        rows.forEach(function (x) { if (typeof x.a !== "number" || !isFinite(x.a)) x.a = null; if (typeof x.p !== "number" || !isFinite(x.p)) x.p = null; });
+        if (!rows.length) { message("No data to show. Check the filters."); clear(); return; }
+        message(null);
+        var time = rows.every(function (x) { return x.k.time; });
+        if (time) { rows.sort(function (a, b) { return a.k.sort - b.k.sort; }); dateLabels(rows.map(function (x) { return x.k; })); }
+        else if (rows.every(function (x) { return x.k.num; })) rows.sort(function (a, b) { return a.k.sort - b.k.sort; });
+        var higherGood = it.good !== "LOWER", sort = it.sort || "VARIANCE", topN = Math.max(3, Math.min(60, +it.topN || 15));
+        rows.forEach(function (x) { x.d = x.a !== null && x.p !== null ? x.a - x.p : null; x.pc = x.d !== null && x.p ? x.d / Math.abs(x.p) : null; });
+        if (!time && sort !== "DATA") {
+            var key = sort === "PERCENT" ? "pc" : sort === "ACTUAL" ? "a" : "d", dir = sort === "ACTUAL" || higherGood ? -1 : 1;
+            rows.sort(function (a, b) { var x = a[key], y = b[key]; if (x === null) return 1; if (y === null) return -1; return dir * (x - y); });
+        }
+        var shown = rows, other = null;
+        if (rows.length > topN) {
+            shown = rows.slice(0, topN - 1); var rest = rows.slice(topN - 1), sa = 0, sp = 0;
+            rest.forEach(function (x) { sa += x.a || 0; sp += x.p || 0; });
+            other = { k: { label: "Other (" + rest.length + ")" }, a: sa, p: sp, other: true }; other.d = sa - sp; other.pc = sp ? other.d / Math.abs(sp) : null; shown = shown.concat([other]);
+        }
+        var additive = function (m) { var f = m && typeof m === "object" && m.function ? String(m.function).toUpperCase() : "SUM"; return f.indexOf("SUM") >= 0 || f.indexOf("COUNT") >= 0 || f === "RECORD_COUNT"; };
+        var total = null;
+        if (it.showTotal !== false && additive(it.actual) && additive(it.plan) && rows.length > 1) {
+            var ta = 0, tp = 0; rows.forEach(function (x) { ta += x.a || 0; tp += x.p || 0; }); total = { k: { label: "Total" }, a: ta, p: tp, total: true, d: ta - tp, pc: tp ? (ta - tp) / Math.abs(tp) : null };
+        }
+        var layout = it.layout === "ROWS" ? "rows" : it.layout === "COLUMNS" ? "cols" : time ? "cols" : "rows";
+        S.model = { rows: shown, all: rows, total: total, time: time, layout: layout, higherGood: higherGood, F: { c: fname(it.category), a: fname(it.actual), p: fname(it.plan) } };
+        introIf(rows.length + "|" + JSON.stringify(it) + "|" + d3.sum(rows, function (x) { return x.a || 0; }));
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        draw();
+    }
+    function clear() { d3.select("#svg").selectAll("*").remove(); }
+
+    function draw() {
+        var M = S.model; if (!M) return; tip(); var intro = introDone();
+        var W = window.innerWidth, H = window.innerHeight, svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var items = M.rows.concat(M.total ? [M.total] : []), n = items.length, cols = M.layout === "cols";
+        var col = function (d) { return d === null || d === 0 ? PLAN : (d > 0) === M.higherGood ? GOOD : BAD; };
+        var arrow = function (d) { return d > 0 ? "\u25b2 " : d < 0 ? "\u25bc " : ""; };
+        // header summary
+        var T = M.total, head = svg.append("text").attr("x", 12).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.F.a + " vs " + M.F.p);
+        if (T) { head.append("tspan").attr("fill", "#52514e").text(":  " + fmt(T.a) + " vs " + fmt(T.p) + "   "); head.append("tspan").attr("fill", col(T.d)).style("font-weight", "bold").text(arrow(T.d) + sgn(T.d, fmt) + " (" + pctf(T.pc) + ")"); head.append("tspan").attr("fill", "#52514e").text(T.d === 0 ? "" : (T.d > 0) === M.higherGood ? "  ahead of plan" : "  behind plan"); }
+        var top = 30, g = svg.append("g");
+        var maxLab = d3.max(items, function (x) { return x.k.label.length; }) || 4;
+        // geometry: band axis and three value panels (actual vs plan, variance, variance %)
+        var bandLen, b0, P = [];
+        if (!cols) {
+            var L = Math.min(170, maxLab * 6.4 + 14), avail = W - L - 16, gap = 18; b0 = top + 22; bandLen = H - b0 - 8;
+            var wA = avail * 0.42, wB = avail * 0.29 - gap, wC = avail * 0.29 - gap;
+            P = [{ s: L + 4, len: wA }, { s: L + 4 + wA + gap, len: wB }, { s: L + 4 + wA + wB + 2 * gap, len: wC }];
+            P.lx = L - 6;
+        } else {
+            var Lh = 22, availH = H - top - 18 - Lh, gapH = 22, Lw = 12; b0 = 50; bandLen = W - b0 - 12;
+            var hA = availH * 0.46, hB = availH * 0.27 - gapH, hC = availH * 0.27 - gapH;
+            P = [{ s: top + 16, len: hA }, { s: top + 16 + hA + gapH, len: hB }, { s: top + 16 + hA + hB + 2 * gapH, len: hC }];
+            P.ly = H - 10;
+        }
+        var step = bandLen / (n + (M.total ? 0.4 : 0)), bw = Math.max(3, Math.min(cols ? 60 : 26, step * 0.68)), bc = function (i) { return b0 + step * (i + 0.5) + (M.total && i === n - 1 ? step * 0.4 : 0); };
+        var pad = function (p, a, b, both) { var lo = Math.min(0, a), hi = Math.max(0, b); if (lo === hi) hi = 1; var lp = cols ? 16 : 46; var r0 = lo < 0 ? lp : 0, r1 = hi > 0 ? lp : 0; var sc = d3.scaleLinear().domain([lo, hi]); return cols ? sc.range([p.s + p.len - r0, p.s + r1]) : sc.range([p.s + r0, p.s + p.len - r1]); };
+        var vals = function (k, withTotal) { return (withTotal ? items : M.rows).map(function (x) { return x[k]; }).filter(function (v) { return v !== null && isFinite(v); }); };
+        var all = vals("a").concat(vals("p")), ds = vals("d"), ps = vals("pc", true);
+        var sA = pad(P[0], d3.min(all), d3.max(all)), sB = pad(P[1], d3.min(ds) || 0, d3.max(ds) || 0), sC = pad(P[2], d3.min(ps) || 0, d3.max(ps) || 0);
+        var clip = function (v, s) { var d = s.domain(); return Math.max(d[0], Math.min(d[1], v)); };
+        var brk = function (gb, c, w, v, s) { if (clip(v, s) === v) return; var p = s(clip(v, s)) + (cols ? (v > 0 ? 10 : -10) : (v > 0 ? -10 : 10)); for (var k = 0; k < 2; k++) { var o = (k ? 4 : 0) * (cols ? 1 : 1); if (cols) gb.append("line").attr("x1", c - w / 2 - 2).attr("x2", c + w / 2 + 2).attr("y1", p + o + 3).attr("y2", p + o - 3).attr("stroke", "#fcfcfb").attr("stroke-width", 2.2); else gb.append("line").attr("y1", c - w / 2 - 2).attr("y2", c + w / 2 + 2).attr("x1", p + o - 3).attr("x2", p + o + 3).attr("stroke", "#fcfcfb").attr("stroke-width", 2.2); } };
+        var rect = function (sel, c, w, v0, v1, s) { v1 = clip(v1, s); var a = s(v0), b = s(v1); sel.attr("data-z", a).attr("data-o", cols ? "v" : "h"); return cols ? sel.attr("x", c - w / 2).attr("width", w).attr("y", Math.min(a, b)).attr("height", Math.max(0.5, Math.abs(a - b))) : sel.attr("y", c - w / 2).attr("height", w).attr("x", Math.min(a, b)).attr("width", Math.max(0.5, Math.abs(a - b))); };
+        var label = function (sel, c, v, s, txt, fill, bold) { v = clip(v, s); var p = s(v), z = s(0), out = v >= 0 ? 1 : -1; var t = cols ? sel.attr("x", c).attr("y", p - out * 4).attr("text-anchor", "middle").attr("dy", v >= 0 ? 0 : "0.8em") : sel.attr("x", p + out * 4).attr("y", c).attr("dy", "0.35em").attr("text-anchor", v >= 0 ? "start" : "end"); t.attr("class", "val").text(txt); if (fill) t.style("fill", fill); if (bold) t.style("font-weight", "bold"); return t; };
+        var showVals = cols ? step > 34 : step > 12;
+        // panel titles and zero lines
+        var titles = [M.F.a + " (solid) vs " + M.F.p + " (outline)", "Variance", "Variance %"];
+        P.forEach(function (p, i) {
+            var s = [sA, sB, sC][i];
+            if (!cols) { g.append("text").attr("class", "ttl").attr("x", p.s).attr("y", top + 12).text(i === 0 && p.len < 260 ? "vs " + M.F.p : titles[i]); g.append("line").attr("x1", s(0)).attr("x2", s(0)).attr("y1", b0 - 4).attr("y2", b0 + bandLen).attr("stroke", "#9a988f"); }
+            else { g.append("text").attr("class", "ttl").attr("x", 12).attr("y", p.s - 4).text(titles[i]); g.append("line").attr("y1", s(0)).attr("y2", s(0)).attr("x1", b0 - 4).attr("x2", b0 + bandLen).attr("stroke", "#9a988f"); }
+        });
+        var selKey = S.sel ? S.sel.key : null;
+        items.forEach(function (x, i) {
+            var c = bc(i), bg = g.append("g").attr("class", "band" + (x.total ? " tot" : "")).datum(x);
+            var isSel = selKey !== null && x.k.raw !== undefined && JSON.stringify(x.k.raw) === selKey, dim = selKey !== null && !isSel && !x.total ? 0.35 : 1;
+            if (cols) bg.append("rect").attr("class", "bg").attr("x", c - step / 2).attr("width", step).attr("y", top + 4).attr("height", H - top - 4).attr("fill", isSel ? "rgba(33,97,217,.08)" : "transparent");
+            else bg.append("rect").attr("class", "bg").attr("y", c - step / 2).attr("height", step).attr("x", 0).attr("width", W).attr("fill", isSel ? "rgba(33,97,217,.08)" : "transparent");
+            if (x.total) { if (cols) bg.append("line").attr("x1", c - step * 0.7).attr("x2", c - step * 0.7).attr("y1", top + 8).attr("y2", H - 6).attr("stroke", "#c9c8c1"); else bg.append("line").attr("y1", c - step * 0.7).attr("y2", c - step * 0.7).attr("x1", 6).attr("x2", W - 6).attr("stroke", "#c9c8c1"); }
+            var gb = bg.append("g").attr("opacity", dim);
+            // plan as outline behind, actual as a narrower solid bar in front
+            if (x.p !== null) rect(gb.append("rect"), c + (cols ? -bw * 0.12 : bw * 0.12), bw * 0.9, 0, x.p, sA).attr("fill", "#fcfcfb").attr("stroke", PLAN).attr("stroke-width", 1.2);
+            if (x.a !== null) rect(gb.append("rect"), c - (cols ? -bw * 0.1 : bw * 0.1), bw * 0.7, 0, x.a, sA).attr("fill", x.total ? "#0b0b0b" : INK);
+            if (x.total && x.a !== null) brk(gb, c, bw, Math.max(x.a, x.p || 0), sA);
+            if (showVals && x.a !== null) label(gb.append("text"), c, Math.max(x.a, x.p || 0), sA, fmt(x.a), null, x.total);
+            if (x.d !== null) {
+                rect(gb.append("rect"), c, bw * 0.8, 0, x.d, sB).attr("fill", col(x.d)); if (x.total) brk(gb, c, bw * 0.8, x.d, sB);
+                if (showVals) label(gb.append("text"), c, x.d, sB, (cols ? "" : arrow(x.d)) + sgn(x.d, fmt), col(x.d), x.total);
+            }
+            if (x.pc !== null) {
+                var pz = sC(0), pv = sC(x.pc);
+                if (cols) { gb.append("line").attr("x1", c).attr("x2", c).attr("y1", pz).attr("y2", pv).attr("stroke", col(x.d)).attr("stroke-width", 2); gb.append("rect").attr("x", c - 4).attr("y", pv - 4).attr("width", 8).attr("height", 8).attr("fill", col(x.d)); }
+                else { gb.append("line").attr("y1", c).attr("y2", c).attr("x1", pz).attr("x2", pv).attr("stroke", col(x.d)).attr("stroke-width", 2); gb.append("rect").attr("y", c - 4).attr("x", pv - 4).attr("width", 8).attr("height", 8).attr("fill", col(x.d)); }
+                if (showVals) { var lt = label(gb.append("text"), c, x.pc, sC, pctf(x.pc), col(x.d), x.total); if (cols) lt.attr("y", +lt.attr("y") + (x.pc >= 0 ? -3 : 3)); else lt.attr("x", +lt.attr("x") + (x.pc >= 0 ? 4 : -4)); }
+            }
+            var lab = bg.append("text").attr("class", "lab").text(x.k.label);
+            if (cols) { lab.attr("x", c).attr("y", P.ly).attr("text-anchor", "middle"); if (step < x.k.label.length * 6.2) lab.text(step < 18 ? "" : x.k.label.slice(0, Math.max(1, Math.floor(step / 6.2)))); }
+            else { lab.attr("x", P.lx).attr("y", c).attr("dy", "0.35em").attr("text-anchor", "end"); if (step < 10) lab.text(""); }
+            bg.on("mouseenter", function (ev) { tipRow(x, ev); }).on("mousemove", function (ev) { tipRow(x, ev); }).on("mouseleave", tip)
+                .on("click", function (ev) { ev.stopPropagation(); select(x); });
+        });
+        if (intro) { growZ(g.selectAll("rect[data-z]"), 650, stag(items.length, 500)); fadeIn(g.selectAll("text.val"), 450, stag(items.length, 500)); fadeIn(g.selectAll("line[stroke-width='2']"), 450, 0); }
+    }
+
+    function tipRow(x, ev) {
+        var M = S.model, good = x.d === null ? "" : (x.d > 0) === M.higherGood ? "ahead of plan" : x.d === 0 ? "on plan" : "behind plan";
+        var c = x.d === null || x.d === 0 ? PLAN : (x.d > 0) === M.higherGood ? GOOD : BAD;
+        show('<b>' + esc(x.k.label) + '</b><br><span class="k">' + esc(M.F.a) + ':</span> ' + fmt(x.a) + '<br><span class="k">' + esc(M.F.p) + ':</span> ' + fmt(x.p) +
+            (x.d !== null ? '<br><span class="k">Variance:</span> <b style="color:' + c + '">' + (x.d > 0 ? "\u25b2 " : x.d < 0 ? "\u25bc " : "") + sgn(x.d, fmt) + ' (' + pctf(x.pc) + ')</b> ' + good : ''), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function select(x) {
+        var M = S.model;
+        if (x.total || x.other || x.k.raw === undefined) { if (S.sel) publish(null, null); return; }
+        var key = JSON.stringify(x.k.raw); if (S.sel && S.sel.key === key) return publish(null, null);
+        var raw = x.k.raw, F = M.F.c;
+        var f = raw && typeof raw === "object" && "lower" in raw ? { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F, operator: ">=", value: raw.lower }, { type: "FIELD_VALUE", inputField: F, operator: "<", value: raw.upper }] } : { type: "FIELD_VALUE", inputField: F, operator: "=", value: raw };
+        publish(f, { key: key });
+    }
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    window.__var.selectLabel = function (l) { select(S.model.rows.find(function (x) { return x.k.label === l; })); };
+
+    document.body.addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

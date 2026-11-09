@@ -1,0 +1,194 @@
+{
+  "name": "Org Chart",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "org chart",
+    "organisation",
+    "hierarchy",
+    "tree",
+    "hr",
+    "people",
+    "span of control",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "id": {
+        "displayName": "Person",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Unique identifier of each person (or position, unit or account)"
+      },
+      "parent": {
+        "displayName": "Reports to",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Identifier of each person's manager (parent); empty for the top of the tree"
+      },
+      "label": {
+        "displayName": "Card title",
+        "type": "FIELD",
+        "detail": "Text shown in bold on each card, e.g. Name (default: the ID)"
+      },
+      "subtitle": {
+        "displayName": "Card subtitle",
+        "type": "FIELD",
+        "detail": "Second line on each card, e.g. Job title"
+      },
+      "colour": {
+        "displayName": "Colour by",
+        "type": "FIELD",
+        "detail": "Category for the card colour strip, e.g. Department (eight colours)"
+      },
+      "metric": {
+        "displayName": "Card value",
+        "type": "FIELD",
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional number shown on each card and summed for each manager's team, e.g. Salary or Open roles"
+      },
+      "orientation": {
+        "displayName": "Layout",
+        "type": "CHOICE",
+        "values": [
+          "TOP_DOWN",
+          "LEFT_RIGHT"
+        ],
+        "displayValues": [
+          "Top down",
+          "Left to right"
+        ],
+        "detail": "Direction of the tree"
+      },
+      "depth": {
+        "displayName": "Levels open",
+        "type": "NUMBER",
+        "minValue": 1,
+        "maxValue": 20,
+        "detail": "Number of levels expanded when the chart opens (default 2)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "id",
+        "parent",
+        "label",
+        "colour"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Hierarchy",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "id",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "parent",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Cards",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "label",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "subtitle",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "metric",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Layout",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "orientation",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "depth",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "orientation": "TOP_DOWN",
+      "depth": 2
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 200
+  }
+}

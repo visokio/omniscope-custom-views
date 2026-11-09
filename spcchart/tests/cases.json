@@ -1,0 +1,292 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/attendances.csv",
+  "options": {
+   "items": {
+    "time": {
+     "inputField": "Arrival date",
+     "type": "HISTOGRAM",
+     "dateUnit": "WEEK",
+     "histogramInterval": 1
+    },
+    "value": {
+     "inputField": "Wait (minutes)",
+     "function": "MEAN"
+    },
+    "direction": "LOWER",
+    "target": 210,
+    "baseline": 0,
+    "runLength": 7,
+    "trendLength": 6,
+    "showMR": true,
+    "showSigma": false
+   }
+  },
+  "width": 1040,
+  "height": 520,
+  "wait": 2000,
+  "showcaseHeight": 520,
+  "caption": "Live: weekly average wait in an illustrative emergency department. Hover for each week; drag across points to select those weeks.",
+  "expect": {
+   "selector": "circle.pt",
+   "min": 100
+  }
+ },
+ {
+  "name": "rebased",
+  "showcase": true,
+  "data": "sample-data/attendances.csv",
+  "options": {
+   "items": {
+    "time": {
+     "inputField": "Arrival date",
+     "type": "HISTOGRAM",
+     "dateUnit": "WEEK",
+     "histogramInterval": 1
+    },
+    "value": {
+     "inputField": "Wait (minutes)",
+     "function": "MEAN"
+    },
+    "direction": "LOWER",
+    "target": 210,
+    "baseline": 0,
+    "runLength": 7,
+    "trendLength": 6,
+    "showMR": true,
+    "showSigma": false,
+    "rebase": "2025-10-06"
+   }
+  },
+  "width": 1040,
+  "height": 460,
+  "wait": 2000,
+  "showcaseHeight": 460,
+  "caption": "Live: the same data with limits recalculated from the week the new process started (6 October 2025).",
+  "actions": [
+   {
+    "eval": "window.__spc.phases.length===2 && window.__spc.phases[1].mean < window.__spc.phases[0].mean",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/attendances.csv",
+  "options": {
+   "items": {
+    "time": {
+     "inputField": "Arrival date",
+     "type": "HISTOGRAM",
+     "dateUnit": "WEEK",
+     "histogramInterval": 1
+    },
+    "value": {
+     "inputField": "Wait (minutes)",
+     "function": "MEAN"
+    },
+    "direction": "LOWER",
+    "target": 210,
+    "baseline": 0,
+    "runLength": 7,
+    "trendLength": 6,
+    "showMR": true,
+    "showSigma": false
+   }
+  },
+  "width": 1000,
+  "height": 520,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "window.__spc.points.filter(function(p){return p.cause==='concern'}).length>0 && window.__spc.points.filter(function(p){return p.cause==='improve'}).length>0",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__spc.points[30].flags.join('|')"
+   },
+   {
+    "hover": "rect[fill=transparent]"
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__spc.selectRange(70,80,false)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "clickAt": [
+     520,
+     8
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Department",
+     "operator": "=",
+     "value": "Main ED"
+    }
+   },
+   {
+    "eval": "window.__spc.points.length>90",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     520,
+     300
+    ]
+   },
+   {
+    "screenshot": "small"
+   }
+  ]
+ },
+ {
+  "name": "four-hour-monthly",
+  "data": "sample-data/attendances.csv",
+  "options": {
+   "items": {
+    "time": {
+     "inputField": "Arrival date",
+     "type": "HISTOGRAM",
+     "dateUnit": "MONTH",
+     "histogramInterval": 1
+    },
+    "value": {
+     "inputField": "Within 4 hours",
+     "function": "MEAN"
+    },
+    "direction": "HIGHER",
+    "target": 0.8,
+    "showMR": false
+   }
+  },
+  "width": 900,
+  "height": 380,
+  "wait": 2000,
+  "expect": {
+   "text": "target"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Arrival date",
+    "type": "DATE"
+   },
+   {
+    "name": "Wait (minutes)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "time": {
+     "inputField": "Arrival date",
+     "type": "HISTOGRAM",
+     "dateUnit": "WEEK",
+     "histogramInterval": 1
+    },
+    "value": {
+     "inputField": "Wait (minutes)",
+     "function": "MEAN"
+    },
+    "direction": "LOWER",
+    "target": 210,
+    "baseline": 0,
+    "runLength": 7,
+    "trendLength": 6,
+    "showMR": true,
+    "showSigma": false
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/attendances.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose a Time field"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "time": {
+     "inputField": "Day",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Reading",
+     "function": "MEAN"
+    },
+    "direction": "NEUTRAL",
+    "showSigma": true
+   }
+  },
+  "width": 1100,
+  "height": 500,
+  "wait": 3000,
+  "expect": {
+   "selector": "circle.pt",
+   "min": 2000
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/attendances.csv",
+  "options": {
+   "items": {
+    "time": {
+     "inputField": "Arrival date",
+     "type": "HISTOGRAM",
+     "dateUnit": "WEEK",
+     "histogramInterval": 1
+    },
+    "value": {
+     "inputField": "Wait (minutes)",
+     "function": "MEAN"
+    },
+    "direction": "LOWER",
+    "target": 210,
+    "baseline": 0,
+    "runLength": 7,
+    "trendLength": 6,
+    "showMR": false,
+    "showSigma": false,
+    "rebase": "2025-10-06"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "wait": 2000,
+  "scale": 0.5
+ }
+]

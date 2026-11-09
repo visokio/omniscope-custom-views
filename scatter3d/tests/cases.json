@@ -1,0 +1,401 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "point": {
+     "inputField": "Customer ID",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Recency (days)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Orders per year",
+     "function": "MEAN"
+    },
+    "z": {
+     "inputField": "Annual spend (GBP)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Lifetime value (GBP)",
+     "function": "MEAN"
+    },
+    "theme": "LIGHT",
+    "autoRotate": false,
+    "showAxes": true,
+    "pointScale": 1
+   }
+  },
+  "width": 1000,
+  "height": 620,
+  "wait": 4000,
+  "showcaseHeight": 600,
+  "caption": "Live: 2,000 illustrative customers in three segments. Drag to rotate, scroll to zoom, hover for details, click a point or a legend entry to select.",
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "window.__scatter3d.points.length===2000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "normal",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "point": {
+     "inputField": "Customer ID",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Recency (days)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Orders per year",
+     "function": "MEAN"
+    },
+    "z": {
+     "inputField": "Annual spend (GBP)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Lifetime value (GBP)",
+     "function": "MEAN"
+    },
+    "theme": "LIGHT",
+    "autoRotate": false,
+    "showAxes": true,
+    "pointScale": 1
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 4000,
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "click": "#legend .item[data-cat='High value']"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "clickAt": [
+     60,
+     40
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "resize": [
+     600,
+     400
+    ]
+   },
+   {
+    "screenshot": "resized"
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "London"
+    }
+   },
+   {
+    "eval": "window.__scatter3d.points.length<2000 && window.__scatter3d.points.length>0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "click-point",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "point": {
+     "inputField": "Customer ID",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Recency (days)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Orders per year",
+     "function": "MEAN"
+    },
+    "z": {
+     "inputField": "Annual spend (GBP)",
+     "function": "MEAN"
+    },
+    "colour": null,
+    "size": null,
+    "theme": "LIGHT",
+    "autoRotate": false,
+    "showAxes": true,
+    "pointScale": 1,
+    "colourValue": {
+     "inputField": "Lifetime value (GBP)",
+     "function": "MEAN"
+    }
+   }
+  },
+  "width": 700,
+  "height": 500,
+  "wait": 4000,
+  "actions": [
+   {
+    "clickEval": "(function(){var s=window.__scatter3d;var best=null;s.points.forEach(function(p){var q=p.pos.clone().project(s.camera);if(!best||q.z<best.z)best=q;});var c=s.renderer.domElement.getBoundingClientRect();return [(best.x+1)/2*c.width,(1-best.y)/2*c.height];})()"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "after-click"
+   },
+   {
+    "hoverEval": "(function(){var s=window.__scatter3d;var p=s.points[5].pos.clone().project(s.camera);var c=s.renderer.domElement.getBoundingClientRect();return [(p.x+1)/2*c.width,(1-p.y)/2*c.height];})()"
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "tooltip"
+   }
+  ],
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "dark",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "point": {
+     "inputField": "Customer ID",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Recency (days)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Orders per year",
+     "function": "MEAN"
+    },
+    "z": {
+     "inputField": "Annual spend (GBP)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Lifetime value (GBP)",
+     "function": "MEAN"
+    },
+    "theme": "DARK",
+    "autoRotate": false,
+    "showAxes": true,
+    "pointScale": 1
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 4000,
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Customer ID",
+    "type": "TEXT"
+   },
+   {
+    "name": "Segment",
+    "type": "TEXT"
+   },
+   {
+    "name": "Recency (days)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Orders per year",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Annual spend (GBP)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Lifetime value (GBP)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "point": {
+     "inputField": "Customer ID",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Recency (days)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Orders per year",
+     "function": "MEAN"
+    },
+    "z": {
+     "inputField": "Annual spend (GBP)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Lifetime value (GBP)",
+     "function": "MEAN"
+    },
+    "theme": "LIGHT",
+    "autoRotate": false,
+    "showAxes": true,
+    "pointScale": 1
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "theme": "LIGHT"
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "expect": {
+   "text": "Choose a Points field"
+  }
+ },
+ {
+  "name": "large",
+  "data": "sample-data/large.csv",
+  "options": {
+   "items": {
+    "point": {
+     "inputField": "Sensor reading",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Temperature",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Vibration",
+     "function": "MEAN"
+    },
+    "z": {
+     "inputField": "Pressure",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Line",
+     "type": "UNIQUE_VALUES"
+    },
+    "theme": "DARK",
+    "showAxes": true
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 7000,
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "window.__scatter3d.points.length",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/customers.csv",
+  "options": {
+   "items": {
+    "point": {
+     "inputField": "Customer ID",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Recency (days)",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Orders per year",
+     "function": "MEAN"
+    },
+    "z": {
+     "inputField": "Annual spend (GBP)",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Segment",
+     "type": "UNIQUE_VALUES"
+    },
+    "size": {
+     "inputField": "Lifetime value (GBP)",
+     "function": "MEAN"
+    },
+    "theme": "LIGHT",
+    "autoRotate": false,
+    "showAxes": true,
+    "pointScale": 1.3
+   }
+  },
+  "width": 290,
+  "height": 290,
+  "wait": 4000
+ }
+]

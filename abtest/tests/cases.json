@@ -1,0 +1,285 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/checkout_test.csv",
+  "options": {
+   "items": {
+    "variant": "Variant",
+    "outcome": "Converted",
+    "segment": "Device",
+    "kind": "AUTO",
+    "better": "HIGHER",
+    "confidence": "95",
+    "adjust": true
+   }
+  },
+  "width": 1060,
+  "height": 520,
+  "wait": 1500,
+  "showcaseHeight": 520,
+  "caption": "Live: an illustrative checkout experiment with 36,000 visitors and three designs. The one-page checkout wins, mostly on mobile; express pay makes no clear difference. Hover a row or group for the details; click to select.",
+  "expect": {
+   "selector": "tr.v",
+   "min": 3
+  }
+ },
+ {
+  "name": "revenue",
+  "showcase": true,
+  "data": "sample-data/checkout_test.csv",
+  "options": {
+   "items": {
+    "variant": "Variant",
+    "outcome": "Order value",
+    "segment": "Visitor type",
+    "kind": "AUTO",
+    "better": "HIGHER",
+    "confidence": "95",
+    "adjust": true
+   }
+  },
+  "width": 1060,
+  "height": 460,
+  "wait": 1500,
+  "showcaseHeight": 460,
+  "caption": "Live: the same test measured by revenue per visitor (the average order value across all visitors, including those who did not buy).",
+  "expect": {
+   "selector": "tr.v",
+   "min": 3
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/checkout_test.csv",
+  "options": {
+   "items": {
+    "variant": "Variant",
+    "outcome": "Converted",
+    "segment": "Device",
+    "kind": "AUTO",
+    "better": "HIGHER",
+    "confidence": "95",
+    "adjust": true
+   }
+  },
+  "width": 1000,
+  "height": 520,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__ab.model,B=M.vs.find(function(v){return v.name[0]==='B'}),C=M.vs.find(function(v){return v.name[0]==='C'});return M.binary && M.C.name==='A: current checkout' && Math.abs(B.cmp.p-0.0069068873054687245)<1e-4 && Math.abs(C.cmp.p-0.4367122506286792)<1e-3 && B.cmp.verdict==='better' && C.cmp.verdict==='unclear' && M.segs.length===3})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "tr.v",
+    "nth": 1
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "tr.v",
+    "nth": 1
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "click": "g.seg",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     700,
+     6
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Device",
+     "operator": "=",
+     "value": "Desktop"
+    }
+   },
+   {
+    "wait": 1000
+   },
+   {
+    "eval": "window.__ab.model.vs[0].n<6000",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     520
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "rpv",
+  "data": "sample-data/checkout_test.csv",
+  "options": {
+   "items": {
+    "variant": "Variant",
+    "outcome": "Order value",
+    "kind": "AUTO",
+    "better": "HIGHER",
+    "confidence": "95",
+    "adjust": true
+   }
+  },
+  "width": 900,
+  "height": 360,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__ab.model,B=M.vs.find(function(v){return v.name[0]==='B'});return !M.binary && Math.abs(B.cmp.p-0.006977991119302089)<1e-4})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "single",
+  "data": "sample-data/checkout_test.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Variant",
+   "operator": "=",
+   "value": "C: express pay"
+  },
+  "options": {
+   "items": {
+    "variant": "Variant",
+    "outcome": "Converted",
+    "segment": "Device",
+    "kind": "AUTO",
+    "better": "HIGHER",
+    "confidence": "95",
+    "adjust": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "at least two"
+  }
+ },
+ {
+  "name": "idfield",
+  "data": "sample-data/checkout_test.csv",
+  "options": {
+   "items": {
+    "variant": "Visitor ID",
+    "outcome": "Converted"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "compares a few versions"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Variant",
+    "type": "TEXT"
+   },
+   {
+    "name": "Converted",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Device",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "variant": "Variant",
+    "outcome": "Converted",
+    "segment": "Device",
+    "kind": "AUTO",
+    "better": "HIGHER",
+    "confidence": "95",
+    "adjust": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/checkout_test.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Variants"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "variant": "Arm",
+    "outcome": "Clicked",
+    "segment": "Device"
+   }
+  },
+  "width": 1000,
+  "height": 500,
+  "wait": 8000,
+  "actions": [
+   {
+    "eval": "window.__ab.model.binary && window.__ab.model.C.name==='Control' && window.__ab.model.vs[0].n>240000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/checkout_test.csv",
+  "options": {
+   "items": {
+    "variant": "Variant",
+    "outcome": "Converted",
+    "kind": "AUTO",
+    "better": "HIGHER",
+    "confidence": "95",
+    "adjust": true
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

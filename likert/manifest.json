@@ -1,0 +1,166 @@
+{
+  "name": "Likert Survey",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "likert",
+    "survey",
+    "diverging bar",
+    "nps",
+    "engagement",
+    "feedback",
+    "questionnaire",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "answer": {
+        "displayName": "Answers",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "The rating given, e.g. Strongly disagree to Strongly agree, 1 to 5, or 0 to 10"
+      },
+      "question": {
+        "displayName": "Questions",
+        "type": "FIELD",
+        "detail": "Optional: the question or statement each answer belongs to, when one column holds several questions"
+      },
+      "group": {
+        "displayName": "Compare by",
+        "type": "FIELD",
+        "detail": "Optional: split each question by a group, e.g. Department or Region"
+      },
+      "order": {
+        "displayName": "Answer order",
+        "type": "TEXT",
+        "detail": "Optional: the scale from most negative to most positive, separated by commas, when it is not recognised automatically"
+      },
+      "scale": {
+        "displayName": "Scale",
+        "type": "CHOICE",
+        "values": [
+          "AUTO",
+          "LIKERT",
+          "NPS"
+        ],
+        "displayValues": [
+          "Automatic",
+          "Rating scale",
+          "Net Promoter (0 to 10)"
+        ],
+        "detail": "Automatic treats 0 to 10 answers as Net Promoter Score"
+      },
+      "sort": {
+        "displayName": "Sort questions",
+        "type": "CHOICE",
+        "values": [
+          "NET",
+          "DATA"
+        ],
+        "displayValues": [
+          "By net score",
+          "Alphabetically"
+        ],
+        "detail": "Order of the questions"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "answer",
+        "question",
+        "group"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Survey",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "answer",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "question",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "group",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Scale",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "order",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "scale",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "sort",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "scale": "AUTO",
+      "sort": "NET"
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 200
+  }
+}

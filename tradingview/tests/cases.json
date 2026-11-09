@@ -1,0 +1,341 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/portfolio.csv",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Symbol",
+     "function": "MIN"
+    },
+    "interval": "W"
+   }
+  },
+  "width": 760,
+  "height": 480,
+  "showcaseHeight": 480,
+  "wait": 1500,
+  "caption": "Live: TradingView's chart for the first symbol in an invented portfolio, with weekly bars. Symbol uses the Min function here, so one chart is always shown.",
+  "expect": {
+   "selector": ".stub-chart",
+   "min": 1,
+   "max": 1
+  },
+  "actions": [
+   {
+    "eval": "window.__tv.length===1 && window.__tv[0].symbol==='BINANCE:BTCUSDT' && window.__tv[0].interval==='W' && window.__tv[0].details===false && window.__tv[0].theme==='light'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.querySelector('.tradingview-widget-copyright a').href==='https://www.tradingview.com/symbols/BINANCE-BTCUSDT/'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "dark-details",
+  "showcase": true,
+  "data": "sample-data/portfolio.csv",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Company",
+   "operator": "=",
+   "value": "LVMH"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Symbol",
+     "function": "SINGLETON"
+    },
+    "o_darkMode": true,
+    "details": true
+   }
+  },
+  "width": 760,
+  "height": 480,
+  "showcaseHeight": 480,
+  "wait": 1500,
+  "caption": "Live: dark mode with the details panel, for one symbol filtered in the report.",
+  "expect": {
+   "selector": ".stub-chart",
+   "min": 1
+  },
+  "actions": [
+   {
+    "eval": "var c=window.__tv[0]; c.symbol==='EURONEXT:MC' && c.theme==='dark' && c.details===true && c.interval==='D' && document.body.className==='dark'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/portfolio.csv",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Company",
+   "operator": "=",
+   "value": "Apple"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Symbol",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 700,
+  "height": 420,
+  "wait": 1500,
+  "actions": [
+   {
+    "clickAt": [
+     5,
+     5
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "resize": [
+     600,
+     380
+    ]
+   },
+   {
+    "eval": "window.__tv.length===1",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Company",
+     "operator": "=",
+     "value": "Toyota (US listing)"
+    }
+   },
+   {
+    "eval": "window.__tv.length===2 && window.__tv[1].symbol==='NYSE:TM' && document.querySelectorAll('.stub-chart').length===1",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "Europe"
+    }
+   },
+   {
+    "eval": "document.body.innerText.indexOf('No single symbol to show')>=0 && !document.querySelector('.stub-chart')",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Company",
+     "operator": "=",
+     "value": "Airbus"
+    }
+   },
+   {
+    "update": {
+     "aticker": {
+      "inputField": "Symbol",
+      "function": "SINGLETON"
+     },
+     "interval": "60"
+    }
+   },
+   {
+    "eval": "window.__tv[window.__tv.length-1].symbol==='EURONEXT:AIR' && window.__tv[window.__tv.length-1].interval==='60'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "unreachable",
+  "data": "sample-data/portfolio.csv",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "abort"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Symbol",
+     "function": "MIN"
+    }
+   }
+  },
+  "width": 700,
+  "height": 360,
+  "wait": 2000,
+  "expect": {
+   "text": "The chart can't be shown here",
+   "noErrors": false
+  }
+ },
+ {
+  "name": "small",
+  "data": "sample-data/portfolio.csv",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Symbol",
+     "function": "MIN"
+    }
+   }
+  },
+  "width": 180,
+  "height": 120,
+  "wait": 1200,
+  "actions": [
+   {
+    "eval": "document.body.innerText.indexOf('Too small for a chart')>=0 && !window.__tv",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     500,
+     360
+    ]
+   },
+   {
+    "eval": "document.querySelectorAll('.stub-chart').length===1",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Symbol",
+    "type": "TEXT"
+   }
+  ],
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Symbol",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 800,
+  "expect": {
+   "text": "No single symbol to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/portfolio.csv",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 800,
+  "expect": {
+   "text": "Choose the field with the symbols"
+  }
+ },
+ {
+  "name": "plain-word",
+  "data": "sample-data/portfolio.csv",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Company",
+     "function": "MAX"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "actions": [
+   {
+    "eval": "window.__tv.length===1 && window.__tv[0].symbol==='Walt Disney'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "bad-text",
+  "data": "sample-data/portfolio.csv",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Company",
+   "operator": "=",
+   "value": "Bitcoin (in US tether)"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Company",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "Not a symbol"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "routes": {
+   "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js": "tests/stub-widget.js"
+  },
+  "options": {
+   "items": {
+    "aticker": {
+     "inputField": "Symbol",
+     "function": "MAX"
+    }
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "window.__tv.length===1 && window.__tv[0].symbol==='NYSE:T9'",
+    "expectTruthy": true
+   }
+  ]
+ }
+]

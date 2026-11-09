@@ -1,0 +1,192 @@
+{
+  "name": "Tile Map",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "tile map",
+    "map",
+    "us states",
+    "uk regions",
+    "grid map",
+    "choropleth",
+    "regions",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 5000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "region": {
+        "displayName": "Regions",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "US states (names or two-letter codes), UK regions (names or ITL/NUTS codes), or your own codes with a Custom layout"
+      },
+      "value": {
+        "displayName": "Colour by",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "The measure that colours each tile"
+      },
+      "layout": {
+        "displayName": "Map",
+        "type": "CHOICE",
+        "values": [
+          "AUTO",
+          "US",
+          "UK",
+          "CUSTOM"
+        ],
+        "displayValues": [
+          "Automatic",
+          "US states",
+          "UK regions",
+          "Custom layout"
+        ],
+        "detail": "Automatic picks the layout that matches most regions"
+      },
+      "custom": {
+        "displayName": "Custom layout",
+        "type": "TEXT",
+        "detail": "Your own grid: CODE:column,row separated by semicolons, optionally CODE:column,row:Full name"
+      },
+      "colour": {
+        "displayName": "Colours",
+        "type": "CHOICE",
+        "values": [
+          "SEQUENTIAL",
+          "QUANTILE",
+          "DIVERGING"
+        ],
+        "displayValues": [
+          "Low to high",
+          "Low to high, equal numbers per colour",
+          "Below and above a midpoint"
+        ],
+        "detail": "Equal numbers per colour (quantiles) stop one large region from washing out the rest"
+      },
+      "midpoint": {
+        "displayName": "Midpoint",
+        "type": "NUMBER",
+        "detail": "For diverging colours (default the median)"
+      },
+      "showValues": {
+        "displayName": "Show values",
+        "type": "TOGGLE",
+        "detail": "Write the value in each tile"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "region",
+        "value",
+        "layout"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Map",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "region",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "layout",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "custom",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "midpoint",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showValues",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "layout": "AUTO",
+      "colour": "SEQUENTIAL",
+      "showValues": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 200
+  }
+}

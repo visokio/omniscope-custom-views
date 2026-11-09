@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #grid { flex: 1; position: relative; min-width: 0; }
+        #side { width: 330px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .cell { cursor: pointer; } .cell:hover { stroke: #0b0b0b; stroke-width: 1.5; }
+        .seglab { pointer-events: none; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        .stat { margin-bottom: 4px; color: #52514e; } .stat b { font-size: 16px; color: #0b0b0b; }
+        .seg { padding: 5px 6px; border-radius: 5px; cursor: pointer; margin-bottom: 2px; } .seg:hover { background: rgba(127,127,127,.1); } .seg.sel { outline: 1px dashed #2161D9; }
+        .seg .n { font-weight: bold; } .seg .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 6px; }
+        .seg .m { color: #52514e; font-size: 11px; margin-top: 1px; } .seg .a { color: #898781; font-size: 11px; font-style: italic; margin-top: 1px; }
+        .seg .bars { display: flex; gap: 4px; margin-top: 3px; align-items: center; font-size: 10px; color: #898781; } .seg .bars i { display: inline-block; height: 3px; border-radius: 2px; }
+        .note { color: #898781; font-size: 11px; margin-top: 6px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="grid"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    // Segments in order of customer value. Blues for healthy customers, amber and red for those slipping away, greys for lapsed.
+    var SEGS = [
+        ["Champions", "#184f95", "Reward them, ask for reviews and referrals, offer early access."],
+        ["Loyal", "#2a78d6", "Upsell higher-value products; recognise their loyalty."],
+        ["Potential loyalists", "#6fa8ec", "Offer membership or loyalty benefits; recommend related products."],
+        ["New customers", "#9ec5f4", "Welcome and onboard them; make the second purchase easy."],
+        ["Promising", "#c9def8", "Build awareness of the range with targeted offers."],
+        ["Need attention", "#fbd58a", "Time-limited offers based on what they bought before."],
+        ["About to sleep", "#eda100", "Reconnect with popular products before they lapse."],
+        ["At risk", "#eb6834", "Personalised win-back messages and offers."],
+        ["Cannot lose them", "#d03b3b", "Win them back: talk to them, new products, strong offers."],
+        ["Hibernating", "#c9c8c1", "Suggest other relevant products; special discounts."],
+        ["Lost", "#9a988f", "Try one reactivation campaign, then exclude to save cost."]
+    ];
+    // GRID[fm-1][r-1]: R = recency score (5 = most recent), FM = average of frequency and monetary scores.
+    var GRID = [
+        [10, 9, 6, 4, 3],
+        [10, 9, 6, 2, 2],
+        [7, 7, 5, 2, 2],
+        [7, 7, 1, 0, 0],
+        [8, 8, 1, 0, 0]
+    ];
+    var S = { gen: 0, sel: null };
+    window.__rfm = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(a >= 1e7 ? 1 : 2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 10 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var pct = function (v) { return (100 * v).toFixed(v >= 0.1 ? 0 : 1) + "%"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function tval(v) { if (v === null || v === undefined || v === "") return null; if (typeof v === "number") return v; var s = typeof v === "object" ? v.lower : v; var t = Date.parse(typeof s === "string" && s.length === 10 ? s + "T00:00:00Z" : s); return isNaN(t) ? null : t; }
+    function textOn(bg) { return d3.lab(bg).l > 62 ? "#0b0b0b" : "#ffffff"; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { c: fld(o.customer), d: fld(o.date), v: fld(o.value), o: fld(o.orders) };
+        if (!F.c || !F.d || !F.v) { message("Choose the Customers field, the date of each purchase (Dated by) and its value (Spend)."); return; }
+        var q = {
+            groupings: [{ inputField: F.c, type: "UNIQUE_VALUES" }],
+            measures: [{ inputField: F.d, function: "MAX", name: "last" }, { inputField: F.d, function: "MIN", name: "first" },
+                F.o ? { inputField: F.o, function: "UNIQUE_VALUE_COUNT", name: "freq" } : { function: "RECORD_COUNT", name: "freq" },
+                { inputField: F.v, function: "SUM", name: "spend" }],
+            range: { start: 0, length: Math.max(1000, Math.min(500000, +o.maxCustomers || 200000)) }
+        };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    // Quintile score 1..5 by rank; tied values share the score of their first position, so ties are never split.
+    function scores(vals, higherBetter) {
+        var n = vals.length, idx = vals.map(function (v, i) { return i; }).sort(function (a, b) { return vals[a] - vals[b]; }), out = new Array(n), first = 0;
+        for (var k = 0; k < n; k++) { if (k && vals[idx[k]] !== vals[idx[k - 1]]) first = k; var s = 1 + Math.floor(5 * first / n); out[idx[k]] = higherBetter ? s : 6 - s; }
+        return out;
+    }
+
+    function build(F, recs) {
+        var cs = [], asof = -Infinity, bad = 0;
+        recs.forEach(function (r) { var l = tval(r[1]); if (l !== null && l > asof) asof = l; });
+        recs.forEach(function (r) {
+            var l = tval(r[1]), fi = tval(r[2]), fr = +r[3], sp = typeof r[4] === "number" ? r[4] : parseFloat(r[4]);
+            if (r[0] === null || l === null || !isFinite(fr) || !isFinite(sp)) { bad++; return; }
+            cs.push({ raw: r[0], days: Math.round((asof - l) / 864e5), tenure: fi === null ? null : Math.round((asof - fi) / 864e5), freq: fr, spend: sp });
+        });
+        if (cs.length < 5) { S.model = null; message(cs.length ? "Too few customers to score (" + cs.length + "). RFM needs at least 5." : "No data to show. Check the filters."); return; }
+        message(null);
+        var R = scores(cs.map(function (c) { return c.days; }), false), Fq = scores(cs.map(function (c) { return c.freq; }), true), Mn = scores(cs.map(function (c) { return c.spend; }), true);
+        var cells = []; for (var fm = 1; fm <= 5; fm++) for (var r = 1; r <= 5; r++) cells.push({ r: r, fm: fm, seg: GRID[fm - 1][r - 1], n: 0, spend: 0, days: 0, freq: 0, list: [] });
+        var segs = SEGS.map(function (s, i) { return { i: i, name: s[0], colour: s[1], action: s[2], n: 0, spend: 0, days: 0, freq: 0, cells: [] }; });
+        var total = 0;
+        cs.forEach(function (c, i) {
+            c.R = R[i]; c.F = Fq[i]; c.M = Mn[i]; c.FM = Math.round((c.F + c.M) / 2);
+            var cell = cells[(c.FM - 1) * 5 + (c.R - 1)], sg = segs[cell.seg];
+            [cell, sg].forEach(function (x) { x.n++; x.spend += c.spend; x.days += c.days; x.freq += c.freq; });
+            cell.list.push(c.raw); total += c.spend;
+        });
+        cells.forEach(function (c) { segs[c.seg].cells.push(c); });
+        S.model = { F: F, cs: cs, cells: cells, segs: segs, n: cs.length, total: total, asof: asof, bad: bad };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var box = document.getElementById("grid"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var m = { l: 58, r: 14, t: 34, b: 46 }, size = Math.max(40, Math.min((W - m.l - m.r) / 5, (H - m.t - m.b) / 5)), x0 = m.l + Math.max(0, (W - m.l - m.r - size * 5) / 2), y0 = m.t;
+        var g = svg.append("g"), sel = S.sel;
+        var isSelCell = function (c) { return sel && ((sel.cell && sel.cell[0] === c.r && sel.cell[1] === c.fm) || (sel.seg !== undefined && sel.seg === c.seg)); };
+        var cx = function (c) { return x0 + (c.r - 1) * size; }, cy = function (c) { return y0 + (5 - c.fm) * size; };
+        g.selectAll("rect.cell").data(M.cells).enter().append("rect").attr("class", "cell")
+            .attr("x", function (c) { return cx(c); }).attr("y", function (c) { return cy(c); }).attr("width", size).attr("height", size)
+            .attr("fill", function (c) { return M.segs[c.seg].colour; }).attr("opacity", function (c) { return sel && !isSelCell(c) ? 0.35 : 1; })
+            .on("mouseenter", function (ev, c) { tipCell(c, ev); }).on("mousemove", function (ev, c) { tipCell(c, ev); }).on("mouseleave", tip)
+            .on("click", function (ev, c) { ev.stopPropagation(); selectCell(c); });
+        // faint lines inside a segment, so single cells can still be read and hovered
+        M.cells.forEach(function (c) { if (c.r < 5) g.append("line").attr("x1", cx(c) + size).attr("x2", cx(c) + size).attr("y1", cy(c)).attr("y2", cy(c) + size).attr("stroke", "rgba(255,255,255,.28)").attr("pointer-events", "none"); if (c.fm < 5) g.append("line").attr("x1", cx(c)).attr("x2", cx(c) + size).attr("y1", cy(c)).attr("y2", cy(c)).attr("stroke", "rgba(255,255,255,.28)").attr("pointer-events", "none"); });
+        // segment boundaries and labels
+        M.cells.forEach(function (c) {
+            var right = c.r < 5 ? M.cells[(c.fm - 1) * 5 + c.r] : null, up = c.fm < 5 ? M.cells[c.fm * 5 + c.r - 1] : null;
+            if (right && right.seg !== c.seg) g.append("line").attr("x1", cx(c) + size).attr("x2", cx(c) + size).attr("y1", cy(c)).attr("y2", cy(c) + size).attr("stroke", "#fcfcfb").attr("stroke-width", 4).attr("pointer-events", "none");
+            if (up && up.seg !== c.seg) g.append("line").attr("x1", cx(c)).attr("x2", cx(c) + size).attr("y1", cy(c)).attr("y2", cy(c)).attr("stroke", "#fcfcfb").attr("stroke-width", 4).attr("pointer-events", "none");
+        });
+        M.segs.forEach(function (sg) {
+            if (!sg.cells.length) return;
+            var mx = d3.mean(sg.cells, function (c) { return cx(c) + size / 2; }), my = d3.mean(sg.cells, function (c) { return cy(c) + size / 2; });
+            var fill = textOn(sg.colour), words = sg.name.split(" "), lines = (sg.name.length > 12 || size * Math.sqrt(sg.cells.length) < 110) && words.length > 1 ? [words[0], words.slice(1).join(" ")] : [sg.name];
+            var t = g.append("text").attr("class", "seglab").attr("x", mx).attr("y", my - (lines.length - 1) * 7 - 4).attr("text-anchor", "middle").attr("fill", fill).style("font-weight", "bold").style("font-size", size > 70 ? "12.5px" : "11px");
+            lines.forEach(function (l, i) { t.append("tspan").attr("x", mx).attr("dy", i ? "1.15em" : 0).text(l); });
+            if (size > 54) g.append("text").attr("class", "seglab").attr("x", mx).attr("y", my + lines.length * 7 + 8).attr("text-anchor", "middle").attr("fill", fill).style("font-size", "10.5px").text(pct(sg.n / M.n) + " of customers");
+        });
+        // axes
+        var ax = svg.append("g").style("font-size", "11px").attr("fill", "#52514e");
+        for (var i = 1; i <= 5; i++) { ax.append("text").attr("x", x0 + (i - 0.5) * size).attr("y", y0 + 5 * size + 15).attr("text-anchor", "middle").text(i); ax.append("text").attr("x", x0 - 8).attr("y", y0 + (5 - i + 0.5) * size).attr("dy", "0.35em").attr("text-anchor", "end").text(i); }
+        ax.append("text").attr("x", x0 + 2.5 * size).attr("y", y0 + 5 * size + 33).attr("text-anchor", "middle").text("Recency score: longer ago \u2190 \u2192 more recent");
+        ax.append("text").attr("transform", "translate(" + (x0 - 30) + "," + (y0 + 2.5 * size) + ") rotate(-90)").attr("text-anchor", "middle").text("Frequency and spend score");
+        svg.append("text").attr("x", x0).attr("y", 20).style("font-size", "12.5px").style("font-weight", "bold").text("RFM segments");
+        svg.append("text").attr("x", x0 + 98).attr("y", 20).style("font-size", "11.5px").attr("fill", "#52514e").text(M.n.toLocaleString() + " customers scored 1 to 5 against each other");
+        if (intro) { var cs = svg.selectAll("rect.cell"); fadeIn(cs, 400, 28); fadeIn(svg.selectAll(".seglab"), 500, 20); }
+        side();
+    }
+
+    function side() {
+        var M = S.model, el = document.getElementById("side");
+        var h = '<h3>Customers</h3><div class="stat"><b>' + M.n.toLocaleString() + '</b> customers, <b>' + fmt(M.total) + '</b> spend</div><div class="note" style="margin-top:0">Recency is measured to ' + new Date(M.asof).toISOString().slice(0, 10) + ', the latest purchase in the data' + (M.bad ? '; ' + M.bad.toLocaleString() + ' customers skipped (missing values)' : '') + '.</div><h3>Segments</h3>';
+        M.segs.forEach(function (sg) {
+            if (!sg.n) return;
+            var isSel = S.sel && S.sel.seg === sg.i;
+            h += '<div class="seg' + (isSel ? ' sel' : '') + '" data-i="' + sg.i + '"><span class="sw" style="background:' + sg.colour + '"></span><span class="n">' + esc(sg.name) + '</span> <span style="color:#52514e">' + sg.n.toLocaleString() + ' (' + pct(sg.n / M.n) + ')</span>' +
+                '<div class="m">Last bought ' + Math.round(sg.days / sg.n).toLocaleString() + ' days ago on average; ' + (sg.freq / sg.n).toFixed(1) + ' purchases; ' + fmt(sg.spend / sg.n) + ' spend each</div>' +
+                '<div class="bars"><i style="width:' + Math.max(2, 120 * sg.n / M.n) + 'px;background:#9a988f"></i>' + pct(sg.n / M.n) + ' of customers <i style="width:' + Math.max(2, 120 * sg.spend / M.total) + 'px;background:' + sg.colour + ';margin-left:6px"></i>' + pct(sg.spend / M.total) + ' of spend</div>' +
+                '<div class="a">' + esc(sg.action) + '</div></div>';
+        });
+        h += '<div class="note">Scores rank customers against each other in fifths. Recency: days since the last purchase. Frequency: ' + (M.F.o ? 'distinct ' + esc(M.F.o) : 'number of records') + '. Spend: sum of ' + esc(M.F.v) + '. The suggested actions are common practice, not rules. Click a segment or a cell to select its customers.</div>';
+        el.innerHTML = h;
+        Array.prototype.forEach.call(el.querySelectorAll(".seg"), function (d) { d.addEventListener("click", function (e) { e.stopPropagation(); selectSeg(+d.getAttribute("data-i")); }); });
+    }
+
+    function tipCell(c, ev) {
+        var M = S.model, sg = M.segs[c.seg];
+        show('<b>' + esc(sg.name) + '</b> <span class="k">(recency ' + c.r + ', frequency and spend ' + c.fm + ')</span><br><span class="k">Customers:</span> ' + c.n.toLocaleString() + (c.n ? ' (' + pct(c.n / M.n) + ')<br><span class="k">Spend:</span> ' + fmt(c.spend) + ' (' + pct(c.spend / M.total) + ')<br><span class="k">Average days since last purchase:</span> ' + Math.round(c.days / c.n) + '<br><span class="k">Average purchases:</span> ' + (c.freq / c.n).toFixed(1) : ''), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function custFilter(raws, label) {
+        if (!raws.length) return null;
+        if (raws.length > 3000) { omniscope.view.error(label + " has " + raws.length.toLocaleString() + " customers; selection is limited to 3,000."); return null; }
+        var F = S.model.F, eq = function (v) { return { type: "FIELD_VALUE", inputField: F.c, operator: "=", value: v }; };
+        return raws.length === 1 ? eq(raws[0]) : { type: "OR", filters: raws.map(eq) };
+    }
+    function selectCell(c) {
+        if (S.sel && S.sel.cell && S.sel.cell[0] === c.r && S.sel.cell[1] === c.fm) return publish(null, null);
+        var f = custFilter(c.list, "This cell"); if (f) publish(f, { cell: [c.r, c.fm] });
+    }
+    function selectSeg(i) {
+        if (S.sel && S.sel.seg === i) return publish(null, null);
+        var sg = S.model.segs[i], raws = []; sg.cells.forEach(function (c) { raws = raws.concat(c.list); });
+        var f = custFilter(raws, sg.name); if (f) publish(f, { seg: i });
+    }
+    window.__rfm.selectSeg = function (name) { selectSeg(S.model.segs.find(function (s) { return s.name === name; }).i); };
+    window.__rfm.seg = function (name) { return S.model.segs.find(function (s) { return s.name === name; }); };
+
+    document.getElementById("grid").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

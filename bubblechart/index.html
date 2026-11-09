@@ -4,21 +4,91 @@
     <meta charset="utf-8"/>
 
     <style>
-        #main {
+        html, body {
+            /* The body fills the view, so a click anywhere is handled: */
             width: 100%;
             height: 100%;
             margin: 0;
+            overflow: hidden;
+        }
+        #main {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: #333;
+        }
+        svg {
+            position: absolute;
             top: 0;
             left: 0;
-            position: absolute;
         }
-        text {
+        .bubble circle {
+            stroke: #fff;
+            stroke-width: 1;
+            cursor: pointer;
+        }
+        .bubble:hover circle {
+            stroke: #1b1b1b;
+            stroke-width: 2;
+        }
+        .bubble.selected circle {
+            stroke: #1b1b1b;
+            stroke-width: 2.5;
+        }
+        .bubble text {
             text-anchor: middle;
+            pointer-events: none;
+            fill: var(--ink, #fff);
+        }
+        .bubble text.value {
+            fill-opacity: 0.85;
+        }
+        .group circle {
+            fill: #f4f4f2;
+            stroke: #d6d6d2;
+            stroke-width: 1;
+            cursor: pointer;
+        }
+        .group.selected circle {
+            stroke: #1b1b1b;
+            stroke-width: 2;
+        }
+        .group-labels text {
+            text-anchor: middle;
+            font-size: 12px;
+            font-weight: bold;
+            fill: #444;
+            stroke: #fff;
+            stroke-width: 3px;
+            stroke-linejoin: round;
+            paint-order: stroke;
+            pointer-events: none;
+        }
+        #note {
+            position: absolute;
+            left: 6px;
+            bottom: 4px;
+            font-size: 11px;
+            color: #777;
+            pointer-events: none;
+        }
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #555;
+            background: #fff;
         }
     </style>
 
-    <!-- Put SCRIPT tags to load 3rd party libraries here -->
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- Third-party library, pinned to one version -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 
 </head>
 
@@ -26,6 +96,8 @@
 
 <div id="main">
     <svg width="100%" height="100%"></svg>
+    <div id="note"></div>
+    <div id="message"></div>
 </div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
@@ -34,9 +106,13 @@
 
     var svg = d3.select("svg");
 
-    var format = d3.format(",d");
-
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
+    // Colours follow the category's name (from an unfiltered, sorted list of the field's values), not its rank in
+    // the current data, so filtering the report does not recolour the bubbles.
+    var PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948", "#7f8c8d", "#00a3bf"];
+    var NONE = "#b9b8b2";
+    var MAX_BUBBLES = 2000;
+    var state = { selected: null, domains: {}, signature: null };
+    window.__bubble = state;
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
@@ -45,83 +121,290 @@
         }
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    // A click on empty space clears the selection in Omniscope, and closes menus:
     document.body.addEventListener("click", function() {
+        state.selected = null;
+        highlight();
         omniscope.view.whitespaceClick();
     });
 
-    // Naively redraw on any of these events
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+    }
 
-        var width = +parseInt(svg.style("width"), 10);
-        var height = +parseInt(svg.style("height"), 10);
+    function isRange(v) { return v !== null && typeof v === "object" && ("lower" in v || "upper" in v); }
+    function label(v) {
+        if (v === null || v === undefined || v === "") return "(blank)";
+        if (isRange(v)) return label(v.lower) + " to " + label(v.upper);
+        if (typeof v === "number") return format(v);
+        return String(v);
+    }
+    // Whole numbers from 100, two decimals from 1, three significant digits below 1.
+    function format(v) {
+        if (typeof v !== "number" || !isFinite(v)) return "";
+        var a = Math.abs(v);
+        if (a >= 100) return Math.round(v).toLocaleString();
+        if (a >= 1) return (Math.round(v * 100) / 100).toLocaleString();
+        return (+v.toPrecision(3)).toLocaleString(undefined, { maximumSignificantDigits: 3 });
+    }
+    function measureName(m) {
+        if (!m) return "";
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField + " (" + m.function.toLowerCase().replace(/_/g, " ") + ")";
+    }
 
-        var pack = d3.pack()
-            .size([width, height])
-            .padding(1.5);
+    // The filter that selects one value of a grouping: an equality, or a range for a histogram grouping.
+    function valueFilter(field, v) {
+        if (isRange(v)) {
+            return { type: "AND", filters: [
+                { type: "FIELD_VALUE", inputField: field, operator: ">=", value: v.lower },
+                { type: "FIELD_VALUE", inputField: field, operator: "<", value: v.upper } ] };
+        }
+        return { type: "FIELD_VALUE", inputField: field, operator: "=", value: v === undefined ? null : v };
+    }
 
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        var data = omniscope.view.context().result.data.records;
-
-        var classes = data
-            .filter(function(record) {
-                return record[0] !== null;
+    // Unfiltered, sorted list of a field's values, fetched once per field (null while loading, or above 50 values).
+    function domainOf(field) {
+        var cached = state.domains[field];
+        if (cached) return cached.values;
+        state.domains[field] = { values: null };
+        omniscope.view.queryBuilder().table({ groupings: [{ inputField: field, type: "UNIQUE_VALUES" }],
+            measures: [{ function: "RECORD_COUNT" }], range: { start: 0, length: 51 } })
+            .on("load", function(e) {
+                var vals = e.data.records.map(function(r) { return r[0]; }).filter(function(v) { return v !== null; });
+                state.domains[field] = { values: vals.length <= 50 ? vals.map(String).sort() : null };
+                render();
             })
-            .map(function(record) {
-                return {id: ""+record[0], value: record[1]};
+            .on("error", function() { })
+            .execute();
+        return null;
+    }
+    // Above 50 values (or before the list arrives) the colour comes from the value's name.
+    function hashColour(s) {
+        var h = 0;
+        for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+        return PALETTE[Math.abs(h) % PALETTE.length];
+    }
+    function colourFor(field, v) {
+        if (v === null || v === undefined) return NONE;
+        var s = label(v), dom = domainOf(field);
+        var i = dom ? dom.indexOf(s) : -1;
+        return i >= 0 ? PALETTE[i % PALETTE.length] : hashColour(s);
+    }
+
+    omniscope.view.on(["load", "update", "resize"], render);
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        svg.selectAll("*").remove();
+        document.getElementById("note").textContent = "";
+        if (!it.split || !it.split.inputField) { message("Choose a field for One bubble per, for example Product."); return; }
+        if (!it.measures) { message("Choose a Size measure, for example the sum of Revenue."); return; }
+        var result = ctx.result;
+        if (!result || !result.data) { message("Waiting for data"); return; }
+        var records = result.data.records || [], mp = result.mappings || {};
+        if (!records.length) { message("No data to show. Check the report's filters."); return; }
+        if (!ctx.viewSelection) state.selected = null;
+
+        var grouped = !!(it.colour && it.colour.inputField && mp.colour !== undefined);
+        var all = records.map(function(r) {
+            var v = r[mp.measures];
+            return { id: r[mp.split], group: grouped ? r[mp.colour] : null, value: typeof v === "number" && isFinite(v) ? v : null };
+        });
+        var bubbles = all.filter(function(d) { return d.value !== null && d.value > 0; });
+        var dropped = all.length - bubbles.length;
+        if (!bubbles.length) { message("No positive values to size the bubbles by. Check the Size measure."); return; }
+        if (bubbles.length > MAX_BUBBLES) {
+            message("Too many bubbles (" + bubbles.length.toLocaleString() + "). Choose a field with fewer values for " +
+                "One bubble per, or filter the report: the view shows up to " + MAX_BUBBLES.toLocaleString() + ".");
+            return;
+        }
+        message(null);
+        var total = d3.sum(bubbles, function(d) { return d.value; });
+        bubbles.forEach(function(d) {
+            d.key = JSON.stringify([d.id, d.group]);
+            d.name = label(d.id);
+            d.colour = grouped ? colourFor(it.colour.inputField, d.group) : colourFor(it.split.inputField, d.id);
+        });
+
+        var W = parseInt(svg.style("width"), 10) || 0, H = parseInt(svg.style("height"), 10) || 0;
+        var noteH = dropped ? 16 : 0;
+        var size = [Math.max(10, W - 4), Math.max(10, H - 4 - noteH)];
+
+        // A flat pack, or one circle per group with its bubbles inside.
+        var tree;
+        if (grouped) {
+            var groups = d3.group(bubbles, function(d) { return JSON.stringify(d.group); });
+            tree = { children: Array.from(groups, function(e) { return { group: e[1][0].group, children: e[1] }; }) };
+        } else {
+            tree = { children: bubbles };
+        }
+        var root = d3.hierarchy(tree)
+            .sum(function(d) { return d.children ? 0 : d.value; })
+            .sort(function(a, b) { return b.value - a.value; });
+        d3.pack().size(size).padding(function(n) { return n.depth === 0 ? 4 : 2; })(root);
+
+        // Grow the bubbles in when the options or the filter change (not on hover, selection or resize).
+        var sig = JSON.stringify([it.split, it.measures, it.colour, ctx.dataConfig && ctx.dataConfig.filter, records.length]);
+        var animate = sig !== state.signature && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+        state.signature = sig;
+
+        var g = svg.append("g").attr("transform", "translate(2,2)");
+
+        if (grouped) {
+            var gNodes = g.selectAll(".group").data(root.children).join("g")
+                .attr("class", "group")
+                .attr("transform", function(n) { return "translate(" + n.x + "," + n.y + ")"; });
+            gNodes.append("circle").attr("r", function(n) { return n.r; });
+            gNodes.append("title").text(function(n) {
+                return it.colour.inputField + ": " + label(n.data.group) + "\n" + measureName(it.measures) + ": " + format(n.value) +
+                    " (" + pct(n.value / total) + " of total)";
             });
-
-        var root = d3.hierarchy({children: classes})
-            .sum(function(d) { return d.value; })
-            .each(function(d) {
-                if (id = d.data.id) {
-                    d.id = id;
-                    d.class = id;
-                }
+            gNodes.on("click", function(event, n) {
+                event.stopPropagation();
+                select("g:" + JSON.stringify(n.data.group), valueFilter(it.colour.inputField, n.data.group));
             });
+        }
 
-        var node = svg.selectAll(".node")
-            .data(pack(root).leaves());
+        var leaves = root.leaves();
+        var nodes = g.selectAll(".bubble").data(leaves).join("g")
+            .attr("class", "bubble")
+            .attr("transform", function(n) { return "translate(" + n.x + "," + n.y + ")"; });
+        var circles = nodes.append("circle").attr("fill", function(n) { return n.data.colour; });
+        if (animate) {
+            circles.attr("r", 0).transition().duration(600).delay(function(n, i) { return Math.min(300, i * 6); })
+                .attr("r", function(n) { return n.r; });
+        } else {
+            circles.attr("r", function(n) { return n.r; });
+        }
 
-        var nodeEnter = node
-            .enter()
-            .append("g")
-            .attr("class", "node");
+        nodes.append("title").text(function(n) {
+            var d = n.data, lines = [d.name];
+            if (grouped) lines.push(it.colour.inputField + ": " + label(d.group));
+            lines.push(measureName(it.measures) + ": " + format(d.value));
+            lines.push("Share of total: " + pct(d.value / total));
+            return lines.join("\n");
+        });
 
-        node.exit().remove();
+        // Labels: the name (on two lines if it needs them), and the value underneath when there is room. Text is
+        // measured, shrunk a little or cut with "..." so it never runs outside its bubble.
+        var mode = it.labels || "NAME_VALUE";
+        if (mode !== "NONE") {
+            nodes.each(function(n) {
+                var fs = Math.min(16, n.r / 2.8);
+                if (fs < 7) return;
+                var node = d3.select(this).style("--ink", ink(n.data.colour));
+                var withValue = mode === "NAME_VALUE" && n.r > 22;
+                var lines = fitLines(node, n.data.name, n.r, fs, withValue);
+                if (!lines) return;
+                var lh = lines.fs * 1.1, rows = lines.text.length + (withValue ? 1 : 0), y0 = -(rows - 1) * lh / 2;
+                lines.text.forEach(function(t, i) {
+                    node.append("text").attr("class", "name").attr("y", y0 + i * lh).attr("dy", "0.35em")
+                        .style("font-size", lines.fs + "px").text(t);
+                });
+                if (withValue) node.append("text").attr("class", "value").attr("y", y0 + lines.text.length * lh)
+                    .attr("dy", "0.35em").style("font-size", (lines.fs * 0.85) + "px").text(format(n.data.value));
+            });
+        }
+        // Group names at the top of their circles, above the bubbles, when they fit.
+        if (grouped) {
+            var gl = g.append("g").attr("class", "group-labels");
+            root.children.forEach(function(n) {
+                if (n.r < 30) return;
+                var t = gl.append("text").attr("x", n.x).attr("y", n.y - n.r + 14).text(label(n.data.group));
+                if (!cut(t, 1.5 * n.r)) t.remove();
+            });
+        }
 
-        svg.selectAll(".node")
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        nodes.on("click", function(event, n) {
+            event.stopPropagation();
+            var f = valueFilter(it.split.inputField, n.data.id);
+            if (grouped) f = { type: "AND", filters: [f, valueFilter(it.colour.inputField, n.data.group)] };
+            select("b:" + n.data.key, f);
+        });
 
-        nodeEnter.append("circle");
-        svg.selectAll(".node").select("circle")
-            .attr("id", function(d) { return "circle-" + d.id.replace(/\s/g, "+"); })
-            .style("fill", function(d) { return color(d.id); })
-            .attr("r", function(d) { return d.r; });
+        if (dropped) document.getElementById("note").textContent = dropped.toLocaleString() +
+            (dropped === 1 ? " value" : " values") + " with no size, zero or below not shown";
+        highlight();
+    }
 
-        nodeEnter.append("clipPath")
-        svg.selectAll(".node").select("clipPath")
-            .attr("id", function(d) { return "clipPath-" + d.id.replace(/\s/g, "+"); })
-            .append("use")
-            .attr("xlink:href", function(d) { return "#circle-" + d.id.replace(/\s/g, "+"); });
+    function select(key, filter) {
+        if (state.selected === key) {
+            state.selected = null;
+            highlight();
+            omniscope.view.whitespaceClick();
+            return;
+        }
+        state.selected = key;
+        omniscope.view.context().viewSelection = { filter: filter };
+        omniscope.view.updated();
+        highlight();
+    }
 
-        nodeEnter.append("text")
-        svg.selectAll(".node").select("text")
-            .attr("clip-path", function(d) { return "url(#clipPath-"+d.id.replace(/\s/g, "+")+")"; })
-            .selectAll("tspan")
-            .data(function(d) { return d.id.split(/(?=[A-Z][^A-Z])/g); })
-            .join("tspan")
-            .attr("x", 0)
-            .attr("y", (d, i, nodes) => `${i - nodes.length / 2 + 0.8}em`)
-            .text(d => d);
+    function pct(f) { return (f * 100 >= 10 ? Math.round(f * 100) : Math.round(f * 1000) / 10) + "%"; }
 
-        nodeEnter.append("title");
-        svg.selectAll(".node").select("title")
-            .text(function(d) { return d.id + "\n" + format(d.value); });
+    // Dark text on light colours, white on dark ones.
+    function ink(c) {
+        var rgb = d3.rgb(c), l = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+        return l > 0.62 ? "#1b1b1b" : "#fff";
+    }
 
+    // Cuts a text element's text, ending it with "...", until it is at most width wide; false if nothing fits.
+    function cut(t, width) {
+        var s = t.text();
+        if (t.node().getComputedTextLength() <= width) return true;
+        while (s.length > 3) {
+            s = s.slice(0, -1);
+            t.text(s.replace(/\s+$/, "") + "\u2026");
+            if (t.node().getComputedTextLength() <= width) return true;
+        }
+        return false;
+    }
 
-    });
+    // Fits a name inside a bubble of radius r: one line, or two split at a space, at fs or down to 80% of it,
+    // otherwise one line cut short. Returns {text: [lines], fs} or null.
+    function fitLines(node, name, r, fs, withValue) {
+        var probe = node.append("text").attr("class", "name");
+        var widthAt = function(dy) { return 2 * Math.sqrt(Math.max(0, r * r - dy * dy)) * 0.9; };
+        var measure = function(t, size) { probe.style("font-size", size + "px").text(t); return probe.node().getComputedTextLength(); };
+        var out = null;
+        [fs, fs * 0.8].filter(function(size) { return size >= 7; }).some(function(size) {
+            var lh = size * 1.1;
+            if (measure(name, size) <= widthAt(withValue ? lh / 2 : lh / 2)) { out = { text: [name], fs: size }; return true; }
+            var words = name.split(/\s+/);
+            if (words.length < 2 || r < 24) return false;
+            var best = null;
+            for (var i = 1; i < words.length; i++) {
+                var a = words.slice(0, i).join(" "), b = words.slice(i).join(" ");
+                var w = Math.max(measure(a, size), measure(b, size));
+                if (!best || w < best.w) best = { w: w, text: [a, b] };
+            }
+            if (best.w <= widthAt(withValue ? lh * 1.5 : lh)) { out = { text: best.text, fs: size }; return true; }
+            return false;
+        });
+        if (!out) {
+            probe.style("font-size", fs + "px").text(name);
+            out = cut(probe, widthAt(fs * 0.6)) ? { text: [probe.text()], fs: fs } : null;
+        }
+        probe.remove();
+        return out;
+    }
+
+    function highlight() {
+        var sel = state.selected;
+        svg.selectAll(".bubble")
+            .classed("selected", function(n) { return sel === "b:" + n.data.key; })
+            .style("opacity", function(n) {
+                if (sel === null) return 1;
+                if (sel === "b:" + n.data.key) return 1;
+                if (sel === "g:" + JSON.stringify(n.data.group)) return 1;
+                return 0.3;
+            });
+        svg.selectAll(".group").classed("selected", function(n) { return sel === "g:" + JSON.stringify(n.data.group); });
+    }
 
 </script>
 

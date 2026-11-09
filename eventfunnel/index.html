@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #chart { flex: 1; position: relative; min-width: 0; }
+        #side { width: 270px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .bar, .drop { cursor: pointer; } .bar:hover, .drop:hover { opacity: .8; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        .stat { color: #52514e; margin-bottom: 4px; line-height: 1.45; } .big { font-size: 16px; font-weight: bold; color: #0b0b0b; }
+        table { border-collapse: collapse; width: 100%; font-size: 11.5px; } td, th { padding: 3px 3px; text-align: right; white-space: nowrap; } th { color: #52514e; font-weight: normal; font-size: 10.5px; border-bottom: 1px solid #e1e0d9; } td:first-child, th:first-child { text-align: left; }
+        .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 5px; }
+        .note { color: #898781; font-size: 11px; margin-top: 6px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+
+    var CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], ONE = "#2a78d6", DROP = "#f0efec", SELECT = "#2161D9";
+    var S = { gen: 0, sel: null };
+    window.__fun = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var pct = function (v) { return v === null || !isFinite(v) ? "n/a" : (100 * v).toFixed(v >= 0.1 ? 0 : 1) + "%"; };
+    function dur(ms) { if (ms === null || !isFinite(ms)) return "n/a"; var a = Math.abs(ms), m = 6e4, h = 36e5, d = 864e5; return a >= 2 * d ? (ms / d).toFixed(1) + " days" : a >= 2 * h ? (ms / h).toFixed(1) + " hours" : a >= 2 * m ? Math.round(ms / m) + " min" : Math.round(ms / 1000) + " s"; }
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function tval(v) { if (v === null || v === undefined || v === "") return null; if (typeof v === "number") return v; var s = typeof v === "object" ? v.lower : v; var t = Date.parse(typeof s === "string" && s.length === 10 ? s + "T00:00:00Z" : s); return isNaN(t) ? null : t; }
+    function stepList() { var s = it().steps; return s ? String(s).split(/[,\n;]/).map(function (x) { return x.trim(); }).filter(Boolean) : []; }
+
+    function load() {
+        var o = it(), F = { u: fld(o.user), e: fld(o.event), t: fld(o.time), g: fld(o.group) };
+        if (!F.u || !F.e || !F.t) { message("Choose the Users, Events and Ordered by fields of an event log (who, what and when)."); return; }
+        if (F.g === F.u || F.g === F.e) F.g = null;
+        var steps = stepList(), fields = [F.u, F.e, F.t]; if (F.g) fields.push(F.g);
+        var q = { fields: fields, sorts: [{ inputField: F.u, direction: "ASCENDING" }, { inputField: F.t, direction: "ASCENDING" }], range: { start: 0, length: Math.max(1000, Math.min(1000000, +o.maxEvents || 500000)) } };
+        var filt = [], f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) filt.push(f);
+        if (steps.length) filt.push(steps.length === 1 ? { type: "FIELD_VALUE", inputField: F.e, operator: "=", value: steps[0] } : { type: "OR", filters: steps.map(function (s) { return { type: "FIELD_VALUE", inputField: F.e, operator: "=", value: s }; }) });
+        if (filt.length) q.filter = filt.length === 1 ? filt[0] : { type: "AND", filters: filt };
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, steps, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    // Without listed steps, propose a funnel: the most common events, ordered by when they usually first happen.
+    function autoSteps(users) {
+        var stat = new Map();
+        users.forEach(function (U) { var seen = {}; U.ev.forEach(function (e, i) { if (seen[e.e]) return; seen[e.e] = 1; if (!stat.has(e.e)) stat.set(e.e, { n: 0, pos: 0 }); var s = stat.get(e.e); s.n++; s.pos += U.ev.length > 1 ? i / (U.ev.length - 1) : 0; }); });
+        var list = Array.from(stat.entries()).map(function (x) { return { e: x[0], n: x[1].n, pos: x[1].pos / x[1].n }; }).sort(function (a, b) { return b.n - a.n; }).slice(0, 6);
+        return list.sort(function (a, b) { return a.pos - b.pos || b.n - a.n; }).map(function (x) { return x.e; });
+    }
+
+    function build(F, steps, recs) {
+        introIf(recs.length + "|" + JSON.stringify(it()));
+        var o = it(), win = +o.window > 0 ? +o.window * 864e5 : null, users = new Map();
+        recs.forEach(function (r) { if (r[0] === null || r[1] === null) return; var t = tval(r[2]); if (t === null) return; var k = String(r[0]); if (!users.has(k)) users.set(k, { raw: r[0], ev: [], g: F.g ? (r[3] === null || r[3] === undefined ? "(blank)" : String(r[3])) : null }); users.get(k).ev.push({ e: String(r[1]), t: t }); });
+        if (!users.size) { S.model = null; message(steps.length ? "No events match the Funnel steps. Check their spelling against the Events field." : "No data to show. Check the filters."); return; }
+        var auto = !steps.length; if (auto) steps = autoSteps(users);
+        var distinct = new Set(); users.forEach(function (U) { U.ev.forEach(function (e) { distinct.add(e.e); }); });
+        if (auto && distinct.size > 200) { S.model = null; message("Events has " + distinct.size.toLocaleString() + " different values. Choose the field that names what happened, or list the Funnel steps."); return; }
+        if (steps.length < 2) { S.model = null; message("A funnel needs at least two steps. List them in Funnel steps, separated by commas."); return; }
+        message(null);
+        var groups = new Map(), all = { name: "All", users: 0, reach: steps.map(function () { return 0; }), times: steps.map(function () { return []; }), lists: steps.map(function () { return []; }) };
+        var mk = function (g) { if (!groups.has(g)) groups.set(g, { name: g, users: 0, reach: steps.map(function () { return 0; }), times: steps.map(function () { return []; }), lists: steps.map(function () { return []; }) }); return groups.get(g); };
+        users.forEach(function (U) {
+            U.ev.sort(function (a, b) { return a.t - b.t; });
+            // strict order: each step must happen after the previous one (and within the window of the first step)
+            var k = 0, t0 = null, last = null;
+            for (var i = 0; i < U.ev.length && k < steps.length; i++) { var e = U.ev[i]; if (e.e !== steps[k]) continue; if (k === 0) t0 = e.t; else if (win !== null && e.t - t0 > win) break; U["t" + k] = e.t; if (k) U["d" + k] = e.t - last; last = e.t; k++; }
+            U.k = k; if (!k) return;
+            [all].concat(F.g ? [mk(U.g)] : []).forEach(function (G) { G.users++; for (var j = 0; j < k; j++) { G.reach[j]++; if (j) G.times[j].push(U["d" + j]); } G.lists[k - 1].push(U.raw); });
+        });
+        if (!all.users) { S.model = null; message("No user did the first step (" + steps[0] + "). Check the Funnel steps."); return; }
+        var fin = function (G) { G.med = G.times.map(function (a) { return a.length ? d3.median(a) : null; }); G.conv = G.reach.map(function (n, j) { return j ? (G.reach[j - 1] ? n / G.reach[j - 1] : null) : 1; }); G.overall = G.reach[steps.length - 1] / G.reach[0]; return G; };
+        fin(all);
+        var names = Array.from(groups.keys()).sort(function (a, b) { return groups.get(b).users - groups.get(a).users; }).slice(0, 6), alpha = names.slice().sort();
+        var gl = names.map(function (n) { var G = fin(groups.get(n)); G.colour = CAT[alpha.indexOf(n) % CAT.length]; return G; }).sort(function (a, b) { return a.name.localeCompare(b.name); });
+        var worst = 1; for (var j = 2; j < steps.length; j++) if (all.conv[j] < all.conv[worst]) worst = j;
+        S.model = { F: F, steps: steps, auto: auto, all: all, groups: gl, worst: worst, win: win, moreGroups: groups.size - gl.length };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var n = M.steps.length, series = M.groups.length && it().combine !== true ? M.groups : [M.all], m = { l: 46, r: 14, t: series.length > 1 ? 72 : 56, b: 52 };
+        var w = Math.max(80, W - m.l - m.r), h = Math.max(60, H - m.t - m.b), x = d3.scaleBand().domain(d3.range(n)).range([0, w]).paddingInner(0.34).paddingOuter(0.1);
+        var xs = d3.scaleBand().domain(d3.range(series.length)).range([0, x.bandwidth()]).padding(series.length > 1 ? 0.08 : 0), y = d3.scaleLinear().domain([0, 1]).range([h, 0]);
+        var g = svg.append("g").attr("transform", "translate(" + m.l + "," + m.t + ")");
+        [0, 0.25, 0.5, 0.75, 1].forEach(function (t) { g.append("line").attr("x1", 0).attr("x2", w).attr("y1", y(t)).attr("y2", y(t)).attr("stroke", "#ebeae5"); g.append("text").attr("x", -6).attr("y", y(t)).attr("dy", "0.35em").attr("text-anchor", "end").style("font-size", "10.5px").attr("fill", "#52514e").text(t * 100 + "%"); });
+        var sel = S.sel;
+        series.forEach(function (G, si) {
+            var colr = series.length > 1 ? G.colour : ONE;
+            M.steps.forEach(function (st, j) {
+                var share = G.reach[j] / G.reach[0], bx = x(j) + xs(si), bw = xs.bandwidth(), isSel = sel && sel.step === j && (sel.group || null) === (series.length > 1 ? G.name : null), dim = sel && !isSel;
+                // drop-off since the previous step, drawn as a pale cap
+                if (j) { var prev = G.reach[j - 1] / G.reach[0]; g.append("rect").attr("class", "drop").attr("x", bx).attr("width", bw).attr("y", y(prev)).attr("height", Math.max(0, y(share) - y(prev))).attr("fill", DROP).attr("stroke", sel && sel.drop === j && (sel.group || null) === (series.length > 1 ? G.name : null) ? SELECT : "#e1e0d9").attr("stroke-dasharray", "2 2")
+                    .on("mousemove", function (ev) { tipDrop(G, j, ev); }).on("mouseleave", tip).on("click", function (ev) { ev.stopPropagation(); selectUsers(G, j, true); }); }
+                g.append("rect").attr("class", "bar").attr("x", bx).attr("width", bw).attr("y", y(share)).attr("height", Math.max(0.5, h - y(share))).attr("fill", colr).attr("opacity", dim ? 0.35 : 1).attr("stroke", isSel ? SELECT : "none").attr("stroke-width", 2.5)
+                    .on("mousemove", function (ev) { tipBar(G, j, ev); }).on("mouseleave", tip).on("click", function (ev) { ev.stopPropagation(); selectUsers(G, j, false); });
+                if (bw > 30) g.append("text").attr("x", bx + bw / 2).attr("y", y(share) - 5).attr("text-anchor", "middle").style("font-size", series.length > 2 ? "10px" : "11px").style("font-weight", "bold").attr("fill", "#2b2a28").attr("pointer-events", "none").text(pct(share));
+                if (bw > 44 && series.length === 1) g.append("text").attr("x", bx + bw / 2).attr("y", h - 8).attr("text-anchor", "middle").style("font-size", "10.5px").attr("fill", d3.lab(colr).l > 60 ? "#0b0b0b" : "#fff").attr("pointer-events", "none").text(G.reach[j].toLocaleString());
+            });
+        });
+        // step labels and conversions between steps
+        M.steps.forEach(function (st, j) {
+            var t = g.append("text").attr("x", x(j) + x.bandwidth() / 2).attr("y", h + 16).attr("text-anchor", "middle").style("font-size", "11.5px").attr("fill", "#2b2a28").text(st);
+            while (t.node().getComputedTextLength() > x.step() - 4 && t.text().length > 4) t.text(t.text().slice(0, -2) + "\u2026");
+            if (j) {
+                var cx = x(j) - (x.step() - x.bandwidth()) / 2, c = M.all.conv[j], worst = j === M.worst;
+                g.append("text").attr("x", cx).attr("y", h + 34).attr("text-anchor", "middle").style("font-size", "10.5px").style("font-weight", worst ? "bold" : null).attr("fill", worst ? "#a34a1a" : "#52514e").text("\u2192 " + pct(c) + (x.step() - x.bandwidth() > 60 && M.all.med[j] !== null ? ", " + dur(M.all.med[j]) : ""));
+            }
+        });
+        var head = svg.append("text").attr("x", m.l).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(pct(M.all.overall) + " of " + M.all.reach[0].toLocaleString() + " users completed the funnel");
+        head.append("tspan").attr("fill", "#52514e").text("  (" + n + " steps" + (M.win ? ", within " + (M.win / 864e5) + " days" : "") + (M.auto ? ", steps chosen automatically" : "") + ")");
+        var sub = svg.append("text").attr("x", m.l).attr("y", 36).style("font-size", "11.5px").attr("fill", "#52514e");
+        sub.append("tspan").text("Biggest drop: "); sub.append("tspan").style("font-weight", "bold").attr("fill", "#a34a1a").text(M.steps[M.worst - 1] + " \u2192 " + M.steps[M.worst]); sub.append("tspan").text(", " + pct(1 - M.all.conv[M.worst]) + " lost");
+        if (series.length > 1) { var lg = svg.append("g").attr("transform", "translate(" + m.l + ",56)").style("font-size", "11px").attr("fill", "#52514e"), lx = 0; series.forEach(function (G) { var e = lg.append("g").attr("transform", "translate(" + lx + ",0)"); e.append("rect").attr("y", -8).attr("width", 10).attr("height", 10).attr("fill", G.colour); var t = e.append("text").attr("x", 14).text(G.name); lx += 14 + t.node().getComputedTextLength() + 14; }); }
+        if (intro) { var bars = svg.selectAll("rect.bar"); growUp(bars, 650, stag(bars.size(), 600)); fadeIn(svg.selectAll("rect.drop"), 500, stag(bars.size(), 600)); }
+        side();
+    }
+
+    function side() {
+        var M = S.model, el = document.getElementById("side"), A = M.all;
+        var h = '<h3>Funnel</h3><div class="stat"><span class="big">' + pct(A.overall) + '</span> overall conversion<br>' + A.reach[A.reach.length - 1].toLocaleString() + ' of ' + A.reach[0].toLocaleString() + ' users</div>';
+        h += '<table><tr><th>Step</th><th>Users</th><th title="Share of the previous step">Conv.</th><th title="Median time from the previous step">Median</th></tr>';
+        M.steps.forEach(function (s, j) { h += '<tr><td>' + esc(s.length > 18 ? s.slice(0, 17) + "\u2026" : s) + '</td><td>' + A.reach[j].toLocaleString() + '</td><td' + (j === M.worst ? ' style="color:#a34a1a;font-weight:bold"' : '') + '>' + (j ? pct(A.conv[j]) : '') + '</td><td>' + (j ? dur(A.med[j]) : '') + '</td></tr>'; });
+        h += '</table>';
+        if (M.groups.length) {
+            h += '<h3>By ' + esc(M.F.g) + '</h3><table><tr><th></th><th>Users</th><th>Converted</th><th>Weakest step</th></tr>';
+            M.groups.forEach(function (G) { var wj = 1; for (var j = 2; j < M.steps.length; j++) if (G.conv[j] < G.conv[wj]) wj = j; h += '<tr><td><span class="sw" style="background:' + G.colour + '"></span>' + esc(G.name) + '</td><td>' + G.reach[0].toLocaleString() + '</td><td><b>' + pct(G.overall) + '</b></td><td>' + pct(G.conv[wj]) + ' to ' + esc(M.steps[wj].split(" ").slice(-1)[0]) + '</td></tr>'; });
+            h += '</table>' + (M.moreGroups ? '<div class="note">' + M.moreGroups + ' smaller groups not shown.</div>' : '');
+        }
+        h += '<div class="note">Users count once at each step they reach, in order' + (M.win ? ' and within ' + (M.win / 864e5) + ' days of the first step' : '') + '. Median times are between consecutive steps. Click a bar to select the users who reached that step, or a pale drop-off cap to select those who stopped before it.' + (M.auto ? ' The steps were chosen automatically from the most common events; list your own in Funnel steps.' : '') + '</div>';
+        el.innerHTML = h;
+    }
+    function tipBar(G, j, ev) { var M = S.model; show('<b>' + esc(M.steps[j]) + '</b>' + (G.name !== "All" ? ' <span class="k">(' + esc(G.name) + ')</span>' : '') + '<br><span class="k">Users:</span> ' + G.reach[j].toLocaleString() + ' (' + pct(G.reach[j] / G.reach[0]) + ' of the start)' + (j ? '<br><span class="k">From previous step:</span> ' + pct(G.conv[j]) + '<br><span class="k">Median time from previous:</span> ' + dur(G.med[j]) : ''), ev); }
+    function tipDrop(G, j, ev) { var M = S.model, lost = G.reach[j - 1] - G.reach[j]; show('<b>Dropped after ' + esc(M.steps[j - 1]) + '</b>' + (G.name !== "All" ? ' <span class="k">(' + esc(G.name) + ')</span>' : '') + '<br><span class="k">Users:</span> ' + lost.toLocaleString() + ' (' + pct(lost / G.reach[j - 1]) + ' of those who got there)', ev); }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    // reached step j: users whose last step is j or later; dropped before step j: users whose last step is j-1
+    function selectUsers(G, j, dropped) {
+        var M = S.model, meta = dropped ? { drop: j } : { step: j }; if (G.name !== "All") meta.group = G.name;
+        if (S.sel && JSON.stringify(S.sel) === JSON.stringify(meta)) return publish(null, null);
+        var raws = dropped ? G.lists[j - 1].slice() : [].concat.apply([], G.lists.slice(j));
+        if (!raws.length) return;
+        if (raws.length > 3000) { omniscope.view.error(raws.length.toLocaleString() + " users; selection is limited to 3,000. Filter first, for example by channel or date."); return; }
+        var eq = function (v) { return { type: "FIELD_VALUE", inputField: M.F.u, operator: "=", value: v }; };
+        publish(raws.length === 1 ? eq(raws[0]) : { type: "OR", filters: raws.map(eq) }, meta);
+    }
+    window.__fun.select = function (j, dropped, group) { var M = S.model, G = group ? M.groups.find(function (x) { return x.name === group; }) : M.all; selectUsers(G, j, dropped); };
+
+    document.getElementById("chart").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

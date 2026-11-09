@@ -1,0 +1,114 @@
+{
+  "name": "Bubble Chart",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "bubble"
+  ],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "measures": {
+        "displayName": "Size",
+        "type": "MEASURE",
+        "iconName": "visokio-option-icon:size-measure",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Numerical measure value to size the markers by"
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      },
+      "split": {
+        "displayName": "Split",
+        "type": "GROUPING",
+        "detail": "Categorical field to split/group and colour the markers by",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ]
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "measures",
+        "split"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    },
+    "optionGroups": [{
+      "displayName": "Chart",
+      "rows": [{
+        "cells": [{
+          "option": "split",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Marker",
+      "rows": [{
+        "cells": [{
+          "option": "measures",
+          "usePrefixTitle": false
+        }]
+      }]
+    }, {
+      "displayName": "Pane/tile",
+      "rows": [{
+        "cells": [{
+          "option": "paneX",
+          "usePrefixTitle": false
+        }]
+      }, {
+        "cells": [{
+          "option": "paneY",
+          "usePrefixTitle": false
+        }]
+      }]
+    }]
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 50,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}

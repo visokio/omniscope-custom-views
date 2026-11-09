@@ -1,0 +1,164 @@
+{
+  "name": "Distribution",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "histogram",
+    "distribution",
+    "percentiles",
+    "outliers",
+    "statistics",
+    "spread",
+    "skew",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "value": {
+        "displayName": "Values",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ],
+        "detail": "Any number, e.g. Hours to deliver, Order value, Age"
+      },
+      "group": {
+        "displayName": "Compare by",
+        "type": "FIELD",
+        "detail": "Optional: one outline per group, e.g. Carrier (up to 6)"
+      },
+      "bins": {
+        "displayName": "Bars",
+        "type": "NUMBER",
+        "minValue": 10,
+        "maxValue": 120,
+        "detail": "Approximate number of bars (default 40)"
+      },
+      "scale": {
+        "displayName": "Height",
+        "type": "CHOICE",
+        "values": [
+          "SHARE",
+          "COUNT"
+        ],
+        "displayValues": [
+          "Share of records",
+          "Number of records"
+        ],
+        "detail": "Shares make groups of different sizes comparable"
+      },
+      "clip": {
+        "displayName": "Trim the far tail",
+        "type": "TOGGLE",
+        "detail": "Do not draw values beyond the upper outlier fence, so the main shape is visible (statistics still use every value)"
+      },
+      "maxRows": {
+        "displayName": "Values used",
+        "type": "NUMBER",
+        "minValue": 1000,
+        "maxValue": 1000000,
+        "detail": "Maximum records fetched (default 500,000)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "value",
+        "group"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Data",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "group",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "bins",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "scale",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "clip",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxRows",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "bins": 40,
+      "scale": "SHARE",
+      "clip": true,
+      "maxRows": 500000
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

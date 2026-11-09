@@ -2,7 +2,11 @@
   "name": "France Choropleth",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["custom", "map", "france"],
+  "tags": [
+    "custom",
+    "map",
+    "france"
+  ],
   "thumbnail": "thumbnail.png",
   "sandbox": false,
   "autoPane": true,
@@ -15,21 +19,25 @@
         "displayName": "Colour",
         "type": "MEASURE",
         "iconName": "visokio-option-icon:colour-measure",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "The value that colours each department, for example the sum of Sales. Lighter is lower, darker is higher"
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "Optional: one map per value, side by side"
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "Optional: one map per value, one above the other"
       },
       "split": {
-        "displayName": "Split",
-        "type": "GROUPING"
+        "displayName": "Department field",
+        "type": "GROUPING",
+        "detail": "A field holding French department names (Ain, Côte-d'Or) or INSEE codes (01, 2A, 974); each value colours one department"
       }
     },
     "structure": {
@@ -44,33 +52,50 @@
         "paneY"
       ]
     },
-    "optionGroups": [{
-      "displayName": "Region",
-      "rows": [{
-        "cells": [{
-          "option": "split",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "measures",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Pane/tile",
-      "rows": [{
-        "cells": [{
-          "option": "paneX",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "paneY",
-          "usePrefixTitle": false
-        }]
-      }]
-    }]
+    "optionGroups": [
+      {
+        "displayName": "Map",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "split",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "measures",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Panes",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {},

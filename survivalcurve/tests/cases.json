@@ -1,0 +1,278 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/subscriptions.csv",
+  "options": {
+   "items": {
+    "start": "Start date",
+    "end": "End date",
+    "group": "Plan",
+    "unit": "AUTO",
+    "show": "SURVIVAL",
+    "bands": true
+   }
+  },
+  "width": 1060,
+  "height": 600,
+  "wait": 1500,
+  "showcaseHeight": 600,
+  "caption": "Live: illustrative subscription customers by plan. Monthly plans churn steadily; annual plans drop at each renewal. Hover for the share still active at any point, click a curve or row to select its customers.",
+  "expect": {
+   "selector": "path.curve",
+   "min": 3
+  }
+ },
+ {
+  "name": "channel",
+  "showcase": true,
+  "data": "sample-data/subscriptions.csv",
+  "options": {
+   "items": {
+    "start": "Start date",
+    "end": "End date",
+    "group": "Channel",
+    "unit": "AUTO",
+    "show": "CUMULATIVE",
+    "bands": false
+   }
+  },
+  "width": 1000,
+  "height": 520,
+  "wait": 1500,
+  "showcaseHeight": 520,
+  "caption": "Live: cumulative churn by acquisition channel, with the log-rank test in the panel.",
+  "expect": {
+   "selector": "path.curve",
+   "min": 3
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/subscriptions.csv",
+  "options": {
+   "items": {
+    "start": "Start date",
+    "end": "End date",
+    "group": "Plan",
+    "unit": "AUTO",
+    "show": "SURVIVAL",
+    "bands": true
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "Math.abs(window.__surv.at('Monthly',6)-0.46)<0.0005 && Math.abs(window.__surv.at('Annual',13)-0.6293)<0.0005 && Math.abs(window.__surv.at('Family',6)-0.749)<0.0005 && window.__surv.model.unit==='months'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__surv.model.test.df===2 && window.__surv.model.test.p<0.001",
+    "expectTruthy": true
+   },
+   {
+    "hoverEval": "(function(){var r=document.querySelector('rect.plot').getBoundingClientRect();return [r.left+r.width*0.3, r.top+r.height*0.42]})()"
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block' && document.getElementById('tooltip').textContent.indexOf('Monthly')>=0",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "eval": "window.__surv.selectGroup('Annual')"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "clickAt": [
+     8,
+     590
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "Wales"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__surv.model.n<1000",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     420
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "twogroups",
+  "data": "sample-data/subscriptions.csv",
+  "filter": {
+   "type": "OR",
+   "filters": [
+    {
+     "type": "FIELD_VALUE",
+     "inputField": "Plan",
+     "operator": "=",
+     "value": "Monthly"
+    },
+    {
+     "type": "FIELD_VALUE",
+     "inputField": "Plan",
+     "operator": "=",
+     "value": "Annual"
+    }
+   ]
+  },
+  "options": {
+   "items": {
+    "start": "Start date",
+    "end": "End date",
+    "group": "Plan",
+    "unit": "AUTO",
+    "show": "SURVIVAL",
+    "bands": true
+   }
+  },
+  "width": 900,
+  "height": 500,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__surv.model.groups.length===2 && Math.abs(window.__surv.model.test.chi-903.251)<0.01 && window.__surv.model.test.df===1",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "nogroup",
+  "data": "sample-data/subscriptions.csv",
+  "options": {
+   "items": {
+    "start": "Start date",
+    "end": "End date",
+    "unit": "WEEKS",
+    "show": "SURVIVAL",
+    "bands": true
+   }
+  },
+  "width": 800,
+  "height": 460,
+  "wait": 1200,
+  "expect": {
+   "selector": "path.curve",
+   "min": 1
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Start date",
+    "type": "DATE"
+   },
+   {
+    "name": "End date",
+    "type": "DATE"
+   },
+   {
+    "name": "Plan",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "start": "Start date",
+    "end": "End date",
+    "group": "Plan",
+    "unit": "AUTO",
+    "show": "SURVIVAL",
+    "bands": true
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/subscriptions.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose a Start"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "duration": "Age days",
+    "event": "Failed",
+    "group": "Model",
+    "bands": true
+   }
+  },
+  "width": 1100,
+  "height": 700,
+  "wait": 6000,
+  "actions": [
+   {
+    "eval": "window.__surv.model.groups.length===8 && window.__surv.model.groups[7].name==='Other' && window.__surv.model.n===300000",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "selector": "path.curve",
+   "min": 8
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/subscriptions.csv",
+  "options": {
+   "items": {
+    "start": "Start date",
+    "end": "End date",
+    "group": "Plan",
+    "unit": "AUTO",
+    "show": "SURVIVAL",
+    "bands": true
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

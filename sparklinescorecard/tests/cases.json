@@ -1,0 +1,335 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Week",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "target": {
+     "inputField": "Target (GBP)",
+     "function": "SUM"
+    },
+    "direction": "HIGHER",
+    "headline": "LAST",
+    "compare": "PREVIOUS",
+    "periods": 13,
+    "tolerance": 5,
+    "sortBy": "ATTAINMENT_ASC"
+   }
+  },
+  "width": 1040,
+  "height": 600,
+  "wait": 1500,
+  "showcaseHeight": 600,
+  "caption": "Live: 16 illustrative stores, the latest 13 weeks against target, sorted with the furthest behind first. Hover a trend for the week's figures; click a row to select that store.",
+  "expect": {
+   "selector": "tr.r",
+   "min": 16
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Week",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "target": {
+     "inputField": "Target (GBP)",
+     "function": "SUM"
+    },
+    "direction": "HIGHER",
+    "headline": "LAST",
+    "compare": "PREVIOUS",
+    "periods": 13,
+    "tolerance": 5,
+    "sortBy": "ATTAINMENT_ASC"
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var R=window.__score.model.rows;return R.length===16 && R.some(function(o){return o.status==='bad'}) && R.some(function(o){return o.status==='good'}) && window.__score.model.periods.length===13})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "td.spark svg",
+    "nth": 2
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "tr.r",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "eval": "window.__score.select(window.__score.model.rows[3].key, 5)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     990,
+     595
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "London"
+    }
+   },
+   {
+    "eval": "window.__score.model.rows.length===4",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     520,
+     400
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "no-target-total",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Week",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "target": null,
+    "direction": "HIGHER",
+    "headline": "SUM",
+    "compare": "FIRST",
+    "periods": 26,
+    "tolerance": 5,
+    "sortBy": "CHANGE_DESC"
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 1500,
+  "expect": {
+   "selector": "tr.r",
+   "min": 16
+  }
+ },
+ {
+  "name": "monthly",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Week",
+     "type": "HISTOGRAM",
+     "dateUnit": "MONTH",
+     "histogramInterval": 1
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "target": {
+     "inputField": "Target (GBP)",
+     "function": "SUM"
+    },
+    "direction": "HIGHER",
+    "headline": "MEAN",
+    "compare": "PREVIOUS",
+    "periods": 13,
+    "tolerance": 5,
+    "sortBy": "ATTAINMENT_ASC"
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 1500,
+  "expect": {
+   "selector": "tr.r",
+   "min": 16
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Week",
+    "type": "DATE"
+   },
+   {
+    "name": "Store",
+    "type": "TEXT"
+   },
+   {
+    "name": "Sales (GBP)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Week",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "target": null,
+    "direction": "HIGHER",
+    "headline": "LAST",
+    "compare": "PREVIOUS",
+    "periods": 13,
+    "tolerance": 5,
+    "sortBy": "ATTAINMENT_ASC"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose Rows"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Account",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Week",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Revenue",
+     "function": "SUM"
+    },
+    "target": {
+     "inputField": "Goal",
+     "function": "SUM"
+    },
+    "periods": 52
+   }
+  },
+  "width": 1100,
+  "height": 800,
+  "wait": 3000,
+  "expect": {
+   "selector": "tr.r",
+   "min": 400
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/stores.csv",
+  "options": {
+   "items": {
+    "rows": {
+     "inputField": "Store",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Week",
+     "type": "UNIQUE_VALUES"
+    },
+    "value": {
+     "inputField": "Sales (GBP)",
+     "function": "SUM"
+    },
+    "target": {
+     "inputField": "Target (GBP)",
+     "function": "SUM"
+    },
+    "direction": "HIGHER",
+    "headline": "LAST",
+    "compare": "PREVIOUS",
+    "periods": 13,
+    "tolerance": 5,
+    "sortBy": "ATTAINMENT_ASC"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "wait": 1500,
+  "scale": 0.5
+ }
+]

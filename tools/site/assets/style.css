@@ -1,0 +1,98 @@
+/* Omniscope community gallery: one stylesheet for the index and every item page, the same in both
+   repositories. Visokio's palette and type: navy, two blues, orange, a pale background;
+   Roboto Slab for headings, Lato for text. */
+:root {
+  --navy: #10244a; --blue: #2e73b9; --blue-2: #477eeb; --orange: #f68c11; --pale: #f5f8fd;
+  --ink: #1d2a3f; --muted: #5a6780; --line: #dfe6f1; --card: #fff;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: var(--ink); background: var(--pale); line-height: 1.6; font-size: 16px; }
+h1, h2, h3 { font-family: "Roboto Slab", Georgia, serif; color: var(--navy); line-height: 1.2; }
+a { color: var(--blue); }
+a:hover { color: var(--blue-2); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+nav.top { background: var(--navy); }
+nav.top .wrap { display: flex; gap: 20px; align-items: center; height: 48px; }
+nav.top a { color: #fff; text-decoration: none; font-weight: 700; }
+nav.top a.home { margin-right: auto; font-family: "Roboto Slab", Georgia, serif; }
+nav.top a:hover { color: var(--orange); }
+header.hero { background: linear-gradient(135deg, var(--navy) 0%, #1b3c78 60%, var(--blue) 100%); color: #fff; padding: 28px 0 32px; }
+header.hero h1 { color: #fff; font-size: clamp(28px, 4.5vw, 42px); margin: .2em 0 .25em; }
+header.hero .lead { font-size: clamp(16px, 2vw, 19px); max-width: 820px; margin: 0 0 12px; opacity: .95; }
+header.hero .lead.small { font-size: 15px; opacity: .85; }
+header.hero a { color: #fff; }
+.crumbs { font-size: 13px; opacity: .8; margin: 0; }
+.crumbs a { color: #fff; }
+.badges { margin: 8px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 12px; padding: 2px 10px; background: #e8eefa; color: var(--navy); text-decoration: none; white-space: nowrap; }
+header .badge { background: rgba(255, 255, 255, .16); color: #fff; border: 1px solid rgba(255, 255, 255, .35); }
+.badge.ai, header .badge.ai { background: var(--orange); color: #fff; border-color: var(--orange); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+.btn { display: inline-block; padding: 7px 14px; border-radius: 6px; font-weight: 700; font-size: 14px; text-decoration: none; background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .45); color: #fff; }
+.btn:hover { background: rgba(255, 255, 255, .24); color: #fff; }
+.btn.primary { background: var(--orange); border-color: var(--orange); }
+.btn.primary:hover { background: #ff9d2e; }
+main { padding: 24px 20px 48px; }
+article, section.reference, section.ai-note, p.ai-note { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 28px 22px; margin: 0 0 20px; }
+p.ai-note { padding: 12px 18px; font-size: 14px; color: var(--muted); border-left: 4px solid var(--orange); }
+article h2 { font-size: 23px; margin: 1.3em 0 .4em; }
+article h3 { font-size: 18px; margin: 1.1em 0 .3em; }
+article img { max-width: 100%; height: auto; }
+figure.shot { margin: 16px 0; text-align: center; }
+figure.shot img { border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; margin: 8px 0 16px; display: block; overflow-x: auto; }
+th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 7px 10px; vertical-align: top; }
+th { background: #eef3fb; color: var(--navy); }
+code { background: #eef3fb; padding: 1px 5px; border-radius: 4px; font-size: .92em; }
+pre { background: #0f1d3a; color: #e9eefb; padding: 12px 14px; border-radius: 8px; overflow-x: auto; }
+pre code { background: none; padding: 0; color: inherit; }
+blockquote { margin: 16px 0; padding: 10px 16px; border-left: 4px solid var(--orange); background: #fff7ec; }
+figure.live { margin: 0 0 24px; }
+figure.live .frame { background: #fff; border-radius: 10px; border: 1px solid var(--line); box-shadow: 0 10px 32px rgba(16, 36, 74, .16); overflow: hidden; }
+figure.live iframe { width: 100%; border: 0; display: block; }
+.replay { float: right; margin: 0 0 4px 12px; font: inherit; font-size: 13px; color: var(--blue); background: none; border: 1px solid var(--line); border-radius: 6px; padding: 2px 10px; cursor: pointer; }
+.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 18px; }
+.filters input, .filters select { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+.filters input { flex: 1 1 260px; }
+#count { color: var(--muted); font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; text-decoration: none; color: var(--ink); transition: box-shadow .15s, transform .15s; }
+.card:hover { box-shadow: 0 8px 24px rgba(16, 36, 74, .14); transform: translateY(-2px); color: var(--ink); }
+.card[hidden] { display: none; }
+.card .thumb { aspect-ratio: 16 / 10; background: #eef3fb; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.card .thumb img { width: 100%; height: 100%; object-fit: contain; }
+.card .nothumb { font-family: "Roboto Slab", Georgia, serif; color: var(--blue); padding: 12px; text-align: center; }
+.card .body { padding: 10px 14px 12px; }
+.card h3 { font-size: 17px; margin: 0 0 4px; }
+.card p { font-size: 14px; color: var(--muted); margin: 0 0 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card p.badges { display: flex; -webkit-line-clamp: unset; }
+section.ai-note { margin-top: 28px; }
+footer { color: var(--muted); font-size: 13px; padding: 10px 0 36px; }
+@media (max-width: 640px) { article, section.reference { padding: 4px 14px 16px; } }
+figure.shot.thumb img { max-width: 320px; }
+
+/* Icons as the app draws them: a block's white glyph on its category's tile; a view's icon on white. */
+.icon { display: inline-flex; align-items: center; justify-content: center; flex: none; border-radius: 15%; vertical-align: middle; }
+.icon img { width: 70%; height: 70%; object-fit: contain; }
+.icon.plain { background: #fff; border: 1px solid var(--line); }
+.icon.plain img { width: 84%; height: 84%; }
+.icon.big { width: 64px; height: 64px; }
+header .icon.plain { border-color: rgba(255, 255, 255, .5); }
+.icon.small { width: 26px; height: 26px; margin-right: 8px; position: relative; top: -2px; }
+.card .thumb .icon.huge { width: 96px; height: 96px; }
+.title { display: flex; align-items: center; gap: 16px; }
+.title h1 { margin: .2em 0; }
+.badges.small .badge { font-size: 11px; padding: 1px 8px; }
+a.badge:hover { filter: brightness(1.08); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: -6px 0 18px; }
+.chip { font: inherit; font-size: 14px; border: 1px solid var(--line); background: #fff; color: var(--navy); border-radius: 16px; padding: 4px 12px; cursor: pointer; }
+.chip span { color: var(--muted); font-size: 12px; margin-left: 2px; }
+.chip.on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.chip.on span { color: #c9d6ee; }
+.about-link { margin-top: 28px; font-size: 14px; color: var(--muted); }
+ul.related { padding-left: 1.2em; }
+ul.related li { margin: 0 0 10px; }
+ul.related .kind { font-size: 0.8em; color: var(--muted); border: 1px solid var(--line); border-radius: 8px; padding: 0 6px; margin-left: 4px; white-space: nowrap; }
+section.related p.intro { color: var(--muted); font-size: 14px; margin-top: -6px; }

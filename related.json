@@ -1,0 +1,1276 @@
+{
+ "_about": "Related core and community blocks and views, shown in the Related section of each gallery page. Format and rules: CONTRIBUTING.md, \"Related blocks and views\".",
+ "items": {
+  "abcxyz": {
+   "summary": "The core **Pareto** view ranks items by value, which covers only the ABC part. This view adds demand variability (XYZ) and shows the nine classes as a matrix with a typical stock policy for each.",
+   "overlaps": [
+    {
+     "coreView": "Pareto",
+     "note": "The ABC ranking by value, without demand variability."
+    },
+    {
+     "block": "Analytics/ABC-Classification",
+     "note": "Classifies the same way in the workflow, optionally within groups such as warehouse. Use it when each item's class is needed as a field, for joins, exports or stock rules; use this view to explore the classes in a report.",
+     "name": "ABC Classification"
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "concentration",
+     "note": "How concentrated value is across items: Lorenz curve, Gini and top shares."
+    }
+   ]
+  },
+  "abtest": {
+   "summary": "The core **Bar** view can show rates by variant, but not whether a difference is real. This view reads an experiment's result in a report, with intervals, significance and a verdict for each variant.",
+   "overlaps": [
+    {
+     "block": "Analytics/AB-Test",
+     "note": "Runs the same tests in the workflow, also from per-variant totals, with the sample size each variant would need. Use it for a results table you can keep or test across several segments; use this view to read the result in a report.",
+     "name": "A/B Test"
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Bar",
+     "note": "Rates by variant, without intervals or significance."
+    },
+    {
+     "block": "Analytics/Sample-Size-Calculator",
+     "note": "Works out before the test how many visitors it needs and how many days it should run.",
+     "name": "Sample Size Calculator"
+    }
+   ]
+  },
+  "barchartrace": {
+   "summary": "The race animates a ranking through time, a format for presentations, screens and social media; for analysis, the community **Bump Chart** suits better.",
+   "overlaps": [
+    {
+     "coreView": "Bar",
+     "note": "The same ranked bars for one period, without the animation over time."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "bumpchart",
+     "note": "Rank over time as lines, all periods at once."
+    },
+    {
+     "view": "motionbubbles",
+     "note": "Also plays through time, with bubbles on two axes."
+    }
+   ]
+  },
+  "beeswarm": {
+   "summary": "A beeswarm keeps one dot per item, up to 1,000, pushed apart so none hides another, where the core **Box Plot** and the community **Distribution** view hide the individual items.",
+   "overlaps": [
+    {
+     "coreView": "Box Plot",
+     "note": "Summarises each group's distribution in five numbers, without showing the items."
+    },
+    {
+     "coreView": "Scatter",
+     "note": "Places items by two measures, but points can hide each other where they pile up."
+    },
+    {
+     "view": "distribution",
+     "note": "A histogram with percentiles and outliers, for datasets too large for one dot each."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "ridgeline",
+     "note": "Distribution shapes for many categories, stacked."
+    }
+   ]
+  },
+  "benford": {
+   "summary": "The core **Bar** view can draw first-digit counts from a derived field, but not the curve Benford's law expects or the conformity tests. This view runs the screening in a report, ranks suppliers, approvers or branches by how far they depart, and selects the records behind a digit.",
+   "overlaps": [
+    {
+     "block": "Analytics/Benford-Test",
+     "note": "Runs the same tests in the workflow and outputs the records behind the over-represented digits. Use it to keep the results or hand flagged records on for follow-up; use this view to explore interactively.",
+     "name": "Benford's Law Test"
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Bar",
+     "note": "First digits as bars with a derived field, without the expected curve or tests."
+    }
+   ]
+  },
+  "bubblechart": {
+   "summary": "The core **Packed bubble** view draws the same kind of chart and is the first choice in a report. This view is a short D3 file that is easy to change in the View Designer.",
+   "overlaps": [
+    {
+     "coreView": "Packed bubble",
+     "note": "Draws the same kind of chart, circles sized by a measure and packed together, and is better integrated with the report."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "motionbubbles",
+     "note": "Bubbles on two axes, animated through time."
+    }
+   ]
+  },
+  "bumpchart": {
+   "summary": "This view ranks the items within each period itself, where the core **Line** view needs rank calculated in the workflow first, and draws the crossings as a league table.",
+   "overlaps": [
+    {
+     "coreView": "Line",
+     "note": "A line per item over time; showing rank needs it calculated in the workflow first."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "barchartrace",
+     "note": "Rankings over time, animated as bars."
+    },
+    {
+     "view": "slopechart",
+     "note": "Change between two periods only, as values, shares or ranks."
+    }
+   ]
+  },
+  "calendar": {
+   "summary": "The core **Line** and **Bar** views show a daily measure as a trend. This view lays every day of every year out as a calendar, so the weekday and the time of year are read together and closures stand out.",
+   "overlaps": [
+    {
+     "view": "weeklypattern",
+     "note": "Averages by weekday and hour, built from timestamps, rather than every day of the year."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "yearonyear",
+     "note": "This year against last year, by month, quarter, week or day."
+    }
+   ]
+  },
+  "cohortretention": {
+   "summary": "This view computes cohort retention in a report from raw activity data, laid out as the familiar triangle.",
+   "overlaps": [
+    {
+     "coreView": "Pivot",
+     "note": "Can tabulate customers by cohort and period; this view computes retention against each cohort's starting size and colours it as a triangle."
+    },
+    {
+     "block": "Analytics/Cohort-Retention",
+     "note": "Builds the same cohort matrix in the workflow, plus a table of each customer's cohort and last active period. Use it when those are needed as data; use this view to explore retention in a report.",
+     "name": "Cohort Retention"
+    }
+   ]
+  },
+  "concentration": {
+   "summary": "The core **Pareto** view ranks items with a cumulative line. This view adds the standard measures for comparing concentration between groups.",
+   "overlaps": [
+    {
+     "coreView": "Pareto",
+     "note": "Ranked bars with a cumulative line, without the Lorenz curve, Gini or HHI."
+    },
+    {
+     "block": "Analytics/Concentration-Measures",
+     "note": "Calculates the same measures in the workflow, per group, with HHI bands, CR4 and the equivalent number of equal-sized entities. Use it to keep the figures as a table; use this view to compare curves and select items.",
+     "name": "Concentration Measures"
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "abcxyz",
+     "note": "Classes items by share of value and demand variability, for stock policy."
+    }
+   ]
+  },
+  "correlationmatrix": {
+   "summary": "This view shows every pair of fields as a heatmap with related fields grouped, and opens any pair as a scatter to check for outliers and curves.",
+   "overlaps": [
+    {
+     "block": "Analytics/Correlation-Matrix",
+     "note": "Calculates the same correlations in the workflow, with p-values, per group or against one target, ranked by strength. Use it when significance or the pairs as a table matter; use this view to explore and drill into pairs.",
+     "name": "Correlation Matrix"
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Scatter",
+     "note": "One pair of fields at a time."
+    },
+    {
+     "coreView": "Parallel Coordinates",
+     "note": "Many numeric fields at once, record by record."
+    },
+    {
+     "coreBlock": "Covariance Correlation",
+     "note": "A covariance or correlation matrix as data in the workflow."
+    }
+   ]
+  },
+  "customhtml": {
+   "summary": "Use the core **Content** view for formatted and data-driven text; this view is for content that already exists as HTML.",
+   "overlaps": [
+    {
+     "coreView": "Content",
+     "note": "Writes formatted text, links, images and formula-driven values without any HTML. Use this view when the content is already HTML: an embed snippet, or HTML cards stored in the data."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "web",
+     "note": "Shows a whole web page, from an address in the data."
+    },
+    {
+     "block": "Preparation/Markdown-to-HTML",
+     "note": "Converts Markdown text in a field to HTML, for this view to show formatted.",
+     "name": "Markdown to HTML"
+    }
+   ]
+  },
+  "customviewdemo": {
+   "summary": "The core **Bar** view is the one to use for bar charts. This view is a teaching example: its code is commented step by step, showing options, its own query, a charting library and selections.",
+   "overlaps": [
+    {
+     "coreView": "Bar",
+     "note": "For a bar chart in a report, use the built-in Bar view. This view is a commented example of how to write one."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "kpi",
+     "note": "The smallest worked example, using Omniscope's automatic query."
+    }
+   ]
+  },
+  "decomposition": {
+   "summary": "The core **Timeseries** view shows a series and **Regression** a trend line, but neither separates out the seasonal pattern. This view splits one series into trend, season and residual and flags the periods that were unusual once the season is allowed for.",
+   "overlaps": [
+    {
+     "block": "Analytics/Seasonal-Decomposition",
+     "note": "Decomposes many series at once in the workflow and outputs the components, seasonally adjusted values and seasonal indices. Use it when those are needed as data; use this view to inspect one series and its unusual periods.",
+     "name": "Seasonal Decomposition"
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Timeseries",
+     "note": "The series itself."
+    },
+    {
+     "coreView": "Regression",
+     "note": "A trend line."
+    },
+    {
+     "view": "forecast",
+     "note": "Fits a forecast with ranges to the same kind of series."
+    }
+   ]
+  },
+  "decomptree": {
+   "summary": "Unlike the core **Tree** and **Grouped Tree** views, this is the root-cause drill familiar from other BI tools, with the levels chosen as the viewer goes.",
+   "overlaps": [
+    {
+     "coreView": "Tree",
+     "note": "Draws a hierarchy whose levels are set in advance; here the viewer picks the next field at each level, and automatic splits find the largest contributor."
+    },
+    {
+     "coreView": "Grouped Tree",
+     "note": "Also breaks a measure down through levels of grouping, with the levels chosen by the report author."
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Sunburst",
+     "note": "Hierarchical part-to-whole as rings."
+    }
+   ]
+  },
+  "densityscatter": {
+   "summary": "This view exists for hundreds of thousands to millions of records, showing their density, or the average of a third field, where a normal scatter becomes a slow, solid blot.",
+   "overlaps": [
+    {
+     "coreView": "Scatter",
+     "note": "The same chart, and the right choice for ordinary volumes; this view bins on the server so hundreds of thousands to millions of points stay readable."
+    }
+   ]
+  },
+  "distribution": {
+   "summary": "This view draws the full histogram with the percentiles and outliers written out, for large datasets and for comparing groups.",
+   "overlaps": [
+    {
+     "coreView": "Box Plot",
+     "note": "The same distribution as a five-number summary."
+    },
+    {
+     "view": "beeswarm",
+     "note": "The distribution as individual dots, one per item, up to 1,000."
+    },
+    {
+     "block": "Analytics/Histogram-Distribution",
+     "note": "Bins the values and calculates the same statistics in the workflow, with bins shared across groups. Use it when the histogram or the statistics are needed as tables; use this view to look at the shape.",
+     "name": "Histogram and Distribution"
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Bar",
+     "note": "A histogram from a binned field."
+    },
+    {
+     "view": "ridgeline",
+     "note": "Smoothed distribution shapes for dozens of categories, stacked."
+    }
+   ]
+  },
+  "eventfunnel": {
+   "summary": "This view computes a funnel correctly from a raw event log, following each user through the steps in order within an optional time window.",
+   "overlaps": [
+    {
+     "coreView": "Funnel",
+     "note": "The same funnel chart from step totals; this view computes ordered conversion per user from raw events. If step totals already exist, use Funnel."
+    },
+    {
+     "block": "Analytics/Funnel-Analysis",
+     "note": "Builds the same funnel in the workflow, plus one row per user with the furthest step reached and the time to convert, for remarketing lists. Use it for that table; use this view to explore and select users in a report.",
+     "name": "Funnel Analysis"
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "processmap",
+     "note": "Every path cases take through the steps, with rework loops and variants."
+    }
+   ]
+  },
+  "forcecoordinategraph": {
+   "summary": "The core **Network** view can also place nodes at X and Y values from the data, and suits most networks. This view is for dense networks at fixed positions, such as depots on a map, where bundling hundreds of crossing links into a few flows makes the pattern readable.",
+   "overlaps": [
+    {
+     "coreView": "Network",
+     "note": "Can also place nodes at X and Y values from the data (its Manual layout). This view bundles links that run the same way into flows and pushes overlapping nodes apart."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "networkanalyser",
+     "note": "A network in a free layout, with communities, centrality and shortest paths."
+    },
+    {
+     "block": "Analytics/Network-Analysis/TSNE",
+     "note": "Places the nodes of a network on a 2-D map with t-SNE, giving positions this view can use.",
+     "name": "TSNE"
+    }
+   ]
+  },
+  "forecast": {
+   "summary": "The core **Time Series Forecast** block adds forecasts to the data in the workflow; this view fits a forecast in the report itself, re-fitted for any filtered slice, with ranges and a backtest.",
+   "overlaps": [
+    {
+     "coreView": "Timeseries",
+     "note": "Shows the history; Omniscope's Time Series Forecast workflow block can add forecasts to the data."
+    },
+    {
+     "block": "Analytics/Holt-Winters-Forecast",
+     "note": "Fits Holt-Winters per series in the workflow, many series in one pass, with prediction intervals and a holdout check. Use it when the forecasts are needed as data; use this view for one series re-fitted as the report is filtered.",
+     "name": "Holt-Winters Forecast"
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Area Range",
+     "note": "Bands around a line, for a forecast already calculated."
+    },
+    {
+     "view": "decomposition",
+     "note": "Splits the same kind of series into trend, season and residual, and flags unusual periods."
+    },
+    {
+     "coreBlock": "Time Series Forecast",
+     "note": "Forecasts in the workflow, with ARIMA settings, when the forecast is needed as data."
+    }
+   ]
+  },
+  "francechoropleth": {
+   "summary": "For French departments this view is quicker than the core **Choropleth** view: the outlines are built in and loose names and codes match without a join.",
+   "overlaps": [
+    {
+     "coreView": "Choropleth",
+     "note": "Colours regions on a map from a set of region shapes. This view has the French departments built in, with the overseas departments, an enlarged Paris inset and forgiving name matching."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "tilemap",
+     "note": "Every region as a same-sized tile, for US states, UK regions or a custom grid."
+    }
+   ]
+  },
+  "globeflows": {
+   "summary": "The core **Map** view shows geographic data on a flat map. This view draws origin-to-destination flows as arcs on a 3D globe, sized by volume, for presenting a network of routes that viewers can turn and zoom.",
+   "seeAlso": [
+    {
+     "coreView": "Map",
+     "note": "Geographic data on a flat map."
+    },
+    {
+     "view": "orbitaltransactionflow",
+     "note": "Flows between parties replayed over time around a central hub, without geography."
+    },
+    {
+     "block": "Analytics/Point-To-Point-Distance",
+     "note": "Great-circle distance and bearing for each origin and destination pair.",
+     "name": "Point-to-Point Distance"
+    },
+    {
+     "coreBlock": "Geocode",
+     "note": "Adds the latitude and longitude this view needs when the data only has place names."
+    }
+   ]
+  },
+  "indexheatmap": {
+   "summary": "The core **Pivot** view shows the same cross-tab of values; index scores against expectation and significance marks are what turn it into a profiling tool.",
+   "overlaps": [
+    {
+     "coreView": "Pivot",
+     "note": "The same cross-tab, without index scores or significance."
+    },
+    {
+     "block": "Analytics/Contingency-Table",
+     "note": "Cross-tabulates the same two fields in the workflow, with expected counts, adjusted residuals and a chi-square test with Cramer's V. Use it when the test result matters or the cells are needed as data; use this view to read the profile.",
+     "name": "Contingency Table and Chi-square"
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "marketbasket",
+     "note": "Lift between items bought together, from order lines."
+    }
+   ]
+  },
+  "jsontree": {
+   "summary": "This view is for looking inside JSON held in a field, to see its shape before deciding what to extract; the core **Table** view only shows it as a line of text.",
+   "seeAlso": [
+    {
+     "block": "Preparation/JSON/Normalise",
+     "note": "Flattens JSON text into records and fields once you know what you need.",
+     "name": "JSON Normalise"
+    },
+    {
+     "block": "Preparation/JSON/Expand_Fields",
+     "note": "Turns the top-level keys of a JSON object into fields.",
+     "name": "JSON Expand fields"
+    },
+    {
+     "coreBlock": "Parse text",
+     "note": "Parses JSON or XML text into columns."
+    }
+   ]
+  },
+  "kpi": {
+   "summary": "For headline figures in a report, use the core **KPI** or **Content** view. This view is kept as the smallest example in the repository, one HTML file with no libraries, as a starting point for writing a custom view.",
+   "overlaps": [
+    {
+     "coreView": "KPI",
+     "note": "The built-in view for headline figures in a report. This view is mainly a minimal, readable example for writing your own custom view."
+    },
+    {
+     "coreView": "Content",
+     "note": "Builds headline figures and sentences from formulas, with formula-driven styling."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "customviewdemo",
+     "note": "The other worked example: a view that runs its own query and sends selections back."
+    }
+   ]
+  },
+  "lambdaworkflowexecution": {
+   "summary": "Of the execution views, this is the one for several viewers at once: each run happens in a new copy of the project, so typed values never overwrite each other or change the published report.",
+   "overlaps": [
+    {
+     "view": "setparamandexecute",
+     "note": "Changes the project's own parameters and executes the project itself. Use it when the published report should show the new values' results."
+    },
+    {
+     "view": "workflowexecution",
+     "note": "Executes the project itself, without parameter inputs."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "uploadandexecute",
+     "note": "A lambda execution on a file the viewer uploads, rather than typed values."
+    }
+   ]
+  },
+  "likert": {
+   "summary": "The core **Bar** and **Mirror Bar** views can show counts of answers, but not as the standard survey chart. This view draws that diverging chart from one row per answer.",
+   "overlaps": [
+    {
+     "coreView": "Bar",
+     "note": "Stacked bars of answers, not centred on the neutral answer."
+    },
+    {
+     "coreView": "Mirror Bar",
+     "note": "Two-sided bars, without the scale order or the neutral centre."
+    },
+    {
+     "block": "Analytics/Likert-Survey",
+     "note": "Summarises the same questions in the workflow (mean, top-2-box, net score) from a wide export with one column per statement, and outputs the long layout this view reads.",
+     "name": "Likert Survey Summary"
+    }
+   ],
+   "seeAlso": [
+    {
+     "block": "Analytics/Net-Promoter-Score",
+     "note": "Net Promoter Score per group and period with margins of error and significance tests.",
+     "name": "Net Promoter Score"
+    },
+    {
+     "coreBlock": "De-pivot",
+     "note": "Turns a wide survey export, one column per question, into the long layout this view reads."
+    }
+   ]
+  },
+  "marimekko": {
+   "summary": "A Marimekko makes each column's width its share of the total, so market size and share read from one chart.",
+   "overlaps": [
+    {
+     "coreView": "Bar",
+     "note": "100% stacked bars show the mix within each segment, but not the segment sizes as widths."
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Tile",
+     "note": "Rectangles sized by value."
+    }
+   ]
+  },
+  "marketbasket": {
+   "summary": "Use this view to explore which items are bought together, ranked as rules, and to select the baskets behind a pair.",
+   "overlaps": [
+    {
+     "block": "Analytics/Basket-Affinity",
+     "note": "Measures the same pairs in the workflow, with Jaccard and each item's strongest partners. Use it to keep the pairs as a table; use this view to explore them and select baskets.",
+     "name": "Basket Affinity Matrix"
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Chord",
+     "note": "Links between categories, once co-occurrence is calculated."
+    },
+    {
+     "view": "indexheatmap",
+     "note": "Index scores for two categories of the same records, against what chance would give."
+    },
+    {
+     "block": "Analytics/Product-Recommendations",
+     "note": "Turns purchase history into recommendations per customer, with the product that prompted each.",
+     "name": "Product Recommendations"
+    },
+    {
+     "coreBlock": "Basket Analysis",
+     "note": "Association rules in the workflow, at item and item-group level."
+    }
+   ]
+  },
+  "modelevaluation": {
+   "summary": "This view evaluates a two-class model that has already scored the records, whether in Omniscope or outside it: ROC, gains and a confusion matrix, all driven by one threshold.",
+   "seeAlso": [
+    {
+     "coreView": "Regression",
+     "note": "Fits models rather than evaluating a classifier."
+    },
+    {
+     "block": "Analytics/Validation/Model-Validation",
+     "note": "Confusion matrix with precision, recall and F1 for models that predict a category, including more than two classes.",
+     "name": "Model Validation"
+    },
+    {
+     "block": "Analytics/Regression",
+     "note": "Fits a logistic regression and scores each row with a probability, ready to evaluate here.",
+     "name": "Regression"
+    },
+    {
+     "coreBlock": "Prediction",
+     "note": "Its scored output, with a likelihood for each target value, can be evaluated here."
+    }
+   ]
+  },
+  "motionbubbles": {
+   "summary": "The core **Scatter** view shows the bubbles for one moment; this view animates them through time, with trails, a format for presentations where the movement is the story.",
+   "overlaps": [
+    {
+     "coreView": "Scatter",
+     "note": "The same bubbles for one moment, without the animation over time."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "barchartrace",
+     "note": "Also plays through time, as a ranking of bars."
+    },
+    {
+     "view": "quadrant",
+     "note": "A still two-by-two, with named quadrants and selection by quadrant."
+    },
+    {
+     "view": "bubblechart",
+     "note": "Bubbles sized by a measure and packed together, with no axes or time."
+    }
+   ]
+  },
+  "networkanalyser": {
+   "summary": "The core **Network** and **Force Graph** views and the community **3D Force Graph** already draw networks; this view's reason is the analysis, computed in the report and usable as selections.",
+   "overlaps": [
+    {
+     "coreView": "Network",
+     "note": "Draws the same node-link networks. This view adds communities, centrality, shortest paths and neighbourhood focus; for a picture of the network alone, use Network."
+    },
+    {
+     "coreView": "Force Graph",
+     "note": "A force-directed layout of the same links, without the network analytics."
+    },
+    {
+     "view": "threeforcegraph",
+     "note": "The same kind of network in 3D, which gives a dense graph more room, but without the analytics."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "forcecoordinategraph",
+     "note": "A network drawn at positions given in the data, with links bundled into flows."
+    },
+    {
+     "block": "Analytics/Network-Analysis/Attribute-Analysis",
+     "note": "Measures how much each category's connections are shared with each other category, giving category-to-category links.",
+     "name": "Attribute Analysis"
+    },
+    {
+     "block": "Analytics/Websites/Website-Analysis",
+     "note": "Crawls a website and lists the links between its pages, a network this view can analyse.",
+     "name": "Website Analysis"
+    },
+    {
+     "coreBlock": "Network Analysis",
+     "note": "Finds important nodes and clusters in the workflow, as fields other views can use."
+    }
+   ]
+  },
+  "orbitaltransactionflow": {
+   "summary": "This view is for a few tens of parties around one hub, when the order and timing of the flows is the story: a briefing, or a wall screen fed by a source that refreshes; pair it with a table when exact figures matter.",
+   "seeAlso": [
+    {
+     "coreView": "Sankey",
+     "note": "Totals flowing between parties, without the replay over time."
+    },
+    {
+     "view": "globeflows",
+     "note": "Flows between places, as arcs on a 3D globe."
+    },
+    {
+     "block": "Connectors/Etherscan",
+     "note": "Loads the transactions of Ethereum addresses (from, to, time, amount), data this view can replay.",
+     "name": "Etherscan"
+    }
+   ]
+  },
+  "orgchart": {
+   "summary": "The core **Tree** and **Radial Tree** views can draw a reporting hierarchy; this view is for the organisation chart people expect, with a whole team selected in one click.",
+   "overlaps": [
+    {
+     "coreView": "Tree",
+     "note": "Draws the same reporting hierarchy from manager and employee fields (a linked network). This view adds person cards, team sizes, rolled-up values, search and collapsing teams."
+    },
+    {
+     "coreView": "Radial Tree",
+     "note": "The same hierarchy laid out radially, without cards."
+    }
+   ]
+  },
+  "paygap": {
+   "summary": "This view calculates the measures used in gender pay gap reporting in Great Britain from employee-level data: mean and median pay and bonus gaps, bonus shares and pay quartiles, with a breakdown that shows where the gap comes from.",
+   "seeAlso": [
+    {
+     "coreView": "Mirror Bar",
+     "note": "Two groups side by side, without the statutory measures."
+    }
+   ]
+  },
+  "processmap": {
+   "summary": "The core **Sankey** view can show flows between steps, but process mining needs events ordered within each case, rework loops, variants and the time between steps, which this view works out from a raw event log.",
+   "overlaps": [
+    {
+     "coreView": "Sankey",
+     "note": "Shows flows between steps, but does not order events within each case or show rework loops."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "eventfunnel",
+     "note": "Conversion through a fixed sequence of steps, from the same kind of event log."
+    },
+    {
+     "block": "Analytics/Case-Bottlenecks",
+     "note": "Case durations, rework and the slowest handovers between activities as tables, from the same event log.",
+     "name": "Case Duration and Bottlenecks"
+    },
+    {
+     "block": "Analytics/Path-Analysis",
+     "note": "The most common event sequences, step-numbered transitions and next-step probabilities as tables.",
+     "name": "Path Analysis"
+    }
+   ]
+  },
+  "pvmbridge": {
+   "summary": "The core **Waterfall** view draws the same bridge, so the chart is not new; the value is splitting a change in revenue into price, volume and mix effects per item.",
+   "overlaps": [
+    {
+     "coreView": "Waterfall",
+     "note": "The same bridge chart; this view calculates the price, volume and mix effects itself. If the effects are already calculated, use Waterfall."
+    },
+    {
+     "block": "Analytics/Price-Volume-Mix",
+     "note": "Calculates the same bridge in the workflow, optionally per group, with each item's effects and the bar start and end for a waterfall. Use it when the bridge is needed as data; use this view to explore it in a report.",
+     "name": "Price-Volume-Mix Bridge"
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "variancechart",
+     "note": "Actual against plan per row or period, with absolute and percentage variances."
+    }
+   ]
+  },
+  "quadrant": {
+   "summary": "The core **Scatter** view shows the same points, so the plotting is not new; the value is the two-by-two, with split lines at medians, averages or targets.",
+   "overlaps": [
+    {
+     "coreView": "Scatter",
+     "note": "The same points; this view adds the quadrant splits, quadrant names and selecting a whole quadrant. For a plain scatter, use Scatter."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "motionbubbles",
+     "note": "Bubbles on two axes animated through time, with optional reference lines."
+    },
+    {
+     "view": "venndiagram",
+     "note": "Splits records by ranges of three numeric fields, with each overlap selectable."
+    }
+   ]
+  },
+  "rfmsegments": {
+   "summary": "This view scores customers on recency, frequency and spend straight from transactions and shows the segments on the standard grid, to explore them in a report.",
+   "overlaps": [
+    {
+     "block": "Analytics/RFM-Segmentation",
+     "note": "Scores customers in the workflow and outputs each one's R, F and M scores and segment (ten named segments). Use it when the segment is needed as a field, for campaigns or exports; use this view to explore segments in a report.",
+     "name": "RFM Segmentation"
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Pivot",
+     "note": "Could show segments once scores are calculated in the workflow."
+    },
+    {
+     "view": "venndiagram",
+     "note": "Overlaps of three conditions on numeric fields, such as frequent, high-spending and recent, with each region selectable."
+    }
+   ]
+  },
+  "ridgeline": {
+   "summary": "The core **Box Plot** view summarises each group in five numbers; this view shows the full shape for dozens of groups at once, revealing the peaks, tails and gaps a box plot hides.",
+   "overlaps": [
+    {
+     "coreView": "Box Plot",
+     "note": "Compares distributions by category as five-number summaries rather than shapes."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "beeswarm",
+     "note": "Every value as its own dot, for up to 1,000 items."
+    },
+    {
+     "view": "distribution",
+     "note": "One detailed histogram with percentiles and outliers; groups shown as outlines."
+    }
+   ]
+  },
+  "runningpivot": {
+   "summary": "The core **Pivot** view shows each period's own value; this view shows the total so far down each column, for year-to-date and cumulative figures in a table.",
+   "overlaps": [
+    {
+     "coreView": "Pivot",
+     "note": "Shows each cell's own value; this view adds the values down the rows, so each cell is the total so far."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "yearonyear",
+     "note": "Running totals through the year as lines, this year against last."
+    },
+    {
+     "block": "Preparation/Multi-Row-Formula",
+     "note": "Adds running totals (and other window calculations) as fields, when they are needed in the data.",
+     "name": "Multi-Row Formula"
+    }
+   ]
+  },
+  "scatter3d": {
+   "summary": "The core **Scatter** view suits most 3D plotting; this view is for an orbiting scene, typically of clusters or components from the workflow.",
+   "overlaps": [
+    {
+     "coreView": "Scatter",
+     "note": "The core Scatter view also plots in 3D and is better integrated with the report, so it suits most data. Use this view for an orbiting three.js scene with depth cues, up to about 15,000 points."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "surface3d",
+     "note": "A measure drawn as a 3D surface over two groupings, rather than points placed by three measures."
+    },
+    {
+     "block": "Analytics/Principal-Components",
+     "note": "PCA with scores per row: three components make the axes of this view.",
+     "name": "Principal Component Analysis"
+    },
+    {
+     "block": "Analytics/Clustering/KMeans",
+     "note": "Adds a Cluster field from k-means, to colour the points by.",
+     "name": "KMeans"
+    },
+    {
+     "coreBlock": "Clustering",
+     "note": "Finds clusters in numeric fields, to colour the points by."
+    },
+    {
+     "coreBlock": "Reduce Dimensions",
+     "note": "Reduces many numeric fields to a few dimensions, three of which make the axes here."
+    }
+   ]
+  },
+  "sequentialworkflowexecution": {
+   "summary": "Use the community **Workflow Execution** view in most cases. This view is for steps the workflow cannot order, linked only through a file or a database, which it runs one at a time, stopping at a failure.",
+   "overlaps": [
+    {
+     "view": "workflowexecution",
+     "note": "Executes all the blocks in one request and lets Omniscope order them by their connections. Use it unless the order of side effects matters."
+    }
+   ],
+   "seeAlso": [
+    {
+     "block": "Preparation/ForEach/ForEachMultiStage",
+     "note": "Runs stages of a project one after another, each a separate run, once per input record.",
+     "name": "For Each Multi Stage"
+    }
+   ]
+  },
+  "setparamandexecute": {
+   "summary": "This view puts the project's parameters in the report as typed inputs and executes the workflow with them, for what-if reports; the new values are the project's own, for every viewer.",
+   "overlaps": [
+    {
+     "view": "switchparamandexecute",
+     "note": "Sets one parameter from a list of a field's values, one click per choice. Use it for a picker; this view for typed values or several parameters."
+    },
+    {
+     "view": "lambdaworkflowexecution",
+     "note": "Runs with the values in a new copy of the project, leaving the project's own parameters unchanged. Use it when several viewers run at once."
+    },
+    {
+     "view": "workflowexecution",
+     "note": "Executes blocks without any parameter inputs."
+    }
+   ],
+   "seeAlso": [
+    {
+     "block": "Preparation/Set Project Parameters",
+     "note": "Sets parameters from records in the workflow rather than from a report.",
+     "name": "Set Project Parameters"
+    }
+   ]
+  },
+  "slopechart": {
+   "summary": "This view draws the change between two periods as slopes, so rises, falls and reordering read at a glance, and can show values, shares or ranks.",
+   "overlaps": [
+    {
+     "coreView": "Dumbbell",
+     "note": "Two values per item, side by side rather than as slopes."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "bumpchart",
+     "note": "Rank over many periods, rather than change between two."
+    }
+   ]
+  },
+  "spainforcedotdensitymap": {
+   "summary": "The core **Map** view is the usual choice. This view is for counting by eye in Spain: the size of a cluster shows how many items are there.",
+   "overlaps": [
+    {
+     "coreView": "Map",
+     "note": "Places markers at their exact positions anywhere, where they pile up in a busy town. This view covers Spain only and pushes dots apart so each one shows."
+    }
+   ]
+  },
+  "sparklinescorecard": {
+   "summary": "The core **Aggregated Table** and **KPI** views cover sparklines and headline figures; this view is a ready-made scorecard, with an On track, At risk or Off track status per item, sorted so the problems come first.",
+   "overlaps": [
+    {
+     "coreView": "Aggregated Table",
+     "note": "Can show a small line or bar chart in its cells. This view lays out one row per KPI with latest value, change, trend and status against a target."
+    },
+    {
+     "coreView": "KPI",
+     "note": "One headline value, without a trend or target status."
+    }
+   ]
+  },
+  "spcchart": {
+   "summary": "The core **Timeseries** view draws the measure over time. This view adds what statistical process control needs: XmR control limits, the standard run rules and plain-English verdicts on improvement and on meeting a target, for a measure watched closely.",
+   "seeAlso": [
+    {
+     "coreView": "Timeseries",
+     "note": "The same series over time, without control limits or run rules."
+    },
+    {
+     "block": "Analytics/Time-Series-Anomalies",
+     "note": "Flags spikes and dips in many series at once against a rolling baseline, with weekday effects.",
+     "name": "Time Series Anomaly Detection"
+    }
+   ]
+  },
+  "strata": {
+   "summary": "The core **Gantt** view gives each task its own row. This view is for thousands of things that open and close: it stacks the ones open at each moment, so the height shows the load while each line still shows what it was doing.",
+   "overlaps": [
+    {
+     "coreView": "Gantt",
+     "note": "One bar per task from start to end, each on its own row; suited to a plan of tasks rather than thousands of overlapping sessions."
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Timeline",
+     "note": "Events as labelled points along a line, for up to 300 events."
+    },
+    {
+     "view": "survivalcurve",
+     "note": "How long such open-and-close records last, and whether groups differ."
+    },
+    {
+     "block": "Analytics/Occupancy-From-Intervals",
+     "note": "Turns start and end times into occupancy per time bucket, with peaks and utilisation against capacity.",
+     "name": "Occupancy From Intervals"
+    }
+   ]
+  },
+  "surface3d": {
+   "summary": "This view draws one measure as a surface over two groupings, for data where the shape of the ridges and valleys matters, such as yield curves or demand by price and lead time; its From above button gives a heatmap of the same grid.",
+   "seeAlso": [
+    {
+     "view": "scatter3d",
+     "note": "Points placed by three measures, rather than a surface over two groupings."
+    }
+   ]
+  },
+  "survivalcurve": {
+   "summary": "This view calculates a retention curve in the report, re-estimated for every filter, where the core **Line** view can only draw one already calculated.",
+   "overlaps": [
+    {
+     "coreView": "Line",
+     "note": "Can draw a retention curve already calculated. This view calculates it: a Kaplan-Meier estimate with censored records, confidence bands and a log-rank test."
+    },
+    {
+     "block": "Analytics/Survival",
+     "note": "Estimates Kaplan-Meier or Fleming-Harrington curves in the workflow with R, from a numeric time and an event flag. Use it when the curve is needed as data; use this view for interactive curves with a log-rank test.",
+     "name": "Survival Analysis"
+    },
+    {
+     "block": "Analytics/Churn-Survival",
+     "note": "Uses the same method in the workflow and adds retention at chosen milestones, restricted mean lifetime and log-rank tests of each group against the rest. Use it when those figures are needed as data.",
+     "name": "Churn Survival Curves"
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "strata",
+     "note": "Draws the same kind of open-and-close records as a timeline."
+    }
+   ]
+  },
+  "switchparam": {
+   "summary": "This view only sets a parameter, from a list of a field's values; blocks use the new value at their next run, from a schedule or a **Workflow Execution** button.",
+   "overlaps": [
+    {
+     "view": "switchparamandexecute",
+     "note": "The same radio buttons, but executes workflow blocks after each change. Use this view when the new value should wait for the next scheduled or manual run."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "workflowexecution",
+     "note": "A button that executes the workflow, to run with the value set here."
+    },
+    {
+     "block": "Preparation/Set Project Parameters",
+     "note": "Sets parameters from records in the workflow, several in one request.",
+     "name": "Set Project Parameters"
+    },
+    {
+     "block": "Preparation/Conditional Execution",
+     "note": "Starts a run of chosen blocks only when a yes/no parameter, which this view can set, is on.",
+     "name": "Conditional Execution"
+    }
+   ]
+  },
+  "switchparamandexecute": {
+   "summary": "This view sets one parameter from a list of a field's values and then executes the workflow, so the report shows results for the value picked.",
+   "overlaps": [
+    {
+     "view": "switchparam",
+     "note": "Sets the parameter without executing anything. Use it when the workflow is run later, by a schedule or a button."
+    },
+    {
+     "view": "setparamandexecute",
+     "note": "Several parameters from typed values rather than one from a list of choices."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "workflowexecution",
+     "note": "Executes blocks without changing any parameter."
+    }
+   ]
+  },
+  "targettracker": {
+   "summary": "The core **Bullet** and **Dial (Arch)** views show progress against a target at one moment. This view follows the cumulative total through the period against a target path, projects where it will end at the average and the recent rate, and gives the daily rate still needed.",
+   "overlaps": [
+    {
+     "coreView": "Bullet",
+     "note": "Progress against a target at one moment, without the projection to the end of the period."
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Dial (Arch)",
+     "note": "Progress at one moment, as a dial."
+    }
+   ]
+  },
+  "threeforcegraph": {
+   "summary": "The core **Force Graph** and **Network** views suit most networks. This view is for dense networks, where a third dimension gives the clusters room and turning the graph shows them from another side.",
+   "overlaps": [
+    {
+     "coreView": "Force Graph",
+     "note": "The same force-directed layout of links in two dimensions, better integrated with the report. Use this view when a dense network needs the room of a third dimension."
+    },
+    {
+     "view": "networkanalyser",
+     "note": "Draws the same From and To links in 2D and analyses them: communities, centrality, shortest paths."
+    },
+    {
+     "coreView": "Network",
+     "note": "Draws networks in two dimensions with several layouts, better integrated with the report; it suits most networks."
+    }
+   ]
+  },
+  "tilemap": {
+   "summary": "This view gives every US state or UK region, or each territory in a grid of your own, a tile of the same size labelled with its value, so every region can be read and compared, unlike on the core **Choropleth** map.",
+   "overlaps": [
+    {
+     "coreView": "Choropleth",
+     "note": "Colours regions on a geographic map, where large regions dominate and small ones are hard to see."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "francechoropleth",
+     "note": "French departments coloured on a geographic map."
+    }
+   ]
+  },
+  "tradingview": {
+   "summary": "This view is for when the data has symbols but not prices: TradingView supplies the market data, intervals and indicators, next to your own figures; for prices already in your data, use the core **Candlestick** view.",
+   "overlaps": [
+    {
+     "coreView": "Candlestick",
+     "note": "Draws price bars from prices in your own data. This view shows TradingView's market data and tools for a symbol in your data."
+    }
+   ],
+   "seeAlso": [
+    {
+     "block": "Connectors/YahooFinance",
+     "note": "Loads price history into the workflow, when you need the prices as data for your own calculations or charts.",
+     "name": "Yahoo Finance"
+    }
+   ]
+  },
+  "transitions": {
+   "summary": "This view pairs two snapshots itself and shows the matrix of shares between states, with the share that stayed, moved up and moved down.",
+   "overlaps": [
+    {
+     "coreView": "Sankey",
+     "note": "Flows from one state to another, without the matrix of shares."
+    },
+    {
+     "coreView": "Pivot",
+     "note": "A cross-tab of states, once each item's two states are joined in the workflow."
+    }
+   ]
+  },
+  "uploadandexecute": {
+   "summary": "This view is for data that arrives as files from people who should not edit the workflow: the viewer uploads a file and the workflow runs on it in a copy of the project.",
+   "seeAlso": [
+    {
+     "view": "lambdaworkflowexecution",
+     "note": "Runs a copy of the project with typed parameter values instead of a file."
+    },
+    {
+     "coreBlock": "Validate data",
+     "note": "Checks the uploaded file against expected fields and values, and stops it if it fails."
+    }
+   ]
+  },
+  "variancechart": {
+   "summary": "This view puts actual, plan, absolute and percentage variance side by side for every row or period, in the layout of a management pack, with colours that swap for costs.",
+   "overlaps": [
+    {
+     "coreView": "Comparison Bar",
+     "note": "Actual against a comparison value, one chart at a time."
+    },
+    {
+     "coreView": "Bullet",
+     "note": "Actual against target, one bar at a time."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "pvmbridge",
+     "note": "Explains a change in revenue between two periods as price, volume and mix effects."
+    },
+    {
+     "block": "Analytics/Variance-Bridge",
+     "note": "Bridges the two totals category by category as waterfall steps, with favourable and adverse labels.",
+     "name": "Variance Bridge"
+    }
+   ]
+  },
+  "venndiagram": {
+   "summary": "Report filters can pick out any combination of three conditions, but not show how big each overlap is. This view counts all seven regions and selects any one of them with a click.",
+   "seeAlso": [
+    {
+     "view": "quadrant",
+     "note": "Splits items into four quadrants by two measures, with each quadrant selectable."
+    },
+    {
+     "view": "rfmsegments",
+     "note": "Scores customers on recency, frequency and spend from transactions, into named segments."
+    }
+   ]
+  },
+  "waffle": {
+   "summary": "The core **Pie** view shows the mix as angles, which are hard to compare. This view lays the mix out as 100 squares, so shares can be counted and several groups compared side by side; it is mainly a presentation choice.",
+   "overlaps": [
+    {
+     "coreView": "Pictorial",
+     "note": "Fills an icon in proportion to each part, stacked by a field. Use it for a picture of the mix; use this view when shares should be countable and several groups compared side by side."
+    }
+   ],
+   "seeAlso": [
+    {
+     "coreView": "Pictogram",
+     "note": "Repeated images in place of bars, one row per category."
+    },
+    {
+     "coreView": "Pie",
+     "note": "Part-to-whole as slices, harder to read exactly."
+    }
+   ]
+  },
+  "web": {
+   "summary": "This view shows a whole web page, chosen by an address in the data, next to the records that point to it.",
+   "seeAlso": [
+    {
+     "view": "customhtml",
+     "note": "Shows HTML typed into the settings or held in the data, such as a widget's embed snippet."
+    }
+   ]
+  },
+  "weeklypattern": {
+   "summary": "This view builds the weekly pattern straight from timestamps, as averages per week, with no derived fields.",
+   "overlaps": [
+    {
+     "coreView": "Pivot",
+     "note": "Weekday by hour, once those fields are derived in the workflow."
+    },
+    {
+     "view": "calendar",
+     "note": "A time grid coloured by a measure, by day of the year rather than weekday and hour."
+    }
+   ]
+  },
+  "workflowexecution": {
+   "summary": "This view is the simplest of those that act on the workflow from a report: a button that executes named blocks.",
+   "overlaps": [
+    {
+     "view": "sequentialworkflowexecution",
+     "note": "Executes the blocks one at a time in the order given, stopping at a failure. Use it when steps with side effects must run in a set order; this view lets Omniscope order them by their connections."
+    },
+    {
+     "view": "setparamandexecute",
+     "note": "Adds inputs for project parameters, sent with the execution. Use it when viewers should change values before running."
+    },
+    {
+     "view": "lambdaworkflowexecution",
+     "note": "Executes in a new copy of the project with typed parameter values, so viewers don't wait for or overwrite each other."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "switchparamandexecute",
+     "note": "Sets one parameter from a list of values, then executes."
+    },
+    {
+     "view": "switchparam",
+     "note": "Sets a parameter without executing; pair it with this button."
+    },
+    {
+     "block": "Preparation/Conditional Execution",
+     "note": "Starts a run of chosen blocks from inside the workflow, when a yes/no option is on.",
+     "name": "Conditional Execution"
+    }
+   ]
+  },
+  "yearonyear": {
+   "summary": "The core **Timeseries Multi-Line** view can overlay years once a month-of-year field is derived. This view handles the details that make the comparison fair: financial years, an incomplete current period and like-for-like year to date.",
+   "overlaps": [
+    {
+     "coreView": "Timeseries Multi-Line",
+     "note": "Several lines over time; overlaying years needs a derived month field."
+    }
+   ],
+   "seeAlso": [
+    {
+     "view": "runningpivot",
+     "note": "Running totals by period for several columns, as a table."
+    },
+    {
+     "view": "calendar",
+     "note": "Daily values laid out year by year."
+    },
+    {
+     "block": "Analytics/Period-Comparison",
+     "note": "The month, QTD, YTD and moving annual total comparison table, per group, with a fiscal year start of your choice.",
+     "name": "Period Comparison"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,238 @@
+{
+  "name": "Bump Chart",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "bump",
+    "rank",
+    "ranking",
+    "league table",
+    "over time",
+    "slope",
+    "position",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 20000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "time": {
+        "displayName": "Time",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "The periods to rank in, e.g. Month, Week or Season (a date grouped by month works well)"
+      },
+      "item": {
+        "displayName": "Ranked items",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "What is ranked in each period, e.g. Product, Store, Team or Keyword"
+      },
+      "value": {
+        "displayName": "Rank by",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Measure that decides the rank, e.g. sum of Sales. Highest value is rank 1 unless Lowest first is chosen."
+      },
+      "topN": {
+        "displayName": "Ranks shown",
+        "type": "NUMBER",
+        "minValue": 3,
+        "maxValue": 50,
+        "detail": "Number of ranks on the chart (default 10)"
+      },
+      "which": {
+        "displayName": "Items shown",
+        "type": "CHOICE",
+        "values": [
+          "LATEST",
+          "EVER"
+        ],
+        "displayValues": [
+          "Top at the latest period",
+          "Top in any period"
+        ],
+        "detail": "Which items get a line"
+      },
+      "order": {
+        "displayName": "Rank order",
+        "type": "CHOICE",
+        "values": [
+          "HIGH",
+          "LOW"
+        ],
+        "displayValues": [
+          "Highest value is 1st",
+          "Lowest value is 1st"
+        ],
+        "detail": "Use Lowest first for measures like delivery time or cost"
+      },
+      "highlight": {
+        "displayName": "Highlight",
+        "type": "TEXT",
+        "detail": "Optional item to emphasise; other lines are muted"
+      },
+      "showValues": {
+        "displayName": "Show rank numbers",
+        "type": "TOGGLE",
+        "detail": "Write the rank inside each point"
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "time",
+        "item",
+        "value"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    },
+    "optionGroups": [
+      {
+        "displayName": "Chart",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "time",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "item",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "topN",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "which",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "order",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "highlight",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showValues",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "topN": 10,
+      "which": "LATEST",
+      "order": "HIGH",
+      "showValues": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 200,
+    "minHeight": 150
+  }
+}

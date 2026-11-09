@@ -1,0 +1,444 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/office.csv",
+  "options": {
+   "items": {
+    "floor": {
+     "inputField": "Floor",
+     "type": "UNIQUE_VALUES"
+    },
+    "zone": {
+     "inputField": "Zone",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X (m)",
+     "function": "MIN"
+    },
+    "y": {
+     "inputField": "Y (m)",
+     "function": "MIN"
+    },
+    "w": {
+     "inputField": "Width (m)",
+     "function": "MIN"
+    },
+    "d": {
+     "inputField": "Depth (m)",
+     "function": "MIN"
+    },
+    "value": {
+     "inputField": "Occupancy (%)",
+     "function": "MEAN"
+    },
+    "scale": "SEQUENTIAL",
+    "floorHeight": 3.5,
+    "explode": 3,
+    "labels": true,
+    "theme": "LIGHT"
+   }
+  },
+  "width": 1040,
+  "height": 620,
+  "wait": 4000,
+  "showcaseHeight": 620,
+  "caption": "Live: an illustrative five-floor office coloured by average occupancy over the day. Drag to rotate, scroll to zoom, hover a zone, click to select, or isolate a floor on the left.",
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "temperature",
+  "showcase": true,
+  "data": "sample-data/office.csv",
+  "options": {
+   "items": {
+    "floor": {
+     "inputField": "Floor",
+     "type": "UNIQUE_VALUES"
+    },
+    "zone": {
+     "inputField": "Zone",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X (m)",
+     "function": "MIN"
+    },
+    "y": {
+     "inputField": "Y (m)",
+     "function": "MIN"
+    },
+    "w": {
+     "inputField": "Width (m)",
+     "function": "MIN"
+    },
+    "d": {
+     "inputField": "Depth (m)",
+     "function": "MIN"
+    },
+    "value": {
+     "inputField": "Temperature (C)",
+     "function": "MEAN"
+    },
+    "scale": "DIVERGING",
+    "floorHeight": 3.5,
+    "explode": 3,
+    "labels": true,
+    "theme": "LIGHT",
+    "midpoint": 21
+   }
+  },
+  "width": 1040,
+  "height": 560,
+  "wait": 4000,
+  "showcaseHeight": 560,
+  "caption": "Live: the same building coloured by temperature around 21 C, filtered to the afternoon.",
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/office.csv",
+  "options": {
+   "items": {
+    "floor": {
+     "inputField": "Floor",
+     "type": "UNIQUE_VALUES"
+    },
+    "zone": {
+     "inputField": "Zone",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X (m)",
+     "function": "MIN"
+    },
+    "y": {
+     "inputField": "Y (m)",
+     "function": "MIN"
+    },
+    "w": {
+     "inputField": "Width (m)",
+     "function": "MIN"
+    },
+    "d": {
+     "inputField": "Depth (m)",
+     "function": "MIN"
+    },
+    "value": {
+     "inputField": "Occupancy (%)",
+     "function": "MEAN"
+    },
+    "scale": "SEQUENTIAL",
+    "floorHeight": 3.5,
+    "explode": 3,
+    "labels": true,
+    "theme": "LIGHT"
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 4000,
+  "actions": [
+   {
+    "eval": "window.__bldg.zones.length===34 && window.__bldg.fkeys.length===5",
+    "expectTruthy": true
+   },
+   {
+    "clickEval": "window.__bldg.project(window.__bldg.zones.findIndex(function(z){return z.f===3&&z.z==='Open plan east'}))"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "hoverEval": "window.__bldg.project(10)"
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "click": "#floors button[data-f='4']"
+   },
+   {
+    "eval": "window.__bldg.zones.filter(function(z){return z.mesh.visible}).length===7",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "isolated"
+   },
+   {
+    "click": "#floors button[data-f='']"
+   },
+   {
+    "clickAt": [
+     893,
+     595
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Hour",
+     "operator": ">=",
+     "value": 15
+    }
+   },
+   {
+    "eval": "window.__bldg.zones.length===34",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     420
+    ]
+   },
+   {
+    "screenshot": "small"
+   }
+  ],
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "dark-energy",
+  "data": "sample-data/office.csv",
+  "options": {
+   "items": {
+    "floor": {
+     "inputField": "Floor",
+     "type": "UNIQUE_VALUES"
+    },
+    "zone": {
+     "inputField": "Zone",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X (m)",
+     "function": "MIN"
+    },
+    "y": {
+     "inputField": "Y (m)",
+     "function": "MIN"
+    },
+    "w": {
+     "inputField": "Width (m)",
+     "function": "MIN"
+    },
+    "d": {
+     "inputField": "Depth (m)",
+     "function": "MIN"
+    },
+    "value": {
+     "inputField": "Energy (kWh)",
+     "function": "SUM"
+    },
+    "scale": "SEQUENTIAL",
+    "floorHeight": 3.5,
+    "explode": 1,
+    "labels": true,
+    "theme": "DARK"
+   }
+  },
+  "width": 900,
+  "height": 600,
+  "wait": 4000,
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Floor",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Zone",
+    "type": "TEXT"
+   },
+   {
+    "name": "X (m)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Y (m)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Width (m)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Depth (m)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Occupancy (%)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "floor": {
+     "inputField": "Floor",
+     "type": "UNIQUE_VALUES"
+    },
+    "zone": {
+     "inputField": "Zone",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X (m)",
+     "function": "MIN"
+    },
+    "y": {
+     "inputField": "Y (m)",
+     "function": "MIN"
+    },
+    "w": {
+     "inputField": "Width (m)",
+     "function": "MIN"
+    },
+    "d": {
+     "inputField": "Depth (m)",
+     "function": "MIN"
+    },
+    "value": {
+     "inputField": "Occupancy (%)",
+     "function": "MEAN"
+    },
+    "scale": "SEQUENTIAL",
+    "floorHeight": 3.5,
+    "explode": 3,
+    "labels": true,
+    "theme": "LIGHT"
+   }
+  },
+  "width": 600,
+  "height": 400,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/office.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 400,
+  "expect": {
+   "text": "Choose Floor and Zone"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "floor": {
+     "inputField": "Floor",
+     "type": "UNIQUE_VALUES"
+    },
+    "zone": {
+     "inputField": "Zone",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X",
+     "function": "MIN"
+    },
+    "y": {
+     "inputField": "Y",
+     "function": "MIN"
+    },
+    "w": {
+     "inputField": "W",
+     "function": "MIN"
+    },
+    "d": {
+     "inputField": "D",
+     "function": "MIN"
+    },
+    "value": {
+     "inputField": "Load",
+     "function": "MEAN"
+    },
+    "labels": false,
+    "explode": 1
+   }
+  },
+  "width": 900,
+  "height": 700,
+  "wait": 7000,
+  "expect": {
+   "notBlank": true
+  },
+  "actions": [
+   {
+    "eval": "window.__bldg.zones.length===2000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/office.csv",
+  "options": {
+   "items": {
+    "floor": {
+     "inputField": "Floor",
+     "type": "UNIQUE_VALUES"
+    },
+    "zone": {
+     "inputField": "Zone",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X (m)",
+     "function": "MIN"
+    },
+    "y": {
+     "inputField": "Y (m)",
+     "function": "MIN"
+    },
+    "w": {
+     "inputField": "Width (m)",
+     "function": "MIN"
+    },
+    "d": {
+     "inputField": "Depth (m)",
+     "function": "MIN"
+    },
+    "value": {
+     "inputField": "Occupancy (%)",
+     "function": "MEAN"
+    },
+    "scale": "SEQUENTIAL",
+    "floorHeight": 3.5,
+    "explode": 3,
+    "labels": false,
+    "theme": "LIGHT"
+   }
+  },
+  "width": 290,
+  "height": 290,
+  "wait": 4000
+ }
+]

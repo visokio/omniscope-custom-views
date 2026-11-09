@@ -1,0 +1,411 @@
+[
+ {
+  "name": "showcase",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders, Clean, Summarise",
+    "buttonText": "Run the three steps"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "showcase": true,
+  "showcaseHeight": 150,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "workflow": {
+   "states": [
+    "RUNNING",
+    "COMPLETED"
+   ]
+  },
+  "caption": "Live: press the button. The blocks run one after another, each starting when the one before has finished (simulated Workflow REST API).",
+  "expect": {
+   "text": "Run the three steps"
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 700
+   },
+   {
+    "eval": "/^Block 1 of 3, Load orders/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "running"
+   },
+   {
+    "wait": 4800
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Load orders"
+      ],
+      "refreshFromSource": true,
+      "cancelExisting": false
+     },
+     "count": 1
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Clean"
+      ]
+     },
+     "count": 1
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Summarise"
+      ]
+     },
+     "count": 1
+    }
+   },
+   {
+    "eval": "var r = window.__omniMock.workflow.requests.filter(function (q) { return q.method === 'POST'; }).map(function (q) { return q.body.blocks[0]; }); r.join('|') === 'Load orders|Clean|Summarise'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished all 3 blocks') === 0",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.parent.__omniEvents.every(function (e) { return e.type !== 'whitespaceClick'; })",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "reload-mid-sequence",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders, Clean, Summarise"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "workflow": {
+   "states": [
+    "RUNNING",
+    "COMPLETED"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run",
+    "waitAfter": 200
+   },
+   {
+    "reload": true
+   },
+   {
+    "eval": "/^Block 1 of 3, Load orders/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   },
+   {
+    "wait": 1500
+   },
+   {
+    "reload": true
+   },
+   {
+    "wait": 4500
+   },
+   {
+    "eval": "window.__omniMock.workflow.requests.filter(function (q) { return q.method === 'POST'; }).map(function (q) { return q.body.blocks[0]; }).join('|') === 'Load orders|Clean|Summarise'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished all 3 blocks') === 0 && !document.getElementById('run').disabled",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "stops-on-failure",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders, Clean, Summarise"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "workflow": {
+   "states": [
+    "RUNNING",
+    "COMPLETED"
+   ],
+   "failBlocks": [
+    "Clean"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 4500
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Summarise"
+      ]
+     },
+     "count": 0
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Clean"
+      ]
+     },
+     "count": 1
+    }
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Stopped at block 2 of 3, Clean: Failed') === 0",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     300,
+     140
+    ]
+   },
+   {
+    "expectSelection": false
+   }
+  ]
+ },
+ {
+  "name": "unknown-block",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders, Tidy"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "workflow": {
+   "states": [
+    "RUNNING",
+    "COMPLETED"
+   ],
+   "blocks": [
+    "Load orders",
+    "Clean"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 2500
+   },
+   {
+    "eval": "/^Stopped at block 2 of 2, Tidy: .*could not be found/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders, Clean, Summarise"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "actions": [
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "West"
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 0
+    }
+   },
+   {
+    "eval": "!document.getElementById('run').disabled",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders, Clean, Summarise"
+   }
+  },
+  "width": 120,
+  "height": 60,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "workflow": {
+   "states": [
+    "RUNNING",
+    "COMPLETED"
+   ]
+  },
+  "actions": [
+   {
+    "eval": "document.getElementById('run').getBoundingClientRect().right <= window.innerWidth + 1",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 5500
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished all 3') === 0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Region",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "block": "Load orders, Clean, Summarise"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "expect": {
+   "selector": "#run",
+   "min": 1
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "actions": [
+   {
+    "eval": "document.getElementById('run').disabled && document.getElementById('status').textContent.indexOf('Enter the blocks to execute') === 0",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 0
+    }
+   },
+   {
+    "update": {
+     "block": "Report"
+    }
+   },
+   {
+    "eval": "!document.getElementById('run').disabled && document.getElementById('status').textContent === ''",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "large",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Step 1, Step 2, Step 3, Step 4, Step 5, Step 6"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Sequential+Workflow+Execution/",
+  "workflow": {
+   "states": [
+    "COMPLETED"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 4200
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 6
+    }
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished all 6 blocks') === 0",
+    "expectTruthy": true
+   }
+  ]
+ }
+]

@@ -1,0 +1,303 @@
+{
+  "name": "Motion Bubbles",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "animation",
+    "bubble",
+    "scatter",
+    "motion chart",
+    "over time",
+    "portfolio",
+    "bcg",
+    "storytelling",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 50000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "entity": {
+        "displayName": "Bubbles",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "One bubble per value, e.g. Product, Store, Country"
+      },
+      "time": {
+        "displayName": "Time",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "The animation frames, e.g. Quarter or Year (a date grouped by quarter works well)"
+      },
+      "x": {
+        "displayName": "X axis",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Horizontal position, e.g. Relative market share"
+      },
+      "y": {
+        "displayName": "Y axis",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Vertical position, e.g. Market growth"
+      },
+      "size": {
+        "displayName": "Size",
+        "type": "MEASURE",
+        "mandatory": false,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Optional bubble area, e.g. sum of Revenue"
+      },
+      "colour": {
+        "displayName": "Colour by",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Optional category, e.g. Business unit or Region (eight colours)"
+      },
+      "xLog": {
+        "displayName": "Log X axis",
+        "type": "TOGGLE",
+        "detail": "Logarithmic horizontal scale (positive values only)"
+      },
+      "yLog": {
+        "displayName": "Log Y axis",
+        "type": "TOGGLE",
+        "detail": "Logarithmic vertical scale (positive values only)"
+      },
+      "xRef": {
+        "displayName": "X reference line",
+        "type": "NUMBER",
+        "detail": "Optional vertical line, e.g. 1 for relative share"
+      },
+      "yRef": {
+        "displayName": "Y reference line",
+        "type": "NUMBER",
+        "detail": "Optional horizontal line, e.g. 10 for 10% growth"
+      },
+      "labels": {
+        "displayName": "Labels",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 100,
+        "detail": "Label the N largest bubbles (default 8)"
+      },
+      "trails": {
+        "displayName": "Trails for selected bubbles",
+        "type": "TOGGLE",
+        "detail": "Draw the path of selected or hovered bubbles"
+      },
+      "duration": {
+        "displayName": "Seconds per period",
+        "type": "NUMBER",
+        "minValue": 0.1,
+        "maxValue": 10,
+        "detail": "Speed of the animation (default 1)"
+      },
+      "autoplay": {
+        "displayName": "Play automatically",
+        "type": "TOGGLE",
+        "detail": "Start playing when the report opens"
+      },
+      "loop": {
+        "displayName": "Loop",
+        "type": "TOGGLE",
+        "detail": "Start again after the last period"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "entity",
+        "time",
+        "x",
+        "y",
+        "size",
+        "colour"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Bubbles",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "entity",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "time",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "x",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "y",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "size",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Axes",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "xLog",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "yLog",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "xRef",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "yRef",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display and playback",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "labels",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "trails",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "duration",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "autoplay",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "loop",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "xLog": false,
+      "yLog": false,
+      "labels": 8,
+      "trails": true,
+      "duration": 1,
+      "autoplay": true,
+      "loop": false
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 250,
+    "minHeight": 200
+  }
+}

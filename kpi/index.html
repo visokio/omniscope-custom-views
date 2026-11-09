@@ -40,10 +40,15 @@
           font-size: 2em;
           font-weight: bold;
           color: #f39300;
+          white-space: nowrap;
         }
         #text {
           font-size: 0.9em;
           font-weight: bold;
+        }
+        #measure.none {
+          color: #8a8f9c;
+          font-weight: normal;
         }
     </style>
 
@@ -80,15 +85,47 @@
         omniscope.view.whitespaceClick();
     });
 
-    // Naively redraw on any of these events 
+    // Number shown: whole numbers from 100 up, two decimals from 1, three significant digits below 1.
+    function format(v) {
+        var a = Math.abs(v);
+        if (a >= 100) return Math.round(v).toLocaleString();
+        if (a >= 1) return v.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        return v.toLocaleString(undefined, { maximumSignificantDigits: 3 });
+    }
+
+    // Title when the Title text option is empty: what the measure is, e.g. "Sales (sum)" or "Record count".
+    function measureLabel(m) {
+        if (!m) return "";
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField + " (" + m.function.toLowerCase().replace(/_/g, " ") + ")";
+    }
+
+    // Value size follows the pane: as large as fits, between 14 and 96 pixels.
+    function fit() {
+        var el = document.getElementById("measure"), text = el.textContent || "0";
+        var w = window.innerWidth - 24, h = window.innerHeight;
+        var size = Math.max(14, Math.min(96, h * 0.4, w / (0.62 * Math.max(3, text.length))));
+        el.style.fontSize = Math.round(size) + "px";
+        document.getElementById("text").style.fontSize = Math.round(Math.max(11, Math.min(20, size * 0.38))) + "px";
+    }
+
+    // Redraw on any of these events
     // (load = first init, update = external settings/state change, resize = browser window resized)
     omniscope.view.on(["load", "update", "resize"], function() {
-      
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        var data = omniscope.view.context().result.data.records;
-      
-        document.getElementById("text").textContent = omniscope.view.context().options.items.text;
-        document.getElementById("measure").textContent = Math.round(data[0][0]).toLocaleString();
+        var ctx = omniscope.view.context(), items = ctx.options.items || {};
+        var result = ctx.result, mappings = (result && result.mappings) || {};
+        var records = (result && result.data && result.data.records) || [];
+        var col = mappings.measure;
+        var title = (items.text !== undefined && items.text !== null && items.text !== "") ? items.text : measureLabel(items.measure);
+        document.getElementById("text").textContent = title;
+        var value = (col !== undefined && records.length) ? records[0][col] : null;
+        var el = document.getElementById("measure");
+        el.classList.remove("none");
+        if (!items.measure || col === undefined) { el.textContent = "Choose a measure"; el.classList.add("none"); }
+        else if (typeof value !== "number" || !isFinite(value)) { el.textContent = "No data"; el.classList.add("none"); }
+        else el.textContent = format(value);
+        fit();
     });
 
 </script>

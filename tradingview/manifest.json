@@ -3,7 +3,15 @@
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
-  "tags": [],
+  "tags": [
+    "trading",
+    "stocks",
+    "quotes",
+    "finance",
+    "crypto",
+    "chart",
+    "embed"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
@@ -12,38 +20,68 @@
   "options": {
     "items": {
       "aticker": {
-        "displayName": "Ticker",
-        "documentation": "The field with a function - typically Singleton - which contains the stock ticker (e.g. AAPL).",
+        "displayName": "Symbol",
+        "documentation": "The field with the symbol to chart, best with its exchange (NASDAQ:AAPL, EURONEXT:AIR, BINANCE:BTCUSDT). With the Singleton function a chart shows when the filter or selection leaves one symbol; Min or Max always shows one.",
         "type": "MEASURE",
         "mandatory": true,
         "validMeasureResultTypes": [
           "TEXT"
         ]
       },
+      "interval": {
+        "displayName": "Bar interval",
+        "type": "CHOICE",
+        "values": [
+          "1",
+          "5",
+          "15",
+          "60",
+          "240",
+          "D",
+          "W",
+          "M"
+        ],
+        "displayValues": [
+          "1 minute",
+          "5 minutes",
+          "15 minutes",
+          "1 hour",
+          "4 hours",
+          "1 day",
+          "1 week",
+          "1 month"
+        ],
+        "documentation": "The time each bar covers when the chart opens. The viewer can change it in the chart."
+      },
       "details": {
-        "displayName": "Show details",
-        "documentation": "Show an extra panel with security key stats, like earnings, financial statements, etc.\n N.B. the panel is hidden when the view is too small.",
+        "displayName": "Show details panel",
+        "documentation": "A panel beside the chart with the symbol's key figures. TradingView hides it when the view is too narrow.",
         "type": "TOGGLE",
         "choicesLayout": "Compact"
       },
       "o_darkMode": {
         "displayName": "Dark mode",
         "type": "TOGGLE",
-        "choicesLayout": "Compact"
+        "choicesLayout": "Compact",
+        "documentation": "Light text on a dark background."
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "documentation": "Optional: one chart per value of this field, side by side."
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "documentation": "Optional: one chart per value of this field, one above the other."
       }
     },
     "structure": {
-      "toolbar": ["aticker"],
+      "toolbar": [
+        "aticker"
+      ],
       "x": [
         "paneX"
       ],
@@ -53,7 +91,9 @@
     }
   },
   "defaultOptions": {
-    "items": {},
+    "items": {
+      "interval": "D"
+    },
     "pane": {
       "yAxisHeaderWidth": 75,
       "paneWidth": 200,
@@ -76,7 +116,7 @@
     }
   },
   "pane": {
-    "minWidth": 400,
-    "minHeight": 400
+    "minWidth": 300,
+    "minHeight": 250
   }
 }

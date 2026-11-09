@@ -2,124 +2,309 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-
     <style>
-        html, body, main {
-            /* Ensure the body fills the view, so clicks are handled everywhere: */
+        html, body {
+            /* Fill the view, so clicks are handled everywhere */
             width: 100%;
             height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
-        main {
-            font-family: monospace;
-            font-size: 20px;
-            white-space: pre;
+        body {
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
+            background: #fff;
         }
+        #map { position: absolute; left: 0; top: 0; }
+        .dept { stroke: #fff; stroke-width: 0.6; cursor: pointer; }
+        .dept.nodata { cursor: default; }
+        .dept:hover { stroke: #1b1b1b; stroke-width: 1.2; }
+        .dept.faded { opacity: 0.35; }
+        .dept.selected { stroke: #1b1b1b; stroke-width: 1.6; }
+        .inset-frame { fill: none; stroke: #d6d5cf; stroke-width: 0.8; }
+        .inset-label { font-size: 10px; fill: #666; }
+        #legend { position: absolute; left: 10px; top: 8px; font-size: 11px; color: #444; pointer-events: none; }
+        #legend .title { margin-bottom: 4px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #legend .bar { width: 140px; height: 10px; border-radius: 2px; }
+        #legend .ends { display: flex; justify-content: space-between; width: 140px; margin-top: 2px; }
+        #legend .nodata { margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+        #legend .nodata span { display: inline-block; width: 10px; height: 10px; background: #e6e5e0; border-radius: 2px; }
+        #note { position: absolute; left: 10px; right: 10px; bottom: 6px; font-size: 11px; color: #8a5a00;
+                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+                   text-align: center; padding: 12px; color: #666; font-size: 13px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(255,255,255,.97);
+                   border: 1px solid rgba(0,0,0,.12); box-shadow: 0 3px 10px rgba(0,0,0,.15); border-radius: 5px;
+                   padding: 5px 8px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #666; }
     </style>
-
-    <!-- Put SCRIPT tags to load 3rd party libraries here -->
-    <script src="d3.v4.min.js"></script>
-
 </head>
 
 <body>
-
-<main id="main"><svg width="100%" height="100%"></svg></main><!-- This element is where the view will render -->
+<svg id="map"></svg>
+<div id="legend"></div>
+<div id="note"></div>
+<div id="message"></div>
+<div id="tooltip"></div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
 <script>
-    var ORIGINAL_MAP_WIDTH = 702;
-    var ORIGINAL_MAP_HEIGHT = 610;
+    // A choropleth of the French departments: each department is coloured by the Colour measure, matched to the
+    // data through the Department grouping (department names or INSEE codes). The outlines are in regions_fr.json,
+    // a file of this view (see basemap/make_basemap.py for its source and licence).
+    var SVG_NS = "http://www.w3.org/2000/svg";
+    // Light to dark blue; departments with no value are grey.
+    var RAMP = ["#e3eef9", "#a9cbea", "#5d9bd5", "#2a6db3", "#123f75"];
+    var NO_DATA = "#e6e5e0";
+    var state = { basemap: null, byName: null, selected: null, model: null };
+    window.__france = state;
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
         window.onerror = function(msg) {
             omniscope.view.error(msg);
-        }
+        };
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    // A click on empty space clears the selection in Omniscope (and closes menus)
     document.body.addEventListener("click", function() {
+        state.selected = null;
         omniscope.view.whitespaceClick();
+        paintSelection();
     });
 
-    // Naively redraw on any of these events
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
-
-        var svg = d3.select("svg");
-        var width = +parseInt(svg.style("width"), 10);
-        var height = +parseInt(svg.style("height"), 10);
-        var maxSize = Math.min(width, height);
-        // Using ORIGINAL_MAP_WIDTH as it's greater than ORIGINAL_MAP_HEIGHT
-        var scale = maxSize/ORIGINAL_MAP_WIDTH;
-
-        // Position map in the centre of the view
-        var widthMargin = width - (ORIGINAL_MAP_WIDTH * scale);
-        var heightMargin = height - (ORIGINAL_MAP_HEIGHT * scale);
-        svg.attr("transform", "translate("+widthMargin/2+", "+heightMargin/2+")");
-
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        var records = omniscope.view.context().result.data.records;
-        var mappings = omniscope.view.context().result.mappings;
-
-        // Map records to field options
-        var data = [];
-        records.forEach(function(record) {
-            data.push({
-                name: (mappings.split !== undefined) ? record[mappings.split] : null,
-                opacity: (mappings.measures !== undefined) ? record[mappings.measures] : null
-            });
+    // Load the outlines once, then draw on every load, update and resize
+    var basemapRequest = fetch("regions_fr.json").then(function(r) {
+        if (!r.ok) throw new Error("Could not load regions_fr.json (" + r.status + ")");
+        return r.json();
+    }).then(function(b) {
+        state.basemap = b;
+        state.byName = {};
+        b.departments.forEach(function(d) {
+            state.byName[d.code.toLowerCase()] = d;
+            state.byName[normalise(d.name)] = d;
         });
-
-        var opacityMinMax = getMinMax(data, "opacity");
-
-        d3.json("regions_fr.json", function(error, regions) {
-            if (error) throw error;
-
-            // Add value to regions
-            regions.forEach(function(region) {
-                var opacity = 0;
-                for (var i = 0; i < data.length; i++) {
-                    var record = data[i];
-                    if (record.name != null && record.name.toUpperCase() === region.name.toUpperCase()) {
-                        if (record.opacity !== null && record.opacity !== undefined) opacity = record.opacity;
-                        break;
-                    }
-                }
-                region.opacity = opacity/opacityMinMax.max;
-            });
-
-            d3.select("svg")
-                .selectAll(".region")
-                .data(regions)
-                .enter()
-                .append("path")
-                .attr("class", "region");
-
-            d3.selectAll(".region")
-                .attr("transform", "scale("+scale+")")
-                .attr("d", function(d) {return d.path;})
-                .attr("stroke", "#CBCDCC")
-                .attr("fill", "#00BFB6")
-                .attr("fill-opacity", function(d) {return d.opacity;});
-
-            d3.selectAll(".region")
-                .append("title")
-                .text(function(d) {return d.name});
-        });
-
+        // A few other spellings in common use
+        var aliases = { "reunion": "974", "guyanefrancaise": "973", "frenchguiana": "973" };
+        Object.keys(aliases).forEach(function(k) { state.byName[k] = byCode(aliases[k]); });
+        return b;
     });
-
-    function getMinMax(data, field) {
-        var min = null, max = null;
-        data.forEach(function(record) {
-            if (min == null || min > record[field]) min = record[field];
-            if (max == null || max < record[field]) max = record[field];
-        });
-        return {min: min, max: max};
+    function byCode(code) {
+        for (var i = 0; i < state.basemap.departments.length; i++) if (state.basemap.departments[i].code === code) return state.basemap.departments[i];
+        return null;
     }
 
+    omniscope.view.on(["load", "update", "resize"], function() {
+        basemapRequest.then(render).catch(function(e) { omniscope.view.error(e.message); });
+    });
+
+    // Department names are matched without accents, case, spaces or punctuation ("Cote d'Or" = "Cote-d'Or"),
+    // with "St"/"Ste" read as "Saint"/"Sainte"; codes may drop the leading zero ("1" = "01").
+    function normalise(s) {
+        return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+            .replace(/\bste\b/g, "sainte").replace(/\bst\b/g, "saint").replace(/[^a-z0-9]/g, "");
+    }
+    function lookup(v) {
+        if (v === null || v === undefined || typeof v === "object") return null;
+        var s = String(v).trim();
+        if (/^\d$/.test(s)) s = "0" + s;
+        return state.byName[s.toLowerCase()] || state.byName[normalise(s)] || null;
+    }
+
+    function measureName(m) {
+        if (!m) return "";
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField + " (" + m.function.toLowerCase().replace(/_/g, " ") + ")";
+    }
+    function format(v) {
+        if (typeof v !== "number" || !isFinite(v)) return "No data";
+        var a = Math.abs(v);
+        if (a >= 100) return Math.round(v).toLocaleString();
+        if (a >= 1 || a === 0) return (+v.toFixed(2)).toLocaleString();
+        return String(+v.toPrecision(3));
+    }
+    function hexToRgb(h) { return [1, 3, 5].map(function(i) { return parseInt(h.substr(i, 2), 16); }); }
+    function colour(t) {
+        // t from 0 to 1 along the ramp
+        t = Math.max(0, Math.min(1, t)) * (RAMP.length - 1);
+        var i = Math.min(RAMP.length - 2, Math.floor(t)), f = t - i;
+        var a = hexToRgb(RAMP[i]), b = hexToRgb(RAMP[i + 1]);
+        return "rgb(" + a.map(function(x, k) { return Math.round(x + (b[k] - x) * f); }).join(",") + ")";
+    }
+
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+        if (text) {
+            document.getElementById("map").innerHTML = "";
+            document.getElementById("legend").innerHTML = "";
+            document.getElementById("note").textContent = "";
+        }
+    }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        state.model = null;
+        if (!it.split) { message("Choose a Department field: a field holding department names or codes, such as Ain or 01."); return; }
+        if (!it.measures) { message("Choose a Colour measure."); return; }
+        var result = ctx.result;
+        if (!result || !result.data) { message(result && result.error ? "Query failed: " + result.error : "Waiting for data"); return; }
+        var records = result.data.records || [], map = result.mappings || {};
+        if (!records.length) { message("No data to show. Check the report's filters."); return; }
+        message(null);
+        if (!ctx.viewSelection) state.selected = null;
+
+        // Match each record to a department
+        var values = {}, raw = {}, unmatched = [], repeated = [];
+        records.forEach(function(r) {
+            var key = r[map.split], d = lookup(key), v = r[map.measures];
+            if (!d) { unmatched.push(key === null || key === undefined ? "(blank)" : String(key)); return; }
+            if (d.code in values) { repeated.push(String(key)); return; }
+            values[d.code] = typeof v === "number" && isFinite(v) ? v : null;
+            raw[d.code] = key;
+        });
+        var nums = Object.keys(values).map(function(k) { return values[k]; }).filter(function(v) { return v !== null; });
+        var lo = nums.length ? Math.min.apply(null, nums) : 0, hi = nums.length ? Math.max.apply(null, nums) : 0;
+        var fill = function(code) {
+            var v = values[code];
+            if (v === null || v === undefined) return NO_DATA;
+            return colour(hi > lo ? (v - lo) / (hi - lo) : 0.5);
+        };
+        state.model = { values: values, raw: raw, field: it.split.inputField, lo: lo, hi: hi, unmatched: unmatched, repeated: repeated };
+
+        // Size: the map keeps its proportions and fills the view
+        var b = state.basemap, W = window.innerWidth, H = window.innerHeight;
+        var showLegend = W >= 240 && H >= 170 && nums.length > 0;
+        var noteText = "";
+        if (!Object.keys(values).length) noteText = "None of the " + records.length + " Department values is a French department name or code.";
+        else if (unmatched.length) noteText = unmatched.length + " value" + (unmatched.length > 1 ? "s" : "") + " not on the map: " + unmatched.slice(0, 5).join(", ") + (unmatched.length > 5 ? ", ..." : "");
+        else if (repeated.length) noteText = "Matched a department already shown, so left out: " + repeated.slice(0, 5).join(", ");
+        var noteH = noteText && H >= 120 ? 18 : 0;
+        var availH = H - noteH;
+        var s = Math.min(W / b.width, availH / b.height);
+        var svg = document.getElementById("map");
+        svg.setAttribute("width", W);
+        svg.setAttribute("height", availH);
+        svg.setAttribute("viewBox", [0, 0, b.width, b.height].join(" "));
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        svg.innerHTML = "";
+
+        var g = document.createElementNS(SVG_NS, "g");
+        svg.appendChild(g);
+        function addPath(code, d) {
+            var p = document.createElementNS(SVG_NS, "path");
+            p.setAttribute("d", d);
+            p.setAttribute("class", "dept" + (values[code] === undefined || values[code] === null ? " nodata" : ""));
+            p.setAttribute("fill", fill(code));
+            p.setAttribute("data-code", code);
+            p.style.strokeWidth = (0.6 / Math.max(s, 0.3)) + "px";
+            g.appendChild(p);
+        }
+        b.departments.forEach(function(d) { addPath(d.code, d.path); });
+        b.insets.forEach(function(inset) {
+            var r = document.createElementNS(SVG_NS, "rect");
+            ["x", "y", "width", "height"].forEach(function(k) { r.setAttribute(k, inset[k]); });
+            r.setAttribute("class", "inset-frame");
+            g.insertBefore(r, g.firstChild);
+            (inset.paths || []).forEach(function(p) { addPath(p.code, p.path); });
+            if (s >= 0.55) {
+                var t = document.createElementNS(SVG_NS, "text");
+                t.setAttribute("x", inset.x + 4);
+                t.setAttribute("y", inset.y + 11);
+                t.setAttribute("class", "inset-label");
+                t.style.fontSize = (10 / s) + "px";
+                t.textContent = inset.label;
+                g.appendChild(t);
+            }
+        });
+
+        // Hover and click
+        var tip = document.getElementById("tooltip");
+        var mName = measureName(it.measures);
+        Array.prototype.forEach.call(svg.querySelectorAll(".dept"), function(p) {
+            var code = p.getAttribute("data-code"), d = byCode(code);
+            p.addEventListener("mousemove", function(e) {
+                var v = values[code];
+                tip.innerHTML = "";
+                var head = document.createElement("div");
+                head.style.fontWeight = "bold";
+                head.textContent = d.name + " (" + code + ")";
+                var line = document.createElement("div");
+                var k = document.createElement("span");
+                k.className = "k";
+                k.textContent = mName + ": ";
+                line.appendChild(k);
+                line.appendChild(document.createTextNode(v === undefined ? "not in the data" : format(v)));
+                tip.appendChild(head);
+                tip.appendChild(line);
+                tip.style.display = "block";
+                var x = e.clientX + 12, y = e.clientY + 12;
+                if (x + tip.offsetWidth > W) x = Math.max(0, e.clientX - tip.offsetWidth - 8);
+                if (y + tip.offsetHeight > H) y = Math.max(0, e.clientY - tip.offsetHeight - 8);
+                tip.style.left = x + "px";
+                tip.style.top = y + "px";
+            });
+            p.addEventListener("mouseleave", function() { tip.style.display = "none"; });
+            p.addEventListener("click", function(e) {
+                e.stopPropagation();
+                if (!(code in raw)) { document.body.click(); return; }
+                select(state.selected === code ? null : code);
+            });
+        });
+
+        // Legend: the colour ramp from the lowest to the highest value
+        var legend = document.getElementById("legend");
+        legend.innerHTML = "";
+        if (showLegend) {
+            var title = document.createElement("div");
+            title.className = "title";
+            title.textContent = mName;
+            var bar = document.createElement("div");
+            bar.className = "bar";
+            bar.style.background = "linear-gradient(to right," + [0, 0.25, 0.5, 0.75, 1].map(colour).join(",") + ")";
+            var ends = document.createElement("div");
+            ends.className = "ends";
+            ends.innerHTML = "<span></span><span></span>";
+            ends.children[0].textContent = format(lo);
+            ends.children[1].textContent = format(hi);
+            var nd = document.createElement("div");
+            nd.className = "nodata";
+            nd.innerHTML = "<span></span>No data";
+            [title, bar, ends].forEach(function(el) { legend.appendChild(el); });
+            // The grey key only when some department on the map has no value
+            if (b.departments.some(function(d) { return values[d.code] === undefined || values[d.code] === null; })) legend.appendChild(nd);
+        }
+        document.getElementById("note").textContent = noteH ? noteText : "";
+        paintSelection();
+    }
+
+    // Selecting a department selects its records in the rest of the report; clicking it again clears
+    function select(code) {
+        var m = state.model;
+        state.selected = code;
+        if (code === null) {
+            omniscope.view.context().viewSelection = null;
+        } else {
+            omniscope.view.context().viewSelection = { filter: { type: "AND", filters: [
+                { type: "FIELD_VALUE", inputField: m.field, operator: "=", value: m.raw[code] } ] } };
+        }
+        omniscope.view.updated();
+        paintSelection();
+    }
+    function paintSelection() {
+        var sel = state.selected;
+        Array.prototype.forEach.call(document.querySelectorAll(".dept"), function(p) {
+            var on = p.getAttribute("data-code") === sel;
+            p.classList.toggle("selected", on);
+            p.classList.toggle("faded", sel !== null && !on);
+        });
+        // Draw the selected outline on top
+        Array.prototype.forEach.call(document.querySelectorAll(".dept.selected"), function(p) { p.parentNode.appendChild(p); });
+    }
 </script>
 
 </body>

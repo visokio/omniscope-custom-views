@@ -4,39 +4,98 @@
     <meta charset="utf-8"/>
 
     <style>
-        html, body, main {
-
+        html, body {
             /* Ensure the body fills the view, so clicks are handled everywhere: */
             width: 100%;
             height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
-        main {
-            font-family: monospace;
-            font-size: 20px;
-            white-space: pre;
+        #main {
+            position: absolute;
+            inset: 0;
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
         }
-        .hidden {
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .land {
+            fill: #e9e8e3;
+            stroke: #c9c7bf;
+            stroke-width: 0.75;
+        }
+        .dots circle {
+            cursor: pointer;
+            stroke: #fff;
+            stroke-width: 0.4;
+        }
+        .dots circle:hover, .dots circle.selected {
+            stroke: #1b1b1b;
+            stroke-width: 1.5;
+        }
+        .key text, .note {
+            font-size: 11px;
+            fill: #444;
+        }
+        #tooltip {
+            position: absolute;
             display: none;
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+            padding: 5px 8px;
+            white-space: nowrap;
+            line-height: 1.4;
         }
-        .annotation-subject path.invisible {
-            stroke: none;
+        #tooltip b {
+            font-weight: 600;
+        }
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #555;
+            background: #fff;
         }
     </style>
 
     <!-- Put SCRIPT tags to load 3rd party libraries here -->
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 
 </head>
 
 <body>
 
-<main id="main"><svg width="100%" height="100%"></svg></main><!-- This element is where the view will render -->
+<div id="main">
+    <svg width="100%" height="100%"></svg>
+    <div id="tooltip"></div>
+    <div id="message"></div>
+</div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
 <script>
+
+    var svg = d3.select("svg");
+    var tooltip = document.getElementById("tooltip");
+
+    // Colours follow the category's name (from an unfiltered list of the colour field's values), not its rank in
+    // the current data, so a filter does not recolour the dots.
+    var PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948", "#7f8c8d", "#00a3bf"];
+    var NONE = "#b9b8b2", PLAIN = "#d6402f";
+    var state = { selected: null, colourDomain: {}, map: null, mapError: null, model: null };
+    window.__spainDots = state;
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
@@ -47,128 +106,247 @@
 
     // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
     document.body.addEventListener("click", function() {
-        omniscope.view.whitespaceClick();
+        clearSelection();
     });
 
-    // Naively redraw on any of these events
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    function clearSelection() {
+        state.selected = null;
+        highlight();
+        omniscope.view.whitespaceClick();
+    }
 
-        var svg = d3.select("svg");
-        var width = +parseInt(svg.style("width"), 10);
-        var height = +parseInt(svg.style("height"), 10);
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+    }
+
+    function isRange(v) { return v !== null && typeof v === "object" && ("lower" in v || "upper" in v); }
+    function label(v) {
+        if (v === null || v === undefined) return "(blank)";
+        if (isRange(v)) return label(v.lower) + " to " + label(v.upper);
+        if (typeof v === "number") return (+v.toPrecision(6)).toLocaleString();
+        return String(v);
+    }
+    function measureName(m) {
+        if (!m) return "";
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField;
+    }
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"]/g, function(c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; });
+    }
+
+    // The filter that selects one Split value: an equality, or a range for a histogram grouping.
+    function splitFilter(field, v) {
+        if (isRange(v)) {
+            return { type: "AND", filters: [
+                { type: "FIELD_VALUE", inputField: field, operator: ">=", value: v.lower },
+                { type: "FIELD_VALUE", inputField: field, operator: "<", value: v.upper } ] };
+        }
+        return { type: "FIELD_VALUE", inputField: field, operator: "=", value: v === undefined ? null : v };
+    }
+
+    // Unfiltered list of the colour field's values, fetched once per field.
+    function colourDomain(m, done) {
+        if (!m || !m.inputField) return null;
+        var key = m.inputField, cached = state.colourDomain[key];
+        if (cached) return cached.values;
+        state.colourDomain[key] = { values: null };
+        omniscope.view.queryBuilder().table({ groupings: [{ inputField: key, type: "UNIQUE_VALUES" }],
+            measures: [{ function: "RECORD_COUNT" }], range: { start: 0, length: 51 } })
+            .on("load", function(e) {
+                var vals = e.data.records.map(function(r) { return r[0]; }).filter(function(v) { return v !== null; });
+                state.colourDomain[key] = { values: vals.length <= 50 ? vals.map(String).sort() : null };
+                done();
+            })
+            .on("error", function() { done(); })
+            .execute();
+        return null;
+    }
+
+    // The outline of Spain (mainland, Balearic Islands, Ceuta and Melilla) is a file next to this one, loaded once.
+    function loadMap() {
+        if (state.map || state.mapError || state.mapLoading) return;
+        state.mapLoading = true;
+        fetch("spain_peninsula.json").then(function(r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.json();
+        }).then(function(feature) {
+            state.map = { type: "FeatureCollection", features: [feature] };
+            render();
+        }).catch(function(e) {
+            state.mapError = "Could not load the map outline (spain_peninsula.json): " + e.message;
+            render();
+        });
+    }
+
+    // Redraw on any of these events
+    // (load = first init, update = external settings/state change, resize = browser window resized)
+    omniscope.view.on(["load", "update", "resize"], render);
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {}, t0 = Date.now();
+        svg.selectAll("*").remove();
+        tooltip.style.display = "none";
+        state.model = null;
+        if (!it.split) { message("Choose a Split grouping: the view draws one dot per value, for example per site."); return; }
+        if (!it.lat || !it.lon) { message("Choose a Dot latitude and a Dot longitude measure, for example the mean of Latitude and of Longitude."); return; }
+        if (state.mapError) { message(state.mapError); return; }
+        if (!state.map) { message("Loading the map"); loadMap(); return; }
+        var result = ctx.result;
+        if (!result || !result.data) { message("Waiting for data"); return; }
 
         // Retrieve the auto-query results, a 2d array ([row][column]):
-        var options = omniscope.view.context().options.items;
-        var records = omniscope.view.context().result.data.records;
-        var mappings = omniscope.view.context().result.mappings;
+        var records = result.data.records || [];
+        var mappings = result.mappings || {};
+        if (!records.length) { message("No data to show. Check the report's filters."); return; }
+        if (mappings.lat === undefined || mappings.lon === undefined) { message("Waiting for data"); return; }
+        if (!ctx.viewSelection) state.selected = null;
 
-        var forceCollide = d3.forceCollide()
-            .radius(function(d) { return 2 + 1; });
-
-        d3.json("spain_peninsula.json", function(error, feature) {
-            if (error) throw error;
-
-            let geojson = {
-                "type": "FeatureCollection",
-                "features": [
-                    feature
-                ]
+        var num = function(record, k) {
+            var v = mappings[k] !== undefined ? record[mappings[k]] : null;
+            return typeof v === "number" && isFinite(v) ? v : null;
+        };
+        var all = records.map(function(record) {
+            return {
+                id: record[mappings.split],
+                key: JSON.stringify(record[mappings.split]),
+                lat: num(record, "lat"),
+                lon: num(record, "lon"),
+                colour: (mappings.colour !== undefined) ? record[mappings.colour] : null,
+                tip: (mappings.tooltipvalue !== undefined) ? record[mappings.tooltipvalue] : null
             };
+        });
+        var located = all.filter(function(d) { return d.lat !== null && d.lon !== null && Math.abs(d.lat) <= 90 && Math.abs(d.lon) <= 180; });
+        if (!located.length) { message("None of the " + all.length.toLocaleString() + " dots has a latitude and longitude. Check Dot latitude and Dot longitude."); return; }
+        message(null);
 
-            // Map records to field options
-            var data = [];
-            records.forEach(function(record) {
-                let dot = {
-                    x: (mappings.lat !== undefined) ? record[mappings.lat] : null,
-                    y: (mappings.lon !== undefined) ? record[mappings.lon] : null,
-                    tooltipValue: (mappings.tooltipvalue !== undefined) ? record[mappings.tooltipvalue] : null
-                };
-                data.push(dot);
+        var W = +parseInt(svg.style("width"), 10), H = +parseInt(svg.style("height"), 10);
+
+        // Colour key: categories in a fixed order, at most 10 shown.
+        var domain = null, cats = [];
+        if (mappings.colour !== undefined) {
+            domain = colourDomain(it.colour, render);
+            var present = {};
+            all.forEach(function(d) { if (d.colour !== null && d.colour !== undefined) present[String(d.colour)] = true; });
+            if (!domain) domain = Object.keys(present).sort();
+            cats = domain.filter(function(c) { return present[c]; });
+        }
+        var colourOf = function(d) {
+            if (mappings.colour === undefined) return PLAIN;
+            if (d.colour === null || d.colour === undefined) return NONE;
+            var i = domain.indexOf(String(d.colour));
+            return i < 0 ? NONE : PALETTE[i % PALETTE.length];
+        };
+        var showKey = cats.length > 0 && cats.length <= 10 && W > 220 && H > 160;
+
+        var pad = Math.max(4, Math.min(16, Math.min(W, H) * 0.04));
+        var top = pad + (showKey ? 20 : 0), bottom = pad + (H > 160 ? 14 : 0);
+        var projection = d3.geoMercator().fitExtent([[pad, top], [Math.max(pad + 10, W - pad), Math.max(top + 10, H - bottom)]], state.map);
+        var path = d3.geoPath().projection(projection);
+
+        svg.append("g").attr("class", "land").selectAll("path").data(state.map.features).enter()
+            .append("path").attr("d", path);
+
+        // Each dot is pulled towards its location and pushed away from its neighbours, so dots in a crowded place
+        // spread out instead of hiding each other. Dots outside the view (for example in the Canary Islands, which
+        // the map does not show) are counted but not drawn.
+        var dots = [], outside = 0;
+        located.forEach(function(d) {
+            var p = projection([d.lon, d.lat]);
+            if (!p || p[0] < 0 || p[1] < 0 || p[0] > W || p[1] > H) { outside++; return; }
+            d.tx = d.x = p[0]; d.ty = d.y = p[1];
+            dots.push(d);
+        });
+        if (!dots.length) {
+            svg.selectAll("*").remove();
+            message("None of the " + located.length.toLocaleString() + " dots is on the map of Spain. Check Dot latitude and Dot longitude: for example the mean of a Latitude field, not Record count.");
+            return;
+        }
+        var mapArea = Math.max(1, (W - 2 * pad) * (H - top - bottom) * 0.5);
+        var r = +it.dotsize > 0 ? Math.min(20, +it.dotsize)
+            : Math.max(1.2, Math.min(4, Math.sqrt(mapArea / Math.max(1, dots.length)) * 0.22));
+        var simulation = d3.forceSimulation(dots)
+            .force("x", d3.forceX(function(d) { return d.tx; }).strength(0.6))
+            .force("y", d3.forceY(function(d) { return d.ty; }).strength(0.6))
+            .force("collide", d3.forceCollide(r + 0.4).iterations(dots.length > 5000 ? 1 : 2))
+            .stop();
+        // Fewer steps for many dots, so a large dataset does not hold up the report.
+        var steps = dots.length > 5000 ? 40 : dots.length > 1500 ? 80 : 150;
+        for (var i = 0; i < steps; ++i) simulation.tick();
+        dots.forEach(function(d) {
+            d.x = Math.max(r, Math.min(W - r, d.x));
+            d.y = Math.max(r, Math.min(H - r, d.y));
+        });
+
+        var g = svg.append("g").attr("class", "dots");
+        g.selectAll("circle").data(dots).enter().append("circle")
+            .attr("r", r)
+            .attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; })
+            .attr("fill", colourOf)
+            .on("mousemove", function(event, d) { showTip(event, d); })
+            .on("mouseleave", function() { tooltip.style.display = "none"; })
+            .on("click", function(event, d) {
+                event.stopPropagation();
+                if (state.selected === d.key) { clearSelection(); return; }
+                state.selected = d.key;
+                omniscope.view.context().viewSelection = { filter: splitFilter(it.split.inputField, d.id) };
+                omniscope.view.updated();
+                highlight();
             });
 
-            // Position map in the centre of the view with 20 px margin
-            var projection = d3.geoMercator()
-                .fitExtent([[0, 0], [width - 20, height - 20]], geojson);
-            // Create path generator based on projection
-            var path = d3.geoPath()
-                .projection(projection);
-
-            var simulation = d3.forceSimulation()
-                .force("collide", forceCollide)
-                .alphaDecay(0.1)
-                .force("x", d3.forceX().strength(.7).x(function(d) {return projection([d.y, d.x])[0];}))
-                .force("y", d3.forceY().strength(.7).y(function(d) {return projection([d.y, d.x])[1];}));
-
-            function tick() {
-                svg.selectAll("circle")
-                    .attr("cx", function(d) {
-                        return d.x;
-                    })
-                    .attr("cy", function(d) {
-                        return d.y;
-                    });
+        function showTip(event, d) {
+            var lines = ["<b>" + escapeHtml(label(d.id)) + "</b>"];
+            if (mappings.tooltipvalue !== undefined) {
+                var title = it.tooltiptitle ? it.tooltiptitle : measureName(it.tooltipvalue);
+                lines.push(escapeHtml(title) + ": " + escapeHtml(label(d.tip)));
             }
+            if (mappings.colour !== undefined) lines.push(escapeHtml(measureName(it.colour)) + ": " + escapeHtml(label(d.colour)));
+            lines.push(escapeHtml(label(d.lat)) + ", " + escapeHtml(label(d.lon)));
+            tooltip.innerHTML = lines.join("<br>");
+            tooltip.style.display = "block";
+            var tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+            var x = event.clientX + 12, y = event.clientY + 12;
+            if (x + tw > W) x = Math.max(0, event.clientX - tw - 12);
+            if (y + th > H) y = Math.max(0, event.clientY - th - 12);
+            tooltip.style.left = x + "px";
+            tooltip.style.top = y + "px";
+        }
 
-            simulation
-                .nodes(data)
-                .on("tick", tick);
+        if (showKey) {
+            var key = svg.append("g").attr("class", "key").attr("transform", "translate(" + pad + "," + pad + ")");
+            var kx = 0;
+            cats.forEach(function(c) {
+                var item = key.append("g").attr("transform", "translate(" + kx + ",0)");
+                item.append("circle").attr("r", 5).attr("cx", 5).attr("cy", 6).attr("fill", PALETTE[domain.indexOf(c) % PALETTE.length]);
+                var t = item.append("text").attr("x", 14).attr("y", 10).text(c);
+                kx += 14 + t.node().getComputedTextLength() + 14;
+            });
+            if (kx > W - 2 * pad) key.remove();
+        }
 
-            d3.select("svg")
-                .selectAll(".path")
-                .data(geojson.features)
-                .enter()
-                .append("path")
-                .attr("class", "path");
+        // A note for dots that cannot be drawn, so a missing dot is never silent.
+        var missing = all.length - located.length, notes = [];
+        if (outside) notes.push(outside.toLocaleString() + (outside === 1 ? " dot is" : " dots are") + " outside the map");
+        if (missing) notes.push(missing.toLocaleString() + (missing === 1 ? " has" : " have") + " no location");
+        if (notes.length && H > 160) {
+            svg.append("text").attr("class", "note").attr("x", W - pad).attr("y", H - 6).attr("text-anchor", "end")
+                .text(notes.join("; "));
+        }
 
-            d3.selectAll(".path")
-                .attr("d", path)
-                .attr("fill", "#dedede");
+        state.model = { dots: dots.length, outside: outside, missing: missing, r: r, cats: cats, steps: steps, ms: Date.now() - t0 };
+        highlight();
+    }
 
-            // add circles to svg
-            svg.selectAll("circle")
-                .data(data).enter()
-                .append("circle")
-                .attr("cx", function (d) { return projection([d.y, d.x])[0]; })
-                .attr("cy", function (d) { return projection([d.y, d.x])[1]; })
-                .attr("r", "2px")
-                .attr("fill", "red");
-
-            // --- ANNOTATIONS --- //
-            svg.selectAll(".annotation-tooltip").remove();
-
-            if (mappings.tooltipvalue) {
-                var tooltipTitle = (options.tooltiptitle !== undefined) ? options.tooltiptitle : options.tooltipvalue.inputField;
-                var labels = data.map(function(dot) {
-                    let _x = projection([dot.y, dot.x])[0];
-                    let _y = projection([dot.y, dot.x])[1];
-                    return {
-                        x: _x,
-                        y: _y,
-                        dx: (_x + 150 > width) ? -50 : 50,
-                        dy: (_y + 150 > height) ? -50 : 50,
-                        note: {title: tooltipTitle, label: dot.tooltipValue},
-                        subject: { radius: 4 }
-                    }
-                });
-
-                window.makeAnnotations = d3.annotation().annotations(labels).type(d3.annotationCalloutCircle)
-                    .on('subjectover', function (annotation) {
-                        annotation.type.a.selectAll("g.annotation-connector, g.annotation-note").classed("hidden", false);
-                        annotation.type.a.selectAll("g.annotation-subject path").classed("invisible", false);
-                    }).on('subjectout', function (annotation) {
-                        annotation.type.a.selectAll("g.annotation-connector, g.annotation-note").classed("hidden", true);
-                        annotation.type.a.selectAll("g.annotation-subject path").classed("invisible", true);
-                    });
-
-                svg.append("g").attr("class", "annotation-tooltip").call(makeAnnotations);
-
-                svg.selectAll("g.annotation-connector, g.annotation-note").classed("hidden", true);
-                svg.selectAll("g.annotation-subject path").classed("invisible", true);
-            }
-
-        });
-    });
+    function highlight() {
+        var sel = state.selected;
+        svg.selectAll(".dots circle")
+            .classed("selected", function(d) { return sel !== null && d.key === sel; })
+            .attr("opacity", function(d) { return sel === null || d.key === sel ? 1 : 0.25; });
+    }
 
 </script>
 

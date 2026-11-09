@@ -1,0 +1,607 @@
+{
+ "ctx": {
+  "@visokiotype": "CustomViewApi.ViewApiContext",
+  "viewName": "KPI",
+  "viewInstanceId": 4,
+  "baseUrl": "https://omniscope.example.com/Demos/kpi-demo.iox/er/Report/customview/KPI/",
+  "dataConfig": {
+   "@visokiotype": "CustomViewApi.DataConfig",
+   "queryApiEndpoint": "https://omniscope.example.com/Demos/kpi-demo.iox/er/Report/input/0/api/eccbc87e4b5ce2fe28308fd9f2a7baf3",
+   "queryApiRootNode": {
+    "comment": null,
+    "variables": null,
+    "@visokiotype": "QueryApi.DefaultSource"
+   },
+   "healthWatermark": null,
+   "paneXFilter": {
+    "@visokiotype": "QueryApi.Filter",
+    "type": "AND",
+    "inputField": null,
+    "operator": null,
+    "value": null,
+    "filters": [],
+    "geoDistance": null
+   },
+   "paneYFilter": {
+    "@visokiotype": "QueryApi.Filter",
+    "type": "AND",
+    "inputField": null,
+    "operator": null,
+    "value": null,
+    "filters": [],
+    "geoDistance": null
+   },
+   "filter": {
+    "@visokiotype": "QueryApi.Filter",
+    "type": "AND",
+    "inputField": null,
+    "operator": null,
+    "value": null,
+    "filters": [],
+    "geoDistance": null
+   },
+   "shadowFilter": null,
+   "baseFilter": {
+    "@visokiotype": "QueryApi.Filter",
+    "type": "AND",
+    "inputField": null,
+    "operator": null,
+    "value": null,
+    "filters": [],
+    "geoDistance": null
+   },
+   "baseShadowFilter": null
+  },
+  "viewSelection": null,
+  "globalOptions": {
+   "@visokiotype": "CustomViewApi.GlobalOptions",
+   "viewerMode": true,
+   "isDataEditingAllowed": false,
+   "isReportInEditMode": false,
+   "canExportData": false,
+   "showViewMenu": false,
+   "imageSets": [],
+   "linkDefinitions": [],
+   "viewAnimationOptions": {
+    "@visokiotype": "CustomViewApi.ViewAnimationOptions",
+    "enableInitialAnimation": true,
+    "initialAnimationDuration": 500,
+    "enableUpdateAnimation": true,
+    "updateAnimationDuration": 250
+   },
+   "viewSelectionMode": "INHERIT"
+  },
+  "options": {
+   "@visokiotype": "CustomViewApi.ViewOptions",
+   "items": {
+    "measure": {
+     "@visokiotype": "QueryApi.Measure",
+     "name": "Sales (sum)",
+     "inputField": "Sales",
+     "weightField": null,
+     "function": "SUM",
+     "percentileValue": null,
+     "sequenceId": null,
+     "namedMeasure": null,
+     "formula": null,
+     "colour": null,
+     "displayName": null,
+     "valueColourOptions": null,
+     "labelOptions": null,
+     "axisPosition": null,
+     "numericFormattingOptions": null,
+     "dateFormattingOptions": null
+    },
+    "text": "Total sales"
+   },
+   "custom": null,
+   "pane": {
+    "@visokiotype": "CustomViewApi.AutoPaneOptions",
+    "yAxisHeaderWidth": 75,
+    "paneWidth": 100,
+    "paneHeight": 100,
+    "showGridLines": true,
+    "gridLineThickness": 1,
+    "gridLineColour": "rgba(36,45,59,0.149)",
+    "headerStyle": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": 13,
+     "bold": null,
+     "italic": null,
+     "colour": "rgba(36,45,59,1)",
+     "backgroundColour": "rgba(255,255,255,0)",
+     "align": null,
+     "verticalAlign": null
+    },
+    "showPaneXHeader": true,
+    "showPaneYHeader": true,
+    "showTileHeader": true,
+    "xHeaderStyle": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": null,
+     "bold": null,
+     "italic": null,
+     "colour": null,
+     "backgroundColour": null,
+     "align": "CENTER",
+     "verticalAlign": "TOP"
+    },
+    "yHeaderStyle": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": null,
+     "bold": null,
+     "italic": null,
+     "colour": null,
+     "backgroundColour": null,
+     "align": "LEFT",
+     "verticalAlign": "TOP"
+    },
+    "tileHeaderStyle": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": null,
+     "bold": null,
+     "italic": null,
+     "colour": null,
+     "backgroundColour": null,
+     "align": "CENTER",
+     "verticalAlign": null
+    },
+    "xHeaderLines": 1,
+    "tileHeaderLines": 1,
+    "xHeaderPlacement": "TOP",
+    "yHeaderPlacement": "LEFT",
+    "showColourKeyInEveryPane": false,
+    "enableTouchScrolling": false
+   }
+  },
+  "baseOptions": {
+   "@visokiotype": "CustomViewApi.ViewOptions",
+   "items": {
+    "measure": {
+     "@visokiotype": "QueryApi.Measure",
+     "name": "Sales (sum)",
+     "inputField": "Sales",
+     "weightField": null,
+     "function": "SUM",
+     "percentileValue": null,
+     "sequenceId": null,
+     "namedMeasure": null,
+     "formula": null,
+     "colour": null,
+     "displayName": null,
+     "valueColourOptions": null,
+     "labelOptions": null,
+     "axisPosition": null,
+     "numericFormattingOptions": null,
+     "dateFormattingOptions": null
+    },
+    "text": "Total sales"
+   },
+   "custom": null,
+   "pane": {
+    "@visokiotype": "CustomViewApi.AutoPaneOptions",
+    "yAxisHeaderWidth": 75,
+    "paneWidth": 100,
+    "paneHeight": 100,
+    "showGridLines": true,
+    "gridLineThickness": 1,
+    "gridLineColour": "rgba(36,45,59,0.149)",
+    "headerStyle": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": 13,
+     "bold": null,
+     "italic": null,
+     "colour": "rgba(36,45,59,1)",
+     "backgroundColour": "rgba(255,255,255,0)",
+     "align": null,
+     "verticalAlign": null
+    },
+    "showPaneXHeader": true,
+    "showPaneYHeader": true,
+    "showTileHeader": true,
+    "xHeaderStyle": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": null,
+     "bold": null,
+     "italic": null,
+     "colour": null,
+     "backgroundColour": null,
+     "align": "CENTER",
+     "verticalAlign": "TOP"
+    },
+    "yHeaderStyle": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": null,
+     "bold": null,
+     "italic": null,
+     "colour": null,
+     "backgroundColour": null,
+     "align": "LEFT",
+     "verticalAlign": "TOP"
+    },
+    "tileHeaderStyle": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": null,
+     "bold": null,
+     "italic": null,
+     "colour": null,
+     "backgroundColour": null,
+     "align": "CENTER",
+     "verticalAlign": null
+    },
+    "xHeaderLines": 1,
+    "tileHeaderLines": 1,
+    "xHeaderPlacement": "TOP",
+    "yHeaderPlacement": "LEFT",
+    "showColourKeyInEveryPane": false,
+    "enableTouchScrolling": false
+   }
+  },
+  "stylisedHeaderTitle": null,
+  "stylisedHeaderSubtitle": {
+   "@visokiotype": "CustomViewApi.StylisedTitle",
+   "text": {
+    "@visokiotype": "CustomViewApi.StylisedText",
+    "content": null,
+    "style": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": 14,
+     "bold": false,
+     "italic": false,
+     "colour": "rgba(36,45,59,1)",
+     "backgroundColour": "rgba(255,255,255,0)",
+     "align": "CENTER",
+     "verticalAlign": null
+    }
+   },
+   "show": false
+  },
+  "stylisedFooterTitle": {
+   "@visokiotype": "CustomViewApi.StylisedTitle",
+   "text": {
+    "@visokiotype": "CustomViewApi.StylisedText",
+    "content": null,
+    "style": {
+     "@visokiotype": "CustomViewApi.TextStyle",
+     "font": null,
+     "size": 13,
+     "bold": false,
+     "italic": false,
+     "colour": "rgba(36,45,59,1)",
+     "backgroundColour": "rgba(255,255,255,0)",
+     "align": "CENTER",
+     "verticalAlign": null
+    }
+   },
+   "show": false
+  },
+  "supportsSelection": true,
+  "manifest": {
+   "@visokiotype": "CustomViewApi.ViewApiManifest",
+   "name": "KPI",
+   "isNative": false,
+   "frameworkVersion": "v1",
+   "icon": "icon.svg",
+   "thumbnail": "thumbnail.png",
+   "readme": null,
+   "tags": [
+    "custom",
+    "key"
+   ],
+   "sandbox": false,
+   "autoPane": true,
+   "autoQuery": true,
+   "devicesView": null,
+   "dataLimit": 10000,
+   "supportsSelection": true,
+   "options": {
+    "@visokiotype": "CustomViewApi.OptionDefinitions",
+    "items": {
+     "measure": {
+      "@visokiotype": "CustomViewApi.OptionDefinition",
+      "displayName": "Measure",
+      "detail": "Measure value to show under the text",
+      "type": "MEASURE",
+      "mandatory": true
+     },
+     "text": {
+      "@visokiotype": "CustomViewApi.OptionDefinition",
+      "displayName": "Text",
+      "detail": "Static text to show as title",
+      "type": "TEXT"
+     }
+    },
+    "structure": {
+     "@visokiotype": "CustomViewApi.ToolbarStructure",
+     "toolbar": [
+      "measure"
+     ],
+     "x": [],
+     "y": [],
+     "microtoolbar": null
+    },
+    "optionGroups": [
+     {
+      "@visokiotype": "CustomViewApi.OptionGroup",
+      "displayName": "Measures",
+      "rows": [
+       {
+        "@visokiotype": "CustomViewApi.OptionGroupRow",
+        "title": null,
+        "cells": [
+         {
+          "@visokiotype": "CustomViewApi.OptionGroupCell",
+          "option": "text",
+          "hideTitle": null,
+          "usePrefixTitle": false,
+          "width": null
+         }
+        ]
+       },
+       {
+        "@visokiotype": "CustomViewApi.OptionGroupRow",
+        "title": null,
+        "cells": [
+         {
+          "@visokiotype": "CustomViewApi.OptionGroupCell",
+          "option": "measure",
+          "hideTitle": null,
+          "usePrefixTitle": false,
+          "width": null
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "selectionStrategies": null,
+    "sections": null
+   },
+   "defaultOptions": {
+    "@visokiotype": "CustomViewApi.ViewOptions",
+    "items": {},
+    "custom": null,
+    "pane": {
+     "@visokiotype": "CustomViewApi.AutoPaneOptions",
+     "yAxisHeaderWidth": 75,
+     "paneWidth": 100,
+     "paneHeight": 100,
+     "showGridLines": true,
+     "gridLineThickness": 1,
+     "gridLineColour": null,
+     "headerStyle": {
+      "@visokiotype": "CustomViewApi.TextStyle",
+      "font": null,
+      "size": null,
+      "bold": null,
+      "italic": null,
+      "colour": null,
+      "backgroundColour": null,
+      "align": null,
+      "verticalAlign": null
+     },
+     "showPaneXHeader": true,
+     "showPaneYHeader": true,
+     "showTileHeader": true,
+     "xHeaderStyle": {
+      "@visokiotype": "CustomViewApi.TextStyle",
+      "font": null,
+      "size": null,
+      "bold": null,
+      "italic": null,
+      "colour": null,
+      "backgroundColour": null,
+      "align": null,
+      "verticalAlign": null
+     },
+     "yHeaderStyle": {
+      "@visokiotype": "CustomViewApi.TextStyle",
+      "font": null,
+      "size": null,
+      "bold": null,
+      "italic": null,
+      "colour": null,
+      "backgroundColour": null,
+      "align": null,
+      "verticalAlign": null
+     },
+     "tileHeaderStyle": {
+      "@visokiotype": "CustomViewApi.TextStyle",
+      "font": null,
+      "size": null,
+      "bold": null,
+      "italic": null,
+      "colour": null,
+      "backgroundColour": null,
+      "align": null,
+      "verticalAlign": null
+     },
+     "xHeaderLines": 1,
+     "tileHeaderLines": 1,
+     "xHeaderPlacement": "TOP",
+     "yHeaderPlacement": "LEFT",
+     "showColourKeyInEveryPane": false,
+     "enableTouchScrolling": false
+    }
+   },
+   "custom": null,
+   "pane": {
+    "@visokiotype": "CustomViewApi.PaneConstraints",
+    "minWidth": 50,
+    "minHeight": 50,
+    "maxCells": 20
+   },
+   "experimental": null,
+   "layerListType": null,
+   "customScaling": null
+  },
+  "result": {
+   "@visokiotype": "CustomViewApi.AutoQueryResult",
+   "data": {
+    "@visokiotype": "QueryApi.TableQueryOutput",
+    "schema": {
+     "@visokiotype": "QueryApi.SchemaFieldsQueryOutput",
+     "fields": [
+      {
+       "@visokiotype": "QueryApi.SchemaField",
+       "name": "_1_measure_Sales (sum)",
+       "type": "NUMBER",
+       "granularity": 1,
+       "formatting": {
+        "@visokiotype": "QueryApi.NumericFieldFormattingOptions",
+        "percent": false,
+        "thousandSeparator": true,
+        "decimalPlaces": null,
+        "prefix": null,
+        "suffix": null,
+        "negativeNumberFormat": null
+       },
+       "extendedMeta": {
+        "@visokiotype": "QueryApi.FieldExtMeta",
+        "displayName": null,
+        "description": null,
+        "source": "loop.csv",
+        "group": null
+       },
+       "customOrder": null
+      }
+     ],
+     "diagnostics": null,
+     "isEditable": false
+    },
+    "records": [
+     [
+      4940
+     ]
+    ],
+    "diagnostics": null
+   },
+   "shadowData": null,
+   "mappings": {
+    "measure": 0
+   }
+  },
+  "pane": {
+   "@visokiotype": "CustomViewApi.AutoPaneCell",
+   "x": {
+    "@visokiotype": "CustomViewApi.AutoPaneCellPosition",
+    "index": 0,
+    "headers": [
+     {
+      "@visokiotype": "QueryApi.AllMarker",
+      "all": true
+     }
+    ]
+   },
+   "y": {
+    "@visokiotype": "CustomViewApi.AutoPaneCellPosition",
+    "index": 0,
+    "headers": [
+     {
+      "@visokiotype": "QueryApi.AllMarker",
+      "all": true
+     }
+    ]
+   }
+  },
+  "variables": {
+   "!tab": "Tab 1",
+   "!tabNum": 1,
+   "!userIdentity": "demo-user"
+  },
+  "variableDefinitions": [
+   {
+    "@visokiotype": "QueryApi.FormulaVariable",
+    "name": "!tab",
+    "value": "Tab 1",
+    "dataType": "TEXT",
+    "nullable": false,
+    "enableLiveQueryInjection": false
+   },
+   {
+    "@visokiotype": "QueryApi.FormulaVariable",
+    "name": "!tabNum",
+    "value": 1,
+    "dataType": "NUMBER",
+    "nullable": false,
+    "enableLiveQueryInjection": false
+   },
+   {
+    "@visokiotype": "QueryApi.FormulaVariable",
+    "name": "!userIdentity",
+    "value": "demo-user",
+    "dataType": "TEXT",
+    "nullable": true,
+    "enableLiveQueryInjection": false
+   }
+  ],
+  "invalidReason": null,
+  "customViewVersion": 8,
+  "keyForShortTermLocalStorage": null
+ },
+ "endpoint": {
+  "url": "https://omniscope.example.com/Demos/kpi-demo.iox/er/Report/input/0/api/eccbc87e4b5ce2fe28308fd9f2a7baf3",
+  "rootNode": {
+   "comment": null,
+   "variables": null,
+   "@visokiotype": "QueryApi.DefaultSource"
+  },
+  "variables": [
+   {
+    "@visokiotype": "QueryApi.FormulaVariable",
+    "name": "!tab",
+    "value": "Tab 1",
+    "dataType": "TEXT",
+    "nullable": false,
+    "enableLiveQueryInjection": false
+   },
+   {
+    "@visokiotype": "QueryApi.FormulaVariable",
+    "name": "!tabNum",
+    "value": 1,
+    "dataType": "NUMBER",
+    "nullable": false,
+    "enableLiveQueryInjection": false
+   },
+   {
+    "@visokiotype": "QueryApi.FormulaVariable",
+    "name": "!userIdentity",
+    "value": "demo-user",
+    "dataType": "TEXT",
+    "nullable": true,
+    "enableLiveQueryInjection": false
+   }
+  ]
+ },
+ "keys": [
+  "Zf",
+  "Q0",
+  "PN",
+  "Ca",
+  "kk",
+  "oI",
+  "parent",
+  "context",
+  "endpoint",
+  "busy",
+  "error",
+  "updated",
+  "whitespaceClick",
+  "on",
+  "off",
+  "once",
+  "queryBuilder"
+ ],
+ "qkeys": [
+  "builder"
+ ]
+}

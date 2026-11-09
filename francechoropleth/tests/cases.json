@@ -1,0 +1,113 @@
+[
+ {
+  "name": "showcase", "showcase": true,
+  "data": "sample-data/orders.csv",
+  "options": { "items": { "split": { "inputField": "Department", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 640, "height": 640, "showcaseHeight": 640, "wait": 1500,
+  "caption": "Live: invented sales of 2,000 orders, summed by department. Hover a department for its value; click it to select its orders.",
+  "expect": { "selector": ".dept", "min": 105, "max": 105, "text": "Sales (sum)" },
+  "actions": [
+   { "eval": "document.querySelectorAll('.dept.nodata').length === 0 && Object.keys(__france.model.values).length === 101", "expectTruthy": true },
+   { "eval": "Math.abs(Object.values(__france.model.values).reduce((a, b) => a + b, 0) - 157894.98) < 0.01", "expectTruthy": true },
+   { "eval": "document.getElementById('note').textContent === ''", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "codes", "showcase": true,
+  "data": "sample-data/orders.csv",
+  "options": { "items": { "split": { "inputField": "Department code", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Satisfaction", "function": "MEAN" } } },
+  "width": 640, "height": 640, "showcaseHeight": 640, "wait": 1500,
+  "caption": "Live: the same orders matched by INSEE department code, coloured by the mean satisfaction score.",
+  "expect": { "selector": ".dept", "min": 105, "text": "Satisfaction (mean)" },
+  "actions": [
+   { "eval": "Object.keys(__france.model.values).length === 101 && __france.model.lo >= 1 && __france.model.hi <= 5", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/orders.csv",
+  "options": { "items": { "split": { "inputField": "Department", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 640, "height": 640, "wait": 1500,
+  "actions": [
+   { "hover": ".dept[data-code='33']" },
+   { "eval": "document.getElementById('tooltip').textContent.indexOf('Gironde (33)') === 0", "expectTruthy": true },
+   { "click": ".dept[data-code='33']" },
+   { "expectSelection": true },
+   { "eval": "JSON.stringify(omniscope.view.context().viewSelection.filter.filters[0]) === JSON.stringify({type: 'FIELD_VALUE', inputField: 'Department', operator: '=', value: 'Gironde'})", "expectTruthy": true },
+   { "eval": "document.querySelectorAll('.dept.faded').length === 104 && document.querySelector('.dept.selected').getAttribute('data-code') === '33'", "expectTruthy": true },
+   { "screenshot": "selected" },
+   { "click": ".dept[data-code='33']" },
+   { "expectSelection": false },
+   { "click": ".dept[data-code='75']", "nth": 1 },
+   { "expectSelection": true },
+   { "eval": "omniscope.view.context().viewSelection.filter.filters[0].value === 'Paris'", "expectTruthy": true },
+   { "clickAt": [620, 20] },
+   { "expectSelection": false },
+   { "eval": "document.querySelectorAll('.dept.faded').length === 0", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/orders.csv",
+  "options": { "items": { "split": { "inputField": "Department", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 640, "height": 640, "wait": 1500,
+  "actions": [
+   { "filter": { "type": "FIELD_VALUE", "inputField": "Region", "operator": "=", "value": "Bretagne" } },
+   { "eval": "document.querySelectorAll('.dept:not(.nodata)').length === 4 && ['22','29','35','56'].every(c => c in __france.model.values) && document.getElementById('legend').innerText.indexOf('No data') >= 0", "expectTruthy": true },
+   { "screenshot": "bretagne" },
+   { "update": { "split": { "inputField": "Region", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+   { "eval": "/None of the 1 Department values/.test(document.getElementById('note').textContent)", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "spellings",
+  "data": "tests/spellings.csv",
+  "options": { "items": { "split": { "inputField": "Department", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Customers", "function": "SUM" } } },
+  "width": 640, "height": 640, "wait": 1500,
+  "actions": [
+   { "eval": "['93','2A','974','21','01','75'].every(c => c in __france.model.values) && Object.keys(__france.model.values).length === 6", "expectTruthy": true },
+   { "eval": "/1 value not on the map: Atlantis/.test(document.getElementById('note').textContent)", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/orders.csv",
+  "options": { "items": { "split": { "inputField": "Department", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 900, "height": 600, "wait": 1500,
+  "actions": [
+   { "eval": "document.getElementById('legend').children.length === 3", "expectTruthy": true },
+   { "resize": [180, 140] },
+   { "eval": "document.getElementById('legend').children.length === 0 && document.getElementById('map').getBoundingClientRect().height <= 140 && document.querySelectorAll('.inset-label').length === 0", "expectTruthy": true },
+   { "screenshot": "180x140" }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [ { "name": "Department", "type": "TEXT" }, { "name": "Sales", "type": "NUMBER" } ],
+  "options": { "items": { "split": { "inputField": "Department", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 500, "height": 400, "wait": 1000,
+  "expect": { "text": "No data to show" }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": { "items": {} },
+  "width": 500, "height": 400, "wait": 1000,
+  "expect": { "text": "Choose a Department field" }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": { "items": { "split": { "inputField": "Code", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Value", "function": "SUM" } } },
+  "width": 640, "height": 640, "wait": 2500,
+  "actions": [
+   { "eval": "Object.keys(__france.model.values).length === 101 && Object.values(__france.model.values).every(v => v === 15150)", "expectTruthy": true }
+  ]
+ },
+ {
+  "name": "thumb", "thumbnail": true,
+  "data": "sample-data/orders.csv",
+  "options": { "items": { "split": { "inputField": "Department", "type": "UNIQUE_VALUES" }, "measures": { "inputField": "Sales", "function": "SUM" } } },
+  "width": 580, "height": 580, "scale": 0.5, "wait": 1500
+ }
+]

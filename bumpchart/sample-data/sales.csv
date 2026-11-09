@@ -1,0 +1,1709 @@
+Month,Region,Product,Units sold,Revenue (GBP)
+2025-01-01,North,Classic Kettle,814,19114.4
+2025-01-01,South,Classic Kettle,1131,28042.79
+2025-01-01,London,Classic Kettle,1148,22781.45
+2025-01-01,Scotland,Classic Kettle,436,8633.37
+2025-01-01,North,Trail Runner,892,16985.2
+2025-01-01,South,Trail Runner,1029,20282.89
+2025-01-01,London,Trail Runner,1130,24241.49
+2025-01-01,Scotland,Trail Runner,510,11662.28
+2025-01-01,North,Smart Plug,667,13477.87
+2025-01-01,South,Smart Plug,854,21324.62
+2025-01-01,London,Smart Plug,1233,30144.85
+2025-01-01,Scotland,Smart Plug,476,11404.01
+2025-01-01,North,Daily Planner,847,20624.59
+2025-01-01,South,Daily Planner,846,20980.39
+2025-01-01,London,Daily Planner,1074,25818.99
+2025-01-01,Scotland,Daily Planner,423,9067.69
+2025-01-01,North,Desk Lamp,700,15007.0
+2025-01-01,South,Desk Lamp,842,15946.54
+2025-01-01,London,Desk Lamp,1155,28165.91
+2025-01-01,Scotland,Desk Lamp,464,10916.7
+2025-01-01,North,Cast Iron Pan,697,16719.14
+2025-01-01,South,Cast Iron Pan,746,17467.27
+2025-01-01,London,Cast Iron Pan,974,18908.33
+2025-01-01,Scotland,Cast Iron Pan,347,7697.0
+2025-01-01,North,Yoga Mat,628,13612.32
+2025-01-01,South,Yoga Mat,855,18096.98
+2025-01-01,London,Yoga Mat,871,19098.29
+2025-01-01,Scotland,Yoga Mat,347,6900.24
+2025-01-01,North,Bluetooth Speaker,600,12558.91
+2025-01-01,South,Bluetooth Speaker,704,16339.74
+2025-01-01,London,Bluetooth Speaker,1084,22891.38
+2025-01-01,Scotland,Bluetooth Speaker,391,9956.35
+2025-01-01,North,Coffee Grinder,519,9930.53
+2025-01-01,South,Coffee Grinder,802,19813.54
+2025-01-01,London,Coffee Grinder,904,17427.36
+2025-01-01,Scotland,Coffee Grinder,325,8107.43
+2025-01-01,North,Rain Jacket,502,12261.54
+2025-01-01,South,Rain Jacket,501,12439.45
+2025-01-01,London,Rain Jacket,626,14856.29
+2025-01-01,Scotland,Rain Jacket,223,5746.81
+2025-01-01,North,Air Fryer,561,13341.54
+2025-01-01,South,Air Fryer,607,13923.32
+2025-01-01,London,Air Fryer,804,18274.76
+2025-01-01,Scotland,Air Fryer,289,6884.43
+2025-01-01,North,Plant Pot Set,480,9774.05
+2025-01-01,South,Plant Pot Set,554,13003.63
+2025-01-01,London,Plant Pot Set,643,12734.27
+2025-01-01,Scotland,Plant Pot Set,244,5648.16
+2025-01-01,North,Travel Mug,484,10815.72
+2025-01-01,South,Travel Mug,501,10779.88
+2025-01-01,London,Travel Mug,655,12275.55
+2025-01-01,Scotland,Travel Mug,225,5846.24
+2025-01-01,North,Wireless Mouse,397,8103.57
+2025-01-01,South,Wireless Mouse,509,11594.04
+2025-01-01,London,Wireless Mouse,564,12272.15
+2025-01-01,Scotland,Wireless Mouse,239,5897.57
+2025-01-01,North,Bamboo Towels,351,7257.99
+2025-01-01,South,Bamboo Towels,504,12982.18
+2025-01-01,London,Bamboo Towels,599,13054.47
+2025-01-01,Scotland,Bamboo Towels,241,4909.76
+2025-01-01,North,Kids Scooter,327,7197.6
+2025-01-01,South,Kids Scooter,522,12479.45
+2025-01-01,London,Kids Scooter,509,11947.44
+2025-01-01,Scotland,Kids Scooter,233,4675.93
+2025-01-01,North,Phone Stand,360,7504.03
+2025-01-01,South,Phone Stand,396,8038.34
+2025-01-01,London,Phone Stand,461,9591.82
+2025-01-01,Scotland,Phone Stand,168,3558.42
+2025-01-01,North,Wool Socks,283,6810.44
+2025-01-01,South,Wool Socks,406,7321.3
+2025-01-01,London,Wool Socks,505,9859.33
+2025-01-01,Scotland,Wool Socks,178,3993.79
+2025-01-01,North,Water Filter,275,5586.76
+2025-01-01,South,Water Filter,347,6626.28
+2025-01-01,London,Water Filter,464,8767.5
+2025-01-01,Scotland,Water Filter,176,3475.33
+2025-01-01,North,Notebook Pack,245,5171.15
+2025-01-01,South,Notebook Pack,274,5213.18
+2025-01-01,London,Notebook Pack,361,7774.12
+2025-01-01,Scotland,Notebook Pack,161,4172.93
+2025-01-01,North,LED Strip,202,4500.64
+2025-01-01,South,LED Strip,255,6229.49
+2025-01-01,London,LED Strip,320,8045.82
+2025-01-01,Scotland,LED Strip,132,2508.67
+2025-01-01,North,Garden Hose,170,3397.45
+2025-01-01,South,Garden Hose,270,5183.46
+2025-01-01,London,Garden Hose,286,5998.34
+2025-01-01,Scotland,Garden Hose,105,2563.5
+2025-01-01,North,Sunglasses,156,3704.53
+2025-01-01,South,Sunglasses,218,5555.24
+2025-01-01,London,Sunglasses,247,6264.8
+2025-01-01,Scotland,Sunglasses,93,2100.52
+2025-02-01,North,Classic Kettle,890,21998.35
+2025-02-01,South,Classic Kettle,1175,22234.47
+2025-02-01,London,Classic Kettle,1105,24609.24
+2025-02-01,Scotland,Classic Kettle,522,11624.3
+2025-02-01,North,Trail Runner,787,20221.86
+2025-02-01,South,Trail Runner,962,17984.66
+2025-02-01,London,Trail Runner,1048,19118.92
+2025-02-01,Scotland,Trail Runner,497,9372.05
+2025-02-01,North,Smart Plug,825,20567.86
+2025-02-01,South,Smart Plug,1089,26650.56
+2025-02-01,London,Smart Plug,1094,25136.9
+2025-02-01,Scotland,Smart Plug,473,11223.42
+2025-02-01,North,Daily Planner,707,17035.91
+2025-02-01,South,Daily Planner,814,16660.69
+2025-02-01,London,Daily Planner,1252,27255.82
+2025-02-01,Scotland,Daily Planner,390,9468.66
+2025-02-01,North,Desk Lamp,709,12782.83
+2025-02-01,South,Desk Lamp,756,15174.58
+2025-02-01,London,Desk Lamp,988,25192.07
+2025-02-01,Scotland,Desk Lamp,370,9176.26
+2025-02-01,North,Cast Iron Pan,767,16359.46
+2025-02-01,South,Cast Iron Pan,972,23420.08
+2025-02-01,London,Cast Iron Pan,996,20011.26
+2025-02-01,Scotland,Cast Iron Pan,381,9607.44
+2025-02-01,North,Yoga Mat,675,13197.09
+2025-02-01,South,Yoga Mat,785,17119.94
+2025-02-01,London,Yoga Mat,875,19760.55
+2025-02-01,Scotland,Yoga Mat,319,7837.79
+2025-02-01,North,Bluetooth Speaker,604,11369.11
+2025-02-01,South,Bluetooth Speaker,839,17164.43
+2025-02-01,London,Bluetooth Speaker,1077,23667.58
+2025-02-01,Scotland,Bluetooth Speaker,374,9228.89
+2025-02-01,North,Coffee Grinder,557,13347.27
+2025-02-01,South,Coffee Grinder,778,16670.61
+2025-02-01,London,Coffee Grinder,1002,18212.58
+2025-02-01,Scotland,Coffee Grinder,375,7180.24
+2025-02-01,North,Rain Jacket,928,17845.39
+2025-02-01,South,Rain Jacket,892,19628.88
+2025-02-01,London,Rain Jacket,1372,27521.34
+2025-02-01,Scotland,Rain Jacket,466,10654.79
+2025-02-01,North,Air Fryer,495,11010.21
+2025-02-01,South,Air Fryer,560,12093.25
+2025-02-01,London,Air Fryer,836,17321.42
+2025-02-01,Scotland,Air Fryer,273,5025.01
+2025-02-01,North,Plant Pot Set,539,11544.03
+2025-02-01,South,Plant Pot Set,699,16723.12
+2025-02-01,London,Plant Pot Set,647,16377.7
+2025-02-01,Scotland,Plant Pot Set,319,7826.96
+2025-02-01,North,Travel Mug,519,12170.99
+2025-02-01,South,Travel Mug,615,14352.55
+2025-02-01,London,Travel Mug,700,14040.31
+2025-02-01,Scotland,Travel Mug,233,5547.64
+2025-02-01,North,Wireless Mouse,467,8616.93
+2025-02-01,South,Wireless Mouse,578,13224.9
+2025-02-01,London,Wireless Mouse,658,15923.75
+2025-02-01,Scotland,Wireless Mouse,281,5914.72
+2025-02-01,North,Bamboo Towels,456,10029.32
+2025-02-01,South,Bamboo Towels,520,11081.7
+2025-02-01,London,Bamboo Towels,680,14657.83
+2025-02-01,Scotland,Bamboo Towels,263,5445.69
+2025-02-01,North,Kids Scooter,402,10171.09
+2025-02-01,South,Kids Scooter,493,10354.2
+2025-02-01,London,Kids Scooter,482,10520.61
+2025-02-01,Scotland,Kids Scooter,207,5074.07
+2025-02-01,North,Phone Stand,380,9837.94
+2025-02-01,South,Phone Stand,421,8960.6
+2025-02-01,London,Phone Stand,515,12358.83
+2025-02-01,Scotland,Phone Stand,170,3353.07
+2025-02-01,North,Wool Socks,286,5890.71
+2025-02-01,South,Wool Socks,368,9474.56
+2025-02-01,London,Wool Socks,422,10747.44
+2025-02-01,Scotland,Wool Socks,167,3278.33
+2025-02-01,North,Water Filter,332,6212.67
+2025-02-01,South,Water Filter,314,5975.03
+2025-02-01,London,Water Filter,366,7720.11
+2025-02-01,Scotland,Water Filter,148,2852.38
+2025-02-01,North,Notebook Pack,225,5306.82
+2025-02-01,South,Notebook Pack,278,5518.69
+2025-02-01,London,Notebook Pack,388,9726.39
+2025-02-01,Scotland,Notebook Pack,153,3621.59
+2025-02-01,North,LED Strip,245,5972.41
+2025-02-01,South,LED Strip,313,6022.2
+2025-02-01,London,LED Strip,289,6637.57
+2025-02-01,Scotland,LED Strip,129,2859.65
+2025-02-01,North,Garden Hose,216,4189.08
+2025-02-01,South,Garden Hose,258,5524.25
+2025-02-01,London,Garden Hose,280,5588.12
+2025-02-01,Scotland,Garden Hose,103,2331.06
+2025-02-01,North,Sunglasses,172,4343.69
+2025-02-01,South,Sunglasses,193,4578.93
+2025-02-01,London,Sunglasses,214,4968.21
+2025-02-01,Scotland,Sunglasses,84,2088.31
+2025-03-01,North,Classic Kettle,958,19193.68
+2025-03-01,South,Classic Kettle,1123,22187.21
+2025-03-01,London,Classic Kettle,1144,21536.55
+2025-03-01,Scotland,Classic Kettle,459,8645.13
+2025-03-01,North,Trail Runner,898,20298.45
+2025-03-01,South,Trail Runner,1010,23915.9
+2025-03-01,London,Trail Runner,1125,23235.18
+2025-03-01,Scotland,Trail Runner,451,8125.34
+2025-03-01,North,Smart Plug,863,16143.24
+2025-03-01,South,Smart Plug,832,20286.54
+2025-03-01,London,Smart Plug,1224,26414.08
+2025-03-01,Scotland,Smart Plug,420,8027.78
+2025-03-01,North,Daily Planner,651,14428.71
+2025-03-01,South,Daily Planner,864,16595.91
+2025-03-01,London,Daily Planner,1240,22511.18
+2025-03-01,Scotland,Daily Planner,408,9797.11
+2025-03-01,North,Desk Lamp,767,14462.19
+2025-03-01,South,Desk Lamp,936,21066.99
+2025-03-01,London,Desk Lamp,1072,27385.96
+2025-03-01,Scotland,Desk Lamp,432,9847.17
+2025-03-01,North,Cast Iron Pan,760,16670.27
+2025-03-01,South,Cast Iron Pan,873,21422.93
+2025-03-01,London,Cast Iron Pan,1052,22104.45
+2025-03-01,Scotland,Cast Iron Pan,334,8121.97
+2025-03-01,North,Yoga Mat,627,13438.04
+2025-03-01,South,Yoga Mat,754,16921.87
+2025-03-01,London,Yoga Mat,924,22797.01
+2025-03-01,Scotland,Yoga Mat,376,8447.57
+2025-03-01,North,Bluetooth Speaker,730,15712.29
+2025-03-01,South,Bluetooth Speaker,832,19970.17
+2025-03-01,London,Bluetooth Speaker,1037,24835.31
+2025-03-01,Scotland,Bluetooth Speaker,418,9389.97
+2025-03-01,North,Coffee Grinder,630,12289.66
+2025-03-01,South,Coffee Grinder,698,14990.25
+2025-03-01,London,Coffee Grinder,894,22523.65
+2025-03-01,Scotland,Coffee Grinder,297,6176.73
+2025-03-01,North,Rain Jacket,907,19656.2
+2025-03-01,South,Rain Jacket,1143,22035.52
+2025-03-01,London,Rain Jacket,1322,28356.86
+2025-03-01,Scotland,Rain Jacket,480,8858.69
+2025-03-01,North,Air Fryer,517,12626.44
+2025-03-01,South,Air Fryer,697,15690.84
+2025-03-01,London,Air Fryer,751,13752.34
+2025-03-01,Scotland,Air Fryer,313,6751.68
+2025-03-01,North,Plant Pot Set,551,12615.53
+2025-03-01,South,Plant Pot Set,612,15297.97
+2025-03-01,London,Plant Pot Set,663,17020.9
+2025-03-01,Scotland,Plant Pot Set,251,6464.05
+2025-03-01,North,Travel Mug,483,10424.07
+2025-03-01,South,Travel Mug,651,14385.95
+2025-03-01,London,Travel Mug,682,12602.89
+2025-03-01,Scotland,Travel Mug,285,6587.39
+2025-03-01,North,Wireless Mouse,425,8036.5
+2025-03-01,South,Wireless Mouse,550,14014.82
+2025-03-01,London,Wireless Mouse,740,16075.46
+2025-03-01,Scotland,Wireless Mouse,221,5443.57
+2025-03-01,North,Bamboo Towels,385,9181.28
+2025-03-01,South,Bamboo Towels,517,13291.73
+2025-03-01,London,Bamboo Towels,546,13294.82
+2025-03-01,Scotland,Bamboo Towels,250,4534.5
+2025-03-01,North,Kids Scooter,394,8021.28
+2025-03-01,South,Kids Scooter,499,12819.69
+2025-03-01,London,Kids Scooter,585,12841.96
+2025-03-01,Scotland,Kids Scooter,221,4417.51
+2025-03-01,North,Phone Stand,348,6588.16
+2025-03-01,South,Phone Stand,458,8484.9
+2025-03-01,London,Phone Stand,512,9951.37
+2025-03-01,Scotland,Phone Stand,199,3672.08
+2025-03-01,North,Wool Socks,274,6301.75
+2025-03-01,South,Wool Socks,417,10469.25
+2025-03-01,London,Wool Socks,486,12619.16
+2025-03-01,Scotland,Wool Socks,159,3661.89
+2025-03-01,North,Water Filter,306,5937.3
+2025-03-01,South,Water Filter,320,6375.54
+2025-03-01,London,Water Filter,427,10375.0
+2025-03-01,Scotland,Water Filter,174,3928.03
+2025-03-01,North,Notebook Pack,233,5539.54
+2025-03-01,South,Notebook Pack,328,6348.99
+2025-03-01,London,Notebook Pack,399,7966.1
+2025-03-01,Scotland,Notebook Pack,140,3025.43
+2025-03-01,North,LED Strip,247,4657.11
+2025-03-01,South,LED Strip,276,5487.16
+2025-03-01,London,LED Strip,348,8535.15
+2025-03-01,Scotland,LED Strip,118,2803.45
+2025-03-01,North,Garden Hose,198,3908.74
+2025-03-01,South,Garden Hose,228,5085.25
+2025-03-01,London,Garden Hose,315,7186.59
+2025-03-01,Scotland,Garden Hose,94,2279.65
+2025-03-01,North,Sunglasses,173,3698.81
+2025-03-01,South,Sunglasses,190,4090.03
+2025-03-01,London,Sunglasses,257,5183.42
+2025-03-01,Scotland,Sunglasses,83,2077.49
+2025-04-01,North,Classic Kettle,807,14981.86
+2025-04-01,South,Classic Kettle,1122,21178.36
+2025-04-01,London,Classic Kettle,1138,26120.32
+2025-04-01,Scotland,Classic Kettle,479,12066.91
+2025-04-01,North,Trail Runner,775,17480.48
+2025-04-01,South,Trail Runner,1169,25413.68
+2025-04-01,London,Trail Runner,1320,28686.88
+2025-04-01,Scotland,Trail Runner,508,13037.26
+2025-04-01,North,Smart Plug,740,17683.4
+2025-04-01,South,Smart Plug,906,22741.5
+2025-04-01,London,Smart Plug,1211,30108.43
+2025-04-01,Scotland,Smart Plug,480,10926.06
+2025-04-01,North,Daily Planner,883,16992.22
+2025-04-01,South,Daily Planner,971,18055.28
+2025-04-01,London,Daily Planner,1151,27044.59
+2025-04-01,Scotland,Daily Planner,404,9896.57
+2025-04-01,North,Desk Lamp,695,13607.7
+2025-04-01,South,Desk Lamp,791,17896.07
+2025-04-01,London,Desk Lamp,994,18264.35
+2025-04-01,Scotland,Desk Lamp,373,9622.17
+2025-04-01,North,Cast Iron Pan,708,16613.37
+2025-04-01,South,Cast Iron Pan,854,15857.93
+2025-04-01,London,Cast Iron Pan,1067,20999.62
+2025-04-01,Scotland,Cast Iron Pan,352,8073.6
+2025-04-01,North,Yoga Mat,688,12442.82
+2025-04-01,South,Yoga Mat,906,16458.24
+2025-04-01,London,Yoga Mat,850,17535.34
+2025-04-01,Scotland,Yoga Mat,396,9480.42
+2025-04-01,North,Bluetooth Speaker,723,15499.7
+2025-04-01,South,Bluetooth Speaker,925,17638.35
+2025-04-01,London,Bluetooth Speaker,1108,20389.03
+2025-04-01,Scotland,Bluetooth Speaker,335,8042.49
+2025-04-01,North,Coffee Grinder,680,15901.63
+2025-04-01,South,Coffee Grinder,710,17703.3
+2025-04-01,London,Coffee Grinder,912,17921.08
+2025-04-01,Scotland,Coffee Grinder,307,7954.93
+2025-04-01,North,Rain Jacket,395,7804.37
+2025-04-01,South,Rain Jacket,534,13428.19
+2025-04-01,London,Rain Jacket,724,17906.99
+2025-04-01,Scotland,Rain Jacket,263,4758.32
+2025-04-01,North,Air Fryer,569,11109.04
+2025-04-01,South,Air Fryer,737,18986.93
+2025-04-01,London,Air Fryer,668,15931.8
+2025-04-01,Scotland,Air Fryer,272,5123.27
+2025-04-01,North,Plant Pot Set,583,12557.51
+2025-04-01,South,Plant Pot Set,601,13511.1
+2025-04-01,London,Plant Pot Set,659,14096.14
+2025-04-01,Scotland,Plant Pot Set,304,7574.22
+2025-04-01,North,Travel Mug,420,10562.98
+2025-04-01,South,Travel Mug,510,10022.31
+2025-04-01,London,Travel Mug,649,12559.0
+2025-04-01,Scotland,Travel Mug,231,5369.21
+2025-04-01,North,Wireless Mouse,454,8861.03
+2025-04-01,South,Wireless Mouse,575,10920.0
+2025-04-01,London,Wireless Mouse,713,18333.84
+2025-04-01,Scotland,Wireless Mouse,257,5492.97
+2025-04-01,North,Bamboo Towels,416,8708.02
+2025-04-01,South,Bamboo Towels,511,9927.28
+2025-04-01,London,Bamboo Towels,582,13691.3
+2025-04-01,Scotland,Bamboo Towels,237,4394.91
+2025-04-01,North,Kids Scooter,350,8654.68
+2025-04-01,South,Kids Scooter,458,11285.26
+2025-04-01,London,Kids Scooter,585,13457.28
+2025-04-01,Scotland,Kids Scooter,208,4708.61
+2025-04-01,North,Phone Stand,346,7657.8
+2025-04-01,South,Phone Stand,492,9278.9
+2025-04-01,London,Phone Stand,469,11831.2
+2025-04-01,Scotland,Phone Stand,223,5464.01
+2025-04-01,North,Wool Socks,356,6703.58
+2025-04-01,South,Wool Socks,418,7939.82
+2025-04-01,London,Wool Socks,512,10837.99
+2025-04-01,Scotland,Wool Socks,178,3944.49
+2025-04-01,North,Water Filter,272,6128.44
+2025-04-01,South,Water Filter,404,8722.64
+2025-04-01,London,Water Filter,423,8854.61
+2025-04-01,Scotland,Water Filter,150,3041.5
+2025-04-01,North,Notebook Pack,299,7690.21
+2025-04-01,South,Notebook Pack,319,6475.2
+2025-04-01,London,Notebook Pack,373,9291.35
+2025-04-01,Scotland,Notebook Pack,140,2724.45
+2025-04-01,North,LED Strip,216,4037.47
+2025-04-01,South,LED Strip,250,4964.08
+2025-04-01,London,LED Strip,346,8799.58
+2025-04-01,Scotland,LED Strip,118,2400.69
+2025-04-01,North,Garden Hose,207,3775.29
+2025-04-01,South,Garden Hose,216,4879.17
+2025-04-01,London,Garden Hose,288,5993.53
+2025-04-01,Scotland,Garden Hose,109,1979.13
+2025-04-01,North,Sunglasses,157,3048.61
+2025-04-01,South,Sunglasses,191,3544.76
+2025-04-01,London,Sunglasses,268,4858.87
+2025-04-01,Scotland,Sunglasses,92,1782.53
+2025-05-01,North,Classic Kettle,728,17527.47
+2025-05-01,South,Classic Kettle,1111,28578.77
+2025-05-01,London,Classic Kettle,1095,24454.76
+2025-05-01,Scotland,Classic Kettle,435,8108.56
+2025-05-01,North,Trail Runner,852,19503.21
+2025-05-01,South,Trail Runner,1034,25104.67
+2025-05-01,London,Trail Runner,1240,25235.37
+2025-05-01,Scotland,Trail Runner,542,12228.53
+2025-05-01,North,Smart Plug,728,18370.64
+2025-05-01,South,Smart Plug,954,21774.07
+2025-05-01,London,Smart Plug,1123,27930.05
+2025-05-01,Scotland,Smart Plug,467,10058.7
+2025-05-01,North,Daily Planner,757,18302.56
+2025-05-01,South,Daily Planner,1062,24233.29
+2025-05-01,London,Daily Planner,1268,28177.68
+2025-05-01,Scotland,Daily Planner,427,8768.11
+2025-05-01,North,Desk Lamp,667,12822.94
+2025-05-01,South,Desk Lamp,987,22128.85
+2025-05-01,London,Desk Lamp,905,17801.19
+2025-05-01,Scotland,Desk Lamp,389,9510.52
+2025-05-01,North,Cast Iron Pan,802,19308.9
+2025-05-01,South,Cast Iron Pan,831,17797.3
+2025-05-01,London,Cast Iron Pan,1188,25067.89
+2025-05-01,Scotland,Cast Iron Pan,421,7747.39
+2025-05-01,North,Yoga Mat,648,14289.28
+2025-05-01,South,Yoga Mat,895,22988.66
+2025-05-01,London,Yoga Mat,1014,20944.69
+2025-05-01,Scotland,Yoga Mat,403,10205.8
+2025-05-01,North,Bluetooth Speaker,585,12517.7
+2025-05-01,South,Bluetooth Speaker,832,17006.41
+2025-05-01,London,Bluetooth Speaker,893,21681.08
+2025-05-01,Scotland,Bluetooth Speaker,340,7625.52
+2025-05-01,North,Coffee Grinder,544,11801.71
+2025-05-01,South,Coffee Grinder,886,15974.57
+2025-05-01,London,Coffee Grinder,811,20441.74
+2025-05-01,Scotland,Coffee Grinder,397,8752.81
+2025-05-01,North,Rain Jacket,434,8847.14
+2025-05-01,South,Rain Jacket,605,13699.23
+2025-05-01,London,Rain Jacket,658,15482.13
+2025-05-01,Scotland,Rain Jacket,226,4771.28
+2025-05-01,North,Air Fryer,595,15052.13
+2025-05-01,South,Air Fryer,650,15767.8
+2025-05-01,London,Air Fryer,860,19068.13
+2025-05-01,Scotland,Air Fryer,265,4990.93
+2025-05-01,North,Plant Pot Set,560,11609.31
+2025-05-01,South,Plant Pot Set,656,12029.51
+2025-05-01,London,Plant Pot Set,872,17633.82
+2025-05-01,Scotland,Plant Pot Set,308,7077.73
+2025-05-01,North,Travel Mug,457,8991.02
+2025-05-01,South,Travel Mug,595,12265.08
+2025-05-01,London,Travel Mug,603,11703.29
+2025-05-01,Scotland,Travel Mug,229,5767.22
+2025-05-01,North,Wireless Mouse,431,10928.29
+2025-05-01,South,Wireless Mouse,599,15366.12
+2025-05-01,London,Wireless Mouse,678,13587.78
+2025-05-01,Scotland,Wireless Mouse,230,5283.25
+2025-05-01,North,Bamboo Towels,461,10803.04
+2025-05-01,South,Bamboo Towels,598,11235.03
+2025-05-01,London,Bamboo Towels,657,15523.96
+2025-05-01,Scotland,Bamboo Towels,274,5481.27
+2025-05-01,North,Kids Scooter,449,8174.13
+2025-05-01,South,Kids Scooter,499,10291.69
+2025-05-01,London,Kids Scooter,578,11209.55
+2025-05-01,Scotland,Kids Scooter,213,4428.45
+2025-05-01,North,Phone Stand,356,7562.9
+2025-05-01,South,Phone Stand,403,7797.83
+2025-05-01,London,Phone Stand,516,13380.32
+2025-05-01,Scotland,Phone Stand,221,4242.87
+2025-05-01,North,Wool Socks,338,6479.71
+2025-05-01,South,Wool Socks,376,9763.01
+2025-05-01,London,Wool Socks,446,8393.43
+2025-05-01,Scotland,Wool Socks,184,4176.2
+2025-05-01,North,Water Filter,304,7776.14
+2025-05-01,South,Water Filter,372,7779.72
+2025-05-01,London,Water Filter,399,9037.6
+2025-05-01,Scotland,Water Filter,181,3986.97
+2025-05-01,North,Notebook Pack,266,5322.66
+2025-05-01,South,Notebook Pack,371,9621.34
+2025-05-01,London,Notebook Pack,408,9664.09
+2025-05-01,Scotland,Notebook Pack,145,2792.99
+2025-05-01,North,LED Strip,199,4564.41
+2025-05-01,South,LED Strip,316,7433.41
+2025-05-01,London,LED Strip,350,8706.13
+2025-05-01,Scotland,LED Strip,124,2657.27
+2025-05-01,North,Garden Hose,190,4683.34
+2025-05-01,South,Garden Hose,264,5858.54
+2025-05-01,London,Garden Hose,320,8096.04
+2025-05-01,Scotland,Garden Hose,98,1936.23
+2025-05-01,North,Sunglasses,169,4007.74
+2025-05-01,South,Sunglasses,193,4157.67
+2025-05-01,London,Sunglasses,259,5271.34
+2025-05-01,Scotland,Sunglasses,100,1848.3
+2025-06-01,North,Classic Kettle,751,17355.36
+2025-06-01,South,Classic Kettle,1045,23083.0
+2025-06-01,London,Classic Kettle,1169,27249.67
+2025-06-01,Scotland,Classic Kettle,447,9660.19
+2025-06-01,North,Trail Runner,837,15921.48
+2025-06-01,South,Trail Runner,1208,29236.28
+2025-06-01,London,Trail Runner,1337,32120.82
+2025-06-01,Scotland,Trail Runner,465,9027.34
+2025-06-01,North,Aero Bottle,273,5935.11
+2025-06-01,South,Aero Bottle,345,8620.15
+2025-06-01,London,Aero Bottle,377,7912.99
+2025-06-01,Scotland,Aero Bottle,159,3984.96
+2025-06-01,North,Smart Plug,812,18475.1
+2025-06-01,South,Smart Plug,1088,27595.75
+2025-06-01,London,Smart Plug,993,25610.55
+2025-06-01,Scotland,Smart Plug,389,8718.47
+2025-06-01,North,Daily Planner,799,20639.48
+2025-06-01,South,Daily Planner,898,16481.97
+2025-06-01,London,Daily Planner,1312,28411.65
+2025-06-01,Scotland,Daily Planner,438,9379.6
+2025-06-01,North,Desk Lamp,675,12308.45
+2025-06-01,South,Desk Lamp,900,17755.68
+2025-06-01,London,Desk Lamp,1045,27133.79
+2025-06-01,Scotland,Desk Lamp,460,9414.51
+2025-06-01,North,Cast Iron Pan,697,13226.67
+2025-06-01,South,Cast Iron Pan,925,17976.92
+2025-06-01,London,Cast Iron Pan,941,23827.32
+2025-06-01,Scotland,Cast Iron Pan,415,10423.97
+2025-06-01,North,Yoga Mat,599,11628.6
+2025-06-01,South,Yoga Mat,820,19296.79
+2025-06-01,London,Yoga Mat,855,18824.51
+2025-06-01,Scotland,Yoga Mat,371,8160.51
+2025-06-01,North,Bluetooth Speaker,626,13505.15
+2025-06-01,South,Bluetooth Speaker,716,13451.42
+2025-06-01,London,Bluetooth Speaker,831,20500.24
+2025-06-01,Scotland,Bluetooth Speaker,341,7978.08
+2025-06-01,North,Coffee Grinder,566,14190.3
+2025-06-01,South,Coffee Grinder,672,16426.71
+2025-06-01,London,Coffee Grinder,934,23595.8
+2025-06-01,Scotland,Coffee Grinder,397,7185.15
+2025-06-01,North,Rain Jacket,407,8137.38
+2025-06-01,South,Rain Jacket,496,12360.45
+2025-06-01,London,Rain Jacket,607,14209.09
+2025-06-01,Scotland,Rain Jacket,296,6990.49
+2025-06-01,North,Air Fryer,620,14374.56
+2025-06-01,South,Air Fryer,637,16426.79
+2025-06-01,London,Air Fryer,713,15995.44
+2025-06-01,Scotland,Air Fryer,292,6529.36
+2025-06-01,North,Plant Pot Set,506,12994.17
+2025-06-01,South,Plant Pot Set,755,17810.14
+2025-06-01,London,Plant Pot Set,777,19896.63
+2025-06-01,Scotland,Plant Pot Set,339,6233.55
+2025-06-01,North,Travel Mug,541,10206.46
+2025-06-01,South,Travel Mug,520,10412.51
+2025-06-01,London,Travel Mug,673,14721.31
+2025-06-01,Scotland,Travel Mug,306,5873.48
+2025-06-01,North,Wireless Mouse,498,10969.72
+2025-06-01,South,Wireless Mouse,517,13425.87
+2025-06-01,London,Wireless Mouse,775,16094.3
+2025-06-01,Scotland,Wireless Mouse,294,6352.39
+2025-06-01,North,Bamboo Towels,464,11796.45
+2025-06-01,South,Bamboo Towels,562,11739.54
+2025-06-01,London,Bamboo Towels,552,11995.74
+2025-06-01,Scotland,Bamboo Towels,251,5065.66
+2025-06-01,North,Kids Scooter,413,7487.11
+2025-06-01,South,Kids Scooter,457,9986.35
+2025-06-01,London,Kids Scooter,580,13716.04
+2025-06-01,Scotland,Kids Scooter,206,4170.62
+2025-06-01,North,Phone Stand,392,7944.97
+2025-06-01,South,Phone Stand,401,9214.18
+2025-06-01,London,Phone Stand,505,11469.95
+2025-06-01,Scotland,Phone Stand,232,5977.87
+2025-06-01,North,Wool Socks,358,9230.27
+2025-06-01,South,Wool Socks,438,9144.85
+2025-06-01,London,Wool Socks,537,10207.1
+2025-06-01,Scotland,Wool Socks,167,3681.51
+2025-06-01,North,Water Filter,273,6231.68
+2025-06-01,South,Water Filter,381,7494.2
+2025-06-01,London,Water Filter,477,8904.74
+2025-06-01,Scotland,Water Filter,170,3433.34
+2025-06-01,North,Notebook Pack,315,6034.41
+2025-06-01,South,Notebook Pack,328,7775.87
+2025-06-01,London,Notebook Pack,379,9331.52
+2025-06-01,Scotland,Notebook Pack,137,2549.01
+2025-06-01,North,LED Strip,199,4467.33
+2025-06-01,South,LED Strip,282,6284.13
+2025-06-01,London,LED Strip,333,8331.7
+2025-06-01,Scotland,LED Strip,118,2262.45
+2025-06-01,North,Garden Hose,192,4735.66
+2025-06-01,South,Garden Hose,278,5255.22
+2025-06-01,London,Garden Hose,255,6607.84
+2025-06-01,Scotland,Garden Hose,132,2667.18
+2025-06-01,North,Sunglasses,175,3215.89
+2025-06-01,South,Sunglasses,213,4127.6
+2025-06-01,London,Sunglasses,264,5080.57
+2025-06-01,Scotland,Sunglasses,98,2021.94
+2025-07-01,North,Classic Kettle,735,18816.68
+2025-07-01,South,Classic Kettle,910,23475.04
+2025-07-01,London,Classic Kettle,1138,22547.54
+2025-07-01,Scotland,Classic Kettle,380,9324.47
+2025-07-01,North,Trail Runner,970,18575.86
+2025-07-01,South,Trail Runner,1197,24398.35
+2025-07-01,London,Trail Runner,1320,33180.35
+2025-07-01,Scotland,Trail Runner,560,10861.43
+2025-07-01,North,Aero Bottle,329,6623.93
+2025-07-01,South,Aero Bottle,465,11960.34
+2025-07-01,London,Aero Bottle,558,13449.49
+2025-07-01,Scotland,Aero Bottle,225,4905.12
+2025-07-01,North,Smart Plug,779,18995.3
+2025-07-01,South,Smart Plug,1025,25699.51
+2025-07-01,London,Smart Plug,1343,29176.13
+2025-07-01,Scotland,Smart Plug,429,8163.49
+2025-07-01,North,Daily Planner,824,16910.91
+2025-07-01,South,Daily Planner,928,20463.89
+2025-07-01,London,Daily Planner,1241,29100.13
+2025-07-01,Scotland,Daily Planner,441,10234.95
+2025-07-01,North,Desk Lamp,762,19286.19
+2025-07-01,South,Desk Lamp,947,23474.77
+2025-07-01,London,Desk Lamp,978,24263.73
+2025-07-01,Scotland,Desk Lamp,347,8505.83
+2025-07-01,North,Cast Iron Pan,631,14432.5
+2025-07-01,South,Cast Iron Pan,841,16232.28
+2025-07-01,London,Cast Iron Pan,1144,21847.17
+2025-07-01,Scotland,Cast Iron Pan,432,8060.42
+2025-07-01,North,Yoga Mat,604,12784.51
+2025-07-01,South,Yoga Mat,827,19244.42
+2025-07-01,London,Yoga Mat,916,22836.71
+2025-07-01,Scotland,Yoga Mat,316,6175.08
+2025-07-01,North,Bluetooth Speaker,633,14493.09
+2025-07-01,South,Bluetooth Speaker,836,20979.7
+2025-07-01,London,Bluetooth Speaker,902,20862.92
+2025-07-01,Scotland,Bluetooth Speaker,384,7403.65
+2025-07-01,North,Coffee Grinder,615,13249.24
+2025-07-01,South,Coffee Grinder,807,17940.94
+2025-07-01,London,Coffee Grinder,825,16192.83
+2025-07-01,Scotland,Coffee Grinder,338,6319.2
+2025-07-01,North,Rain Jacket,516,12986.06
+2025-07-01,South,Rain Jacket,624,12329.63
+2025-07-01,London,Rain Jacket,708,12926.16
+2025-07-01,Scotland,Rain Jacket,242,4848.67
+2025-07-01,North,Air Fryer,563,12757.04
+2025-07-01,South,Air Fryer,677,13056.57
+2025-07-01,London,Air Fryer,791,18968.29
+2025-07-01,Scotland,Air Fryer,338,7082.13
+2025-07-01,North,Plant Pot Set,534,13332.09
+2025-07-01,South,Plant Pot Set,572,13058.81
+2025-07-01,London,Plant Pot Set,690,16861.05
+2025-07-01,Scotland,Plant Pot Set,317,5887.71
+2025-07-01,North,Travel Mug,425,10848.36
+2025-07-01,South,Travel Mug,567,12842.93
+2025-07-01,London,Travel Mug,729,15352.49
+2025-07-01,Scotland,Travel Mug,241,5733.94
+2025-07-01,North,Wireless Mouse,454,9723.96
+2025-07-01,South,Wireless Mouse,636,16221.87
+2025-07-01,London,Wireless Mouse,645,13330.62
+2025-07-01,Scotland,Wireless Mouse,287,6199.24
+2025-07-01,North,Bamboo Towels,496,10408.55
+2025-07-01,South,Bamboo Towels,470,9532.1
+2025-07-01,London,Bamboo Towels,718,16248.09
+2025-07-01,Scotland,Bamboo Towels,282,6929.82
+2025-07-01,North,Kids Scooter,431,8375.94
+2025-07-01,South,Kids Scooter,487,8845.33
+2025-07-01,London,Kids Scooter,561,11078.37
+2025-07-01,Scotland,Kids Scooter,257,4946.42
+2025-07-01,North,Phone Stand,354,6437.22
+2025-07-01,South,Phone Stand,407,9592.61
+2025-07-01,London,Phone Stand,521,11483.8
+2025-07-01,Scotland,Phone Stand,226,5325.91
+2025-07-01,North,Wool Socks,306,7335.39
+2025-07-01,South,Wool Socks,431,9787.39
+2025-07-01,London,Wool Socks,483,12230.26
+2025-07-01,Scotland,Wool Socks,191,3530.64
+2025-07-01,North,Water Filter,343,7984.18
+2025-07-01,South,Water Filter,354,8560.99
+2025-07-01,London,Water Filter,507,12100.39
+2025-07-01,Scotland,Water Filter,172,4234.59
+2025-07-01,North,Notebook Pack,245,4512.87
+2025-07-01,South,Notebook Pack,333,7375.05
+2025-07-01,London,Notebook Pack,422,9817.04
+2025-07-01,Scotland,Notebook Pack,157,3294.42
+2025-07-01,North,LED Strip,252,5661.29
+2025-07-01,South,LED Strip,263,5947.87
+2025-07-01,London,LED Strip,336,8181.84
+2025-07-01,Scotland,LED Strip,139,3597.4
+2025-07-01,North,Garden Hose,228,5037.88
+2025-07-01,South,Garden Hose,271,5513.42
+2025-07-01,London,Garden Hose,310,8037.85
+2025-07-01,Scotland,Garden Hose,104,2225.61
+2025-07-01,North,Sunglasses,173,4102.77
+2025-07-01,South,Sunglasses,195,4576.28
+2025-07-01,London,Sunglasses,225,5783.99
+2025-07-01,Scotland,Sunglasses,86,1991.84
+2025-08-01,North,Classic Kettle,755,16933.08
+2025-08-01,South,Classic Kettle,799,16694.59
+2025-08-01,London,Classic Kettle,1135,24592.34
+2025-08-01,Scotland,Classic Kettle,398,10205.22
+2025-08-01,North,Trail Runner,898,22010.28
+2025-08-01,South,Trail Runner,1136,27986.62
+2025-08-01,London,Trail Runner,1351,25770.99
+2025-08-01,Scotland,Trail Runner,460,9296.56
+2025-08-01,North,Aero Bottle,429,9751.83
+2025-08-01,South,Aero Bottle,558,11675.88
+2025-08-01,London,Aero Bottle,579,14991.61
+2025-08-01,Scotland,Aero Bottle,259,5094.03
+2025-08-01,North,Smart Plug,862,16144.36
+2025-08-01,South,Smart Plug,897,22915.07
+2025-08-01,London,Smart Plug,1246,26000.77
+2025-08-01,Scotland,Smart Plug,406,9666.2
+2025-08-01,North,Daily Planner,742,15299.88
+2025-08-01,South,Daily Planner,919,21172.97
+2025-08-01,London,Daily Planner,1073,19781.12
+2025-08-01,Scotland,Daily Planner,494,10984.24
+2025-08-01,North,Desk Lamp,662,12251.23
+2025-08-01,South,Desk Lamp,1024,22608.68
+2025-08-01,London,Desk Lamp,1094,27572.54
+2025-08-01,Scotland,Desk Lamp,355,6692.63
+2025-08-01,North,Cast Iron Pan,674,15903.89
+2025-08-01,South,Cast Iron Pan,799,17977.41
+2025-08-01,London,Cast Iron Pan,1162,24648.47
+2025-08-01,Scotland,Cast Iron Pan,431,7904.14
+2025-08-01,North,Yoga Mat,668,14024.1
+2025-08-01,South,Yoga Mat,864,18264.61
+2025-08-01,London,Yoga Mat,1017,25620.06
+2025-08-01,Scotland,Yoga Mat,422,10339.43
+2025-08-01,North,Bluetooth Speaker,683,17553.14
+2025-08-01,South,Bluetooth Speaker,770,13986.31
+2025-08-01,London,Bluetooth Speaker,1014,21170.3
+2025-08-01,Scotland,Bluetooth Speaker,340,8700.1
+2025-08-01,North,Coffee Grinder,619,11801.67
+2025-08-01,South,Coffee Grinder,874,15752.77
+2025-08-01,London,Coffee Grinder,797,18808.6
+2025-08-01,Scotland,Coffee Grinder,319,7582.89
+2025-08-01,North,Rain Jacket,411,8357.34
+2025-08-01,South,Rain Jacket,572,13164.64
+2025-08-01,London,Rain Jacket,749,17541.46
+2025-08-01,Scotland,Rain Jacket,244,6058.5
+2025-08-01,North,Air Fryer,482,10371.21
+2025-08-01,South,Air Fryer,588,14202.61
+2025-08-01,London,Air Fryer,796,17126.86
+2025-08-01,Scotland,Air Fryer,349,6958.89
+2025-08-01,North,Plant Pot Set,568,13392.8
+2025-08-01,South,Plant Pot Set,578,13965.97
+2025-08-01,London,Plant Pot Set,746,17790.63
+2025-08-01,Scotland,Plant Pot Set,324,6700.93
+2025-08-01,North,Travel Mug,484,10303.01
+2025-08-01,South,Travel Mug,538,12123.27
+2025-08-01,London,Travel Mug,771,19797.21
+2025-08-01,Scotland,Travel Mug,273,6110.77
+2025-08-01,North,Wireless Mouse,495,11930.99
+2025-08-01,South,Wireless Mouse,609,15624.17
+2025-08-01,London,Wireless Mouse,756,19442.12
+2025-08-01,Scotland,Wireless Mouse,259,5796.48
+2025-08-01,North,Bamboo Towels,400,8842.32
+2025-08-01,South,Bamboo Towels,545,11361.31
+2025-08-01,London,Bamboo Towels,725,18143.47
+2025-08-01,Scotland,Bamboo Towels,271,5526.2
+2025-08-01,North,Kids Scooter,421,10463.07
+2025-08-01,South,Kids Scooter,486,11024.51
+2025-08-01,London,Kids Scooter,539,13759.47
+2025-08-01,Scotland,Kids Scooter,233,5032.68
+2025-08-01,North,Phone Stand,417,8409.76
+2025-08-01,South,Phone Stand,464,9872.49
+2025-08-01,London,Phone Stand,608,13376.25
+2025-08-01,Scotland,Phone Stand,237,5824.1
+2025-08-01,North,Wool Socks,300,6807.68
+2025-08-01,South,Wool Socks,414,7957.25
+2025-08-01,London,Wool Socks,546,13397.76
+2025-08-01,Scotland,Wool Socks,215,4709.97
+2025-08-01,North,Water Filter,280,6506.28
+2025-08-01,South,Water Filter,422,8510.61
+2025-08-01,London,Water Filter,488,10666.49
+2025-08-01,Scotland,Water Filter,168,4345.18
+2025-08-01,North,Notebook Pack,297,7651.0
+2025-08-01,South,Notebook Pack,371,9138.06
+2025-08-01,London,Notebook Pack,370,8866.23
+2025-08-01,Scotland,Notebook Pack,137,3307.39
+2025-08-01,North,LED Strip,253,5363.35
+2025-08-01,South,LED Strip,300,7710.27
+2025-08-01,London,LED Strip,365,7436.95
+2025-08-01,Scotland,LED Strip,152,3686.17
+2025-08-01,North,Garden Hose,201,4289.19
+2025-08-01,South,Garden Hose,249,5364.77
+2025-08-01,London,Garden Hose,340,7154.15
+2025-08-01,Scotland,Garden Hose,134,2741.05
+2025-08-01,North,Sunglasses,171,3480.47
+2025-08-01,South,Sunglasses,238,4492.46
+2025-08-01,London,Sunglasses,232,5679.32
+2025-08-01,Scotland,Sunglasses,107,2057.5
+2025-09-01,North,Classic Kettle,648,11971.74
+2025-09-01,South,Classic Kettle,894,22365.8
+2025-09-01,London,Classic Kettle,826,20053.0
+2025-09-01,Scotland,Classic Kettle,340,8794.76
+2025-09-01,North,Trail Runner,809,20681.24
+2025-09-01,South,Trail Runner,1036,23246.45
+2025-09-01,London,Trail Runner,1323,32237.3
+2025-09-01,Scotland,Trail Runner,479,11618.63
+2025-09-01,North,Aero Bottle,618,14380.1
+2025-09-01,South,Aero Bottle,600,12961.38
+2025-09-01,London,Aero Bottle,750,19472.41
+2025-09-01,Scotland,Aero Bottle,307,7693.31
+2025-09-01,North,Smart Plug,811,16279.29
+2025-09-01,South,Smart Plug,921,21859.49
+2025-09-01,London,Smart Plug,1057,23041.88
+2025-09-01,Scotland,Smart Plug,466,11946.11
+2025-09-01,North,Daily Planner,881,16348.57
+2025-09-01,South,Daily Planner,937,20078.85
+2025-09-01,London,Daily Planner,1252,23581.05
+2025-09-01,Scotland,Daily Planner,471,9574.32
+2025-09-01,North,Desk Lamp,781,16323.38
+2025-09-01,South,Desk Lamp,834,20704.93
+2025-09-01,London,Desk Lamp,1205,25146.91
+2025-09-01,Scotland,Desk Lamp,404,7954.22
+2025-09-01,North,Cast Iron Pan,702,14963.92
+2025-09-01,South,Cast Iron Pan,797,20202.37
+2025-09-01,London,Cast Iron Pan,1045,20958.77
+2025-09-01,Scotland,Cast Iron Pan,379,7310.42
+2025-09-01,North,Yoga Mat,677,14427.49
+2025-09-01,South,Yoga Mat,908,18699.69
+2025-09-01,London,Yoga Mat,902,17455.41
+2025-09-01,Scotland,Yoga Mat,403,7768.81
+2025-09-01,North,Bluetooth Speaker,568,10606.67
+2025-09-01,South,Bluetooth Speaker,785,16213.39
+2025-09-01,London,Bluetooth Speaker,983,20547.04
+2025-09-01,Scotland,Bluetooth Speaker,389,7760.18
+2025-09-01,North,Coffee Grinder,608,14700.15
+2025-09-01,South,Coffee Grinder,857,20963.52
+2025-09-01,London,Coffee Grinder,961,21067.99
+2025-09-01,Scotland,Coffee Grinder,343,8718.44
+2025-09-01,North,Rain Jacket,462,9840.27
+2025-09-01,South,Rain Jacket,627,14019.46
+2025-09-01,London,Rain Jacket,788,16271.48
+2025-09-01,Scotland,Rain Jacket,297,7119.34
+2025-09-01,North,Air Fryer,503,12733.18
+2025-09-01,South,Air Fryer,731,18595.74
+2025-09-01,London,Air Fryer,821,20557.4
+2025-09-01,Scotland,Air Fryer,317,7985.47
+2025-09-01,North,Plant Pot Set,589,11530.98
+2025-09-01,South,Plant Pot Set,736,14206.14
+2025-09-01,London,Plant Pot Set,782,16224.76
+2025-09-01,Scotland,Plant Pot Set,295,5981.36
+2025-09-01,North,Travel Mug,476,11383.06
+2025-09-01,South,Travel Mug,600,13278.09
+2025-09-01,London,Travel Mug,654,12608.98
+2025-09-01,Scotland,Travel Mug,297,6313.68
+2025-09-01,North,Wireless Mouse,479,12108.05
+2025-09-01,South,Wireless Mouse,503,10097.07
+2025-09-01,London,Wireless Mouse,749,17598.61
+2025-09-01,Scotland,Wireless Mouse,285,5477.03
+2025-09-01,North,Bamboo Towels,433,10746.09
+2025-09-01,South,Bamboo Towels,616,14596.72
+2025-09-01,London,Bamboo Towels,728,15098.7
+2025-09-01,Scotland,Bamboo Towels,258,6569.62
+2025-09-01,North,Kids Scooter,370,8469.68
+2025-09-01,South,Kids Scooter,475,10541.08
+2025-09-01,London,Kids Scooter,662,14231.39
+2025-09-01,Scotland,Kids Scooter,203,4484.89
+2025-09-01,North,Phone Stand,388,7839.67
+2025-09-01,South,Phone Stand,505,10291.54
+2025-09-01,London,Phone Stand,543,12197.35
+2025-09-01,Scotland,Phone Stand,181,4559.19
+2025-09-01,North,Wool Socks,356,7207.91
+2025-09-01,South,Wool Socks,472,11392.24
+2025-09-01,London,Wool Socks,511,11234.39
+2025-09-01,Scotland,Wool Socks,202,3997.89
+2025-09-01,North,Water Filter,309,5619.92
+2025-09-01,South,Water Filter,332,7567.75
+2025-09-01,London,Water Filter,457,11318.32
+2025-09-01,Scotland,Water Filter,181,4330.03
+2025-09-01,North,Notebook Pack,294,6222.67
+2025-09-01,South,Notebook Pack,365,7083.76
+2025-09-01,London,Notebook Pack,460,10546.83
+2025-09-01,Scotland,Notebook Pack,152,3559.04
+2025-09-01,North,LED Strip,239,4877.7
+2025-09-01,South,LED Strip,309,7949.29
+2025-09-01,London,LED Strip,361,9062.97
+2025-09-01,Scotland,LED Strip,131,3362.39
+2025-09-01,North,Garden Hose,243,5848.98
+2025-09-01,South,Garden Hose,230,5811.37
+2025-09-01,London,Garden Hose,317,6873.7
+2025-09-01,Scotland,Garden Hose,131,2966.59
+2025-09-01,North,Sunglasses,199,4483.17
+2025-09-01,South,Sunglasses,200,5099.93
+2025-09-01,London,Sunglasses,240,5310.18
+2025-09-01,Scotland,Sunglasses,92,1707.48
+2025-10-01,North,Classic Kettle,621,13196.8
+2025-10-01,South,Classic Kettle,670,16530.65
+2025-10-01,London,Classic Kettle,915,20871.06
+2025-10-01,Scotland,Classic Kettle,310,6442.36
+2025-10-01,North,Trail Runner,963,22049.09
+2025-10-01,South,Trail Runner,1063,21996.38
+2025-10-01,London,Trail Runner,1455,31779.04
+2025-10-01,Scotland,Trail Runner,456,10662.44
+2025-10-01,North,Aero Bottle,694,16426.36
+2025-10-01,South,Aero Bottle,758,16424.03
+2025-10-01,London,Aero Bottle,918,16836.68
+2025-10-01,Scotland,Aero Bottle,368,8515.48
+2025-10-01,North,Smart Plug,837,21119.97
+2025-10-01,South,Smart Plug,962,22635.43
+2025-10-01,London,Smart Plug,1324,31534.66
+2025-10-01,Scotland,Smart Plug,417,10741.64
+2025-10-01,North,Daily Planner,717,13100.84
+2025-10-01,South,Daily Planner,995,20254.46
+2025-10-01,London,Daily Planner,1088,20908.05
+2025-10-01,Scotland,Daily Planner,480,8779.06
+2025-10-01,North,Desk Lamp,725,18791.37
+2025-10-01,South,Desk Lamp,831,19612.07
+2025-10-01,London,Desk Lamp,1151,24011.6
+2025-10-01,Scotland,Desk Lamp,442,8534.21
+2025-10-01,North,Cast Iron Pan,800,19810.7
+2025-10-01,South,Cast Iron Pan,941,17218.74
+2025-10-01,London,Cast Iron Pan,996,19202.57
+2025-10-01,Scotland,Cast Iron Pan,462,8370.61
+2025-10-01,North,Yoga Mat,749,19149.42
+2025-10-01,South,Yoga Mat,956,18940.28
+2025-10-01,London,Yoga Mat,1114,21133.08
+2025-10-01,Scotland,Yoga Mat,377,9036.77
+2025-10-01,North,Bluetooth Speaker,616,12212.7
+2025-10-01,South,Bluetooth Speaker,791,16707.76
+2025-10-01,London,Bluetooth Speaker,999,24549.9
+2025-10-01,Scotland,Bluetooth Speaker,305,7496.67
+2025-10-01,North,Coffee Grinder,568,11192.66
+2025-10-01,South,Coffee Grinder,872,22286.2
+2025-10-01,London,Coffee Grinder,918,23039.36
+2025-10-01,Scotland,Coffee Grinder,355,7108.05
+2025-10-01,North,Rain Jacket,916,21330.85
+2025-10-01,South,Rain Jacket,985,20315.87
+2025-10-01,London,Rain Jacket,1421,32940.37
+2025-10-01,Scotland,Rain Jacket,442,8433.27
+2025-10-01,North,Air Fryer,652,12398.82
+2025-10-01,South,Air Fryer,778,18608.5
+2025-10-01,London,Air Fryer,773,15594.28
+2025-10-01,Scotland,Air Fryer,306,5821.96
+2025-10-01,North,Plant Pot Set,484,12545.55
+2025-10-01,South,Plant Pot Set,652,16110.86
+2025-10-01,London,Plant Pot Set,840,16533.9
+2025-10-01,Scotland,Plant Pot Set,319,7812.74
+2025-10-01,North,Travel Mug,446,9295.26
+2025-10-01,South,Travel Mug,602,13519.75
+2025-10-01,London,Travel Mug,749,16225.17
+2025-10-01,Scotland,Travel Mug,317,8186.84
+2025-10-01,North,Wireless Mouse,459,11523.41
+2025-10-01,South,Wireless Mouse,521,13170.49
+2025-10-01,London,Wireless Mouse,578,13749.56
+2025-10-01,Scotland,Wireless Mouse,264,6208.52
+2025-10-01,North,Bamboo Towels,411,9539.46
+2025-10-01,South,Bamboo Towels,528,10454.82
+2025-10-01,London,Bamboo Towels,620,14459.39
+2025-10-01,Scotland,Bamboo Towels,279,6969.59
+2025-10-01,North,Kids Scooter,434,9442.37
+2025-10-01,South,Kids Scooter,530,10543.14
+2025-10-01,London,Kids Scooter,568,13951.99
+2025-10-01,Scotland,Kids Scooter,216,3984.47
+2025-10-01,North,Phone Stand,328,5987.97
+2025-10-01,South,Phone Stand,494,9108.34
+2025-10-01,London,Phone Stand,600,12931.2
+2025-10-01,Scotland,Phone Stand,211,4429.14
+2025-10-01,North,Wool Socks,372,8867.62
+2025-10-01,South,Wool Socks,442,9897.42
+2025-10-01,London,Wool Socks,465,10436.44
+2025-10-01,Scotland,Wool Socks,189,4170.73
+2025-10-01,North,Water Filter,356,7979.12
+2025-10-01,South,Water Filter,417,9095.45
+2025-10-01,London,Water Filter,441,11011.62
+2025-10-01,Scotland,Water Filter,160,3864.34
+2025-10-01,North,Notebook Pack,295,5873.08
+2025-10-01,South,Notebook Pack,305,7617.13
+2025-10-01,London,Notebook Pack,448,9693.8
+2025-10-01,Scotland,Notebook Pack,139,2734.59
+2025-10-01,North,LED Strip,251,4984.55
+2025-10-01,South,LED Strip,261,6053.56
+2025-10-01,London,LED Strip,397,7385.62
+2025-10-01,Scotland,LED Strip,154,2817.25
+2025-10-01,North,Garden Hose,196,3738.57
+2025-10-01,South,Garden Hose,260,5306.67
+2025-10-01,London,Garden Hose,309,6100.17
+2025-10-01,Scotland,Garden Hose,120,2842.49
+2025-10-01,North,Sunglasses,175,3444.12
+2025-10-01,South,Sunglasses,237,5609.56
+2025-10-01,London,Sunglasses,283,7346.97
+2025-10-01,Scotland,Sunglasses,97,2205.3
+2025-11-01,North,Classic Kettle,596,12699.82
+2025-11-01,South,Classic Kettle,699,15018.19
+2025-11-01,London,Classic Kettle,812,17459.1
+2025-11-01,Scotland,Classic Kettle,351,8084.75
+2025-11-01,North,Trail Runner,994,25035.69
+2025-11-01,South,Trail Runner,1026,20474.25
+2025-11-01,London,Trail Runner,1294,32701.27
+2025-11-01,Scotland,Trail Runner,440,9236.21
+2025-11-01,North,Aero Bottle,764,14346.87
+2025-11-01,South,Aero Bottle,1038,25772.87
+2025-11-01,London,Aero Bottle,1046,25440.71
+2025-11-01,Scotland,Aero Bottle,388,7330.76
+2025-11-01,North,Smart Plug,873,18043.13
+2025-11-01,South,Smart Plug,984,24142.89
+2025-11-01,London,Smart Plug,1302,30095.87
+2025-11-01,Scotland,Smart Plug,517,10636.0
+2025-11-01,North,Daily Planner,863,21185.89
+2025-11-01,South,Daily Planner,974,19544.35
+2025-11-01,London,Daily Planner,1113,26957.95
+2025-11-01,Scotland,Daily Planner,490,10058.51
+2025-11-01,North,Desk Lamp,807,20368.72
+2025-11-01,South,Desk Lamp,1067,20637.69
+2025-11-01,London,Desk Lamp,1107,21530.49
+2025-11-01,Scotland,Desk Lamp,464,11214.08
+2025-11-01,North,Cast Iron Pan,811,17308.38
+2025-11-01,South,Cast Iron Pan,934,16997.59
+2025-11-01,London,Cast Iron Pan,950,20637.27
+2025-11-01,Scotland,Cast Iron Pan,403,8891.02
+2025-11-01,North,Yoga Mat,715,16100.51
+2025-11-01,South,Yoga Mat,899,16517.23
+2025-11-01,London,Yoga Mat,1103,20216.19
+2025-11-01,Scotland,Yoga Mat,333,7586.1
+2025-11-01,North,Bluetooth Speaker,530,12693.96
+2025-11-01,South,Bluetooth Speaker,733,16391.49
+2025-11-01,London,Bluetooth Speaker,1008,23414.3
+2025-11-01,Scotland,Bluetooth Speaker,374,7360.7
+2025-11-01,North,Coffee Grinder,598,12614.11
+2025-11-01,South,Coffee Grinder,686,14796.77
+2025-11-01,London,Coffee Grinder,847,17806.85
+2025-11-01,Scotland,Coffee Grinder,291,6414.77
+2025-11-01,North,Rain Jacket,873,17413.84
+2025-11-01,South,Rain Jacket,1228,28836.49
+2025-11-01,London,Rain Jacket,1206,30103.04
+2025-11-01,Scotland,Rain Jacket,549,10147.9
+2025-11-01,North,Air Fryer,804,14954.54
+2025-11-01,South,Air Fryer,1264,30059.95
+2025-11-01,London,Air Fryer,1349,31132.76
+2025-11-01,Scotland,Air Fryer,584,12915.68
+2025-11-01,North,Plant Pot Set,453,8898.87
+2025-11-01,South,Plant Pot Set,594,13591.43
+2025-11-01,London,Plant Pot Set,709,16388.82
+2025-11-01,Scotland,Plant Pot Set,253,6090.26
+2025-11-01,North,Travel Mug,453,8760.25
+2025-11-01,South,Travel Mug,672,12171.72
+2025-11-01,London,Travel Mug,649,14794.54
+2025-11-01,Scotland,Travel Mug,313,5638.21
+2025-11-01,North,Wireless Mouse,406,9290.72
+2025-11-01,South,Wireless Mouse,523,12724.3
+2025-11-01,London,Wireless Mouse,623,12581.92
+2025-11-01,Scotland,Wireless Mouse,265,4829.17
+2025-11-01,North,Bamboo Towels,482,9358.36
+2025-11-01,South,Bamboo Towels,564,13949.71
+2025-11-01,London,Bamboo Towels,687,15696.42
+2025-11-01,Scotland,Bamboo Towels,211,4490.05
+2025-11-01,North,Kids Scooter,367,8695.86
+2025-11-01,South,Kids Scooter,422,8168.85
+2025-11-01,London,Kids Scooter,619,14216.01
+2025-11-01,Scotland,Kids Scooter,249,6005.78
+2025-11-01,North,Phone Stand,418,9289.33
+2025-11-01,South,Phone Stand,448,11147.56
+2025-11-01,London,Phone Stand,487,8933.07
+2025-11-01,Scotland,Phone Stand,195,4916.49
+2025-11-01,North,Wool Socks,334,6790.3
+2025-11-01,South,Wool Socks,382,9201.86
+2025-11-01,London,Wool Socks,462,9016.7
+2025-11-01,Scotland,Wool Socks,204,4832.29
+2025-11-01,North,Water Filter,289,7008.87
+2025-11-01,South,Water Filter,396,8563.91
+2025-11-01,London,Water Filter,503,11714.99
+2025-11-01,Scotland,Water Filter,150,2737.92
+2025-11-01,North,Notebook Pack,290,6633.68
+2025-11-01,South,Notebook Pack,294,7328.45
+2025-11-01,London,Notebook Pack,349,6697.25
+2025-11-01,Scotland,Notebook Pack,142,3264.26
+2025-11-01,North,LED Strip,262,6663.88
+2025-11-01,South,LED Strip,281,5143.93
+2025-11-01,London,LED Strip,324,6283.98
+2025-11-01,Scotland,LED Strip,152,3229.22
+2025-11-01,North,Garden Hose,209,4611.54
+2025-11-01,South,Garden Hose,293,5522.54
+2025-11-01,London,Garden Hose,298,5861.88
+2025-11-01,Scotland,Garden Hose,110,2782.41
+2025-11-01,North,Sunglasses,161,3347.67
+2025-11-01,South,Sunglasses,248,6288.43
+2025-11-01,London,Sunglasses,279,5901.62
+2025-11-01,Scotland,Sunglasses,101,2367.05
+2025-12-01,North,Classic Kettle,623,15775.79
+2025-12-01,South,Classic Kettle,684,17480.25
+2025-12-01,London,Classic Kettle,764,16655.08
+2025-12-01,Scotland,Classic Kettle,333,8297.6
+2025-12-01,North,Trail Runner,960,21848.48
+2025-12-01,South,Trail Runner,928,20584.68
+2025-12-01,London,Trail Runner,1366,29758.46
+2025-12-01,Scotland,Trail Runner,501,12293.04
+2025-12-01,North,Aero Bottle,802,17816.09
+2025-12-01,South,Aero Bottle,1174,30239.64
+2025-12-01,London,Aero Bottle,1398,25322.93
+2025-12-01,Scotland,Aero Bottle,497,11708.63
+2025-12-01,North,Smart Plug,916,22933.24
+2025-12-01,South,Smart Plug,1013,21616.95
+2025-12-01,London,Smart Plug,1057,26075.08
+2025-12-01,Scotland,Smart Plug,497,12367.41
+2025-12-01,North,Daily Planner,736,14774.73
+2025-12-01,South,Daily Planner,893,20873.28
+2025-12-01,London,Daily Planner,1022,18404.34
+2025-12-01,Scotland,Daily Planner,419,8709.61
+2025-12-01,North,Desk Lamp,787,17329.19
+2025-12-01,South,Desk Lamp,1083,20730.3
+2025-12-01,London,Desk Lamp,1255,32471.36
+2025-12-01,Scotland,Desk Lamp,450,9940.58
+2025-12-01,North,Cast Iron Pan,669,17202.31
+2025-12-01,South,Cast Iron Pan,859,21685.27
+2025-12-01,London,Cast Iron Pan,1059,20070.95
+2025-12-01,Scotland,Cast Iron Pan,391,8167.34
+2025-12-01,North,Yoga Mat,685,12981.38
+2025-12-01,South,Yoga Mat,849,17299.24
+2025-12-01,London,Yoga Mat,943,23043.7
+2025-12-01,Scotland,Yoga Mat,370,7968.6
+2025-12-01,North,Bluetooth Speaker,554,10652.81
+2025-12-01,South,Bluetooth Speaker,867,15939.43
+2025-12-01,London,Bluetooth Speaker,928,17898.1
+2025-12-01,Scotland,Bluetooth Speaker,351,8487.06
+2025-12-01,North,Coffee Grinder,619,14602.38
+2025-12-01,South,Coffee Grinder,742,18961.6
+2025-12-01,London,Coffee Grinder,856,17295.28
+2025-12-01,Scotland,Coffee Grinder,315,7944.03
+2025-12-01,North,Rain Jacket,510,12234.77
+2025-12-01,South,Rain Jacket,614,14298.25
+2025-12-01,London,Rain Jacket,647,16298.32
+2025-12-01,Scotland,Rain Jacket,294,6810.13
+2025-12-01,North,Air Fryer,1051,25304.6
+2025-12-01,South,Air Fryer,1007,25565.23
+2025-12-01,London,Air Fryer,1404,35225.89
+2025-12-01,Scotland,Air Fryer,508,9250.1
+2025-12-01,North,Plant Pot Set,490,11290.44
+2025-12-01,South,Plant Pot Set,564,10334.62
+2025-12-01,London,Plant Pot Set,850,17382.96
+2025-12-01,Scotland,Plant Pot Set,302,5974.61
+2025-12-01,North,Travel Mug,462,11259.11
+2025-12-01,South,Travel Mug,572,12839.93
+2025-12-01,London,Travel Mug,722,14881.44
+2025-12-01,Scotland,Travel Mug,310,8018.38
+2025-12-01,North,Wireless Mouse,463,9595.36
+2025-12-01,South,Wireless Mouse,478,11590.63
+2025-12-01,London,Wireless Mouse,731,18838.07
+2025-12-01,Scotland,Wireless Mouse,217,5193.21
+2025-12-01,North,Bamboo Towels,379,7777.69
+2025-12-01,South,Bamboo Towels,561,13509.65
+2025-12-01,London,Bamboo Towels,558,12786.76
+2025-12-01,Scotland,Bamboo Towels,240,4916.43
+2025-12-01,North,Kids Scooter,450,10817.03
+2025-12-01,South,Kids Scooter,428,7897.07
+2025-12-01,London,Kids Scooter,594,12257.21
+2025-12-01,Scotland,Kids Scooter,228,5500.3
+2025-12-01,North,Phone Stand,374,8694.92
+2025-12-01,South,Phone Stand,515,12357.69
+2025-12-01,London,Phone Stand,529,12522.16
+2025-12-01,Scotland,Phone Stand,238,5222.88
+2025-12-01,North,Wool Socks,374,8313.18
+2025-12-01,South,Wool Socks,368,8756.79
+2025-12-01,London,Wool Socks,445,11270.19
+2025-12-01,Scotland,Wool Socks,211,4917.56
+2025-12-01,North,Water Filter,346,6342.43
+2025-12-01,South,Water Filter,404,10271.53
+2025-12-01,London,Water Filter,411,8687.15
+2025-12-01,Scotland,Water Filter,147,3501.82
+2025-12-01,North,Notebook Pack,229,5315.38
+2025-12-01,South,Notebook Pack,330,7713.68
+2025-12-01,London,Notebook Pack,413,10666.3
+2025-12-01,Scotland,Notebook Pack,157,3939.97
+2025-12-01,North,LED Strip,217,4796.25
+2025-12-01,South,LED Strip,318,8204.83
+2025-12-01,London,LED Strip,335,8375.86
+2025-12-01,Scotland,LED Strip,140,3541.12
+2025-12-01,North,Garden Hose,203,4164.04
+2025-12-01,South,Garden Hose,287,6560.99
+2025-12-01,London,Garden Hose,320,7312.58
+2025-12-01,Scotland,Garden Hose,129,2690.35
+2025-12-01,North,Sunglasses,158,3956.05
+2025-12-01,South,Sunglasses,230,4263.29
+2025-12-01,London,Sunglasses,298,7566.35
+2025-12-01,Scotland,Sunglasses,102,2094.18
+2026-01-01,North,Classic Kettle,542,13236.62
+2026-01-01,South,Classic Kettle,682,15416.32
+2026-01-01,London,Classic Kettle,792,20350.17
+2026-01-01,Scotland,Classic Kettle,297,6343.49
+2026-01-01,North,Trail Runner,770,15463.97
+2026-01-01,South,Trail Runner,1069,27377.04
+2026-01-01,London,Trail Runner,1100,25186.72
+2026-01-01,Scotland,Trail Runner,530,11150.72
+2026-01-01,North,Aero Bottle,944,22779.2
+2026-01-01,South,Aero Bottle,1133,20440.76
+2026-01-01,London,Aero Bottle,1319,24288.26
+2026-01-01,Scotland,Aero Bottle,605,12942.02
+2026-01-01,North,Smart Plug,917,17533.72
+2026-01-01,South,Smart Plug,965,22712.97
+2026-01-01,London,Smart Plug,1058,22610.13
+2026-01-01,Scotland,Smart Plug,448,8133.24
+2026-01-01,North,Daily Planner,718,18513.49
+2026-01-01,South,Daily Planner,910,16923.04
+2026-01-01,London,Daily Planner,1155,23903.96
+2026-01-01,Scotland,Daily Planner,416,10372.07
+2026-01-01,North,Desk Lamp,695,13095.03
+2026-01-01,South,Desk Lamp,901,19885.59
+2026-01-01,London,Desk Lamp,1109,23771.18
+2026-01-01,Scotland,Desk Lamp,476,11535.96
+2026-01-01,North,Cast Iron Pan,755,18046.15
+2026-01-01,South,Cast Iron Pan,818,17973.6
+2026-01-01,London,Cast Iron Pan,985,20817.6
+2026-01-01,Scotland,Cast Iron Pan,417,8579.57
+2026-01-01,North,Yoga Mat,687,13064.37
+2026-01-01,South,Yoga Mat,790,16796.89
+2026-01-01,London,Yoga Mat,1138,22751.86
+2026-01-01,Scotland,Yoga Mat,409,9035.74
+2026-01-01,North,Bluetooth Speaker,535,9771.96
+2026-01-01,South,Bluetooth Speaker,727,17032.05
+2026-01-01,London,Bluetooth Speaker,804,15374.26
+2026-01-01,Scotland,Bluetooth Speaker,320,6887.65
+2026-01-01,North,Coffee Grinder,519,12546.37
+2026-01-01,South,Coffee Grinder,715,17742.88
+2026-01-01,London,Coffee Grinder,939,24135.5
+2026-01-01,Scotland,Coffee Grinder,292,7292.99
+2026-01-01,North,Rain Jacket,467,10140.52
+2026-01-01,South,Rain Jacket,626,11346.12
+2026-01-01,London,Rain Jacket,643,15738.72
+2026-01-01,Scotland,Rain Jacket,225,5459.29
+2026-01-01,North,Air Fryer,581,10495.53
+2026-01-01,South,Air Fryer,610,12477.46
+2026-01-01,London,Air Fryer,867,21954.61
+2026-01-01,Scotland,Air Fryer,342,6252.33
+2026-01-01,North,Plant Pot Set,529,11728.66
+2026-01-01,South,Plant Pot Set,615,12732.13
+2026-01-01,London,Plant Pot Set,813,18811.85
+2026-01-01,Scotland,Plant Pot Set,323,6290.55
+2026-01-01,North,Travel Mug,480,9202.41
+2026-01-01,South,Travel Mug,564,10875.87
+2026-01-01,London,Travel Mug,759,15639.94
+2026-01-01,Scotland,Travel Mug,304,7036.04
+2026-01-01,North,Wireless Mouse,398,8336.13
+2026-01-01,South,Wireless Mouse,596,14293.17
+2026-01-01,London,Wireless Mouse,551,14123.67
+2026-01-01,Scotland,Wireless Mouse,241,6164.03
+2026-01-01,North,Bamboo Towels,431,10186.27
+2026-01-01,South,Bamboo Towels,484,9346.66
+2026-01-01,London,Bamboo Towels,649,13764.82
+2026-01-01,Scotland,Bamboo Towels,229,5261.94
+2026-01-01,North,Kids Scooter,440,8373.79
+2026-01-01,South,Kids Scooter,521,13149.69
+2026-01-01,London,Kids Scooter,502,9507.21
+2026-01-01,Scotland,Kids Scooter,244,6262.44
+2026-01-01,North,Phone Stand,381,9283.58
+2026-01-01,South,Phone Stand,388,8506.07
+2026-01-01,London,Phone Stand,603,11517.22
+2026-01-01,Scotland,Phone Stand,199,3796.75
+2026-01-01,North,Wool Socks,328,5914.01
+2026-01-01,South,Wool Socks,455,8876.66
+2026-01-01,London,Wool Socks,560,10989.75
+2026-01-01,Scotland,Wool Socks,190,3927.64
+2026-01-01,North,Water Filter,284,5330.0
+2026-01-01,South,Water Filter,313,8115.12
+2026-01-01,London,Water Filter,448,8620.12
+2026-01-01,Scotland,Water Filter,190,3846.47
+2026-01-01,North,Notebook Pack,273,5750.84
+2026-01-01,South,Notebook Pack,296,6314.46
+2026-01-01,London,Notebook Pack,334,7174.75
+2026-01-01,Scotland,Notebook Pack,126,2680.18
+2026-01-01,North,LED Strip,218,5317.93
+2026-01-01,South,LED Strip,280,5235.47
+2026-01-01,London,LED Strip,396,10001.99
+2026-01-01,Scotland,LED Strip,135,2499.32
+2026-01-01,North,Garden Hose,206,5329.65
+2026-01-01,South,Garden Hose,262,4798.31
+2026-01-01,London,Garden Hose,273,7011.56
+2026-01-01,Scotland,Garden Hose,115,2533.82
+2026-01-01,North,Sunglasses,182,4107.13
+2026-01-01,South,Sunglasses,227,4831.87
+2026-01-01,London,Sunglasses,222,4690.87
+2026-01-01,Scotland,Sunglasses,95,2311.95
+2026-02-01,North,Classic Kettle,451,11631.14
+2026-02-01,South,Classic Kettle,515,11587.67
+2026-02-01,London,Classic Kettle,773,18055.24
+2026-02-01,Scotland,Classic Kettle,224,4814.37
+2026-02-01,North,Trail Runner,955,18640.46
+2026-02-01,South,Trail Runner,964,24069.29
+2026-02-01,London,Trail Runner,1334,27000.73
+2026-02-01,Scotland,Trail Runner,498,10980.8
+2026-02-01,North,Aero Bottle,1181,21581.94
+2026-02-01,South,Aero Bottle,1125,27845.65
+2026-02-01,London,Aero Bottle,1698,36659.16
+2026-02-01,Scotland,Aero Bottle,618,11231.61
+2026-02-01,North,Smart Plug,779,15268.91
+2026-02-01,South,Smart Plug,901,19878.27
+2026-02-01,London,Smart Plug,1300,24083.83
+2026-02-01,Scotland,Smart Plug,480,9224.16
+2026-02-01,North,Daily Planner,778,17582.28
+2026-02-01,South,Daily Planner,895,16393.15
+2026-02-01,London,Daily Planner,1049,26121.44
+2026-02-01,Scotland,Daily Planner,376,8933.6
+2026-02-01,North,Desk Lamp,841,17494.92
+2026-02-01,South,Desk Lamp,811,16545.84
+2026-02-01,London,Desk Lamp,1159,25975.66
+2026-02-01,Scotland,Desk Lamp,435,8349.58
+2026-02-01,North,Cast Iron Pan,657,15533.48
+2026-02-01,South,Cast Iron Pan,880,18398.2
+2026-02-01,London,Cast Iron Pan,933,17070.12
+2026-02-01,Scotland,Cast Iron Pan,346,7620.68
+2026-02-01,North,Yoga Mat,662,12966.03
+2026-02-01,South,Yoga Mat,958,20473.66
+2026-02-01,London,Yoga Mat,929,19148.95
+2026-02-01,Scotland,Yoga Mat,438,9073.01
+2026-02-01,North,Bluetooth Speaker,540,11435.34
+2026-02-01,South,Bluetooth Speaker,805,17336.4
+2026-02-01,London,Bluetooth Speaker,835,18362.8
+2026-02-01,Scotland,Bluetooth Speaker,334,6794.65
+2026-02-01,North,Coffee Grinder,523,10232.19
+2026-02-01,South,Coffee Grinder,647,15359.86
+2026-02-01,London,Coffee Grinder,812,19000.01
+2026-02-01,Scotland,Coffee Grinder,283,6971.76
+2026-02-01,North,Rain Jacket,826,18345.9
+2026-02-01,South,Rain Jacket,1146,27093.18
+2026-02-01,London,Rain Jacket,1445,29892.32
+2026-02-01,Scotland,Rain Jacket,477,11224.99
+2026-02-01,North,Air Fryer,515,12379.17
+2026-02-01,South,Air Fryer,772,16789.79
+2026-02-01,London,Air Fryer,744,15674.01
+2026-02-01,Scotland,Air Fryer,331,6775.97
+2026-02-01,North,Plant Pot Set,545,10522.94
+2026-02-01,South,Plant Pot Set,580,12805.97
+2026-02-01,London,Plant Pot Set,758,16031.15
+2026-02-01,Scotland,Plant Pot Set,302,6790.0
+2026-02-01,North,Travel Mug,542,9998.78
+2026-02-01,South,Travel Mug,599,12650.58
+2026-02-01,London,Travel Mug,691,17095.17
+2026-02-01,Scotland,Travel Mug,289,5791.81
+2026-02-01,North,Wireless Mouse,450,8840.8
+2026-02-01,South,Wireless Mouse,618,11916.97
+2026-02-01,London,Wireless Mouse,567,10520.66
+2026-02-01,Scotland,Wireless Mouse,221,4395.86
+2026-02-01,North,Bamboo Towels,355,7870.23
+2026-02-01,South,Bamboo Towels,461,11600.09
+2026-02-01,London,Bamboo Towels,601,11467.12
+2026-02-01,Scotland,Bamboo Towels,222,5608.25
+2026-02-01,North,Kids Scooter,440,9841.03
+2026-02-01,South,Kids Scooter,526,12315.87
+2026-02-01,London,Kids Scooter,625,16147.04
+2026-02-01,Scotland,Kids Scooter,217,4154.6
+2026-02-01,North,Phone Stand,341,6881.59
+2026-02-01,South,Phone Stand,474,11275.21
+2026-02-01,London,Phone Stand,564,11705.44
+2026-02-01,Scotland,Phone Stand,191,4283.16
+2026-02-01,North,Wool Socks,349,6488.16
+2026-02-01,South,Wool Socks,451,11490.41
+2026-02-01,London,Wool Socks,435,9055.83
+2026-02-01,Scotland,Wool Socks,183,4378.95
+2026-02-01,North,Water Filter,326,7465.09
+2026-02-01,South,Water Filter,335,8444.96
+2026-02-01,London,Water Filter,467,8624.04
+2026-02-01,Scotland,Water Filter,185,4139.59
+2026-02-01,North,Notebook Pack,272,5582.11
+2026-02-01,South,Notebook Pack,314,8052.45
+2026-02-01,London,Notebook Pack,405,8850.66
+2026-02-01,Scotland,Notebook Pack,131,3315.61
+2026-02-01,North,LED Strip,270,6927.4
+2026-02-01,South,LED Strip,267,6273.16
+2026-02-01,London,LED Strip,404,8777.31
+2026-02-01,Scotland,LED Strip,152,3470.6
+2026-02-01,North,Garden Hose,217,4723.37
+2026-02-01,South,Garden Hose,249,6070.35
+2026-02-01,London,Garden Hose,308,7561.8
+2026-02-01,Scotland,Garden Hose,105,1990.16
+2026-02-01,North,Sunglasses,198,3632.48
+2026-02-01,South,Sunglasses,196,4253.18
+2026-02-01,London,Sunglasses,279,5136.03
+2026-02-01,Scotland,Sunglasses,92,2097.75
+2026-03-01,North,Classic Kettle,498,10396.28
+2026-03-01,South,Classic Kettle,486,10552.55
+2026-03-01,London,Classic Kettle,584,12182.14
+2026-03-01,Scotland,Classic Kettle,278,5635.8
+2026-03-01,North,Trail Runner,725,13179.69
+2026-03-01,South,Trail Runner,1012,19051.59
+2026-03-01,London,Trail Runner,1314,31100.28
+2026-03-01,Scotland,Trail Runner,473,11667.15
+2026-03-01,North,Aero Bottle,1172,23545.53
+2026-03-01,South,Aero Bottle,1481,34692.33
+2026-03-01,London,Aero Bottle,1816,46039.1
+2026-03-01,Scotland,Aero Bottle,578,11044.21
+2026-03-01,North,Smart Plug,752,13770.95
+2026-03-01,South,Smart Plug,967,22964.6
+2026-03-01,London,Smart Plug,1252,22928.86
+2026-03-01,Scotland,Smart Plug,500,10452.94
+2026-03-01,North,Daily Planner,832,16900.54
+2026-03-01,South,Daily Planner,856,17269.9
+2026-03-01,London,Daily Planner,1037,18730.84
+2026-03-01,Scotland,Daily Planner,365,8077.48
+2026-03-01,North,Desk Lamp,796,15898.38
+2026-03-01,South,Desk Lamp,1052,21289.98
+2026-03-01,London,Desk Lamp,995,25768.07
+2026-03-01,Scotland,Desk Lamp,443,8880.73
+2026-03-01,North,Cast Iron Pan,762,13984.17
+2026-03-01,South,Cast Iron Pan,711,13527.89
+2026-03-01,London,Cast Iron Pan,953,22523.95
+2026-03-01,Scotland,Cast Iron Pan,389,8402.54
+2026-03-01,North,Yoga Mat,758,17546.73
+2026-03-01,South,Yoga Mat,737,17238.7
+2026-03-01,London,Yoga Mat,867,20099.66
+2026-03-01,Scotland,Yoga Mat,380,8441.07
+2026-03-01,North,Bluetooth Speaker,653,14568.87
+2026-03-01,South,Bluetooth Speaker,712,14881.93
+2026-03-01,London,Bluetooth Speaker,872,15868.81
+2026-03-01,Scotland,Bluetooth Speaker,373,9280.54
+2026-03-01,North,Coffee Grinder,645,12741.93
+2026-03-01,South,Coffee Grinder,748,18008.42
+2026-03-01,London,Coffee Grinder,872,17005.53
+2026-03-01,Scotland,Coffee Grinder,340,6250.61
+2026-03-01,North,Rain Jacket,879,20120.23
+2026-03-01,South,Rain Jacket,951,22612.13
+2026-03-01,London,Rain Jacket,1392,32519.68
+2026-03-01,Scotland,Rain Jacket,413,8376.61
+2026-03-01,North,Air Fryer,559,10910.57
+2026-03-01,South,Air Fryer,716,18393.66
+2026-03-01,London,Air Fryer,738,17592.04
+2026-03-01,Scotland,Air Fryer,327,7481.39
+2026-03-01,North,Plant Pot Set,570,13583.13
+2026-03-01,South,Plant Pot Set,583,14527.8
+2026-03-01,London,Plant Pot Set,703,14464.02
+2026-03-01,Scotland,Plant Pot Set,302,7673.16
+2026-03-01,North,Travel Mug,553,13701.52
+2026-03-01,South,Travel Mug,564,11000.33
+2026-03-01,London,Travel Mug,625,14887.17
+2026-03-01,Scotland,Travel Mug,273,5895.0
+2026-03-01,North,Wireless Mouse,446,9168.51
+2026-03-01,South,Wireless Mouse,565,12742.56
+2026-03-01,London,Wireless Mouse,716,16837.93
+2026-03-01,Scotland,Wireless Mouse,253,5619.41
+2026-03-01,North,Bamboo Towels,380,7920.08
+2026-03-01,South,Bamboo Towels,469,8654.17
+2026-03-01,London,Bamboo Towels,557,13996.19
+2026-03-01,Scotland,Bamboo Towels,215,4410.31
+2026-03-01,North,Kids Scooter,342,6664.76
+2026-03-01,South,Kids Scooter,484,9105.07
+2026-03-01,London,Kids Scooter,483,11600.9
+2026-03-01,Scotland,Kids Scooter,216,4819.24
+2026-03-01,North,Phone Stand,337,6814.69
+2026-03-01,South,Phone Stand,394,7397.23
+2026-03-01,London,Phone Stand,536,11098.65
+2026-03-01,Scotland,Phone Stand,188,4853.68
+2026-03-01,North,Wool Socks,305,5831.61
+2026-03-01,South,Wool Socks,439,10858.42
+2026-03-01,London,Wool Socks,430,8077.97
+2026-03-01,Scotland,Wool Socks,164,2985.3
+2026-03-01,North,Water Filter,270,6011.15
+2026-03-01,South,Water Filter,390,9810.49
+2026-03-01,London,Water Filter,362,7418.03
+2026-03-01,Scotland,Water Filter,155,3517.23
+2026-03-01,North,Notebook Pack,286,6467.06
+2026-03-01,South,Notebook Pack,321,6643.38
+2026-03-01,London,Notebook Pack,405,7516.48
+2026-03-01,Scotland,Notebook Pack,150,3461.83
+2026-03-01,North,LED Strip,209,3846.38
+2026-03-01,South,LED Strip,266,6584.21
+2026-03-01,London,LED Strip,355,6702.58
+2026-03-01,Scotland,LED Strip,150,3000.92
+2026-03-01,North,Garden Hose,175,4340.67
+2026-03-01,South,Garden Hose,283,5630.52
+2026-03-01,London,Garden Hose,317,7805.49
+2026-03-01,Scotland,Garden Hose,129,3285.58
+2026-03-01,North,Sunglasses,151,3091.93
+2026-03-01,South,Sunglasses,196,3753.72
+2026-03-01,London,Sunglasses,289,6590.35
+2026-03-01,Scotland,Sunglasses,89,1744.7
+2026-04-01,North,Classic Kettle,365,8907.79
+2026-04-01,South,Classic Kettle,546,10726.73
+2026-04-01,London,Classic Kettle,551,11444.03
+2026-04-01,Scotland,Classic Kettle,208,4830.31
+2026-04-01,North,Trail Runner,823,18695.14
+2026-04-01,South,Trail Runner,1157,23093.67
+2026-04-01,London,Trail Runner,1092,23584.88
+2026-04-01,Scotland,Trail Runner,487,10159.54
+2026-04-01,North,Aero Bottle,1296,27193.39
+2026-04-01,South,Aero Bottle,1533,28213.18
+2026-04-01,London,Aero Bottle,1837,40955.99
+2026-04-01,Scotland,Aero Bottle,601,14065.25
+2026-04-01,North,Smart Plug,901,17478.52
+2026-04-01,South,Smart Plug,891,20337.21
+2026-04-01,London,Smart Plug,1294,30507.6
+2026-04-01,Scotland,Smart Plug,434,9091.14
+2026-04-01,North,Daily Planner,750,16650.24
+2026-04-01,South,Daily Planner,814,20211.94
+2026-04-01,London,Daily Planner,1178,23613.0
+2026-04-01,Scotland,Daily Planner,440,11372.59
+2026-04-01,North,Desk Lamp,773,17417.65
+2026-04-01,South,Desk Lamp,961,19096.04
+2026-04-01,London,Desk Lamp,991,19337.65
+2026-04-01,Scotland,Desk Lamp,410,9623.49
+2026-04-01,North,Cast Iron Pan,719,13694.4
+2026-04-01,South,Cast Iron Pan,846,20031.15
+2026-04-01,London,Cast Iron Pan,954,21298.69
+2026-04-01,Scotland,Cast Iron Pan,433,9896.91
+2026-04-01,North,Yoga Mat,593,10966.89
+2026-04-01,South,Yoga Mat,717,14611.08
+2026-04-01,London,Yoga Mat,1016,23726.59
+2026-04-01,Scotland,Yoga Mat,428,9235.99
+2026-04-01,North,Bluetooth Speaker,643,16486.32
+2026-04-01,South,Bluetooth Speaker,807,16607.19
+2026-04-01,London,Bluetooth Speaker,894,18977.03
+2026-04-01,Scotland,Bluetooth Speaker,383,9330.78
+2026-04-01,North,Coffee Grinder,542,12712.16
+2026-04-01,South,Coffee Grinder,829,17227.33
+2026-04-01,London,Coffee Grinder,793,15412.32
+2026-04-01,Scotland,Coffee Grinder,306,5752.88
+2026-04-01,North,Rain Jacket,473,11529.04
+2026-04-01,South,Rain Jacket,496,10710.28
+2026-04-01,London,Rain Jacket,745,16689.97
+2026-04-01,Scotland,Rain Jacket,217,5587.79
+2026-04-01,North,Air Fryer,576,13421.79
+2026-04-01,South,Air Fryer,583,11294.53
+2026-04-01,London,Air Fryer,711,13802.96
+2026-04-01,Scotland,Air Fryer,282,6937.69
+2026-04-01,North,Plant Pot Set,489,11989.46
+2026-04-01,South,Plant Pot Set,623,14365.86
+2026-04-01,London,Plant Pot Set,660,17117.66
+2026-04-01,Scotland,Plant Pot Set,310,6818.06
+2026-04-01,North,Travel Mug,442,10531.76
+2026-04-01,South,Travel Mug,595,12791.84
+2026-04-01,London,Travel Mug,704,17313.82
+2026-04-01,Scotland,Travel Mug,243,6081.23
+2026-04-01,North,Wireless Mouse,470,11887.5
+2026-04-01,South,Wireless Mouse,496,9196.83
+2026-04-01,London,Wireless Mouse,648,12239.11
+2026-04-01,Scotland,Wireless Mouse,214,5423.67
+2026-04-01,North,Bamboo Towels,435,11164.48
+2026-04-01,South,Bamboo Towels,557,13343.2
+2026-04-01,London,Bamboo Towels,532,13215.34
+2026-04-01,Scotland,Bamboo Towels,224,4779.75
+2026-04-01,North,Kids Scooter,397,8483.43
+2026-04-01,South,Kids Scooter,477,10366.19
+2026-04-01,London,Kids Scooter,610,12870.5
+2026-04-01,Scotland,Kids Scooter,206,4539.34
+2026-04-01,North,Phone Stand,350,7441.35
+2026-04-01,South,Phone Stand,388,7626.28
+2026-04-01,London,Phone Stand,468,11854.48
+2026-04-01,Scotland,Phone Stand,215,4094.64
+2026-04-01,North,Wool Socks,309,5622.63
+2026-04-01,South,Wool Socks,451,11691.78
+2026-04-01,London,Wool Socks,451,10865.25
+2026-04-01,Scotland,Wool Socks,173,3886.37
+2026-04-01,North,Water Filter,330,8060.89
+2026-04-01,South,Water Filter,379,7421.1
+2026-04-01,London,Water Filter,387,7369.39
+2026-04-01,Scotland,Water Filter,141,2772.63
+2026-04-01,North,Notebook Pack,252,5275.16
+2026-04-01,South,Notebook Pack,326,6211.56
+2026-04-01,London,Notebook Pack,334,8470.8
+2026-04-01,Scotland,Notebook Pack,126,2512.35
+2026-04-01,North,LED Strip,249,6203.78
+2026-04-01,South,LED Strip,319,6494.68
+2026-04-01,London,LED Strip,372,8125.56
+2026-04-01,Scotland,LED Strip,147,3269.05
+2026-04-01,North,Garden Hose,178,4474.97
+2026-04-01,South,Garden Hose,261,5848.35
+2026-04-01,London,Garden Hose,273,5751.76
+2026-04-01,Scotland,Garden Hose,99,2277.12
+2026-04-01,North,Sunglasses,150,3154.11
+2026-04-01,South,Sunglasses,183,4448.48
+2026-04-01,London,Sunglasses,228,5425.25
+2026-04-01,Scotland,Sunglasses,103,2237.82
+2026-05-01,North,Classic Kettle,412,9190.7
+2026-05-01,South,Classic Kettle,472,9886.23
+2026-05-01,London,Classic Kettle,531,11607.83
+2026-05-01,Scotland,Classic Kettle,216,5569.03
+2026-05-01,North,Trail Runner,951,22592.11
+2026-05-01,South,Trail Runner,933,20243.17
+2026-05-01,London,Trail Runner,1304,24982.59
+2026-05-01,Scotland,Trail Runner,506,12860.88
+2026-05-01,North,Aero Bottle,1495,28220.37
+2026-05-01,South,Aero Bottle,1467,28973.06
+2026-05-01,London,Aero Bottle,2172,54632.79
+2026-05-01,Scotland,Aero Bottle,748,14842.64
+2026-05-01,North,Smart Plug,879,20868.9
+2026-05-01,South,Smart Plug,1086,22370.74
+2026-05-01,London,Smart Plug,1186,26535.69
+2026-05-01,Scotland,Smart Plug,432,9672.76
+2026-05-01,North,Daily Planner,739,17930.15
+2026-05-01,South,Daily Planner,904,20804.58
+2026-05-01,London,Daily Planner,1213,29539.3
+2026-05-01,Scotland,Daily Planner,383,9332.33
+2026-05-01,North,Desk Lamp,702,16515.28
+2026-05-01,South,Desk Lamp,993,25726.74
+2026-05-01,London,Desk Lamp,892,19016.65
+2026-05-01,Scotland,Desk Lamp,382,8214.34
+2026-05-01,North,Cast Iron Pan,736,19064.08
+2026-05-01,South,Cast Iron Pan,881,17391.46
+2026-05-01,London,Cast Iron Pan,1115,22501.52
+2026-05-01,Scotland,Cast Iron Pan,327,5944.49
+2026-05-01,North,Yoga Mat,743,14945.36
+2026-05-01,South,Yoga Mat,886,17220.77
+2026-05-01,London,Yoga Mat,1005,19765.54
+2026-05-01,Scotland,Yoga Mat,345,7869.22
+2026-05-01,North,Bluetooth Speaker,583,11264.02
+2026-05-01,South,Bluetooth Speaker,760,16270.64
+2026-05-01,London,Bluetooth Speaker,854,17412.15
+2026-05-01,Scotland,Bluetooth Speaker,340,7038.64
+2026-05-01,North,Coffee Grinder,676,12716.75
+2026-05-01,South,Coffee Grinder,653,14826.05
+2026-05-01,London,Coffee Grinder,748,15851.13
+2026-05-01,Scotland,Coffee Grinder,338,8088.46
+2026-05-01,North,Rain Jacket,486,10819.19
+2026-05-01,South,Rain Jacket,601,12968.1
+2026-05-01,London,Rain Jacket,716,16901.58
+2026-05-01,Scotland,Rain Jacket,253,6068.43
+2026-05-01,North,Air Fryer,528,9899.04
+2026-05-01,South,Air Fryer,567,12681.8
+2026-05-01,London,Air Fryer,681,16284.37
+2026-05-01,Scotland,Air Fryer,274,5260.79
+2026-05-01,North,Plant Pot Set,436,8099.94
+2026-05-01,South,Plant Pot Set,698,16817.42
+2026-05-01,London,Plant Pot Set,750,15722.05
+2026-05-01,Scotland,Plant Pot Set,258,5180.09
+2026-05-01,North,Travel Mug,405,10305.38
+2026-05-01,South,Travel Mug,610,15672.56
+2026-05-01,London,Travel Mug,757,18642.59
+2026-05-01,Scotland,Travel Mug,229,5455.67
+2026-05-01,North,Wireless Mouse,433,9657.52
+2026-05-01,South,Wireless Mouse,511,11912.41
+2026-05-01,London,Wireless Mouse,654,13414.28
+2026-05-01,Scotland,Wireless Mouse,266,5737.38
+2026-05-01,North,Bamboo Towels,368,7140.95
+2026-05-01,South,Bamboo Towels,571,13101.97
+2026-05-01,London,Bamboo Towels,659,13596.57
+2026-05-01,Scotland,Bamboo Towels,224,4857.93
+2026-05-01,North,Kids Scooter,376,7231.36
+2026-05-01,South,Kids Scooter,511,11299.52
+2026-05-01,London,Kids Scooter,629,12997.5
+2026-05-01,Scotland,Kids Scooter,191,3469.41
+2026-05-01,North,Phone Stand,327,8216.72
+2026-05-01,South,Phone Stand,446,10873.19
+2026-05-01,London,Phone Stand,507,12016.95
+2026-05-01,Scotland,Phone Stand,167,4136.44
+2026-05-01,North,Wool Socks,299,5847.15
+2026-05-01,South,Wool Socks,446,10737.05
+2026-05-01,London,Wool Socks,408,9544.54
+2026-05-01,Scotland,Wool Socks,173,3764.27
+2026-05-01,North,Water Filter,325,8052.15
+2026-05-01,South,Water Filter,322,7296.44
+2026-05-01,London,Water Filter,429,9705.13
+2026-05-01,Scotland,Water Filter,143,3532.79
+2026-05-01,North,Notebook Pack,274,7045.97
+2026-05-01,South,Notebook Pack,323,6451.76
+2026-05-01,London,Notebook Pack,391,7059.1
+2026-05-01,Scotland,Notebook Pack,161,3174.59
+2026-05-01,North,LED Strip,203,4049.49
+2026-05-01,South,LED Strip,250,6307.82
+2026-05-01,London,LED Strip,324,8134.61
+2026-05-01,Scotland,LED Strip,123,2600.3
+2026-05-01,North,Garden Hose,228,5068.87
+2026-05-01,South,Garden Hose,275,5154.8
+2026-05-01,London,Garden Hose,320,7554.41
+2026-05-01,Scotland,Garden Hose,106,2080.85
+2026-05-01,North,Sunglasses,172,3260.06
+2026-05-01,South,Sunglasses,184,4007.88
+2026-05-01,London,Sunglasses,278,7111.46
+2026-05-01,Scotland,Sunglasses,96,2175.31
+2026-06-01,North,Classic Kettle,353,8339.34
+2026-06-01,South,Classic Kettle,408,8122.56
+2026-06-01,London,Classic Kettle,550,13176.26
+2026-06-01,Scotland,Classic Kettle,205,5073.93
+2026-06-01,North,Trail Runner,840,20736.38
+2026-06-01,South,Trail Runner,902,17412.07
+2026-06-01,London,Trail Runner,1335,34631.22
+2026-06-01,Scotland,Trail Runner,413,8844.09
+2026-06-01,North,Aero Bottle,1412,31658.17
+2026-06-01,South,Aero Bottle,1634,39595.47
+2026-06-01,London,Aero Bottle,2383,60856.28
+2026-06-01,Scotland,Aero Bottle,711,13527.08
+2026-06-01,North,Smart Plug,880,16419.02
+2026-06-01,South,Smart Plug,871,22422.67
+2026-06-01,London,Smart Plug,1000,24608.32
+2026-06-01,Scotland,Smart Plug,375,7505.36
+2026-06-01,North,Daily Planner,772,19405.43
+2026-06-01,South,Daily Planner,795,15706.18
+2026-06-01,London,Daily Planner,1193,23579.01
+2026-06-01,Scotland,Daily Planner,364,6965.19
+2026-06-01,North,Desk Lamp,789,16159.49
+2026-06-01,South,Desk Lamp,867,19302.78
+2026-06-01,London,Desk Lamp,1087,22797.74
+2026-06-01,Scotland,Desk Lamp,351,8414.75
+2026-06-01,North,Cast Iron Pan,791,17098.46
+2026-06-01,South,Cast Iron Pan,779,18755.46
+2026-06-01,London,Cast Iron Pan,1114,20567.58
+2026-06-01,Scotland,Cast Iron Pan,439,9591.34
+2026-06-01,North,Yoga Mat,640,13457.22
+2026-06-01,South,Yoga Mat,748,17981.89
+2026-06-01,London,Yoga Mat,822,15968.61
+2026-06-01,Scotland,Yoga Mat,377,7445.28
+2026-06-01,North,Bluetooth Speaker,733,13970.26
+2026-06-01,South,Bluetooth Speaker,770,17644.55
+2026-06-01,London,Bluetooth Speaker,1037,22411.24
+2026-06-01,Scotland,Bluetooth Speaker,411,10431.34
+2026-06-01,North,Coffee Grinder,564,13032.84
+2026-06-01,South,Coffee Grinder,701,18042.18
+2026-06-01,London,Coffee Grinder,878,17921.37
+2026-06-01,Scotland,Coffee Grinder,385,9227.3
+2026-06-01,North,Rain Jacket,442,9374.05
+2026-06-01,South,Rain Jacket,512,9984.01
+2026-06-01,London,Rain Jacket,618,12209.88
+2026-06-01,Scotland,Rain Jacket,229,4317.73
+2026-06-01,North,Air Fryer,473,10682.54
+2026-06-01,South,Air Fryer,650,12859.12
+2026-06-01,London,Air Fryer,664,17248.17
+2026-06-01,Scotland,Air Fryer,254,5185.91
+2026-06-01,North,Plant Pot Set,517,13381.47
+2026-06-01,South,Plant Pot Set,597,15174.03
+2026-06-01,London,Plant Pot Set,743,18209.45
+2026-06-01,Scotland,Plant Pot Set,245,4786.07
+2026-06-01,North,Travel Mug,484,10876.47
+2026-06-01,South,Travel Mug,494,9767.23
+2026-06-01,London,Travel Mug,688,12813.75
+2026-06-01,Scotland,Travel Mug,261,4876.45
+2026-06-01,North,Wireless Mouse,425,8553.89
+2026-06-01,South,Wireless Mouse,482,9161.77
+2026-06-01,London,Wireless Mouse,723,14582.89
+2026-06-01,Scotland,Wireless Mouse,248,6001.2
+2026-06-01,North,Bamboo Towels,473,9608.08
+2026-06-01,South,Bamboo Towels,439,10434.96
+2026-06-01,London,Bamboo Towels,580,12254.74
+2026-06-01,Scotland,Bamboo Towels,201,3651.5
+2026-06-01,North,Kids Scooter,349,8803.28
+2026-06-01,South,Kids Scooter,491,12235.29
+2026-06-01,London,Kids Scooter,529,12850.1
+2026-06-01,Scotland,Kids Scooter,183,4092.76
+2026-06-01,North,Phone Stand,341,8572.5
+2026-06-01,South,Phone Stand,486,9747.07
+2026-06-01,London,Phone Stand,464,10315.67
+2026-06-01,Scotland,Phone Stand,191,4663.62
+2026-06-01,North,Wool Socks,287,6100.79
+2026-06-01,South,Wool Socks,337,6329.91
+2026-06-01,London,Wool Socks,444,8891.7
+2026-06-01,Scotland,Wool Socks,195,4563.87
+2026-06-01,North,Water Filter,260,6444.3
+2026-06-01,South,Water Filter,310,5984.9
+2026-06-01,London,Water Filter,423,9652.91
+2026-06-01,Scotland,Water Filter,160,3010.6
+2026-06-01,North,Notebook Pack,259,6194.14
+2026-06-01,South,Notebook Pack,340,6607.87
+2026-06-01,London,Notebook Pack,394,8830.23
+2026-06-01,Scotland,Notebook Pack,147,2985.13
+2026-06-01,North,LED Strip,233,5338.19
+2026-06-01,South,LED Strip,256,5776.41
+2026-06-01,London,LED Strip,350,6704.97
+2026-06-01,Scotland,LED Strip,125,2722.93
+2026-06-01,North,Garden Hose,205,4399.34
+2026-06-01,South,Garden Hose,273,6415.02
+2026-06-01,London,Garden Hose,301,6430.69
+2026-06-01,Scotland,Garden Hose,109,2652.64
+2026-06-01,North,Sunglasses,152,3928.61
+2026-06-01,South,Sunglasses,193,4442.12
+2026-06-01,London,Sunglasses,255,6594.76
+2026-06-01,Scotland,Sunglasses,108,2090.95

@@ -1,0 +1,347 @@
+{
+  "name": "3D Building",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "3d",
+    "three.js",
+    "building",
+    "floor plan",
+    "digital twin",
+    "facilities",
+    "occupancy",
+    "energy",
+    "iot",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 20000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "floor": {
+        "displayName": "Floor",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Floor or level of each zone. Numbers are stacked in order (0 = ground); text floors are stacked alphabetically."
+      },
+      "zone": {
+        "displayName": "Zone",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Name of each zone, room or area. Selection filters on Floor and Zone."
+      },
+      "building": {
+        "displayName": "Building",
+        "type": "GROUPING",
+        "mandatory": false,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Optional: several buildings are placed side by side"
+      },
+      "x": {
+        "displayName": "Left (x)",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "validMeasureFunctions": [
+          "MEAN",
+          "MEDIAN",
+          "MIN",
+          "MAX",
+          "SINGLETON"
+        ],
+        "detail": "Distance of the zone's left edge from the building origin, in metres (or any unit)"
+      },
+      "y": {
+        "displayName": "Front (y)",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "validMeasureFunctions": [
+          "MEAN",
+          "MEDIAN",
+          "MIN",
+          "MAX",
+          "SINGLETON"
+        ],
+        "detail": "Distance of the zone's front edge from the building origin"
+      },
+      "w": {
+        "displayName": "Width",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "validMeasureFunctions": [
+          "MEAN",
+          "MEDIAN",
+          "MIN",
+          "MAX",
+          "SINGLETON"
+        ],
+        "detail": "Width of the zone along x"
+      },
+      "d": {
+        "displayName": "Depth",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "validMeasureFunctions": [
+          "MEAN",
+          "MEDIAN",
+          "MIN",
+          "MAX",
+          "SINGLETON"
+        ],
+        "detail": "Depth of the zone along y"
+      },
+      "value": {
+        "displayName": "Colour by",
+        "type": "MEASURE",
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "Measure that colours each zone, e.g. mean of Occupancy, mean of Temperature, sum of Energy"
+      },
+      "scale": {
+        "displayName": "Colour scale",
+        "type": "CHOICE",
+        "values": [
+          "SEQUENTIAL",
+          "DIVERGING"
+        ],
+        "displayValues": [
+          "Low to high",
+          "Below and above a midpoint"
+        ],
+        "detail": "Diverging uses blue below and red above the midpoint"
+      },
+      "midpoint": {
+        "displayName": "Midpoint",
+        "type": "NUMBER",
+        "detail": "Centre of the diverging scale, e.g. 21 for temperature (default: the middle of the data)"
+      },
+      "floorHeight": {
+        "displayName": "Floor height",
+        "type": "NUMBER",
+        "minValue": 0.5,
+        "maxValue": 20,
+        "detail": "Height of each floor in the same unit as the layout (default 3.5)"
+      },
+      "explode": {
+        "displayName": "Gap between floors",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 30,
+        "detail": "Pull floors apart so lower floors are visible (default 3)"
+      },
+      "labels": {
+        "displayName": "Label zones",
+        "type": "TOGGLE",
+        "detail": "Write zone names on the largest zones"
+      },
+      "theme": {
+        "displayName": "Background",
+        "type": "CHOICE",
+        "values": [
+          "LIGHT",
+          "DARK"
+        ],
+        "displayValues": [
+          "Light",
+          "Dark"
+        ],
+        "detail": "Scene background"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "floor",
+        "zone",
+        "value",
+        "scale"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Zones",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "floor",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "zone",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "building",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Layout",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "x",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "y",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "w",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "d",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Colour",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "scale",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "midpoint",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Scene",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "floorHeight",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "explode",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "labels",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "theme",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "scale": "SEQUENTIAL",
+      "floorHeight": 3.5,
+      "explode": 3,
+      "labels": true,
+      "theme": "LIGHT"
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 200,
+    "minHeight": 200
+  }
+}

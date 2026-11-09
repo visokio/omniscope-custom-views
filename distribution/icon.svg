@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect x="1.9" y="26" width="3.5" height="3.5" rx="0.5" fill="#7aa2ee"/>
+  <rect x="6" y="21.5" width="3.5" height="8" rx="0.5" fill="#7aa2ee"/>
+  <rect x="10.1" y="14.5" width="3.5" height="15" rx="0.5" fill="#5789e9"/>
+  <rect x="14.2" y="9.5" width="3.5" height="20" rx="0.5" fill="#5789e9"/>
+  <rect x="18.3" y="13.5" width="3.5" height="16" rx="0.5" fill="#5789e9"/>
+  <rect x="22.4" y="20.5" width="3.5" height="9" rx="0.5" fill="#7aa2ee"/>
+  <rect x="26.5" y="25.5" width="3.5" height="4" rx="0.5" fill="#7aa2ee"/>
+  <path d="M2 29.37 L2.5 29.31 L3 29.23 L3.5 29.12 L4 28.98 L4.5 28.79 L5 28.54 L5.5 28.23 L6 27.83 L6.5 27.34 L7 26.74 L7.5 26.01 L8 25.15 L8.5 24.15 L9 23.01 L9.5 21.72 L10 20.3 L10.5 18.76 L11 17.13 L11.5 15.43 L12 13.7 L12.5 11.99 L13 10.35 L13.5 8.82 L14 7.46 L14.5 6.31 L15 5.42 L15.5 4.82 L16 4.53 L16.5 4.56 L17 4.91 L17.5 5.58 L18 6.52 L18.5 7.71 L19 9.11 L19.5 10.67 L20 12.33 L20.5 14.05 L21 15.77 L21.5 17.46 L22 19.08 L22.5 20.6 L23 21.99 L23.5 23.25 L24 24.36 L24.5 25.33 L25 26.17 L25.5 26.87 L26 27.44 L26.5 27.92 L27 28.3 L27.5 28.6 L28 28.83 L28.5 29.01 L29 29.15 L29.5 29.25 L30 29.32" fill="none" stroke="#f68c11" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

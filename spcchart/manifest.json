@@ -1,0 +1,260 @@
+{
+  "name": "SPC Control Chart",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "spc",
+    "control chart",
+    "xmr",
+    "statistical process control",
+    "quality",
+    "variation",
+    "nhs",
+    "six sigma",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 5000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "time": {
+        "displayName": "Time",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "The time or sequence axis, e.g. Arrival date grouped by week, Batch number, Month"
+      },
+      "value": {
+        "displayName": "Value",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "The measure to monitor, one value per time point, e.g. mean of Wait minutes, sum of Defects"
+      },
+      "direction": {
+        "displayName": "Improvement is",
+        "type": "CHOICE",
+        "values": [
+          "NEUTRAL",
+          "HIGHER",
+          "LOWER"
+        ],
+        "displayValues": [
+          "Neither (neutral)",
+          "Higher values",
+          "Lower values"
+        ],
+        "detail": "Which direction counts as improvement. Special-cause points are then shown as improvement or concern."
+      },
+      "target": {
+        "displayName": "Target",
+        "type": "NUMBER",
+        "detail": "Optional target line. With an improvement direction, the view says whether the process can be relied on to meet it."
+      },
+      "baseline": {
+        "displayName": "Baseline points",
+        "type": "NUMBER",
+        "minValue": 0,
+        "detail": "Calculate the limits from the first N points only (0 uses all points)"
+      },
+      "rebase": {
+        "displayName": "Recalculate limits at",
+        "type": "TEXT",
+        "detail": "Optional comma-separated time points where the process changed (e.g. 2025-02-03); limits are recalculated from each one"
+      },
+      "runLength": {
+        "displayName": "Shift rule: points in a run",
+        "type": "NUMBER",
+        "minValue": 5,
+        "maxValue": 12,
+        "detail": "Consecutive points on one side of the mean that signal a shift (default 7)"
+      },
+      "trendLength": {
+        "displayName": "Trend rule: points rising or falling",
+        "type": "NUMBER",
+        "minValue": 5,
+        "maxValue": 12,
+        "detail": "Consecutive increases or decreases that signal a trend (default 6)"
+      },
+      "showMR": {
+        "displayName": "Show moving range chart",
+        "type": "TOGGLE",
+        "detail": "Show the moving range (mR) chart under the main chart"
+      },
+      "showSigma": {
+        "displayName": "Show one and two sigma bands",
+        "type": "TOGGLE",
+        "detail": "Shade the zones between the mean and the limits"
+      },
+      "paneX": {
+        "displayName": "Pane X",
+        "type": "GROUPING",
+        "list": true
+      },
+      "paneY": {
+        "displayName": "Pane Y",
+        "type": "GROUPING",
+        "list": true
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "time",
+        "value",
+        "direction"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    },
+    "optionGroups": [
+      {
+        "displayName": "Chart",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "time",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "direction",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "target",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Limits and rules",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "baseline",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "rebase",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "runLength",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "trendLength",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showMR",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "showSigma",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "direction": "NEUTRAL",
+      "baseline": 0,
+      "runLength": 7,
+      "trendLength": 6,
+      "showMR": true,
+      "showSigma": false
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 200,
+    "minHeight": 150
+  }
+}

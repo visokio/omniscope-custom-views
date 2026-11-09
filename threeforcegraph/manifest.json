@@ -2,55 +2,142 @@
   "name": "3D Force Graph",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["custom", "3d", "graph", "network", "three.js"],
+  "tags": [
+    "custom",
+    "3d",
+    "graph",
+    "network",
+    "three.js"
+  ],
   "sandbox": false,
   "autoPane": true,
   "autoQuery": true,
   "dataLimit": 10000,
-  "supportsSelection": false,
+  "supportsSelection": true,
   "options": {
     "items": {
       "source": {
         "displayName": "Source",
         "type": "GROUPING",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "Each record links its Source value to its Target value, for example From. Nodes are the values of both"
       },
       "target": {
         "displayName": "Target",
         "type": "GROUPING",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "The other end of each link, for example To"
       },
       "group": {
-        "displayName": "Group",
+        "displayName": "Node colour",
         "type": "GROUPING",
-        "list": false
+        "list": false,
+        "detail": "Colours each node by this category of its Source records, for example Team. A node that only appears as a Target is grey"
       },
       "linkWidth": {
         "displayName": "Link width",
         "type": "MEASURE",
-        "detail": "Numeric measure controlling link thickness"
+        "detail": "Thickness of each link, for example the sum of Messages. If empty, links are thin lines"
       },
       "background": {
-        "displayName": "Background",
+        "displayName": "Background colour",
         "type": "TEXT",
-        "detail": "Background colour for the graph"
+        "detail": "Any CSS colour, for example #ffffff or black. Empty or not a colour: white"
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "One graph per value, side by side"
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "One graph per value, one above the other"
       }
     },
     "structure": {
-      "toolbar": ["source", "target"],
-      "x": ["paneX"],
-      "y": ["paneY"]
-    }
+      "toolbar": [
+        "source",
+        "target"
+      ],
+      "x": [
+        "paneX"
+      ],
+      "y": [
+        "paneY"
+      ]
+    },
+    "optionGroups": [
+      {
+        "displayName": "Links",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "source",
+                "usePrefixTitle": false
+              },
+              {
+                "option": "target",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "linkWidth",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Look",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "group",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "background",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {

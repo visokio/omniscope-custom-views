@@ -1,0 +1,342 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/yield_curves.csv",
+  "options": {
+   "items": {
+    "x": {
+     "inputField": "Maturity (years)",
+     "type": "UNIQUE_VALUES"
+    },
+    "y": {
+     "inputField": "Month",
+     "type": "UNIQUE_VALUES"
+    },
+    "z": {
+     "inputField": "Yield %",
+     "function": "MEAN"
+    },
+    "colour": "AUTO",
+    "heightScale": 1,
+    "wireframe": true,
+    "autoRotate": false
+   }
+  },
+  "width": 1060,
+  "height": 600,
+  "wait": 5000,
+  "showcaseHeight": 600,
+  "caption": "Live: an illustrative yield curve for every month from 2022 to 2026 (invented, not market data). Drag to rotate, hover for the yield at any maturity and month, click to select it.",
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "demand",
+  "showcase": true,
+  "data": "sample-data/demand_grid.csv",
+  "options": {
+   "items": {
+    "x": {
+     "inputField": "Price",
+     "type": "UNIQUE_VALUES"
+    },
+    "y": {
+     "inputField": "Weeks before travel",
+     "type": "UNIQUE_VALUES"
+    },
+    "z": {
+     "inputField": "Bookings",
+     "function": "SUM"
+    },
+    "colour": "AUTO",
+    "heightScale": 0.8,
+    "wireframe": true,
+    "autoRotate": false
+   }
+  },
+  "width": 1060,
+  "height": 560,
+  "wait": 5000,
+  "showcaseHeight": 560,
+  "caption": "Live: an illustrative response surface of bookings by price and weeks before travel.",
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/yield_curves.csv",
+  "options": {
+   "items": {
+    "x": {
+     "inputField": "Maturity (years)",
+     "type": "UNIQUE_VALUES"
+    },
+    "y": {
+     "inputField": "Month",
+     "type": "UNIQUE_VALUES"
+    },
+    "z": {
+     "inputField": "Yield %",
+     "function": "MEAN"
+    },
+    "colour": "AUTO",
+    "heightScale": 1,
+    "wireframe": true,
+    "autoRotate": false
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 5000,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__surf.model;var i=M.X.list.findIndex(function(k){return k.sort===10}),j=M.Y.list.findIndex(function(k){return k.full==='Jan 2024'});return M.nx===12 && M.ny===58 && M.X.kind==='num' && M.Y.kind==='date' && Math.abs(M.grid[i*M.ny+j]-5.14)<1e-9})()",
+    "expectTruthy": true
+   },
+   {
+    "hoverEval": "window.__surf.screenOf(6,30)"
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "clickEval": "window.__surf.screenOf(6,30)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "window.__surf.sel.i===6 && window.__surf.sel.j===30",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__surf.selectCell(6,30)"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Month",
+     "operator": ">=",
+     "value": "2025-01-01"
+    }
+   },
+   {
+    "wait": 3000
+   },
+   {
+    "eval": "window.__surf.model.ny===22",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     420
+    ]
+   },
+   {
+    "wait": 1500
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "text",
+  "data": "../forecast/sample-data/sales_history.csv",
+  "options": {
+   "items": {
+    "x": {
+     "inputField": "Region",
+     "type": "UNIQUE_VALUES"
+    },
+    "y": {
+     "inputField": "Category",
+     "type": "UNIQUE_VALUES"
+    },
+    "z": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "colour": "AUTO",
+    "heightScale": 1,
+    "wireframe": true,
+    "autoRotate": false
+   }
+  },
+  "width": 900,
+  "height": 500,
+  "wait": 5000,
+  "actions": [
+   {
+    "eval": "window.__surf.model.X.kind==='text' && window.__surf.model.nx===4 && window.__surf.model.ny===3",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "single",
+  "data": "sample-data/yield_curves.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Month",
+   "operator": "=",
+   "value": "2024-01-01"
+  },
+  "options": {
+   "items": {
+    "x": {
+     "inputField": "Maturity (years)",
+     "type": "UNIQUE_VALUES"
+    },
+    "y": {
+     "inputField": "Month",
+     "type": "UNIQUE_VALUES"
+    },
+    "z": {
+     "inputField": "Yield %",
+     "function": "MEAN"
+    },
+    "colour": "AUTO",
+    "heightScale": 1,
+    "wireframe": true,
+    "autoRotate": false
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 2000,
+  "expect": {
+   "text": "at least two values"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Month",
+    "type": "DATE"
+   },
+   {
+    "name": "Maturity (years)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Yield %",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "x": {
+     "inputField": "Maturity (years)",
+     "type": "UNIQUE_VALUES"
+    },
+    "y": {
+     "inputField": "Month",
+     "type": "UNIQUE_VALUES"
+    },
+    "z": {
+     "inputField": "Yield %",
+     "function": "MEAN"
+    },
+    "colour": "AUTO",
+    "heightScale": 1,
+    "wireframe": true,
+    "autoRotate": false
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/yield_curves.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose two groupings"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "x": {
+     "inputField": "A",
+     "type": "UNIQUE_VALUES"
+    },
+    "y": {
+     "inputField": "B",
+     "type": "UNIQUE_VALUES"
+    },
+    "z": {
+     "inputField": "V",
+     "function": "MEAN"
+    }
+   }
+  },
+  "width": 1100,
+  "height": 700,
+  "wait": 9000,
+  "actions": [
+   {
+    "eval": "window.__surf.model.nx===140 && window.__surf.model.ny===140",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "notBlank": true
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/yield_curves.csv",
+  "options": {
+   "items": {
+    "x": {
+     "inputField": "Maturity (years)",
+     "type": "UNIQUE_VALUES"
+    },
+    "y": {
+     "inputField": "Month",
+     "type": "UNIQUE_VALUES"
+    },
+    "z": {
+     "inputField": "Yield %",
+     "function": "MEAN"
+    },
+    "colour": "AUTO",
+    "heightScale": 1,
+    "wireframe": true,
+    "autoRotate": false
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 5000
+ }
+]

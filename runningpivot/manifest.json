@@ -1,5 +1,5 @@
 {
-  "name": "Running Pivot",
+  "name": "Running Pivot View",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
   "thumbnail": "thumbnail.png",
@@ -11,7 +11,7 @@
   ],
   "sandbox": false,
   "autoPane": false,
-  "autoQuery": true,
+  "autoQuery": false,
   "dataLimit": 10000,
   "supportsSelection": true,
   "options": {
@@ -19,19 +19,21 @@
       "measures": {
         "displayName": "Measure",
         "type": "MEASURE",
-        "mandatory": true
+        "mandatory": true,
+        "detail": "The value added up down each column, for example the sum of Sales. Use a measure that adds up: a sum or a record count"
       },
       "paneX": {
-        "displayName": "Pane X",
+        "displayName": "Columns",
         "type": "GROUPING",
         "list": true,
-          "mandatory": true
+        "detail": "Optional: one column of running totals per value, for example Region. Several fields nest"
       },
       "paneY": {
-        "displayName": "Pane Y",
+        "displayName": "Rows",
         "type": "GROUPING",
         "list": true,
-          "mandatory": true
+        "mandatory": true,
+        "detail": "The order of the running total, for example Order date by month. Several fields nest; the total runs through all of them"
       }
     },
     "structure": {
@@ -44,7 +46,38 @@
       "y": [
         "paneY"
       ]
-    }
+    },
+    "optionGroups": [
+      {
+        "displayName": "Pivot",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "measures",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
     "items": {},

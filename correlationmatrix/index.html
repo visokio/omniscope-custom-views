@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #mat { flex: 1.25; position: relative; min-width: 0; }
+        #side { flex: 1; position: relative; border-left: 1px solid #e1e0d9; min-width: 0; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .cell { cursor: pointer; }
+        .cell:hover { stroke: #0b0b0b; stroke-width: 1.5; }
+        .lab { font-size: 11px; fill: #0b0b0b; }
+        .axis text { fill: #898781; font-size: 10px; } .axis path, .axis line { stroke: #c3c2b7; } .grid line { stroke: #eeede8; } .grid path { display: none; }
+        #sideTitle { position: absolute; left: 12px; top: 8px; right: 12px; font-weight: bold; font-size: 12px; }
+        #sideSub { position: absolute; left: 12px; top: 24px; right: 12px; color: #52514e; font-size: 11px; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="mat"><svg id="msvg"></svg></div>
+    <div id="side"><svg id="ssvg"></svg><div id="sideTitle"></div><div id="sideSub"></div></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    // Diverging blue (negative) <-> red (positive) with a neutral grey midpoint.
+    var DIV = ["#184f95", "#3987e5", "#9ec5f4", "#f0efec", "#f4a6a5", "#e34948", "#a32a2a"], DOT = "#2a78d6", SELECT = "#2161D9";
+    var S = { gen: 0, pair: null, brush: null };
+    window.__corr = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toLocaleString() : (+v.toPrecision(3)).toString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fields() { var f = it().fields; return (Array.isArray(f) ? f : f ? [f] : []).map(function (x) { return typeof x === "string" ? x : x.inputField; }).filter(Boolean); }
+    function colour(r) { var t = (r + 1) / 2, f = Math.max(0, Math.min(1, t)) * (DIV.length - 1), i = Math.min(DIV.length - 2, Math.floor(f)); return d3.interpolateRgb(DIV[i], DIV[i + 1])(f - i); }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var F = fields();
+        if (F.length < 2) { message("Add two or more numeric fields to correlate."); return; }
+        var q = { fields: F, range: { start: 0, length: Math.max(100, Math.min(200000, +it().maxRows || 20000)) } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) {
+            if (gen !== S.gen) return; omniscope.view.busy(false);
+            compute(F, e.data.records); draw();
+        }).on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+    function ranks(a) {
+        var idx = a.map(function (v, i) { return i; }).sort(function (x, y) { return a[x] - a[y]; }), r = new Array(a.length), i = 0;
+        while (i < idx.length) { var j = i; while (j + 1 < idx.length && a[idx[j + 1]] === a[idx[i]]) j++; var avg = (i + j) / 2 + 1; for (var k = i; k <= j; k++) r[idx[k]] = avg; i = j + 1; }
+        return r;
+    }
+    function pearson(x, y) {
+        var n = x.length; if (n < 3) return { r: NaN, n: n };
+        var mx = d3.mean(x), my = d3.mean(y), sxy = 0, sxx = 0, syy = 0;
+        for (var i = 0; i < n; i++) { var a = x[i] - mx, b = y[i] - my; sxy += a * b; sxx += a * a; syy += b * b; }
+        return { r: sxx && syy ? sxy / Math.sqrt(sxx * syy) : NaN, n: n };
+    }
+    function compute(F, recs) {
+        var k = F.length, cols = F.map(function (f, j) { return recs.map(function (r) { return r[j]; }); });
+        var spearman = it().method === "SPEARMAN", R = [], N = [];
+        for (var a = 0; a < k; a++) { R.push(new Array(k)); N.push(new Array(k)); }
+        for (a = 0; a < k; a++) for (var b = a; b < k; b++) {
+            var xs = [], ys = [];
+            for (var i = 0; i < recs.length; i++) { var x = cols[a][i], y = cols[b][i]; if (typeof x === "number" && typeof y === "number" && isFinite(x) && isFinite(y)) { xs.push(x); ys.push(y); } }
+            var res = a === b ? { r: 1, n: xs.length } : spearman ? pearson(ranks(xs), ranks(ys)) : pearson(xs, ys);
+            R[a][b] = R[b][a] = res.r; N[a][b] = N[b][a] = res.n;
+        }
+        // order: greedy chain by strongest |r| so related fields sit together
+        var order = F.map(function (f, i) { return i; });
+        if (it().order !== "LISTED" && k > 2) {
+            var used = new Set([0]), chain = [0];
+            var strength = function (i) { var s = 0; for (var j = 0; j < k; j++) if (j !== i && isFinite(R[i][j])) s += Math.abs(R[i][j]); return s; };
+            chain = [order.slice().sort(function (p, q) { return strength(q) - strength(p); })[0]]; used = new Set(chain);
+            while (chain.length < k) { var last = chain[chain.length - 1], best = -1, bv = -1; for (var j = 0; j < k; j++) if (!used.has(j)) { var v = isFinite(R[last][j]) ? Math.abs(R[last][j]) : 0; if (v > bv) { bv = v; best = j; } } chain.push(best); used.add(best); }
+            order = chain;
+        }
+        S.model = { F: F, R: R, N: N, order: order, cols: cols, rows: recs.length, method: spearman ? "Spearman" : "Pearson" };
+        // default pair: the strongest off-diagonal correlation
+        if (!S.pair || F.indexOf(S.pair[0]) < 0 || F.indexOf(S.pair[1]) < 0) {
+            var best2 = null; for (a = 0; a < k; a++) for (b = a + 1; b < k; b++) if (isFinite(R[a][b]) && (!best2 || Math.abs(R[a][b]) > Math.abs(R[best2[0]][best2[1]]))) best2 = [a, b];
+            S.pair = best2 ? [F[best2[0]], F[best2[1]]] : null;
+        }
+        var sel = omniscope.view.context().viewSelection; if (!sel) S.brush = null;
+    }
+    function draw() {
+        var M = S.model; if (!M) return; message(null); var intro = introDone();
+        document.body.classList.toggle("narrow", window.innerWidth < 640);
+        var box = document.getElementById("mat"), W = box.clientWidth, H = box.clientHeight, k = M.F.length;
+        var maxLab = d3.max(M.F, function (f) { return f.length; }) || 5, lw = Math.min(200, 14 + maxLab * 6.1);
+        var size = Math.max(10, Math.min((W - lw - 80) / k, (H - lw * 0.7 - 30) / k)), x0 = lw, y0 = 12;
+        var svg = d3.select("#msvg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var lower = it().triangle !== "FULL", showV = it().showValues !== false && size >= 26;
+        M.order.forEach(function (a, ri) {
+            svg.append("text").attr("class", "lab").attr("x", x0 - 6).attr("y", y0 + ri * size + size / 2).attr("dy", "0.35em").attr("text-anchor", "end").text(M.F[a]);
+            M.order.forEach(function (b, ci) {
+                if (lower && ci > ri) return;
+                var r = M.R[a][b], cx = x0 + ci * size, cy = y0 + ri * size, isPair = S.pair && ((S.pair[0] === M.F[a] && S.pair[1] === M.F[b]) || (S.pair[1] === M.F[a] && S.pair[0] === M.F[b]));
+                svg.append("rect").attr("class", "cell").attr("x", cx + 1).attr("y", cy + 1).attr("width", size - 2).attr("height", size - 2).attr("rx", 3)
+                    .attr("fill", isFinite(r) ? (a === b ? "#e1e0d9" : colour(r)) : "#fcfcfb").attr("stroke", isPair && a !== b ? SELECT : "none").attr("stroke-width", isPair ? 2 : 0)
+                    .on("mousemove", function (ev) { tip(a, b, ev); }).on("mouseleave", function () { tip(null); })
+                    .on("click", function (ev) { ev.stopPropagation(); if (a !== b) { S.pair = [M.F[a], M.F[b]]; S.brush = null; draw(); } });
+                if (showV && a !== b && isFinite(r)) svg.append("text").attr("x", cx + size / 2).attr("y", cy + size / 2).attr("dy", "0.35em").attr("text-anchor", "middle").attr("font-size", Math.min(12, size * 0.32)).attr("pointer-events", "none").attr("fill", Math.abs(r) > 0.55 ? "#fff" : "#0b0b0b").text(r.toFixed(2));
+            });
+            svg.append("text").attr("class", "lab").attr("transform", "translate(" + (x0 + ri * size + size / 2) + "," + (y0 + k * size + 6) + ") rotate(40)").attr("text-anchor", "start").text(M.F[a]);
+        });
+        // legend
+        var lgW = Math.min(180, k * size), lgx = x0 + k * size - lgW, lgy = y0 + 4;
+        if (lower && k > 2) {
+            var g = svg.append("g").attr("transform", "translate(" + lgx + "," + lgy + ")"), id = "lg" + Math.random().toString(36).slice(2);
+            var grad = svg.append("defs").append("linearGradient").attr("id", id); DIV.forEach(function (c, i) { grad.append("stop").attr("offset", (i / (DIV.length - 1) * 100) + "%").attr("stop-color", c); });
+            g.append("rect").attr("width", lgW).attr("height", 9).attr("rx", 2).attr("fill", "url(#" + id + ")");
+            [["-1", 0], ["0", lgW / 2], ["+1", lgW]].forEach(function (t) { g.append("text").attr("x", t[1]).attr("y", 21).attr("text-anchor", "middle").attr("font-size", 10).attr("fill", "#52514e").text(t[0]); });
+            g.append("text").attr("x", lgW / 2).attr("y", 34).attr("text-anchor", "middle").attr("font-size", 10).attr("fill", "#898781").text(M.method + ", " + M.rows.toLocaleString() + " records");
+        }
+        drawScatter();
+        if (intro) { var cs = d3.selectAll("#mat rect.cell"); fadeIn(cs, 350, stag(cs.size(), 800)); popIn(d3.selectAll("#ssvg circle"), 500, 2); }
+    }
+    function drawScatter() {
+        var M = S.model, box = document.getElementById("side"), W = box.clientWidth, H = box.clientHeight;
+        var svg = d3.select("#ssvg").attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        if (!S.pair || document.body.classList.contains("narrow")) { document.getElementById("sideTitle").textContent = ""; document.getElementById("sideSub").textContent = ""; return; }
+        var a = M.F.indexOf(S.pair[0]), b = M.F.indexOf(S.pair[1]), xs = M.cols[b], ys = M.cols[a], pts = [];
+        for (var i = 0; i < xs.length; i++) if (typeof xs[i] === "number" && typeof ys[i] === "number") pts.push([xs[i], ys[i]]);
+        var r = M.R[a][b];
+        document.getElementById("sideTitle").textContent = S.pair[0] + " against " + S.pair[1];
+        document.getElementById("sideSub").textContent = M.method + " r = " + (isFinite(r) ? r.toFixed(3) : "n/a") + " (" + pts.length.toLocaleString() + " records). Drag to select records.";
+        var m = { l: 46, r: 14, t: 46, b: 34 }, x = d3.scaleLinear().domain(d3.extent(pts, function (p) { return p[0]; })).nice().range([m.l, W - m.r]), y = d3.scaleLinear().domain(d3.extent(pts, function (p) { return p[1]; })).nice().range([H - m.b, m.t]);
+        svg.append("g").attr("class", "grid").attr("transform", "translate(" + m.l + ",0)").call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat(""));
+        svg.append("g").attr("class", "axis").attr("transform", "translate(" + m.l + ",0)").call(d3.axisLeft(y).ticks(5).tickFormat(fmt));
+        svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (H - m.b) + ")").call(d3.axisBottom(x).ticks(5).tickFormat(fmt));
+        svg.append("text").attr("x", W - m.r).attr("y", H - 4).attr("text-anchor", "end").attr("font-size", 10).attr("fill", "#52514e").text(S.pair[1]);
+        svg.append("text").attr("x", m.l + 4).attr("y", m.t + 10).attr("font-size", 10).attr("fill", "#52514e").text(S.pair[0]);
+        var sample = pts.length > 5000 ? pts.filter(function (p, i) { return i % Math.ceil(pts.length / 5000) === 0; }) : pts, br = S.brush;
+        var inB = function (p) { return br && p[0] >= br.x0 && p[0] <= br.x1 && p[1] >= br.y0 && p[1] <= br.y1; };
+        svg.append("g").selectAll("circle").data(sample).enter().append("circle").attr("cx", function (p) { return x(p[0]); }).attr("cy", function (p) { return y(p[1]); }).attr("r", sample.length > 2000 ? 1.6 : 2.6)
+            .attr("fill", function (p) { return br ? (inB(p) ? SELECT : "#c3c2b7") : DOT; }).attr("fill-opacity", 0.55);
+        // least-squares line
+        if (pts.length > 2) {
+            var mx = d3.mean(pts, function (p) { return p[0]; }), my = d3.mean(pts, function (p) { return p[1]; }), sxy = d3.sum(pts, function (p) { return (p[0] - mx) * (p[1] - my); }), sxx = d3.sum(pts, function (p) { return (p[0] - mx) * (p[0] - mx); });
+            if (sxx) { var sl = sxy / sxx, dx = x.domain(); svg.append("line").attr("x1", x(dx[0])).attr("y1", y(my + sl * (dx[0] - mx))).attr("x2", x(dx[1])).attr("y2", y(my + sl * (dx[1] - mx))).attr("stroke", "#0b0b0b").attr("stroke-width", 1.5).attr("stroke-dasharray", "5,3").attr("clip-path", null); }
+        }
+        var brush = d3.brush().extent([[m.l, m.t], [W - m.r, H - m.b]]).on("end", function (ev) {
+            if (!ev.selection) { if (S.brush) { S.brush = null; omniscope.view.whitespaceClick(); drawScatter(); } return; }
+            var s = ev.selection, bx = [x.invert(s[0][0]), x.invert(s[1][0])], by = [y.invert(s[1][1]), y.invert(s[0][1])];
+            selectBox(bx[0], bx[1], by[0], by[1]);
+        });
+        svg.append("g").attr("class", "brush").call(brush);
+    }
+    function selectBox(x0, x1, y0, y1) {
+        var fx = S.pair[1], fy = S.pair[0], p = function (v) { return +v.toPrecision(6); };
+        S.brush = { x0: x0, x1: x1, y0: y0, y1: y1 };
+        omniscope.view.context().viewSelection = { filter: { type: "AND", filters: [
+            { type: "FIELD_VALUE", inputField: fx, operator: ">=", value: p(x0) }, { type: "FIELD_VALUE", inputField: fx, operator: "<=", value: p(x1) },
+            { type: "FIELD_VALUE", inputField: fy, operator: ">=", value: p(y0) }, { type: "FIELD_VALUE", inputField: fy, operator: "<=", value: p(y1) }] } };
+        omniscope.view.updated(); drawScatter();
+    }
+    function tip(a, b, ev) {
+        var el = document.getElementById("tooltip");
+        if (a === null) { el.style.display = "none"; return; }
+        var M = S.model, r = M.R[a][b], s = Math.abs(r), word = !isFinite(r) ? "not enough data" : s >= 0.7 ? "strong" : s >= 0.4 ? "moderate" : s >= 0.2 ? "weak" : "little or no";
+        el.innerHTML = '<b>' + esc(M.F[a]) + '</b> and <b>' + esc(M.F[b]) + '</b><br><span class="k">' + M.method + ' r:</span> ' + (isFinite(r) ? r.toFixed(3) : "n/a") + ' (' + word + (isFinite(r) && s >= 0.2 ? (r > 0 ? ", positive" : ", negative") : "") + ')<br><span class="k">Records:</span> ' + M.N[a][b].toLocaleString() + (a !== b ? '<br><span class="k">Click to see the scatter plot</span>' : '');
+        el.style.display = "block";
+        var X = ev.clientX + 14, Y = ev.clientY + 14;
+        if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14;
+        if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+    window.__corr.selectBox = selectBox;
+    window.__corr.pick = function (f1, f2) { S.pair = [f1, f2]; draw(); };
+    document.getElementById("mat").addEventListener("click", function () { if (S.brush) { S.brush = null; drawScatter(); } omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

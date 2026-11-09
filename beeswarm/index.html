@@ -8,13 +8,15 @@
             /* Ensure the body fills the view, so clicks are handled everywhere: */
             width: 100%;
             height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
         #main {
             width: 100%;
             height: 100%;
-            font-family: monospace;
-            font-size: 20px;
-            white-space: pre;
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
             position: absolute;
         }
         svg {
@@ -24,27 +26,58 @@
         }
         .axis path, .axis line {
             fill: none;
-            stroke: #000;
+            stroke: #888;
             shape-rendering: crispEdges;
         }
 
         .axis text {
-            font: 10px sans-serif;
+            font: 10px Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            fill: #555;
+        }
+
+        .axis-title, .key text {
+            font-size: 11px;
+            fill: #444;
         }
 
         .cells path {
             fill: none;
             pointer-events: all;
+            cursor: pointer;
+        }
+
+        .cells circle {
+            stroke: #fff;
+            stroke-width: 0.75;
         }
 
         .cells :hover circle {
-            fill: red;
+            stroke: #1b1b1b;
+            stroke-width: 2;
+        }
+
+        .cells circle.selected {
+            stroke: #1b1b1b;
+            stroke-width: 2;
+        }
+
+        #message {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #555;
+            background: #fff;
         }
 
     </style>
 
     <!-- Put SCRIPT tags to load 3rd party libraries here -->
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@4.13.0/build/d3.min.js"></script>
 
 </head>
 
@@ -52,6 +85,7 @@
 
 <div id="main">
     <svg width="100%" height="100%"></svg>
+    <div id="message"></div>
 </div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
@@ -60,7 +94,12 @@
 
     var svg = d3.select("svg");
 
-    var color = d3.scaleOrdinal(d3.schemeCategory20c);
+    // Colours follow the category's name (from an unfiltered list of the colour field's values), not its rank in
+    // the current data, so a filter does not recolour the dots.
+    var PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948", "#7f8c8d", "#00a3bf"];
+    var NONE = "#b9b8b2", PLAIN = "#2a78d6";
+    var state = { selected: null, colourDomain: {}, model: null };
+    window.__beeswarm = state;
 
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
@@ -71,88 +110,233 @@
 
     // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
     document.body.addEventListener("click", function() {
-        omniscope.view.whitespaceClick();
+        clearSelection();
     });
 
-    // Naively redraw on any of these events
+    function clearSelection() {
+        state.selected = null;
+        svg.selectAll(".cells circle").classed("selected", false).attr("opacity", 1);
+        omniscope.view.whitespaceClick();
+    }
+
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+    }
+
+    function isRange(v) { return v !== null && typeof v === "object" && ("lower" in v || "upper" in v); }
+    function label(v) {
+        if (v === null || v === undefined) return "(blank)";
+        if (isRange(v)) return label(v.lower) + " to " + label(v.upper);
+        if (typeof v === "number") return (+v.toPrecision(6)).toLocaleString();
+        return String(v);
+    }
+    function measureName(m) {
+        if (!m) return "";
+        if (m.displayName) return m.displayName;
+        if (!m.function || m.function === "RECORD_COUNT") return "Record count";
+        return m.inputField;
+    }
+
+    // The filter that selects one Split value: an equality, or a range for a histogram grouping.
+    function splitFilter(field, v) {
+        if (isRange(v)) {
+            return { type: "AND", filters: [
+                { type: "FIELD_VALUE", inputField: field, operator: ">=", value: v.lower },
+                { type: "FIELD_VALUE", inputField: field, operator: "<", value: v.upper } ] };
+        }
+        return { type: "FIELD_VALUE", inputField: field, operator: "=", value: v === undefined ? null : v };
+    }
+
+    // Unfiltered list of the colour field's values, fetched once per field.
+    function colourDomain(m, done) {
+        if (!m || !m.inputField) return null;
+        var key = m.inputField, cached = state.colourDomain[key];
+        if (cached) return cached.values;
+        state.colourDomain[key] = { values: null };
+        omniscope.view.queryBuilder().table({ groupings: [{ inputField: key, type: "UNIQUE_VALUES" }],
+            measures: [{ function: "RECORD_COUNT" }], range: { start: 0, length: 51 } })
+            .on("load", function(e) {
+                var vals = e.data.records.map(function(r) { return r[0]; }).filter(function(v) { return v !== null; });
+                state.colourDomain[key] = { values: vals.length <= 50 ? vals.map(String).sort() : null };
+                done();
+            })
+            .on("error", function() { done(); })
+            .execute();
+        return null;
+    }
+
+    // Redraw on any of these events
     // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    omniscope.view.on(["load", "update", "resize"], render);
 
-        var margin = {top: -20, right: 40, bottom: 40, left: -20};
-        var width = +parseInt(svg.style("width"), 10) - 80;
-        var height = +parseInt(svg.style("height"), 10) - 80;
-
-        var x = d3.scaleLinear().rangeRound([60, width]);
-        var y = d3.scaleLinear().rangeRound([height, 60]);
-
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
         svg.select("g").remove();
-
-        var g = svg.append("g");
+        state.model = null;
+        if (!it.split) { message("Choose a Split grouping: the view draws one dot per value, for example per Store."); return; }
+        var result = ctx.result;
+        if (!result || !result.data) { message("Waiting for data"); return; }
 
         // Retrieve the auto-query results, a 2d array ([row][column]):
-        var records = omniscope.view.context().result.data.records;
-        var mappings = omniscope.view.context().result.mappings;
+        var records = result.data.records || [];
+        var mappings = result.mappings || {};
+        if (!records.length) { message("No data to show. Check the report's filters."); return; }
+        message(null);
+        if (!ctx.viewSelection) state.selected = null;
 
         // Map records to field options
-        var bees = [];
-        records.forEach(function(record) {
-            bees.push({
-                id: (mappings.split !== undefined) ? record[mappings.split] : null,
-                xValue: (mappings.x !== undefined) ? record[mappings.x] : null,
-                yValue: (mappings.y !== undefined) ? record[mappings.y] : null,
+        var bees = records.map(function(record) {
+            var num = function(k) { var v = mappings[k] !== undefined ? record[mappings[k]] : null; return typeof v === "number" && isFinite(v) ? v : null; };
+            return {
+                id: record[mappings.split],
+                key: JSON.stringify(record[mappings.split]),
+                xValue: num("x"),
+                yValue: num("y"),
                 colour: (mappings.colour !== undefined) ? record[mappings.colour] : null,
                 title: (mappings.title !== undefined) ? record[mappings.title] : null
-            });
+            };
         });
 
-        var xMin = d3.min(bees, function(d) { return d.xValue; });
-        var yMin = d3.min(bees, function(d) { return d.yValue; });
+        var W = +parseInt(svg.style("width"), 10), H = +parseInt(svg.style("height"), 10);
+        var useX = mappings.x !== undefined && bees.some(function(d) { return d.xValue !== null; });
+        var useY = mappings.y !== undefined && bees.some(function(d) { return d.yValue !== null; });
 
-        if (mappings.x) x.domain([(xMin < 0) ? xMin : 0, d3.max(bees, function(d) {return d.xValue;})]);
-        if (mappings.y) y.domain([(yMin < 0) ? yMin : 0, d3.max(bees, function(d) {return d.yValue;})]);
+        // Colour key: categories in a fixed order, at most 10 shown.
+        var domain = null, cats = [];
+        if (mappings.colour !== undefined) {
+            domain = colourDomain(it.colour, render);
+            var present = {};
+            bees.forEach(function(d) { if (d.colour !== null && d.colour !== undefined) present[String(d.colour)] = true; });
+            if (!domain) domain = Object.keys(present).sort();
+            cats = domain.filter(function(c) { return present[c]; });
+        }
+        var colourOf = function(d) {
+            if (mappings.colour === undefined) return PLAIN;
+            if (d.colour === null || d.colour === undefined) return NONE;
+            var i = domain.indexOf(String(d.colour));
+            return i < 0 ? NONE : PALETTE[i % PALETTE.length];
+        };
+        var showKey = cats.length > 0 && cats.length <= 10 && W > 200;
 
+        var margin = { top: showKey ? 30 : 12, right: 16, bottom: useX ? 44 : 12, left: useY ? 62 : 12 };
+        var width = Math.max(10, W - margin.left - margin.right), height = Math.max(10, H - margin.top - margin.bottom);
+
+        var x = d3.scaleLinear().range([0, width]);
+        var y = d3.scaleLinear().range([height, 0]);
+        var extent = function(k) {
+            var lo = d3.min(bees, function(d) { return d[k]; }), hi = d3.max(bees, function(d) { return d[k]; });
+            lo = lo < 0 ? lo : 0;
+            if (hi <= lo) hi = lo + 1;
+            return [lo, hi];
+        };
+        if (useX) x.domain(extent("xValue")).nice();
+        if (useY) y.domain(extent("yValue")).nice();
+
+        // Dot size follows the space per dot: 8 pixels at most (as before), smaller when crowded. With both axes
+        // the dots can only spread around their points, so they get less room.
+        var r = Math.max(2, Math.min(8, Math.sqrt(width * height / bees.length) * (useX && useY ? 0.18 : 0.3)));
+
+        bees.forEach(function(d) {
+            d.tx = (useX && d.xValue !== null) ? x(d.xValue) : width / 2;
+            d.ty = (useY && d.yValue !== null) ? y(d.yValue) : height / 2;
+            d.x = d.tx; d.y = d.ty;
+        });
         var simulation = d3.forceSimulation(bees)
-            .force("x", d3.forceX(function(d) { return (d.xValue !== null) ? x(d.xValue) : width / 2; }).strength(1))
-            .force("y", d3.forceY(function(d) { return (d.yValue !== null) ? y(d.yValue) : height / 2; }).strength(1))
-            .force("collide", d3.forceCollide(10))
+            .force("x", d3.forceX(function(d) { return d.tx; }).strength(1))
+            .force("y", d3.forceY(function(d) { return d.ty; }).strength(1))
+            .force("collide", d3.forceCollide(r + 1))
             .stop();
 
-        for (var i = 0; i < 500; ++i) simulation.tick();
+        for (var i = 0; i < 300; ++i) simulation.tick();
+        bees.forEach(function(d) {
+            d.x = Math.max(r, Math.min(width - r, d.x));
+            d.y = Math.max(r, Math.min(height - r, d.y));
+        });
 
-        if (mappings.x) {
+        var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        if (useX) {
             g.append("g")
                 .attr("class", "axis axis--x")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x));
+                .call(d3.axisBottom(x).ticks(Math.max(3, Math.floor(width / 80))));
+            g.append("text").attr("class", "axis-title").attr("text-anchor", "middle")
+                .attr("x", width / 2).attr("y", height + 36).text(measureName(it.x));
         }
 
-        if (mappings.y) {
+        if (useY) {
             g.append("g")
                 .attr("class", "axis axis--y")
-                .attr("transform", "translate(60,0)")
-                .call(d3.axisLeft(y));
+                .call(d3.axisLeft(y).ticks(Math.max(3, Math.floor(height / 50))));
+            g.append("text").attr("class", "axis-title").attr("text-anchor", "middle")
+                .attr("transform", "translate(-48," + (height / 2) + ") rotate(-90)").text(measureName(it.y));
         }
+
+        if (showKey) {
+            var key = g.append("g").attr("class", "key").attr("transform", "translate(0," + (-margin.top + 8) + ")");
+            var kx = 0;
+            cats.forEach(function(c) {
+                var item = key.append("g").attr("transform", "translate(" + kx + ",0)");
+                item.append("circle").attr("r", 5).attr("cx", 5).attr("cy", 6).attr("fill", PALETTE[domain.indexOf(c) % PALETTE.length]);
+                var t = item.append("text").attr("x", 14).attr("y", 10).text(c);
+                kx += 14 + t.node().getComputedTextLength() + 14;
+            });
+            if (kx > width + margin.right) key.remove();
+        }
+
+        var tip = function(d) {
+            var lines = [d.title !== null && d.title !== undefined ? label(d.title) : label(d.id)];
+            if (useX) lines.push(measureName(it.x) + ": " + label(d.xValue));
+            if (useY) lines.push(measureName(it.y) + ": " + label(d.yValue));
+            if (mappings.colour !== undefined) lines.push(measureName(it.colour) + ": " + label(d.colour));
+            return lines.join("\n");
+        };
 
         var cell = g.append("g")
             .attr("class", "cells")
             .selectAll("g").data(d3.voronoi()
-                .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
+                .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]])
                 .x(function(d) { return d.x; })
                 .y(function(d) { return d.y; })
                 .polygons(bees)).enter().append("g");
 
         cell.append("circle")
-            .attr("r", 8)
+            .attr("r", r)
             .attr("cx", function(d) { return (d) ? d.data.x : null; })
             .attr("cy", function(d) { return (d) ? d.data.y : null; })
-            .attr("fill", function(d) { return (d) ? color(d.data.colour) : "none"; });
+            .attr("fill", function(d) { return (d) ? colourOf(d.data) : "none"; });
 
         cell.append("path")
             .attr("d", function(d) { return (d) ? "M" + d.join("L") + "Z" : null; });
 
         cell.append("title")
-            .text(function(d) { return (d) ? d.data.title : null; });
-    });
+            .text(function(d) { return (d) ? tip(d.data) : null; });
+
+        // Click a dot to select its Split value; a click away from every dot clears the selection.
+        cell.on("click", function(d) {
+            if (!d) return;
+            var m = d3.mouse(g.node()), b = d.data;
+            if (Math.sqrt((m[0] - b.x) * (m[0] - b.x) + (m[1] - b.y) * (m[1] - b.y)) > Math.max(2.5 * r, 12)) return;
+            d3.event.stopPropagation();
+            if (state.selected === b.key) { clearSelection(); return; }
+            state.selected = b.key;
+            omniscope.view.context().viewSelection = { filter: splitFilter(it.split.inputField, b.id) };
+            omniscope.view.updated();
+            highlight();
+        });
+
+        state.model = { bees: bees, r: r, margin: margin, useX: useX, useY: useY, cats: cats };
+        highlight();
+    }
+
+    function highlight() {
+        var sel = state.selected;
+        svg.selectAll(".cells circle")
+            .classed("selected", function(d) { return !!d && sel !== null && d.data.key === sel; })
+            .attr("opacity", function(d) { return sel === null || (d && d.data.key === sel) ? 1 : 0.3; });
+    }
 
 </script>
 

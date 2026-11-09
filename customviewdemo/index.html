@@ -1,160 +1,186 @@
 <!doctype html>
 <html>
+<!--
+  Custom View Demo: a worked example of a custom view. It shows how to
+    1. read the options the user picked in the view's settings (defined in manifest.json),
+    2. run your own query against the report's data with the Query API (the manifest turns autoQuery off),
+    3. draw the result with a charting library (Highcharts),
+    4. send a selection back to Omniscope when the user clicks a bar, so other views filter or highlight.
+  Copy it into the View Designer and change the drawing to make your own view.
+-->
 <head>
     <meta charset="utf-8"/>
     <style>
-        html, body, main {
+        html, body, #main {
+            /* Fill the view, so clicks are handled everywhere */
             width: 100%;
             height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
-        main {
-            font-family: monospace;
-            font-size: 20px;
-            white-space: pre;
+        body {
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 13px;
+            color: #333;
+        }
+        #message {
+            position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+            text-align: center; padding: 12px; color: #666;
         }
     </style>
-    <script src="https://code.highcharts.com/adapters/standalone-framework.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <!-- Third-party libraries go here. Highcharts is loaded from the jsDelivr CDN, pinned to one version.
+         Highcharts has its own licence: see the README. -->
+    <script src="https://cdn.jsdelivr.net/npm/highcharts@13.1.1/highcharts.js"></script>
 </head>
-<!--
-  A demonstration of a custom view using Highcharts, manual/advanced querying, and selection.
--->
 <body>
-<main id="main"></main><!-- This element is where the view will render -->
-<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+<div id="main"></div><!-- The chart is drawn here -->
+<div id="message"></div><!-- Shown instead of the chart when there is nothing to draw -->
+
+<!-- The Omniscope custom view API: the omniscope.view and omniscope.query objects -->
+<script src="/_global_/customview/v1/omniscope.js"></script>
 <script>
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+
+    var chart = null;     // the Highcharts chart, kept so a resize can reuse it
+    var selected = null;  // the Split value the user selected, or null
+
+    // Report script errors to Omniscope, which shows them on the view
     omniscope.view.on("load", function() {
         window.onerror = function(msg) {
             omniscope.view.error(msg);
-        }
-    });
-    // Naively redraw on any of these events
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
-        try {
-            var query = {
-                // Use grouping and measure from options, as specified in manifest
-                "groupings": [
-                    omniscope.view.context().options.items.split
-                ],
-                "measures": [
-                    omniscope.view.context().options.items.measures
-                ],
-                // Use default filters for the view:
-                "filter": omniscope.view.context().dataConfig.filter
-            }
-
-            // Notify the container that the view is busy loading
-            omniscope.view.busy(true);
-
-            // Get the view endpoint using the Custom View API, this is needed to create the query builder.
-            var endpoint = omniscope.view.endpoint();
-
-            // Execute the query and render the view.
-            omniscope.query.builder(endpoint).table(query).on("load", function(event) {
-                renderView(event.data);
-                omniscope.view.busy(false); // Also notify the container view is now ready.
-            }).execute();
-        } catch (error) {
-            throw new Error(error.message);
-        }
+        };
     });
 
-    // Using the query results, show it in the custom visualisation.
-    function renderView(queryResultData) {
+    // "load" is the first draw, "update" a change of options, filters or data: both need a new query.
+    omniscope.view.on(["load", "update"], query);
+    // "resize" only changes the size: resize the chart we already have.
+    omniscope.view.on("resize", function() {
+        if (chart) chart.setSize(window.innerWidth, window.innerHeight, false);
+    });
 
-        // CREATE SPLIT LABELS.
-        var labels = [];
+    // Show a message instead of the chart
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+        if (text && chart) { chart.destroy(); chart = null; }
+    }
 
-        // Note the result is a 2d array - for more information see Query API docs.
-        for (var i = 0; i < queryResultData.records.length; i++) {
-            labels.push(queryResultData.records[i][0]);
+    function query() {
+        // The view's context holds everything about this view: its options, the report's filter, the selection.
+        var context = omniscope.view.context();
+        var options = context.options.items;   // keys as in manifest.json: "split" and "measures"
+
+        // Mandatory options can be empty while the user is still setting the view up
+        if (!options.split || !options.measures) {
+            message("Choose a Split field and a Measure in the view's settings.");
+            return;
         }
+        // An update without a selection (for example the user clicked elsewhere) clears ours
+        if (!context.viewSelection) selected = null;
 
-        // Get stored measure option
-        var measure = omniscope.view.context().options.items.measures;
+        // One row per Split value, with the measure aggregated over its records. Because autoQuery is off, the view
+        // must pass the report's filter itself, or it would ignore the other views' filters.
+        var queryRequest = {
+            groupings: [options.split],
+            measures: [options.measures],
+            filter: context.dataConfig.filter,
+            range: { start: 0, length: 500 }   // a safety limit: a bar chart of more bars is unreadable anyway
+        };
 
-        var yAxisLabel = "";
+        omniscope.view.busy(true);   // tells Omniscope the view is loading
+        omniscope.query.builder(omniscope.view.endpoint())
+            .table(queryRequest)
+            .on("load", function(event) {
+                omniscope.view.busy(false);
+                // event.data.records is a 2D array: one row per Split value, [split value, measure value]
+                render(event.data.records, options);
+            })
+            .on("error", function(event) {
+                omniscope.view.busy(false);
+                message("Query failed: " + (event.data && event.data.message ? event.data.message : "unknown error"));
+            })
+            .execute();
+    }
 
-        // RECORD COUNT option doesn't have an input field associated with it
-        // hence we are checking to see if the input field is present.
-        if (!measure.inputField) {
-            yAxisLabel = measure.function;
-        } else {
-            yAxisLabel = measure.inputField + " (" + measure.function+")";
+    // A readable name for the measure: "Sales (sum)", or "Record count"
+    function measureName(measure) {
+        if (!measure.inputField || measure.function === "RECORD_COUNT") return "Record count";
+        return measure.inputField + " (" + measure.function.toLowerCase() + ")";
+    }
+
+    function render(records, options) {
+        if (!records.length) {
+            message("No data to show. Check the report's filters.");
+            return;
         }
-        var bodyOffsets = document.body.getBoundingClientRect();
+        message(null);
 
-        // High chart specific
-        new Highcharts.Chart({
+        // Highcharts takes the categories (bar labels) and the values separately
+        var labels = records.map(function(row) { return row[0] === null ? "(blank)" : String(row[0]); });
+        var points = records.map(function(row) {
+            return { y: row[1], selected: selected !== null && row[0] === selected, splitValue: row[0] };
+        });
+
+        if (chart) chart.destroy();
+        chart = Highcharts.chart("main", {
             chart: {
-                renderTo: 'main',
-                width: bodyOffsets.width,
-                height: bodyOffsets.height,
+                type: "column",
+                width: window.innerWidth,
+                height: window.innerHeight,
+                animation: false,
                 events: {
-                    click: function() {
-                        // On clicking anywhere on the chart other than point, trigger whitespace click.
-                        omniscope.view.whitespaceClick();
-                    }
-                },
-                type: "column"
-            },
-            title: {
-                text: null
-            },
-            xAxis: {
-                gridLineWidth: 1,
-                categories: labels,
-                type: "categories",
-            },
-            yAxis: {
-                gridLineDashStyle: 'longdash',
-                title: {
-                    text: yAxisLabel
+                    // A click on the chart's background (not on a bar) is a "whitespace click": it clears the
+                    // selection in Omniscope and closes any open menus
+                    click: function() { select(null); }
                 }
             },
+            title: { text: null },
+            credits: { enabled: false },
+            legend: { enabled: false },
+            xAxis: { categories: labels, title: { text: options.split.inputField } },
+            yAxis: { title: { text: measureName(options.measures) } },
             plotOptions: {
                 series: {
-                    animation: 1000,
-                    allowPointSelect: true,
+                    color: "#2a78d6",
                     dataLabels: {
-                        enabled: true
+                        enabled: records.length <= 30,
+                        // Whole numbers from 100, otherwise two decimals
+                        formatter: function() { return Highcharts.numberFormat(this.y, Math.abs(this.y) >= 100 ? 0 : 2); }
                     },
-                    states: {
-                        select: {
-                            color: 'blue'
-                        }
-                    },
+                    states: { select: { color: "#123f75" } },
                     point: {
                         events: {
+                            // A click on a bar selects its Split value; a second click on it clears the selection
                             click: function() {
-                                // On clicking a bar trigger omniscope selection.
-                                var fieldName = omniscope.view.context().options.items["split"].inputField;
-                                var selectedValue = this.category;
-                                var filter = {
-                                    "type": "AND",
-                                    "filters": [{
-                                        "type": "FIELD_VALUE",
-                                        "inputField": fieldName,
-                                        "operator": "=",
-                                        "value": selectedValue
-                                    }]
-                                };
-                                omniscope.view.context().viewSelection = { filter: filter };
-                                omniscope.view.updated();
+                                select(this.splitValue === selected ? null : this.splitValue);
+                                return false;   // stop Highcharts' own point selection: we manage it
                             }
                         }
                     }
                 }
             },
-            legend: {
-                enabled: false
-            },
-            series: [{
-                data: queryResultData.records
-            }]
+            series: [{ name: measureName(options.measures), data: points }]
         });
+    }
+
+    // Send the selection to Omniscope. A selection is a filter: here, "Split field = the clicked value".
+    function select(value) {
+        selected = value;
+        if (value === null) {
+            omniscope.view.whitespaceClick();
+        } else {
+            omniscope.view.context().viewSelection = {
+                filter: {
+                    type: "AND",
+                    filters: [{ type: "FIELD_VALUE", inputField: omniscope.view.context().options.items.split.inputField,
+                                operator: "=", value: value }]
+                }
+            };
+            omniscope.view.updated();   // tells Omniscope the selection changed
+        }
+        // Show the selection on the bars straight away
+        if (chart) chart.series[0].points.forEach(function(p) { p.select(p.splitValue === value && value !== null, true); });
     }
 </script>
 </body>

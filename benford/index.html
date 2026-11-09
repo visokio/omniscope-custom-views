@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #chart { flex: 1; position: relative; min-width: 0; }
+        #side { width: 290px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .axis text { fill: #52514e; font-size: 11px; } .axis path, .axis line { stroke: #c9c8c1; } .grid line { stroke: #ebeae5; } .grid path { display: none; }
+        .bar { cursor: pointer; } .bar:hover { opacity: .8; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        .stat { color: #52514e; margin-bottom: 4px; line-height: 1.45; } .big { font-size: 15px; font-weight: bold; color: #0b0b0b; }
+        .tag { display: inline-block; font-size: 11px; border-radius: 10px; padding: 1px 8px; white-space: nowrap; }
+        .c0 { color: #0b6b0b; background: rgba(12,163,12,.12); } .c1 { color: #0b6b0b; background: rgba(12,163,12,.07); } .c2 { color: #7a5600; background: rgba(250,178,25,.18); } .c3 { color: #a32a2a; background: rgba(208,59,59,.12); }
+        table { border-collapse: collapse; width: 100%; font-size: 11.5px; } td, th { padding: 3px 3px; text-align: right; white-space: nowrap; } th { color: #52514e; font-weight: normal; font-size: 10.5px; border-bottom: 1px solid #e1e0d9; } td:first-child, th:first-child { text-align: left; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+        tr.g { cursor: pointer; } tr.g:hover { background: rgba(127,127,127,.08); } tr.sel td:first-child { font-weight: bold; color: #2161D9; }
+        .note { color: #898781; font-size: 11px; margin-top: 6px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    var BAR = "#2a78d6", FLAG = "#eb6834", INK = "#3a3936", SELECT = "#2161D9";
+    // Nigrini's mean absolute deviation thresholds for close, acceptable and marginal conformity.
+    var MODES = {
+        FIRST: { digits: d3.range(1, 10), exp: function (d) { return Math.log10(1 + 1 / d); }, mad: [0.006, 0.012, 0.015], label: "First digit" },
+        FIRST_TWO: { digits: d3.range(10, 100), exp: function (d) { return Math.log10(1 + 1 / d); }, mad: [0.0012, 0.0018, 0.0022], label: "First two digits" },
+        SECOND: { digits: d3.range(0, 10), exp: function (d) { var s = 0; for (var k = 1; k <= 9; k++) s += Math.log10(1 + 1 / (10 * k + d)); return s; }, mad: [0.008, 0.010, 0.012], label: "Second digit" }
+    };
+    var CONF = ["Close conformity", "Acceptable conformity", "Marginally acceptable", "Nonconformity"];
+    var S = { gen: 0, sel: null, focus: null };
+    window.__ben = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var pct = function (v, d) { return (100 * v).toFixed(d === undefined ? 1 : d) + "%"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function modeOf() { var m = it().digits; return MODES[m] ? m : "FIRST"; }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { v: fld(o.value), g: fld(o.group) };
+        if (!F.v) { message("Choose the Amounts field: payments, invoices, expense claims, transactions or any other naturally occurring values."); return; }
+        if (F.g === F.v) F.g = null;
+        var q = { fields: F.g ? [F.v, F.g] : [F.v], range: { start: 0, length: Math.max(1000, Math.min(1000000, +o.maxRows || 500000)) } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    // Leading digits from the decimal mantissa, so that 4999.99 gives 4, 9 and never suffers from floating-point logs.
+    function digitsOf(a) { var s = a.toExponential(12); return [+s[0], +s[2]]; }
+    function analyse(vals, mode) {
+        var M = MODES[mode], idx = {}, counts = M.digits.map(function () { return 0; }); M.digits.forEach(function (d, i) { idx[d] = i; });
+        vals.forEach(function (a) { var dg = digitsOf(a), d = mode === "FIRST" ? dg[0] : mode === "SECOND" ? dg[1] : dg[0] * 10 + dg[1]; counts[idx[d]]++; });
+        var N = vals.length, mad = 0, chi = 0;
+        var rows = M.digits.map(function (d, i) {
+            var e = M.exp(d), p = N ? counts[i] / N : 0, se = Math.sqrt(e * (1 - e) / Math.max(1, N)), z = N ? Math.max(0, Math.abs(p - e) - 1 / (2 * N)) / se : 0;
+            mad += Math.abs(p - e); if (N) chi += Math.pow(counts[i] - N * e, 2) / (N * e);
+            return { d: d, n: counts[i], p: p, e: e, z: z, flag: z > 1.96 };
+        });
+        mad /= M.digits.length;
+        var cls = mad <= M.mad[0] ? 0 : mad <= M.mad[1] ? 1 : mad <= M.mad[2] ? 2 : 3;
+        return { rows: rows, N: N, mad: mad, cls: cls, chi: chi, df: M.digits.length - 1, p: N ? 1 - gammaP((M.digits.length - 1) / 2, chi / 2) : null };
+    }
+    function gammaP(a, x) {
+        if (x <= 0) return 0; var gl = lgamma(a);
+        if (x < a + 1) { var sum = 1 / a, del = sum, ap = a; for (var n = 0; n < 1000; n++) { ap++; del *= x / ap; sum += del; if (Math.abs(del) < Math.abs(sum) * 1e-14) break; } return sum * Math.exp(-x + a * Math.log(x) - gl); }
+        var b = x + 1 - a, c = 1e300, d = 1 / b, h = d; for (var i = 1; i < 1000; i++) { var an = -i * (i - a); b += 2; d = an * d + b; if (Math.abs(d) < 1e-300) d = 1e-300; c = b + an / c; if (Math.abs(c) < 1e-300) c = 1e-300; d = 1 / d; var dl = d * c; h *= dl; if (Math.abs(dl - 1) < 1e-14) break; }
+        return 1 - Math.exp(-x + a * Math.log(x) - gl) * h;
+    }
+    function lgamma(z) { var g = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5], x = z, y = z, t = x + 5.5; t -= (x + 0.5) * Math.log(t); var s = 1.000000000190015; for (var j = 0; j < 6; j++) s += g[j] / ++y; return -t + Math.log(2.5066282746310005 * s / x); }
+
+    function build(F, recs) {
+        var o = it(), mode = modeOf(), minV = o.minValue === undefined || o.minValue === null || o.minValue === "" || isNaN(+o.minValue) ? 10 : Math.max(0, +o.minValue), neg = o.negatives !== false;
+        var vals = [], groups = new Map(), skipped = 0, hasNeg = false, maxA = 0, minA = Infinity;
+        recs.forEach(function (r) {
+            var v = typeof r[0] === "number" ? r[0] : parseFloat(r[0]); if (!isFinite(v)) { skipped++; return; }
+            if (v < 0 && !neg) { skipped++; return; }
+            var a = Math.abs(v); if (a < minV || a === 0) { skipped++; return; }
+            if (v < 0) hasNeg = true; if (a > maxA) maxA = a; if (a < minA) minA = a;
+            vals.push(a);
+            if (F.g) { var g = r[1] === null || r[1] === undefined ? "(blank)" : String(r[1]); if (!groups.has(g)) groups.set(g, { name: g, raw: r[1], vals: [] }); groups.get(g).vals.push(a); }
+        });
+        if (vals.length < 50) { S.model = null; message(vals.length ? "Only " + vals.length + " values of at least " + minV + ". Benford analysis needs many values (ideally thousands) spread over several orders of magnitude." : "No data to show. Check the filters and the Amounts field."); return; }
+        message(null);
+        var all = analyse(vals, mode), mags = Math.log10(maxA / minA);
+        var minG = Math.max(20, +o.minGroup || 100), gl = [];
+        groups.forEach(function (G) { if (G.vals.length >= minG) { var A = analyse(G.vals, mode); A.name = G.name; A.raw = G.raw; A.vals = G.vals; gl.push(A); } });
+        gl.sort(function (a, b) { return b.mad - a.mad; });
+        S.model = { F: F, mode: mode, all: all, vals: vals, groups: gl, skipped: skipped, minV: minV, hasNeg: hasNeg, minA: minA, maxA: maxA, mags: mags, ngroups: groups.size, minG: minG };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        if (S.focus && !gl.some(function (g) { return g.name === S.focus; })) S.focus = null;
+        if (S.sel && S.sel.group) S.focus = S.sel.group;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var A = S.focus ? M.groups.find(function (g) { return g.name === S.focus; }) : M.all, mode = MODES[M.mode];
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var m = { l: 50, r: 16, t: 50, b: 34 }, w = Math.max(60, W - m.l - m.r), h = Math.max(60, H - m.t - m.b);
+        var x = d3.scaleBand().domain(mode.digits).range([0, w]).padding(mode.digits.length > 20 ? 0.15 : 0.22), ymax = d3.max(A.rows, function (r) { return Math.max(r.p, r.e); }) * 1.12;
+        var y = d3.scaleLinear().domain([0, ymax]).nice().range([h, 0]);
+        var g = svg.append("g").attr("transform", "translate(" + m.l + "," + m.t + ")");
+        g.append("g").attr("class", "grid").call(d3.axisLeft(y).ticks(5).tickSize(-w).tickFormat(""));
+        g.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".0%")));
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + h + ")").call(d3.axisBottom(x).tickValues(mode.digits.length > 20 ? mode.digits.filter(function (d) { return d % 10 === 0 || d === 99; }) : mode.digits));
+        g.append("text").attr("x", w / 2).attr("y", h + 30).attr("text-anchor", "middle").attr("fill", "#52514e").style("font-size", "11px").text(mode.label);
+        var selD = S.sel && S.sel.digit !== undefined ? S.sel.digit : null;
+        g.selectAll("rect.bar").data(A.rows).enter().append("rect").attr("class", "bar")
+            .attr("x", function (r) { return x(r.d); }).attr("width", x.bandwidth()).attr("y", function (r) { return y(r.p); }).attr("height", function (r) { return h - y(r.p); })
+            .attr("fill", function (r) { return r.flag ? FLAG : BAR; }).attr("opacity", function (r) { return selD !== null && r.d !== selD ? 0.35 : r.flag || selD === r.d ? 1 : 0.75; })
+            .attr("stroke", function (r) { return r.d === selD ? SELECT : "none"; }).attr("stroke-width", 2)
+            .on("mouseenter", function (ev, r) { tipBar(r, A, ev); }).on("mousemove", function (ev, r) { tipBar(r, A, ev); }).on("mouseleave", tip)
+            .on("click", function (ev, r) { ev.stopPropagation(); selectDigit(r.d); });
+        var line = d3.line().x(function (r) { return x(r.d) + x.bandwidth() / 2; }).y(function (r) { return y(r.e); }).curve(d3.curveMonotoneX);
+        g.append("path").attr("d", line(A.rows)).attr("fill", "none").attr("stroke", INK).attr("stroke-width", 1.6).attr("pointer-events", "none");
+        if (mode.digits.length <= 20) g.selectAll("circle.e").data(A.rows).enter().append("circle").attr("cx", function (r) { return x(r.d) + x.bandwidth() / 2; }).attr("cy", function (r) { return y(r.e); }).attr("r", 3).attr("fill", INK).attr("pointer-events", "none");
+        if (mode.digits.length <= 20 && x.bandwidth() > 26) g.selectAll("text.fl").data(A.rows.filter(function (r) { return r.flag; })).enter().append("text").attr("x", function (r) { return x(r.d) + x.bandwidth() / 2; }).attr("y", function (r) { return y(Math.max(r.p, r.e)) - 6; }).attr("text-anchor", "middle").style("font-size", "10.5px").attr("fill", "#a34a1a").text(function (r) { return (r.p > r.e ? "\u25b2 " : "\u25bc ") + pct(r.p); });
+        // heading and legend
+        var head = svg.append("text").attr("x", m.l).attr("y", 17).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(mode.label + " of " + M.F.v + (S.focus ? " for " + S.focus : "") + ": ");
+        head.append("tspan").attr("fill", ["#0b6b0b", "#0b6b0b", "#7a5600", "#a32a2a"][A.cls]).style("font-weight", "bold").text((A.cls >= 2 ? "\u25b2 " : "\u25cf ") + CONF[A.cls]);
+        head.append("tspan").attr("fill", "#52514e").text("  (MAD " + A.mad.toFixed(4) + ", " + A.N.toLocaleString() + " values)");
+        var lg = svg.append("g").attr("transform", "translate(" + m.l + ",36)").style("font-size", "11px").attr("fill", "#52514e"), lx = 0;
+        [[BAR, "Actual share", "rect"], [FLAG, "Differs from Benford (z > 1.96)", "rect"], [INK, "Expected by Benford's law", "line"]].forEach(function (L) { var e = lg.append("g").attr("transform", "translate(" + lx + ",0)"); if (L[2] === "rect") e.append("rect").attr("y", -8).attr("width", 11).attr("height", 10).attr("fill", L[0]); else { e.append("line").attr("x1", 0).attr("x2", 14).attr("y1", -3).attr("y2", -3).attr("stroke", L[0]).attr("stroke-width", 1.6); e.append("circle").attr("cx", 7).attr("cy", -3).attr("r", 3).attr("fill", L[0]); } var t = e.append("text").attr("x", 17).text(L[1]); lx += 17 + t.node().getComputedTextLength() + 16; });
+        if (intro) { var bs = svg.selectAll("rect.bar"); growUp(bs, 650, stag(bs.size(), 500)); linesIn(svg, 1000); }
+        side(A);
+    }
+
+    function side(A) {
+        var M = S.model, el = document.getElementById("side"), mode = MODES[M.mode];
+        var flags = A.rows.filter(function (r) { return r.flag; }).sort(function (a, b) { return b.z - a.z; });
+        var h = '<h3>Conformity</h3><div class="stat"><span class="tag c' + A.cls + '">' + CONF[A.cls] + '</span></div><div class="stat">Mean absolute deviation <b>' + A.mad.toFixed(4) + '</b> (close up to ' + mode.mad[0] + ', acceptable up to ' + mode.mad[1] + ', marginal up to ' + mode.mad[2] + ')<br>Chi-square ' + A.chi.toFixed(1) + ' on ' + A.df + ' degrees of freedom, p ' + (A.p < 0.001 ? '< 0.001' : '= ' + A.p.toFixed(3)) + '</div>';
+        h += '<div class="note" style="margin-top:0">With large samples the chi-square test flags even trivial differences, so the MAD thresholds (Nigrini) are the usual guide. ' + (M.mags < 2 ? '<b>The values span less than two orders of magnitude, so Benford\u2019s law may not apply.</b> ' : '') + M.skipped.toLocaleString() + ' values below ' + M.minV + ' or not numeric were left out.</div>';
+        if (flags.length) { h += '<h3>Digits that stand out</h3><table><tr><th>' + (M.mode === "FIRST_TWO" ? "Digits" : "Digit") + '</th><th>Count</th><th>Actual</th><th>Expected</th><th>z</th></tr>'; flags.slice(0, 8).forEach(function (r) { h += '<tr class="g" data-d="' + r.d + '"><td>' + (r.p > r.e ? "\u25b2 " : "\u25bc ") + r.d + '</td><td>' + r.n.toLocaleString() + '</td><td>' + pct(r.p) + '</td><td>' + pct(r.e) + '</td><td>' + r.z.toFixed(1) + '</td></tr>'; }); h += '</table>'; }
+        if (M.F.g) {
+            h += '<h3>' + esc(M.F.g) + ' furthest from Benford</h3>';
+            if (!M.groups.length) h += '<div class="note">No ' + esc(M.F.g) + ' has ' + M.minG + ' or more values.</div>';
+            else { h += '<table><tr><th>' + esc(M.F.g) + '</th><th>Values</th><th>MAD</th><th></th></tr>'; M.groups.slice(0, 12).forEach(function (G) { h += '<tr class="g gr' + (S.focus === G.name ? ' sel' : '') + '" data-g="' + esc(G.name) + '"><td title="' + esc(G.name) + '">' + esc(G.name) + '</td><td>' + G.N.toLocaleString() + '</td><td>' + G.mad.toFixed(4) + '</td><td><span class="tag c' + G.cls + '">' + ["Close", "Acceptable", "Marginal", "Nonconforming"][G.cls] + '</span></td></tr>'; }); h += '</table><div class="note">' + M.groups.length + ' of ' + M.ngroups.toLocaleString() + ' have at least ' + M.minG + ' values. Click one to compare it with Benford and select its records.</div>'; }
+        }
+        h += '<div class="note">A digit pattern that departs from Benford\u2019s law is a prompt to look closer (for example amounts kept under an approval limit, round sums or duplicated payments), not proof of anything wrong. Click a bar to select the records with that ' + (M.mode === "FIRST_TWO" ? "pair of leading digits" : "digit") + '.</div>';
+        el.innerHTML = h;
+        Array.prototype.forEach.call(el.querySelectorAll("tr.gr"), function (r) { r.addEventListener("click", function (e) { e.stopPropagation(); focusGroup(r.getAttribute("data-g")); }); });
+        Array.prototype.forEach.call(el.querySelectorAll("tr.g[data-d]"), function (r) { r.addEventListener("click", function (e) { e.stopPropagation(); selectDigit(+r.getAttribute("data-d")); }); });
+    }
+
+    function tipBar(r, A, ev) {
+        var M = S.model, more = r.p - r.e;
+        show('<b>' + MODES[M.mode].label + ' ' + r.d + '</b><br><span class="k">Values:</span> ' + r.n.toLocaleString() + '<br><span class="k">Actual:</span> ' + pct(r.p, 2) + '<br><span class="k">Expected:</span> ' + pct(r.e, 2) + ' (' + Math.round(r.e * A.N).toLocaleString() + ' values)<br><span class="k">Difference:</span> ' + (more >= 0 ? "+" : "\u2212") + Math.abs(Math.round(more * A.N)).toLocaleString() + ' values, z = ' + r.z.toFixed(2) + (r.flag ? ' <b style="color:#a34a1a">(stands out)</b>' : ''), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    // Values whose leading digits are d: one interval per order of magnitude (mirrored for negatives).
+    function digitFilter(d) {
+        var M = S.model, F = M.F.v, iv = [], k0 = Math.floor(Math.log10(Math.max(M.minA, 1e-12))), k1 = Math.floor(Math.log10(M.maxA));
+        for (var k = k0; k <= k1; k++) {
+            var u = Math.pow(10, k), add = function (lo, hi) { lo = Math.max(lo, M.minV); if (hi > lo) iv.push([+lo.toPrecision(12), +hi.toPrecision(12)]); };
+            if (M.mode === "FIRST") add(d * u, (d + 1) * u);
+            else if (M.mode === "FIRST_TWO") add(d * u / 10, (d + 1) * u / 10);
+            else for (var f = 1; f <= 9; f++) add((10 * f + d) * u / 10, (10 * f + d + 1) * u / 10);
+        }
+        var cl = []; iv.forEach(function (p) {
+            cl.push({ type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F, operator: ">=", value: p[0] }, { type: "FIELD_VALUE", inputField: F, operator: "<", value: p[1] }] });
+            if (M.hasNeg) cl.push({ type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F, operator: ">", value: -p[1] }, { type: "FIELD_VALUE", inputField: F, operator: "<=", value: -p[0] }] });
+        });
+        return cl.length === 1 ? cl[0] : { type: "OR", filters: cl };
+    }
+    function groupFilter(name) { var M = S.model, G = M.groups.find(function (g) { return g.name === name; }); return { type: "FIELD_VALUE", inputField: M.F.g, operator: "=", value: G.raw === undefined ? null : G.raw }; }
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectDigit(d) {
+        if (S.sel && S.sel.digit === d) return S.focus ? publish(groupFilter(S.focus), { group: S.focus }) : publish(null, null);
+        var f = digitFilter(d); if (S.focus) f = { type: "AND", filters: [groupFilter(S.focus), f] };
+        publish(f, { digit: d, group: S.focus || undefined });
+    }
+    function focusGroup(name) { if (S.focus === name) { S.focus = null; return publish(null, null); } S.focus = name; publish(groupFilter(name), { group: name }); }
+    window.__ben.selectDigit = selectDigit; window.__ben.focusGroup = focusGroup; window.__ben.digitFilter = digitFilter;
+
+    document.getElementById("chart").addEventListener("click", function () { S.focus = null; if (S.sel) publish(null, null); else draw(); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

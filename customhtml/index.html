@@ -2,53 +2,99 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-
     <style>
-        html, body, main {
-            /* Ensure the body fills the view, so clicks are handled everywhere: */
+        html, body {
+            /* Fill the view, so clicks are handled everywhere */
             width: 100%;
             height: 100%;
+            margin: 0;
         }
+        body {
+            font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            font-size: 13px;
+            color: #333;
+        }
+        #main {
+            position: absolute;
+            inset: 0;
+            overflow: auto;
+            padding: 6px 8px;
+            box-sizing: border-box;
+        }
+        #note { color: #8a5a00; font-size: 11px; padding: 4px 0; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+                   text-align: center; padding: 12px; color: #666; font-size: 13px; }
     </style>
-
-    <!-- Put SCRIPT tags to load 3rd party libraries here -->
-
 </head>
 
 <body>
 
-<div id="main"></div><!-- This element is where the view will render -->
+<div id="main"></div><!-- The HTML is shown here -->
+<div id="message"></div>
 
 <script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
 
 <script>
+    // Shows either the HTML typed into Static HTML, or HTML held in the data: the HTML value measure, one block
+    // per record of the auto-query (one block per value of "One block per", or a single block without it).
+    var MAX_BLOCKS = 200;
+    var state = { content: null, blocks: 0 };
+    window.__customhtml = state;
+
     if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
     omniscope.view.on("load", function() {
         window.onerror = function(msg) {
             omniscope.view.error(msg);
-        }
+        };
     });
 
-    // Ensure clicks on unoccupied space clear the selection in Omniscope, and close menus:
+    // A click on the view clears the selection in Omniscope and closes menus
     document.body.addEventListener("click", function() {
         omniscope.view.whitespaceClick();
     });
 
-    // Naively redraw on any of these events 
-    // (load = first init, update = external settings/state change, resize = browser window resized)
-    omniscope.view.on(["load", "update", "resize"], function() {
+    function message(text) {
+        var m = document.getElementById("message");
+        m.style.display = text ? "flex" : "none";
+        m.textContent = text || "";
+        if (text) show(null);
+    }
 
-        // Retrieve the auto-query results, a 2d array ([row][column]):
-        var data = omniscope.view.context().result.data.records;
-        var content = "";
-        if (omniscope.view.context().options.items.dynamicHTML === true) {
-        	content = data[0][0];
-        } else if (omniscope.view.context().options.items.aStaticHTML) {
-            content = omniscope.view.context().options.items.aStaticHTML;
+    // Replace the HTML only when it changes, so a resize or an unrelated update does not reload embedded content
+    // (a video or a widget in an iframe would otherwise restart)
+    function show(html) {
+        if (html === state.content) return;
+        state.content = html;
+        document.getElementById("main").innerHTML = html || "";
+    }
+
+    omniscope.view.on(["load", "update"], function() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (it.dynamicHTML !== true) {
+            state.blocks = 0;
+            if (it.aStaticHTML) { message(null); show(it.aStaticHTML); }
+            else message("Type HTML into Static HTML, or turn on Show HTML from the data.");
+            return;
         }
-        document.getElementById("main").innerHTML = content;
-    });
+        if (!it.measures) { message("Choose an HTML value: a measure of the field holding HTML, for example Card (singleton)."); return; }
+        var result = ctx.result;
+        if (!result || !result.data) { message(result && result.error ? "Query failed: " + result.error : "Waiting for data"); return; }
+        var records = result.data.records || [], col = (result.mappings || {}).measures;
+        if (!records.length) { message("No data to show. Check the report's filters."); return; }
 
+        // The measure's column, read through result.mappings (with a split, the first column is the split)
+        var blocks = records.map(function(r) { return r[col]; }).filter(function(v) { return v !== null && v !== undefined && v !== ""; });
+        if (!blocks.length) {
+            message("No HTML to show: the HTML value is empty for these records. With the Singleton function this " +
+                "means they hold different HTML: filter or select one record, or set One block per.");
+            return;
+        }
+        state.blocks = Math.min(blocks.length, MAX_BLOCKS);
+        var note = blocks.length > MAX_BLOCKS
+            ? "<div id='note'>Showing the first " + MAX_BLOCKS + " of " + blocks.length + " blocks.</div>" : "";
+        message(null);
+        show(note + blocks.slice(0, MAX_BLOCKS).map(function(h) { return "<div class='block'>" + h + "</div>"; }).join(""));
+    });
 </script>
 
 </body>

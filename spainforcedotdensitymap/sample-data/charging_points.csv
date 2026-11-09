@@ -1,0 +1,601 @@
+Charging point,Town,Region,Charger type,Latitude,Longitude,Sessions per month
+CP-0001,Zaragoza,Aragon,Standard,41.5021,-0.965,36
+CP-0002,Barcelona,Catalonia,Fast,41.3854,2.0435,136
+CP-0003,Madrid,Madrid,Fast,40.41,-3.6629,136
+CP-0004,Cuenca,Castile-La Mancha,Fast,40.0508,-2.0021,127
+CP-0005,Madrid,Madrid,Standard,40.5054,-3.6896,65
+CP-0006,Madrid,Madrid,Fast,40.4685,-3.7945,150
+CP-0007,Murcia,Murcia,Fast,37.9376,-1.2117,107
+CP-0008,Vitoria-Gasteiz,Basque Country,Fast,42.865,-2.4977,138
+CP-0009,Valencia,Valencian Community,Standard,39.5779,-0.3145,70
+CP-0010,Jaen,Andalusia,Standard,37.7232,-3.7883,60
+CP-0011,Lleida,Catalonia,Standard,41.4272,0.6673,83
+CP-0012,Pamplona,Navarre,Standard,42.8537,-1.6448,68
+CP-0013,Lugo,Galicia,Standard,43.0118,-7.605,65
+CP-0014,Salamanca,Castile and Leon,Standard,40.9846,-5.6094,81
+CP-0015,Barcelona,Catalonia,Fast,41.3858,2.1226,173
+CP-0016,Barcelona,Catalonia,Fast,41.4389,2.1403,251
+CP-0017,Barcelona,Catalonia,Standard,41.4261,2.129,76
+CP-0018,Madrid,Madrid,Standard,40.3405,-3.6378,59
+CP-0019,Pamplona,Navarre,Standard,42.7821,-1.5736,80
+CP-0020,Barcelona,Catalonia,Standard,41.4396,2.1002,50
+CP-0021,Jaen,Andalusia,Fast,37.689,-3.778,150
+CP-0022,Lleida,Catalonia,Standard,41.6569,0.6482,48
+CP-0023,A Coruna,Galicia,Standard,43.3017,-8.467,105
+CP-0024,Barcelona,Catalonia,Fast,41.4332,2.1505,109
+CP-0025,Bilbao,Basque Country,Fast,43.2483,-2.8762,167
+CP-0026,Palma,Balearic Islands,Standard,39.5911,2.7245,40
+CP-0027,Girona,Catalonia,Standard,41.9836,2.8358,54
+CP-0028,Madrid,Madrid,Standard,40.4283,-3.7796,77
+CP-0029,Valencia,Valencian Community,Fast,39.6221,-0.5398,120
+CP-0030,Madrid,Madrid,Ultra-fast,40.3335,-3.6833,263
+CP-0031,Vigo,Galicia,Fast,42.1873,-8.798,72
+CP-0032,Madrid,Madrid,Ultra-fast,40.6636,-3.841,224
+CP-0033,A Coruna,Galicia,Fast,43.3004,-8.5876,76
+CP-0034,Burgos,Castile and Leon,Standard,42.4016,-3.8131,49
+CP-0035,Bilbao,Basque Country,Fast,43.2378,-2.9533,226
+CP-0036,Gijon,Asturias,Fast,43.524,-5.7721,184
+CP-0037,Zaragoza,Aragon,Fast,41.6654,-0.922,196
+CP-0038,Malaga,Andalusia,Standard,36.7377,-4.4027,88
+CP-0039,Alicante,Valencian Community,Standard,38.3972,-0.5132,51
+CP-0040,Barcelona,Catalonia,Fast,41.49,2.2647,220
+CP-0041,Zaragoza,Aragon,Fast,41.6984,-0.9404,154
+CP-0042,Salamanca,Castile and Leon,Standard,41.0405,-5.5009,41
+CP-0043,Bilbao,Basque Country,Standard,43.2446,-2.8855,78
+CP-0044,Gijon,Asturias,Standard,43.4138,-5.5911,56
+CP-0045,Zaragoza,Aragon,Standard,41.6424,-0.8283,45
+CP-0046,Valencia,Valencian Community,Standard,39.3018,-0.4139,62
+CP-0047,Leon,Castile and Leon,Fast,42.7062,-5.5336,113
+CP-0048,Madrid,Madrid,Standard,40.5355,-3.6349,75
+CP-0049,Badajoz,Extremadura,Standard,38.883,-6.9206,47
+CP-0050,Alicante,Valencian Community,Ultra-fast,38.2948,-0.5718,143
+CP-0051,Valladolid,Castile and Leon,Standard,41.6749,-4.6229,80
+CP-0052,Gijon,Asturias,Standard,43.5353,-5.6291,73
+CP-0053,Vigo,Galicia,Fast,42.1442,-8.7359,82
+CP-0054,Lleida,Catalonia,Fast,41.6969,0.7984,191
+CP-0055,Madrid,Madrid,Ultra-fast,40.326,-3.6637,188
+CP-0056,Leon,Castile and Leon,Standard,42.6635,-5.5074,19
+CP-0057,Cordoba,Andalusia,Fast,37.9213,-4.6417,98
+CP-0058,Barcelona,Catalonia,Ultra-fast,41.3777,2.1901,194
+CP-0059,Burgos,Castile and Leon,Standard,42.3231,-3.6695,31
+CP-0060,Malaga,Andalusia,Standard,36.7426,-4.2715,73
+CP-0061,Valencia,Valencian Community,Standard,39.4791,-0.4281,31
+CP-0062,Logrono,La Rioja,Standard,42.4584,-2.5308,20
+CP-0063,Almeria,Andalusia,Standard,36.8825,-2.4272,53
+CP-0064,Cordoba,Andalusia,Fast,37.9995,-4.9516,128
+CP-0065,Barcelona,Catalonia,Fast,41.4288,2.134,190
+CP-0066,Bilbao,Basque Country,Standard,43.2432,-2.8962,81
+CP-0067,Bilbao,Basque Country,Fast,43.1895,-2.9391,95
+CP-0068,Vigo,Galicia,Standard,42.2087,-8.6175,69
+CP-0069,Huelva,Andalusia,Standard,37.3091,-6.983,73
+CP-0070,Toledo,Castile-La Mancha,Standard,39.9134,-3.9369,48
+CP-0071,Barcelona,Catalonia,Standard,41.2723,2.0317,61
+CP-0072,Barcelona,Catalonia,Standard,41.3752,2.1895,87
+CP-0073,Valencia,Valencian Community,Fast,39.4459,-0.409,176
+CP-0074,Barcelona,Catalonia,Standard,41.4483,2.2057,81
+CP-0075,Seville,Andalusia,Standard,37.3165,-5.9228,67
+CP-0076,Alicante,Valencian Community,Fast,38.4448,-0.6527,125
+CP-0077,Burgos,Castile and Leon,Fast,42.3525,-3.553,170
+CP-0078,Valencia,Valencian Community,Fast,39.4685,-0.3356,163
+CP-0079,Barcelona,Catalonia,Standard,41.4984,2.2674,62
+CP-0080,Seville,Andalusia,Standard,37.3548,-5.9867,57
+CP-0081,Valladolid,Castile and Leon,Standard,41.8062,-4.845,30
+CP-0082,Malaga,Andalusia,Standard,36.7158,-4.4429,49
+CP-0083,Madrid,Madrid,Standard,40.5062,-3.6734,51
+CP-0084,Barcelona,Catalonia,Standard,41.5185,2.3755,57
+CP-0085,Madrid,Madrid,Fast,40.4944,-3.7301,118
+CP-0086,Murcia,Murcia,Standard,38.0596,-1.2404,70
+CP-0087,Vigo,Galicia,Standard,42.13,-8.6779,64
+CP-0088,Murcia,Murcia,Fast,38.0296,-0.9405,149
+CP-0089,Vigo,Galicia,Standard,42.3032,-8.8173,43
+CP-0090,Cuenca,Castile-La Mancha,Ultra-fast,40.0214,-2.1065,203
+CP-0091,A Coruna,Galicia,Fast,43.2363,-8.3029,116
+CP-0092,Pamplona,Navarre,Standard,42.6976,-1.7596,76
+CP-0093,Valencia,Valencian Community,Standard,39.46,-0.3774,44
+CP-0094,Barcelona,Catalonia,Fast,41.3547,2.1007,193
+CP-0095,Murcia,Murcia,Fast,37.7605,-0.8847,119
+CP-0096,Ciudad Real,Castile-La Mancha,Fast,38.877,-3.8069,148
+CP-0097,Barcelona,Catalonia,Standard,41.3716,2.1868,54
+CP-0098,Barcelona,Catalonia,Fast,41.3406,1.9351,135
+CP-0099,Vitoria-Gasteiz,Basque Country,Standard,42.7675,-2.795,35
+CP-0100,Madrid,Madrid,Standard,40.3521,-3.6519,55
+CP-0101,Madrid,Madrid,Standard,40.3238,-3.6965,78
+CP-0102,Murcia,Murcia,Standard,37.9653,-1.2001,50
+CP-0103,Cordoba,Andalusia,Fast,37.8369,-4.8073,138
+CP-0104,Barcelona,Catalonia,Fast,41.4013,2.2206,147
+CP-0105,Seville,Andalusia,Standard,37.483,-6.0697,103
+CP-0106,Madrid,Madrid,Standard,40.4081,-3.6209,49
+CP-0107,Ourense,Galicia,Ultra-fast,42.3434,-7.7505,245
+CP-0108,Ciudad Real,Castile-La Mancha,Standard,38.9125,-3.8802,38
+CP-0109,Alicante,Valencian Community,Standard,38.4312,-0.4446,35
+CP-0110,Zaragoza,Aragon,Standard,41.6865,-0.8991,84
+CP-0111,Pamplona,Navarre,Ultra-fast,42.5711,-1.7001,254
+CP-0112,Madrid,Madrid,Fast,40.3686,-3.5769,94
+CP-0113,Valencia,Valencian Community,Fast,39.384,-0.4278,141
+CP-0114,Barcelona,Catalonia,Standard,41.3702,2.1885,56
+CP-0115,Barcelona,Catalonia,Standard,41.4599,2.2375,83
+CP-0116,Palma,Balearic Islands,Standard,39.6243,2.5909,47
+CP-0117,Barcelona,Catalonia,Standard,41.4045,2.14,69
+CP-0118,Pamplona,Navarre,Standard,42.7188,-1.6183,78
+CP-0119,Toledo,Castile-La Mancha,Ultra-fast,39.7907,-3.9239,215
+CP-0120,A Coruna,Galicia,Fast,43.3247,-8.4377,154
+CP-0121,Madrid,Madrid,Standard,40.4982,-3.6422,54
+CP-0122,Pamplona,Navarre,Fast,42.7558,-1.5847,153
+CP-0123,Madrid,Madrid,Fast,40.3827,-3.5636,135
+CP-0124,Valencia,Valencian Community,Standard,39.508,-0.3929,43
+CP-0125,Vigo,Galicia,Ultra-fast,42.0978,-8.805,332
+CP-0126,Salamanca,Castile and Leon,Standard,40.9311,-5.6865,75
+CP-0127,Tarragona,Catalonia,Standard,41.1617,1.2082,49
+CP-0128,Seville,Andalusia,Fast,37.4397,-6.0251,158
+CP-0129,Salamanca,Castile and Leon,Fast,40.8411,-5.7032,172
+CP-0130,Caceres,Extremadura,Standard,39.5757,-6.3737,64
+CP-0131,Palma,Balearic Islands,Standard,39.4965,2.5178,30
+CP-0132,Madrid,Madrid,Ultra-fast,40.3842,-3.5718,323
+CP-0133,Madrid,Madrid,Fast,40.394,-3.7374,121
+CP-0134,Barcelona,Catalonia,Fast,41.3477,2.1805,89
+CP-0135,Seville,Andalusia,Fast,37.2936,-5.7787,88
+CP-0136,Gijon,Asturias,Standard,43.5335,-5.712,21
+CP-0137,Badajoz,Extremadura,Fast,38.8115,-7.1228,184
+CP-0138,Huelva,Andalusia,Standard,37.1942,-6.9902,29
+CP-0139,Seville,Andalusia,Ultra-fast,37.4599,-5.8624,226
+CP-0140,Barcelona,Catalonia,Ultra-fast,41.4199,2.1034,289
+CP-0141,Madrid,Madrid,Fast,40.4076,-3.6585,144
+CP-0142,Madrid,Madrid,Ultra-fast,40.3766,-3.8152,286
+CP-0143,Madrid,Madrid,Standard,40.4547,-3.6637,63
+CP-0144,Bilbao,Basque Country,Standard,43.3708,-2.9206,71
+CP-0145,Madrid,Madrid,Standard,40.4229,-3.7777,68
+CP-0146,Barcelona,Catalonia,Standard,41.4638,2.2696,54
+CP-0147,Madrid,Madrid,Standard,40.5391,-3.7524,39
+CP-0148,Barcelona,Catalonia,Standard,41.3837,2.171,63
+CP-0149,Valencia,Valencian Community,Fast,39.5021,-0.5162,153
+CP-0150,Valencia,Valencian Community,Standard,39.5042,-0.3907,96
+CP-0151,Alicante,Valencian Community,Standard,38.4051,-0.4831,78
+CP-0152,Madrid,Madrid,Fast,40.5174,-3.6245,67
+CP-0153,Madrid,Madrid,Standard,40.4061,-3.5582,40
+CP-0154,Huelva,Andalusia,Standard,37.2698,-7.1019,42
+CP-0155,Santander,Cantabria,Standard,43.3247,-3.7,66
+CP-0156,Palma,Balearic Islands,Standard,39.5634,2.6883,46
+CP-0157,Madrid,Madrid,Fast,40.3931,-3.6051,99
+CP-0158,Madrid,Madrid,Ultra-fast,40.5023,-3.7789,314
+CP-0159,Badajoz,Extremadura,Standard,38.8737,-6.9817,57
+CP-0160,Palma,Balearic Islands,Standard,39.5726,2.8111,58
+CP-0161,Alicante,Valencian Community,Standard,38.3231,-0.54,58
+CP-0162,Almeria,Andalusia,Standard,36.9542,-2.4185,65
+CP-0163,Valladolid,Castile and Leon,Standard,41.6386,-4.7747,73
+CP-0164,Madrid,Madrid,Standard,40.3398,-3.6923,70
+CP-0165,Seville,Andalusia,Standard,37.5314,-5.8907,34
+CP-0166,Pamplona,Navarre,Standard,42.8027,-1.6016,44
+CP-0167,Seville,Andalusia,Fast,37.4605,-5.9712,214
+CP-0168,Cordoba,Andalusia,Standard,37.876,-4.7935,58
+CP-0169,Valencia,Valencian Community,Standard,39.4506,-0.4146,28
+CP-0170,Badajoz,Extremadura,Fast,38.8727,-7.0104,124
+CP-0171,Soria,Castile and Leon,Standard,41.6977,-2.4951,78
+CP-0172,Cuenca,Castile-La Mancha,Fast,40.156,-2.272,133
+CP-0173,Barcelona,Catalonia,Standard,41.4825,2.1271,72
+CP-0174,Bilbao,Basque Country,Ultra-fast,43.2862,-2.9562,194
+CP-0175,Valencia,Valencian Community,Ultra-fast,39.4349,-0.3693,371
+CP-0176,Palma,Balearic Islands,Standard,39.6841,2.5429,51
+CP-0177,Lleida,Catalonia,Fast,41.749,0.6118,196
+CP-0178,Barcelona,Catalonia,Fast,41.481,2.2233,121
+CP-0179,Badajoz,Extremadura,Standard,38.9147,-6.8658,71
+CP-0180,Cuenca,Castile-La Mancha,Standard,40.0788,-2.0075,50
+CP-0181,Valladolid,Castile and Leon,Fast,41.6447,-4.808,143
+CP-0182,Barcelona,Catalonia,Standard,41.378,2.121,62
+CP-0183,Palma,Balearic Islands,Standard,39.6091,2.7467,45
+CP-0184,Cordoba,Andalusia,Standard,37.8639,-4.6496,66
+CP-0185,Jaen,Andalusia,Standard,37.7162,-3.8497,40
+CP-0186,Granada,Andalusia,Ultra-fast,37.1049,-3.5989,170
+CP-0187,Logrono,La Rioja,Standard,42.514,-2.5229,24
+CP-0188,Murcia,Murcia,Ultra-fast,37.9288,-1.2246,247
+CP-0189,Valencia,Valencian Community,Ultra-fast,39.576,-0.3312,248
+CP-0190,Granada,Andalusia,Standard,37.0862,-3.6407,83
+CP-0191,Madrid,Madrid,Standard,40.3418,-3.6652,86
+CP-0192,Murcia,Murcia,Standard,38.0246,-1.1248,75
+CP-0193,Barcelona,Catalonia,Ultra-fast,41.53,2.2526,181
+CP-0194,Seville,Andalusia,Fast,37.2688,-5.9583,112
+CP-0195,Palma,Balearic Islands,Fast,39.5962,2.6266,177
+CP-0196,Almeria,Andalusia,Standard,36.901,-2.3927,60
+CP-0197,Valencia,Valencian Community,Fast,39.6073,-0.3067,108
+CP-0198,Bilbao,Basque Country,Ultra-fast,43.2995,-2.9083,266
+CP-0199,Barcelona,Catalonia,Standard,41.4684,2.1555,49
+CP-0200,Teruel,Aragon,Standard,40.492,-1.0524,92
+CP-0201,Malaga,Andalusia,Ultra-fast,36.7879,-4.2566,293
+CP-0202,Barcelona,Catalonia,Standard,41.4846,2.191,56
+CP-0203,Gijon,Asturias,Fast,43.4721,-5.4817,135
+CP-0204,Vigo,Galicia,Standard,42.2033,-8.6297,53
+CP-0205,Barcelona,Catalonia,Standard,41.4046,2.2237,44
+CP-0206,Valencia,Valencian Community,Fast,39.3636,-0.4782,66
+CP-0207,Barcelona,Catalonia,Fast,41.3619,2.1072,241
+CP-0208,Zaragoza,Aragon,Standard,41.7571,-0.999,56
+CP-0209,Bilbao,Basque Country,Fast,43.2485,-2.8632,169
+CP-0210,Granada,Andalusia,Standard,37.2099,-3.5981,75
+CP-0211,Barcelona,Catalonia,Standard,41.5557,2.009,31
+CP-0212,Seville,Andalusia,Standard,37.4179,-5.8843,51
+CP-0213,Palma,Balearic Islands,Standard,39.5033,2.5181,25
+CP-0214,Valladolid,Castile and Leon,Standard,41.6452,-4.9396,54
+CP-0215,Pamplona,Navarre,Standard,42.8587,-1.5339,31
+CP-0216,Santander,Cantabria,Fast,43.4104,-3.8635,142
+CP-0217,Malaga,Andalusia,Fast,36.812,-4.3933,63
+CP-0218,Madrid,Madrid,Standard,40.3573,-3.6901,63
+CP-0219,Zaragoza,Aragon,Fast,41.599,-0.8648,222
+CP-0220,Palma,Balearic Islands,Standard,39.6372,2.4965,51
+CP-0221,Madrid,Madrid,Standard,40.4123,-3.6755,44
+CP-0222,Barcelona,Catalonia,Fast,41.331,2.1371,130
+CP-0223,Madrid,Madrid,Fast,40.4187,-3.6469,176
+CP-0224,Madrid,Madrid,Standard,40.3125,-3.7725,69
+CP-0225,Ourense,Galicia,Fast,42.4184,-7.8327,163
+CP-0226,Zaragoza,Aragon,Standard,41.6466,-0.8908,55
+CP-0227,Huesca,Aragon,Standard,42.1841,-0.3402,54
+CP-0228,Madrid,Madrid,Fast,40.4328,-3.5473,138
+CP-0229,Barcelona,Catalonia,Standard,41.4507,2.1347,85
+CP-0230,Madrid,Madrid,Standard,40.4087,-3.8069,75
+CP-0231,Valencia,Valencian Community,Fast,39.4223,-0.5492,175
+CP-0232,Seville,Andalusia,Fast,37.3389,-5.9313,106
+CP-0233,Barcelona,Catalonia,Standard,41.3501,2.1535,64
+CP-0234,Barcelona,Catalonia,Fast,41.4667,1.9007,183
+CP-0235,Burgos,Castile and Leon,Standard,42.3594,-3.6151,54
+CP-0236,Barcelona,Catalonia,Ultra-fast,41.3952,2.163,338
+CP-0237,Gijon,Asturias,Standard,43.5223,-5.5754,76
+CP-0238,Pamplona,Navarre,Standard,42.7844,-1.6726,21
+CP-0239,Valencia,Valencian Community,Ultra-fast,39.4482,-0.3551,199
+CP-0240,Murcia,Murcia,Standard,38.097,-1.0452,66
+CP-0241,Madrid,Madrid,Standard,40.4749,-3.6017,53
+CP-0242,Palma,Balearic Islands,Standard,39.638,2.7425,81
+CP-0243,Gijon,Asturias,Standard,43.5101,-5.7039,55
+CP-0244,Seville,Andalusia,Standard,37.4986,-6.1165,84
+CP-0245,Barcelona,Catalonia,Fast,41.4051,2.1751,70
+CP-0246,Ourense,Galicia,Ultra-fast,42.2887,-7.8999,371
+CP-0247,Barcelona,Catalonia,Ultra-fast,41.3513,2.0462,299
+CP-0248,Alicante,Valencian Community,Standard,38.3896,-0.5047,64
+CP-0249,Valencia,Valencian Community,Standard,39.4133,-0.3787,43
+CP-0250,Madrid,Madrid,Standard,40.4657,-3.7339,49
+CP-0251,Valencia,Valencian Community,Fast,39.4347,-0.3559,124
+CP-0252,Vigo,Galicia,Standard,42.1553,-8.6312,63
+CP-0253,Madrid,Madrid,Standard,40.4006,-3.6829,43
+CP-0254,Valencia,Valencian Community,Standard,39.4295,-0.3804,64
+CP-0255,Teruel,Aragon,Fast,40.29,-1.1381,159
+CP-0256,Alicante,Valencian Community,Fast,38.4225,-0.398,129
+CP-0257,Almeria,Andalusia,Fast,36.8532,-2.5853,103
+CP-0258,Barcelona,Catalonia,Standard,41.4937,2.2172,62
+CP-0259,Barcelona,Catalonia,Standard,41.4169,2.2176,54
+CP-0260,Madrid,Madrid,Standard,40.3737,-3.7867,55
+CP-0261,Malaga,Andalusia,Fast,36.6682,-4.5118,66
+CP-0262,Lugo,Galicia,Ultra-fast,42.9608,-7.6016,322
+CP-0263,Valencia,Valencian Community,Fast,39.4471,-0.5156,216
+CP-0264,Madrid,Madrid,Fast,40.3906,-3.7755,106
+CP-0265,Valencia,Valencian Community,Standard,39.4197,-0.394,55
+CP-0266,Murcia,Murcia,Standard,38.029,-1.1071,65
+CP-0267,Madrid,Madrid,Standard,40.4104,-3.7423,63
+CP-0268,Madrid,Madrid,Standard,40.3406,-3.5787,33
+CP-0269,Barcelona,Catalonia,Fast,41.3978,1.9972,100
+CP-0270,Vigo,Galicia,Standard,42.1478,-8.7053,51
+CP-0271,Valladolid,Castile and Leon,Standard,41.6553,-4.6629,23
+CP-0272,Ourense,Galicia,Standard,42.2547,-7.7684,80
+CP-0273,Alicante,Valencian Community,Fast,38.3721,-0.482,149
+CP-0274,Barcelona,Catalonia,Standard,41.404,2.1363,5
+CP-0275,Valencia,Valencian Community,Standard,39.5563,-0.3613,49
+CP-0276,Salamanca,Castile and Leon,Standard,41.013,-5.6211,48
+CP-0277,Alicante,Valencian Community,Standard,38.369,-0.7322,52
+CP-0278,Salamanca,Castile and Leon,Standard,40.8874,-5.6263,69
+CP-0279,Tarragona,Catalonia,Standard,41.165,1.3046,51
+CP-0280,Alicante,Valencian Community,Standard,38.3997,-0.5654,62
+CP-0281,Madrid,Madrid,Standard,40.556,-3.6252,70
+CP-0282,Malaga,Andalusia,Fast,36.741,-4.3595,139
+CP-0283,Malaga,Andalusia,Ultra-fast,36.6796,-4.4706,425
+CP-0284,Zaragoza,Aragon,Standard,41.4808,-0.8174,35
+CP-0285,Madrid,Madrid,Standard,40.4372,-3.6605,41
+CP-0286,Barcelona,Catalonia,Standard,41.4808,2.157,60
+CP-0287,Jaen,Andalusia,Fast,37.8655,-3.7824,158
+CP-0288,Seville,Andalusia,Fast,37.2799,-5.9248,66
+CP-0289,Cuenca,Castile-La Mancha,Standard,40.2083,-1.9994,56
+CP-0290,Lleida,Catalonia,Standard,41.5689,0.7367,63
+CP-0291,Seville,Andalusia,Fast,37.3202,-5.8836,100
+CP-0292,Valencia,Valencian Community,Standard,39.545,-0.4157,98
+CP-0293,Madrid,Madrid,Standard,40.3615,-3.5725,59
+CP-0294,Valladolid,Castile and Leon,Standard,41.5621,-4.7012,68
+CP-0295,Valencia,Valencian Community,Standard,39.4613,-0.3748,47
+CP-0296,Murcia,Murcia,Ultra-fast,38.0252,-1.0718,244
+CP-0297,Valencia,Valencian Community,Ultra-fast,39.4709,-0.4231,79
+CP-0298,Barcelona,Catalonia,Standard,41.4663,2.0519,75
+CP-0299,Barcelona,Catalonia,Standard,41.3149,1.9738,67
+CP-0300,Vitoria-Gasteiz,Basque Country,Standard,42.9101,-2.5937,80
+CP-0301,Cordoba,Andalusia,Ultra-fast,37.9127,-4.6589,328
+CP-0302,Malaga,Andalusia,Standard,36.6287,-4.5475,68
+CP-0303,Seville,Andalusia,Fast,37.4019,-5.859,129
+CP-0304,Alicante,Valencian Community,Fast,38.3483,-0.5941,158
+CP-0305,Tarragona,Catalonia,Ultra-fast,41.1655,1.3326,255
+CP-0306,A Coruna,Galicia,Fast,43.2995,-8.3189,137
+CP-0307,Madrid,Madrid,Standard,40.5012,-3.7065,74
+CP-0308,Tarragona,Catalonia,Fast,41.176,1.2337,109
+CP-0309,Zaragoza,Aragon,Standard,41.5134,-0.9308,55
+CP-0310,Madrid,Madrid,Standard,40.5188,-3.849,49
+CP-0311,Barcelona,Catalonia,Fast,41.4325,2.0018,53
+CP-0312,Salamanca,Castile and Leon,Standard,40.9236,-5.6103,74
+CP-0313,Madrid,Madrid,Fast,40.3407,-3.5516,160
+CP-0314,Seville,Andalusia,Ultra-fast,37.4198,-5.9072,172
+CP-0315,Madrid,Madrid,Fast,40.4675,-3.7047,188
+CP-0316,Barcelona,Catalonia,Standard,41.311,2.1231,43
+CP-0317,Valencia,Valencian Community,Standard,39.455,-0.4334,53
+CP-0318,Madrid,Madrid,Fast,40.3464,-3.5403,207
+CP-0319,Valencia,Valencian Community,Standard,39.429,-0.5172,53
+CP-0320,Madrid,Madrid,Fast,40.4866,-3.7643,108
+CP-0321,Seville,Andalusia,Ultra-fast,37.3099,-5.9513,191
+CP-0322,Barcelona,Catalonia,Fast,41.4798,2.1053,124
+CP-0323,Barcelona,Catalonia,Standard,41.4542,2.0629,76
+CP-0324,A Coruna,Galicia,Standard,43.3319,-8.489,48
+CP-0325,Seville,Andalusia,Ultra-fast,37.3753,-5.8848,228
+CP-0326,Valladolid,Castile and Leon,Standard,41.754,-4.7169,79
+CP-0327,Teruel,Aragon,Standard,40.3392,-1.016,75
+CP-0328,Bilbao,Basque Country,Ultra-fast,43.1368,-2.9695,250
+CP-0329,Madrid,Madrid,Fast,40.3756,-3.6341,121
+CP-0330,Soria,Castile and Leon,Fast,41.7038,-2.4515,137
+CP-0331,Zaragoza,Aragon,Standard,41.5994,-0.8132,48
+CP-0332,Ourense,Galicia,Standard,42.2561,-7.5811,52
+CP-0333,Badajoz,Extremadura,Ultra-fast,38.816,-7.0831,339
+CP-0334,Seville,Andalusia,Ultra-fast,37.4217,-6.0151,215
+CP-0335,Barcelona,Catalonia,Fast,41.4266,2.1973,91
+CP-0336,Barcelona,Catalonia,Fast,41.3551,2.1542,141
+CP-0337,Almeria,Andalusia,Standard,36.8523,-2.4721,38
+CP-0338,Madrid,Madrid,Standard,40.4007,-3.6814,45
+CP-0339,Madrid,Madrid,Standard,40.3864,-3.7196,45
+CP-0340,Pamplona,Navarre,Standard,42.8055,-1.6381,79
+CP-0341,Barcelona,Catalonia,Standard,41.4981,2.2769,82
+CP-0342,Seville,Andalusia,Ultra-fast,37.3742,-6.1169,159
+CP-0343,Seville,Andalusia,Fast,37.4304,-5.9765,134
+CP-0344,Madrid,Madrid,Standard,40.31,-3.7212,59
+CP-0345,Barcelona,Catalonia,Fast,41.4882,2.1428,182
+CP-0346,Madrid,Madrid,Ultra-fast,40.4407,-3.703,298
+CP-0347,Valencia,Valencian Community,Ultra-fast,39.3683,-0.3709,355
+CP-0348,Malaga,Andalusia,Standard,36.6802,-4.465,88
+CP-0349,Valencia,Valencian Community,Standard,39.3981,-0.3359,42
+CP-0350,Madrid,Madrid,Standard,40.4524,-3.6835,54
+CP-0351,Palma,Balearic Islands,Standard,39.6248,2.7007,47
+CP-0352,Granada,Andalusia,Standard,37.1851,-3.612,60
+CP-0353,Lugo,Galicia,Ultra-fast,43.1038,-7.5546,190
+CP-0354,Valencia,Valencian Community,Fast,39.5406,-0.419,195
+CP-0355,Valencia,Valencian Community,Fast,39.3857,-0.3784,158
+CP-0356,Barcelona,Catalonia,Standard,41.4001,2.1498,92
+CP-0357,Burgos,Castile and Leon,Fast,42.2931,-3.6575,244
+CP-0358,Logrono,La Rioja,Fast,42.5731,-2.4871,172
+CP-0359,Santander,Cantabria,Fast,43.4619,-3.8281,49
+CP-0360,Cordoba,Andalusia,Fast,37.8385,-4.572,154
+CP-0361,Bilbao,Basque Country,Standard,43.3743,-2.9248,38
+CP-0362,Girona,Catalonia,Standard,41.7985,2.9599,74
+CP-0363,Granada,Andalusia,Standard,37.1251,-3.5319,72
+CP-0364,A Coruna,Galicia,Standard,43.2704,-8.4521,57
+CP-0365,Barcelona,Catalonia,Ultra-fast,41.476,2.137,280
+CP-0366,Murcia,Murcia,Fast,38.0603,-1.1054,122
+CP-0367,Malaga,Andalusia,Standard,36.793,-4.4013,41
+CP-0368,Malaga,Andalusia,Standard,36.6778,-4.4719,54
+CP-0369,Madrid,Madrid,Standard,40.3651,-3.6025,42
+CP-0370,Logrono,La Rioja,Standard,42.5289,-2.525,79
+CP-0371,Ciudad Real,Castile-La Mancha,Standard,38.939,-3.8072,58
+CP-0372,Bilbao,Basque Country,Fast,43.3731,-2.9315,155
+CP-0373,Seville,Andalusia,Fast,37.3744,-6.0737,33
+CP-0374,Lleida,Catalonia,Standard,41.5502,0.52,66
+CP-0375,Granada,Andalusia,Fast,37.2279,-3.5538,203
+CP-0376,Palma,Balearic Islands,Standard,39.5937,2.5732,55
+CP-0377,Almeria,Andalusia,Standard,36.8517,-2.6222,63
+CP-0378,Barcelona,Catalonia,Standard,41.342,2.0495,55
+CP-0379,Granada,Andalusia,Ultra-fast,37.0497,-3.6955,232
+CP-0380,Almeria,Andalusia,Standard,36.8928,-2.3492,63
+CP-0381,Barcelona,Catalonia,Standard,41.4487,2.0724,58
+CP-0382,Cordoba,Andalusia,Standard,37.8039,-4.6441,45
+CP-0383,Madrid,Madrid,Fast,40.4812,-3.7331,145
+CP-0384,Valencia,Valencian Community,Standard,39.5465,-0.4081,17
+CP-0385,Palma,Balearic Islands,Ultra-fast,39.6022,2.6365,243
+CP-0386,Soria,Castile and Leon,Standard,41.7374,-2.3769,74
+CP-0387,Vitoria-Gasteiz,Basque Country,Standard,42.7983,-2.5,57
+CP-0388,Madrid,Madrid,Fast,40.3973,-3.9315,88
+CP-0389,Albacete,Castile-La Mancha,Standard,39.0084,-1.9666,49
+CP-0390,Murcia,Murcia,Standard,37.9825,-1.1945,77
+CP-0391,Vigo,Galicia,Standard,42.1699,-8.6684,37
+CP-0392,Ourense,Galicia,Standard,42.3473,-7.9049,56
+CP-0393,Valencia,Valencian Community,Ultra-fast,39.4209,-0.5832,429
+CP-0394,Burgos,Castile and Leon,Standard,42.2907,-3.6833,59
+CP-0395,Bilbao,Basque Country,Fast,43.2221,-3.044,156
+CP-0396,Murcia,Murcia,Standard,37.9779,-1.1078,59
+CP-0397,Leon,Castile and Leon,Standard,42.6149,-5.5753,73
+CP-0398,Murcia,Murcia,Fast,37.8962,-1.2627,106
+CP-0399,Madrid,Madrid,Ultra-fast,40.5333,-3.6338,300
+CP-0400,Valencia,Valencian Community,Fast,39.408,-0.3889,146
+CP-0401,Barcelona,Catalonia,Standard,41.3165,2.1136,51
+CP-0402,Barcelona,Catalonia,Standard,41.4333,2.0139,64
+CP-0403,Barcelona,Catalonia,Standard,41.3593,2.1124,59
+CP-0404,Barcelona,Catalonia,Standard,41.5332,2.1785,75
+CP-0405,Gijon,Asturias,Standard,43.4732,-5.8013,87
+CP-0406,Barcelona,Catalonia,Ultra-fast,41.4463,2.1887,339
+CP-0407,Valencia,Valencian Community,Standard,39.5391,-0.3853,68
+CP-0408,Valencia,Valencian Community,Standard,39.3515,-0.3579,43
+CP-0409,Bilbao,Basque Country,Fast,43.2558,-3.0322,189
+CP-0410,Seville,Andalusia,Standard,37.3971,-5.7969,76
+CP-0411,Barcelona,Catalonia,Ultra-fast,41.5183,2.0114,162
+CP-0412,Madrid,Madrid,Standard,40.5555,-3.748,18
+CP-0413,Madrid,Madrid,Fast,40.3568,-3.8676,184
+CP-0414,Valencia,Valencian Community,Standard,39.5083,-0.3478,57
+CP-0415,Valencia,Valencian Community,Standard,39.5271,-0.3565,76
+CP-0416,Murcia,Murcia,Standard,38.0497,-1.269,47
+CP-0417,Almeria,Andalusia,Standard,36.8833,-2.4287,49
+CP-0418,Girona,Catalonia,Standard,42.0902,2.7668,60
+CP-0419,Palma,Balearic Islands,Ultra-fast,39.5358,2.8035,157
+CP-0420,Albacete,Castile-La Mancha,Ultra-fast,39.0138,-1.9172,271
+CP-0421,Ciudad Real,Castile-La Mancha,Standard,39.1073,-3.9067,70
+CP-0422,Madrid,Madrid,Standard,40.4334,-3.7053,48
+CP-0423,Barcelona,Catalonia,Fast,41.415,2.0692,114
+CP-0424,Madrid,Madrid,Standard,40.4297,-3.7088,65
+CP-0425,Alicante,Valencian Community,Standard,38.3065,-0.5352,78
+CP-0426,Seville,Andalusia,Standard,37.3285,-6.0768,55
+CP-0427,Lleida,Catalonia,Fast,41.6371,0.8298,158
+CP-0428,Malaga,Andalusia,Standard,36.8187,-4.4089,84
+CP-0429,Almeria,Andalusia,Fast,36.8333,-2.4203,109
+CP-0430,Malaga,Andalusia,Standard,36.7934,-4.3244,50
+CP-0431,Madrid,Madrid,Fast,40.3646,-3.6984,108
+CP-0432,Madrid,Madrid,Fast,40.3625,-3.8032,141
+CP-0433,Ourense,Galicia,Standard,42.3258,-7.7644,64
+CP-0434,Badajoz,Extremadura,Ultra-fast,38.8313,-6.9495,203
+CP-0435,Malaga,Andalusia,Standard,36.7966,-4.4548,51
+CP-0436,Malaga,Andalusia,Standard,36.8499,-4.4527,70
+CP-0437,Logrono,La Rioja,Ultra-fast,42.534,-2.6857,205
+CP-0438,Gijon,Asturias,Standard,43.4152,-5.6008,30
+CP-0439,Toledo,Castile-La Mancha,Ultra-fast,39.8428,-3.9564,352
+CP-0440,Valencia,Valencian Community,Ultra-fast,39.482,-0.3479,157
+CP-0441,Tarragona,Catalonia,Ultra-fast,41.1033,1.2124,306
+CP-0442,Barcelona,Catalonia,Ultra-fast,41.3463,2.118,137
+CP-0443,Alicante,Valencian Community,Standard,38.4296,-0.3773,81
+CP-0444,Santander,Cantabria,Ultra-fast,43.3715,-3.7181,188
+CP-0445,Cordoba,Andalusia,Standard,37.8211,-4.7755,71
+CP-0446,Salamanca,Castile and Leon,Fast,40.9759,-5.6425,201
+CP-0447,Vigo,Galicia,Standard,42.1793,-8.7278,70
+CP-0448,Valladolid,Castile and Leon,Ultra-fast,41.7434,-4.6446,235
+CP-0449,Lleida,Catalonia,Fast,41.5765,0.8347,210
+CP-0450,Valencia,Valencian Community,Standard,39.4418,-0.4,82
+CP-0451,Madrid,Madrid,Standard,40.4763,-3.7847,60
+CP-0452,Barcelona,Catalonia,Standard,41.337,2.1115,53
+CP-0453,Madrid,Madrid,Standard,40.4821,-3.6728,84
+CP-0454,Seville,Andalusia,Standard,37.3584,-6.0349,67
+CP-0455,Jaen,Andalusia,Fast,37.8337,-3.7235,144
+CP-0456,Cordoba,Andalusia,Standard,37.8012,-4.6002,45
+CP-0457,Murcia,Murcia,Standard,38.0757,-1.1318,61
+CP-0458,Madrid,Madrid,Fast,40.3961,-3.7681,129
+CP-0459,Gijon,Asturias,Fast,43.4796,-5.5207,127
+CP-0460,Zaragoza,Aragon,Ultra-fast,41.5756,-0.8099,315
+CP-0461,Huesca,Aragon,Standard,42.1652,-0.3981,53
+CP-0462,Madrid,Madrid,Fast,40.3494,-3.8048,165
+CP-0463,Seville,Andalusia,Fast,37.3276,-6.0899,203
+CP-0464,Madrid,Madrid,Standard,40.4517,-3.604,67
+CP-0465,Madrid,Madrid,Standard,40.359,-3.636,94
+CP-0466,Malaga,Andalusia,Ultra-fast,36.6808,-4.4868,224
+CP-0467,Madrid,Madrid,Fast,40.4035,-3.64,97
+CP-0468,Seville,Andalusia,Fast,37.386,-5.9273,119
+CP-0469,Vigo,Galicia,Standard,42.1767,-8.6926,45
+CP-0470,Alicante,Valencian Community,Fast,38.3677,-0.545,159
+CP-0471,Zaragoza,Aragon,Standard,41.508,-0.8594,33
+CP-0472,Ciudad Real,Castile-La Mancha,Fast,39.0951,-3.9097,99
+CP-0473,A Coruna,Galicia,Ultra-fast,43.3278,-8.2716,195
+CP-0474,Zaragoza,Aragon,Fast,41.5636,-0.9267,115
+CP-0475,Murcia,Murcia,Fast,38.0535,-1.1403,183
+CP-0476,Pamplona,Navarre,Standard,42.8176,-1.6474,85
+CP-0477,Seville,Andalusia,Ultra-fast,37.4363,-5.9824,356
+CP-0478,Badajoz,Extremadura,Fast,38.914,-6.9232,104
+CP-0479,Gijon,Asturias,Fast,43.5385,-5.8087,139
+CP-0480,Palma,Balearic Islands,Standard,39.5133,2.7526,84
+CP-0481,Gijon,Asturias,Standard,43.4517,-5.7052,73
+CP-0482,Teruel,Aragon,Fast,40.4251,-1.1485,110
+CP-0483,Seville,Andalusia,Standard,37.4484,-5.8829,6
+CP-0484,Palma,Balearic Islands,Standard,39.6721,2.588,29
+CP-0485,Barcelona,Catalonia,Fast,41.457,2.1832,162
+CP-0486,Leon,Castile and Leon,Standard,42.6486,-5.5076,54
+CP-0487,Madrid,Madrid,Fast,40.5268,-3.6179,136
+CP-0488,Vigo,Galicia,Fast,42.3208,-8.5562,154
+CP-0489,Barcelona,Catalonia,Standard,41.3587,2.0364,69
+CP-0490,Malaga,Andalusia,Fast,36.686,-4.4579,182
+CP-0491,Palma,Balearic Islands,Fast,39.5783,2.713,204
+CP-0492,Valencia,Valencian Community,Fast,39.6163,-0.4689,156
+CP-0493,Lleida,Catalonia,Standard,41.601,0.5705,57
+CP-0494,Caceres,Extremadura,Standard,39.423,-6.3252,51
+CP-0495,Barcelona,Catalonia,Fast,41.3857,2.1426,214
+CP-0496,Palma,Balearic Islands,Standard,39.6215,2.6151,56
+CP-0497,Valencia,Valencian Community,Fast,39.5643,-0.3917,158
+CP-0498,Madrid,Madrid,Standard,40.4324,-3.7183,49
+CP-0499,Valladolid,Castile and Leon,Standard,41.6293,-4.7948,54
+CP-0500,Valencia,Valencian Community,Standard,39.5572,-0.4234,70
+CP-0501,Barcelona,Catalonia,Fast,41.45,2.1779,138
+CP-0502,Albacete,Castile-La Mancha,Standard,39.024,-1.9657,64
+CP-0503,Huesca,Aragon,Fast,42.1425,-0.5356,122
+CP-0504,Seville,Andalusia,Standard,37.3129,-6.0621,74
+CP-0505,Murcia,Murcia,Ultra-fast,37.8692,-1.1627,263
+CP-0506,Barcelona,Catalonia,Standard,41.4148,2.1163,50
+CP-0507,Leon,Castile and Leon,Fast,42.6547,-5.687,138
+CP-0508,Seville,Andalusia,Ultra-fast,37.313,-6.1554,208
+CP-0509,Girona,Catalonia,Standard,41.9941,2.7896,82
+CP-0510,Murcia,Murcia,Standard,37.9741,-1.1958,93
+CP-0511,Vitoria-Gasteiz,Basque Country,Standard,43.0469,-2.5399,71
+CP-0512,Cordoba,Andalusia,Ultra-fast,37.9458,-4.6911,324
+CP-0513,Zaragoza,Aragon,Fast,41.6573,-1.0101,162
+CP-0514,Soria,Castile and Leon,Standard,41.8292,-2.4989,49
+CP-0515,Palma,Balearic Islands,Fast,39.5223,2.7511,169
+CP-0516,Cordoba,Andalusia,Fast,37.8955,-4.7722,156
+CP-0517,Valencia,Valencian Community,Standard,39.5564,-0.4102,51
+CP-0518,Toledo,Castile-La Mancha,Standard,39.8186,-4.0445,30
+CP-0519,Madrid,Madrid,Standard,40.4314,-3.7473,71
+CP-0520,Malaga,Andalusia,Standard,36.7278,-4.3435,56
+CP-0521,Badajoz,Extremadura,Fast,38.9198,-6.8529,152
+CP-0522,Palma,Balearic Islands,Standard,39.5617,2.5257,83
+CP-0523,Gijon,Asturias,Fast,43.5018,-5.4623,165
+CP-0524,Barcelona,Catalonia,Fast,41.4081,2.1269,219
+CP-0525,Ciudad Real,Castile-La Mancha,Standard,38.9424,-4.0408,56
+CP-0526,Madrid,Madrid,Standard,40.3401,-3.7885,61
+CP-0527,Madrid,Madrid,Standard,40.6166,-3.6552,55
+CP-0528,Bilbao,Basque Country,Standard,43.2948,-2.8812,54
+CP-0529,Malaga,Andalusia,Standard,36.729,-4.5356,71
+CP-0530,Madrid,Madrid,Standard,40.5244,-3.6845,56
+CP-0531,Zaragoza,Aragon,Fast,41.7042,-0.9939,145
+CP-0532,Madrid,Madrid,Standard,40.3082,-3.6768,51
+CP-0533,Madrid,Madrid,Standard,40.561,-3.6673,65
+CP-0534,Albacete,Castile-La Mancha,Standard,39.0012,-2.021,36
+CP-0535,Madrid,Madrid,Standard,40.4096,-3.643,68
+CP-0536,Madrid,Madrid,Standard,40.5153,-3.6455,79
+CP-0537,Madrid,Madrid,Standard,40.3442,-3.7445,55
+CP-0538,Alicante,Valencian Community,Standard,38.3585,-0.5565,51
+CP-0539,Almeria,Andalusia,Fast,36.8865,-2.3947,94
+CP-0540,Lleida,Catalonia,Standard,41.6989,0.6912,64
+CP-0541,Granada,Andalusia,Ultra-fast,37.2032,-3.7363,291
+CP-0542,Albacete,Castile-La Mancha,Ultra-fast,39.0544,-1.8557,222
+CP-0543,A Coruna,Galicia,Ultra-fast,43.2207,-8.5498,115
+CP-0544,Vitoria-Gasteiz,Basque Country,Ultra-fast,42.7815,-2.6001,164
+CP-0545,Madrid,Madrid,Standard,40.3458,-3.634,61
+CP-0546,Alicante,Valencian Community,Standard,38.4107,-0.5259,53
+CP-0547,Burgos,Castile and Leon,Standard,42.3944,-3.7058,56
+CP-0548,Albacete,Castile-La Mancha,Standard,38.9474,-1.8236,82
+CP-0549,Madrid,Madrid,Standard,40.4244,-3.7,51
+CP-0550,Alicante,Valencian Community,Standard,38.5631,-0.349,71
+CP-0551,Malaga,Andalusia,Ultra-fast,36.6964,-4.5948,200
+CP-0552,Seville,Andalusia,Standard,37.4192,-6.0369,87
+CP-0553,Valladolid,Castile and Leon,Ultra-fast,41.7207,-4.5916,291
+CP-0554,Madrid,Madrid,Standard,40.5127,-3.6092,64
+CP-0555,A Coruna,Galicia,Ultra-fast,43.2658,-8.4692,293
+CP-0556,Madrid,Madrid,Fast,40.4314,-3.8625,160
+CP-0557,Palma,Balearic Islands,Standard,39.6118,2.5818,57
+CP-0558,Barcelona,Catalonia,Standard,41.4586,2.2072,45
+CP-0559,Valladolid,Castile and Leon,Fast,41.6304,-4.9051,67
+CP-0560,Valladolid,Castile and Leon,Fast,41.5812,-4.6469,135
+CP-0561,Alicante,Valencian Community,Standard,38.3399,-0.4774,58
+CP-0562,Malaga,Andalusia,Standard,36.8146,-4.4513,60
+CP-0563,Bilbao,Basque Country,Fast,43.1715,-3.1801,128
+CP-0564,Malaga,Andalusia,Ultra-fast,36.7948,-4.39,186
+CP-0565,Malaga,Andalusia,Standard,36.7877,-4.3939,55
+CP-0566,Madrid,Madrid,Fast,40.384,-3.8083,166
+CP-0567,Zaragoza,Aragon,Ultra-fast,41.6313,-0.8072,263
+CP-0568,Huesca,Aragon,Standard,42.1503,-0.4577,61
+CP-0569,Huesca,Aragon,Fast,42.1399,-0.4428,150
+CP-0570,Bilbao,Basque Country,Standard,43.3341,-2.73,73
+CP-0571,Madrid,Madrid,Standard,40.4264,-3.7425,48
+CP-0572,Soria,Castile and Leon,Standard,41.6956,-2.4545,48
+CP-0573,Bilbao,Basque Country,Ultra-fast,43.2018,-2.9159,289
+CP-0574,Madrid,Madrid,Fast,40.5171,-3.5054,93
+CP-0575,Valencia,Valencian Community,Fast,39.4453,-0.572,188
+CP-0576,Madrid,Madrid,Fast,40.441,-3.911,110
+CP-0577,Barcelona,Catalonia,Standard,41.332,2.1448,59
+CP-0578,Valencia,Valencian Community,Fast,39.3519,-0.5019,171
+CP-0579,Zaragoza,Aragon,Standard,41.6731,-0.8627,70
+CP-0580,Cordoba,Andalusia,Standard,37.8173,-4.8369,73
+CP-0581,Ourense,Galicia,Fast,42.311,-7.8891,93
+CP-0582,Pamplona,Navarre,Ultra-fast,42.7543,-1.783,160
+CP-0583,Seville,Andalusia,Standard,37.3496,-6.05,43
+CP-0584,Valencia,Valencian Community,Fast,39.5453,-0.4842,205
+CP-0585,Valladolid,Castile and Leon,Fast,41.6884,-4.794,140
+CP-0586,Madrid,Madrid,Standard,40.4809,-3.6391,21
+CP-0587,Seville,Andalusia,Fast,37.4188,-5.9466,154
+CP-0588,Barcelona,Catalonia,Fast,41.3716,2.1737,110
+CP-0589,Valencia,Valencian Community,Standard,39.4237,-0.37,47
+CP-0590,A Coruna,Galicia,Fast,43.3858,-8.2839,151
+CP-0591,Valencia,Valencian Community,Standard,39.4827,-0.3375,66
+CP-0592,Madrid,Madrid,Standard,40.3282,-3.8164,67
+CP-0593,Madrid,Madrid,Ultra-fast,40.3625,-3.66,148
+CP-0594,Leon,Castile and Leon,Fast,42.7222,-5.6117,130
+CP-0595,Madrid,Madrid,Standard,40.3904,-3.7143,51
+CP-0596,Vitoria-Gasteiz,Basque Country,Ultra-fast,42.8717,-2.8394,182
+CP-0597,Granada,Andalusia,Fast,37.1317,-3.6808,128
+CP-0598,Murcia,Murcia,Fast,37.9541,-1.2227,166
+CP-0599,Vigo,Galicia,Fast,42.1282,-8.7874,160
+CP-0600,Madrid,Madrid,Standard,40.4415,-3.5786,98

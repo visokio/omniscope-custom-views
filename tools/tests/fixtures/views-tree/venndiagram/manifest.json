@@ -1,0 +1,216 @@
+{
+  "name": "Venn Diagram",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "subset"
+  ],
+  "sandbox": false,
+  "autoPane": true,
+  "autoQuery": true,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "filterAField": {
+        "displayName": "Filter A field",
+        "type": "FIELD",
+        "detail": "Field used to create a range filter for the set A",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ]
+      },
+      "filterAMax": {
+        "displayName": "Filter A max",
+        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
+        "type": "TEXT"
+      },
+      "filterAMin": {
+        "displayName": "Filter A min",
+        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
+        "type": "TEXT"
+      },
+      "filterBField": {
+        "displayName": "Filter B field",
+        "type": "FIELD",
+        "detail": "Field used to create a range filter for the set B",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ]
+      },
+      "filterBMax": {
+        "displayName": "Filter B max",
+        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
+        "type": "TEXT"
+      },
+      "filterBMin": {
+        "displayName": "Filter B min",
+        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
+        "type": "TEXT"
+      },
+      "filterCField": {
+        "displayName": "Filter C field",
+        "type": "FIELD",
+        "detail": "Field used to create a range filter for the set C",
+        "mandatory": true,
+        "validFieldTypes": [
+          "NUMBER"
+        ]
+      },
+      "filterCMax": {
+        "displayName": "Filter C max",
+        "detail": "Maximum value for the field filter, if not set, the set won't have a filter",
+        "type": "TEXT"
+      },
+      "filterCMin": {
+        "displayName": "Filter C min",
+        "detail": "Minimum value for the field filter, if not set, the set won't have a filter",
+        "type": "TEXT"
+      },
+      "setAName": {
+        "displayName": "Set A name",
+        "detail": "Custom name for set A, if not set, the field name will be used",
+        "type": "TEXT"
+      },
+      "setBName": {
+        "displayName": "Set B name",
+        "type": "TEXT",
+        "detail": "Custom name for set B, if not set, the field name will be used"
+      },
+      "setCName": {
+        "displayName": "Set C name",
+        "detail": "Custom name for set C, if not set, the field name will be used",
+
+        "type": "TEXT"
+      }
+    },
+    "structure": {
+      "toolbar": [],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [{
+      "displayName": "Filters",
+      "rows": [
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "title": "Filter A",
+          "cells": []
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "cells": [
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterAField",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterAMin",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterAMax",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "setAName",
+              "usePrefixTitle": false
+            }
+          ]
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "title": "Filter B",
+          "cells": []
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "cells": [
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterBField",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterBMin",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterBMax",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "setBName",
+              "usePrefixTitle": false
+            }
+          ]
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "title": "Filter C",
+          "cells": []
+        },
+        {
+          "@visokiotype": "CustomViewApi.OptionGroupRow",
+          "cells": [
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterCField",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterCMin",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "filterCMax",
+              "usePrefixTitle": false
+            },
+            {
+              "@visokiotype": "CustomViewApi.OptionGroupCell",
+              "option": "setCName",
+              "usePrefixTitle": false
+            }
+          ]
+        }
+      ]
+    }]
+  },
+  "defaultOptions": {
+    "items": {},
+    "pane": {
+      "yAxisHeaderWidth": 50,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}

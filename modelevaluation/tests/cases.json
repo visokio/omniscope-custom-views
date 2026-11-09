@@ -1,0 +1,226 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/scores.csv",
+  "options": {
+   "items": {
+    "actual": "Churned",
+    "score": "Churn probability",
+    "positive": "",
+    "bins": 100
+   }
+  },
+  "width": 1040,
+  "height": 640,
+  "wait": 2000,
+  "showcaseHeight": 640,
+  "caption": "Live: an illustrative churn model scored on 8,000 customers. Move the threshold (slider or drag the line) and watch every panel update; click a confusion-matrix cell to select those customers.",
+  "expect": {
+   "text": "AUC"
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/scores.csv",
+  "options": {
+   "items": {
+    "actual": "Churned",
+    "score": "Churn probability",
+    "positive": "",
+    "bins": 100
+   }
+  },
+  "width": 1000,
+  "height": 640,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__model.model;return M.posRaw==='Yes'&&M.auc>0.85&&M.auc<0.97&&Math.abs(M.P+M.N-8000)<1})()",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var c=window.__model.counts();return c.TP+c.FN===window.__model.model.P})()",
+    "expectTruthy": true
+   },
+   {
+    "click": "#cm .cell[data-k='FN']"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "screenshot": "fn"
+   },
+   {
+    "eval": "window.__model.setThreshold(0.3)"
+   },
+   {
+    "eval": "window.__model.counts().TP>0"
+   },
+   {
+    "screenshot": "t03"
+   },
+   {
+    "clickAt": [
+     990,
+     630
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Segment",
+     "operator": "=",
+     "value": "Enterprise"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__model.model.P+window.__model.model.N<1200",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     500
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "baseline",
+  "data": "sample-data/scores.csv",
+  "options": {
+   "items": {
+    "actual": "Churned",
+    "score": "Baseline score",
+    "positive": "",
+    "bins": 100
+   }
+  },
+  "width": 1000,
+  "height": 600,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "window.__model.model.auc<0.8 && window.__model.model.auc>0.55",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "text": "AUC"
+  }
+ },
+ {
+  "name": "one-class",
+  "data": "sample-data/scores.csv",
+  "options": {
+   "items": {
+    "actual": "Churned",
+    "score": "Churn probability",
+    "positive": "",
+    "bins": 100
+   }
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Churned",
+   "operator": "=",
+   "value": "Yes"
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "two classes"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Churned",
+    "type": "TEXT"
+   },
+   {
+    "name": "Churn probability",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "actual": "Churned",
+    "score": "Churn probability",
+    "positive": "",
+    "bins": 100
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/scores.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Actual"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "actual": "Fraud",
+    "score": "Score",
+    "bins": 300
+   }
+  },
+  "width": 1000,
+  "height": 640,
+  "wait": 6000,
+  "actions": [
+   {
+    "eval": "window.__model.model.posRaw===1 && window.__model.model.auc>0.8",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "text": "AUC"
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/scores.csv",
+  "options": {
+   "items": {
+    "actual": "Churned",
+    "score": "Churn probability",
+    "positive": "",
+    "bins": 100
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "wait": 2000,
+  "scale": 0.5
+ }
+]

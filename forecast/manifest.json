@@ -1,0 +1,212 @@
+{
+  "name": "Forecast",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "forecast",
+    "time series",
+    "holt-winters",
+    "exponential smoothing",
+    "prediction",
+    "seasonality",
+    "planning",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "date": {
+        "displayName": "Dated by",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE"
+        ],
+        "detail": "The date of each record, e.g. Order date, Month"
+      },
+      "value": {
+        "displayName": "Forecast",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "The measure to forecast per period, e.g. sum of Sales or record count"
+      },
+      "period": {
+        "displayName": "Period",
+        "type": "CHOICE",
+        "values": [
+          "DAY",
+          "WEEK",
+          "MONTH",
+          "QUARTER",
+          "YEAR"
+        ],
+        "displayValues": [
+          "Day",
+          "Week",
+          "Month",
+          "Quarter",
+          "Year"
+        ],
+        "detail": "Size of each period (default month); also sets the length of the season"
+      },
+      "horizon": {
+        "displayName": "Periods ahead",
+        "type": "NUMBER",
+        "minValue": 1,
+        "maxValue": 120,
+        "detail": "How far to forecast (default one season, e.g. 12 months)"
+      },
+      "model": {
+        "displayName": "Season",
+        "type": "CHOICE",
+        "values": [
+          "AUTO",
+          "ADDITIVE",
+          "MULTIPLICATIVE"
+        ],
+        "displayValues": [
+          "Automatic",
+          "Additive (fixed size)",
+          "Multiplicative (grows with the level)"
+        ],
+        "detail": "How the seasonal pattern behaves"
+      },
+      "seasonal": {
+        "displayName": "Seasonal",
+        "type": "TOGGLE",
+        "detail": "Turn off for series without a repeating pattern"
+      },
+      "backtest": {
+        "displayName": "Show backtest",
+        "type": "TOGGLE",
+        "detail": "Forecast the most recent periods from the history before them, to show how accurate the method is"
+      },
+      "historyShown": {
+        "displayName": "History shown",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 10000,
+        "detail": "Periods of history drawn (0 or blank for all); the model always uses all history"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "date",
+        "value",
+        "period"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Series",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "date",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "value",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "period",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Forecast",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "horizon",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "model",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "seasonal",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "backtest",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "historyShown",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "period": "MONTH",
+      "horizon": 12,
+      "model": "AUTO",
+      "seasonal": true,
+      "backtest": true
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

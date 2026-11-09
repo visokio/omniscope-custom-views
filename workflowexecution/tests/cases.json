@@ -1,0 +1,516 @@
+[
+ {
+  "name": "showcase",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders, Report",
+    "buttonText": "Refresh the orders"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "showcase": true,
+  "showcaseHeight": 150,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "workflow": {
+   "blocks": [
+    "Load orders",
+    "Report"
+   ]
+  },
+  "caption": "Live: press the button. Here the Workflow REST API is simulated: the job is queued, runs and finishes.",
+  "expect": {
+   "text": "Refresh the orders"
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Load orders",
+       "Report"
+      ],
+      "refreshFromSource": true,
+      "cancelExisting": false
+     },
+     "count": 1
+    }
+   },
+   {
+    "eval": "document.getElementById('run').disabled",
+    "expectTruthy": true
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "expectRequest": {
+     "method": "GET",
+     "url": "Orders%20demo.iox/w/job/JOB_1/state"
+    }
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished at') === 0 && !document.getElementById('run').disabled",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.parent.__omniEvents.every(function (e) { return e.type !== 'whitespaceClick'; })",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "finished"
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders",
+    "refreshFromSource": false
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "workflow": {
+   "blocks": [
+    "Load orders",
+    "Report"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [
+       "Load orders"
+      ],
+      "refreshFromSource": false
+     },
+     "count": 1
+    }
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished') === 0",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     300,
+     140
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "update": {
+     "block": "Load orders",
+     "showJobState": false
+    }
+   },
+   {
+    "eval": "document.getElementById('status').textContent === ''",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 2
+    }
+   },
+   {
+    "eval": "document.getElementById('status').textContent === ''",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "not-found",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Clean data"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "workflow": {
+   "blocks": [
+    "Load orders",
+    "Report"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "eval": "/could not be found/.test(document.getElementById('status').textContent) && document.getElementById('status').className.indexOf('error') > 0",
+    "expectTruthy": true
+   },
+   {
+    "eval": "!document.getElementById('run').disabled",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "failed-job",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Report"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "workflow": {
+   "failBlocks": [
+    "Report"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Failed at') === 0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "already-running",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Report"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "workflow": {
+   "respond": {
+    "POST w/execute": {
+     "status": 409,
+     "body": {
+      "errorType": "WORKFLOW_ALREADY_RUNNING",
+      "errorMessage": "There is another execution running or queued for this file."
+     }
+    }
+   }
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "eval": "/another execution/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "no-permission",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Report",
+    "showJobState": false
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "workflow": {
+   "permission": false
+  },
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "eval": "/Workflow Execution via APIs/.test(document.getElementById('status').textContent)",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Report"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "actions": [
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "West"
+    }
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 0
+    }
+   },
+   {
+    "eval": "document.getElementById('run').textContent === 'Execute'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Report",
+    "buttonText": "Refresh every order in the workflow"
+   }
+  },
+  "width": 120,
+  "height": 50,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "actions": [
+   {
+    "eval": "document.getElementById('run').getBoundingClientRect().right <= window.innerWidth + 1",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished') === 0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Region",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "block": "Report"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "expect": {
+   "selector": "#run",
+   "min": 1,
+   "text": "Execute"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "expect": {
+   "text": "Execute"
+  },
+  "actions": [
+   {
+    "eval": "document.getElementById('run').title === 'Executes the whole workflow'",
+    "expectTruthy": true
+   },
+   {
+    "click": "#run"
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "body": {
+      "blocks": [],
+      "refreshFromSource": true,
+      "cancelExisting": false
+     },
+     "count": 1
+    }
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished') === 0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "large",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Block 1, Block 2, Block 3, Block 4, Block 5, Block 6, Block 7, Block 8, Block 9, Block 10, Block 11, Block 12, Block 13, Block 14, Block 15, Block 16, Block 17, Block 18, Block 19, Block 20, Block 21, Block 22, Block 23, Block 24, Block 25, Block 26, Block 27, Block 28, Block 29, Block 30, Block 31, Block 32, Block 33, Block 34, Block 35, Block 36, Block 37, Block 38, Block 39, Block 40"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "eval": "window.__omniMock.workflow.requests[0].body.blocks.length === 40 && window.__omniMock.workflow.requests[0].body.blocks[39] === 'Block 40'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "reload-mid-job",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Load orders, Report"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "baseUrl": "https://omniscope.example.com/Demos/Orders%20demo.iox/er/Report/customview/Workflow+Execution/",
+  "workflow": {
+   "blocks": [
+    "Load orders",
+    "Report"
+   ]
+  },
+  "actions": [
+   {
+    "click": "#run",
+    "waitAfter": 200
+   },
+   {
+    "reload": true
+   },
+   {
+    "eval": "document.getElementById('run').disabled",
+    "expectTruthy": true
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished at') === 0 && !document.getElementById('run').disabled",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 1
+    }
+   },
+   {
+    "reload": true
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished at') === 0",
+    "expectTruthy": true
+   },
+   {
+    "expectRequest": {
+     "method": "POST",
+     "url": "Orders%20demo.iox/w/execute",
+     "count": 1
+    }
+   }
+  ]
+ },
+ {
+  "name": "no-report-url",
+  "data": "sample-data/orders.csv",
+  "options": {
+   "items": {
+    "block": "Report"
+   }
+  },
+  "width": 360,
+  "height": 160,
+  "wait": 800,
+  "actions": [
+   {
+    "click": "#run"
+   },
+   {
+    "eval": "/\\/w\\/execute$/.test(window.__omniMock.workflow.requests[0].url)",
+    "expectTruthy": true
+   },
+   {
+    "wait": 3200
+   },
+   {
+    "eval": "document.getElementById('status').textContent.indexOf('Finished') === 0",
+    "expectTruthy": true
+   }
+  ]
+ }
+]

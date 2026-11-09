@@ -1,0 +1,281 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/sessions.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Sessions",
+     "function": "SUM"
+    },
+    "period": "WEEK",
+    "model": "ADDITIVE",
+    "threshold": 3
+   }
+  },
+  "width": 1060,
+  "height": 600,
+  "wait": 1500,
+  "showcaseHeight": 600,
+  "caption": "Live: three years of illustrative weekly website sessions split into trend, yearly pattern and residual. The circled weeks are unusual: an outage and a campaign. Hover any week; click to select it.",
+  "expect": {
+   "selector": "circle",
+   "min": 3
+  }
+ },
+ {
+  "name": "monthly",
+  "showcase": true,
+  "data": "../forecast/sample-data/sales_history.csv",
+  "options": {
+   "items": {
+    "date": "Month",
+    "value": {
+     "inputField": "Sales",
+     "function": "SUM"
+    },
+    "period": "MONTH",
+    "model": "MULTIPLICATIVE",
+    "threshold": 3
+   }
+  },
+  "width": 1060,
+  "height": 540,
+  "wait": 1500,
+  "showcaseHeight": 540,
+  "caption": "Live: monthly sales with a multiplicative season, where the December peak grows with the business.",
+  "expect": {
+   "selector": "rect",
+   "min": 20
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/sessions.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Sessions",
+     "function": "SUM"
+    },
+    "period": "WEEK",
+    "model": "ADDITIVE",
+    "threshold": 3
+   }
+  },
+  "width": 1000,
+  "height": 580,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__dec.model,a=M.anoms.map(function(p){return p.t});return M.series.length===155 && Math.abs(M.series[100].trend/27411.16346153846-1)<0.03 && a.indexOf(Date.UTC(2025,2,10))>=0 && a.indexOf(Date.UTC(2025,2,17))>=0 && a.indexOf(Date.UTC(2026,8,14))>=0 && M.strength>0.6})()",
+    "expectTruthy": true
+   },
+   {
+    "hoverEval": "(function(){var r=document.querySelector('svg > rect').getBoundingClientRect();return [r.left+r.width*0.5, r.top+r.height*0.3]})()"
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "eval": "window.__dec.selectAnomaly(0)"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "click": "tr.an",
+    "nth": 1
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     5,
+     575
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Source",
+     "operator": "=",
+     "value": "Search"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__dec.model.series[100].trend<0.6*27411.16346153846",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     460
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "daily",
+  "data": "sample-data/sessions.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Date",
+   "operator": ">=",
+   "value": "2026-06-01"
+  },
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Sessions",
+     "function": "SUM"
+    },
+    "period": "DAY",
+    "model": "ADDITIVE",
+    "threshold": 3
+   }
+  },
+  "width": 900,
+  "height": 500,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__dec.model.m===7 && window.__dec.model.series.length>140",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "short",
+  "data": "sample-data/sessions.csv",
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Date",
+   "operator": ">=",
+   "value": "2025-06-01"
+  },
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Sessions",
+     "function": "SUM"
+    },
+    "period": "WEEK",
+    "model": "ADDITIVE",
+    "threshold": 3
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "two full seasons"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Date",
+    "type": "DATE"
+   },
+   {
+    "name": "Sessions",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Sessions",
+     "function": "SUM"
+    },
+    "period": "WEEK",
+    "model": "ADDITIVE",
+    "threshold": 3
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/sessions.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the date"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "../forecast/tests/large.js",
+  "options": {
+   "items": {
+    "date": "Day",
+    "value": {
+     "inputField": "Amount",
+     "function": "SUM"
+    },
+    "period": "WEEK"
+   }
+  },
+  "width": 1100,
+  "height": 600,
+  "wait": 9000,
+  "actions": [
+   {
+    "eval": "window.__dec.model.series.length>200",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/sessions.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Sessions",
+     "function": "SUM"
+    },
+    "period": "WEEK",
+    "model": "ADDITIVE",
+    "threshold": 3
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

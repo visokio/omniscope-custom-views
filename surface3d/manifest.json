@@ -1,0 +1,181 @@
+{
+  "name": "3D Surface",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "3d",
+    "surface",
+    "three.js",
+    "response surface",
+    "yield curve",
+    "terrain",
+    "heatmap",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": true,
+  "dataLimit": 20000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "x": {
+        "displayName": "Across",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "First direction of the floor, e.g. Maturity, Price, Hour (numbers and dates are spaced to scale)"
+      },
+      "y": {
+        "displayName": "Along",
+        "type": "GROUPING",
+        "mandatory": true,
+        "detail": "Second direction of the floor, e.g. Month, Weeks before travel, Day"
+      },
+      "z": {
+        "displayName": "Height",
+        "type": "MEASURE",
+        "mandatory": true,
+        "validMeasureResultTypes": [
+          "NUMBER"
+        ],
+        "detail": "The measure that sets the height and colour, e.g. average Yield or sum of Bookings"
+      },
+      "colour": {
+        "displayName": "Colours",
+        "type": "CHOICE",
+        "values": [
+          "AUTO",
+          "SEQUENTIAL",
+          "DIVERGING"
+        ],
+        "displayValues": [
+          "Automatic",
+          "Low to high",
+          "Below and above zero"
+        ],
+        "detail": "Automatic uses two colours when values are both negative and positive"
+      },
+      "heightScale": {
+        "displayName": "Height scale",
+        "type": "NUMBER",
+        "minValue": 0.2,
+        "maxValue": 3,
+        "detail": "Stretch or flatten the surface (default 1)"
+      },
+      "wireframe": {
+        "displayName": "Grid lines",
+        "type": "TOGGLE",
+        "detail": "Draw grid lines on the surface"
+      },
+      "autoRotate": {
+        "displayName": "Spin",
+        "type": "TOGGLE",
+        "detail": "Rotate the scene slowly"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "x",
+        "y",
+        "z"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Surface",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "x",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "y",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "z",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "heightScale",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "wireframe",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "autoRotate",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "colour": "AUTO",
+      "heightScale": 1,
+      "wireframe": true,
+      "autoRotate": false
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 300,
+      "paneHeight": 200,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

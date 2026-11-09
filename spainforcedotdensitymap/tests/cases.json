@@ -1,0 +1,487 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/charging_points.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Charging point",
+     "type": "UNIQUE_VALUES"
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Charger type",
+     "function": "SINGLETON"
+    },
+    "tooltipvalue": {
+     "inputField": "Sessions per month",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 760,
+  "height": 620,
+  "showcaseHeight": 620,
+  "wait": 2500,
+  "caption": "Live: 600 invented charging points, one dot each, coloured by charger type. Dots in busy towns spread out instead of piling up. Hover a dot for its figures; click it to select the charging point.",
+  "expect": {
+   "selector": ".dots circle",
+   "min": 600,
+   "max": 600
+  },
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.key text').length===3 && document.querySelectorAll('.land path').length===1 && !document.querySelector('.note')",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "plain",
+  "showcase": true,
+  "data": "sample-data/charging_points.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Charging point",
+     "type": "UNIQUE_VALUES"
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    }
+   }
+  },
+  "width": 760,
+  "height": 620,
+  "showcaseHeight": 620,
+  "wait": 2500,
+  "caption": "Live: the same charging points in a single colour. The width of each cluster shows how many sites share a town.",
+  "expect": {
+   "selector": ".dots circle",
+   "min": 600,
+   "max": 600
+  },
+  "actions": [
+   {
+    "eval": "!document.querySelector('.key') && window.__spainDots.model.r>=1.2 && window.__spainDots.model.r<=4",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/charging_points.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Charging point",
+     "type": "UNIQUE_VALUES"
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Charger type",
+     "function": "SINGLETON"
+    },
+    "tooltipvalue": {
+     "inputField": "Sessions per month",
+     "function": "SUM"
+    },
+    "tooltiptitle": "Sessions"
+   }
+  },
+  "width": 760,
+  "height": 620,
+  "wait": 2500,
+  "actions": [
+   {
+    "eval": "(function(){window.__c0={};document.querySelectorAll('.dots circle').forEach(function(c){window.__c0[c.__data__.colour]=c.getAttribute('fill')});return Object.keys(window.__c0).length===3})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": ".dots circle",
+    "nth": 25
+   },
+   {
+    "eval": "(function(){var t=document.getElementById('tooltip');return t.style.display==='block'&&t.textContent.indexOf('CP-')===0&&t.textContent.indexOf('Sessions: ')>0&&t.textContent.indexOf('Charger type: ')>0})()",
+    "expectTruthy": true
+   },
+   {
+    "click": ".dots circle",
+    "nth": 25
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.inputField==='Charging point'&&f.operator==='='&&document.querySelectorAll('.dots circle.selected').length===1})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "click": ".dots circle.selected"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "click": ".dots circle",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     740,
+     30
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "Andalusia"
+    }
+   },
+   {
+    "eval": "(function(){var n=document.querySelectorAll('.dots circle');var ok=n.length===98;n.forEach(function(c){if(window.__c0[c.__data__.colour]!==c.getAttribute('fill'))ok=false});return ok})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "filtered"
+   },
+   {
+    "update": {
+     "split": {
+      "inputField": "Charging point",
+      "type": "UNIQUE_VALUES"
+     },
+     "lat": {
+      "inputField": "Latitude",
+      "function": "MEAN"
+     },
+     "lon": {
+      "inputField": "Longitude",
+      "function": "MEAN"
+     },
+     "dotsize": 6
+    }
+   },
+   {
+    "eval": "window.__spainDots.model.r===6 && !document.querySelector('.key') && document.querySelectorAll('.dots circle').length===98",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "histogram-split",
+  "data": "sample-data/charging_points.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Sessions per month",
+     "type": "HISTOGRAM",
+     "histogramInterval": 50
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    }
+   }
+  },
+  "width": 600,
+  "height": 500,
+  "wait": 2000,
+  "expect": {
+   "selector": ".dots circle",
+   "min": 3
+  },
+  "actions": [
+   {
+    "click": ".dots circle",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "(function(){var f=omniscope.view.context().viewSelection.filter;return f.type==='AND'&&f.filters[0].operator==='>='&&f.filters[1].operator==='<'})()",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "outside",
+  "fields": [
+   {
+    "name": "Site",
+    "type": "TEXT"
+   },
+   {
+    "name": "Latitude",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Longitude",
+    "type": "NUMBER"
+   }
+  ],
+  "data": "tests/outside.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Site",
+     "type": "UNIQUE_VALUES"
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    }
+   }
+  },
+  "width": 600,
+  "height": 500,
+  "wait": 2000,
+  "expect": {
+   "selector": ".dots circle",
+   "min": 2,
+   "max": 2
+  },
+  "actions": [
+   {
+    "eval": "document.querySelector('.note').textContent==='1 dot is outside the map; 1 has no location'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/charging_points.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Charging point",
+     "type": "UNIQUE_VALUES"
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Charger type",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 900,
+  "height": 700,
+  "wait": 2500,
+  "actions": [
+   {
+    "resize": [
+     180,
+     150
+    ]
+   },
+   {
+    "eval": "(function(){var b=document.querySelector('.land path').getBoundingClientRect();return b.width<=180&&b.height<=150&&document.querySelectorAll('.dots circle').length===600&&!document.querySelector('.key')})()",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "180x150"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Charging point",
+    "type": "TEXT"
+   },
+   {
+    "name": "Latitude",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Longitude",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Charging point",
+     "type": "UNIQUE_VALUES"
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    }
+   }
+  },
+  "width": 600,
+  "height": 500,
+  "wait": 1500,
+  "expect": {
+   "text": "No data to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/charging_points.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 500,
+  "wait": 1200,
+  "expect": {
+   "text": "None of the 600 dots is on the map of Spain"
+  },
+  "actions": [
+   {
+    "eval": "document.body.innerText.indexOf('Choose a Split grouping')>=0",
+    "expectTruthy": true
+   },
+   {
+    "update": {
+     "split": {
+      "inputField": "Charging point",
+      "type": "UNIQUE_VALUES"
+     }
+    }
+   },
+   {
+    "eval": "document.body.innerText.indexOf('Choose a Dot latitude')>=0",
+    "expectTruthy": true
+   },
+   {
+    "update": {
+     "split": {
+      "inputField": "Charging point",
+      "type": "UNIQUE_VALUES"
+     },
+     "lat": {
+      "function": "RECORD_COUNT"
+     },
+     "lon": {
+      "function": "RECORD_COUNT"
+     }
+    }
+   }
+  ]
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Site",
+     "type": "UNIQUE_VALUES"
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Charger type",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 900,
+  "height": 700,
+  "wait": 6000,
+  "expect": {
+   "selector": ".dots circle",
+   "min": 10000,
+   "max": 10000
+  },
+  "actions": [
+   {
+    "eval": "window.__spainDots.model.ms"
+   },
+   {
+    "eval": "window.__spainDots.model.ms < 15000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/charging_points.csv",
+  "options": {
+   "items": {
+    "split": {
+     "inputField": "Charging point",
+     "type": "UNIQUE_VALUES"
+    },
+    "lat": {
+     "inputField": "Latitude",
+     "function": "MEAN"
+    },
+    "lon": {
+     "inputField": "Longitude",
+     "function": "MEAN"
+    },
+    "colour": {
+     "inputField": "Charger type",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 2500
+ }
+]

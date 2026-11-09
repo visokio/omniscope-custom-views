@@ -1,0 +1,110 @@
+{
+  "name": "Set Parameters and Execute",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "lambda",
+    "parameter",
+    "param",
+    "workflow",
+    "job",
+    "execute",
+    "execution",
+    "block",
+    "api"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "dataLimit": 10000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "block": {
+        "displayName": "Blocks to execute (comma separated names)",
+        "documentation": "Leave blank to execute all blocks; Use the current report name as a way to refresh the report data",
+        "type": "TEXT"
+      },
+      "buttonText": {
+        "displayName": "Button text",
+        "type": "TEXT"
+      },
+      "paramNames": {
+        "displayName": "Param names (comma separated names)",
+        "type": "TEXT"
+      },
+      "refreshFromSource": {
+        "displayName": "Refresh from source",
+        "documentation": "If ticked, Omniscope discards any previous execution data and reloads fresh data from the sources;\n\n \n\n If unticked, Omniscope executes only the necessary blocks in the workflow based on their current configuration and previous execution data; it will reuse cached data from upstream blocks if available, executing only those blocks that require fresh data.",
+        "type": "TOGGLE"
+      },
+      "showJobState": {
+        "displayName": "Show job state",
+        "type": "TOGGLE"
+      },
+      "wGrid": {
+        "displayName": "Grid Width (px)",
+        "type": "NUMBER"
+      },
+      "wInputWidth": {
+        "displayName": "Input Width (px)",
+        "type": "NUMBER"
+      },
+      "zlabelFontSize": {
+        "displayName": "Label Font Size (px)",
+        "type": "NUMBER"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "block",
+        "refreshFromSource",
+        "buttonText",
+        "paramNames",
+        "showJobState"
+      ],
+      "x": [],
+      "y": []
+    }
+  },
+  "defaultOptions": {
+    "items": {
+      "buttonText": "Execute",
+      "refreshFromSource": true,
+      "wGrid": 200,
+      "wInputWidth": 100,
+      "zlabelFontSize": 13
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 200,
+      "paneHeight": 200,
+      "showGridLines": true,
+      "gridLineThickness": 1,
+      "gridLineColour": "rgba(229,229,229,1)",
+      "headerStyle": {
+        "size": 12,
+        "colour": "#333333",
+        "backgroundColour": "#FFFFFF"
+      },
+      "showPaneXHeader": true,
+      "showPaneYHeader": true,
+      "showTileHeader": true,
+      "xHeaderStyle": {},
+      "yHeaderStyle": {},
+      "tileHeaderStyle": {},
+      "xHeaderLines": 1,
+      "tileHeaderLines": 1,
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 50,
+    "minHeight": 50
+  }
+}

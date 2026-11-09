@@ -1,0 +1,297 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/survey_responses.csv",
+  "options": {
+   "items": {
+    "answer": "Answer",
+    "question": "Question",
+    "scale": "AUTO",
+    "sort": "NET"
+   }
+  },
+  "width": 1060,
+  "height": 420,
+  "wait": 1500,
+  "showcaseHeight": 420,
+  "caption": "Live: an illustrative employee survey of 640 people, ten statements sorted by net agreement. Hover a segment for the counts; click it to select those answers.",
+  "expect": {
+   "selector": "rect.seg",
+   "min": 40
+  }
+ },
+ {
+  "name": "bydept",
+  "showcase": true,
+  "data": "sample-data/survey_responses.csv",
+  "filter": {
+   "type": "OR",
+   "filters": [
+    {
+     "type": "FIELD_VALUE",
+     "inputField": "Question",
+     "operator": "=",
+     "value": "Workload in my team is manageable"
+    },
+    {
+     "type": "FIELD_VALUE",
+     "inputField": "Question",
+     "operator": "=",
+     "value": "I have the tools I need to do my job well"
+    }
+   ]
+  },
+  "options": {
+   "items": {
+    "answer": "Answer",
+    "question": "Question",
+    "scale": "AUTO",
+    "sort": "NET",
+    "group": "Department"
+   }
+  },
+  "width": 1060,
+  "height": 380,
+  "wait": 1500,
+  "showcaseHeight": 380,
+  "caption": "Live: two statements compared across departments.",
+  "expect": {
+   "selector": "rect.seg",
+   "min": 40
+  }
+ },
+ {
+  "name": "enps",
+  "showcase": true,
+  "data": "sample-data/enps.csv",
+  "options": {
+   "items": {
+    "answer": "Recommend score",
+    "group": "Department"
+   }
+  },
+  "width": 1060,
+  "height": 300,
+  "wait": 1500,
+  "showcaseHeight": 300,
+  "caption": "Live: a 0 to 10 'would you recommend working here' question, shown as a Net Promoter Score by department.",
+  "expect": {
+   "text": "NPS"
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/survey_responses.csv",
+  "options": {
+   "items": {
+    "answer": "Answer",
+    "question": "Question",
+    "scale": "AUTO",
+    "sort": "NET"
+   }
+  },
+  "width": 1000,
+  "height": 420,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "(function(){var M=window.__lik.model,R=M.rows.find(function(r){return r.q==='Workload in my team is manageable'});return M.sc.kind==='known' && M.sc.order[0]==='Strongly disagree' && M.sc.order[4]==='Strongly agree' && R.n===618 && Math.abs(R.net-(-0.3284789644012945))<1e-9 && M.qs[M.qs.length-1]==='Workload in my team is manageable' && M.excluded>100})()",
+    "expectTruthy": true
+   },
+   {
+    "hover": "rect.seg",
+    "nth": 7
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "rect.seg",
+    "nth": 7
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.type==='AND'",
+    "expectTruthy": true
+   },
+   {
+    "click": "text.qlab",
+    "nth": 2
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     5,
+     410
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Department",
+     "operator": "=",
+     "value": "Finance"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__lik.model.total<700",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     520,
+     420
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "npsvalue",
+  "data": "sample-data/enps.csv",
+  "options": {
+   "items": {
+    "answer": "Recommend score"
+   }
+  },
+  "width": 900,
+  "height": 200,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__lik.model.sc.kind==='nps' && Math.abs(window.__lik.model.rows[0].net-(-0.2765625))<1e-9",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "custom",
+  "data": "sample-data/survey_responses.csv",
+  "options": {
+   "items": {
+    "answer": "Answer",
+    "question": "Question",
+    "scale": "AUTO",
+    "sort": "NET",
+    "order": "Strongly agree, Agree, Neither agree nor disagree, Disagree, Strongly disagree"
+   }
+  },
+  "width": 900,
+  "height": 400,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__lik.model.sc.kind==='custom' && window.__lik.model.sc.order[0]==='Strongly agree'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "toomany",
+  "data": "sample-data/survey_responses.csv",
+  "options": {
+   "items": {
+    "answer": "Respondent"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "expect": {
+   "text": "rating scale"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Question",
+    "type": "TEXT"
+   },
+   {
+    "name": "Answer",
+    "type": "TEXT"
+   }
+  ],
+  "options": {
+   "items": {
+    "answer": "Answer",
+    "question": "Question",
+    "scale": "AUTO",
+    "sort": "NET"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/survey_responses.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Answers"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "answer": "Score",
+    "question": "Item",
+    "group": "Region"
+   }
+  },
+  "width": 1100,
+  "height": 700,
+  "wait": 8000,
+  "actions": [
+   {
+    "eval": "window.__lik.model.rows.length===320 && window.__lik.model.sc.kind==='numeric' && window.__lik.model.total===400000",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/survey_responses.csv",
+  "options": {
+   "items": {
+    "answer": "Answer",
+    "question": "Question",
+    "scale": "AUTO",
+    "sort": "NET"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

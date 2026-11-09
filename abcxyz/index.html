@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #main { position: absolute; inset: 0; display: flex; }
+        #chart { flex: 1; position: relative; min-width: 0; }
+        #side { width: 290px; flex: none; background: #f6f6f3; border-left: 1px solid #e1e0d9; overflow: auto; padding: 10px 12px; box-sizing: border-box; }
+        body.narrow #side { display: none; }
+        svg { display: block; position: absolute; left: 0; top: 0; }
+        .cell { cursor: pointer; } .cell:hover rect.bg { stroke: #0b0b0b; stroke-width: 1.5; }
+        h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52514e; margin: 12px 0 6px; } h3:first-child { margin-top: 0; }
+        .stat { color: #52514e; margin-bottom: 4px; line-height: 1.45; }
+        .cls { margin-bottom: 7px; line-height: 1.4; } .cls b { display: inline-block; min-width: 26px; } .cls .p { color: #52514e; font-size: 11px; }
+        .note { color: #898781; font-size: 11px; margin-top: 6px; line-height: 1.4; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 6px 9px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="main"><!-- This element is where the view will render -->
+    <div id="chart"><svg id="svg"></svg></div>
+    <div id="side"></div>
+</div>
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+
+    // Cell colour by priority: high value and steady demand darkest; low value and erratic demand palest.
+    var CELL = { AX: "#184f95", AY: "#2a6fc4", AZ: "#3987e5", BX: "#3987e5", BY: "#6fa8ec", BZ: "#9ec5f4", CX: "#9ec5f4", CY: "#c9def8", CZ: "#e8f1fc" }, SELECT = "#2161D9";
+    var ADVICE = {
+        AX: "High value, steady demand: forecast well; keep tight, frequent replenishment and low safety stock.",
+        AY: "High value, variable demand: review forecasts often; size safety stock carefully.",
+        AZ: "High value, erratic demand: avoid holding much stock; order to demand where possible and review individually.",
+        BX: "Medium value, steady demand: automate replenishment with periodic review.",
+        BY: "Medium value, variable demand: standard safety stock; review periodically.",
+        BZ: "Medium value, erratic demand: consider ordering to demand; watch for obsolete stock.",
+        CX: "Low value, steady demand: automate fully; larger, less frequent orders.",
+        CY: "Low value, variable demand: simple rules and generous safety stock are cheap.",
+        CZ: "Low value, erratic demand: candidates for make-to-order, consolidation or delisting."
+    };
+    var S = { gen: 0, sel: null };
+    window.__abc = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { if (v === null || !isFinite(v)) return "n/a"; var a = Math.abs(v); return a >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(0) + "k" : a >= 1e3 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toString() : (+v.toPrecision(3)).toString(); };
+    var pct = function (v) { return (100 * v).toFixed(v >= 0.1 ? 0 : 1) + "%"; };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function it() { return omniscope.view.context().options.items || {}; }
+    function fld(x) { return x ? (typeof x === "string" ? x : x.inputField) : null; }
+    function tval(v) { if (v === null || v === undefined || v === "") return null; if (typeof v === "number") return v; var s = typeof v === "object" ? v.lower : v; var t = Date.parse(typeof s === "string" && s.length === 10 ? s + "T00:00:00Z" : s); return isNaN(t) ? null : t; }
+    function num(v, d, lo, hi) { v = v === null || v === undefined || v === "" || isNaN(+v) ? d : +v; return Math.max(lo, Math.min(hi, v)); }
+
+    function load() {
+        introIf(JSON.stringify(it()) + "|" + JSON.stringify(omniscope.view.context().dataConfig.filter || null));
+        var o = it(), F = { i: fld(o.item), d: fld(o.date), q: fld(o.demand), v: fld(o.value) };
+        if (!F.i || !F.d || !F.q) { message("Choose the Items field (SKU or product), the date (Dated by) and the Demand (units sold or used). Add a Value field to rank by revenue."); return; }
+        var unit = o.period === "WEEK" ? "WEEK" : o.period === "QUARTER" ? "QUARTER" : "MONTH";
+        var ms = [{ inputField: F.q, function: "SUM", name: "q" }]; if (F.v) ms.push({ inputField: F.v, function: "SUM", name: "v" });
+        var q = { groupings: [{ inputField: F.i, type: "UNIQUE_VALUES" }, { inputField: F.d, type: "HISTOGRAM", dateUnit: unit, histogramInterval: 1 }], measures: ms, range: { start: 0, length: 1000000 } };
+        var f = omniscope.view.context().dataConfig.filter; if (f && (!f.filters || f.filters.length)) q.filter = f;
+        var gen = ++S.gen; omniscope.view.busy(true);
+        omniscope.view.queryBuilder().table(q).on("load", function (e) { if (gen !== S.gen) return; omniscope.view.busy(false); build(F, unit, e.data.records); draw(); })
+            .on("error", function (e) { omniscope.view.busy(false); omniscope.view.error((e.data && e.data.message) || "Query failed", e.data); }).execute();
+    }
+
+    function build(F, unit, recs) {
+        var o = it(), aCut = num(o.aShare, 80, 1, 99) / 100, bCut = Math.max(aCut, num(o.bShare, 95, 1, 100) / 100), xCut = num(o.xCV, 0.5, 0, 10), yCut = Math.max(xCut, num(o.yCV, 1.0, 0, 20));
+        var items = new Map(), periods = new Set();
+        recs.forEach(function (r) { if (r[0] === null) return; var t = tval(r[1]); if (t === null) return; var k = String(r[0]); periods.add(t); if (!items.has(k)) items.set(k, { name: k, raw: r[0], q: new Map(), val: 0, units: 0 }); var I = items.get(k), q = +r[2] || 0; I.q.set(t, (I.q.get(t) || 0) + q); I.units += q; I.val += F.v ? (+r[3] || 0) : q; });
+        if (!items.size) { S.model = null; message("No data to show. Check the filters."); return; }
+        var ps = Array.from(periods).sort(function (a, b) { return a - b; });
+        if (ps.length < 3) { S.model = null; message("Demand variability needs at least 3 periods; found " + ps.length + ". Choose a shorter Period or a longer date range."); return; }
+        message(null);
+        // XYZ: coefficient of variation of demand per period, counting periods with no demand as zero
+        var list = Array.from(items.values());
+        list.forEach(function (I) { var s = ps.map(function (t) { return I.q.get(t) || 0; }), m = d3.mean(s), sd = d3.deviation(s) || 0; I.cv = m > 0 ? sd / m : Infinity; I.active = s.filter(function (v) { return v > 0; }).length; I.x = I.cv <= xCut ? "X" : I.cv <= yCut ? "Y" : "Z"; });
+        // ABC: rank by value; A until the cumulative share passes the A threshold (the item that crosses it is still A)
+        list.sort(function (a, b) { return b.val - a.val || (a.name < b.name ? -1 : 1); });
+        var total = d3.sum(list, function (I) { return I.val; }), acc = 0;
+        list.forEach(function (I, r) { var before = total ? acc / total : 0; acc += I.val; I.cum = total ? acc / total : 0; I.rank = r; I.a = before < aCut ? "A" : before < bCut ? "B" : "C"; I.cls = I.a + I.x; });
+        var cells = {}; "ABC".split("").forEach(function (a) { "XYZ".split("").forEach(function (x) { cells[a + x] = { k: a + x, a: a, x: x, n: 0, val: 0, units: 0, items: [] }; }); });
+        list.forEach(function (I) { var c = cells[I.cls]; c.n++; c.val += I.val; c.units += I.units; c.items.push(I); });
+        S.model = { F: F, unit: unit, list: list, cells: cells, total: total, np: ps.length, cuts: [aCut, bCut, xCut, yCut], ps: ps };
+        var sel = omniscope.view.context().viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+    }
+
+    var svg = d3.select("#svg");
+    function draw() {
+        var M = S.model; tip();
+        if (!M) { svg.selectAll("*").remove(); document.getElementById("side").innerHTML = ""; return; }
+        document.body.classList.toggle("narrow", window.innerWidth < 640); var intro = introDone();
+        var box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight; svg.attr("width", W).attr("height", H); svg.selectAll("*").remove();
+        var wide = W > 620, gw = wide ? W * 0.56 : W - 20, top = 50, L = 64, size = Math.max(40, Math.min((gw - L - 10) / 3, (H - top - 50) / 3));
+        var g = svg.append("g").attr("transform", "translate(" + L + "," + top + ")"), sel = S.sel;
+        var xl = { X: "X: steady", Y: "Y: variable", Z: "Z: erratic" }, al = { A: "A", B: "B", C: "C" };
+        "ABC".split("").forEach(function (a, ri) {
+            "XYZ".split("").forEach(function (x, ci) {
+                var c = M.cells[a + x], isSel = sel && sel.cls === c.k, dim = sel && sel.cls && !isSel, fill = CELL[c.k], ink = d3.lab(fill).l > 62 ? "#0b0b0b" : "#ffffff";
+                var e = g.append("g").attr("class", "cell").attr("transform", "translate(" + ci * size + "," + ri * size + ")").attr("opacity", dim ? 0.35 : 1)
+                    .on("mousemove", function (ev) { tipCell(c, ev); }).on("mouseleave", tip).on("click", function (ev) { ev.stopPropagation(); selectClass(c); });
+                e.append("rect").attr("class", "bg").attr("x", 1.5).attr("y", 1.5).attr("width", size - 3).attr("height", size - 3).attr("rx", 4).attr("fill", fill).attr("stroke", isSel ? SELECT : "none").attr("stroke-width", 3);
+                e.append("text").attr("x", 10).attr("y", 22).style("font-weight", "bold").style("font-size", size > 110 ? "16px" : "13px").attr("fill", ink).text(c.k);
+                if (size > 70) {
+                    e.append("text").attr("x", size / 2).attr("y", size / 2).attr("text-anchor", "middle").style("font-size", size > 110 ? "20px" : "15px").style("font-weight", "bold").attr("fill", ink).text(c.n.toLocaleString());
+                    e.append("text").attr("x", size / 2).attr("y", size / 2 + 18).attr("text-anchor", "middle").style("font-size", "11px").attr("fill", ink).text("items, " + pct(M.total ? c.val / M.total : 0) + " of value");
+                } else e.append("text").attr("x", size / 2).attr("y", size / 2 + 8).attr("text-anchor", "middle").style("font-size", "11px").attr("fill", ink).text(c.n.toLocaleString());
+            });
+        });
+        var ax = svg.append("g").style("font-size", "11px").attr("fill", "#52514e");
+        "XYZ".split("").forEach(function (x, ci) { ax.append("text").attr("x", L + ci * size + size / 2).attr("y", top - 8).attr("text-anchor", "middle").text(xl[x]); });
+        "ABC".split("").forEach(function (a, ri) { var share = d3.sum("XYZ".split(""), function (x) { return M.cells[a + x].val; }) / (M.total || 1); ax.append("text").attr("x", L - 8).attr("y", top + ri * size + size / 2 - 6).attr("text-anchor", "end").style("font-weight", "bold").attr("fill", "#2b2a28").text(al[a]); ax.append("text").attr("x", L - 8).attr("y", top + ri * size + size / 2 + 9).attr("text-anchor", "end").text(pct(share)); });
+        var nA = M.list.filter(function (I) { return I.a === "A"; }).length;
+        var head = svg.append("text").attr("x", 10).attr("y", 18).style("font-size", "12.5px");
+        head.append("tspan").style("font-weight", "bold").text(M.list.length.toLocaleString() + " items: " + pct(nA / M.list.length) + " of them make up " + pct(d3.sum(M.list.filter(function (I) { return I.a === "A"; }), function (I) { return I.val; }) / (M.total || 1)) + " of " + (M.F.v ? M.F.v : M.F.q));
+        head.append("tspan").attr("fill", "#52514e").text("  (" + M.np + " " + M.unit.toLowerCase() + "s of demand)");
+        // Pareto curve
+        if (wide) {
+            var px = L + 3 * size + 40, pw = W - px - 16, ph = 3 * size, pg = svg.append("g").attr("transform", "translate(" + px + "," + top + ")");
+            var xs = d3.scaleLinear().domain([0, 1]).range([0, pw]), ys = d3.scaleLinear().domain([0, 1]).range([ph, 0]), n = M.list.length;
+            var bA = M.list.filter(function (I) { return I.a === "A"; }).length / n, bB = M.list.filter(function (I) { return I.a !== "C"; }).length / n;
+            [[0, bA, "#e8f1fc", "A"], [bA, bB, "#f2f7fd", "B"], [bB, 1, "#fcfcfb", "C"]].forEach(function (z) { pg.append("rect").attr("x", xs(z[0])).attr("width", Math.max(0, xs(z[1]) - xs(z[0]))).attr("y", 0).attr("height", ph).attr("fill", z[2]); pg.append("text").attr("x", (xs(z[0]) + xs(z[1])) / 2).attr("y", 14).attr("text-anchor", "middle").style("font-size", "11px").style("font-weight", "bold").attr("fill", "#52514e").text(xs(z[1]) - xs(z[0]) > 14 ? z[3] : ""); });
+            var step = Math.max(1, Math.floor(n / 400)), pts = [[0, 0]]; M.list.forEach(function (I, i) { if (i % step === 0 || i === n - 1) pts.push([(i + 1) / n, I.cum]); });
+            pg.append("path").attr("d", d3.line().x(function (p) { return xs(p[0]); }).y(function (p) { return ys(p[1]); })(pts)).attr("fill", "none").attr("stroke", "#2a78d6").attr("stroke-width", 2);
+            pg.append("g").attr("transform", "translate(0," + ph + ")").call(d3.axisBottom(xs).ticks(4).tickFormat(d3.format(".0%"))).selectAll("text").attr("fill", "#52514e");
+            pg.append("g").call(d3.axisLeft(ys).ticks(4).tickFormat(d3.format(".0%"))).selectAll("text").attr("fill", "#52514e");
+            pg.selectAll(".domain, .tick line").attr("stroke", "#c9c8c1");
+            pg.append("text").attr("x", pw / 2).attr("y", ph + 30).attr("text-anchor", "middle").style("font-size", "11px").attr("fill", "#52514e").text("Share of items, highest value first");
+            pg.append("text").attr("x", 0).attr("y", -8).style("font-size", "11px").attr("fill", "#52514e").text("Cumulative share of value");
+        }
+        if (intro) { var cs = svg.selectAll("g.cell"); fadeIn(cs, 380, 70); linesIn(svg, 1100); }
+        side();
+    }
+
+    function side() {
+        var M = S.model, el = document.getElementById("side"), c = M.cuts;
+        var h = '<h3>Classes</h3><div class="stat">A: the items that make up the first ' + Math.round(c[0] * 100) + '% of value; B: up to ' + Math.round(c[1] * 100) + '%; C: the rest. X: coefficient of variation of demand up to ' + c[2] + '; Y: up to ' + c[3] + '; Z: above, or no demand.</div><h3>Typical policies</h3>';
+        "AX AY AZ BX BY BZ CX CY CZ".split(" ").forEach(function (k) { var cl = M.cells[k]; if (!cl.n) return; h += '<div class="cls"><b style="color:' + (k[0] === "C" ? "#52514e" : "#184f95") + '">' + k + '</b> <span class="p">' + cl.n.toLocaleString() + ' items, ' + pct(M.total ? cl.val / M.total : 0) + ' of value</span><br>' + esc(ADVICE[k]) + '</div>'; });
+        h += '<div class="note">Common practice, not rules. Variability is measured over ' + M.np + ' ' + M.unit.toLowerCase() + 's, counting periods without demand as zero. Click a cell to select its items.</div>';
+        el.innerHTML = h;
+    }
+    function tipCell(c, ev) {
+        var M = S.model, top = c.items.slice(0, 3).map(function (I) { return esc(I.name); }).join(", ");
+        show('<b>' + c.k + '</b> <span class="k">(' + c.n.toLocaleString() + ' items)</span><br><span class="k">' + esc(M.F.v || M.F.q) + ':</span> ' + fmt(c.val) + ' (' + pct(M.total ? c.val / M.total : 0) + ')<br><span class="k">Units:</span> ' + fmt(c.units) + (c.n ? '<br><span class="k">Median variability (CV):</span> ' + (d3.median(c.items, function (I) { return isFinite(I.cv) ? I.cv : null; }) || 0).toFixed(2) + '<br><span class="k">Largest:</span> ' + top : ''), ev);
+    }
+    function show(html, ev) { var el = document.getElementById("tooltip"); el.innerHTML = html; el.style.display = "block"; var X = ev.clientX + 14, Y = ev.clientY + 14; if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14; if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14; el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px"; }
+    function tip() { document.getElementById("tooltip").style.display = "none"; }
+
+    function publish(f, meta) { S.sel = meta; omniscope.view.context().viewSelection = f ? { filter: f, meta: meta } : null; omniscope.view.updated(); draw(); }
+    function selectClass(c) {
+        if (S.sel && S.sel.cls === c.k) return publish(null, null);
+        if (!c.n) return;
+        if (c.n > 3000) { omniscope.view.error(c.k + " has " + c.n.toLocaleString() + " items; selection is limited to 3,000."); return; }
+        var F = S.model.F.i, eq = function (I) { return { type: "FIELD_VALUE", inputField: F, operator: "=", value: I.raw }; };
+        publish(c.n === 1 ? eq(c.items[0]) : { type: "OR", filters: c.items.map(eq) }, { cls: c.k });
+    }
+    window.__abc.selectClass = function (k) { selectClass(S.model.cells[k]); };
+
+    document.getElementById("chart").addEventListener("click", function () { if (S.sel) publish(null, null); omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], function () { message(null); load(); });
+    omniscope.view.on("resize", function () { if (S.model) draw(); });
+})();
+</script>
+</body>
+</html>

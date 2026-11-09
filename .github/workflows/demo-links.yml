@@ -1,0 +1,21 @@
+name: Demo links
+
+# Manual: checks that every item with a demo.ioz has its demo project on the public demo server,
+# and lists the ones that are missing. It changes nothing.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  demo-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check:demo-links

@@ -1,0 +1,271 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/events.csv",
+  "options": {
+   "items": {
+    "user": "Visitor",
+    "event": "Event",
+    "time": "Time",
+    "steps": "Visited site, Viewed product, Added to basket, Started checkout, Purchased"
+   }
+  },
+  "width": 1060,
+  "height": 500,
+  "wait": 1500,
+  "showcaseHeight": 500,
+  "caption": "Live: an illustrative web shop event log of 8,000 visitors. Hover a bar for counts and times; click a bar or a pale drop-off cap to select those visitors.",
+  "expect": {
+   "selector": "rect.bar",
+   "min": 5
+  }
+ },
+ {
+  "name": "channels",
+  "showcase": true,
+  "data": "sample-data/events.csv",
+  "options": {
+   "items": {
+    "user": "Visitor",
+    "event": "Event",
+    "time": "Time",
+    "steps": "Visited site, Viewed product, Added to basket, Started checkout, Purchased",
+    "group": "Channel"
+   }
+  },
+  "width": 1060,
+  "height": 500,
+  "wait": 1500,
+  "showcaseHeight": 500,
+  "caption": "Live: the same funnel compared by acquisition channel.",
+  "expect": {
+   "selector": "rect.bar",
+   "min": 15
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/events.csv",
+  "options": {
+   "items": {
+    "user": "Visitor",
+    "event": "Event",
+    "time": "Time",
+    "steps": "Visited site, Viewed product, Added to basket, Started checkout, Purchased"
+   }
+  },
+  "width": 1000,
+  "height": 500,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "JSON.stringify(window.__fun.model.all.reach)==='[8000,5909,2515,1423,748]' && window.__fun.model.worst===2",
+    "expectTruthy": true
+   },
+   {
+    "hover": "rect.bar",
+    "nth": 2
+   },
+   {
+    "eval": "document.getElementById('tooltip').style.display==='block'",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "hover"
+   },
+   {
+    "click": "rect.bar",
+    "nth": 4
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "omniscope.view.context().viewSelection.filter.filters.length===748",
+    "expectTruthy": true
+   },
+   {
+    "click": "rect.drop",
+    "nth": 3
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "clickAt": [
+     10,
+     490
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Device",
+     "operator": "=",
+     "value": "Desktop"
+    }
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.__fun.model.all.reach[0]<4000",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     560,
+     420
+    ]
+   },
+   {
+    "screenshot": "narrow"
+   }
+  ]
+ },
+ {
+  "name": "window",
+  "data": "sample-data/events.csv",
+  "options": {
+   "items": {
+    "user": "Visitor",
+    "event": "Event",
+    "time": "Time",
+    "steps": "Visited site, Viewed product, Added to basket, Started checkout, Purchased",
+    "window": 7
+   }
+  },
+  "width": 900,
+  "height": 460,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "JSON.stringify(window.__fun.model.all.reach)==='[8000,5909,2515,1373,717]'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "auto",
+  "data": "sample-data/events.csv",
+  "options": {
+   "items": {
+    "user": "Visitor",
+    "event": "Event",
+    "time": "Time"
+   }
+  },
+  "width": 900,
+  "height": 460,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__fun.model.auto && window.__fun.model.steps[0]==='Visited site' && window.__fun.model.steps.length>=4",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "badsteps",
+  "data": "sample-data/events.csv",
+  "options": {
+   "items": {
+    "user": "Visitor",
+    "event": "Event",
+    "time": "Time",
+    "steps": "Signed up, Paid"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "No events match"
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Visitor",
+    "type": "TEXT"
+   },
+   {
+    "name": "Event",
+    "type": "TEXT"
+   },
+   {
+    "name": "Time",
+    "type": "DATE"
+   }
+  ],
+  "options": {
+   "items": {
+    "user": "Visitor",
+    "event": "Event",
+    "time": "Time",
+    "steps": "Visited site, Viewed product, Added to basket, Started checkout, Purchased"
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No events match"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/events.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose the Users"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "user": "User",
+    "event": "Action",
+    "time": "At",
+    "steps": "Open, Browse, Select, Basket, Pay, Confirm"
+   }
+  },
+  "width": 1100,
+  "height": 600,
+  "wait": 10000,
+  "actions": [
+   {
+    "eval": "window.__fun.model.all.reach[0]>50000 && window.__fun.model.steps.length===6",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/events.csv",
+  "options": {
+   "items": {
+    "user": "Visitor",
+    "event": "Event",
+    "time": "Time",
+    "steps": "Visited site, Viewed product, Added to basket, Started checkout, Purchased"
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

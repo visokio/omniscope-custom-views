@@ -1,0 +1,154 @@
+{
+  "name": "Strata",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "tags": [
+    "custom",
+    "time",
+    "timeline",
+    "gantt",
+    "stacked",
+    "strata",
+    "layers"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "dataLimit": 50000,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "layer": {
+        "displayName": "Layer",
+        "detail": "What each line is - a session, a ticket, a project. Its rows are stretches of time; the line runs from its first start to its last end.",
+        "type": "FIELD",
+        "mandatory": true
+      },
+      "start": {
+        "displayName": "Start",
+        "detail": "When each row's stretch of time starts.",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": ["DATE"]
+      },
+      "end": {
+        "displayName": "End",
+        "detail": "When each row's stretch of time ends.",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": ["DATE"]
+      },
+      "label": {
+        "displayName": "Label",
+        "detail": "The name shown for a line - on it, and when pointing at it. Defaults to the Layer value.",
+        "type": "FIELD"
+      },
+      "colour": {
+        "displayName": "Colour by",
+        "detail": "Lines sharing a value share a colour - e.g. a team or a workspace. Defaults to each layer its own.",
+        "type": "FIELD"
+      },
+      "emphasis": {
+        "displayName": "Emphasis",
+        "detail": "Per row, 2 strong, 1 medium, 0 faint (the default). Each pixel of a line shows the strongest stretch in it, so a moment of 2 is never lost.",
+        "type": "FIELD",
+        "validFieldTypes": ["NUMBER"]
+      },
+      "momentAt": {
+        "displayName": "Moment time",
+        "detail": "Rows with a time here (and no Start or End) are moments on their line, at that time - a commit, say, appended from a table of its own - drawn as a tiny triangle above it. Rows whose Start and End are the same are moments too.",
+        "type": "FIELD",
+        "validFieldTypes": ["DATE"]
+      },
+      "moment": {
+        "displayName": "Moment kind",
+        "detail": "What kind each moment is. With this field, the commonest kind is a pinch on the line (a tiny triangle above it, its point on the line) and the next a badge with a tick (a merge, say).",
+        "type": "FIELD"
+      },
+      "foot": {
+        "displayName": "Foot line",
+        "detail": "Rows with no Layer but a value here are drawn as a heavy line along the foot - up to two values, the more frequent darker. Blank: the foot line is drawn from the lines, wherever any is strong.",
+        "type": "FIELD"
+      },
+      "order": {
+        "displayName": "Stacking",
+        "detail": "Longest-lived on top: short-lived layers slide in beneath and lift the long ones. Longest-lived at the bottom: the long ones lie flat, short-lived layers ride on top of them. Oldest at the bottom: new layers go on top.",
+        "type": "CHOICE",
+        "values": ["Longest-lived on top", "Longest-lived at the bottom", "Oldest at the bottom"]
+      },
+      "labels": {
+        "displayName": "Line labels",
+        "detail": "Where the lines still open at the right edge are named; point at any line for its name.",
+        "type": "CHOICE",
+        "values": ["At the end", "At the start", "None"]
+      },
+      "intro": {
+        "displayName": "Opening",
+        "detail": "How the view opens, the first time it loads: glide in from the whole range to about a week on the screen, or replay the whole range from left to right, or neither.",
+        "type": "CHOICE",
+        "values": ["Glide in", "Replay the timeline", "None"]
+      },
+      "workday": {
+        "displayName": "Working-day marks",
+        "detail": "Under the foot line, each day's 8am-4pm with dots at 8, 12 and 4.",
+        "type": "TOGGLE"
+      },
+      "standup": {
+        "displayName": "Daily meeting",
+        "detail": "A time such as 09:30, marked on weekdays with the working-day marks.",
+        "type": "TEXT"
+      }
+    },
+    "structure": {
+      "toolbar": ["layer", "start", "end", "label", "colour", "emphasis", "momentAt", "moment", "foot", "order", "labels", "intro", "workday", "standup"],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [{
+      "displayName": "Chart",
+      "rows": [
+        {"cells": [{"option": "layer", "usePrefixTitle": false}]},
+        {"cells": [{"option": "start", "usePrefixTitle": false}]},
+        {"cells": [{"option": "end", "usePrefixTitle": false}]},
+        {"cells": [{"option": "order", "usePrefixTitle": false}]}
+      ]
+    }, {
+      "displayName": "Line",
+      "rows": [
+        {"cells": [{"option": "label", "usePrefixTitle": false}]},
+        {"cells": [{"option": "labels", "usePrefixTitle": false}]},
+        {"cells": [{"option": "colour", "usePrefixTitle": false}]},
+        {"cells": [{"option": "emphasis", "usePrefixTitle": false}]},
+        {"cells": [{"option": "momentAt", "usePrefixTitle": false}]},
+        {"cells": [{"option": "moment", "usePrefixTitle": false}]}
+      ]
+    }, {
+      "displayName": "Foot",
+      "rows": [
+        {"cells": [{"option": "foot", "usePrefixTitle": false}]},
+        {"cells": [{"option": "workday", "usePrefixTitle": false}]},
+        {"cells": [{"option": "standup", "usePrefixTitle": false}]}
+      ]
+    }, {
+      "displayName": "Animation",
+      "rows": [
+        {"cells": [{"option": "intro", "usePrefixTitle": false}]}
+      ]
+    }]
+  },
+  "defaultOptions": {
+    "items": {
+      "order": "Longest-lived on top",
+      "labels": "At the end",
+      "intro": "Glide in",
+      "workday": true,
+      "standup": "09:30"
+    },
+    "pane": {}
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 200
+  }
+}

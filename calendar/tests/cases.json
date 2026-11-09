@@ -1,0 +1,312 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/visits.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Visitors",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 760,
+  "height": 320,
+  "showcaseHeight": 320,
+  "wait": 1500,
+  "caption": "Live: daily visitors to an invented museum in 2024 and 2025. Mondays are grey: the museum is closed.",
+  "expect": {
+   "selector": ".day",
+   "min": 731,
+   "max": 731,
+   "text": "Visitors (sum)"
+  },
+  "actions": [
+   {
+    "eval": "Object.keys(__calendar.days).length === 620 && document.querySelectorAll('.day:not(.nodata)').length === 620",
+    "expectTruthy": true
+   },
+   {
+    "eval": "Object.values(__calendar.days).reduce((a, d) => a + d.value, 0) === 525528",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.querySelector('.day[data-day=\"2024-01-01\"]').classList.contains('nodata') && !document.querySelector('.day[data-day=\"2024-01-02\"]').classList.contains('nodata')",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/visits.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Visitors",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 760,
+  "height": 320,
+  "wait": 1500,
+  "actions": [
+   {
+    "hover": ".day[data-day='2025-07-05']"
+   },
+   {
+    "eval": "document.getElementById('tooltip').textContent.indexOf('Sat 5 Jul 2025') === 0",
+    "expectTruthy": true
+   },
+   {
+    "click": ".day[data-day='2025-07-05']"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "JSON.stringify(omniscope.view.context().viewSelection.filter.filters.map(f => [f.operator, f.value])) === JSON.stringify([['>=', '2025-07-05'], ['<', '2025-07-06']])",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.querySelectorAll('.day.faded').length === 730",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "selected"
+   },
+   {
+    "click": ".day[data-day='2025-07-05']"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "click": ".day[data-day='2025-03-12']"
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "click": ".day[data-day='2025-03-10']"
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "eval": "document.querySelectorAll('.day.faded').length === 0",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "filter",
+  "data": "sample-data/visits.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "function": "RECORD_COUNT"
+    }
+   }
+  },
+  "width": 760,
+  "height": 320,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "__calendar.hi === 3",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "AND",
+     "filters": [
+      {
+       "type": "FIELD_VALUE",
+       "inputField": "Gallery",
+       "operator": "=",
+       "value": "Maritime"
+      },
+      {
+       "type": "FIELD_VALUE",
+       "inputField": "Date",
+       "operator": ">=",
+       "value": "2025-01-01"
+      }
+     ]
+    }
+   },
+   {
+    "eval": "__calendar.hi === 1 && __calendar.years.join() === '2025,2025' && document.querySelectorAll('.day').length === 365",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "one-year"
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/visits.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Visitors",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 760,
+  "height": 320,
+  "wait": 1500,
+  "actions": [
+   {
+    "resize": [
+     220,
+     120
+    ]
+   },
+   {
+    "eval": "document.getElementById('cal').getBoundingClientRect().width <= 220 && document.getElementById('legend').children.length === 0 && __calendar.cell >= 3",
+    "expectTruthy": true
+   },
+   {
+    "screenshot": "220x120"
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Date",
+    "type": "DATE"
+   },
+   {
+    "name": "Visitors",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Visitors",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 500,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "No data to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/visits.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 500,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "Choose a Date field"
+  }
+ },
+ {
+  "name": "too-many-years",
+  "generate": "tests/wide.js",
+  "options": {
+   "items": {
+    "date": "Day",
+    "value": {
+     "inputField": "Amount",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 500,
+  "height": 300,
+  "wait": 1000,
+  "expect": {
+   "text": "The dates span 31 years"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "date": "Day",
+    "value": {
+     "inputField": "Amount",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 760,
+  "height": 400,
+  "wait": 3000,
+  "actions": [
+   {
+    "eval": "Object.keys(__calendar.days).length === 3653 && document.querySelectorAll('.day').length === 3653 && __calendar.years.join() === '2016,2025'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.getElementById('main').scrollHeight > 400",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "twenty-years",
+  "generate": "tests/large.js",
+  "generateArgs": {
+   "years": 20
+  },
+  "options": {
+   "items": {
+    "date": "Day",
+    "value": {
+     "inputField": "Amount",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 760,
+  "height": 400,
+  "wait": 4000,
+  "actions": [
+   {
+    "eval": "document.querySelectorAll('.day').length === 7305 && __calendar.drawMs < 1500",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/visits.csv",
+  "options": {
+   "items": {
+    "date": "Date",
+    "value": {
+     "inputField": "Visitors",
+     "function": "SUM"
+    }
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500
+ }
+]

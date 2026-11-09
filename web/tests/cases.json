@@ -1,0 +1,423 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/offices.csv",
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Article",
+     "function": "MIN"
+    }
+   }
+  },
+  "width": 760,
+  "height": 520,
+  "showcaseHeight": 520,
+  "wait": 2000,
+  "caption": "Live: a Wikipedia article in a report. Page URL uses the Min function here, so one page is always shown.",
+  "actions": [
+   {
+    "eval": "document.getElementById('page').src==='https://en.wikipedia.org/wiki/Berlin' && document.getElementById('address').textContent==='https://en.wikipedia.org/wiki/Berlin' && document.getElementById('open').href==='https://en.wikipedia.org/wiki/Berlin'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "map",
+  "showcase": true,
+  "data": "sample-data/offices.csv",
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Map",
+     "function": "MAX"
+    },
+    "showBar": false
+   }
+  },
+  "width": 760,
+  "height": 420,
+  "showcaseHeight": 420,
+  "wait": 2000,
+  "caption": "Live: an OpenStreetMap map, one of the many pages made to be embedded, with the address bar hidden.",
+  "actions": [
+   {
+    "eval": "document.getElementById('page').src.indexOf('https://www.openstreetmap.org/export/embed.html?bbox=')===0 && getComputedStyle(document.getElementById('bar')).display==='none'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/offices.csv",
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Office",
+   "operator": "=",
+   "value": "London"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Map",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 700,
+  "height": 420,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "document.getElementById('page').src.indexOf('marker=51.507')>0",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     300,
+     14
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "eval": "window.__loads=0; document.getElementById('page').addEventListener('load',function(){window.__loads++}); true",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     600,
+     380
+    ]
+   },
+   {
+    "eval": "window.__loads===0",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Office",
+     "operator": "=",
+     "value": "Tokyo"
+    }
+   },
+   {
+    "eval": "document.getElementById('page').src.indexOf('marker=35.676')>0",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Region",
+     "operator": "=",
+     "value": "Europe"
+    }
+   },
+   {
+    "eval": "document.body.innerText.indexOf('No single page to show')>=0 && getComputedStyle(document.getElementById('page')).display==='none'",
+    "expectTruthy": true
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Office",
+     "operator": "=",
+     "value": "Sydney"
+    }
+   },
+   {
+    "update": {
+     "measures": {
+      "inputField": "Article",
+      "function": "SINGLETON"
+     },
+     "showBar": true
+    }
+   },
+   {
+    "eval": "document.getElementById('page').src==='https://en.wikipedia.org/wiki/Sydney'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "addresses",
+  "generate": "tests/urls.js",
+  "generateArgs": {
+   "urls": [
+    "www.example.org/page"
+   ]
+  },
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Address",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "document.getElementById('page').src==='https://www.example.org/page'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "toUrl('/web/tests/stub-page.html').url==='/web/tests/stub-page.html' && toUrl('//www.example.org/x').url==='https://www.example.org/x' && toUrl('ftp://example.org').error==='scheme' && toUrl('hello world').error==='text'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "same-server-path",
+  "generate": "tests/urls.js",
+  "generateArgs": {
+   "urls": [
+    "/web/tests/stub-page.html"
+   ]
+  },
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Address",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "document.getElementById('page').contentDocument.title==='Stand-in page'",
+    "expectTruthy": true
+   },
+   {
+    "eval": "(function(){var w=document.getElementById('page').contentWindow;try{w.eval(\"top.location.href='/tools/harness/host.html?navigated'\")}catch(e){return 'threw '+e.name}return 'no throw'})()"
+   },
+   {
+    "wait": 800
+   },
+   {
+    "eval": "window.parent.location.search===''",
+    "expectTruthy": true
+   },
+   {
+    "eval": "document.getElementById('page').contentDocument.title==='Stand-in page'",
+    "expectTruthy": true
+   }
+  ],
+  "expect": {
+   "noErrors": false
+  }
+ },
+ {
+  "name": "script-refused",
+  "generate": "tests/urls.js",
+  "generateArgs": {
+   "urls": [
+    "javascript:alert(document.domain)"
+   ]
+  },
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Address",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 1200,
+  "expect": {
+   "text": "Only web pages can be shown"
+  },
+  "actions": [
+   {
+    "eval": "document.getElementById('page').src==='about:blank'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "small",
+  "data": "sample-data/offices.csv",
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Office",
+   "operator": "=",
+   "value": "Paris"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Map",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 160,
+  "height": 100,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "getComputedStyle(document.getElementById('bar')).display==='none' && document.getElementById('page').getBoundingClientRect().height===100",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     500,
+     300
+    ]
+   },
+   {
+    "eval": "getComputedStyle(document.getElementById('bar')).display==='flex'",
+    "expectTruthy": true
+   }
+  ]
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Map",
+    "type": "TEXT"
+   }
+  ],
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Map",
+     "function": "SINGLETON"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 800,
+  "expect": {
+   "text": "No single page to show"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/offices.csv",
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 800,
+  "expect": {
+   "text": "Choose the field with the web addresses"
+  }
+ },
+ {
+  "name": "record-count",
+  "data": "sample-data/offices.csv",
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "function": "RECORD_COUNT"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 800,
+  "expect": {
+   "text": "needs a field value, not a count"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/urls.js",
+  "generateArgs": {
+   "large": true
+  },
+  "routes": {
+   "https://www.openstreetmap.org/**": "tests/stub-page.html",
+   "https://en.wikipedia.org/**": "tests/stub-page.html",
+   "https://www.example.org/**": "tests/stub-page.html"
+  },
+  "filter": {
+   "type": "FIELD_VALUE",
+   "inputField": "Region",
+   "operator": "=",
+   "value": "East"
+  },
+  "options": {
+   "items": {
+    "measures": {
+     "inputField": "Map",
+     "function": "MAX"
+    }
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "wait": 2000,
+  "actions": [
+   {
+    "eval": "document.getElementById('page').src==='https://www.openstreetmap.org/export/embed.html?bbox=9998'",
+    "expectTruthy": true
+   }
+  ]
+ }
+]

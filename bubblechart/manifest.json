@@ -5,7 +5,10 @@
   "thumbnail": "thumbnail.png",
   "tags": [
     "custom",
-    "bubble"
+    "bubble",
+    "packed",
+    "circles",
+    "proportion"
   ],
   "sandbox": false,
   "autoPane": true,
@@ -14,6 +17,15 @@
   "supportsSelection": true,
   "options": {
     "items": {
+      "split": {
+        "displayName": "One bubble per",
+        "type": "GROUPING",
+        "mandatory": true,
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "One bubble for each value of this field, for example Product"
+      },
       "measures": {
         "displayName": "Size",
         "type": "MEASURE",
@@ -22,32 +34,49 @@
         "validMeasureResultTypes": [
           "NUMBER"
         ],
-        "detail": "Numerical measure value to size the markers by"
+        "detail": "The bubble's area is proportional to this measure, for example the sum of Revenue. Zero, negative and empty values are not drawn"
+      },
+      "colour": {
+        "displayName": "Group and colour by",
+        "type": "GROUPING",
+        "validGroupingTypes": [
+          "UNIQUE_VALUES"
+        ],
+        "detail": "Optional. Packs the bubbles into one circle per value of this field, for example Category, and colours them by it. If empty, each bubble is coloured by its own name"
+      },
+      "labels": {
+        "displayName": "Labels",
+        "type": "CHOICE",
+        "values": [
+          "NAME_VALUE",
+          "NAME",
+          "NONE"
+        ],
+        "displayValues": [
+          "Name and value",
+          "Name",
+          "None"
+        ],
+        "detail": "What to write inside bubbles big enough to hold it"
       },
       "paneX": {
         "displayName": "Pane X",
         "type": "GROUPING",
-        "list": true
+        "list": true,
+        "detail": "Optional. One chart per value, side by side"
       },
       "paneY": {
         "displayName": "Pane Y",
         "type": "GROUPING",
-        "list": true
-      },
-      "split": {
-        "displayName": "Split",
-        "type": "GROUPING",
-        "detail": "Categorical field to split/group and colour the markers by",
-        "mandatory": true,
-        "validGroupingTypes": [
-          "UNIQUE_VALUES"
-        ]
+        "list": true,
+        "detail": "Optional. One chart per value, one above the other"
       }
     },
     "structure": {
       "toolbar": [
         "measures",
-        "split"
+        "split",
+        "colour"
       ],
       "x": [
         "paneX"
@@ -56,39 +85,71 @@
         "paneY"
       ]
     },
-    "optionGroups": [{
-      "displayName": "Chart",
-      "rows": [{
-        "cells": [{
-          "option": "split",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Marker",
-      "rows": [{
-        "cells": [{
-          "option": "measures",
-          "usePrefixTitle": false
-        }]
-      }]
-    }, {
-      "displayName": "Pane/tile",
-      "rows": [{
-        "cells": [{
-          "option": "paneX",
-          "usePrefixTitle": false
-        }]
-      }, {
-        "cells": [{
-          "option": "paneY",
-          "usePrefixTitle": false
-        }]
-      }]
-    }]
+    "optionGroups": [
+      {
+        "displayName": "Bubbles",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "split",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "measures",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "colour",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "labels",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Pane/tile",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "paneX",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "paneY",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "defaultOptions": {
-    "items": {},
+    "items": {
+      "labels": "NAME_VALUE"
+    },
     "pane": {
       "yAxisHeaderWidth": 50,
       "paneWidth": 200,

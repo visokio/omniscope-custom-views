@@ -23,33 +23,39 @@
   "options": {
     "items": {
       "block": {
-        "displayName": "Blocks to execute (comma separated names)",
+        "displayName": "Blocks to execute",
         "type": "TEXT",
-        "mandatory": true
+        "detail": "Names of the workflow blocks to execute, separated by commas, e.g. Load orders, Report. Leave empty to execute the whole workflow."
       },
       "buttonText": {
         "displayName": "Button text",
-        "type": "TEXT"
+        "type": "TEXT",
+        "detail": "Text on the button. If empty: Execute"
       },
       "deleteExecutionOnFinish": {
-        "displayName": "Delete spawned project and data on execution finish",
-        "type": "TOGGLE"
+        "displayName": "Delete the copy when finished",
+        "type": "TOGGLE",
+        "detail": "Delete the copy of the project, and its execution data, when the execution ends. Off: a link to the copy is shown."
       },
       "paramNames": {
-        "displayName": "Param names (comma separated names)",
-        "type": "TEXT"
+        "displayName": "Parameters to show",
+        "type": "TEXT",
+        "detail": "Names of the project parameters to show, in this order, separated by commas. Leave empty to show them all."
       },
       "refreshThisReportOnFinish": {
-        "displayName": "Refresh this report on execution finish",
-        "type": "TOGGLE"
+        "displayName": "Refresh this report when finished",
+        "type": "TOGGLE",
+        "detail": "When the execution has finished, execute this report's block (from source) so the report shows what the execution wrote."
       },
       "setParametersUsingVariables": {
-        "displayName": "Set project parameters using report variables",
-        "type": "TOGGLE"
+        "displayName": "Take values from report variables",
+        "type": "TOGGLE",
+        "detail": "Set each parameter from the report variable with the same name, instead of from inputs the viewer types in. Parameters with no such variable are not set."
       },
       "showJobState": {
         "displayName": "Show job state",
-        "type": "TOGGLE"
+        "type": "TOGGLE",
+        "detail": "Show the execution's progress (queued, running, finished) under the button. Errors are always shown."
       }
     },
     "structure": {
@@ -58,6 +64,8 @@
         "buttonText",
         "paramNames",
         "deleteExecutionOnFinish",
+        "refreshThisReportOnFinish",
+        "setParametersUsingVariables",
         "showJobState"
       ],
       "x": [],
@@ -67,7 +75,9 @@
   "defaultOptions": {
     "items": {
       "deleteExecutionOnFinish": false,
-      "setParametersUsingVariables": false
+      "refreshThisReportOnFinish": false,
+      "setParametersUsingVariables": false,
+      "showJobState": true
     },
     "pane": {
       "yAxisHeaderWidth": 75,

@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+        body { font-family: Lato, "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 12px; color: #0b0b0b; background: #fcfcfb; }
+        #chart { position: absolute; inset: 0; }
+        svg { display: block; }
+        .line { fill: none; cursor: pointer; }
+        .pt { cursor: pointer; }
+        .axis text { fill: #898781; font-size: 10px; } .axis path, .axis line { stroke: #c3c2b7; }
+        .lab { font-size: 11px; cursor: pointer; }
+        #tooltip { position: absolute; display: none; pointer-events: none; background: rgba(252,252,251,.97); border: 1px solid rgba(11,11,11,.1); box-shadow: 0 4px 14px rgba(0,0,0,.15); border-radius: 6px; padding: 7px 10px; line-height: 1.45; white-space: nowrap; z-index: 5; }
+        #tooltip .k { color: #52514e; }
+        #message { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; text-align: center; color: #52514e; font-size: 14px; padding: 20px; background: #fcfcfb; z-index: 6; }
+    </style>
+
+    <!-- Put SCRIPT tags to load 3rd party libraries here -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+</head>
+
+<body>
+<div id="chart"><svg id="svg"></svg></div><!-- This element is where the view will render -->
+<div id="tooltip"></div>
+<div id="message"></div>
+
+<script src="/_global_/customview/v1/omniscope.js"></script><!-- Add the Omniscope custom view API -->
+
+<script>
+(function () {
+    if (!omniscope || !omniscope.view) throw new Error("Omniscope chart API is not loaded");
+    omniscope.view.on("load", function () { window.onerror = function (msg) { omniscope.view.error(msg); }; });
+
+    // Entrance animation: plays when new data arrives (first load, a filter or an option change), not when hovering or
+    // selecting; skipped when the viewer has asked the system for reduced motion.
+    var MOTION = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches), INTRO = { on: false, sig: null };
+    function introIf(sig) { if (sig !== INTRO.sig) { INTRO.sig = sig; INTRO.on = true; } }
+    function introDone() { var now = Date.now(); if (INTRO.on && MOTION) { INTRO.on = false; INTRO.t = now; return true; } return MOTION && INTRO.t && now - INTRO.t < 300; } // a redraw right after the entrance (e.g. a resize) replays it
+    function ease(t) { return t.duration(t.duration ? t.duration() : 600).ease(d3.easeCubicOut); }
+    function stag(n, total) { return Math.min(40, (total || 700) / Math.max(1, n)); }
+    function fadeIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), o = e.attr("opacity"); e.attr("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).attr("opacity", o === null ? 1 : o); }); }
+    function drawIn(sel, ms, delay) { sel.each(function () { var L = this.getTotalLength ? this.getTotalLength() : 0, e = d3.select(this); if (!L || e.attr("stroke-dasharray")) return; e.attr("stroke-dasharray", L + " " + L).attr("stroke-dashoffset", L).transition().delay(delay || 0).duration(ms).ease(d3.easeCubicOut).attr("stroke-dashoffset", 0).on("end", function () { d3.select(this).attr("stroke-dasharray", null).attr("stroke-dashoffset", null); }); }); }
+    function growUp(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y + h).attr("height", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); }); }
+    function growRight(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), w = +e.attr("width"); e.attr("width", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("width", w); }); }
+    // bars that know their zero line (data-z, data-o = h or v) grow out of it in the right direction
+    function growZ(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), z = +e.attr("data-z"), v = e.attr("data-o") === "v", t; if (isNaN(z)) return; if (v) { var y = +e.attr("y"), h = +e.attr("height"); e.attr("y", y < z - 0.5 ? y + h : y).attr("height", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("y", y).attr("height", h); } else { var x = +e.attr("x"), w = +e.attr("width"); e.attr("x", x < z - 0.5 ? x + w : x).attr("width", 0); t = e.transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeCubicOut).attr("x", x).attr("width", w); } }); }
+    function popIn(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this), r = +e.attr("r"); if (isNaN(r)) return; e.attr("r", 0).transition().delay(i * (stagger || 0)).duration(ms).ease(d3.easeBackOut).attr("r", r); }); }
+    // line charts: solid lines draw from left to right, filled areas and dashed lines fade in, points fade in
+    function linesIn(root, ms) { ms = ms || 1000; root.selectAll("path").each(function () { var e = d3.select(this), f = e.attr("fill"), st = e.attr("stroke"); if (e.classed("domain") || st === "transparent" || !st && (!f || f === "none")) return; if ((f === "none") && !e.attr("stroke-dasharray")) drawIn(e, ms, 0); else fadeIn(e, ms * 0.7, 0); }); fadeIn(root.selectAll("circle"), ms * 0.6, 0); }
+    function fadeCss(sel, ms, stagger) { sel.each(function (d, i) { var e = d3.select(this); e.style("opacity", 0).transition().delay(i * (stagger || 0)).duration(ms).style("opacity", null).on("end", function () { d3.select(this).style("opacity", null); }); }); }
+
+    var PAL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"], MUTED = "#c3c2b7", SELECT = "#2161D9";
+    var S = { sel: null, hover: null, order: {} };
+    window.__bump = S;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var fmt = function (v) { var a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + "M" : a >= 1e4 ? (v / 1e3).toFixed(1) + "k" : a >= 100 ? Math.round(v).toLocaleString() : (+v.toFixed(2)).toLocaleString(); };
+    function message(t) { var m = document.getElementById("message"); m.style.display = t ? "flex" : "none"; m.textContent = t || ""; }
+    function gf(g) { return g ? (typeof g === "string" ? g : g.inputField) : null; }
+    var DATE_RE = /^\d{4}-\d{2}-\d{2}/;
+    function tinfo(v) {
+        var s = v && typeof v === "object" && "lower" in v ? v.lower : v;
+        if (typeof s === "string" && DATE_RE.test(s)) { var d = new Date(s.length === 10 ? s + "T00:00:00Z" : s); return { sort: d.getTime(), date: d, key: JSON.stringify(v), raw: v }; }
+        if (typeof s === "number") return { sort: s, key: JSON.stringify(v), label: String(s), raw: v };
+        return { sort: null, key: JSON.stringify(v), label: s === null || s === undefined ? "(blank)" : String(s), raw: v };
+    }
+
+    function render() {
+        var ctx = omniscope.view.context(), it = ctx.options.items || {};
+        if (!it.time || !it.item || !it.value) { message("Choose a Time grouping, the Ranked items and a measure to Rank by."); return; }
+        var res = ctx.result; if (!res || !res.data) { message("Waiting for data"); return; }
+        var mp = res.mappings, recs = res.data.records || [];
+        var rows = recs.map(function (r) { return { t: tinfo(r[mp.time]), item: r[mp.item], v: r[mp.value] }; }).filter(function (x) { return typeof x.v === "number" && isFinite(x.v) && x.item !== null; });
+        if (!rows.length) { message("No data to show. Check the filters."); d3.select("#svg").selectAll("*").remove(); return; }
+        message(null);
+        // periods in time order (dates and numbers sorted; text kept in server order)
+        var pmap = new Map(); rows.forEach(function (x) { if (!pmap.has(x.t.key)) pmap.set(x.t.key, x.t); });
+        var periods = Array.from(pmap.values());
+        if (periods.every(function (p) { return p.sort !== null; })) periods.sort(function (a, b) { return a.sort - b.sort; });
+        var unit = periods.length > 1 && periods[0].date ? (periods[1].sort - periods[0].sort) : 0;
+        var dfmt = unit && unit < 20 * 864e5 ? d3.utcFormat("%-d %b") : unit && unit < 200 * 864e5 ? d3.utcFormat("%b %y") : d3.utcFormat("%Y");
+        periods.forEach(function (p, i) { p.i = i; p.label = p.label || (p.date ? dfmt(p.date) : ""); });
+        var pIndex = {}; periods.forEach(function (p) { pIndex[p.key] = p.i; });
+        // rank within each period (ties share the better rank)
+        var low = it.order === "LOW", N = Math.max(3, Math.min(50, +it.topN || 10));
+        var byP = d3.group(rows, function (x) { return x.t.key; }), items = new Map();
+        byP.forEach(function (list, k) {
+            list.sort(function (a, b) { return low ? a.v - b.v : b.v - a.v; });
+            var rank = 0, prev = null;
+            list.forEach(function (x, i) { if (prev === null || x.v !== prev) rank = i + 1; prev = x.v; x.rank = rank;
+                var key = String(x.item); if (!items.has(key)) items.set(key, { key: key, raw: x.item, pts: [] }); items.get(key).pts.push({ i: pIndex[k], rank: rank, v: x.v, p: periods[pIndex[k]] }); });
+        });
+        var last = periods.length - 1;
+        items.forEach(function (o) { o.pts.sort(function (a, b) { return a.i - b.i; }); o.last = o.pts.find(function (q) { return q.i === last; }); o.best = d3.min(o.pts, function (q) { return q.rank; }); });
+        var shown = Array.from(items.values()).filter(function (o) { return it.which === "EVER" ? o.best <= N : o.last && o.last.rank <= N; });
+        shown.sort(function (a, b) { return (a.last ? a.last.rank : 999) - (b.last ? b.last.rank : 999); });
+        // colours: top 8 at the latest period in the unfiltered ranking keep their slot (cache keyed on fields and measure)
+        var okey = gf(it.item) + "|" + JSON.stringify([it.value.inputField, it.value.function, it.order, it.time]);
+        if (!S.order[okey]) S.order[okey] = shown.map(function (o) { return o.key; });
+        shown.forEach(function (o) { if (S.order[okey].indexOf(o.key) < 0) S.order[okey].push(o.key); });
+        var hl = it.highlight ? String(it.highlight).trim() : "";
+        shown.forEach(function (o) { var i = S.order[okey].indexOf(o.key); o.colour = hl ? (o.key === hl ? PAL[0] : MUTED) : (i < 8 ? PAL[i] : MUTED); });
+        S.model = { periods: periods, items: shown, N: N, hl: hl, fields: { time: gf(it.time), item: gf(it.item), value: it.value.inputField || "Value" }, showValues: it.showValues !== false };
+        introIf(recs.length + "|" + JSON.stringify(it) + "|" + JSON.stringify(ctx.dataConfig.filter || null));
+        var sel = ctx.viewSelection; S.sel = sel && sel.meta ? sel.meta : null;
+        draw();
+    }
+
+    function draw() {
+        var M = S.model, box = document.getElementById("chart"), W = box.clientWidth, H = box.clientHeight;
+        var svg = d3.select("#svg").attr("width", W).attr("height", H); svg.selectAll("*").remove(); var intro = introDone();
+        var labW = Math.min(170, Math.max(70, W * 0.16)), m = { l: labW + 26, r: labW + 10, t: 26, b: 14 };
+        if (W - m.l - m.r < 60) { m.l = 30; m.r = 10; labW = 0; }
+        var x = d3.scalePoint().domain(M.periods.map(function (p) { return p.i; })).range([m.l, W - m.r]).padding(0.2);
+        var y = d3.scaleLinear().domain([1, M.N + 1]).range([m.t + 6, H - m.b - 6]);
+        var step = (H - m.t - m.b) / (M.N + 1), r = Math.max(4, Math.min(11, step * 0.36));
+        // period labels on top, thinned to fit
+        var every = Math.max(1, Math.ceil(M.periods.length / Math.max(2, Math.floor((W - m.l - m.r) / 56))));
+        M.periods.forEach(function (p) { if (p.i % every === 0 || p.i === M.periods.length - 1) svg.append("text").attr("x", x(p.i)).attr("y", 14).attr("text-anchor", "middle").attr("fill", "#898781").attr("font-size", 10).text(p.label); });
+        // rank guides
+        for (var k = 1; k <= M.N; k++) svg.append("line").attr("x1", m.l - 8).attr("x2", W - m.r + 8).attr("y1", y(k)).attr("y2", y(k)).attr("stroke", "#eeede8");
+        svg.append("text").attr("x", m.l - 14).attr("y", y(M.N + 1)).attr("text-anchor", "end").attr("fill", "#898781").attr("font-size", 10).attr("dy", "0.35em").text("below " + M.N);
+        var active = function (o) { var s = S.sel, h = S.hover; if (h) return h === o.key; if (!s) return true; return s.item === o.key; };
+        var anyFocus = S.hover || S.sel;
+        var line = d3.line().x(function (q) { return x(q.i); }).y(function (q) { return y(Math.min(q.rank, M.N + 1)); }).curve(d3.curveBumpX);
+        // draw muted first, coloured on top
+        var order = M.items.slice().sort(function (a, b) { return (a.colour === MUTED) - (b.colour === MUTED) || 0; }).reverse();
+        order.forEach(function (o) {
+            var on = active(o), col = anyFocus && !on ? MUTED : o.colour, op = anyFocus && !on ? 0.35 : 1;
+            // split into contiguous runs so gaps (missing periods) are not bridged
+            var runs = [], cur = [];
+            o.pts.forEach(function (q, j) { if (j && q.i !== o.pts[j - 1].i + 1) { runs.push(cur); cur = []; } cur.push(q); }); runs.push(cur);
+            var g = svg.append("g").attr("opacity", op);
+            runs.forEach(function (run) {
+                g.append("path").attr("class", "line").attr("d", line(run)).attr("stroke", col).attr("stroke-width", on && anyFocus ? 4 : 2.5)
+                    .on("mouseenter", function () { if (S.hover !== o.key) { S.hover = o.key; draw(); } }).on("mouseleave", function () { if (S.hover !== null) { S.hover = null; draw(); } tip(null); })
+                    .on("click", function (ev) { ev.stopPropagation(); select({ item: o.key }); });
+            });
+            o.pts.forEach(function (q) {
+                if (q.rank > M.N) return;
+                var isSel = S.sel && S.sel.item === o.key && S.sel.period === q.p.key;
+                g.append("circle").attr("class", "pt").attr("cx", x(q.i)).attr("cy", y(q.rank)).attr("r", r).attr("fill", col).attr("stroke", "#fcfcfb").attr("stroke-width", 2)
+                    .on("mousemove", function (ev) { tip(o, q, ev); }).on("mouseenter", function (ev) { if (S.hover !== o.key) { S.hover = o.key; draw(); } tip(o, q, ev); }).on("mouseleave", function () { tip(null); })
+                    .on("click", function (ev) { ev.stopPropagation(); select({ item: o.key, period: q.p.key }); });
+                if (isSel) g.append("circle").attr("cx", x(q.i)).attr("cy", y(q.rank)).attr("r", r + 3).attr("fill", "none").attr("stroke", SELECT).attr("stroke-dasharray", "3,2").attr("stroke-width", 1.5);
+                if (M.showValues && r >= 7) g.append("text").attr("x", x(q.i)).attr("y", y(q.rank)).attr("dy", "0.35em").attr("text-anchor", "middle").attr("font-size", Math.min(10, r)).attr("fill", d3.lab(col).l > 62 ? "#0b0b0b" : "#fff").attr("pointer-events", "none").text(q.rank);
+            });
+            // end labels: name at the first and last point of the chart (text in ink, swatch carries identity)
+            if (labW) {
+                var f = o.pts[0], l = o.pts[o.pts.length - 1];
+                if (f.i === 0 && f.rank <= M.N) label(svg, m.l - r - 8, y(f.rank), o, "end", labW, f.rank);
+                if (l.i === M.periods.length - 1 && l.rank <= M.N) label(svg, W - m.r + r + 8, y(l.rank), o, "start", labW, l.rank);
+            }
+        });
+        if (intro) { drawIn(svg.selectAll("path.line"), 1400, 0); var ps = svg.selectAll("circle.pt"); popIn(ps, 450, stag(ps.size(), 1100)); fadeIn(svg.selectAll("text"), 600, 0); }
+    }
+    function label(svg, x0, y0, o, anchor, w, rank) {
+        var t = svg.append("text").attr("class", "lab").attr("x", x0).attr("y", y0).attr("dy", "0.35em").attr("text-anchor", anchor)
+            .attr("font-weight", o.key === S.hover || (S.sel && S.sel.item === o.key) || o.key === S.model.hl ? "bold" : "normal").attr("fill", "#0b0b0b").text(rank + ". " + o.key)
+            .on("mouseenter", function () { if (S.hover !== o.key) { S.hover = o.key; draw(); } }).on("mouseleave", function () { if (S.hover !== null) { S.hover = null; draw(); } }).on("click", function (ev) { ev.stopPropagation(); select({ item: o.key }); });
+        var s = t.text(); while (s.length > 3 && t.node().getComputedTextLength() > w) { s = s.slice(0, -1); t.text(s + "\u2026"); }
+    }
+    function tip(o, q, ev) {
+        var el = document.getElementById("tooltip");
+        if (!o) { el.style.display = "none"; return; }
+        var prev = o.pts.find(function (z) { return z.i === q.i - 1; }), ch = prev ? prev.rank - q.rank : null;
+        el.innerHTML = '<b>' + esc(o.key) + '</b>, ' + esc(q.p.label) + '<br><span class="k">Rank:</span> ' + q.rank + (ch === null ? '' : ch > 0 ? ' (up ' + ch + ')' : ch < 0 ? ' (down ' + (-ch) + ')' : ' (no change)') +
+            '<br><span class="k">' + esc(S.model.fields.value) + ':</span> ' + fmt(q.v) + '<br><span class="k">Best rank:</span> ' + o.best;
+        el.style.display = "block";
+        var X = ev.clientX + 14, Y = ev.clientY + 14;
+        if (X + el.offsetWidth > window.innerWidth - 4) X = ev.clientX - el.offsetWidth - 14;
+        if (Y + el.offsetHeight > window.innerHeight - 4) Y = ev.clientY - el.offsetHeight - 14;
+        el.style.left = Math.max(4, X) + "px"; el.style.top = Math.max(4, Y) + "px";
+    }
+    function select(s) {
+        var M = S.model, F = M.fields, o = M.items.find(function (z) { return z.key === s.item; });
+        var f = { type: "FIELD_VALUE", inputField: F.item, operator: "=", value: o ? o.raw : s.item };
+        if (s.period) {
+            var p = M.periods.find(function (z) { return z.key === s.period; }), raw = p.raw;
+            var tf = raw && typeof raw === "object" && "lower" in raw ? { type: "AND", filters: [{ type: "FIELD_VALUE", inputField: F.time, operator: ">=", value: raw.lower }, { type: "FIELD_VALUE", inputField: F.time, operator: "<", value: raw.upper }] } : { type: "FIELD_VALUE", inputField: F.time, operator: "=", value: raw };
+            f = { type: "AND", filters: [f, tf] };
+        }
+        S.sel = s;
+        omniscope.view.context().viewSelection = { filter: f, meta: s };
+        omniscope.view.updated(); draw();
+    }
+    window.__bump.select = select;
+    document.body.addEventListener("click", function () { if (S.sel) { S.sel = null; draw(); } omniscope.view.whitespaceClick(); });
+    omniscope.view.on(["load", "update"], render);
+    omniscope.view.on("resize", function () { if (S.model) draw(); else render(); });
+})();
+</script>
+</body>
+</html>

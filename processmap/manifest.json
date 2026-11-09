@@ -1,0 +1,168 @@
+{
+  "name": "Process Map",
+  "frameworkVersion": "v1",
+  "icon": "icon.svg",
+  "thumbnail": "thumbnail.png",
+  "readme": "README.md",
+  "tags": [
+    "custom",
+    "process mining",
+    "process map",
+    "event log",
+    "workflow",
+    "journey",
+    "variants",
+    "bottleneck",
+    "visokio-agents"
+  ],
+  "sandbox": false,
+  "autoPane": false,
+  "autoQuery": false,
+  "supportsSelection": true,
+  "options": {
+    "items": {
+      "case": {
+        "displayName": "Cases",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "Identifier of each case, e.g. Claim ID, Order ID, Patient episode"
+      },
+      "activity": {
+        "displayName": "Steps",
+        "type": "FIELD",
+        "mandatory": true,
+        "detail": "The step that happened, e.g. Registered, Assessed, Paid"
+      },
+      "time": {
+        "displayName": "Ordered by",
+        "type": "FIELD",
+        "mandatory": true,
+        "validFieldTypes": [
+          "DATE",
+          "NUMBER"
+        ],
+        "detail": "When the step happened; orders the steps within each case"
+      },
+      "metric": {
+        "displayName": "Show on links",
+        "type": "CHOICE",
+        "values": [
+          "FREQUENCY",
+          "DURATION"
+        ],
+        "displayValues": [
+          "Number of cases",
+          "Average time between steps"
+        ],
+        "detail": "What each arrow is labelled with"
+      },
+      "detail": {
+        "displayName": "Detail",
+        "type": "NUMBER",
+        "minValue": 0,
+        "maxValue": 100,
+        "detail": "Hide links followed by fewer than this percentage of cases (default 2); use the slider in the view to adjust"
+      },
+      "maxEvents": {
+        "displayName": "Events used",
+        "type": "NUMBER",
+        "minValue": 1000,
+        "maxValue": 500000,
+        "detail": "Maximum number of events fetched (default 200,000)"
+      }
+    },
+    "structure": {
+      "toolbar": [
+        "case",
+        "activity",
+        "time",
+        "metric"
+      ],
+      "x": [],
+      "y": []
+    },
+    "optionGroups": [
+      {
+        "displayName": "Event log",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "case",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "activity",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "time",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayName": "Display",
+        "rows": [
+          {
+            "cells": [
+              {
+                "option": "metric",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "detail",
+                "usePrefixTitle": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "option": "maxEvents",
+                "usePrefixTitle": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "defaultOptions": {
+    "items": {
+      "metric": "FREQUENCY",
+      "detail": 2,
+      "maxEvents": 200000
+    },
+    "pane": {
+      "yAxisHeaderWidth": 75,
+      "paneWidth": 100,
+      "paneHeight": 100,
+      "gridLineThickness": 1,
+      "headerStyle": {},
+      "tileHeaderAlignment": "CENTER",
+      "xHeaderPlacement": "TOP",
+      "yHeaderPlacement": "LEFT",
+      "showColourKeyInEveryPane": false,
+      "enableTouchScrolling": false
+    }
+  },
+  "pane": {
+    "minWidth": 300,
+    "minHeight": 250
+  }
+}

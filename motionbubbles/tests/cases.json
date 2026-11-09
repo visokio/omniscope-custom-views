@@ -1,0 +1,392 @@
+[
+ {
+  "name": "showcase",
+  "showcase": true,
+  "data": "sample-data/portfolio.csv",
+  "options": {
+   "items": {
+    "entity": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Quarter",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth (%)",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Revenue (GBP m)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Business unit",
+     "type": "UNIQUE_VALUES"
+    },
+    "xLog": true,
+    "yLog": false,
+    "xRef": 1,
+    "yRef": 10,
+    "labels": 8,
+    "trails": true,
+    "duration": 0.7,
+    "autoplay": true,
+    "loop": true
+   }
+  },
+  "width": 1040,
+  "height": 600,
+  "wait": 3000,
+  "showcaseHeight": 600,
+  "caption": "Live: an illustrative product portfolio on a growth-share matrix, Q1 2021 to Q2 2026. Press play, drag the slider, hover a bubble to see its trail, click to select it.",
+  "expect": {
+   "selector": "circle.b",
+   "min": 10
+  }
+ },
+ {
+  "name": "interact",
+  "data": "sample-data/portfolio.csv",
+  "options": {
+   "items": {
+    "entity": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Quarter",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth (%)",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Revenue (GBP m)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Business unit",
+     "type": "UNIQUE_VALUES"
+    },
+    "xLog": true,
+    "yLog": false,
+    "xRef": 1,
+    "yRef": 10,
+    "labels": 8,
+    "trails": true,
+    "duration": 1,
+    "autoplay": false,
+    "loop": false
+   }
+  },
+  "width": 1000,
+  "height": 580,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__motion.model.periods.length===22 && window.__motion.model.ents.length===18",
+    "expectTruthy": true
+   },
+   {
+    "eval": "window.__motion.seek(12)"
+   },
+   {
+    "click": "circle.b",
+    "nth": 0
+   },
+   {
+    "expectSelection": true
+   },
+   {
+    "eval": "window.__motion.seek(21)"
+   },
+   {
+    "wait": 300
+   },
+   {
+    "screenshot": "trail"
+   },
+   {
+    "click": "#play"
+   },
+   {
+    "wait": 1500
+   },
+   {
+    "click": "#play"
+   },
+   {
+    "eval": "window.__motion.pos>0",
+    "expectTruthy": true
+   },
+   {
+    "clickAt": [
+     990,
+     10
+    ]
+   },
+   {
+    "expectSelection": false
+   },
+   {
+    "filter": {
+     "type": "FIELD_VALUE",
+     "inputField": "Business unit",
+     "operator": "=",
+     "value": "Digital"
+    }
+   },
+   {
+    "eval": "window.__motion.model.ents.length<10",
+    "expectTruthy": true
+   },
+   {
+    "resize": [
+     540,
+     380
+    ]
+   },
+   {
+    "screenshot": "small"
+   }
+  ]
+ },
+ {
+  "name": "linear-no-size",
+  "data": "sample-data/portfolio.csv",
+  "options": {
+   "items": {
+    "entity": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Quarter",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth (%)",
+     "function": "MEAN"
+    },
+    "size": null,
+    "colour": null,
+    "xLog": false,
+    "yLog": false,
+    "xRef": null,
+    "yRef": null,
+    "labels": 8,
+    "trails": true,
+    "duration": 1,
+    "autoplay": false,
+    "loop": false
+   }
+  },
+  "width": 900,
+  "height": 560,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__motion.seek(8.5)"
+   }
+  ],
+  "expect": {
+   "selector": "circle.b",
+   "min": 10
+  }
+ },
+ {
+  "name": "empty",
+  "fields": [
+   {
+    "name": "Quarter",
+    "type": "DATE"
+   },
+   {
+    "name": "Product",
+    "type": "TEXT"
+   },
+   {
+    "name": "Business unit",
+    "type": "TEXT"
+   },
+   {
+    "name": "Relative market share",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Market growth (%)",
+    "type": "NUMBER"
+   },
+   {
+    "name": "Revenue (GBP m)",
+    "type": "NUMBER"
+   }
+  ],
+  "options": {
+   "items": {
+    "entity": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Quarter",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth (%)",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Revenue (GBP m)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Business unit",
+     "type": "UNIQUE_VALUES"
+    },
+    "xLog": true,
+    "yLog": false,
+    "xRef": 1,
+    "yRef": 10,
+    "labels": 8,
+    "trails": true,
+    "duration": 1,
+    "autoplay": false,
+    "loop": false
+   }
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "No data"
+  }
+ },
+ {
+  "name": "unconfigured",
+  "data": "sample-data/portfolio.csv",
+  "options": {
+   "items": {}
+  },
+  "width": 600,
+  "height": 300,
+  "expect": {
+   "text": "Choose Bubbles"
+  }
+ },
+ {
+  "name": "large",
+  "generate": "tests/large.js",
+  "options": {
+   "items": {
+    "entity": {
+     "inputField": "Name",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Year",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "X",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Y",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Size",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Group",
+     "type": "UNIQUE_VALUES"
+    },
+    "labels": 0,
+    "autoplay": false
+   }
+  },
+  "width": 1000,
+  "height": 640,
+  "wait": 3000,
+  "actions": [
+   {
+    "eval": "window.__motion.seek(39)"
+   }
+  ],
+  "expect": {
+   "selector": "circle.b",
+   "min": 1000
+  }
+ },
+ {
+  "name": "thumb",
+  "thumbnail": true,
+  "data": "sample-data/portfolio.csv",
+  "options": {
+   "items": {
+    "entity": {
+     "inputField": "Product",
+     "type": "UNIQUE_VALUES"
+    },
+    "time": {
+     "inputField": "Quarter",
+     "type": "UNIQUE_VALUES"
+    },
+    "x": {
+     "inputField": "Relative market share",
+     "function": "MEAN"
+    },
+    "y": {
+     "inputField": "Market growth (%)",
+     "function": "MEAN"
+    },
+    "size": {
+     "inputField": "Revenue (GBP m)",
+     "function": "SUM"
+    },
+    "colour": {
+     "inputField": "Business unit",
+     "type": "UNIQUE_VALUES"
+    },
+    "xLog": true,
+    "yLog": false,
+    "xRef": 1,
+    "yRef": 10,
+    "labels": 4,
+    "trails": true,
+    "duration": 1,
+    "autoplay": false,
+    "loop": false
+   }
+  },
+  "width": 580,
+  "height": 580,
+  "scale": 0.5,
+  "wait": 1500,
+  "actions": [
+   {
+    "eval": "window.__motion.seek(14)"
+   }
+  ]
+ }
+]

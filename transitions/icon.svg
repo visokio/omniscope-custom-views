@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <path d="M11.5 6 Q16 1 18.57 3.79" fill="none" stroke="#f68c11" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><polygon points="20.6,6 16.57,4.81 19.75,1.89" fill="#f68c11"/>
+  <path d="M21 11 Q16 15 13.71 13.11" fill="none" stroke="#aec6f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polygon points="11.4,11.2 15.55,11.83 12.8,15.16" fill="#aec6f5"/>
+  <path d="M26 13 Q26 21 23.12 22.34" fill="none" stroke="#aec6f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polygon points="20.4,23.6 22.76,20.12 24.57,24.04" fill="#aec6f5"/>
+  <path d="M11.6 24.6 Q5 22 5.14 15.6" fill="none" stroke="#aec6f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polygon points="5.2,12.6 7.28,16.25 2.96,16.15" fill="#aec6f5"/>
+  <circle cx="7" cy="8" r="4.6" fill="#467de7"/>
+  <circle cx="25" cy="8" r="4.6" fill="#5789e9"/>
+  <circle cx="16" cy="25" r="4.6" fill="#7aa2ee"/>
+</svg>

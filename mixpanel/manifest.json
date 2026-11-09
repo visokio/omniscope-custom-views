@@ -2,7 +2,13 @@
   "name": "Mixpanel tracker",
   "frameworkVersion": "v1",
   "icon": "icon.svg",
-  "tags": ["mixpanel","tracking"],
+  "tags": [
+    "mixpanel",
+    "tracking",
+    "usage",
+    "analytics",
+    "tool"
+  ],
   "sandbox": false,
   "autoPane": false,
   "autoQuery": false,
@@ -13,12 +19,29 @@
       "api_host": {
         "displayName": "API host",
         "type": "TEXT",
-        "mandatory": true
+        "mandatory": true,
+        "documentation": "Where events are sent: https://api-eu.mixpanel.com for a project with EU data residency (the default), https://api.mixpanel.com for US, https://api-in.mixpanel.com for India, or your own proxy. Must start with https://."
       },
       "token": {
         "displayName": "Mixpanel project token",
         "type": "TEXT",
-        "mandatory": true
+        "mandatory": true,
+        "documentation": "The project token from your Mixpanel project settings. Nothing is loaded or sent until it is set."
+      },
+      "trackClicks": {
+        "displayName": "Track clicks",
+        "type": "TOGGLE",
+        "documentation": "Send an event for every click in the report (not inside other custom views), with the clicked element's Omniscope name. Off: only an event when the report opens."
+      },
+      "sendUser": {
+        "displayName": "Send user identity",
+        "type": "TOGGLE",
+        "documentation": "Add the signed-in Omniscope user's identity to every event. Off: events are anonymous apart from Mixpanel's own device ID."
+      },
+      "showNotice": {
+        "displayName": "Show notice",
+        "type": "TOGGLE",
+        "documentation": "Show a one-line notice in the view telling viewers that their use of the report is recorded."
       }
     },
     "structure": {
@@ -32,7 +55,10 @@
   },
   "defaultOptions": {
     "items": {
-      "api_host": "https://api-eu.mixpanel.com"
+      "api_host": "https://api-eu.mixpanel.com",
+      "trackClicks": true,
+      "sendUser": true,
+      "showNotice": true
     },
     "pane": {
       "yAxisHeaderWidth": 75,
