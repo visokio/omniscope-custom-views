@@ -1,11 +1,12 @@
 // The gallery: a static site in _site/ with an index page, one page per item and catalogue.json.
 // Shared by both community repositories; each passes its items and a RepoConfig.
+import { execFileSync } from "node:child_process";
 import { mkdirSync, rmSync, writeFileSync, readFileSync, copyFileSync, existsSync, readdirSync, statSync } from "node:fs";
 import { join, dirname, posix, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Marked, type Tokens } from "marked";
 import {
-  type Item, type RepoConfig, AI_BUILT_TAG, AI_BUILT_STATEMENT,
+  type Item, type RepoConfig, AI_BUILT_TAG, AI_BUILT_STATEMENT, EXPLORER_URL,
   encodePath, githubTree, githubBlob, githubRaw, demoServerUrl,
 } from "./model.ts";
 import { type RelatedMap, parseRelated, readRelated, relatedSection, relatedForCatalogue } from "./related.ts";
@@ -131,6 +132,7 @@ ${description ? `<meta name="description" content="${esc(description)}">` : ""}
 function topBar(cfg: RepoConfig, rootRel: string): string {
   return `<nav class="top"><div class="wrap"><a class="home" href="${rootRel}index.html">${esc(cfg.title)}</a>` +
     `<a href="${esc(cfg.otherGallery.url)}">${esc(cfg.otherGallery.title)}</a>` +
+    `<a href="${EXPLORER_URL}" target="_blank" rel="noopener">Explorer</a>` +
     `<a href="https://github.com/${cfg.githubRepo}" target="_blank" rel="noopener">GitHub</a></div></nav>`;
 }
 
@@ -271,7 +273,21 @@ function indexPage(cfg: RepoConfig, items: Item[]): string {
 </script>\n` + footer(cfg);
 }
 
-export function catalogue(cfg: RepoConfig, items: Item[], siteUrl: string, related: RelatedMap = new Map()) {
+/** Date (YYYY-MM-DD) of the last commit to touch each item's folder; empty without a full git history, so a shallow clone can't give wrong dates. */
+export function lastUpdated(root: string, items: Item[]): Map<string, string> {
+  const git = (...args: string[]) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  const out = new Map<string, string>();
+  try {
+    if (git("rev-parse", "--is-shallow-repository") !== "false") return out;
+    for (const i of items) {
+      const date = git("log", "-1", "--format=%cs", "--", i.path);
+      if (date) out.set(i.path, date);
+    }
+  } catch { return new Map(); }  // not a git checkout
+  return out;
+}
+
+export function catalogue(cfg: RepoConfig, items: Item[], siteUrl: string, related: RelatedMap = new Map(), updated: Map<string, string> = new Map()) {
   const byPath = new Map(items.map((i) => [i.path, i]));
   return {
     generatedFrom: `https://github.com/${cfg.githubRepo}`,
@@ -291,6 +307,7 @@ export function catalogue(cfg: RepoConfig, items: Item[], siteUrl: string, relat
       options: i.options,
       outputs: i.outputs,
       libraries: i.libraries,
+      lastUpdated: updated.get(i.path) ?? null,
       relatedSummary: related.get(i.path)?.summary ?? null,
       related: relatedForCatalogue(cfg, related.get(i.path), byPath, siteUrl),
       links: {
@@ -312,6 +329,7 @@ function aboutPage(cfg: RepoConfig, items: Item[]): string {
     `Adding one copies it into your project, so later changes here don't affect projects that already use it.</p>` +
     `<p>Each page lists related ${esc(cfg.noun[1])} under <b>Related</b>: Omniscope's core blocks and views, community ${esc(cfg.noun[1])} here, and ` +
     `community ${esc(cfg.otherGallery.noun[1])} in <a href="${esc(cfg.otherGallery.url)}">${esc(cfg.otherGallery.title)}</a>. Where two do a similar job, it says which to use when.</p>` +
+    `<p>To compare core and community blocks and views in one list, with filters, use the <a href="${EXPLORER_URL}" target="_blank" rel="noopener">Blocks and Views Explorer</a>, a report built in Omniscope.</p>` +
     `<h2 id="${AI_BUILT_TAG}">The ${AI_BUILT_TAG} tag</h2><p>${AI_BUILT_STATEMENT.html}</p><p>${ai} of the ${items.length} ${esc(cfg.noun[1])} carry it: <a href="index.html?tag=${AI_BUILT_TAG}">show them</a>.</p>` +
     `<h2>Badges</h2><p>Each page shows small badges: the category (as in Omniscope's picker)${cfg.kind === "blocks" ? ", the script language" : ""}, and ${AI_BUILT_TAG} where it applies. Clicking one lists every ${esc(cfg.noun[0])} that shares it.</p></article></main>\n` + footer(cfg);
 }
@@ -350,7 +368,7 @@ export function buildSite(cfg: RepoConfig, items: Item[], root: string, outDir: 
   }
   writeFileSync(join(outDir, "index.html"), indexPage(cfg, items));
   writeFileSync(join(outDir, "about.html"), aboutPage(cfg, items));
-  writeFileSync(join(outDir, "catalogue.json"), JSON.stringify(catalogue(cfg, items, siteUrl, related), null, 1) + "\n");
+  writeFileSync(join(outDir, "catalogue.json"), JSON.stringify(catalogue(cfg, items, siteUrl, related, lastUpdated(root, items)), null, 1) + "\n");
   writeFileSync(join(outDir, ".nojekyll"), "");
   return { pages: items.length + 1, files, outDir };
 }

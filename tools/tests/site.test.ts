@@ -1,9 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { buildSite } from "../site/build-site.ts";
+import { buildSite, lastUpdated } from "../site/build-site.ts";
+import type { Item } from "../site/model.ts";
 import { CONFIG, loadItems } from "../repo.ts";
 import { libraries } from "../lib/live-demo.ts";
 import { repoRoot } from "../lib/items.ts";
@@ -35,4 +37,23 @@ test("descriptions are cut at a sentence end, never mid-word", async () => {
   const s = shorten("A first sentence that is long enough to be kept as it stands here today. " + "word ".repeat(80));
   assert.equal(s, "A first sentence that is long enough to be kept as it stands here today.");
   assert.ok(shorten("word ".repeat(80)).endsWith("…"));
+});
+
+test("lastUpdated dates an item from its folder's last commit, and gives nothing without a full history", () => {
+  const dir = mkdtempSync(join(tmpdir(), "history-"));
+  const git = (args: string[], date: string) => execFileSync("git", ["-C", dir, "-c", "user.name=t", "-c", "user.email=t@example.org", ...args],
+    { env: { ...process.env, GIT_AUTHOR_DATE: date, GIT_COMMITTER_DATE: date }, stdio: "ignore" });
+  const items = ["a", "b"].map((path) => ({ path })) as Item[];
+  assert.equal(lastUpdated(dir, items).size, 0);
+  git(["init", "-q"], "");
+  for (const [path, date] of [["a", "2024-01-02T12:00:00Z"], ["b", "2025-03-04T12:00:00Z"]]) {
+    mkdirSync(join(dir, path));
+    writeFileSync(join(dir, path, "f"), path);
+    git(["add", "."], date);
+    git(["commit", "-qm", path], date);
+  }
+  assert.deepEqual([...lastUpdated(dir, items)], [["a", "2024-01-02"], ["b", "2025-03-04"]]);
+  const shallow = mkdtempSync(join(tmpdir(), "shallow-"));
+  execFileSync("git", ["clone", "-q", "--depth", "1", `file://${dir}`, shallow], { stdio: "ignore" });
+  assert.equal(lastUpdated(shallow, items).size, 0);
 });

@@ -74,6 +74,7 @@ export interface RepoConfig {
 }
 
 export const AI_BUILT_TAG = "visokio-agents";
+export const EXPLORER_URL = "https://public.omniscope.me/Community/Blocks+and+Views+Explorer.iox/r/Report/";
 
 /** The agreed statement about items built by Visokio's agents, shown in each README and the gallery. */
 export const AI_BUILT_STATEMENT = {

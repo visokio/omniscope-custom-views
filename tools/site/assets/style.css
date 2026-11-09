@@ -17,6 +17,7 @@ nav.top .wrap { display: flex; gap: 20px; align-items: center; height: 48px; }
 nav.top a { color: #fff; text-decoration: none; font-weight: 700; }
 nav.top a.home { margin-right: auto; font-family: "Roboto Slab", Georgia, serif; }
 nav.top a:hover { color: var(--orange); }
+@media (max-width: 560px) { nav.top .wrap { flex-wrap: wrap; height: auto; min-height: 48px; padding-top: 8px; padding-bottom: 8px; gap: 4px 16px; } nav.top a.home { width: 100%; } }
 header.hero { background: linear-gradient(135deg, var(--navy) 0%, #1b3c78 60%, var(--blue) 100%); color: #fff; padding: 28px 0 32px; }
 header.hero h1 { color: #fff; font-size: clamp(28px, 4.5vw, 42px); margin: .2em 0 .25em; }
 header.hero .lead { font-size: clamp(16px, 2vw, 19px); max-width: 820px; margin: 0 0 12px; opacity: .95; }
