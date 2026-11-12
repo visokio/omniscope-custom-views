@@ -33,9 +33,11 @@ Each view is a top-level folder named after the view's id (lower case, no spaces
 - **Icons.** The view picker shows `icon.svg` on white at about 100 pixels, beside the core views. Match them:
   flat shapes in the picker's two or three blues, with orange as a single accent where it helps, no text,
   transparent background, `viewBox="0 0 32 32"`.
-- **Gallery category.** Add the view to `view-categories.json` with one or two of the view picker's tabs (`bar`,
-  `line/scatter`, `diagram`, `map`, `network`, `table`, `tool`); the gallery's filters use them, and the build
-  warns about a view without one.
+- **Picker tab and gallery category.** Add the view to `view-categories.json` with one or two of the view
+  picker's tabs (`bar`, `line/scatter`, `diagram`, `map`, `network`, `table`, `tool`). The app files a view under
+  a tab when one of its tags in `views.json` is the tab's name, so `npm run build` sets those tags from this file;
+  the gallery's filters use it too, and the build warns about a view without one. Don't use a tab's name as an
+  ordinary tag: in `views.json` the build removes it unless the view is in that tab.
 - **Keep `index.html` pure ASCII** (use HTML entities or `\u` escapes), so an upload can't garble it.
 
 ## views.json
@@ -46,7 +48,8 @@ folders:
 
 - a view folder not yet listed gets an entry from its manifest (name, tags, and any extra files in the folder);
 - an entry whose folder has gone is removed;
-- existing entries are left as they are.
+- each entry's picker-tab tags are set from `view-categories.json` (see above);
+- everything else in existing entries is left as it is.
 
 **Bump `version`** when you change a published view, so Omniscope offers the new version. Already installed
 copies aren't updated (see below). `tools/repo.ts` lists the folders deliberately left out of the picker.

@@ -9,7 +9,8 @@
 				"www",
 				"browser",
 				"internet",
-				"url"
+				"url",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -21,7 +22,8 @@
 				"HTML",
 				"web",
 				"widget",
-				"content"
+				"content",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -35,7 +37,8 @@
 				"quotes",
 				"stocks",
 				"exchange",
-				"crypto"
+				"crypto",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 1
@@ -47,7 +50,8 @@
 				"cumulative",
 				"running",
 				"total",
-				"running total"
+				"running total",
+				"table"
 			],
 			"files": [],
 			"version": 1
@@ -57,7 +61,8 @@
 			"displayName": "Twitter View",
 			"tags": [
 				"twitter",
-				"tweet"
+				"tweet",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -67,7 +72,8 @@
 			"displayName": "Bubble Chart",
 			"tags": [
 				"custom",
-				"bubble"
+				"bubble",
+				"diagram"
 			],
 			"files": [],
 			"version": 1
@@ -90,7 +96,8 @@
 			"displayName": "Venn Diagram",
 			"tags": [
 				"custom",
-				"subset"
+				"subset",
+				"diagram"
 			],
 			"files": [],
 			"version": 1
@@ -104,7 +111,8 @@
 				"swarm",
 				"circle",
 				"dot",
-				"jitter"
+				"jitter",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 1
@@ -136,7 +144,6 @@
 				"jitter",
 				"coordinate",
 				"graph",
-				"diagram",
 				"edge",
 				"bundle",
 				"force",
@@ -155,7 +162,8 @@
 				"flow",
 				"circle",
 				"gooey",
-				"orbit"
+				"orbit",
+				"network"
 			],
 			"files": [],
 			"version": 1
@@ -169,7 +177,8 @@
 				"param",
 				"parameter",
 				"project",
-				"api"
+				"api",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -186,7 +195,8 @@
 				"api",
 				"execution",
 				"block",
-				"job"
+				"job",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -200,7 +210,8 @@
 				"job",
 				"execution",
 				"block",
-				"api"
+				"api",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -216,7 +227,8 @@
 				"job",
 				"execution",
 				"block",
-				"api"
+				"api",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -232,7 +244,8 @@
 				"parameter",
 				"param",
 				"block",
-				"api"
+				"api",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -250,7 +263,8 @@
 				"execute",
 				"execution",
 				"block",
-				"api"
+				"api",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -267,7 +281,8 @@
 				"execute",
 				"execution",
 				"block",
-				"api"
+				"api",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -277,7 +292,8 @@
 			"displayName": "KPI (custom view demo)",
 			"tags": [
 				"custom",
-				"key"
+				"key",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -288,7 +304,8 @@
 			"tags": [
 				"custom",
 				"demo",
-				"highcharts"
+				"highcharts",
+				"bar"
 			],
 			"files": [],
 			"version": 1
@@ -312,7 +329,8 @@
 			"tags": [
 				"custom",
 				"tree",
-				"json"
+				"json",
+				"table"
 			],
 			"files": [],
 			"version": 1
@@ -322,7 +340,8 @@
 			"displayName": "Mixpanel tracker",
 			"tags": [
 				"mixpanel",
-				"tracker"
+				"tracker",
+				"tool"
 			],
 			"files": [],
 			"version": 1
@@ -338,7 +357,8 @@
 				"stacked",
 				"strata",
 				"layers",
-				"sessions"
+				"sessions",
+				"line/scatter"
 			],
 			"files": [
 				"strata-cloth.js",
@@ -359,7 +379,8 @@
 				"demand variability",
 				"supply chain",
 				"stock",
-				"visokio-agents"
+				"visokio-agents",
+				"table"
 			],
 			"files": [],
 			"version": 0
@@ -376,7 +397,8 @@
 				"uplift",
 				"statistics",
 				"marketing",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -392,7 +414,8 @@
 				"race",
 				"over time",
 				"storytelling",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -409,7 +432,8 @@
 				"first digit",
 				"anomaly",
 				"compliance",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -428,7 +452,8 @@
 				"occupancy",
 				"energy",
 				"iot",
-				"visokio-agents"
+				"visokio-agents",
+				"diagram"
 			],
 			"files": [],
 			"version": 0
@@ -445,7 +470,8 @@
 				"over time",
 				"slope",
 				"position",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -462,7 +488,9 @@
 				"heatmap",
 				"subscription",
 				"lifetime value",
-				"visokio-agents"
+				"visokio-agents",
+				"table",
+				"diagram"
 			],
 			"files": [],
 			"version": 0
@@ -479,7 +507,8 @@
 				"hhi",
 				"inequality",
 				"dependency",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -496,7 +525,8 @@
 				"spearman",
 				"statistics",
 				"drivers",
-				"visokio-agents"
+				"visokio-agents",
+				"diagram"
 			],
 			"files": [],
 			"version": 0
@@ -513,7 +543,8 @@
 				"time series",
 				"residual",
 				"outliers",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -530,7 +561,8 @@
 				"variance",
 				"breakdown",
 				"explain",
-				"visokio-agents"
+				"visokio-agents",
+				"network"
 			],
 			"files": [],
 			"version": 0
@@ -547,7 +579,8 @@
 				"2d histogram",
 				"big data",
 				"distribution",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -564,7 +597,8 @@
 				"statistics",
 				"spread",
 				"skew",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -581,7 +615,8 @@
 				"drop-off",
 				"journey",
 				"ecommerce",
-				"visokio-agents"
+				"visokio-agents",
+				"diagram"
 			],
 			"files": [],
 			"version": 0
@@ -598,7 +633,8 @@
 				"prediction",
 				"seasonality",
 				"planning",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -634,7 +670,9 @@
 				"market research",
 				"residuals",
 				"profiling",
-				"visokio-agents"
+				"visokio-agents",
+				"table",
+				"diagram"
 			],
 			"files": [],
 			"version": 0
@@ -651,7 +689,8 @@
 				"engagement",
 				"feedback",
 				"questionnaire",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -668,7 +707,8 @@
 				"mosaic",
 				"variable width",
 				"competitor",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -685,7 +725,9 @@
 				"basket analysis",
 				"lift",
 				"retail",
-				"visokio-agents"
+				"visokio-agents",
+				"table",
+				"network"
 			],
 			"files": [],
 			"version": 0
@@ -704,7 +746,8 @@
 				"confusion matrix",
 				"classification",
 				"prediction",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -722,7 +765,8 @@
 				"portfolio",
 				"bcg",
 				"storytelling",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -756,7 +800,8 @@
 				"hr",
 				"people",
 				"span of control",
-				"visokio-agents"
+				"visokio-agents",
+				"network"
 			],
 			"files": [],
 			"version": 0
@@ -773,7 +818,8 @@
 				"pay quartiles",
 				"bonus",
 				"reporting",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -790,7 +836,8 @@
 				"journey",
 				"variants",
 				"bottleneck",
-				"visokio-agents"
+				"visokio-agents",
+				"network"
 			],
 			"files": [],
 			"version": 0
@@ -807,7 +854,8 @@
 				"variance",
 				"revenue",
 				"finance",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -824,7 +872,8 @@
 				"importance performance",
 				"portfolio",
 				"scatter",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -841,7 +890,8 @@
 				"retention",
 				"recency",
 				"marketing",
-				"visokio-agents"
+				"visokio-agents",
+				"table"
 			],
 			"files": [],
 			"version": 0
@@ -857,7 +907,8 @@
 				"density",
 				"histogram",
 				"compare",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -874,7 +925,8 @@
 				"point cloud",
 				"cluster",
 				"segmentation",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -891,7 +943,8 @@
 				"ranking",
 				"market share",
 				"movers",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -927,7 +980,8 @@
 				"variation",
 				"nhs",
 				"six sigma",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -944,7 +998,8 @@
 				"yield curve",
 				"terrain",
 				"heatmap",
-				"visokio-agents"
+				"visokio-agents",
+				"diagram"
 			],
 			"files": [],
 			"version": 0
@@ -961,7 +1016,8 @@
 				"tenure",
 				"time to event",
 				"log-rank",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -978,7 +1034,8 @@
 				"burn-up",
 				"sales target",
 				"goal",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -1012,7 +1069,8 @@
 				"credit rating",
 				"segments",
 				"churn",
-				"visokio-agents"
+				"visokio-agents",
+				"table"
 			],
 			"files": [],
 			"version": 0
@@ -1029,7 +1087,8 @@
 				"forecast",
 				"finance",
 				"management reporting",
-				"visokio-agents"
+				"visokio-agents",
+				"bar"
 			],
 			"files": [],
 			"version": 0
@@ -1046,7 +1105,8 @@
 				"infographic",
 				"proportion",
 				"small multiples",
-				"visokio-agents"
+				"visokio-agents",
+				"diagram"
 			],
 			"files": [],
 			"version": 0
@@ -1063,7 +1123,8 @@
 				"staffing",
 				"capacity",
 				"punch card",
-				"visokio-agents"
+				"visokio-agents",
+				"diagram"
 			],
 			"files": [],
 			"version": 0
@@ -1080,7 +1141,8 @@
 				"seasonal comparison",
 				"financial year",
 				"trend",
-				"visokio-agents"
+				"visokio-agents",
+				"line/scatter"
 			],
 			"files": [],
 			"version": 0
@@ -1090,8 +1152,8 @@
 			"displayName": "Calendar",
 			"tags": [
 				"custom",
-				"table",
-				"time"
+				"time",
+				"diagram"
 			],
 			"files": [],
 			"version": 1
