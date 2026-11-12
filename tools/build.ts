@@ -13,7 +13,7 @@ import { CONFIG, SITE_URL, UNLISTED, CATEGORY_LABELS, loadItems, viewCategories 
 const root = repoRoot();
 const args = process.argv.slice(2);
 const file = join(root, "views.json");
-const sync = syncViews(root, UNLISTED);
+const sync = syncViews(root, UNLISTED, viewCategories(root));
 const fresh = viewsText(sync.views);
 const current = existsSync(file) ? readFileSync(file, "utf8") : "";
 

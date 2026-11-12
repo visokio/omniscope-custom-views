@@ -24,16 +24,17 @@
 		"line/scatter"
 	],
 	"calendar": [
-		"table"
+		"diagram"
 	],
 	"cohortretention": [
-		"table"
+		"table",
+		"diagram"
 	],
 	"concentration": [
 		"line/scatter"
 	],
 	"correlationmatrix": [
-		"table"
+		"diagram"
 	],
 	"customhtml": [
 		"tool"
@@ -69,7 +70,8 @@
 		"map"
 	],
 	"indexheatmap": [
-		"table"
+		"table",
+		"diagram"
 	],
 	"jsontree": [
 		"table"
@@ -199,7 +201,7 @@
 		"tool"
 	],
 	"weeklypattern": [
-		"table"
+		"diagram"
 	],
 	"workflowexecution": [
 		"tool"
